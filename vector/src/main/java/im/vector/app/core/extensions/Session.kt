@@ -34,7 +34,19 @@ fun Session.configureAndStart(context: Context, startSyncing: Boolean = true) {
         startSyncing(context)
     }
     refreshPushers()
+    configureContentScanner()
     context.singletonEntryPoint().webRtcCallManager().checkForProtocolsSupportIfNeeded()
+}
+
+private fun Session.configureContentScanner() {
+    sessionParams.homeServerConnectionConfig.antiVirusServerUri
+            ?.let { url ->
+                contentScannerService().let {
+                    it.enableScanner(true)
+                    it.setScannerUrl(url.toString())
+                }
+            }
+            ?: run { Timber.w("Content scanner is disabled.") }
 }
 
 fun Session.startSyncing(context: Context) {

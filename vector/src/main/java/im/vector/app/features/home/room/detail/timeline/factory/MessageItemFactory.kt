@@ -35,6 +35,7 @@ import im.vector.app.core.utils.containsOnlyEmojis
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
+import im.vector.app.features.home.room.detail.timeline.helper.ContentScannerStateTracker
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
@@ -110,6 +111,7 @@ class MessageItemFactory @Inject constructor(
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
         private val contentDownloadStateTrackerBinder: ContentDownloadStateTrackerBinder,
+        private val contentScannerStateTracker: ContentScannerStateTracker,
         private val defaultItemFactory: DefaultItemFactory,
         private val noticeItemFactory: NoticeItemFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
@@ -229,10 +231,12 @@ class MessageItemFactory @Inject constructor(
                 .mxcUrl(fileUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
+                .contentScannerStateTracker(contentScannerStateTracker)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .filename(messageContent.body)
                 .iconRes(R.drawable.ic_headphones)
+                .encryptedFileInfo(messageContent.encryptedFileInfo?.toElementToDecrypt())
     }
 
     private fun buildVoiceMessageItem(params: TimelineItemFactoryParams,
@@ -328,9 +332,11 @@ class MessageItemFactory @Inject constructor(
                 .mxcUrl(mxcUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
+                .contentScannerStateTracker(contentScannerStateTracker)
                 .highlighted(highlight)
                 .filename(messageContent.body)
                 .iconRes(R.drawable.ic_paperclip)
+                .encryptedFileInfo(messageContent.encryptedFileInfo?.toElementToDecrypt())
     }
 
     private fun buildNotHandledMessageItem(messageContent: MessageContent,
@@ -366,6 +372,7 @@ class MessageItemFactory @Inject constructor(
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
+                .contentScannerStateTracker(contentScannerStateTracker)
                 .playable(messageContent.mimeType == MimeTypes.Gif)
                 .highlighted(highlight)
                 .mediaData(data)
@@ -413,6 +420,7 @@ class MessageItemFactory @Inject constructor(
                 .attributes(attributes)
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
+                .contentScannerStateTracker(contentScannerStateTracker)
                 .playable(true)
                 .highlighted(highlight)
                 .mediaData(thumbnailData)
