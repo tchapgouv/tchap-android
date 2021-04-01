@@ -24,6 +24,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import fr.gouv.tchap.features.home.TchapHomeActivity
 import fr.gouv.tchap.features.login.TchapLoginActivity
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
@@ -234,7 +235,7 @@ class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActiv
                 // We have a session.
                 // Check it can be opened
                 if (sessionHolder.getActiveSession().isOpenable) {
-                    HomeActivity.newIntent(this)
+                    TchapHomeActivity.newIntent(this)
                 } else {
                     // The token is still invalid
                     SoftLogoutActivity.newIntent(this)

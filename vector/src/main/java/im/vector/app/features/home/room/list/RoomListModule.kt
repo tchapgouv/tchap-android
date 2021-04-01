@@ -18,10 +18,15 @@ package im.vector.app.features.home.room.list
 
 import dagger.Binds
 import dagger.Module
+import fr.gouv.tchap.features.home.room.list.TchapRoomListViewModel
+import fr.gouv.tchap.features.home.room.list.TchapRoomListViewModelFactory
 
 @Module
 abstract class RoomListModule {
 
     @Binds
     abstract fun providesRoomListViewModelFactory(factory: RoomListViewModelFactory): RoomListViewModel.Factory
+
+    @Binds
+    abstract fun providesTchapRoomListViewModelFactory(factory: TchapRoomListViewModelFactory): TchapRoomListViewModel.Factory
 }
