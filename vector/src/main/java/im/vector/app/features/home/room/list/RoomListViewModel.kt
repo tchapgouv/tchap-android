@@ -242,6 +242,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     }
 
     private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {
+        val invites = ArrayList<RoomSummary>()
         val favourites = ArrayList<RoomSummary>()
         val conversations = ArrayList<RoomSummary>()
 
@@ -250,11 +251,13 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                 .forEach { room ->
                     val tags = room.tags.map { it.name }
                     when {
+                        room.membership == Membership.INVITE          -> invites.add(room)
                         tags.contains(RoomTag.ROOM_TAG_FAVOURITE)     -> favourites.add(room)
                         else                                          -> conversations.add(room)
                     }
                 }
         return RoomSummaries().apply {
+            put(RoomCategory.INVITE, invites)
             put(RoomCategory.FAVOURITE, favourites)
             put(RoomCategory.GROUP, conversations)
         }
