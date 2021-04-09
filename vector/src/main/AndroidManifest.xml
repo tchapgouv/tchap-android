@@ -84,7 +84,7 @@
         </activity-alias>
 
         <activity
-            android:name="fr.gouv.tchap.features.home.TchapHomeActivity" />
+            android:name=".features.home.HomeActivity" />
         <activity
             android:name="fr.gouv.tchap.features.login.TchapLoginActivity"
             android:launchMode="singleTask"
@@ -135,10 +135,10 @@
         <activity android:name=".features.home.room.filtered.FilteredRoomsActivity" />
         <activity
             android:name=".features.home.room.detail.RoomDetailActivity"
-            android:parentActivityName="fr.gouv.tchap.features.home.TchapHomeActivity">
+            android:parentActivityName=".features.home.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="fr.gouv.tchap.features.home.TchapHomeActivity" />
+                android:value=".features.home.HomeActivity" />
         </activity>
         <activity android:name=".features.debug.DebugMenuActivity" />
         <activity android:name=".features.createdirect.CreateDirectRoomActivity" />
@@ -162,10 +162,10 @@
 
         <activity
             android:name=".features.share.IncomingShareActivity"
-            android:parentActivityName="fr.gouv.tchap.features.home.TchapHomeActivity">
+            android:parentActivityName=".features.home.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="fr.gouv.tchap.features.home.TchapHomeActivity" />
+                android:value=".features.home.HomeActivity" />
 
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -217,10 +217,10 @@
 
         <activity
             android:name=".features.roommemberprofile.RoomMemberProfileActivity"
-            android:parentActivityName="fr.gouv.tchap.features.home.TchapHomeActivity">
+            android:parentActivityName=".features.home.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="fr.gouv.tchap.features.home.TchapHomeActivity" />
+                android:value=".features.home.HomeActivity" />
         </activity>
 
         <activity android:name=".features.qrcode.QrCodeScannerActivity" />
