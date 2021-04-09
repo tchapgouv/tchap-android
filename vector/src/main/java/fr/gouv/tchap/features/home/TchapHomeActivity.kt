@@ -52,6 +52,7 @@ import im.vector.app.features.home.LoadingFragment
 import im.vector.app.features.home.ShortcutsHandler
 import im.vector.app.features.home.UnknownDeviceDetectorSharedViewModel
 import im.vector.app.features.home.UnknownDevicesState
+import im.vector.app.features.invite.InviteUsersToRoomViewModel
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.permalink.NavigationInterceptor
@@ -63,6 +64,8 @@ import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.app.features.userdirectory.UserListViewModel
+import im.vector.app.features.userdirectory.UserListViewState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import im.vector.app.push.fcm.FcmHelper
@@ -85,6 +88,7 @@ class TchapHomeActivity :
         ToolbarConfigurable,
         UnknownDeviceDetectorSharedViewModel.Factory,
         ServerBackupStatusViewModel.Factory,
+        UserListViewModel.Factory,
         NavigationInterceptor {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
@@ -105,6 +109,7 @@ class TchapHomeActivity :
     @Inject lateinit var unknownDeviceViewModelFactory: UnknownDeviceDetectorSharedViewModel.Factory
     @Inject lateinit var permalinkHandler: PermalinkHandler
     @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var userListViewModelFactory: UserListViewModel.Factory
 
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         override fun onDrawerStateChanged(newState: Int) {
@@ -125,6 +130,8 @@ class TchapHomeActivity :
     override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {
         return serverBackupviewModelFactory.create(initialState)
     }
+
+    override fun create(initialState: UserListViewState) = userListViewModelFactory.create(initialState)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
