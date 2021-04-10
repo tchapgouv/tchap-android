@@ -242,9 +242,10 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     }
 
     private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {
+        // Set up init size on conversations as it is the biggest one
         val invites = ArrayList<RoomSummary>()
         val favourites = ArrayList<RoomSummary>()
-        val conversations = ArrayList<RoomSummary>()
+        val conversations = ArrayList<RoomSummary>(rooms.size)
 
         rooms
                 .filter { roomListDisplayModeFilter.test(it) }
