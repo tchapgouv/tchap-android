@@ -18,6 +18,7 @@
 package fr.gouv.tchap.features.login
 
 import im.vector.app.core.platform.VectorViewEvents
+import im.vector.app.features.login.LoginViewEvents
 import im.vector.app.features.login.SignMode
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 
@@ -38,4 +39,5 @@ sealed class TchapLoginViewEvents : VectorViewEvents {
     object OnForgetPasswordClicked : TchapLoginViewEvents()
 
     data class OnSendEmailSuccess(val email: String) : TchapLoginViewEvents()
+    object OnLoginEmailValidated : TchapLoginViewEvents()
 }

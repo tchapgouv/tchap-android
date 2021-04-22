@@ -88,7 +88,7 @@ class TchapLoginViewModel @AssistedInject constructor(
     private var lastAction: TchapLoginAction? = null
     private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
 
-    private val currentThreePid: String?
+    val currentThreePid: String?
         get() = registrationWizard?.currentThreePid
 
     // True when login and password has been sent with success to the homeserver
@@ -250,9 +250,9 @@ class TchapLoginViewModel @AssistedInject constructor(
         reAuthHelper.data = action.password
         currentJob = executeRegistrationStep {
             it.createAccount(
-                    action.username,
+                    null,
                     action.password,
-                    action.initialDeviceName
+                    null
             )
         }
     }
