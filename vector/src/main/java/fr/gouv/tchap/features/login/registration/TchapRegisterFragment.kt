@@ -96,8 +96,7 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
                         Unit
                     }
                 }
-                else                                             ->
-                    Unit // This is handled by the Activity
+                else                                             -> Unit // This is handled by the Activity
             }.exhaustive
         }
     }
