@@ -123,9 +123,27 @@ abstract class TchapAbstractLoginFragment<VB: ViewBinding> : VectorBaseFragment<
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
-        resetViewModel()
-        // Do not consume the Back event
-        return false
+        return when {
+            displayCancelDialog && isResetPasswordStarted               -> {
+                // Ask for confirmation before cancelling the reset password
+                AlertDialog.Builder(requireActivity())
+                        .setTitle(R.string.login_reset_password_cancel_confirmation_title)
+                        .setMessage(R.string.login_reset_password_cancel_confirmation_content)
+                        .setPositiveButton(R.string.yes) { _, _ ->
+                            displayCancelDialog = false
+                            vectorBaseActivity.onBackPressed()
+                        }
+                        .setNegativeButton(R.string.no, null)
+                        .show()
+
+                true
+            }
+            else                                                        -> {
+                resetViewModel()
+                // Do not consume the Back event
+                false
+            }
+        }
     }
 
     final override fun invalidate() = withState(loginViewModel) { state ->

@@ -34,6 +34,7 @@ import fr.gouv.tchap.features.platform.PlatformViewModel
 import fr.gouv.tchap.features.platform.PlatformViewState
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.isEmail
 import im.vector.app.databinding.FragmentTchapRegisterBinding
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.auth.registration.Stage
@@ -78,17 +79,25 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
 
         loginViewModel.observeViewEvents { loginViewEvents ->
             when (loginViewEvents) {
-                TchapLoginViewEvents.OnLoginFlowRetrieved -> loginViewModel.handle(TchapLoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
-                is TchapLoginViewEvents.RegistrationFlowResult -> {
+                TchapLoginViewEvents.OnLoginFlowRetrieved       -> loginViewModel.handle(TchapLoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
+                is TchapLoginViewEvents.RegistrationFlowResult  -> {
+                    // Result from registration request when the account password is set.
+                    // Email stage is mandatory at this time and another stage should not happen.
                     val emailStage = loginViewEvents.flowResult.missingStages.firstOrNull { it.mandatory && it is Stage.Email }
 
                     if (emailStage != null) {
                         loginViewModel.handle(TchapLoginAction.AddThreePid(RegisterThreePid.Email(login)))
-                    } else Unit
+                    } else {
+                        AlertDialog.Builder(requireActivity())
+                                .setTitle(R.string.dialog_title_error)
+                                .setMessage(R.string.login_error_unable_register)
+                                .setPositiveButton(R.string.ok, null)
+                                .show()
+                        Unit
+                    }
                 }
-                else                                      ->
-                    // This is handled by the Activity
-                    Unit
+                else                                             ->
+                    Unit // This is handled by the Activity
             }.exhaustive
         }
     }
@@ -114,8 +123,8 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
 
         // This can be called by the IME action, so deal with empty cases
         var error = 0
-        if (login.isEmpty()) {
-            views.tchapRegisterEmail.error = getString(R.string.error_empty_field_choose_user_name)
+        if (login.isEmpty() || !login.isEmail()) {
+            views.tchapRegisterEmail.error = getString(R.string.auth_invalid_email)
             error++
         }
         if (password.isEmpty()) {
@@ -160,9 +169,12 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
     }
 
     override fun onError(throwable: Throwable) {
+        val passwordErrors = setOf(MatrixError.M_WEAK_PASSWORD, MatrixError.M_PASSWORD_TOO_SHORT, MatrixError.M_PASSWORD_NO_UPPERCASE,
+                MatrixError.M_PASSWORD_NO_DIGIT, MatrixError.M_PASSWORD_NO_SYMBOL, MatrixError.M_PASSWORD_NO_LOWERCASE, MatrixError.M_PASSWORD_IN_DICTIONARY)
+
         if (throwable is Failure.ServerError
-                && throwable.error.code == MatrixError.M_WEAK_PASSWORD) {
-            // Show M_WEAK_PASSWORD error in the password field
+                && throwable.error.code in passwordErrors) {
+            // Show password error in the password field
             views.tchapRegisterPassword.error = errorFormatter.toHumanReadable(throwable)
         } else if (throwable.is401()) {
             // This is normal use case, we go to the mail waiting screen

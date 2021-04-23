@@ -236,6 +236,8 @@ class TchapLoginViewModel @AssistedInject constructor(
     private fun handleRegisterWith(action: TchapLoginAction.LoginOrRegister) {
         reAuthHelper.data = action.password
         currentJob = executeRegistrationStep {
+            // Tchap is not expected userName and initialDeviceDisplayName to create an account.
+            // The first register request will linked the account password with the returned session id (used in the following steps).
             it.createAccount(
                     null,
                     action.password,
