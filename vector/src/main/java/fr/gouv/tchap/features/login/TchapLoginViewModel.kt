@@ -144,20 +144,7 @@ class TchapLoginViewModel @AssistedInject constructor(
             is TchapLoginAction.AddThreePid                  -> handleAddThreePid(action)
             is TchapLoginAction.SendAgainThreePid            -> handleSendAgainThreePid()
             is TchapLoginAction.ValidateThreePid             -> handleValidateThreePid(action)
-            is TchapLoginAction.CheckIfEmailHasBeenValidated -> handleCheckIfEmailHasBeenValidated(action)
-            is TchapLoginAction.StopEmailValidationCheck     -> handleStopEmailValidationCheck()
         }
-    }
-
-    private fun handleCheckIfEmailHasBeenValidated(action: TchapLoginAction.CheckIfEmailHasBeenValidated) {
-        // We do not want the common progress bar to be displayed, so we do not change asyncRegistration value in the state
-        currentJob = executeRegistrationStep(withLoading = false) {
-            it.checkIfEmailHasBeenValidated(action.delayMillis)
-        }
-    }
-
-    private fun handleStopEmailValidationCheck() {
-        currentJob = null
     }
 
     private fun handleValidateThreePid(action: TchapLoginAction.ValidateThreePid) {
@@ -385,12 +372,6 @@ class TchapLoginViewModel @AssistedInject constructor(
                             onSessionCreated(it)
                         }
             }
-        }
-    }
-
-    private fun startRegistrationFlow() {
-        currentJob = executeRegistrationStep {
-            it.getRegistrationFlow()
         }
     }
 

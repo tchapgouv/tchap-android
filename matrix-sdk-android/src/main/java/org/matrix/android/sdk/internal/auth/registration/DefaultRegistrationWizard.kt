@@ -113,11 +113,17 @@ internal class DefaultRegistrationWizard(
 
     private suspend fun sendThreePid(threePid: RegisterThreePid): RegistrationResult {
         val safeSession = pendingSessionData.currentSession ?: throw IllegalStateException("developer error, call createAccount() method first")
+
+        val hsUri = pendingSessionData.homeServerConnectionConfig.homeServerUri
+        val isUri = pendingSessionData.homeServerConnectionConfig.identityServerUri
+        val nextLink = "${hsUri}#/register?client_secret=${pendingSessionData.clientSecret}&hs_url=$hsUri${if (isUri != null) "&is_url=${isUri}" else ""}&session_id=${pendingSessionData.currentSession}"
+
         val response = registerAddThreePidTask.execute(
                 RegisterAddThreePidTask.Params(
                         threePid,
                         pendingSessionData.clientSecret,
-                        pendingSessionData.sendAttempt))
+                        pendingSessionData.sendAttempt,
+                        nextLink))
 
         pendingSessionData = pendingSessionData.copy(sendAttempt = pendingSessionData.sendAttempt + 1)
                 .also { pendingSessionStore.savePendingSessionData(it) }

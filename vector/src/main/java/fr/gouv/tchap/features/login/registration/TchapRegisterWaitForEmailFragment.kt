@@ -27,9 +27,7 @@ import fr.gouv.tchap.features.login.TchapLoginAction
 import fr.gouv.tchap.features.login.TchapLoginViewEvents
 import im.vector.app.R
 import im.vector.app.databinding.FragmentTchapRegisterWaitForEmailBinding
-import im.vector.app.features.login.SignMode
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.failure.is401
 import javax.inject.Inject
 
 @Parcelize
@@ -57,31 +55,10 @@ class TchapRegisterWaitForEmailFragment @Inject constructor() : TchapAbstractLog
         setupViews()
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        loginViewModel.handle(TchapLoginAction.CheckIfEmailHasBeenValidated(0))
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        loginViewModel.handle(TchapLoginAction.StopEmailValidationCheck)
-    }
-
     private fun setupViews() {
         views.fragmentTchapRegisterWaitForEmailEmail.text = params.email
         views.fragmentTchapRegisterWaitForEmailLoginButton.setOnClickListener { signIn() }
         views.fragmentTchapRegisterWaitForEmailBack.setOnClickListener { parentFragmentManager.popBackStack() }
-    }
-
-    override fun onError(throwable: Throwable) {
-        if (throwable.is401()) {
-            // Try again, with a delay
-            loginViewModel.handle(TchapLoginAction.CheckIfEmailHasBeenValidated(10_000))
-        } else {
-            super.onError(throwable)
-        }
     }
 
     override fun resetViewModel() {
@@ -89,6 +66,6 @@ class TchapRegisterWaitForEmailFragment @Inject constructor() : TchapAbstractLog
     }
 
     private fun signIn() {
-        loginViewModel.handle(TchapLoginAction.PostViewEvent(TchapLoginViewEvents.OnLoginEmailValidated))
+        loginViewModel.handle(TchapLoginAction.PostViewEvent(TchapLoginViewEvents.OnSignInEmailValidated))
     }
 }

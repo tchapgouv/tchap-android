@@ -157,12 +157,9 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
                         TchapRegisterWaitForEmailFragmentArgument(loginViewEvents.email),
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
-            is TchapLoginViewEvents.OnLoginEmailValidated                      -> {
+            is TchapLoginViewEvents.OnSignInEmailValidated                     -> {
                 supportFragmentManager.popBackStack(FRAGMENT_REGISTER_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                addFragmentToBackstack(R.id.loginFragmentContainer,
-                        TchapLoginFragment::class.java,
-                        tag = FRAGMENT_LOGIN_TAG,
-                        option = commonOption)
+                tchapLoginViewModel.handle(TchapLoginAction.UpdateSignMode(SignMode.SignIn))
             }
             is TchapLoginViewEvents.Failure,
             is TchapLoginViewEvents.Loading                                    -> Unit // This is handled by the Fragments
