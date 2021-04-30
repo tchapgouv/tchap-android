@@ -26,5 +26,20 @@ class TchapUtils {
          * @return true if external
          */
         fun isExternalTchapServer(homeServerName: String) = homeServerName.startsWith("e.") || homeServerName.startsWith("agent.externe.")
+
+        /**
+         * Get name part of a display name by removing the domain part if any.
+         * For example in case of "Jean Martin [Modernisation]", this will return "Jean Martin".
+         *
+         * @param displayName
+         * @return displayName without domain (null if the provided display name is null).
+         */
+        fun getNameFromDisplayName(displayName: String?): String? {
+            var myRet = displayName
+            if (null != displayName && displayName.contains("[")) {
+                myRet = displayName.split("\\[").toTypedArray()[0].trim { it <= ' ' }
+            }
+            return myRet
+        }
     }
 }

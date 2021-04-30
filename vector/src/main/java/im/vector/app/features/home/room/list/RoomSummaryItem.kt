@@ -27,6 +27,7 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.amulyakhare.textdrawable.TextDrawable
+import fr.gouv.tchap.core.ui.views.HexagonMaskView
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
@@ -36,12 +37,14 @@ import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_room)
+@EpoxyModelClass(layout = R.layout.item_tchap_room)
 abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
     @EpoxyAttribute lateinit var typingMessage: CharSequence
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
+    @EpoxyAttribute @JvmField var isDirect: Boolean = false
+    @EpoxyAttribute @JvmField var isEncrypted: Boolean = false
 
     // Used only for diff calculation
     @EpoxyAttribute lateinit var lastEvent: String
@@ -73,10 +76,8 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         holder.draftView.isVisible = hasDraft
-        avatarRenderer.render(matrixItem, holder.avatarImageView)
-        holder.roomAvatarDecorationImageView.render(encryptionTrustLevel)
-        holder.roomAvatarPublicDecorationImageView.isVisible = izPublic
-        holder.roomAvatarFailSendingImageView.isVisible = hasFailedSending
+        renderAvatar(holder, isDirect)
+        holder.roomAvatarEncryptedImageView.visibility = if(isEncrypted) View.VISIBLE else View.GONE
         renderSelection(holder, showSelected)
         holder.typingView.setTextOrHide(typingMessage)
         holder.lastEventView.isInvisible = holder.typingView.isVisible
@@ -101,6 +102,18 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         }
     }
 
+    private fun renderAvatar(holder: Holder, isDirect: Boolean) {
+        holder.avatarImageView.visibility = if (isDirect) View.VISIBLE else View.GONE
+        holder.avatarHexagonImageView.visibility = if (isDirect) View.GONE else View.VISIBLE
+
+        avatarRenderer.render(
+                matrixItem,
+                if (isDirect)
+                    holder.avatarImageView
+                else holder.avatarHexagonImageView
+        )
+    }
+
     class Holder : VectorEpoxyHolder() {
         val titleView by bind<TextView>(R.id.roomNameView)
         val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomUnreadCounterBadgeView)
@@ -111,9 +124,8 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         val lastEventTimeView by bind<TextView>(R.id.roomLastEventTimeView)
         val avatarCheckedImageView by bind<ImageView>(R.id.roomAvatarCheckedImageView)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
-        val roomAvatarDecorationImageView by bind<ShieldImageView>(R.id.roomAvatarDecorationImageView)
-        val roomAvatarPublicDecorationImageView by bind<ImageView>(R.id.roomAvatarPublicDecorationImageView)
-        val roomAvatarFailSendingImageView by bind<ImageView>(R.id.roomAvatarFailSendingImageView)
+        val avatarHexagonImageView by bind<HexagonMaskView>(R.id.roomAvatarHexagonImageView)
+        val roomAvatarEncryptedImageView by bind<ImageView>(R.id.roomAvatarEncryptedImageView)
         val rootView by bind<ViewGroup>(R.id.itemRoomLayout)
     }
 }

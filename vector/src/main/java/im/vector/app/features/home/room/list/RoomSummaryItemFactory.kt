@@ -114,6 +114,8 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
                 .izPublic(roomSummary.isPublic)
                 .matrixItem(roomSummary.toMatrixItem())
+                .isDirect(roomSummary.isDirect)
+                .isEncrypted(roomSummary.isEncrypted)
                 .lastEventTime(latestEventTime)
                 .typingMessage(typingMessage)
                 .lastEvent(latestFormattedEvent.toString())
