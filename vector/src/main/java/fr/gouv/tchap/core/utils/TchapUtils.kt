@@ -35,11 +35,16 @@ class TchapUtils {
          * @return displayName without domain (null if the provided display name is null).
          */
         fun getNameFromDisplayName(displayName: String?): String? {
-            var myRet = displayName
-            if (null != displayName && displayName.contains("[")) {
-                myRet = displayName.split("\\[").toTypedArray()[0].trim { it <= ' ' }
+            displayName?.run {
+                return if (contains("[")) {
+                    split("\\[")
+                            .toTypedArray()
+                            .first()
+                            .trim { it <= ' ' }
+                } else this
             }
-            return myRet
+
+            return displayName
         }
     }
 }

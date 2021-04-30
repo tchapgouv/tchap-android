@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.list
+package fr.gouv.tchap.features.home.room.list
 
 import android.view.View
 import com.airbnb.mvrx.Async
@@ -27,6 +27,9 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
+import im.vector.app.features.home.room.list.RoomInvitationItem_
+import im.vector.app.features.home.room.list.RoomListListener
+import im.vector.app.features.home.room.list.SpaceChildInfoItem_
 import im.vector.app.features.home.room.typing.TypingHelper
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -35,11 +38,11 @@ import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class RoomSummaryItemFactory @Inject constructor(private val displayableEventFormatter: DisplayableEventFormatter,
-                                                 private val dateFormatter: VectorDateFormatter,
-                                                 private val stringProvider: StringProvider,
-                                                 private val typingHelper: TypingHelper,
-                                                 private val avatarRenderer: AvatarRenderer) {
+class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEventFormatter: DisplayableEventFormatter,
+                                                      private val dateFormatter: VectorDateFormatter,
+                                                      private val stringProvider: StringProvider,
+                                                      private val typingHelper: TypingHelper,
+                                                      private val avatarRenderer: AvatarRenderer) {
 
     fun create(roomSummary: RoomSummary,
                roomChangeMembershipStates: Map<String, ChangeMembershipState>,
@@ -107,12 +110,14 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
             latestEventTime = dateFormatter.format(latestEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
         }
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)
-        return RoomSummaryItem_()
+        return TchapRoomSummaryItem_()
                 .id(roomSummary.roomId)
                 .avatarRenderer(avatarRenderer)
                 // We do not display shield in the room list anymore
                 // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
                 .matrixItem(roomSummary.toMatrixItem())
+                .isDirect(roomSummary.isDirect)
+                .isEncrypted(roomSummary.isEncrypted)
                 .lastEventTime(latestEventTime)
                 .typingMessage(typingMessage)
                 .lastEvent(latestFormattedEvent.toString())
