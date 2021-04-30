@@ -1,6 +1,5 @@
 /*
- * Copyright 2018 New Vector Ltd
- * Copyright 2018 DINSIC
+ * Copyright 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +22,8 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
+import kotlin.math.sqrt
 
-/**
- * Class converted from Java to Kotlin
- * TODO : Fix code which wasn't well converted
- */
 class HexagonMaskView : AppCompatImageView {
     private var hexagonPath: Path? = null
     private var width = 0f
@@ -35,24 +31,19 @@ class HexagonMaskView : AppCompatImageView {
     private var borderPaint: Paint? = null
     private var borderRatio = 0
 
-    constructor(
-            context: Context?
-    ) : super(context!!) {
+    constructor(context: Context) : super(context) {
+        init()
+    }
+
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         init()
     }
 
     constructor(
-            context: Context?,
-            attrs: AttributeSet?
-    ) : super(context!!, attrs) {
-        init()
-    }
-
-    constructor(
-            context: Context?,
+            context: Context,
             attrs: AttributeSet?,
             defStyleAttr: Int
-    ) : super(context!!, attrs, defStyleAttr) {
+    ) : super(context, attrs, defStyleAttr) {
         init()
     }
 
@@ -64,17 +55,14 @@ class HexagonMaskView : AppCompatImageView {
      * of the hexagon (value between 0 and 100, default value: 3)
      */
     fun setBorderSettings(color: Int, ratio: Int) {
-        var ratio2 = ratio
-
         borderPaint?.color = color
 
-        if (ratio < 0) {
-            ratio2 = 0
-        } else if (ratio > 100) {
-            ratio2 = 100
-        }
+        val finalRatio: Int = if (ratio >= 0) {
+            if (ratio > MAX_RATIO) MAX_RATIO else ratio
+        } else 0
+
         if (borderRatio != ratio) {
-            borderRatio = ratio2
+            borderRatio = finalRatio
             // The hexagon path must be updated
             calculatePath()
         } else {
@@ -85,45 +73,63 @@ class HexagonMaskView : AppCompatImageView {
     private fun init() {
         hexagonPath = Path()
         borderPaint = Paint()
-        borderPaint!!.isAntiAlias = true
-        borderPaint!!.style = Paint.Style.STROKE
-        borderPaint!!.color = Color.LTGRAY
-        borderRatio = 3
+
+        borderPaint?.apply {
+            isAntiAlias = true
+            style = Paint.Style.STROKE
+            color = Color.LTGRAY
+        }
+
+        borderRatio = DEFAULT_RADIUS
     }
 
     private fun calculatePath() {
         // Compute the radius of the hexagon, and the border width
-        val radius = height / 2
-        val borderWidth = radius * borderRatio / 100
-        borderPaint!!.strokeWidth = borderWidth
+        val radius = height / DEFAULT_DIVIDER
+        val borderWidth = radius * borderRatio / PCT_VALUE
+        borderPaint?.strokeWidth = borderWidth
 
         // Define the hexagon path by placing it in the middle of the border.
-        val pathRadius = radius - borderWidth / 2
-        val triangleHeight = (Math.sqrt(3.0) * pathRadius / 2).toFloat()
-        val centerX = width / 2
-        val centerY = height / 2
-        hexagonPath!!.reset()
-        hexagonPath!!.moveTo(centerX, centerY + pathRadius)
-        hexagonPath!!.lineTo(centerX - triangleHeight, centerY + pathRadius / 2)
-        hexagonPath!!.lineTo(centerX - triangleHeight, centerY - pathRadius / 2)
-        hexagonPath!!.lineTo(centerX, centerY - pathRadius)
-        hexagonPath!!.lineTo(centerX + triangleHeight, centerY - pathRadius / 2)
-        hexagonPath!!.lineTo(centerX + triangleHeight, centerY + pathRadius / 2)
-        hexagonPath!!.lineTo(centerX, centerY + pathRadius)
-        // Add again the first segment to get the right display of the border.
-        hexagonPath!!.lineTo(centerX - triangleHeight, centerY + pathRadius / 2)
+        val pathRadius = radius - borderWidth / DEFAULT_DIVIDER
+        val triangleHeight = (sqrt(DEFAULT_DOUBLE_RADIUS) * pathRadius / DEFAULT_DIVIDER).toFloat()
+        val centerX = width / DEFAULT_DIVIDER
+        val centerY = height / DEFAULT_DIVIDER
+
+        hexagonPath?.apply {
+            reset()
+            moveTo(centerX, centerY + pathRadius)
+            lineTo(centerX - triangleHeight, centerY + pathRadius / DEFAULT_DIVIDER)
+            lineTo(centerX - triangleHeight, centerY - pathRadius / DEFAULT_DIVIDER)
+            lineTo(centerX, centerY - pathRadius)
+            lineTo(centerX + triangleHeight, centerY - pathRadius / DEFAULT_DIVIDER)
+            lineTo(centerX + triangleHeight, centerY + pathRadius / DEFAULT_DIVIDER)
+            lineTo(centerX, centerY + pathRadius)
+            // Add again the first segment to get the right display of the border.
+            lineTo(centerX - triangleHeight, centerY + pathRadius / DEFAULT_DIVIDER)
+        }
+
         invalidate()
     }
 
-    public override fun onDraw(c: Canvas) {
+    public override fun onDraw(canvas: Canvas) {
         // Apply a clip to draw the bitmap inside an hexagon shape
-        c.save()
-        c.clipPath(hexagonPath!!)
-        super.onDraw(c)
-        // Restore the canvas context
-        c.restore()
-        // Draw the border
-        c.drawPath(hexagonPath!!, borderPaint!!)
+        canvas.apply {
+            save()
+
+            hexagonPath?.let { clipPath(it) }
+
+            super.onDraw(this)
+
+            // Restore the canvas context
+            restore()
+
+            // Draw the border
+            hexagonPath?.let { hexPath ->
+                borderPaint?.let { border ->
+                    drawPath(hexPath, border)
+                }
+            }
+        }
     }
 
     // getting the view size
@@ -132,5 +138,13 @@ class HexagonMaskView : AppCompatImageView {
         width = this.measuredWidth.toFloat()
         height = this.measuredHeight.toFloat()
         calculatePath()
+    }
+
+    companion object {
+        private const val DEFAULT_DIVIDER = 2
+        private const val PCT_VALUE = 100
+        private const val MAX_RATIO = 100
+        private const val DEFAULT_RADIUS = 3
+        private const val DEFAULT_DOUBLE_RADIUS = DEFAULT_RADIUS.toDouble()
     }
 }
