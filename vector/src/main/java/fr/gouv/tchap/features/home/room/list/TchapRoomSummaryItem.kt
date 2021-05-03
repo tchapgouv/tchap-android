@@ -71,16 +71,18 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
             itemLongClickListener?.onLongClick(it) ?: false
         }
         holder.titleView.text = TchapUtils.getNameFromDisplayName(matrixItem.getBestName())
+        holder.roomDomainNameView.text = TchapUtils.getDomainFromDisplayName(matrixItem.getBestName())
         holder.lastEventTimeView.text = lastEventTime
         holder.lastEventView.text = lastFormattedEvent
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         holder.draftView.isVisible = hasDraft
         renderAvatar(holder, isDirect)
-        holder.roomAvatarEncryptedImageView.visibility = if(isEncrypted) View.VISIBLE else View.GONE
+        holder.roomAvatarEncryptedImageView.visibility = if (isEncrypted) View.VISIBLE else View.GONE
         renderSelection(holder, showSelected)
         holder.typingView.setTextOrHide(typingMessage)
         holder.lastEventView.isInvisible = holder.typingView.isVisible
+        renderRoomInformation()
     }
 
     override fun unbind(holder: Holder) {
@@ -114,11 +116,16 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
         )
     }
 
+    private fun renderRoomInformation() {
+
+    }
+
     class Holder : VectorEpoxyHolder() {
         val titleView by bind<TextView>(R.id.roomNameView)
         val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomUnreadCounterBadgeView)
         val unreadIndentIndicator by bind<View>(R.id.roomUnreadIndicator)
         val lastEventView by bind<TextView>(R.id.roomLastEventView)
+        val roomDomainNameView by bind<TextView>(R.id.roomDomainNameView)
         val typingView by bind<TextView>(R.id.roomTypingView)
         val draftView by bind<ImageView>(R.id.roomDraftBadge)
         val lastEventTimeView by bind<TextView>(R.id.roomLastEventTimeView)

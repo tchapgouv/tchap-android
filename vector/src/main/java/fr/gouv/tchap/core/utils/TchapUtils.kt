@@ -34,17 +34,29 @@ class TchapUtils {
          * @param displayName
          * @return displayName without domain (null if the provided display name is null).
          */
-        fun getNameFromDisplayName(displayName: String?): String? {
-            displayName?.run {
-                return if (contains("[")) {
-                    split("\\[")
-                            .toTypedArray()
-                            .first()
-                            .trim { it <= ' ' }
-                } else this
-            }
-
-            return displayName
+        fun getNameFromDisplayName(displayName: String): String {
+            return displayName.split(DISPLAY_NAME_FIRST_DELIMITER)
+                    .first()
+                    .trim()
         }
+
+        /**
+         * Get the potential domain name from a display name.
+         * For example in case of "Jean Martin [Modernisation]", this will return "Modernisation".
+         *
+         * @param displayName
+         * @return displayName without name, null if no domain is available.
+         */
+        fun getDomainFromDisplayName(displayName: String): String {
+            return displayName.split(DISPLAY_NAME_FIRST_DELIMITER)
+                    .elementAtOrNull(1)
+                    ?.split(DISPLAY_NAME_SECOND_DELIMITER)
+                    ?.first()
+                    ?.trim()
+                    ?: displayName
+        }
+
+        private const val DISPLAY_NAME_FIRST_DELIMITER = "["
+        private const val DISPLAY_NAME_SECOND_DELIMITER = "]"
     }
 }
