@@ -20,6 +20,9 @@
     <color name="tchap_jade_green_alpha70">#b227ae60</color>
     <color name="tchap_greyish_brown">#4f4f4f</color>
 
+    <color name="tchap_pale_grey_color">#fff2f5f8</color>
+    <color name="tchap_blue_grey_color">#8B8999</color>
+
     <!-- Default/Android Status Bar -->
     <color name="tchap_primary_color_dark_light">@color/tchap_dark_blue</color>
     <!-- Default/Base -->
@@ -93,4 +96,16 @@
     <attr name="overlay_background_color" format="color" />
     <attr name="box_bg_color" format="color" />
     <attr name="box_text_color" format="color" />
+
+    <!-- color of the room name -->
+    <color name="room_name_color">@color/vector_tchap_primary_color</color>
+
+    <!-- color of the room type -->
+    <color name="room_direct_type_color">@color/tchap_blue_grey_color</color>
+
+    <!-- color of the last event time -->
+    <color name="room_last_event_time_color">@color/tchap_third_text_color</color>
+
+    <!-- color of the last event -->
+    <color name="room_last_event_color">@color/tchap_blue_grey_color</color>
 </resources>
