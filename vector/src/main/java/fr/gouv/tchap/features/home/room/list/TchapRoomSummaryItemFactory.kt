@@ -19,6 +19,7 @@ package fr.gouv.tchap.features.home.room.list
 import android.view.View
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
+import fr.gouv.tchap.core.data.room.RoomAccessState
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
@@ -118,6 +119,8 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
                 .matrixItem(roomSummary.toMatrixItem())
                 .isDirect(roomSummary.isDirect)
                 .isEncrypted(roomSummary.isEncrypted)
+                // FIXME: Update this with the logic of RoomAccessRules
+                .roomAccess(RoomAccessState.PRIVATE)
                 .lastEventTime(latestEventTime)
                 .typingMessage(typingMessage)
                 .lastEvent(latestFormattedEvent.toString())
@@ -127,6 +130,8 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
                 .hasFailedSending(roomSummary.hasFailedSending)
                 .unreadNotificationCount(unreadCount)
                 .hasUnreadMessage(roomSummary.hasUnreadMessages)
+                // FIXME: Check if room has disabled notifications
+                .hasDisabledNotifications(false)
                 .hasDraft(roomSummary.userDrafts.isNotEmpty())
                 .itemLongClickListener { _ ->
                     onLongClick?.invoke(roomSummary) ?: false
