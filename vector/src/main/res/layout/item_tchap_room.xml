@@ -65,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/room_encrypted"
-        android:src="@drawable/ic_room_lock_default"
+        android:src="@drawable/ic_tchap_room_lock"
         app:layout_constraintCircle="@id/roomAvatarContainer"
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="30dp"
@@ -145,28 +145,6 @@
         tools:ignore="MissingPrefix"
         tools:visibility="visible" />
 
-    <im.vector.app.features.home.room.list.UnreadCounterBadgeView
-        android:id="@+id/roomUnreadCounterBadgeView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="12dp"
-        android:gravity="center"
-        android:minWidth="20dp"
-        android:minHeight="20dp"
-        android:paddingStart="4dp"
-        android:paddingEnd="4dp"
-        android:textColor="@android:color/white"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/roomLastEventTimeView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roomDomainNameView"
-        tools:background="@drawable/bg_unread_notification"
-        tools:text="4"
-        tools:visibility="visible" />
-
     <TextView
         android:id="@+id/roomDomainNameView"
         android:layout_width="wrap_content"
@@ -180,6 +158,56 @@
         app:layout_constraintTop_toTopOf="@+id/roomNameView"
         tools:text="@tools:sample/lorem" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/roomBadgesLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/roomLastEventTimeView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roomDomainNameView">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/roomUnreadCounterBadgeView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_unread_notification"
+            android:gravity="center"
+            android:minWidth="20dp"
+            android:minHeight="20dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="4"
+            tools:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/roomExpectedActionBadgeView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="2dp"
+            android:background="@drawable/bg_tchap_expected_action"
+            android:gravity="center"
+            android:minWidth="20dp"
+            android:minHeight="20dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="@string/tchap_exclamation_mark"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/roomUnreadCounterBadgeView"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <TextView
         android:id="@+id/roomLastEventTimeView"
         android:layout_width="wrap_content"
@@ -189,7 +217,7 @@
         android:textColor="@color/room_last_event_time_color"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roomUnreadCounterBadgeView"
+        app:layout_constraintTop_toBottomOf="@+id/roomBadgesLayout"
         tools:text="@tools:sample/date/hhmm" />
 
     <TextView
@@ -216,7 +244,7 @@
         android:textColor="@color/riotx_accent"
         android:textSize="15sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/roomUnreadCounterBadgeView"
+        app:layout_constraintEnd_toStartOf="@+id/roomBadgesLayout"
         app:layout_constraintStart_toStartOf="@+id/roomNameView"
         app:layout_constraintTop_toBottomOf="@+id/roomNameView"
         tools:text="Alice is typing…" />
