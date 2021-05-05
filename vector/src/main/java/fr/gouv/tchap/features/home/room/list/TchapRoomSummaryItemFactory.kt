@@ -132,6 +132,8 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
                 .hasUnreadMessage(roomSummary.hasUnreadMessages)
                 // FIXME: Check if room has disabled notifications
                 .hasDisabledNotifications(false)
+                // FIXME: Check if user has expected actions
+                .hasExpectedAction(true)
                 .hasDraft(roomSummary.userDrafts.isNotEmpty())
                 .itemLongClickListener { _ ->
                     onLongClick?.invoke(roomSummary) ?: false

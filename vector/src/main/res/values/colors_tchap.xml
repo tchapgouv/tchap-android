@@ -22,6 +22,7 @@
 
     <color name="tchap_pale_grey_color">#fff2f5f8</color>
     <color name="tchap_blue_grey_color">#8B8999</color>
+    <color name="tchap_fuchsia_color">#eb5757</color>
 
     <!-- Default/Android Status Bar -->
     <color name="tchap_primary_color_dark_light">@color/tchap_dark_blue</color>
@@ -108,4 +109,7 @@
 
     <!-- color of the last event -->
     <color name="room_last_event_color">@color/tchap_blue_grey_color</color>
+
+    <!-- color of the expected action badge -->
+    <color name="room_expected_action_badge_color">@color/tchap_fuchsia_color</color>
 </resources>

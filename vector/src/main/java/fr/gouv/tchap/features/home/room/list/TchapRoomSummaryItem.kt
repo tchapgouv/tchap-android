@@ -21,6 +21,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -35,7 +36,7 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.room.list.UnreadCounterBadgeView
+import im.vector.app.features.home.room.list.RoomSummaryFormatter
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -59,6 +60,7 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var hasDisabledNotifications: Boolean = false
     @EpoxyAttribute var hasUnreadMessage: Boolean = false
+    @EpoxyAttribute var hasExpectedAction: Boolean = false
     @EpoxyAttribute var hasDraft: Boolean = false
     @EpoxyAttribute var showHighlighted: Boolean = false
     @EpoxyAttribute var hasFailedSending: Boolean = false
@@ -76,16 +78,19 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
         holder.titleView.text = TchapUtils.getNameFromDisplayName(matrixItem.getBestName())
         holder.lastEventTimeView.text = lastEventTime
         holder.lastEventView.text = lastFormattedEvent
-        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
+        holder.unreadCounterBadgeView.text = RoomSummaryFormatter.formatUnreadMessagesCounter(unreadNotificationCount)
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         holder.draftView.isVisible = hasDraft
-        renderAvatar(holder, isDirect)
-        renderRoomType(holder, isDirect)
-        holder.roomAvatarEncryptedImageView.visibility = if (isEncrypted) View.VISIBLE else View.GONE
+        renderAvatar(holder)
+        renderRoomType(holder)
+        renderRoomAccessType(holder)
         renderSelection(holder, showSelected)
         holder.typingView.setTextOrHide(typingMessage)
         holder.lastEventView.isInvisible = holder.typingView.isVisible
-        holder.roomDisabledNotificationsBadge.visibility = if (hasDisabledNotifications) View.VISIBLE else View.GONE
+        holder.unreadCounterBadgeView.manageVisibility(unreadNotificationCount > 0, true)
+        holder.avatarEncryptedImageView.manageVisibility(isEncrypted, false)
+        holder.disabledNotificationsBadge.manageVisibility(hasDisabledNotifications, true)
+        holder.expectedActionBadgeView.manageVisibility(hasExpectedAction, false)
     }
 
     override fun unbind(holder: Holder) {
@@ -107,7 +112,7 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
         }
     }
 
-    private fun renderAvatar(holder: Holder, isDirect: Boolean) {
+    private fun renderAvatar(holder: Holder) {
         holder.avatarImageView.visibility = if (isDirect) View.VISIBLE else View.GONE
         holder.avatarHexagonImageView.visibility = if (isDirect) View.GONE else View.VISIBLE
 
@@ -119,15 +124,15 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
         )
     }
 
-    private fun renderRoomType(holder: Holder, isDirect: Boolean) {
+    private fun renderRoomType(holder: Holder) {
         if (isDirect)
-            holder.roomDomainNameView.text = TchapUtils.getDomainFromDisplayName(matrixItem.getBestName())
+            holder.domainNameView.text = TchapUtils.getDomainFromDisplayName(matrixItem.getBestName())
         else {
             /**
              * FIXME : handle state of each room based on RoomAccessRules (from v1)
              * By default, it will be "Private"
              */
-            holder.roomDomainNameView.apply {
+            holder.domainNameView.apply {
                 val roomType: Int
                 val roomTypeColor: Int
 
@@ -157,20 +162,37 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
         }
     }
 
+    private fun renderRoomAccessType(holder: Holder) {
+//        when (roomAccess) {
+//            RoomAccessState.PRIVATE ->
+//        }
+//
+//        holder.avatarEncryptedImageView.setImag
+    }
+
+    private fun View.manageVisibility(shouldShow: Boolean, isViewGone: Boolean) {
+        visibility = when {
+            shouldShow -> View.VISIBLE
+            isViewGone -> View.GONE
+            else       -> View.INVISIBLE
+        }
+    }
+
     class Holder : VectorEpoxyHolder() {
         val titleView by bind<TextView>(R.id.roomNameView)
-        val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomUnreadCounterBadgeView)
+        val unreadCounterBadgeView by bind<AppCompatTextView>(R.id.roomUnreadCounterBadgeView)
         val unreadIndentIndicator by bind<View>(R.id.roomUnreadIndicator)
         val lastEventView by bind<TextView>(R.id.roomLastEventView)
-        val roomDomainNameView by bind<TextView>(R.id.roomDomainNameView)
+        val domainNameView by bind<TextView>(R.id.roomDomainNameView)
         val typingView by bind<TextView>(R.id.roomTypingView)
         val draftView by bind<ImageView>(R.id.roomDraftBadge)
         val lastEventTimeView by bind<TextView>(R.id.roomLastEventTimeView)
         val avatarCheckedImageView by bind<ImageView>(R.id.roomAvatarCheckedImageView)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
         val avatarHexagonImageView by bind<HexagonMaskView>(R.id.roomAvatarHexagonImageView)
-        val roomAvatarEncryptedImageView by bind<ImageView>(R.id.roomAvatarEncryptedImageView)
-        val roomDisabledNotificationsBadge by bind<ImageView>(R.id.roomDisabledNotificationsBadge)
+        val avatarEncryptedImageView by bind<ImageView>(R.id.roomAvatarEncryptedImageView)
+        val disabledNotificationsBadge by bind<ImageView>(R.id.roomDisabledNotificationsBadge)
+        val expectedActionBadgeView by bind<AppCompatTextView>(R.id.roomExpectedActionBadgeView)
         val rootView by bind<ViewGroup>(R.id.itemRoomLayout)
     }
 }
