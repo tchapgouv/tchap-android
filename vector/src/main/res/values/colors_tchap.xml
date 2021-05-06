@@ -20,10 +20,6 @@
     <color name="tchap_jade_green_alpha70">#b227ae60</color>
     <color name="tchap_greyish_brown">#4f4f4f</color>
 
-    <color name="tchap_pale_grey_color">#fff2f5f8</color>
-    <color name="tchap_blue_grey_color">#8B8999</color>
-    <color name="tchap_fuchsia_color">#eb5757</color>
-
     <!-- Default/Android Status Bar -->
     <color name="tchap_primary_color_dark_light">@color/tchap_dark_blue</color>
     <!-- Default/Base -->
@@ -51,7 +47,7 @@
 
 <!--    <color name="tchap_primary_text_color">#000000</color>-->
 <!--    <color name="tchap_secondary_text_color">#aeaeae</color>-->
-<!--    <color name="tchap_third_text_color">#848484</color>-->
+    <color name="tchap_third_text_color">@color/tchap_text_color_dark_grey</color>
 <!--    <color name="tchap_navigation_menu_text_color">#9b9b9b</color>-->
 <!--    <color name="tchap_presence_status_color">#60ad0d</color>-->
 <!--    <color name="tchap_incoming_msg_phylact_background_color">#FFFFFF</color>-->
@@ -97,19 +93,4 @@
     <attr name="overlay_background_color" format="color" />
     <attr name="box_bg_color" format="color" />
     <attr name="box_text_color" format="color" />
-
-    <!-- color of the room name -->
-    <color name="room_name_color">@color/vector_tchap_primary_color</color>
-
-    <!-- color of the room type -->
-    <color name="room_direct_type_color">@color/tchap_blue_grey_color</color>
-
-    <!-- color of the last event time -->
-    <color name="room_last_event_time_color">@color/tchap_third_text_color</color>
-
-    <!-- color of the last event -->
-    <color name="room_last_event_color">@color/tchap_blue_grey_color</color>
-
-    <!-- color of the expected action badge -->
-    <color name="room_expected_action_badge_color">@color/tchap_fuchsia_color</color>
 </resources>

@@ -28,13 +28,14 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.amulyakhare.textdrawable.TextDrawable
-import fr.gouv.tchap.core.data.room.RoomAccessState
+import fr.gouv.tchap.core.data.room.RoomTchapType
 import fr.gouv.tchap.core.ui.views.HexagonMaskView
 import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.RoomSummaryFormatter
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
@@ -43,12 +44,13 @@ import org.matrix.android.sdk.api.util.MatrixItem
 @EpoxyModelClass(layout = R.layout.item_tchap_room)
 abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Holder>() {
 
+    @EpoxyAttribute lateinit var colorProvider: ColorProvider
     @EpoxyAttribute lateinit var typingMessage: CharSequence
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute @JvmField var isDirect: Boolean = false
     @EpoxyAttribute @JvmField var isEncrypted: Boolean = false
-    @EpoxyAttribute lateinit var roomAccess: RoomAccessState
+    @EpoxyAttribute lateinit var roomType: RoomTchapType
 
     // Used only for diff calculation
     @EpoxyAttribute lateinit var lastEvent: String
@@ -83,12 +85,11 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
         holder.draftView.isVisible = hasDraft
         renderAvatar(holder)
         renderRoomType(holder)
-        renderRoomAccessType(holder)
+        renderRoomAccessView(holder)
         renderSelection(holder, showSelected)
         holder.typingView.setTextOrHide(typingMessage)
         holder.lastEventView.isInvisible = holder.typingView.isVisible
         holder.unreadCounterBadgeView.manageVisibility(unreadNotificationCount > 0, true)
-        holder.avatarEncryptedImageView.manageVisibility(isEncrypted, false)
         holder.disabledNotificationsBadge.manageVisibility(hasDisabledNotifications, true)
         holder.expectedActionBadgeView.manageVisibility(hasExpectedAction, false)
     }
@@ -133,41 +134,45 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
              * By default, it will be "Private"
              */
             holder.domainNameView.apply {
-                val roomType: Int
+                val roomTypeString: Int
                 val roomTypeColor: Int
 
-                when (roomAccess) {
-                    RoomAccessState.PRIVATE  -> {
-                        roomType = R.string.tchap_room_private_room_type
-                        roomTypeColor = R.color.vector_fuchsia_color
+                when (roomType) {
+                    RoomTchapType.PRIVATE  -> {
+                        roomTypeString = R.string.tchap_room_private_room_type
+                        roomTypeColor = R.attr.warn_text_color
                     }
-                    RoomAccessState.EXTERNAL -> {
-                        roomType = R.string.tchap_room_extern_room_type
-                        roomTypeColor = R.color.vector_fuchsia_color
+                    RoomTchapType.EXTERNAL -> {
+                        roomTypeString = R.string.tchap_room_extern_room_type
+                        roomTypeColor = R.attr.primary_text_color
                     }
-                    RoomAccessState.FORUM    -> {
-                        roomType = R.string.tchap_room_forum_type
-                        roomTypeColor = R.color.tchap_jade_green_color
+                    RoomTchapType.FORUM    -> {
+                        roomTypeString = R.string.tchap_room_forum_type
+                        roomTypeColor = R.attr.primary_text_color
+                    }
+                    else                   -> {
+                        roomTypeString = R.string.tchap_room_forum_type
+                        roomTypeColor = R.attr.secondary_text_color
                     }
                 }
 
-                text = holder.view.context.getString(roomType)
-                setTextColor(
-                        ContextCompat.getColor(
-                                holder.view.context,
-                                roomTypeColor
-                        )
-                )
+                text = holder.view.context.getString(roomTypeString)
+                setTextColor(roomTypeColor)
             }
         }
     }
 
-    private fun renderRoomAccessType(holder: Holder) {
-//        when (roomAccess) {
-//            RoomAccessState.PRIVATE ->
-//        }
-//
-//        holder.avatarEncryptedImageView.setImag
+    private fun renderRoomAccessView(holder: Holder) {
+        val resource = when (roomType) {
+            RoomTchapType.PRIVATE  -> R.drawable.ic_tchap_room_lock_red
+            RoomTchapType.EXTERNAL -> R.drawable.ic_tchap_room_lock_grey
+            else                   -> R.drawable.ic_tchap_forum
+        }
+
+        holder.avatarEncryptedImageView.apply {
+            setImageDrawable(ContextCompat.getDrawable(holder.view.context, resource))
+            manageVisibility(roomType != RoomTchapType.NONE, false)
+        }
     }
 
     private fun View.manageVisibility(shouldShow: Boolean, isViewGone: Boolean) {

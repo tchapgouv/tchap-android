@@ -19,11 +19,12 @@ package fr.gouv.tchap.features.home.room.list
 import android.view.View
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
-import fr.gouv.tchap.core.data.room.RoomAccessState
+import fr.gouv.tchap.core.data.room.RoomTchapType
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
@@ -42,6 +43,7 @@ import javax.inject.Inject
 class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEventFormatter: DisplayableEventFormatter,
                                                       private val dateFormatter: VectorDateFormatter,
                                                       private val stringProvider: StringProvider,
+                                                      private val colorProvider: ColorProvider,
                                                       private val typingHelper: TypingHelper,
                                                       private val avatarRenderer: AvatarRenderer) {
 
@@ -114,13 +116,14 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
         return TchapRoomSummaryItem_()
                 .id(roomSummary.roomId)
                 .avatarRenderer(avatarRenderer)
+                .colorProvider(colorProvider)
                 // We do not display shield in the room list anymore
                 // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
                 .matrixItem(roomSummary.toMatrixItem())
                 .isDirect(roomSummary.isDirect)
                 .isEncrypted(roomSummary.isEncrypted)
                 // FIXME: Update this with the logic of RoomAccessRules
-                .roomAccess(RoomAccessState.PRIVATE)
+                .roomType(RoomTchapType.PRIVATE)
                 .lastEventTime(latestEventTime)
                 .typingMessage(typingMessage)
                 .lastEvent(latestFormattedEvent.toString())
@@ -133,7 +136,7 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
                 // FIXME: Check if room has disabled notifications
                 .hasDisabledNotifications(false)
                 // FIXME: Check if user has expected actions
-                .hasExpectedAction(true)
+                .hasExpectedAction(false)
                 .hasDraft(roomSummary.userDrafts.isNotEmpty())
                 .itemLongClickListener { _ ->
                     onLongClick?.invoke(roomSummary) ?: false

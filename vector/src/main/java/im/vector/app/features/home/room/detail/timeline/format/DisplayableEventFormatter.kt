@@ -146,7 +146,7 @@ class DisplayableEventFormatter @Inject constructor(
         return if (appendAuthor) {
             span {
                 text = senderName
-                textColor = colorProvider.getColor(R.color.room_last_event_color)
+                textColor = R.attr.secondary_text_color
                 textStyle = "bold"
             }
                     .append(stringProvider.getString(R.string.tchap_colon_append))

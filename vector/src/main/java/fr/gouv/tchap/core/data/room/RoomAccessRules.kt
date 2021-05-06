@@ -16,8 +16,7 @@
 
 package fr.gouv.tchap.core.data.room
 
-enum class RoomAccessState {
-    PRIVATE,
-    EXTERNAL,
-    FORUM
+enum class RoomAccessRules {
+    RESTRICTED,
+    UNRESTRICTED
 }
