@@ -5,5 +5,5 @@
 
     <corners android:radius="40dp" />
 
-    <solid android:color="@color/tchap_text_color_light" />
+    <solid android:color="?button_bordered_bg_color" />
 </shape>
