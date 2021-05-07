@@ -21,6 +21,9 @@ import org.matrix.android.sdk.api.session.room.state.isPublic
 
 object RoomUtils {
 
+    /**
+     * FIXME: This method is not used yet and will be moved later
+     */
     fun getRoomType(room: Room): RoomTchapType {
         val isEncrypted = room.roomSummary()?.isEncrypted ?: false
         val isDirect = room.roomSummary()?.isDirect ?: false
@@ -36,7 +39,7 @@ object RoomUtils {
                 RoomAccessRules.UNRESTRICTED -> RoomTchapType.EXTERNAL
             }
             isPublic    -> RoomTchapType.FORUM
-            else        -> RoomTchapType.NONE
+            else        -> RoomTchapType.UNKNOWN
         }
     }
 }
