@@ -140,15 +140,15 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
                 when (roomType) {
                     RoomTchapType.PRIVATE  -> {
                         roomTypeString = R.string.tchap_room_private_room_type
-                        roomTypeColor = R.attr.warn_text_color
+                        roomTypeColor = R.color.tchap_coral
                     }
                     RoomTchapType.EXTERNAL -> {
                         roomTypeString = R.string.tchap_room_extern_room_type
-                        roomTypeColor = R.attr.primary_text_color
+                        roomTypeColor = R.color.tchap_pumpkin_orange
                     }
                     RoomTchapType.FORUM    -> {
                         roomTypeString = R.string.tchap_room_forum_type
-                        roomTypeColor = R.attr.primary_text_color
+                        roomTypeColor = R.color.tchap_jade_green
                     }
                     else                   -> {
                         roomTypeString = R.string.tchap_room_forum_type
@@ -171,7 +171,7 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
 
         holder.avatarEncryptedImageView.apply {
             setImageDrawable(ContextCompat.getDrawable(holder.view.context, resource))
-            manageVisibility(roomType != RoomTchapType.NONE, false)
+            manageVisibility(roomType != RoomTchapType.UNKNOWN, false)
         }
     }
 

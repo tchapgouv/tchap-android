@@ -17,7 +17,7 @@
 package fr.gouv.tchap.core.data.room
 
 enum class RoomTchapType {
-    NONE,
+    UNKNOWN,
     DIRECT,
     PRIVATE,
     EXTERNAL,
