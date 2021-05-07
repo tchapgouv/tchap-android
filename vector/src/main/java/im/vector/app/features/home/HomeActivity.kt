@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -93,7 +94,8 @@ class HomeActivity :
         ContactsBookViewModel.Factory,
         UnreadMessagesSharedViewModel.Factory,
         NavigationInterceptor,
-        SpaceInviteBottomSheet.InteractionListener {
+        SpaceInviteBottomSheet.InteractionListener,
+        MenuItem.OnActionExpandListener {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
@@ -191,9 +193,9 @@ class HomeActivity :
                 .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
-                        is HomeActivitySharedAction.OpenDrawer -> views.drawerLayout.openDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.CloseDrawer -> views.drawerLayout.closeDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.OpenGroup -> {
+                        is HomeActivitySharedAction.OpenDrawer        -> views.drawerLayout.openDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.CloseDrawer       -> views.drawerLayout.closeDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.OpenGroup         -> {
                             views.drawerLayout.closeDrawer(GravityCompat.START)
 
                             // Temporary
@@ -207,10 +209,10 @@ class HomeActivity :
                             // we might want to delay that to avoid having the drawer animation lagging
                             // would be probably better to let the drawer do that? in the on closed callback?
                         }
-                        is HomeActivitySharedAction.OpenSpacePreview -> {
+                        is HomeActivitySharedAction.OpenSpacePreview  -> {
                             startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))
                         }
-                        is HomeActivitySharedAction.AddSpace -> {
+                        is HomeActivitySharedAction.AddSpace          -> {
                             createSpaceResultLauncher.launch(SpaceCreationActivity.newIntent(this))
                         }
                         is HomeActivitySharedAction.ShowSpaceSettings -> {
@@ -240,9 +242,9 @@ class HomeActivity :
         homeActivityViewModel.observeViewEvents {
             when (it) {
                 is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning(it)
-                is HomeActivityViewEvents.OnNewSession -> handleOnNewSession(it)
-                HomeActivityViewEvents.PromptToEnableSessionPush -> handlePromptToEnablePush()
-                is HomeActivityViewEvents.OnCrossSignedInvalidated -> handleCrossSigningInvalidated(it)
+                is HomeActivityViewEvents.OnNewSession                  -> handleOnNewSession(it)
+                HomeActivityViewEvents.PromptToEnableSessionPush        -> handlePromptToEnablePush()
+                is HomeActivityViewEvents.OnCrossSignedInvalidated      -> handleCrossSigningInvalidated(it)
             }.exhaustive
         }
         homeActivityViewModel.subscribe(this) { renderState(it) }
@@ -457,15 +459,35 @@ class HomeActivity :
         return super.onPrepareOptionsMenu(menu)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
+
+        val searchItem: MenuItem = menu.findItem(R.id.menu_home_filter)
+        searchItem.setOnActionExpandListener(this)
+
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_home_filter -> {
-                navigator.openRoomsFiltering(this)
+                //TODO: Show search edittext
+                //navigator.openRoomsFiltering(this)
                 return true
             }
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+        Toast.makeText(this, "onMenuItemActionExpand", Toast.LENGTH_SHORT).show()
+        return true
+    }
+
+    override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+        Toast.makeText(this, "onMenuItemActionCollapse", Toast.LENGTH_SHORT).show()
+        return true
     }
 
     override fun onBackPressed() {
