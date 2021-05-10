@@ -28,8 +28,8 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.amulyakhare.textdrawable.TextDrawable
-import fr.gouv.tchap.core.utils.RoomTchapType
 import fr.gouv.tchap.core.ui.views.HexagonMaskView
+import fr.gouv.tchap.core.utils.RoomTchapType
 import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
@@ -134,7 +134,7 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
             when (roomType) {
                 RoomTchapType.DIRECT   -> {
                     roomTypeLabel = TchapUtils.getDomainFromDisplayName(matrixItem.getBestName())
-                    roomTypeColor = R.attr.secondary_text_color
+                    roomTypeColor = colorProvider.getColorFromAttribute(R.attr.secondary_text_color)
                 }
                 RoomTchapType.PRIVATE  -> {
                     roomTypeRes = R.string.tchap_room_private_room_type
@@ -149,7 +149,7 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
                     roomTypeColor = R.color.tchap_jade_green
                 }
                 else                   -> {
-                    roomTypeColor = R.attr.secondary_text_color
+                    roomTypeColor = colorProvider.getColorFromAttribute(R.attr.secondary_text_color)
                 }
             }
 
