@@ -21,26 +21,20 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 object RoomUtils {
 
     /**
-     * FIXME: change Room into RoomSummary and use JoinRules (isPublic) and logic behind AccessRules
+     * FIXME: Change roomAccessRule with real implementation
      */
     fun getRoomType(room: RoomSummary): RoomTchapType {
-        val isEncrypted = room.isEncrypted
-        val isDirect = room.isDirect
-        // TODO : set isPublic to real value
-        val isPublic = true
-
-        // TODO : Change roomAccessRule with real implementation
         val roomAccessRule = RoomAccessRules.RESTRICTED
 
         return when {
-            isDirect    -> RoomTchapType.DIRECT
-            isEncrypted -> when (roomAccessRule) {
+            room.isDirect    -> RoomTchapType.DIRECT
+            room.isEncrypted -> when (roomAccessRule) {
                 RoomAccessRules.RESTRICTED   -> RoomTchapType.PRIVATE
                 RoomAccessRules.UNRESTRICTED -> RoomTchapType.EXTERNAL
                 else                         -> RoomTchapType.UNKNOWN
             }
-            isPublic    -> RoomTchapType.FORUM
-            else        -> RoomTchapType.UNKNOWN
+            room.isPublic    -> RoomTchapType.FORUM
+            else             -> RoomTchapType.UNKNOWN
         }
     }
 }

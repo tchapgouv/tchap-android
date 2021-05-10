@@ -123,8 +123,7 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
                 .matrixItem(roomSummary.toMatrixItem())
                 .isDirect(roomSummary.isDirect)
                 .isEncrypted(roomSummary.isEncrypted)
-                // FIXME: Update this with the logic of RoomAccessRules
-                .isPinned(false)
+                .isPinned(roomSummary.isFavorite)
                 .roomType(RoomUtils.getRoomType(roomSummary))
                 .lastEventTime(latestEventTime)
                 .typingMessage(typingMessage)
