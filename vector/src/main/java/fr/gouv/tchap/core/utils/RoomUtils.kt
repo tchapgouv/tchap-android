@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package fr.gouv.tchap.core.data.room
+package fr.gouv.tchap.core.utils
 
-import org.matrix.android.sdk.api.session.room.Room
-import org.matrix.android.sdk.api.session.room.state.isPublic
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 object RoomUtils {
 
     /**
-     * FIXME: This method is not used yet and will be moved later
+     * FIXME: change Room into RoomSummary and use JoinRules (isPublic) and logic behind AccessRules
      */
-    fun getRoomType(room: Room): RoomTchapType {
-        val isEncrypted = room.roomSummary()?.isEncrypted ?: false
-        val isDirect = room.roomSummary()?.isDirect ?: false
-        val isPublic = room.isPublic()
+    fun getRoomType(room: RoomSummary): RoomTchapType {
+        val isEncrypted = room.isEncrypted
+        val isDirect = room.isDirect
+        // TODO : set isPublic to real value
+        val isPublic = true
 
-        // FIXME : Change roomAccessRule with real implementation
+        // TODO : Change roomAccessRule with real implementation
         val roomAccessRule = RoomAccessRules.RESTRICTED
 
         return when {
@@ -37,9 +37,24 @@ object RoomUtils {
             isEncrypted -> when (roomAccessRule) {
                 RoomAccessRules.RESTRICTED   -> RoomTchapType.PRIVATE
                 RoomAccessRules.UNRESTRICTED -> RoomTchapType.EXTERNAL
+                else                         -> RoomTchapType.UNKNOWN
             }
             isPublic    -> RoomTchapType.FORUM
             else        -> RoomTchapType.UNKNOWN
         }
     }
+}
+
+enum class RoomAccessRules {
+    DIRECT,
+    RESTRICTED,
+    UNRESTRICTED
+}
+
+enum class RoomTchapType {
+    UNKNOWN,
+    DIRECT,
+    PRIVATE,
+    EXTERNAL,
+    FORUM
 }

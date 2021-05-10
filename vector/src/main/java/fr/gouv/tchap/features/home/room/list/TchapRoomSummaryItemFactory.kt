@@ -19,7 +19,8 @@ package fr.gouv.tchap.features.home.room.list
 import android.view.View
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
-import fr.gouv.tchap.core.data.room.RoomTchapType
+import fr.gouv.tchap.core.utils.RoomTchapType
+import fr.gouv.tchap.core.utils.RoomUtils
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
@@ -123,7 +124,8 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
                 .isDirect(roomSummary.isDirect)
                 .isEncrypted(roomSummary.isEncrypted)
                 // FIXME: Update this with the logic of RoomAccessRules
-                .roomType(RoomTchapType.PRIVATE)
+                .isPinned(false)
+                .roomType(RoomUtils.getRoomType(roomSummary))
                 .lastEventTime(latestEventTime)
                 .typingMessage(typingMessage)
                 .lastEvent(latestFormattedEvent.toString())

@@ -52,9 +52,10 @@ object TchapUtils {
                 ?.split(DISPLAY_NAME_SECOND_DELIMITER)
                 ?.first()
                 ?.trim()
-                ?: displayName
+                ?: DEFAULT_EMPTY_STRING
     }
 
     private const val DISPLAY_NAME_FIRST_DELIMITER = "["
     private const val DISPLAY_NAME_SECOND_DELIMITER = "]"
+    private const val DEFAULT_EMPTY_STRING = ""
 }
