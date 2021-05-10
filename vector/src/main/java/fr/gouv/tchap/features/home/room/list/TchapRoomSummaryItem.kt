@@ -28,7 +28,7 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.amulyakhare.textdrawable.TextDrawable
-import fr.gouv.tchap.core.data.room.RoomTchapType
+import fr.gouv.tchap.core.utils.RoomTchapType
 import fr.gouv.tchap.core.ui.views.HexagonMaskView
 import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
@@ -50,6 +50,7 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute @JvmField var isDirect: Boolean = false
     @EpoxyAttribute @JvmField var isEncrypted: Boolean = false
+    @EpoxyAttribute @JvmField var isPinned: Boolean = false
     @EpoxyAttribute lateinit var roomType: RoomTchapType
 
     // Used only for diff calculation
@@ -85,7 +86,6 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
         holder.draftView.isVisible = hasDraft
         renderAvatar(holder)
         renderRoomType(holder)
-        renderRoomAccessView(holder)
         renderSelection(holder, showSelected)
         holder.typingView.setTextOrHide(typingMessage)
         holder.lastEventView.isInvisible = holder.typingView.isVisible
@@ -126,46 +126,42 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
     }
 
     private fun renderRoomType(holder: Holder) {
-        if (isDirect)
-            holder.domainNameView.text = TchapUtils.getDomainFromDisplayName(matrixItem.getBestName())
-        else {
-            /**
-             * FIXME : handle state of each room based on RoomAccessRules (from v1)
-             * By default, it will be "Private"
-             */
-            holder.domainNameView.apply {
-                val roomTypeString: Int
-                val roomTypeColor: Int
+        holder.domainNameView.apply {
+            var roomTypeRes = 0
+            val roomTypeColor: Int
+            var roomTypeLabel = ""
 
-                when (roomType) {
-                    RoomTchapType.PRIVATE  -> {
-                        roomTypeString = R.string.tchap_room_private_room_type
-                        roomTypeColor = R.color.tchap_coral
-                    }
-                    RoomTchapType.EXTERNAL -> {
-                        roomTypeString = R.string.tchap_room_extern_room_type
-                        roomTypeColor = R.color.tchap_pumpkin_orange
-                    }
-                    RoomTchapType.FORUM    -> {
-                        roomTypeString = R.string.tchap_room_forum_type
-                        roomTypeColor = R.color.tchap_jade_green
-                    }
-                    else                   -> {
-                        roomTypeString = R.string.tchap_room_forum_type
-                        roomTypeColor = R.attr.secondary_text_color
-                    }
+            when (roomType) {
+                RoomTchapType.DIRECT   -> {
+                    roomTypeLabel = TchapUtils.getDomainFromDisplayName(matrixItem.getBestName())
+                    roomTypeColor = R.attr.secondary_text_color
                 }
-
-                text = holder.view.context.getString(roomTypeString)
-                setTextColor(roomTypeColor)
+                RoomTchapType.PRIVATE  -> {
+                    roomTypeRes = R.string.tchap_room_private_room_type
+                    roomTypeColor = R.color.tchap_coral
+                }
+                RoomTchapType.EXTERNAL -> {
+                    roomTypeRes = R.string.tchap_room_extern_room_type
+                    roomTypeColor = R.color.tchap_pumpkin_orange
+                }
+                RoomTchapType.FORUM    -> {
+                    roomTypeRes = R.string.tchap_room_forum_type
+                    roomTypeColor = R.color.tchap_jade_green
+                }
+                else                   -> {
+                    roomTypeColor = R.attr.secondary_text_color
+                }
             }
-        }
-    }
 
-    private fun renderRoomAccessView(holder: Holder) {
+            text = if (roomTypeRes > 0)
+                holder.view.context.getString(roomTypeRes) else roomTypeLabel
+            setTextColor(roomTypeColor)
+        }
+
         val resource = when (roomType) {
+            RoomTchapType.DIRECT   -> R.drawable.ic_tchap_room_lock_grey
             RoomTchapType.PRIVATE  -> R.drawable.ic_tchap_room_lock_red
-            RoomTchapType.EXTERNAL -> R.drawable.ic_tchap_room_lock_grey
+            RoomTchapType.EXTERNAL -> R.drawable.ic_tchap_room_lock_orange
             else                   -> R.drawable.ic_tchap_forum
         }
 
