@@ -44,7 +44,7 @@ object TchapUtils {
      * For example in case of "Jean Martin [Modernisation]", this will return "Modernisation".
      *
      * @param displayName
-     * @return displayName without name, null if no domain is available.
+     * @return displayName without name, empty string if no domain is available.
      */
     fun getDomainFromDisplayName(displayName: String): String {
         return displayName.split(DISPLAY_NAME_FIRST_DELIMITER)
