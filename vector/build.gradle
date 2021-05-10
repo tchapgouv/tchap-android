@@ -455,7 +455,7 @@ dependencies {
 
     // Chat effects
     implementation 'nl.dionsegijn:konfetti:1.2.6'
-    implementation 'com.github.jetradarmobile:android-snowfall:1.2.0'
+    implementation 'com.github.jetradarmobile:android-snowfall:1.2.1'
     // DI
     implementation "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
