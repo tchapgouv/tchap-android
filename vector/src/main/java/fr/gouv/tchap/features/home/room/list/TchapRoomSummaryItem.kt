@@ -126,47 +126,45 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
     }
 
     private fun renderRoomType(holder: Holder) {
-        holder.domainNameView.apply {
-            var roomTypeRes = 0
-            val roomTypeColor: Int
-            var roomTypeLabel = ""
+        var roomTypeRes = 0
+        val roomTypeColor: Int
+        var roomTypeLabel = ""
+        var resource: Int? = null
 
+        holder.domainNameView.apply {
             when (roomType) {
                 RoomTchapType.DIRECT   -> {
                     roomTypeLabel = TchapUtils.getDomainFromDisplayName(matrixItem.getBestName())
-                    roomTypeColor = colorProvider.getColorFromAttribute(R.attr.secondary_text_color)
+                    roomTypeColor = R.color.tchap_coral
+                    //roomTypeColor = colorProvider.getColorFromAttribute(R.attr.secondary_text_color)
+                    resource = R.drawable.ic_tchap_room_lock_grey
                 }
                 RoomTchapType.PRIVATE  -> {
                     roomTypeRes = R.string.tchap_room_private_room_type
                     roomTypeColor = R.color.tchap_coral
+                    resource = R.drawable.ic_tchap_room_lock_red
                 }
                 RoomTchapType.EXTERNAL -> {
                     roomTypeRes = R.string.tchap_room_extern_room_type
                     roomTypeColor = R.color.tchap_pumpkin_orange
+                    resource = R.drawable.ic_tchap_room_lock_orange
                 }
                 RoomTchapType.FORUM    -> {
                     roomTypeRes = R.string.tchap_room_forum_type
                     roomTypeColor = R.color.tchap_jade_green
+                    resource = R.drawable.ic_tchap_forum
                 }
                 else                   -> {
                     roomTypeColor = colorProvider.getColorFromAttribute(R.attr.secondary_text_color)
                 }
             }
 
-            text = if (roomTypeRes > 0)
-                holder.view.context.getString(roomTypeRes) else roomTypeLabel
-            setTextColor(roomTypeColor)
-        }
-
-        val resource = when (roomType) {
-            RoomTchapType.DIRECT   -> R.drawable.ic_tchap_room_lock_grey
-            RoomTchapType.PRIVATE  -> R.drawable.ic_tchap_room_lock_red
-            RoomTchapType.EXTERNAL -> R.drawable.ic_tchap_room_lock_orange
-            else                   -> R.drawable.ic_tchap_forum
+            text = if (roomTypeRes > 0) holder.view.context.getString(roomTypeRes) else roomTypeLabel
+            setTextColor(ContextCompat.getColor(holder.view.context, roomTypeColor))
         }
 
         holder.avatarEncryptedImageView.apply {
-            setImageDrawable(ContextCompat.getDrawable(holder.view.context, resource))
+            resource?.let { setImageDrawable(ContextCompat.getDrawable(holder.view.context, it)) }
             manageVisibility(roomType != RoomTchapType.UNKNOWN, false)
         }
     }

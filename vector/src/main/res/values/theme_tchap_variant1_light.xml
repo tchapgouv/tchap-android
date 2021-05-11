@@ -20,7 +20,7 @@
         <item name="primary_text_color">@color/tchap_dark_blue</item>
         <item name="primary_subtext_color">@color/tchap_warm_grey</item>
         <item name="placeholder_text_color">@color/tchap_warm_grey</item>
-        <item name="separator_color">@color/tchap_light_navy</item>
+        <item name="separator_color">@color/tchap_warm_grey</item>
         <item name="secondary_bg_color">@color/tchap_light_grey</item>
         <item name="secondary_text_color">@color/tchap_warm_grey</item>
         <item name="warn_text_color">@color/tchap_coral</item> <!--TODO define warn color-->
