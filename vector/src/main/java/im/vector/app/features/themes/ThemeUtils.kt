@@ -115,10 +115,10 @@ object ThemeUtils {
         currentTheme.set(aTheme)
         context.setTheme(
                 when (aTheme) {
-                    SYSTEM_THEME_VALUE -> if (isSystemDarkTheme(context.resources)) R.style.AppTheme_Dark else R.style.AppTheme_Light
+                    SYSTEM_THEME_VALUE -> if (isSystemDarkTheme(context.resources)) R.style.AppTheme_Dark else R.style.AppTheme_Light_Variant1
                     THEME_DARK_VALUE   -> R.style.AppTheme_Dark
                     THEME_BLACK_VALUE  -> R.style.AppTheme_Black
-                    else               -> R.style.AppTheme_Light
+                    else               -> R.style.AppTheme_Light_Variant1
                 }
         )
 
@@ -153,8 +153,11 @@ object ThemeUtils {
         return mColorByAttr.getOrPut(colorAttribute) {
             try {
                 val color = TypedValue()
-                c.theme.resolveAttribute(colorAttribute, color, true)
-                color.data
+                if (c.theme.resolveAttribute(colorAttribute, color, true)) {
+                    color.data
+                } else {
+                    0
+                }
             } catch (e: Exception) {
                 Timber.e(e, "Unable to get color")
                 ContextCompat.getColor(c, android.R.color.holo_red_dark)
