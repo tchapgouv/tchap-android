@@ -32,8 +32,8 @@
 
         <fr.gouv.tchap.core.ui.views.HexagonMaskView
             android:id="@+id/roomAvatarHexagonImageView"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="68dp"
+            android:layout_height="68dp"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:contentDescription="@string/avatar"
@@ -44,6 +44,7 @@
             android:id="@+id/roomAvatarImageView"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:layout_margin="4dp"
             android:contentDescription="@string/avatar"
             tools:src="@tools:sample/avatars" />
 
