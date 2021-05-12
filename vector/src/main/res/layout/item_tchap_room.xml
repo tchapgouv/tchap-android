@@ -91,67 +91,72 @@
         app:layout_constraintTop_toBottomOf="@id/roomAvatarContainer"
         tools:layout_marginStart="20dp" />
 
-    <TextView
-        android:id="@+id/roomNameView"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/roomNameContainer"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="8dp"
-        android:duplicateParentState="true"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="?primary_text_color"
-        android:textSize="15sp"
-        android:textStyle="bold"
         app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toStartOf="@+id/roomDraftBadge"
+        app:layout_constraintEnd_toStartOf="@+id/roomDomainNameView"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/roomAvatarContainer"
-        app:layout_constraintTop_toTopOf="@+id/roomAvatarContainer"
-        tools:text="@sample/matrix.json/data/displayName" />
+        app:layout_constraintTop_toTopOf="@+id/roomAvatarContainer">
+        
+        <TextView
+            android:id="@+id/roomNameView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:duplicateParentState="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="?primary_text_color"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@sample/matrix.json/data/displayName" />
 
-    <ImageView
-        android:id="@+id/roomDisabledNotificationsBadge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="8dp"
-        android:contentDescription="@string/alert_push_are_disabled_title"
-        android:src="@drawable/ic_disabled_notifications"
-        app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
-        app:layout_constraintStart_toEndOf="@+id/roomNameView"
-        app:layout_constraintTop_toTopOf="@+id/roomNameView"
-        app:tint="?riotx_text_primary"
-        tools:ignore="MissingPrefix"
-        tools:visibility="visible" />
+        <ImageView
+            android:id="@+id/roomDisabledNotificationsBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:contentDescription="@string/alert_push_are_disabled_title"
+            android:src="@drawable/ic_disabled_notifications"
+            app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
+            app:layout_constraintStart_toEndOf="@+id/roomNameView"
+            app:tint="?riotx_text_primary"
+            tools:ignore="MissingPrefix"
+            tools:visibility="visible" />
 
-    <ImageView
-        android:id="@+id/roomDraftBadge"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="8dp"
-        android:contentDescription="@string/a11y_unsent_draft"
-        android:src="@drawable/ic_edit"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
-        app:layout_constraintEnd_toStartOf="@+id/roomDomainNameView"
-        app:layout_constraintStart_toEndOf="@+id/roomNameView"
-        app:layout_constraintTop_toTopOf="@+id/roomNameView"
-        app:tint="?riotx_text_primary"
-        tools:ignore="MissingPrefix"
-        tools:visibility="visible" />
+        <ImageView
+            android:id="@+id/roomDraftBadge"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="4dp"
+            android:contentDescription="@string/a11y_unsent_draft"
+            android:src="@drawable/ic_edit"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@+id/roomDisabledNotificationsBadge"
+            app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
+            app:tint="?riotx_text_primary"
+            tools:ignore="MissingPrefix" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/roomDomainNameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
+        android:gravity="end"
         android:textColor="?primary_subtext_color"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
+        app:layout_constraintBottom_toBottomOf="@+id/roomNameContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/roomAvatarContainer"
         tools:text="@tools:sample/lorem" />
@@ -203,7 +208,6 @@
         android:id="@+id/roomLastEventTimeView"
         android:layout_width="66dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="12dp"
         android:gravity="end"
         android:textColor="?secondary_text_color"
@@ -215,8 +219,7 @@
     <TextView
         android:id="@+id/roomLastEventView"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="1dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:lineSpacingExtra="3sp"
@@ -225,8 +228,7 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/roomAvatarContainer"
         app:layout_constraintEnd_toStartOf="@+id/roomLastEventTimeView"
-        app:layout_constraintStart_toStartOf="@+id/roomNameView"
-        app:layout_constraintTop_toBottomOf="@+id/roomNameView"
+        app:layout_constraintStart_toStartOf="@+id/roomNameContainer"
         tools:text="@sample/matrix.json/data/message" />
 
     <TextView
@@ -241,8 +243,8 @@
         android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/roomLastEventTimeView"
-        app:layout_constraintStart_toStartOf="@+id/roomNameView"
-        app:layout_constraintTop_toBottomOf="@+id/roomNameView"
+        app:layout_constraintStart_toStartOf="@+id/roomNameContainer"
+        app:layout_constraintTop_toBottomOf="@+id/roomNameContainer"
         tools:text="Alice is typing…" />
 
     <!-- Margin bottom does not work, so I use space -->
