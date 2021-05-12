@@ -93,4 +93,5 @@
     <attr name="overlay_background_color" format="color" />
     <attr name="box_bg_color" format="color" />
     <attr name="box_text_color" format="color" />
+    <attr name="avatar_border_color" format="color" />
 </resources>

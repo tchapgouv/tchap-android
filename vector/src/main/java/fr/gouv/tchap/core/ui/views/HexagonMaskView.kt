@@ -52,7 +52,7 @@ class HexagonMaskView : AppCompatImageView {
      *
      * @param color the border color (Color.LTGRAY by default).
      * @param ratio the ratio of the border width to the radius
-     * of the hexagon (value between 0 and 100, default value: 3)
+     * of the hexagon (value between 0 and 100, default value: 1)
      */
     fun setBorderSettings(color: Int, ratio: Int) {
         borderPaint?.color = color
@@ -80,7 +80,7 @@ class HexagonMaskView : AppCompatImageView {
             color = Color.LTGRAY
         }
 
-        borderRatio = DEFAULT_RADIUS
+        borderRatio = DEFAULT_RATIO
     }
 
     private fun calculatePath() {
@@ -144,7 +144,7 @@ class HexagonMaskView : AppCompatImageView {
         private const val DEFAULT_DIVIDER = 2
         private const val PCT_VALUE = 100
         private const val MAX_RATIO = 100
-        private const val DEFAULT_RADIUS = 3
-        private const val DEFAULT_DOUBLE_RADIUS = DEFAULT_RADIUS.toDouble()
+        private const val DEFAULT_RATIO = 3
+        private const val DEFAULT_DOUBLE_RADIUS = DEFAULT_RATIO.toDouble()
     }
 }

@@ -28,6 +28,7 @@
         <item name="overlay_background_color">@color/tchap_light_grey_alpha50</item>
         <item name="box_bg_color">@color/tchap_pale_grey</item>
         <item name="box_text_color">@color/tchap_greyish_brown</item>
+        <item name="avatar_border_color">@color/tchap_greyish_purple</item>
     </style>
 
 </resources>
