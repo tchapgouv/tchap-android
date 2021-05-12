@@ -93,6 +93,7 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
         holder.unreadCounterBadgeView.manageVisibility(unreadNotificationCount > 0, true)
         holder.disabledNotificationsBadge.manageVisibility(hasDisabledNotifications, true)
         holder.expectedActionBadgeView.manageVisibility(hasExpectedAction, false)
+        holder.pinView.manageVisibility(isPinned, true)
     }
 
     override fun unbind(holder: Holder) {
@@ -127,9 +128,8 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
     }
 
     private fun renderRoomType(holder: Holder) {
-        var roomTypeRes = 0
         val roomTypeColor: Int
-        var roomTypeLabel = ""
+        var roomTypeLabel: String
         var resource: Int? = null
 
         holder.domainNameView.apply {
@@ -140,32 +140,33 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
                     resource = R.drawable.ic_tchap_room_lock_grey
                 }
                 RoomTchapType.PRIVATE  -> {
-                    roomTypeRes = R.string.tchap_room_private_room_type
+                    roomTypeLabel = holder.view.context.getString(R.string.tchap_room_private_room_type)
                     roomTypeColor = ContextCompat.getColor(holder.view.context, R.color.tchap_coral)
                     resource = R.drawable.ic_tchap_room_lock_red
                 }
                 RoomTchapType.EXTERNAL -> {
-                    roomTypeRes = R.string.tchap_room_extern_room_type
+                    roomTypeLabel = holder.view.context.getString(R.string.tchap_room_extern_room_type)
                     roomTypeColor = ContextCompat.getColor(holder.view.context, R.color.tchap_pumpkin_orange)
                     resource = R.drawable.ic_tchap_room_lock_orange
                 }
                 RoomTchapType.FORUM    -> {
-                    roomTypeRes = R.string.tchap_room_forum_type
+                    roomTypeLabel = holder.view.context.getString(R.string.tchap_room_forum_type)
                     roomTypeColor = ContextCompat.getColor(holder.view.context, R.color.tchap_jade_green)
                     resource = R.drawable.ic_tchap_forum
                 }
                 else                   -> {
+                    roomTypeLabel = ""
                     roomTypeColor = ThemeUtils.getColor(holder.view.context, R.attr.secondary_text_color)
                 }
             }
 
-            text = if (roomTypeRes > 0) holder.view.context.getString(roomTypeRes) else roomTypeLabel
+            text = roomTypeLabel
             setTextColor(roomTypeColor)
         }
 
-        holder.avatarEncryptedImageView.apply {
+        holder.avatarRoomTypeImageView.apply {
             resource?.let { setImageDrawable(ContextCompat.getDrawable(holder.view.context, it)) }
-            manageVisibility(roomType != RoomTchapType.UNKNOWN, false)
+            manageVisibility(resource != null, false)
         }
     }
 
@@ -189,9 +190,10 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
         val avatarCheckedImageView by bind<ImageView>(R.id.roomAvatarCheckedImageView)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
         val avatarHexagonImageView by bind<HexagonMaskView>(R.id.roomAvatarHexagonImageView)
-        val avatarEncryptedImageView by bind<ImageView>(R.id.roomAvatarEncryptedImageView)
+        val avatarRoomTypeImageView by bind<ImageView>(R.id.roomAvatarEncryptedImageView)
         val disabledNotificationsBadge by bind<ImageView>(R.id.roomDisabledNotificationsBadge)
         val expectedActionBadgeView by bind<AppCompatTextView>(R.id.roomExpectedActionBadgeView)
+        val pinView by bind<ImageView>(R.id.roomPin)
         val rootView by bind<ViewGroup>(R.id.itemRoomLayout)
     }
 }

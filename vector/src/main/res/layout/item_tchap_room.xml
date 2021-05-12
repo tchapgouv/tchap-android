@@ -32,8 +32,8 @@
 
         <fr.gouv.tchap.core.ui.views.HexagonMaskView
             android:id="@+id/roomAvatarHexagonImageView"
-            android:layout_width="68dp"
-            android:layout_height="68dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:contentDescription="@string/avatar"
@@ -42,9 +42,9 @@
 
         <ImageView
             android:id="@+id/roomAvatarImageView"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="4dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="3dp"
             android:contentDescription="@string/avatar"
             tools:src="@tools:sample/avatars" />
 
@@ -59,6 +59,17 @@
             tools:ignore="MissingPrefix" />
 
     </FrameLayout>
+
+    <ImageView
+        android:id="@+id/roomPin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="center"
+        android:background="@drawable/ic_tchap_pin_room"
+        app:layout_constraintStart_toEndOf="@+id/roomUnreadIndicator"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/roomAvatarEncryptedImageView"
@@ -94,7 +105,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/roomNameContainer"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="8dp"
@@ -104,18 +115,21 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/roomAvatarContainer"
         app:layout_constraintTop_toTopOf="@+id/roomAvatarContainer">
-        
+
         <TextView
             android:id="@+id/roomNameView"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:duplicateParentState="true"
             android:ellipsize="end"
+            android:includeFontPadding="false"
             android:maxLines="1"
+            android:padding="0dp"
             android:textColor="?primary_text_color"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toStartOf="@+id/roomDisabledNotificationsBadge"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@sample/matrix.json/data/displayName" />
@@ -128,6 +142,7 @@
             android:contentDescription="@string/alert_push_are_disabled_title"
             android:src="@drawable/ic_disabled_notifications"
             app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/roomNameView"
             app:tint="?riotx_text_primary"
             tools:ignore="MissingPrefix"
@@ -141,8 +156,8 @@
             android:contentDescription="@string/a11y_unsent_draft"
             android:src="@drawable/ic_edit"
             android:visibility="gone"
-            app:layout_constraintStart_toEndOf="@+id/roomDisabledNotificationsBadge"
             app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
+            app:layout_constraintStart_toEndOf="@+id/roomDisabledNotificationsBadge"
             app:tint="?riotx_text_primary"
             tools:ignore="MissingPrefix" />
 
@@ -154,9 +169,10 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
         android:gravity="end"
+        android:includeFontPadding="false"
         android:textColor="?primary_subtext_color"
         android:textSize="12sp"
-        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
         app:layout_constraintBottom_toBottomOf="@+id/roomNameContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/roomAvatarContainer"
@@ -211,6 +227,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
         android:gravity="end"
+        android:includeFontPadding="false"
         android:textColor="?secondary_text_color"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/roomAvatarContainer"
@@ -223,10 +240,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
+        android:includeFontPadding="false"
         android:lineSpacingExtra="3sp"
         android:maxLines="2"
+        android:minLines="2"
         android:textColor="?secondary_text_color"
-        android:textSize="14sp"
+        android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="@+id/roomAvatarContainer"
         app:layout_constraintEnd_toStartOf="@+id/roomLastEventTimeView"
         app:layout_constraintStart_toStartOf="@+id/roomNameContainer"

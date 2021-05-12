@@ -18,27 +18,6 @@ package fr.gouv.tchap.core.utils
 
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
-object RoomUtils {
-
-    /**
-     * FIXME: Change roomAccessRule with real implementation
-     */
-    fun getRoomType(room: RoomSummary): RoomTchapType {
-        val roomAccessRule = RoomAccessRules.RESTRICTED
-
-        return when {
-            room.isDirect    -> RoomTchapType.DIRECT
-            room.isEncrypted -> when (roomAccessRule) {
-                RoomAccessRules.RESTRICTED   -> RoomTchapType.PRIVATE
-                RoomAccessRules.UNRESTRICTED -> RoomTchapType.EXTERNAL
-                else                         -> RoomTchapType.UNKNOWN
-            }
-            room.isPublic    -> RoomTchapType.FORUM
-            else             -> RoomTchapType.UNKNOWN
-        }
-    }
-}
-
 enum class RoomAccessRules {
     DIRECT,
     RESTRICTED,
@@ -51,4 +30,24 @@ enum class RoomTchapType {
     PRIVATE,
     EXTERNAL,
     FORUM
+}
+
+object RoomUtils {
+    /**
+     * FIXME: Change roomAccessRule with real implementation
+     */
+    fun getRoomType(roomSummary: RoomSummary): RoomTchapType {
+        val roomAccessRule = RoomAccessRules.RESTRICTED
+
+        return when {
+            roomSummary.isDirect    -> RoomTchapType.DIRECT
+            roomSummary.isEncrypted -> when (roomAccessRule) {
+                RoomAccessRules.RESTRICTED   -> RoomTchapType.PRIVATE
+                RoomAccessRules.UNRESTRICTED -> RoomTchapType.EXTERNAL
+                else                         -> RoomTchapType.UNKNOWN
+            }
+            roomSummary.isPublic    -> RoomTchapType.FORUM
+            else                    -> RoomTchapType.UNKNOWN
+        }
+    }
 }

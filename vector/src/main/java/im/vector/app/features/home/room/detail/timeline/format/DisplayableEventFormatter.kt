@@ -150,6 +150,7 @@ class DisplayableEventFormatter @Inject constructor(
                 textStyle = "bold"
             }
                     .append(stringProvider.getString(R.string.tchap_colon_append))
+                    .append(" ")
                     .append(body)
         } else {
             body

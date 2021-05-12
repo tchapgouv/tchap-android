@@ -54,7 +54,7 @@
     <string name="tchap_burger_menu_public_rooms">Forums</string>
     <string name="tchap_burger_menu_info">This app is not approved for\nrestricted information interchange</string>
     <string name="tchap_error_message_default">An error occurred, please try later</string>
-    <string name="tchap_colon_append">:&#160;</string>
+    <string name="tchap_colon_append">:</string>
     <string name="tchap_exclamation_mark">!</string>
 
     <!-- tchap discussion -->

@@ -67,7 +67,7 @@ class TchapUtilsTest : TestCase() {
     }
 
     @Test
-    fun `given a displayName if it doesn't contain brackets then return original name`() {
+    fun `given a displayName if it doesn't contain brackets then return empty string`() {
         // Given
         val displayNameTest = "Nom Prenom"
 
@@ -75,6 +75,6 @@ class TchapUtilsTest : TestCase() {
         val result = TchapUtils.getDomainFromDisplayName(displayNameTest)
 
         // Then
-        Assert.assertEquals(result, "Nom Prenom")
+        Assert.assertEquals(result, "")
     }
 }
