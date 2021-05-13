@@ -19,13 +19,11 @@ package fr.gouv.tchap.features.home.room.list
 import android.view.View
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
-import fr.gouv.tchap.core.utils.RoomTchapType
 import fr.gouv.tchap.core.utils.RoomUtils
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
@@ -44,7 +42,6 @@ import javax.inject.Inject
 class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEventFormatter: DisplayableEventFormatter,
                                                       private val dateFormatter: VectorDateFormatter,
                                                       private val stringProvider: StringProvider,
-                                                      private val colorProvider: ColorProvider,
                                                       private val typingHelper: TypingHelper,
                                                       private val avatarRenderer: AvatarRenderer) {
 
@@ -117,7 +114,6 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
         return TchapRoomSummaryItem_()
                 .id(roomSummary.roomId)
                 .avatarRenderer(avatarRenderer)
-                .colorProvider(colorProvider)
                 // We do not display shield in the room list anymore
                 // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
                 .matrixItem(roomSummary.toMatrixItem())

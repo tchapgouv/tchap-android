@@ -153,11 +153,8 @@ object ThemeUtils {
         return mColorByAttr.getOrPut(colorAttribute) {
             try {
                 val color = TypedValue()
-                if (c.theme.resolveAttribute(colorAttribute, color, true)) {
-                    color.data
-                } else {
-                    0
-                }
+                c.theme.resolveAttribute(colorAttribute, color, true)
+                color.data
             } catch (e: Exception) {
                 Timber.e(e, "Unable to get color")
                 ContextCompat.getColor(c, android.R.color.holo_red_dark)
