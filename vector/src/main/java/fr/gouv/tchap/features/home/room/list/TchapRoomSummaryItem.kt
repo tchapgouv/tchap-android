@@ -132,40 +132,38 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
     }
 
     private fun renderRoomType(holder: Holder) {
-        val roomTypeColor: Int
-        var roomTypeLabel: String
         var resource: Int? = null
 
         holder.domainNameView.apply {
             when (roomType) {
                 RoomTchapType.DIRECT   -> {
-                    roomTypeLabel = TchapUtils.getDomainFromDisplayName(matrixItem.getBestName())
-                    roomTypeColor = ThemeUtils.getColor(holder.view.context, R.attr.secondary_text_color)
+                    text = TchapUtils.getDomainFromDisplayName(matrixItem.getBestName())
+                    setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.secondary_text_color))
                     resource = R.drawable.ic_tchap_room_lock_grey
+                    visibility = View.VISIBLE
                 }
                 RoomTchapType.PRIVATE  -> {
-                    roomTypeLabel = holder.view.context.getString(R.string.tchap_room_private_room_type)
-                    roomTypeColor = ContextCompat.getColor(holder.view.context, R.color.tchap_coral)
+                    text = holder.view.context.getString(R.string.tchap_room_private_room_type)
+                    setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_coral))
                     resource = R.drawable.ic_tchap_room_lock_red
+                    visibility = View.VISIBLE
                 }
                 RoomTchapType.EXTERNAL -> {
-                    roomTypeLabel = holder.view.context.getString(R.string.tchap_room_extern_room_type)
-                    roomTypeColor = ContextCompat.getColor(holder.view.context, R.color.tchap_pumpkin_orange)
+                    text = holder.view.context.getString(R.string.tchap_room_extern_room_type)
+                    setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_pumpkin_orange))
                     resource = R.drawable.ic_tchap_room_lock_orange
+                    visibility = View.VISIBLE
                 }
                 RoomTchapType.FORUM    -> {
-                    roomTypeLabel = holder.view.context.getString(R.string.tchap_room_forum_type)
-                    roomTypeColor = ContextCompat.getColor(holder.view.context, R.color.tchap_jade_green)
+                    text = holder.view.context.getString(R.string.tchap_room_forum_type)
+                    setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_jade_green))
                     resource = R.drawable.ic_tchap_forum
+                    visibility = View.VISIBLE
                 }
                 else                   -> {
-                    roomTypeLabel = ""
-                    roomTypeColor = ThemeUtils.getColor(holder.view.context, R.attr.secondary_text_color)
+                    visibility = View.GONE
                 }
             }
-
-            text = roomTypeLabel
-            setTextColor(roomTypeColor)
         }
 
         holder.avatarRoomTypeImageView.apply {
