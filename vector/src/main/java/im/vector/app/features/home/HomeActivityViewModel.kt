@@ -40,6 +40,7 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.pushrules.RuleIds
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
@@ -207,6 +208,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                                     false
                             )
                     )
+                    updateIdentityServer(session)
                 }
             } else {
                 // Try to initialize cross signing in background if possible
@@ -239,6 +241,19 @@ class HomeActivityViewModel @AssistedInject constructor(
                 } catch (failure: Throwable) {
                     Timber.e(failure, "Failed to initialize cross signing")
                 }
+            }
+        }
+    }
+
+    private fun updateIdentityServer(session: Session) {
+        viewModelScope.launch {
+            try {
+                val identityServerUrl = session.sessionParams.homeServerUrl
+                session.identityService().setNewIdentityServer(identityServerUrl)
+                session.identityService().setUserConsent(true)
+                Timber.d("## updateIdentityServer succeeded ($identityServerUrl)")
+            } catch (failure: Throwable) {
+                Timber.e(failure, "## updateIdentityServer failed ")
             }
         }
     }
