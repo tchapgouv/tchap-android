@@ -47,7 +47,6 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
@@ -243,9 +242,6 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                     } else {
                         val searchObservable = session.rx()
                                 .searchUsersDirectory(search, 50, state.excludedUserIds.orEmpty())
-                                .map { users ->
-                                    users.sortedBy { it.toMatrixItem().firstLetterOfDisplayName() }
-                                }
                         // If it's a valid user id try to use Profile API
                         // because directory only returns users that are in public rooms or share a room with you, where as
                         // profile will work other federations

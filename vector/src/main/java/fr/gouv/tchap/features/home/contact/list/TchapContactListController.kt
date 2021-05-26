@@ -88,7 +88,7 @@ class TchapContactListController @Inject constructor(private val session: Sessio
         })
 
         userListHeaderItem {
-            id("known_header", 1)
+            id("local_header", 1)
             header(stringProvider.getString(R.string.local_address_book_header))
         }
 
@@ -189,7 +189,7 @@ class TchapContactListController @Inject constructor(private val session: Sessio
             return
         }
         userListHeaderItem {
-            id("directory")
+            id("directory_header")
             header(stringProvider.getString(R.string.user_directory_header))
         }
         if (toDisplay.isEmpty()) {
