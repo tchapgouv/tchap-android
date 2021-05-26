@@ -89,7 +89,7 @@ class TchapContactListFragment @Inject constructor(
             }
         }
 
-        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, requireActivity(), loadContactsActivityResultLauncher)) {
+        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, requireActivity(), loadContactsActivityResultLauncher, R.string.permissions_rationale_msg_contacts)) {
             viewModel.handle(TchapContactListAction.LoadContacts)
         }
     }
