@@ -3,11 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_home_filter"
+        android:id="@+id/menu_home_search_action"
         android:icon="@drawable/ic_tchap_search"
-        android:title="@string/home_filter_placeholder_home"
-        app:iconTint="?riotx_text_secondary"
-        app:showAsAction="ifRoom"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
-
+        android:title="@string/tchap_menu_cancel_search"
+        app:showAsAction="ifRoom" />
 </menu>

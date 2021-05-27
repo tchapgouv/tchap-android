@@ -42,6 +42,7 @@
     <!--    <color name="tchap_search_bar_text">#7d7d7d</color>-->
     <color name="tchap_general_search_bar">@color/tchap_white_alpha15</color>
     <color name="tchap_general_search_bar_border">@color/tchap_white_alpha24</color>
+    <color name="tchap_general_search_bar_text_hint_color">@color/tchap_white_alpha24</color>
 
     <!-- Action bar text colors -->
     <color name="tchap_action_bar_text_color">@color/white</color>

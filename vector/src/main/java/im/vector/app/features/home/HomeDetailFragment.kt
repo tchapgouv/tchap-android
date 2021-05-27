@@ -18,7 +18,6 @@ package im.vector.app.features.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -88,23 +87,9 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
-    override fun getMenuRes() = R.menu.room_list
+    private var isSearchPressed = false
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_home_mark_all_as_read -> {
-                viewModel.handle(HomeDetailAction.MarkAllRoomsRead)
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = hasUnreadRooms
-        super.onPrepareOptionsMenu(menu)
-    }
+    override fun getMenuRes() = R.menu.tchap_menu_home
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeDetailBinding {
         return FragmentHomeDetailBinding.inflate(inflater, container, false)
@@ -132,7 +117,7 @@ class HomeDetailFragment @Inject constructor(
                 is RoomGroupingMethod.ByLegacyGroup -> {
                     onGroupChange(roomGroupingMethod.groupSummary)
                 }
-                is RoomGroupingMethod.BySpace -> {
+                is RoomGroupingMethod.BySpace       -> {
                     onSpaceChange(roomGroupingMethod.spaceSummary)
                 }
             }
@@ -181,6 +166,33 @@ class HomeDetailFragment @Inject constructor(
         super.onResume()
         // update notification tab if needed
         checkNotificationTabStatus()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_home_search_action -> {
+                if (!isSearchPressed) {
+                    item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS).setIcon(0)
+                    views.homeToolbarContent.visibility = View.GONE
+                    views.homeSearchView.apply {
+                        visibility = View.VISIBLE
+                        isIconified = false
+                    }
+
+                    isSearchPressed = true
+                } else {
+                    item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM).setIcon(R.drawable.ic_tchap_search)
+                    views.homeSearchView.visibility = View.GONE
+                    views.homeToolbarContent.visibility = View.VISIBLE
+
+                    isSearchPressed = false
+                }
+
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun checkNotificationTabStatus() {
@@ -275,10 +287,10 @@ class HomeDetailFragment @Inject constructor(
         serverBackupStatusViewModel
                 .subscribe(this) {
                     when (val banState = it.bannerState.invoke()) {
-                        is BannerState.Setup -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
+                        is BannerState.Setup  -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
                         BannerState.BackingUp -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
                         null,
-                        BannerState.Hidden -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
+                        BannerState.Hidden    -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
                     }
                 }
         views.homeKeysBackupBanner.delegate = this
@@ -309,7 +321,7 @@ class HomeDetailFragment @Inject constructor(
                     is RoomGroupingMethod.ByLegacyGroup -> {
                         // nothing do far
                     }
-                    is RoomGroupingMethod.BySpace -> {
+                    is RoomGroupingMethod.BySpace       -> {
                         it.roomGroupingMethod.spaceSummary?.let {
                             sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(it.roomId))
                         }
@@ -324,7 +336,7 @@ class HomeDetailFragment @Inject constructor(
         views.bottomNavigationView.setOnNavigationItemSelectedListener {
             val displayMode = when (it.itemId) {
                 R.id.bottom_action_people -> RoomListDisplayMode.PEOPLE
-                R.id.bottom_action_rooms -> RoomListDisplayMode.ROOMS
+                R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
                 else                      -> RoomListDisplayMode.NOTIFICATIONS
             }
             viewModel.handle(HomeDetailAction.SwitchDisplayMode(displayMode))
@@ -414,7 +426,7 @@ class HomeDetailFragment @Inject constructor(
 
     private fun RoomListDisplayMode.toMenuId() = when (this) {
         RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
-        RoomListDisplayMode.ROOMS -> R.id.bottom_action_rooms
+        RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
         else                       -> R.id.bottom_action_notification
     }
 

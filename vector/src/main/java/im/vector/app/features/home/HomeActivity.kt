@@ -94,8 +94,7 @@ class HomeActivity :
         ContactsBookViewModel.Factory,
         UnreadMessagesSharedViewModel.Factory,
         NavigationInterceptor,
-        SpaceInviteBottomSheet.InteractionListener,
-        MenuItem.OnActionExpandListener {
+        SpaceInviteBottomSheet.InteractionListener {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
@@ -449,45 +448,6 @@ class HomeActivity :
 
     override fun configure(toolbar: Toolbar) {
         configureToolbar(toolbar, false)
-    }
-
-    override fun getMenuRes() = R.menu.tchap_menu_home
-
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.menu_home_init_sync_legacy)?.isVisible = vectorPreferences.developerMode()
-        menu.findItem(R.id.menu_home_init_sync_optimized)?.isVisible = vectorPreferences.developerMode()
-        return super.onPrepareOptionsMenu(menu)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-
-        val searchItem: MenuItem = menu.findItem(R.id.menu_home_filter)
-        searchItem.setOnActionExpandListener(this)
-
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_home_filter -> {
-                //TODO: Show search edittext
-                //navigator.openRoomsFiltering(this)
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onMenuItemActionExpand(item: MenuItem): Boolean {
-        Toast.makeText(this, "onMenuItemActionExpand", Toast.LENGTH_SHORT).show()
-        return true
-    }
-
-    override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-        Toast.makeText(this, "onMenuItemActionCollapse", Toast.LENGTH_SHORT).show()
-        return true
     }
 
     override fun onBackPressed() {
