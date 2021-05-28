@@ -21,6 +21,9 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
@@ -56,6 +59,7 @@ import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import javax.inject.Inject
 
@@ -127,6 +131,10 @@ class HomeDetailFragment @Inject constructor(
             switchDisplayMode(displayMode)
         }
 
+        viewModel.selectSubscribe(this, HomeDetailViewState::myMatrixItem) { matrixItem ->
+            matrixItem?.let { avatarRenderer.render(it, views.toolbarAvatarImageView) }
+        }
+
         unknownDeviceDetectorSharedViewModel.subscribe { state ->
             state.unknownSessions.invoke()?.let { unknownDevices ->
 //                Timber.v("## Detector Triggerred in fragment - ${unknownDevices.firstOrNull()}")
@@ -174,9 +182,27 @@ class HomeDetailFragment @Inject constructor(
                 if (!isSearchPressed) {
                     item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS).setIcon(0)
                     views.homeToolbarContent.visibility = View.GONE
+                    views.groupToolbarAvatarImageView.visibility = View.GONE
                     views.homeSearchView.apply {
                         visibility = View.VISIBLE
                         isIconified = false
+
+                        // Set default margin to 0 for the LinearLayout container
+                        val layout = findViewById<LinearLayout>(R.id.search_edit_frame)
+                        (layout.layoutParams as? LinearLayout.LayoutParams)?.let {
+                            it.marginStart = 0
+                            it.marginEnd = 0
+                        }
+
+                        // Set default margin to 0 for the search ImageView
+                        val searchIcon = findViewById<ImageView>(R.id.search_mag_icon)
+                        (searchIcon.layoutParams as? LinearLayout.LayoutParams)?.let {
+                            it.marginStart = 0
+                        }
+
+                        // Set default padding to 0 for the SearchAutoComplete
+                        val searchText = findViewById<SearchView.SearchAutoComplete>(R.id.search_src_text)
+                        searchText.setPadding(0, 0, 0, 0)
                     }
 
                     isSearchPressed = true
@@ -184,6 +210,7 @@ class HomeDetailFragment @Inject constructor(
                     item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM).setIcon(R.drawable.ic_tchap_search)
                     views.homeSearchView.visibility = View.GONE
                     views.homeToolbarContent.visibility = View.VISIBLE
+                    views.groupToolbarAvatarImageView.visibility = View.VISIBLE
 
                     isSearchPressed = false
                 }
