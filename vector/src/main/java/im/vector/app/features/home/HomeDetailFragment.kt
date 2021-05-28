@@ -59,7 +59,6 @@ import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import javax.inject.Inject
 
@@ -90,6 +89,8 @@ class HomeDetailFragment @Inject constructor(
                 invalidateOptionsMenu()
             }
         }
+
+    var roomListFragment: RoomListFragment? = null
 
     private var isSearchPressed = false
 
@@ -203,6 +204,18 @@ class HomeDetailFragment @Inject constructor(
                         // Set default padding to 0 for the SearchAutoComplete
                         val searchText = findViewById<SearchView.SearchAutoComplete>(R.id.search_src_text)
                         searchText.setPadding(0, 0, 0, 0)
+
+                        // Listen to searchView events
+                        setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                            override fun onQueryTextSubmit(query: String): Boolean {
+                                return true
+                            }
+
+                            override fun onQueryTextChange(newText: String): Boolean {
+                                roomListFragment?.filterRoomsWith(newText)
+                                return true
+                            }
+                        })
                     }
 
                     isSearchPressed = true
@@ -401,7 +414,8 @@ class HomeDetailFragment @Inject constructor(
                     RoomListDisplayMode.PEOPLE -> {
                         val params = TchapContactListFragmentArgs(
                                 title = getString(R.string.invite_users_to_room_title),
-                                menuResId = R.menu.vector_invite_users_to_room,
+                                menuResId = R.menu.tchap_menu_home,
+                                showInviteActions = false,
                                 showToolbar = false
                         )
                         add(R.id.roomListContainer, TchapContactListFragment::class.java, params.toMvRxBundle(), fragmentTag)
@@ -409,6 +423,10 @@ class HomeDetailFragment @Inject constructor(
                     else                       -> {
                         val params = RoomListParams(displayMode)
                         add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
+                                .apply {
+                                    // TODO : get RoomListFragment instance
+                                    roomListFragment = parentFragmentManager.findFragmentByTag(fragmentTag) as? RoomListFragment
+                                }
                     }
                 }
             } else {
