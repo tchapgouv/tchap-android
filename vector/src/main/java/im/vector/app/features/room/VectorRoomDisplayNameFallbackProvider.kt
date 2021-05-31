@@ -30,7 +30,7 @@ class VectorRoomDisplayNameFallbackProvider(
 
     override fun getNameForEmptyRoom(isDirect: Boolean, leftMemberNames: List<String>): String {
         return if (isDirect && leftMemberNames.isNotEmpty()) {
-            getNameFor1member(leftMemberNames[0])
+            leftMemberNames.first()
         } else {
             context.getString(R.string.room_displayname_empty_room)
         }
