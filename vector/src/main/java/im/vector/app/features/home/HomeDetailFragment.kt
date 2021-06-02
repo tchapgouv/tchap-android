@@ -181,7 +181,7 @@ class HomeDetailFragment @Inject constructor(
         when (item.itemId) {
             R.id.menu_home_search_action -> {
                 if (!isSearchPressed) {
-                    item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS).setIcon(0)
+                    item.setIcon(0)
                     views.homeToolbarContent.visibility = View.GONE
                     views.groupToolbarAvatarImageView.visibility = View.GONE
                     views.homeSearchView.apply {
@@ -220,7 +220,7 @@ class HomeDetailFragment @Inject constructor(
 
                     isSearchPressed = true
                 } else {
-                    item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM).setIcon(R.drawable.ic_tchap_search)
+                    item.setIcon(R.drawable.ic_tchap_search)
                     views.homeSearchView.visibility = View.GONE
                     views.homeToolbarContent.visibility = View.VISIBLE
                     views.groupToolbarAvatarImageView.visibility = View.VISIBLE
