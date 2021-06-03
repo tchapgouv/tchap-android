@@ -25,17 +25,19 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
+import androidx.core.view.*
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
 import fr.gouv.tchap.features.home.contact.list.TchapContactListFragment
 import fr.gouv.tchap.features.home.contact.list.TchapContactListFragmentArgs
+import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.toMvRxBundle
+import im.vector.app.core.extensions.withoutLeftMargin
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
@@ -89,10 +91,6 @@ class HomeDetailFragment @Inject constructor(
                 invalidateOptionsMenu()
             }
         }
-
-    var roomListFragment: RoomListFragment? = null
-
-    private var isSearchPressed = false
 
     override fun getMenuRes() = R.menu.tchap_menu_home
 
@@ -178,61 +176,28 @@ class HomeDetailFragment @Inject constructor(
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             R.id.menu_home_search_action -> {
-                if (!isSearchPressed) {
+                val isSearchMode = views.homeSearchView.isVisible
+                if (!isSearchMode) {
                     item.setIcon(0)
-                    views.homeToolbarContent.visibility = View.GONE
-                    views.groupToolbarAvatarImageView.visibility = View.GONE
+                    views.homeToolbarContent.isVisible = false
+                    views.groupToolbarAvatarImageView.isVisible = false
                     views.homeSearchView.apply {
-                        visibility = View.VISIBLE
+                        isVisible = true
                         isIconified = false
-
-                        // Set default margin to 0 for the LinearLayout container
-                        val layout = findViewById<LinearLayout>(R.id.search_edit_frame)
-                        (layout.layoutParams as? LinearLayout.LayoutParams)?.let {
-                            it.marginStart = 0
-                            it.marginEnd = 0
-                        }
-
-                        // Set default margin to 0 for the search ImageView
-                        val searchIcon = findViewById<ImageView>(R.id.search_mag_icon)
-                        (searchIcon.layoutParams as? LinearLayout.LayoutParams)?.let {
-                            it.marginStart = 0
-                        }
-
-                        // Set default padding to 0 for the SearchAutoComplete
-                        val searchText = findViewById<SearchView.SearchAutoComplete>(R.id.search_src_text)
-                        searchText.setPadding(0, 0, 0, 0)
-
-                        // Listen to searchView events
-                        setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                            override fun onQueryTextSubmit(query: String): Boolean {
-                                return true
-                            }
-
-                            override fun onQueryTextChange(newText: String): Boolean {
-                                roomListFragment?.filterRoomsWith(newText)
-                                return true
-                            }
-                        })
                     }
-
-                    isSearchPressed = true
                 } else {
                     item.setIcon(R.drawable.ic_tchap_search)
-                    views.homeSearchView.visibility = View.GONE
-                    views.homeToolbarContent.visibility = View.VISIBLE
-                    views.groupToolbarAvatarImageView.visibility = View.VISIBLE
-
-                    isSearchPressed = false
+                    views.homeSearchView.isVisible = false
+                    views.homeToolbarContent.isVisible = true
+                    views.groupToolbarAvatarImageView.isVisible = true
                 }
 
-                return true
+                true
             }
+            else                         -> super.onOptionsItemSelected(item)
         }
-
-        return super.onOptionsItemSelected(item)
     }
 
     private fun checkNotificationTabStatus() {
@@ -369,6 +334,15 @@ class HomeDetailFragment @Inject constructor(
                 }
             }
         }
+
+        views.homeSearchView.withoutLeftMargin()
+        views.homeSearchView.queryTextChanges()
+                .skipInitialValue()
+                .map { it.trim() }
+                .subscribe {
+                    // Todo: handle search action
+                }
+                .disposeOnDestroyView()
     }
 
     private fun setupBottomNavigationView() {
@@ -423,10 +397,6 @@ class HomeDetailFragment @Inject constructor(
                     else                       -> {
                         val params = RoomListParams(displayMode)
                         add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
-                                .apply {
-                                    // TODO : get RoomListFragment instance
-                                    roomListFragment = parentFragmentManager.findFragmentByTag(fragmentTag) as? RoomListFragment
-                                }
                     }
                 }
             } else {

@@ -3,12 +3,12 @@
     android:shape="rectangle">
 
     <!-- View background color -->
-    <solid android:color="@color/tchap_general_search_bar" />
+    <solid android:color="?bar_search_bg_color" />
 
     <!-- View border color and width -->
     <stroke
         android:width="0.25dp"
-        android:color="@color/tchap_general_search_bar_border" />
+        android:color="?bar_search_stroke_color" />
 
     <!-- The radius makes the corners rounded -->
     <corners android:radius="2dp" />

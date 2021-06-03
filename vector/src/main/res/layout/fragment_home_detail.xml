@@ -12,8 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:elevation="4dp"
-        app:contentInsetStart="8dp"
-        app:contentInsetEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -28,7 +26,6 @@
                 android:id="@+id/groupToolbarAvatarImageView"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="2dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:contentDescription="@string/a11y_open_drawer"
@@ -41,9 +38,8 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="4dp"
-                    android:importantForAccessibility="no"
                     android:contentDescription="@string/avatar"
+                    android:importantForAccessibility="no"
                     android:transitionName="profile"
                     tools:src="@tools:sample/avatars" />
 
@@ -69,26 +65,13 @@
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/homeSearchView"
+                style="@style/TchapSearchView.Toolbar"
                 android:layout_width="0dp"
                 android:layout_height="34dp"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="4dp"
-                android:background="@drawable/tchap_search_field"
-                android:clickable="true"
-                android:focusable="true"
-                android:textAlignment="center"
+                android:layout_weight="1"
                 android:visibility="gone"
-                app:closeIcon="@drawable/ic_tchap_clear_search"
-                app:defaultQueryHint="@string/tchap_search_hint"
-                app:iconifiedByDefault="false"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:searchHintIcon="@drawable/ic_tchap_search_input"
-                app:searchIcon="@drawable/ic_tchap_search_input"
-                app:theme="@style/TchapSearchView" />
+                tools:visibility="visible" />
 
             <LinearLayout
                 android:id="@+id/homeToolbarContent"

@@ -56,8 +56,6 @@
     <string name="tchap_error_message_default">An error occurred, please try later</string>
     <string name="tchap_colon_append">:</string>
     <string name="tchap_exclamation_mark">!</string>
-    <string name="tchap_menu_cancel_search">Cancel</string>
-    <string name="tchap_search_hint">Search</string>
 
     <!-- tchap discussion -->
     <string name="tchap_cannot_invite_deactivated_account_user">The remote user left definitely this room</string>

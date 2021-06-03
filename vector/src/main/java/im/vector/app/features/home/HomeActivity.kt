@@ -22,9 +22,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -224,7 +221,7 @@ class HomeActivity :
                                     })
                                     .show(supportFragmentManager, "SPACE_SETTINGS")
                         }
-                        is HomeActivitySharedAction.OpenSpaceInvite -> {
+                        is HomeActivitySharedAction.OpenSpaceInvite   -> {
                             SpaceInviteBottomSheet.newInstance(sharedAction.spaceId)
                                     .show(supportFragmentManager, "SPACE_INVITE")
                         }

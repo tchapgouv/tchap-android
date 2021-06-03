@@ -5,6 +5,6 @@
     <item
         android:id="@+id/menu_home_search_action"
         android:icon="@drawable/ic_tchap_search"
-        android:title="@string/tchap_menu_cancel_search"
+        android:title="@string/cancel"
         app:showAsAction="always" />
 </menu>

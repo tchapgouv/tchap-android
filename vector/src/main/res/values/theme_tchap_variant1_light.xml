@@ -9,11 +9,11 @@
         <item name="bar_title_color">@color/white</item>
         <item name="bar_subtitle_color">@color/white</item>
         <item name="bar_action_color">@color/white</item>
-        <item name="actionMenuTextColor">@color/white</item>
-        <item name="actionMenuTextAppearance">@style/TchapMenuItemTextAppearance</item>
-        <item name="android:editTextColor">@color/white</item>
-        <item name="android:textColorHint">@color/tchap_general_search_bar_text_hint_color</item>
-        <item name="colorControlActivated">@color/white</item>
+        <item name="bar_hint_color">@color/tchap_white_alpha24</item>
+        <item name="bar_search_bg_color">@color/tchap_white_alpha15</item>
+        <item name="bar_search_stroke_color">@color/tchap_white_alpha24</item>
+
+        <item name="actionMenuTextColor">?bar_title_color</item>
 
         <!-- Button -->
         <item name="button_bordered_title_color">@color/white</item>
