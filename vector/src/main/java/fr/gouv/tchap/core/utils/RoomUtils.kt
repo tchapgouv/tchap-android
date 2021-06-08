@@ -30,10 +30,11 @@ enum class TchapRoomType {
 object RoomUtils {
     fun getRoomType(roomSummary: RoomSummary): TchapRoomType {
         return when {
-            roomSummary.isDirect    -> TchapRoomType.DIRECT
             roomSummary.isEncrypted -> when (roomSummary.accessRules) {
-                RoomAccessRules.RESTRICTED   -> TchapRoomType.PRIVATE
+                RoomAccessRules.RESTRICTED -> TchapRoomType.PRIVATE
                 RoomAccessRules.UNRESTRICTED -> TchapRoomType.EXTERNAL
+                RoomAccessRules.DIRECT -> TchapRoomType.DIRECT
+                null -> if (roomSummary.isDirect) TchapRoomType.DIRECT else TchapRoomType.PRIVATE
                 else                         -> TchapRoomType.UNKNOWN
             }
             roomSummary.isPublic    -> TchapRoomType.FORUM
