@@ -75,7 +75,7 @@ class TchapContactListController @Inject constructor(private val session: Sessio
     private fun buildlocalContacts(currentState: TchapContactListViewState) {
         val userList = currentState.filteredRoomSummaries.mapNotNull { item ->
             item.directUserId?.let {
-                User(it, item.displayName, item.avatarUrl)
+                session.getUser(it)
             }
         }
         val tchapContactList: MutableList<User> = userList.toMutableList()
