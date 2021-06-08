@@ -18,14 +18,13 @@ package im.vector.app.features.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
-import androidx.core.view.*
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -83,6 +82,8 @@ class HomeDetailFragment @Inject constructor(
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private lateinit var sharedCallActionViewModel: SharedKnownCallsViewModel
+
+    private var menu: Menu? = null
 
     private var hasUnreadRooms = false
         set(value) {
@@ -175,28 +176,40 @@ class HomeDetailFragment @Inject constructor(
         checkNotificationTabStatus()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        this.menu = menu
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_home_search_action -> {
-                val isSearchMode = views.homeSearchView.isVisible
-                if (!isSearchMode) {
-                    item.setIcon(0)
-                    views.homeToolbarContent.isVisible = false
-                    views.groupToolbarAvatarImageView.isVisible = false
-                    views.homeSearchView.apply {
-                        isVisible = true
-                        isIconified = false
-                    }
-                } else {
-                    item.setIcon(R.drawable.ic_tchap_search)
-                    views.homeSearchView.isVisible = false
-                    views.homeToolbarContent.isVisible = true
-                    views.groupToolbarAvatarImageView.isVisible = true
-                }
-
+                toggleSearchView()
                 true
             }
-            else                         -> super.onOptionsItemSelected(item)
+            else                         -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
+    private fun toggleSearchView() {
+        val item = menu?.findItem(R.id.menu_home_search_action)
+        val isSearchMode = views.homeSearchView.isVisible
+        if (!isSearchMode) {
+            item?.setIcon(0)
+            views.homeToolbarContent.isVisible = false
+            views.groupToolbarAvatarImageView.isVisible = false
+            views.homeSearchView.apply {
+                isVisible = true
+                isIconified = false
+            }
+        } else {
+            item?.setIcon(R.drawable.ic_tchap_search)
+            views.homeSearchView.isVisible = false
+            views.homeToolbarContent.isVisible = true
+            views.groupToolbarAvatarImageView.isVisible = true
+            views.homeSearchView.setQuery("", false)
         }
     }
 
@@ -371,6 +384,7 @@ class HomeDetailFragment @Inject constructor(
 
     private fun switchDisplayMode(displayMode: RoomListDisplayMode) {
         views.groupToolbarTitleView.setText(displayMode.titleRes)
+        if (views.homeSearchView.isVisible) toggleSearchView()
         updateSelectedFragment(displayMode)
     }
 
