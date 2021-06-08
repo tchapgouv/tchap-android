@@ -35,7 +35,6 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
-import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentUserListBinding
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
 import org.matrix.android.sdk.api.session.user.model.User
@@ -72,21 +71,6 @@ class TchapContactListFragment @Inject constructor(
 
         homeServerCapabilitiesViewModel.subscribe {
             views.userListE2EbyDefaultDisabled.isVisible = !it.isE2EByDefault
-        }
-
-        viewModel.observeViewEvents {
-            when (it) {
-                is TchapContactListViewEvents.OpenShareMatrixToLink -> {
-                    val text = getString(R.string.invite_friends_text, it.link)
-                    startSharePlainTextIntent(
-                            fragment = this,
-                            activityResultLauncher = null,
-                            chooserTitle = getString(R.string.invite_friends),
-                            text = text,
-                            extraTitle = getString(R.string.invite_friends_rich_title)
-                    )
-                }
-            }
         }
 
         if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, requireActivity(), loadContactsActivityResultLauncher, R.string.permissions_rationale_msg_contacts)) {

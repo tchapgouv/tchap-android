@@ -22,14 +22,11 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
-import im.vector.app.core.contacts.MappedContact
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.contactsbook.contactDetailItem
-import im.vector.app.features.contactsbook.contactItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.userdirectory.userDirectoryUserItem
 import im.vector.app.features.userdirectory.userListHeaderItem
@@ -81,10 +78,10 @@ class TchapContactListController @Inject constructor(private val session: Sessio
                 User(it, item.displayName, item.avatarUrl)
             }
         }
-        val tchapContactList: MutableList<Any> = userList.toMutableList()
+        val tchapContactList: MutableList<User> = userList.toMutableList()
 
-        tchapContactList.addAll(currentState.filteredLocalContacts.filter { mappedContact ->
-            mappedContact.emails.any { it.matrixId != null && !userList.any { user -> user.userId == it.matrixId } }
+        tchapContactList.addAll(currentState.filteredLocalUsers.filter { user ->
+            !userList.any { it.userId == user.userId }
         })
 
         userListHeaderItem {
@@ -92,62 +89,21 @@ class TchapContactListController @Inject constructor(private val session: Sessio
             header(stringProvider.getString(R.string.local_address_book_header))
         }
 
-        tchapContactList.sortWith(object : Comparator<Any> {
-            override fun compare(contact1: Any, contact2: Any): Int {
-                val lhs = when (contact1) {
-                    is User          -> contact1.getBestName()
-                    is MappedContact -> contact1.displayName
-                    else             -> null
-                }
+        tchapContactList.sortWith { contact1, contact2 ->
+            val lhs = contact1.getBestName()
+            val rhs = contact2.getBestName()
 
-                val rhs = when (contact2) {
-                    is User          -> contact2.getBestName()
-                    is MappedContact -> contact2.displayName
-                    else             -> null
-                }
-
-                if (lhs == null) {
-                    return -1
-                } else if (rhs == null) {
-                    return 1
-                }
-
-                return String.CASE_INSENSITIVE_ORDER.compare(lhs, rhs)
-            }
-        })
+            String.CASE_INSENSITIVE_ORDER.compare(lhs, rhs)
+        }
 
         tchapContactList.forEach { item ->
-            when (item) {
-                is User -> {
-                    userDirectoryUserItem {
-                        id(item.userId)
-                        selected(false)
-                        matrixItem(item.toMatrixItem())
-                        avatarRenderer(avatarRenderer)
-                        clickListener { _ ->
-                            callback?.onItemClick(item)
-                        }
-                    }
-                }
-
-                is MappedContact -> {
-                    contactItem {
-                        id(item.id)
-                        mappedContact(item)
-                        avatarRenderer(avatarRenderer)
-                    }
-                    item.emails
-                            .forEachIndexed { index, it ->
-                                if (it.matrixId == null) return@forEachIndexed
-                                contactDetailItem {
-                                    id("${item.id}-e-$index-${it.email}")
-                                    threePid(it.email)
-                                    matrixId(it.matrixId)
-                                    clickListener {
-                                        callback?.onMatrixIdClick(it.matrixId)
-                                    }
-                                }
-                            }
+            userDirectoryUserItem {
+                id(item.userId)
+                selected(false)
+                matrixItem(item.toMatrixItem())
+                avatarRenderer(avatarRenderer)
+                clickListener { _ ->
+                    callback?.onItemClick(item)
                 }
             }
         }

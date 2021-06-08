@@ -21,6 +21,5 @@ import im.vector.app.core.platform.VectorViewModelAction
 sealed class TchapContactListAction : VectorViewModelAction {
     data class SearchUsers(val value: String) : TchapContactListAction()
     object ClearSearchUsers : TchapContactListAction()
-    object ComputeMatrixToLinkForSharing : TchapContactListAction()
     object LoadContacts : TchapContactListAction()
 }

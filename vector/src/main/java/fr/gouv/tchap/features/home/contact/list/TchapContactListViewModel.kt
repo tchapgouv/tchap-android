@@ -27,15 +27,18 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.core.contacts.ContactsDataSource
 import im.vector.app.core.contacts.MappedContact
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
@@ -59,13 +62,10 @@ private typealias DirectoryUsersSearch = String
 class TchapContactListViewModel @AssistedInject constructor(@Assisted initialState: TchapContactListViewState,
                                                             private val contactsDataSource: ContactsDataSource,
                                                             private val session: Session)
-    : VectorViewModel<TchapContactListViewState, TchapContactListAction, TchapContactListViewEvents>(initialState) {
+    : VectorViewModel<TchapContactListViewState, TchapContactListAction, EmptyViewEvents>(initialState) {
 
-//    private val knownUsersSearch = BehaviorRelay.create<KnownUsersSearch>()
+    //    private val knownUsersSearch = BehaviorRelay.create<KnownUsersSearch>()
     private val directoryUsersSearch = BehaviorRelay.create<DirectoryUsersSearch>()
-
-    private var allContacts: List<MappedContact> = emptyList()
-    private var mappedContacts: List<MappedContact> = emptyList()
 
     @AssistedFactory
     interface Factory {
@@ -102,12 +102,11 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            allContacts = contactsDataSource.getContacts(
+            val allContacts = contactsDataSource.getContacts(
                     withEmails = true,
                     // Do not handle phone numbers for the moment
                     withMsisdn = false
             )
-            mappedContacts = allContacts
 
             setState {
                 copy(
@@ -126,8 +125,7 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
         }
         viewModelScope.launch {
             val threePids = contacts.flatMap { contact ->
-                contact.emails.map { ThreePid.Email(it.email) } +
-                        contact.msisdns.map { ThreePid.Msisdn(it.phoneNumber) }
+                contact.emails.map { ThreePid.Email(it.email) }
             }
 
             val data = try {
@@ -144,27 +142,32 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                 return@launch
             }
 
-            mappedContacts = allContacts.map { contactModel ->
-                contactModel.copy(
-                        emails = contactModel.emails.map { email ->
-                            email.copy(
-                                    matrixId = data
-                                            .firstOrNull { foundThreePid -> foundThreePid.threePid.value == email.email }
-                                            ?.matrixId
-                            )
-                        },
-                        msisdns = contactModel.msisdns.map { msisdn ->
-                            msisdn.copy(
-                                    matrixId = data
-                                            .firstOrNull { foundThreePid -> foundThreePid.threePid.value == msisdn.phoneNumber }
-                                            ?.matrixId
-                            )
+            val unresolvedThreePids = mutableListOf<String>()
+            val users = mutableMapOf<String, User>()
+
+            data.associateByTo(users,
+                    { it.matrixId },
+                    {
+                        session.getUser(it.matrixId) ?: run {
+                            unresolvedThreePids.add(it.matrixId)
+                            //Create a temporary user
+                            User(it.matrixId, TchapUtils.computeDisplayNameFromUserId(it.matrixId), null)
                         }
-                )
+                    })
+
+            setState {
+                copy(localUsers = users.values.toList())
             }
+
+            updateFilteredContacts()
+
+            unresolvedThreePids.mapNotNull {
+                tryOrNull { session.resolveUser(it) }
+            }.forEach { user -> users[user.userId] = user }
 
             setState {
                 copy(
+                        localUsers = users.values.toList(),
                         isBoundRetrieved = true
                 )
             }
@@ -174,19 +177,17 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
     }
 
     private fun updateFilteredContacts() = withState { state ->
-        val filteredMappedContacts = mappedContacts
-                .filter { it.displayName.contains(state.searchTerm, true) }
-                .filter { contactModel -> contactModel.emails.any { it.matrixId != null } || contactModel.msisdns.any { it.matrixId != null }
-                }
+        val filteredUsers = state.localUsers
+                .filter { it.getBestName().contains(state.searchTerm, true) }
 
         val filteredRoomSummaries = state.roomSummaries.invoke()
                 ?.filter { it.displayName.contains(state.searchTerm, true) }
-                ?.filter { user -> user.directUserId != null }
+                ?.filter { roomSummary -> roomSummary.directUserId != null }
                 .orEmpty()
 
         setState {
             copy(
-                    filteredLocalContacts = filteredMappedContacts,
+                    filteredLocalUsers = filteredUsers,
                     filteredRoomSummaries = filteredRoomSummaries
             )
         }
@@ -194,10 +195,9 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
 
     override fun handle(action: TchapContactListAction) {
         when (action) {
-            is TchapContactListAction.SearchUsers                -> handleSearchUsers(action.value)
-            is TchapContactListAction.ClearSearchUsers           -> handleClearSearchUsers()
-            TchapContactListAction.ComputeMatrixToLinkForSharing -> handleShareMyMatrixToLink()
-            TchapContactListAction.LoadContacts                  -> loadContacts()
+            is TchapContactListAction.SearchUsers -> handleSearchUsers(action.value)
+            TchapContactListAction.ClearSearchUsers -> handleClearSearchUsers()
+            TchapContactListAction.LoadContacts -> loadContacts()
         }.exhaustive
     }
 
@@ -207,12 +207,6 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
         }
 //        knownUsersSearch.accept(searchTerm)
         directoryUsersSearch.accept(searchTerm)
-    }
-
-    private fun handleShareMyMatrixToLink() {
-        session.permalinkService().createPermalink(session.myUserId)?.let {
-            _viewEvents.post(TchapContactListViewEvents.OpenShareMatrixToLink(it))
-        }
     }
 
     private fun handleClearSearchUsers() {

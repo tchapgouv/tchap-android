@@ -132,6 +132,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                             checkBootstrap = true
                         }
                         is InitialSyncProgressService.Status.Idle        -> {
+                            updateIdentityServer(session)
                             if (checkBootstrap) {
                                 checkBootstrap = false
                                 maybeBootstrapCrossSigningAfterInitialSync()
@@ -208,7 +209,6 @@ class HomeActivityViewModel @AssistedInject constructor(
                                     false
                             )
                     )
-                    updateIdentityServer(session)
                 }
             } else {
                 // Try to initialize cross signing in background if possible
@@ -248,10 +248,13 @@ class HomeActivityViewModel @AssistedInject constructor(
     private fun updateIdentityServer(session: Session) {
         viewModelScope.launch {
             try {
-                val identityServerUrl = session.sessionParams.homeServerUrl
-                session.identityService().setNewIdentityServer(identityServerUrl)
+                if (session.identityService().getCurrentIdentityServerUrl() == null) {
+                    val identityServerUrl = session.sessionParams.homeServerUrl
+
+                    session.identityService().setNewIdentityServer(identityServerUrl)
+                    Timber.d("## updateIdentityServer succeeded ($identityServerUrl)")
+                }
                 session.identityService().setUserConsent(true)
-                Timber.d("## updateIdentityServer succeeded ($identityServerUrl)")
             } catch (failure: Throwable) {
                 Timber.e(failure, "## updateIdentityServer failed ")
             }
