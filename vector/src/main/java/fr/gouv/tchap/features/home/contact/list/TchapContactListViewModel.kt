@@ -37,20 +37,15 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.ThreePid
-import org.matrix.android.sdk.api.session.profile.ProfileService
-import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.user.model.User
-import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
@@ -234,38 +229,7 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                     val stream = if (search.isBlank()) {
                         Single.just(emptyList<User>())
                     } else {
-                        val searchObservable = session.rx()
-                                .searchUsersDirectory(search, 50, state.excludedUserIds.orEmpty())
-                        // If it's a valid user id try to use Profile API
-                        // because directory only returns users that are in public rooms or share a room with you, where as
-                        // profile will work other federations
-                        if (!MatrixPatterns.isUserId(search)) {
-                            searchObservable
-                        } else {
-                            val profileObservable = session.rx().getProfileInfo(search)
-                                    .map { json ->
-                                        User(
-                                                userId = search,
-                                                displayName = json[ProfileService.DISPLAY_NAME_KEY] as? String,
-                                                avatarUrl = json[ProfileService.AVATAR_URL_KEY] as? String
-                                        ).toOptional()
-                                    }
-                                    .onErrorReturn { Optional.empty() }
-
-                            Single.zip(
-                                    searchObservable,
-                                    profileObservable,
-                                    { searchResults, optionalProfile ->
-                                        val profile = optionalProfile.getOrNull() ?: return@zip searchResults
-                                        val searchContainsProfile = searchResults.any { it.userId == profile.userId }
-                                        if (searchContainsProfile) {
-                                            searchResults
-                                        } else {
-                                            listOf(profile) + searchResults
-                                        }
-                                    }
-                            )
-                        }
+                        session.rx().searchUsersDirectory(search, 50, state.excludedUserIds.orEmpty())
                     }
                     stream.toAsync {
                         copy(directoryUsers = it)
@@ -276,15 +240,15 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
     }
 
     private fun observeDMs() {
-        session.getPagedRoomSummariesLive(
+        session.getRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
                     this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
                     this.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                }, sortOrder = RoomSortOrder.NONE
+                }
         ).asObservable()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .observeOn(Schedulers.computation())
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .execute {
                     copy(
                             roomSummaries = it,

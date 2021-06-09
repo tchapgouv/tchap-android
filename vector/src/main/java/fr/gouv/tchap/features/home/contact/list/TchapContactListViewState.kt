@@ -16,7 +16,6 @@
 
 package fr.gouv.tchap.features.home.contact.list
 
-import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
@@ -30,7 +29,7 @@ data class TchapContactListViewState(
         val directoryUsers: Async<List<User>> = Uninitialized,
 
         // All roomSummaries
-        val roomSummaries: Async<PagedList<RoomSummary>> = Uninitialized,
+        val roomSummaries: Async<List<RoomSummary>> = Uninitialized,
         // All roomSummaries, filtered by searchTerm
         val filteredRoomSummaries: List<RoomSummary> = emptyList(),
 
