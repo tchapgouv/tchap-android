@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Enum for [RoomJoinRulesContent] : https://gitlab.matrix.org/new-vector/internal/-/wikis/DINSIC#imvectorroomaccess_rules
+ * Enum for [RoomJoinRulesContent]
  */
 @JsonClass(generateAdapter = false)
 enum class RoomAccessRules(val value: String) {
