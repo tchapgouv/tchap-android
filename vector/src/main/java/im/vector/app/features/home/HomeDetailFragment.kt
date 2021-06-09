@@ -24,6 +24,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
@@ -209,7 +210,7 @@ class HomeDetailFragment @Inject constructor(
             views.homeSearchView.isVisible = false
             views.homeToolbarContent.isVisible = true
             views.groupToolbarAvatarImageView.isVisible = true
-            views.homeSearchView.setQuery("", false)
+            views.homeSearchView.takeUnless { it.isEmpty() }?.setQuery("", false)
         }
     }
 
@@ -351,10 +352,8 @@ class HomeDetailFragment @Inject constructor(
         views.homeSearchView.withoutLeftMargin()
         views.homeSearchView.queryTextChanges()
                 .skipInitialValue()
-                .map { it.trim() }
-                .subscribe {
-                    // Todo: handle search action
-                }
+                .map { it.trim().toString() }
+                .subscribe { filterWith(it) }
                 .disposeOnDestroyView()
     }
 
@@ -366,6 +365,8 @@ class HomeDetailFragment @Inject constructor(
                 R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
                 else                      -> RoomListDisplayMode.NOTIFICATIONS
             }
+            // close search view before changing display mode
+            if (views.homeSearchView.isVisible) toggleSearchView()
             viewModel.handle(HomeDetailAction.SwitchDisplayMode(displayMode))
             true
         }
@@ -384,12 +385,11 @@ class HomeDetailFragment @Inject constructor(
 
     private fun switchDisplayMode(displayMode: RoomListDisplayMode) {
         views.groupToolbarTitleView.setText(displayMode.titleRes)
-        if (views.homeSearchView.isVisible) toggleSearchView()
         updateSelectedFragment(displayMode)
     }
 
     private fun updateSelectedFragment(displayMode: RoomListDisplayMode) {
-        val fragmentTag = "FRAGMENT_TAG_${displayMode.name}"
+        val fragmentTag = "$FRAGMENT_TAG_PREFIX${displayMode.name}"
         val fragmentToShow = childFragmentManager.findFragmentByTag(fragmentTag)
         childFragmentManager.commitTransaction {
             childFragmentManager.fragments
@@ -415,6 +415,19 @@ class HomeDetailFragment @Inject constructor(
                 }
             } else {
                 attach(fragmentToShow)
+            }
+        }
+    }
+
+    private fun filterWith(filter: String) {
+        withState(viewModel) {
+            val displayMode = it.displayMode
+            val fragmentTag = "$FRAGMENT_TAG_PREFIX${displayMode.name}"
+            val fragment = childFragmentManager.findFragmentByTag(fragmentTag)
+            when (displayMode) {
+                RoomListDisplayMode.PEOPLE -> Unit // Todo: SearchView is not displayed yet for people
+                RoomListDisplayMode.ROOMS  -> (fragment as? RoomListFragment)?.filterRoomsWith(filter)
+                else                       -> Unit // nothing to do
             }
         }
     }
@@ -477,5 +490,9 @@ class HomeDetailFragment @Inject constructor(
 
     override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {
         return serverBackupStatusViewModelFactory.create(initialState)
+    }
+
+    companion object {
+        private const val FRAGMENT_TAG_PREFIX = "FRAGMENT_TAG_"
     }
 }
