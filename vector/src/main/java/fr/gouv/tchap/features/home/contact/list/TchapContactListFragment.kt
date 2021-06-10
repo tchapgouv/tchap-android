@@ -69,10 +69,6 @@ class TchapContactListFragment @Inject constructor(
         setupRecyclerView()
         setupSearchView()
 
-        homeServerCapabilitiesViewModel.subscribe {
-            views.userListE2EbyDefaultDisabled.isVisible = !it.isE2EByDefault
-        }
-
         if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, requireActivity(), loadContactsActivityResultLauncher, R.string.permissions_rationale_msg_contacts)) {
             viewModel.handle(TchapContactListAction.LoadContacts)
         }

@@ -139,7 +139,7 @@ class TchapContactListController @Inject constructor(private val session: Sessio
 
     private fun buildDirectoryUsers(directoryUsers: List<User>, searchTerms: String, ignoreIds: List<String>) {
         val toDisplay = directoryUsers
-                .filter { !ignoreIds.contains(it.userId) && it.userId != session.myUserId }
+                .filterNot { ignoreIds.contains(it.userId) || it.userId == session.myUserId }
 
         if (toDisplay.isEmpty() && searchTerms.isBlank()) {
             return

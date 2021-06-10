@@ -120,7 +120,6 @@ object TchapUtils {
                                 Character.toTitleCase(c)
                             }
                             else                   -> {
-                                capNextChar = false
                                 c
                             }
                         }
