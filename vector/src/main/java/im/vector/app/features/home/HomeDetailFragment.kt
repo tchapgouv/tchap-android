@@ -30,9 +30,9 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
+import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import fr.gouv.tchap.features.home.contact.list.TchapContactListFragment
 import fr.gouv.tchap.features.home.contact.list.TchapContactListFragmentArgs
-import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
@@ -403,7 +403,6 @@ class HomeDetailFragment @Inject constructor(
                         val params = TchapContactListFragmentArgs(
                                 title = getString(R.string.invite_users_to_room_title),
                                 menuResId = R.menu.tchap_menu_home,
-                                showInviteActions = false,
                                 showToolbar = false
                         )
                         add(R.id.roomListContainer, TchapContactListFragment::class.java, params.toMvRxBundle(), fragmentTag)
