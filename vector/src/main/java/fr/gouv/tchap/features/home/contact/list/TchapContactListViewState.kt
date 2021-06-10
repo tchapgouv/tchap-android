@@ -30,13 +30,8 @@ data class TchapContactListViewState(
         // All the contacts on the phone
         val mappedContacts: Async<List<MappedContact>> = Loading(),
 
-        // All users from roomSummaries
-        val roomSummariesUsers: List<User> = emptyList(),
-        // All the contacts on the phone
-        val localUsers: List<User> = emptyList(),
         // All contacts, filtered by searchTerm
         val filteredLocalUsers: List<User> = emptyList(),
-
 
         // True when the identity service has return some data
         val isBoundRetrieved: Boolean = false,

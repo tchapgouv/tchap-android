@@ -61,6 +61,11 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
     //    private val knownUsersSearch = BehaviorRelay.create<KnownUsersSearch>()
     private val directoryUsersSearch = BehaviorRelay.create<DirectoryUsersSearch>()
 
+    // All users from roomSummaries
+    private var roomSummariesUsers: List<User> = emptyList()
+    // All the contacts on the phone
+    private var localUsers: List<User> = emptyList()
+
     @AssistedFactory
     interface Factory {
         fun create(initialState: TchapContactListViewState): TchapContactListViewModel
@@ -109,7 +114,6 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
             }
 
             performLookup(allContacts)
-            updateFilteredContacts()
         }
     }
 
@@ -140,17 +144,15 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
             val users: MutableMap<String, User> = data.map {
                 var user = session.getUser(it.matrixId)
                 user = if (user == null) {
+                    unresolvedThreePids.add(it.matrixId)
                     User(it.matrixId, TchapUtils.computeDisplayNameFromUserId(it.matrixId), null)
                 } else {
-                    unresolvedThreePids.add(it.matrixId)
                     user
                 }
                 it.matrixId to user
             }.toMap().toMutableMap()
 
-            setState {
-                copy(localUsers = users.values.toList())
-            }
+            localUsers = users.values.toList()
 
             updateFilteredContacts()
 
@@ -158,9 +160,10 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                 tryOrNull { session.resolveUser(it) }
             }.forEach { user -> users[user.userId] = user }
 
+            localUsers = users.values.toList()
+
             setState {
                 copy(
-                        localUsers = users.values.toList(),
                         isBoundRetrieved = true
                 )
             }
@@ -170,13 +173,17 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
     }
 
     private fun updateFilteredContacts() = withState { state ->
-        val tchapContactList: MutableList<User> = state.roomSummariesUsers.toMutableList()
+        val tchapContactList: MutableList<User> = roomSummariesUsers.toMutableList()
 
-        tchapContactList.addAll(state.localUsers.filter { user ->
-            !state.roomSummariesUsers.any { it.userId == user.userId }
+        tchapContactList.addAll(localUsers.filter { user ->
+            !roomSummariesUsers.any { it.userId == user.userId }
         })
 
-        val filteredUsers = tchapContactList.filter { it.getBestName().contains(state.searchTerm, true) }
+        val filteredUsers = if (state.searchTerm.isNotEmpty()) {
+            tchapContactList.filter { it.getBestName().contains(state.searchTerm, true) }
+        } else {
+            tchapContactList
+        }
 
         setState {
             copy(
@@ -250,9 +257,9 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                         roomSummary.directUserId?.let {
                             var user = session.getUser(it)
                             user = if (user == null) {
+                                unresolvedThreePids.add(it)
                                 User(it, TchapUtils.computeDisplayNameFromUserId(it), null)
                             } else {
-                                unresolvedThreePids.add(it)
                                 user
                             }
 
@@ -260,9 +267,7 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                         }
                     }.toMap().toMutableMap()
 
-                    setState {
-                        copy(roomSummariesUsers = users.values.toList())
-                    }
+                    roomSummariesUsers = users.values.toList()
 
                     updateFilteredContacts()
 
@@ -271,11 +276,7 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                             tryOrNull { session.resolveUser(it) }
                         }.forEach { user -> users[user.userId] = user }
 
-                        setState {
-                            copy(
-                                    roomSummariesUsers = users.values.toList(),
-                            )
-                        }
+                        roomSummariesUsers = users.values.toList()
 
                         updateFilteredContacts()
                     }
