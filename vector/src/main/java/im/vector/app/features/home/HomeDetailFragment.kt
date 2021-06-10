@@ -18,8 +18,6 @@ package im.vector.app.features.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -83,8 +81,6 @@ class HomeDetailFragment @Inject constructor(
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private lateinit var sharedCallActionViewModel: SharedKnownCallsViewModel
-
-    private var menu: Menu? = null
 
     private var hasUnreadRooms = false
         set(value) {
@@ -177,11 +173,6 @@ class HomeDetailFragment @Inject constructor(
         checkNotificationTabStatus()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        this.menu = menu
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_home_search_action -> {
@@ -195,10 +186,10 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun toggleSearchView() {
-        val item = menu?.findItem(R.id.menu_home_search_action)
+        val searchItem = views.groupToolbar.menu?.findItem(R.id.menu_home_search_action)
         val isSearchMode = views.homeSearchView.isVisible
         if (!isSearchMode) {
-            item?.setIcon(0)
+            searchItem?.setIcon(0)
             views.homeToolbarContent.isVisible = false
             views.groupToolbarAvatarImageView.isVisible = false
             views.homeSearchView.apply {
@@ -206,7 +197,7 @@ class HomeDetailFragment @Inject constructor(
                 isIconified = false
             }
         } else {
-            item?.setIcon(R.drawable.ic_tchap_search)
+            searchItem?.setIcon(R.drawable.ic_tchap_search)
             views.homeSearchView.isVisible = false
             views.homeToolbarContent.isVisible = true
             views.groupToolbarAvatarImageView.isVisible = true
@@ -353,7 +344,7 @@ class HomeDetailFragment @Inject constructor(
         views.homeSearchView.queryTextChanges()
                 .skipInitialValue()
                 .map { it.trim().toString() }
-                .subscribe { filterWith(it) }
+                .subscribe { searchWith(it) }
                 .disposeOnDestroyView()
     }
 
@@ -400,11 +391,7 @@ class HomeDetailFragment @Inject constructor(
             if (fragmentToShow == null) {
                 when (displayMode) {
                     RoomListDisplayMode.PEOPLE -> {
-                        val params = TchapContactListFragmentArgs(
-                                title = getString(R.string.invite_users_to_room_title),
-                                menuResId = R.menu.tchap_menu_home,
-                                showToolbar = false
-                        )
+                        val params = TchapContactListFragmentArgs(title = getString(R.string.invite_users_to_room_title))
                         add(R.id.roomListContainer, TchapContactListFragment::class.java, params.toMvRxBundle(), fragmentTag)
                     }
                     else                       -> {
@@ -418,14 +405,14 @@ class HomeDetailFragment @Inject constructor(
         }
     }
 
-    private fun filterWith(filter: String) {
+    private fun searchWith(value: String) {
         withState(viewModel) {
             val displayMode = it.displayMode
             val fragmentTag = "$FRAGMENT_TAG_PREFIX${displayMode.name}"
             val fragment = childFragmentManager.findFragmentByTag(fragmentTag)
             when (displayMode) {
-                RoomListDisplayMode.PEOPLE -> Unit // Todo: SearchView is not displayed yet for people
-                RoomListDisplayMode.ROOMS  -> (fragment as? RoomListFragment)?.filterRoomsWith(filter)
+                RoomListDisplayMode.PEOPLE -> (fragment as? TchapContactListFragment)?.searchContactsWith(value)
+                RoomListDisplayMode.ROOMS  -> (fragment as? RoomListFragment)?.filterRoomsWith(value)
                 else                       -> Unit // nothing to do
             }
         }
