@@ -162,11 +162,9 @@ class RoomProfileFragment @Inject constructor(
     }
 
     private fun handleQuickActions(action: RoomListQuickActionsSharedAction) = when (action) {
+        is RoomListQuickActionsSharedAction.NotificationsAll,
         is RoomListQuickActionsSharedAction.NotificationsAllNoisy     -> {
             roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.ALL_MESSAGES_NOISY))
-        }
-        is RoomListQuickActionsSharedAction.NotificationsAll          -> {
-            roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.ALL_MESSAGES))
         }
         is RoomListQuickActionsSharedAction.NotificationsMentionsOnly -> {
             roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.MENTIONS_ONLY))

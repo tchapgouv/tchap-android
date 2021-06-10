@@ -61,7 +61,6 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
         }
 
         val selectedRoomState = state.roomNotificationState()
-        RoomListQuickActionsSharedAction.NotificationsAllNoisy(roomSummary.roomId).toBottomSheetItem(0, selectedRoomState)
         RoomListQuickActionsSharedAction.NotificationsAll(roomSummary.roomId).toBottomSheetItem(1, selectedRoomState)
         RoomListQuickActionsSharedAction.NotificationsMentionsOnly(roomSummary.roomId).toBottomSheetItem(2, selectedRoomState)
         RoomListQuickActionsSharedAction.NotificationsMute(roomSummary.roomId).toBottomSheetItem(3, selectedRoomState)
@@ -73,8 +72,10 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
 
     private fun RoomListQuickActionsSharedAction.toBottomSheetItem(index: Int, roomNotificationState: RoomNotificationState? = null) {
         val selected = when (this) {
-            is RoomListQuickActionsSharedAction.NotificationsAllNoisy     -> roomNotificationState == RoomNotificationState.ALL_MESSAGES_NOISY
-            is RoomListQuickActionsSharedAction.NotificationsAll          -> roomNotificationState == RoomNotificationState.ALL_MESSAGES
+            is RoomListQuickActionsSharedAction.NotificationsAllNoisy,
+            is RoomListQuickActionsSharedAction.NotificationsAll          -> {
+                roomNotificationState == RoomNotificationState.ALL_MESSAGES || roomNotificationState == RoomNotificationState.ALL_MESSAGES_NOISY
+            }
             is RoomListQuickActionsSharedAction.NotificationsMentionsOnly -> roomNotificationState == RoomNotificationState.MENTIONS_ONLY
             is RoomListQuickActionsSharedAction.NotificationsMute         -> roomNotificationState == RoomNotificationState.MUTE
             else                                                          -> false
