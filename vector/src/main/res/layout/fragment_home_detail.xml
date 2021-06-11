@@ -166,7 +166,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?riotx_background"
-        app:itemIconSize="24dp"
+        app:itemIconSize="28dp"
         app:itemIconTint="@color/bottom_navigation_icon_tint_selector"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
