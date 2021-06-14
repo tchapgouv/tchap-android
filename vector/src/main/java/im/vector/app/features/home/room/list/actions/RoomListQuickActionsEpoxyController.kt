@@ -65,16 +65,16 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
         }
 
         val selectedRoomState = when (val notificationState = state.roomNotificationState()) {
-            RoomNotificationState.ALL_MESSAGES_NOISY,
-            RoomNotificationState.ALL_MESSAGES  -> RoomNotificationState.ALL_MESSAGES
-            RoomNotificationState.MENTIONS_ONLY -> {
+            RoomNotificationState.ALL_MESSAGES,
+            RoomNotificationState.ALL_MESSAGES_NOISY -> RoomNotificationState.ALL_MESSAGES_NOISY
+            RoomNotificationState.MENTIONS_ONLY      -> {
                 if (roomSummary.allowMentionsOnlyNotifications()) notificationState else RoomNotificationState.MUTE
             }
-            else                                -> notificationState
+            else                                     -> notificationState
         }
 
 
-        RoomListQuickActionsSharedAction.NotificationsAll(roomSummary.roomId).toBottomSheetItem(1, selectedRoomState)
+        RoomListQuickActionsSharedAction.NotificationsAllNoisy(roomSummary.roomId).toBottomSheetItem(0, selectedRoomState)
 
         if (roomSummary.allowMentionsOnlyNotifications()) {
             RoomListQuickActionsSharedAction.NotificationsMentionsOnly(roomSummary.roomId).toBottomSheetItem(2, selectedRoomState)
@@ -89,8 +89,9 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
 
     private fun RoomListQuickActionsSharedAction.toBottomSheetItem(index: Int, roomNotificationState: RoomNotificationState? = null) {
         val selected = when (this) {
-            is RoomListQuickActionsSharedAction.NotificationsAllNoisy     -> roomNotificationState == RoomNotificationState.ALL_MESSAGES_NOISY
-            is RoomListQuickActionsSharedAction.NotificationsAll          -> roomNotificationState == RoomNotificationState.ALL_MESSAGES
+            is RoomListQuickActionsSharedAction.NotificationsAllNoisy     -> {
+                roomNotificationState == RoomNotificationState.ALL_MESSAGES_NOISY || roomNotificationState == RoomNotificationState.ALL_MESSAGES
+            }
             is RoomListQuickActionsSharedAction.NotificationsMentionsOnly -> roomNotificationState == RoomNotificationState.MENTIONS_ONLY
             is RoomListQuickActionsSharedAction.NotificationsMute         -> roomNotificationState == RoomNotificationState.MUTE
             else                                                          -> false

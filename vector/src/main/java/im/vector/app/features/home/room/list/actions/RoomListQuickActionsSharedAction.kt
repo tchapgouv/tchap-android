@@ -32,11 +32,6 @@ sealed class RoomListQuickActionsSharedAction(
             R.drawable.ic_room_actions_notifications_all_noisy
     )
 
-    data class NotificationsAll(val roomId: String) : RoomListQuickActionsSharedAction(
-            R.string.room_list_quick_actions_notifications_all,
-            R.drawable.ic_room_actions_notifications_all
-    )
-
     data class NotificationsMentionsOnly(val roomId: String) : RoomListQuickActionsSharedAction(
             R.string.room_list_quick_actions_notifications_mentions,
             R.drawable.ic_room_actions_notifications_mentions
