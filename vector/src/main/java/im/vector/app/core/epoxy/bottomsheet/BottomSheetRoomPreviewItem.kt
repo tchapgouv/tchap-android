@@ -74,11 +74,11 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
         val tintColor: Int
         if (isFavorite) {
             description = stringProvider.getString(R.string.room_list_quick_actions_favorite_remove)
-            holder.roomFavorite.setImageResource(R.drawable.ic_star_green_24dp)
+            holder.roomFavorite.setImageResource(R.drawable.ic_tchap_pinned)
             tintColor = ContextCompat.getColor(holder.view.context, R.color.riotx_accent)
         } else {
             description = stringProvider.getString(R.string.room_list_quick_actions_favorite_add)
-            holder.roomFavorite.setImageResource(R.drawable.ic_star_24dp)
+            holder.roomFavorite.setImageResource(R.drawable.ic_tchap_unpinned)
             tintColor = ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
         }
         holder.roomFavorite.apply {
