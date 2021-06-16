@@ -30,21 +30,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <fr.gouv.tchap.core.ui.views.HexagonMaskView
-            android:id="@+id/roomAvatarHexagonImageView"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:adjustViewBounds="true"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/avatar"
-            android:scaleType="centerCrop"
-            tools:src="@tools:sample/avatars" />
-
         <ImageView
             android:id="@+id/roomAvatarImageView"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_margin="3dp"
+            android:layout_gravity="center"
             android:contentDescription="@string/avatar"
             tools:src="@tools:sample/avatars" />
 
@@ -57,6 +47,18 @@
             android:src="@drawable/ic_material_done"
             app:tint="@android:color/white"
             tools:ignore="MissingPrefix" />
+
+        <fr.gouv.tchap.core.ui.views.HexagonMaskView
+            android:id="@+id/roomAvatarHexagonImageView"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:adjustViewBounds="true"
+            android:visibility="gone"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/avatar"
+            android:scaleType="centerCrop"
+            tools:src="@tools:sample/avatars"
+            tools:visibility="visible" />
 
     </FrameLayout>
 
