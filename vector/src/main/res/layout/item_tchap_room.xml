@@ -32,16 +32,16 @@
 
         <ImageView
             android:id="@+id/roomAvatarImageView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/tchap_item_room_circle_avatar_size"
+            android:layout_height="@dimen/tchap_item_room_circle_avatar_size"
             android:layout_gravity="center"
             android:contentDescription="@string/avatar"
             tools:src="@tools:sample/avatars" />
 
         <ImageView
             android:id="@+id/roomAvatarCheckedImageView"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="@dimen/tchap_item_room_avatar_size"
+            android:layout_height="@dimen/tchap_item_room_avatar_size"
             android:contentDescription="@string/a11y_checked"
             android:scaleType="centerInside"
             android:src="@drawable/ic_material_done"
@@ -50,8 +50,8 @@
 
         <fr.gouv.tchap.core.ui.views.HexagonMaskView
             android:id="@+id/roomAvatarHexagonImageView"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="@dimen/tchap_item_room_hexagon_avatar_size"
+            android:layout_height="@dimen/tchap_item_room_hexagon_avatar_size"
             android:adjustViewBounds="true"
             android:visibility="gone"
             android:background="@android:color/transparent"

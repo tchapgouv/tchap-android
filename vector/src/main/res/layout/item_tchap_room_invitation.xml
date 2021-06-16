@@ -21,16 +21,16 @@
 
         <ImageView
             android:id="@+id/roomInvitationAvatarImageView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/tchap_item_room_circle_avatar_size"
+            android:layout_height="@dimen/tchap_item_room_circle_avatar_size"
             android:layout_gravity="center"
             android:contentDescription="@string/avatar"
             tools:src="@tools:sample/avatars" />
 
         <fr.gouv.tchap.core.ui.views.HexagonMaskView
             android:id="@+id/roomInvitationAvatarHexagonImageView"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="@dimen/tchap_item_room_hexagon_avatar_size"
+            android:layout_height="@dimen/tchap_item_room_hexagon_avatar_size"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:contentDescription="@string/avatar"
