@@ -114,7 +114,7 @@
         android:minWidth="122dp"
         app:bsv_button_text="@string/reject"
         app:bsv_loaded_image_src="@drawable/ic_tick"
-        app:bsv_use_flat_button="true"
+        app:bsv_use_flat_button="false"
         app:layout_constraintEnd_toStartOf="@+id/roomInvitationAccept"
         app:layout_constraintTop_toTopOf="@+id/roomInvitationAccept" />
 
