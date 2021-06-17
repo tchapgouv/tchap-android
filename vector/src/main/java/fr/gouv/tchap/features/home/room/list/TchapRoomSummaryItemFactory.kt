@@ -92,7 +92,6 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
                 .changeMembershipState(changeMembershipState)
                 .acceptListener { listener?.onAcceptRoomInvitation(roomSummary) }
                 .rejectListener { listener?.onRejectRoomInvitation(roomSummary) }
-                .listener { listener?.onRoomClicked(roomSummary) }
     }
 
     fun createRoomItem(
