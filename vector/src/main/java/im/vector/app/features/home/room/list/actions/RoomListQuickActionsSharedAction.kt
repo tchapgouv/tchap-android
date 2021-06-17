@@ -49,7 +49,7 @@ sealed class RoomListQuickActionsSharedAction(
 
     data class Favorite(val roomId: String) : RoomListQuickActionsSharedAction(
             R.string.room_list_quick_actions_favorite_add,
-            R.drawable.ic_star_24dp)
+            R.drawable.ic_tchap_unpinned)
 
     data class Leave(val roomId: String) : RoomListQuickActionsSharedAction(
             R.string.room_list_quick_actions_leave,
