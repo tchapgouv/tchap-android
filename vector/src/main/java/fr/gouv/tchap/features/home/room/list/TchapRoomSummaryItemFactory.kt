@@ -31,6 +31,7 @@ import im.vector.app.features.home.room.list.RoomInvitationItem_
 import im.vector.app.features.home.room.list.RoomListListener
 import im.vector.app.features.home.room.list.SpaceChildInfoItem_
 import im.vector.app.features.home.room.typing.TypingHelper
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -42,7 +43,8 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
                                                       private val dateFormatter: VectorDateFormatter,
                                                       private val stringProvider: StringProvider,
                                                       private val typingHelper: TypingHelper,
-                                                      private val avatarRenderer: AvatarRenderer) {
+                                                      private val avatarRenderer: AvatarRenderer,
+                                                      private val session: Session) {
 
     fun create(roomSummary: RoomSummary,
                roomChangeMembershipStates: Map<String, ChangeMembershipState>,
@@ -75,12 +77,9 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
     private fun createInvitationItem(roomSummary: RoomSummary,
                                      changeMembershipState: ChangeMembershipState,
                                      listener: RoomListListener?): VectorEpoxyModel<*> {
-        val secondLine = if (roomSummary.isDirect) {
-            roomSummary.inviterId
-        } else {
-            roomSummary.inviterId?.let {
-                stringProvider.getString(R.string.invited_by, it)
-            }
+        val secondLine = roomSummary.inviterId?.let { inviterId ->
+            val inviterName = session.getRoomMember(inviterId, roomSummary.roomId)?.displayName
+            stringProvider.getString(R.string.tchap_room_invited_you, inviterName ?: inviterId)
         }
 
         return RoomInvitationItem_()
