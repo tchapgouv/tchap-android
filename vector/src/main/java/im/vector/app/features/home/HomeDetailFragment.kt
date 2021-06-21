@@ -184,8 +184,10 @@ class HomeDetailFragment @Inject constructor(
 
         roomListViewModel.observeViewEvents {
             when (it) {
-                is RoomListViewEvents.SelectRoom -> closeSearchView()
-                else                             -> Unit
+                is RoomListViewEvents.SelectRoom,
+                is RoomListViewEvents.OpenRoomDirectory,
+                RoomListViewEvents.CreateDirectChat -> closeSearchView()
+                else                                -> Unit
             }.exhaustive
         }
     }

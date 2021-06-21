@@ -176,6 +176,8 @@ class RoomListViewModel @Inject constructor(
             is RoomListAction.ToggleSection               -> handleToggleSection(action.section)
             is RoomListAction.JoinSuggestedRoom           -> handleJoinSuggestedRoom(action)
             is RoomListAction.ShowRoomDetails             -> handleShowRoomDetails(action)
+            RoomListAction.CreateDirectChat               -> handleCreateDirectChat()
+            is RoomListAction.OpenRoomDirectory           -> handleOpenRoomDirectory(action)
         }.exhaustive
     }
 
@@ -353,5 +355,13 @@ class RoomListViewModel @Inject constructor(
                     .fold({ RoomListViewEvents.Done }, { RoomListViewEvents.Failure(it) })
             _viewEvents.post(value)
         }
+    }
+
+    private fun handleCreateDirectChat() {
+        _viewEvents.post(RoomListViewEvents.CreateDirectChat)
+    }
+
+    private fun handleOpenRoomDirectory(action: RoomListAction.OpenRoomDirectory) {
+        _viewEvents.post(RoomListViewEvents.OpenRoomDirectory(action.filter))
     }
 }

@@ -30,4 +30,7 @@ sealed class RoomListViewEvents : VectorViewEvents {
     data class SelectRoom(val roomSummary: RoomSummary) : RoomListViewEvents()
     object Done : RoomListViewEvents()
     data class NavigateToMxToBottomSheet(val link: String) : RoomListViewEvents()
+
+    object CreateDirectChat : RoomListViewEvents()
+    data class OpenRoomDirectory(val filter: String = "") : RoomListViewEvents()
 }
