@@ -30,8 +30,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.OnModelBuildFinishedListener
+import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
-import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.dialogs.withColoredButton
@@ -65,7 +65,6 @@ data class RoomListParams(
 
 class RoomListFragment @Inject constructor(
         private val pagedControllerFactory: RoomSummaryPagedControllerFactory,
-        val roomListViewModelFactory: RoomListViewModel.Factory,
         private val notificationDrawerManager: NotificationDrawerManager,
         private val footerController: RoomListFooterController,
         private val userPreferencesProvider: UserPreferencesProvider
@@ -77,7 +76,7 @@ class RoomListFragment @Inject constructor(
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     private val roomListParams: RoomListParams by args()
-    private val roomListViewModel: RoomListViewModel by fragmentViewModel()
+    private val roomListViewModel: RoomListViewModel by activityViewModel()
     private lateinit var stateRestorer: LayoutManagerStateRestorer
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomListBinding {
