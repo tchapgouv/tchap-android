@@ -19,6 +19,7 @@ package fr.gouv.tchap.features.home.room.list
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import fr.gouv.tchap.core.utils.RoomUtils
+import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
@@ -78,8 +79,13 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
                                      changeMembershipState: ChangeMembershipState,
                                      listener: RoomListListener?): VectorEpoxyModel<*> {
         val secondLine = roomSummary.inviterId?.let { inviterId ->
-            val inviterName = session.getRoomMember(inviterId, roomSummary.roomId)?.displayName
-            stringProvider.getString(R.string.tchap_room_invited_you, inviterName ?: inviterId)
+            val displayName = if (roomSummary.isDirect) {
+                session.getRoomMember(inviterId, roomSummary.roomId)?.displayName
+                        ?.let { TchapUtils.getNameFromDisplayName(it) }
+            } else {
+                session.getRoomMember(inviterId, roomSummary.roomId)?.displayName
+            }
+            stringProvider.getString(R.string.tchap_room_invited_you, displayName ?: inviterId)
         }
 
         return RoomInvitationItem_()
