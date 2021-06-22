@@ -78,14 +78,14 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
     private fun createInvitationItem(roomSummary: RoomSummary,
                                      changeMembershipState: ChangeMembershipState,
                                      listener: RoomListListener?): VectorEpoxyModel<*> {
-        val secondLine = roomSummary.inviterId?.let { inviterId ->
-            val displayName = if (roomSummary.isDirect) {
-                session.getRoomMember(inviterId, roomSummary.roomId)?.displayName
-                        ?.let { TchapUtils.getNameFromDisplayName(it) }
-            } else {
-                session.getRoomMember(inviterId, roomSummary.roomId)?.displayName
-            }
-            stringProvider.getString(R.string.tchap_room_invited_you, displayName ?: inviterId)
+        val secondLine = roomSummary.inviterId?.let { userId ->
+            val displayName = session.getRoomMember(userId, roomSummary.roomId)?.displayName
+                    ?.let { displayName ->
+                        displayName.takeUnless { roomSummary.isDirect } ?: TchapUtils.getNameFromDisplayName(displayName)
+                    }
+                    ?: TchapUtils.computeDisplayNameFromUserId(userId)
+                    ?: userId
+            stringProvider.getString(R.string.tchap_room_invited_you, displayName)
         }
 
         return RoomInvitationItem_()
