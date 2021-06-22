@@ -16,6 +16,7 @@
 
 package fr.gouv.tchap.android.sdk.internal.session.room
 
+import android.util.Patterns
 import org.matrix.android.sdk.api.session.events.model.EventType.STATE_ROOM_CREATE
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
@@ -56,11 +57,13 @@ internal class TchapRoomGetter @Inject constructor(
         // 3. join-invite
         // 4. join-left (or invite-left)
         // The case left-x isn't possible because we ignore for the moment the left rooms.
+        // If other member user id is an email, we take the oldest room.
 
         return directRoomMemberships.firstOrNull { it.first == Membership.JOIN && it.second == Membership.JOIN }?.roomId // join - join
                 ?: directRoomMemberships.firstOrNull { it.first == Membership.INVITE && it.second == Membership.JOIN }?.roomId // invite - join
                 ?: directRoomMemberships.firstOrNull { it.first == Membership.JOIN && it.second == Membership.INVITE }?.roomId // join - invite
                 ?: directRoomMemberships.firstOrNull { it.first?.isActive() == true && it.second == Membership.LEAVE }?.roomId // join or invite - left
+                ?: directRoomMemberships.takeIf { Patterns.EMAIL_ADDRESS.matcher(otherUserId).matches() }?.firstOrNull()?.roomId // otherUserId is an email
     }
 
     /**
