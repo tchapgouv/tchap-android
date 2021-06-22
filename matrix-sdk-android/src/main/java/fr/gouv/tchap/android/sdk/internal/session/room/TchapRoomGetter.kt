@@ -63,7 +63,10 @@ internal class TchapRoomGetter @Inject constructor(
                 ?: directRoomMemberships.firstOrNull { it.first == Membership.INVITE && it.second == Membership.JOIN }?.roomId // invite - join
                 ?: directRoomMemberships.firstOrNull { it.first == Membership.JOIN && it.second == Membership.INVITE }?.roomId // join - invite
                 ?: directRoomMemberships.firstOrNull { it.first?.isActive() == true && it.second == Membership.LEAVE }?.roomId // join or invite - left
-                ?: directRoomMemberships.takeIf { Patterns.EMAIL_ADDRESS.matcher(otherUserId).matches() }?.firstOrNull()?.roomId // otherUserId is an email
+                ?: directRoomMemberships // otherUserId is an email
+                        .takeIf { Patterns.EMAIL_ADDRESS.matcher(otherUserId).matches() }
+                        ?.firstOrNull { it.first == Membership.JOIN }
+                        ?.roomId
     }
 
     /**
