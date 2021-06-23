@@ -35,6 +35,7 @@ import im.vector.app.core.platform.VectorViewModel
 import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
@@ -42,6 +43,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.rx.asObservable
@@ -54,7 +56,8 @@ private typealias DirectoryUsersSearch = String
 
 class TchapContactListViewModel @AssistedInject constructor(@Assisted initialState: TchapContactListViewState,
                                                             private val contactsDataSource: ContactsDataSource,
-                                                            private val session: Session)
+                                                            private val session: Session,
+                                                            private val matrix: Matrix)
     : VectorViewModel<TchapContactListViewState, TchapContactListAction, TchapContactListViewEvents>(initialState) {
 
     //    private val knownUsersSearch = BehaviorRelay.create<KnownUsersSearch>()
@@ -76,7 +79,8 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
         override fun initialState(viewModelContext: ViewModelContext): TchapContactListViewState? {
             return TchapContactListViewState(
                     excludedUserIds = null,
-                    showSearch = true
+                    showSearch = true,
+                    showInviteActions = false
             )
         }
 
@@ -212,6 +216,7 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
             TchapContactListAction.SetUserConsent   -> handleSetUserConsent()
             TchapContactListAction.CancelSearch     -> handleCancelSearch()
             TchapContactListAction.OpenSearch       -> handleOpenSearch()
+            is TchapContactListAction.InviteByEmail -> handleIndividualInviteByEmail(action.value)
         }.exhaustive
     }
 
@@ -247,6 +252,57 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
 
     private fun handleCancelSearch() {
         _viewEvents.post(TchapContactListViewEvents.CancelSearch)
+    
+    }
+    private fun handleIndividualInviteByEmail(email: String) {
+        viewModelScope.launch {
+            // Start the invite process by checking whether a Tchap account has been created for this email.
+            val data = tryOrNull { session.identityService().lookUp(listOf(ThreePid.Email(email))) }
+
+            if (data.isNullOrEmpty()) {
+                // Pursue the invite process by checking whether an invite has been already sent
+                val existingDMRoom = tryOrNull { session.getExistingDirectRoomWithUser(email) }
+
+                if (existingDMRoom.isNullOrEmpty()) {
+                    // Send the invite if the email is authorized
+                    createDiscussion(email)
+                } else {
+                    // TODO isEmailBoundToTheExternalHost
+                    // There is already a discussion with this email
+                    // We do not re-invite the NoTchapUser except if
+                    // the email is bound to the external instance (for which the invites may expire).
+
+                    _viewEvents.post(TchapContactListViewEvents.InviteIgnoredForExistingRoom(email))
+                }
+            } else {
+                _viewEvents.post(TchapContactListViewEvents.InviteIgnoredForDiscoveredUser(email))
+            }
+        }
+    }
+
+    private suspend fun createDiscussion(email: String) {
+        val platform = tryOrNull {
+            session.identityService().getCurrentIdentityServerUrl()?.let {
+                matrix.threePidPlatformDiscoverService().getPlatform(it, ThreePid.Email(email))
+            }
+        }
+
+        if (platform != null && platform.hs.isNotEmpty()) {
+            val roomParams = CreateRoomParams()
+                    .apply {
+                        invite3pids.add(ThreePid.Email(email))
+                        setDirectMessage()
+                    }
+
+            val roomId = session.createRoom(roomParams)
+            if (roomId.isNotEmpty()) {
+                _viewEvents.post(TchapContactListViewEvents.InviteNoTchapUserByEmail)
+            } else {
+                //TODO room was not created
+            }
+        } else {
+            _viewEvents.post(TchapContactListViewEvents.InviteIgnoredForUnauthorizedEmail(email))
+        }
     }
 
     private fun observeUsers() = withState { state ->

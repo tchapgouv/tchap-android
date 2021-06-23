@@ -43,10 +43,14 @@ data class TchapContactListViewState(
         val searchTerm: String = "",
 
         // Display search button
-        val showSearch: Boolean
+        val showSearch: Boolean,
+        private val showInviteActions: Boolean
 ) : MvRxState {
     constructor(args: TchapContactListFragmentArgs) : this(
             excludedUserIds = args.excludedUserIds,
-            showSearch = args.showSearch
+            showSearch = args.showSearch,
+            showInviteActions = args.showInviteActions
     )
+
+    fun showInviteActions() = showInviteActions
 }

@@ -24,4 +24,8 @@ import im.vector.app.core.platform.VectorViewEvents
 sealed class TchapContactListViewEvents : VectorViewEvents {
     object OpenSearch : TchapContactListViewEvents()
     object CancelSearch : TchapContactListViewEvents()
+    data class InviteIgnoredForDiscoveredUser(val email: String) : TchapContactListViewEvents()
+    data class InviteIgnoredForUnauthorizedEmail(val email: String) : TchapContactListViewEvents()
+    data class InviteIgnoredForExistingRoom(val email: String) : TchapContactListViewEvents()
+    object InviteNoTchapUserByEmail : TchapContactListViewEvents()
 }

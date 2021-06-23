@@ -25,5 +25,5 @@ data class TchapContactListFragmentArgs(
         val excludedUserIds: Set<String>? = null,
         val showFilter: Boolean = false,
         val showSearch: Boolean = true
-
+        val showInviteActions: Boolean = true
 ) : Parcelable

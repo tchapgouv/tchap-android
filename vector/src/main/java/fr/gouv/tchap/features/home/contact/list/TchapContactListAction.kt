@@ -25,4 +25,5 @@ sealed class TchapContactListAction : VectorViewModelAction {
     object SetUserConsent : TchapContactListAction()
     object OpenSearch : TchapContactListAction()
     object CancelSearch : TchapContactListAction()
+    data class InviteByEmail(val value: String) : TchapContactListAction()
 }
