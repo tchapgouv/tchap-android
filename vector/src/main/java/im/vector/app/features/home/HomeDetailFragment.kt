@@ -22,6 +22,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.doOnNextLayout
 import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
@@ -34,7 +35,6 @@ import fr.gouv.tchap.features.home.contact.list.TchapContactListFragmentArgs
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.extensions.withoutLeftMargin
 import im.vector.app.core.platform.ToolbarConfigurable
@@ -183,12 +183,10 @@ class HomeDetailFragment @Inject constructor(
                 })
 
         roomListViewModel.observeViewEvents {
-            when (it) {
-                is RoomListViewEvents.SelectRoom,
-                is RoomListViewEvents.OpenRoomDirectory,
-                RoomListViewEvents.CreateDirectChat -> closeSearchView()
-                else                                -> Unit
-            }.exhaustive
+            if (it is RoomListViewEvents.CancelSearch) {
+                // prevent glitch caused by search refresh during activity transition
+                view.doOnNextLayout { closeSearchView() }
+            }
         }
     }
 

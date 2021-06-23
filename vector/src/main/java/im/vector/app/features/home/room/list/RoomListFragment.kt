@@ -114,6 +114,7 @@ class RoomListFragment @Inject constructor(
                 is RoomListViewEvents.NavigateToMxToBottomSheet -> handleShowMxToLink(it.link)
                 RoomListViewEvents.CreateDirectChat             -> handleCreateDirectChat()
                 is RoomListViewEvents.OpenRoomDirectory         -> handleOpenRoomDirectory(it.filter)
+                RoomListViewEvents.CancelSearch                 -> Unit
             }.exhaustive
         }
 
@@ -176,14 +177,17 @@ class RoomListFragment @Inject constructor(
 
     private fun handleSelectRoom(event: RoomListViewEvents.SelectRoom) {
         navigator.openRoom(requireActivity(), event.roomSummary.roomId)
+        roomListViewModel.handle(RoomListAction.CancelSearch)
     }
 
     private fun handleCreateDirectChat() {
         navigator.openCreateDirectRoom(requireActivity())
+        roomListViewModel.handle(RoomListAction.CancelSearch)
     }
 
     private fun handleOpenRoomDirectory(filter: String) {
         navigator.openRoomDirectory(requireActivity(), filter)
+        roomListViewModel.handle(RoomListAction.CancelSearch)
     }
 
     private fun setupCreateRoomButton() {

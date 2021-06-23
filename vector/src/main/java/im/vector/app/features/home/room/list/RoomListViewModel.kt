@@ -178,6 +178,7 @@ class RoomListViewModel @Inject constructor(
             is RoomListAction.ShowRoomDetails             -> handleShowRoomDetails(action)
             RoomListAction.CreateDirectChat               -> handleCreateDirectChat()
             is RoomListAction.OpenRoomDirectory           -> handleOpenRoomDirectory(action)
+            RoomListAction.CancelSearch                   -> handleCancelSearch()
         }.exhaustive
     }
 
@@ -363,5 +364,9 @@ class RoomListViewModel @Inject constructor(
 
     private fun handleOpenRoomDirectory(action: RoomListAction.OpenRoomDirectory) {
         _viewEvents.post(RoomListViewEvents.OpenRoomDirectory(action.filter))
+    }
+
+    private fun handleCancelSearch() {
+        _viewEvents.post(RoomListViewEvents.CancelSearch)
     }
 }
