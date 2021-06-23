@@ -46,7 +46,7 @@
     <string name="tchap_send_invite_failed">Echec de l’envoi de l’invitation à %s</string>
     <string name="tchap_send_invite_network_error">Impossible d’envoyer une invitation : erreur réseau</string>
     <string name="tchap_send_invite_confirmation">Vous recevrez une notification lorsque \n votre invité rejoindra la communauté Tchap</string>
-    <plurals name="tchap_succes_invite_notification">
+    <plurals name="tchap_success_invite_notification">
         <item quantity="one">%d invitation a bien été envoyée.</item>
         <item quantity="other">%d invitations ont bien été envoyées.</item>
     </plurals>

@@ -298,7 +298,7 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
             if (roomId.isNotEmpty()) {
                 _viewEvents.post(TchapContactListViewEvents.InviteNoTchapUserByEmail)
             } else {
-                //TODO room was not created
+                // TODO room was not created
             }
         } else {
             _viewEvents.post(TchapContactListViewEvents.InviteIgnoredForUnauthorizedEmail(email))

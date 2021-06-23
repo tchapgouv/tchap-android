@@ -80,7 +80,7 @@ class TchapContactListFragment @Inject constructor(
                     Toast.makeText(requireContext(), getString(R.string.tchap_invite_already_send_message, it.email), Toast.LENGTH_LONG).show()
                 }
                 TchapContactListViewEvents.InviteNoTchapUserByEmail             -> {
-                    val text = SpannableString(resources.getQuantityString(R.plurals.tchap_succes_invite_notification, 1))
+                    val text = SpannableString(resources.getQuantityString(R.plurals.tchap_success_invite_notification, 1))
                     Toast.makeText(requireContext(), "$text \n ${getString(R.string.tchap_send_invite_confirmation)}", Toast.LENGTH_LONG).show()
                 }
             }
