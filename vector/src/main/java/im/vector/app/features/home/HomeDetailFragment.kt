@@ -32,6 +32,8 @@ import com.google.android.material.badge.BadgeDrawable
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import fr.gouv.tchap.features.home.contact.list.TchapContactListFragment
 import fr.gouv.tchap.features.home.contact.list.TchapContactListFragmentArgs
+import fr.gouv.tchap.features.home.contact.list.TchapContactListViewEvents
+import fr.gouv.tchap.features.home.contact.list.TchapContactListViewModel
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
@@ -82,6 +84,7 @@ class HomeDetailFragment @Inject constructor(
     private val unreadMessagesSharedViewModel: UnreadMessagesSharedViewModel by activityViewModel()
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
     private val roomListViewModel: RoomListViewModel by activityViewModel()
+    private val tchapContactListViewModel: TchapContactListViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private lateinit var sharedCallActionViewModel: SharedKnownCallsViewModel
@@ -186,6 +189,14 @@ class HomeDetailFragment @Inject constructor(
             if (it is RoomListViewEvents.CancelSearch) {
                 // prevent glitch caused by search refresh during activity transition
                 view.doOnNextLayout { closeSearchView() }
+            }
+        }
+
+        tchapContactListViewModel.observeViewEvents {
+            when (it) {
+                is TchapContactListViewEvents.OpenSearch -> if (!views.homeSearchView.isVisible) toggleSearchView()
+                // TODO view.doOnNextLayout { closeSearchView() }
+                is TchapContactListViewEvents.CancelSearch -> closeSearchView()
             }
         }
     }
