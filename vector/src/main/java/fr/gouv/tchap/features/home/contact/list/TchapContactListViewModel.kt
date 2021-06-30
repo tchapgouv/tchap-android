@@ -31,6 +31,7 @@ import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.core.contacts.ContactsDataSource
 import im.vector.app.core.contacts.MappedContact
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
 import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +44,6 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.rx.asObservable
@@ -79,8 +79,9 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
         override fun initialState(viewModelContext: ViewModelContext): TchapContactListViewState? {
             return TchapContactListViewState(
                     excludedUserIds = null,
+                    singleSelection = true,
                     showSearch = true,
-                    showInviteActions = false
+                    showInviteActions = true
             )
         }
 
@@ -210,13 +211,14 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
 
     override fun handle(action: TchapContactListAction) {
         when (action) {
-            is TchapContactListAction.SearchUsers   -> handleSearchUsers(action.value)
-            TchapContactListAction.ClearSearchUsers -> handleClearSearchUsers()
-            TchapContactListAction.LoadContacts     -> handleLoadContacts()
-            TchapContactListAction.SetUserConsent   -> handleSetUserConsent()
-            TchapContactListAction.CancelSearch     -> handleCancelSearch()
-            TchapContactListAction.OpenSearch       -> handleOpenSearch()
-            is TchapContactListAction.InviteByEmail -> handleIndividualInviteByEmail(action.value)
+            is TchapContactListAction.SearchUsers            -> handleSearchUsers(action.value)
+            TchapContactListAction.ClearSearchUsers          -> handleClearSearchUsers()
+            is TchapContactListAction.AddPendingSelection    -> handleSelectUser(action)
+            is TchapContactListAction.RemovePendingSelection -> handleRemoveSelectedUser(action)
+            TchapContactListAction.LoadContacts              -> handleLoadContacts()
+            TchapContactListAction.SetUserConsent            -> handleSetUserConsent()
+            TchapContactListAction.CancelSearch              -> handleCancelSearch()
+            TchapContactListAction.OpenSearch                -> handleOpenSearch()
         }.exhaustive
     }
 
@@ -252,57 +254,6 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
 
     private fun handleCancelSearch() {
         _viewEvents.post(TchapContactListViewEvents.CancelSearch)
-    
-    }
-    private fun handleIndividualInviteByEmail(email: String) {
-        viewModelScope.launch {
-            // Start the invite process by checking whether a Tchap account has been created for this email.
-            val data = tryOrNull { session.identityService().lookUp(listOf(ThreePid.Email(email))) }
-
-            if (data.isNullOrEmpty()) {
-                // Pursue the invite process by checking whether an invite has been already sent
-                val existingDMRoom = tryOrNull { session.getExistingDirectRoomWithUser(email) }
-
-                if (existingDMRoom.isNullOrEmpty()) {
-                    // Send the invite if the email is authorized
-                    createDiscussion(email)
-                } else {
-                    // TODO isEmailBoundToTheExternalHost
-                    // There is already a discussion with this email
-                    // We do not re-invite the NoTchapUser except if
-                    // the email is bound to the external instance (for which the invites may expire).
-
-                    _viewEvents.post(TchapContactListViewEvents.InviteIgnoredForExistingRoom(email))
-                }
-            } else {
-                _viewEvents.post(TchapContactListViewEvents.InviteIgnoredForDiscoveredUser(email))
-            }
-        }
-    }
-
-    private suspend fun createDiscussion(email: String) {
-        val platform = tryOrNull {
-            session.identityService().getCurrentIdentityServerUrl()?.let {
-                matrix.threePidPlatformDiscoverService().getPlatform(it, ThreePid.Email(email))
-            }
-        }
-
-        if (platform != null && platform.hs.isNotEmpty()) {
-            val roomParams = CreateRoomParams()
-                    .apply {
-                        invite3pids.add(ThreePid.Email(email))
-                        setDirectMessage()
-                    }
-
-            val roomId = session.createRoom(roomParams)
-            if (roomId.isNotEmpty()) {
-                _viewEvents.post(TchapContactListViewEvents.InviteNoTchapUserByEmail)
-            } else {
-                // TODO room was not created
-            }
-        } else {
-            _viewEvents.post(TchapContactListViewEvents.InviteIgnoredForUnauthorizedEmail(email))
-        }
     }
 
     private fun observeUsers() = withState { state ->
@@ -370,5 +321,15 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                         updateFilteredContacts()
                     }
                 }.disposeOnClear()
+    }
+
+    private fun handleSelectUser(action: TchapContactListAction.AddPendingSelection) = withState { state ->
+        val selections = state.pendingSelections.toggle(action.pendingSelection, singleElement = state.singleSelection)
+        setState { copy(pendingSelections = selections) }
+    }
+
+    private fun handleRemoveSelectedUser(action: TchapContactListAction.RemovePendingSelection) = withState { state ->
+        val selections = state.pendingSelections.minus(action.pendingSelection)
+        setState { copy(pendingSelections = selections) }
     }
 }

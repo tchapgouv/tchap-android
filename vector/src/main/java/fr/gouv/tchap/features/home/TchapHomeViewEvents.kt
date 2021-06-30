@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package fr.gouv.tchap.features.home.contact.list
+package fr.gouv.tchap.features.home
 
 import im.vector.app.core.platform.VectorViewEvents
 
 /**
  * Transient events for invite users to room screen
  */
-sealed class TchapContactListViewEvents : VectorViewEvents {
-    object OpenSearch : TchapContactListViewEvents()
-    object CancelSearch : TchapContactListViewEvents()
+sealed class TchapHomeViewEvents : VectorViewEvents {
+    data class InviteIgnoredForDiscoveredUser(val email: String) : TchapHomeViewEvents()
+    data class InviteIgnoredForUnauthorizedEmail(val email: String) : TchapHomeViewEvents()
+    data class InviteIgnoredForExistingRoom(val email: String) : TchapHomeViewEvents()
+    object InviteNoTchapUserByEmail : TchapHomeViewEvents()
+    data class GetPlatform(val email: String) : TchapHomeViewEvents()
 }

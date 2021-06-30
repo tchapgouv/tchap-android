@@ -23,7 +23,8 @@ import kotlinx.parcelize.Parcelize
 data class TchapContactListFragmentArgs(
         val title: String,
         val excludedUserIds: Set<String>? = null,
+        val singleSelection: Boolean = false,
         val showFilter: Boolean = false,
-        val showSearch: Boolean = true
+        val showSearch: Boolean = true,
         val showInviteActions: Boolean = true
 ) : Parcelable

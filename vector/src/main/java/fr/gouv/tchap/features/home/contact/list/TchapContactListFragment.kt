@@ -17,7 +17,6 @@
 package fr.gouv.tchap.features.home.contact.list
 
 import android.os.Bundle
-import android.text.SpannableString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +28,8 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
+import fr.gouv.tchap.features.userdirectory.TchapContactListSharedAction
+import fr.gouv.tchap.features.userdirectory.TchapContactListSharedActionViewModel
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -42,6 +43,8 @@ import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.DialogInviteByIdBinding
 import im.vector.app.databinding.FragmentTchapContactListBinding
 import im.vector.app.features.settings.VectorLocale
+import im.vector.app.features.userdirectory.PendingSelection
+import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
 import javax.inject.Inject
 
@@ -52,6 +55,7 @@ class TchapContactListFragment @Inject constructor(
 
     private val args: TchapContactListFragmentArgs by args()
     private val viewModel: TchapContactListViewModel by activityViewModel()
+    private lateinit var sharedActionViewModel: TchapContactListSharedActionViewModel
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTchapContactListBinding {
         return FragmentTchapContactListBinding.inflate(inflater, container, false)
@@ -59,6 +63,8 @@ class TchapContactListFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedActionViewModel = activityViewModelProvider.get(TchapContactListSharedActionViewModel::class.java)
+
         setupRecyclerView()
         setupSearchView()
         setupUserConsent()
@@ -66,24 +72,6 @@ class TchapContactListFragment @Inject constructor(
         if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, requireActivity(), loadContactsActivityResultLauncher,
                         R.string.permissions_rationale_msg_contacts)) {
             viewModel.handle(TchapContactListAction.LoadContacts)
-        }
-
-        viewModel.observeViewEvents {
-            when (it) {
-                is TchapContactListViewEvents.InviteIgnoredForDiscoveredUser    -> {
-                    Toast.makeText(requireContext(), getString(R.string.tchap_discussion_already_exist, it.email), Toast.LENGTH_LONG).show()
-                }
-                is TchapContactListViewEvents.InviteIgnoredForUnauthorizedEmail -> {
-                    Toast.makeText(requireContext(), getString(R.string.tchap_invite_unauthorized_message, it.email), Toast.LENGTH_LONG).show()
-                }
-                is TchapContactListViewEvents.InviteIgnoredForExistingRoom      -> {
-                    Toast.makeText(requireContext(), getString(R.string.tchap_invite_already_send_message, it.email), Toast.LENGTH_LONG).show()
-                }
-                TchapContactListViewEvents.InviteNoTchapUserByEmail             -> {
-                    val text = SpannableString(resources.getQuantityString(R.plurals.tchap_success_invite_notification, 1))
-                    Toast.makeText(requireContext(), "$text \n ${getString(R.string.tchap_send_invite_confirmation)}", Toast.LENGTH_LONG).show()
-                }
-            }
         }
     }
 
@@ -147,7 +135,7 @@ class TchapContactListFragment @Inject constructor(
         tchapContactListController.setData(it)
     }
 
-    override fun onInviteByEmailClick() {
+    override fun onInviteByEmailClick(): Unit = withState(viewModel) {
         val dialogLayout = requireActivity().layoutInflater.inflate(R.layout.dialog_invite_by_id, null)
         val views = DialogInviteByIdBinding.bind(dialogLayout)
 
@@ -160,7 +148,8 @@ class TchapContactListFragment @Inject constructor(
                     if (text.isEmail()) {
                         // Invite one by one the provided email addresses
                         view?.hideKeyboard()
-                        viewModel.handle(TchapContactListAction.InviteByEmail(text))
+                        viewModel.handle(TchapContactListAction.AddPendingSelection(PendingSelection.ThreePidPendingSelection(ThreePid.Email(text))))
+                        sharedActionViewModel.post(TchapContactListSharedAction.OnInviteByEmail(text))
                     }
                 }
                 .setNegativeButton(R.string.cancel, null)

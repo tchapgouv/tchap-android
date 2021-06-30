@@ -14,14 +14,9 @@
  * limitations under the License.
  */
 
-package fr.gouv.tchap.features.home.contact.list
+package fr.gouv.tchap.features.userdirectory
 
-import im.vector.app.core.platform.VectorViewEvents
+import im.vector.app.core.platform.VectorSharedActionViewModel
+import javax.inject.Inject
 
-/**
- * Transient events for invite users to room screen
- */
-sealed class TchapContactListViewEvents : VectorViewEvents {
-    object OpenSearch : TchapContactListViewEvents()
-    object CancelSearch : TchapContactListViewEvents()
-}
+class TchapContactListSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<TchapContactListSharedAction>()

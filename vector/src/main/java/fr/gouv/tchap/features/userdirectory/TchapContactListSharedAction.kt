@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package fr.gouv.tchap.features.home.contact.list
+package fr.gouv.tchap.features.userdirectory
 
-import im.vector.app.core.platform.VectorViewEvents
+import im.vector.app.core.platform.VectorSharedAction
 
-/**
- * Transient events for invite users to room screen
- */
-sealed class TchapContactListViewEvents : VectorViewEvents {
-    object OpenSearch : TchapContactListViewEvents()
-    object CancelSearch : TchapContactListViewEvents()
+sealed class TchapContactListSharedAction : VectorSharedAction {
+    data class OnInviteByEmail(val email: String) : TchapContactListSharedAction()
 }

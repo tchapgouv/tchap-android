@@ -16,9 +16,13 @@
 
 package im.vector.app.features.home
 
+import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
 import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class HomeDetailAction : VectorViewModelAction {
     data class SwitchDisplayMode(val displayMode: RoomListDisplayMode) : HomeDetailAction()
     object MarkAllRoomsRead : HomeDetailAction()
+    data class InviteByEmail(val email: String) : HomeDetailAction()
+    object UnauthorizeEmail : HomeDetailAction()
+    data class CreateDiscussion(val platform: Platform) : HomeDetailAction()
 }
