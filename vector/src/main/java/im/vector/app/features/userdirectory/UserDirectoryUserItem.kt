@@ -23,13 +23,14 @@ import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.amulyakhare.textdrawable.TextDrawable
+import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_known_user)
+@EpoxyModelClass(layout = R.layout.tchap_item_known_user)
 abstract class UserDirectoryUserItem : VectorEpoxyModel<UserDirectoryUserItem.Holder>() {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
@@ -40,14 +41,12 @@ abstract class UserDirectoryUserItem : VectorEpoxyModel<UserDirectoryUserItem.Ho
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.view.setOnClickListener(clickListener)
-        // If name is empty, use userId as name and force it being centered
-        if (matrixItem.displayName.isNullOrEmpty()) {
-            holder.userIdView.visibility = View.GONE
+        val displayName = matrixItem.displayName
+        if (displayName.isNullOrEmpty()) {
             holder.nameView.text = matrixItem.id
         } else {
-            holder.userIdView.visibility = View.VISIBLE
-            holder.nameView.text = matrixItem.displayName
-            holder.userIdView.text = matrixItem.id
+            holder.nameView.text = TchapUtils.getNameFromDisplayName(displayName)
+            holder.domainView.text = TchapUtils.getDomainFromDisplayName(displayName)
         }
         renderSelection(holder, selected)
     }
@@ -65,8 +64,8 @@ abstract class UserDirectoryUserItem : VectorEpoxyModel<UserDirectoryUserItem.Ho
     }
 
     class Holder : VectorEpoxyHolder() {
-        val userIdView by bind<TextView>(R.id.knownUserID)
         val nameView by bind<TextView>(R.id.knownUserName)
+        val domainView by bind<TextView>(R.id.knownUserDomain)
         val avatarImageView by bind<ImageView>(R.id.knownUserAvatar)
         val avatarCheckedImageView by bind<ImageView>(R.id.knownUserAvatarChecked)
     }
