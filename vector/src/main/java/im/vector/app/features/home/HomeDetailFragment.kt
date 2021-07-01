@@ -194,8 +194,9 @@ class HomeDetailFragment @Inject constructor(
 
         tchapContactListViewModel.observeViewEvents {
             when (it) {
-                is TchapContactListViewEvents.OpenSearch -> if (!views.homeSearchView.isVisible) toggleSearchView()
-                // TODO view.doOnNextLayout { closeSearchView() }
+                is TchapContactListViewEvents.OpenSearch   -> openSearchView()
+                // TODO close searchview when we come back on this screen
+                //  view.doOnNextLayout { closeSearchView() }
                 is TchapContactListViewEvents.CancelSearch -> closeSearchView()
             }
         }
@@ -210,15 +211,19 @@ class HomeDetailFragment @Inject constructor(
     private fun toggleSearchView() {
         val isSearchMode = views.homeSearchView.isVisible
         if (!isSearchMode) {
-            views.groupToolbar.menu?.findItem(R.id.menu_home_search_action)?.setIcon(0)
-            views.homeToolbarContent.isVisible = false
-            views.groupToolbarAvatarImageView.isVisible = false
-            views.homeSearchView.apply {
-                isVisible = true
-                isIconified = false
-            }
+            openSearchView()
         } else {
             closeSearchView()
+        }
+    }
+
+    private fun openSearchView() {
+        views.groupToolbar.menu?.findItem(R.id.menu_home_search_action)?.setIcon(0)
+        views.homeToolbarContent.isVisible = false
+        views.groupToolbarAvatarImageView.isVisible = false
+        views.homeSearchView.apply {
+            isVisible = true
+            isIconified = false
         }
     }
 

@@ -55,7 +55,7 @@ class TchapContactListController @Inject constructor(private val session: Sessio
         val currentState = state ?: return
         val host = this
 
-        if (currentState.showSearch()) {
+        if (currentState.showSearch) {
             actionItem {
                 id(R.drawable.ic_tchap_contact_search)
                 title(host.stringProvider.getString(R.string.search_in_my_contacts))

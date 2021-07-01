@@ -42,12 +42,11 @@ data class TchapContactListViewState(
         // Use to filter contacts by display name
         val searchTerm: String = "",
 
-        private val showSearch: Boolean
+        // Display search button
+        val showSearch: Boolean
 ) : MvRxState {
     constructor(args: TchapContactListFragmentArgs) : this(
             excludedUserIds = args.excludedUserIds,
             showSearch = args.showSearch
     )
-
-    fun showSearch() = showSearch
 }
