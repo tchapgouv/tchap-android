@@ -36,6 +36,19 @@
             tools:ignore="MissingPrefix" />
     </FrameLayout>
 
+    <ImageView
+        android:id="@+id/knownUserStatus"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:contentDescription="@string/room_status_online"
+        android:src="@drawable/ic_room_status_online"
+        android:visibility="gone"
+        app:layout_constraintCircle="@id/knownUserAvatarContainer"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="20dp"
+        tools:ignore="MissingConstraints"
+        tools:visibility="visible" />
+
     <TextView
         android:id="@+id/knownUserName"
         android:layout_width="0dp"
