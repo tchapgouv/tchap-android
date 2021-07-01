@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package fr.gouv.tchap.android.sdk.internal.session.users
+package fr.gouv.tchap.android.sdk.api.session.userinfo.model
 
-import com.squareup.moshi.JsonClass
-
-@JsonClass(generateAdapter = true)
-internal data class TchapGetUserInfoResult(
+/**
+ * Ref: https://gitlab.matrix.org/new-vector/internal/-/wikis/DINSIC#get-_matrixfederationv1queryuser_info-federationsynapse
+ */
+data class UserInfo(
+        /**
+         * Whether the user account is expired.
+         */
         val expired: Boolean,
+        /**
+         * Whether the user account is deactivated.
+         */
         val deactivated: Boolean
 )

@@ -16,13 +16,15 @@
 
 package fr.gouv.tchap.android.sdk.internal.session.users
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.internal.network.NetworkConstants
+import retrofit2.http.Body
+import retrofit2.http.POST
 
-/**
- * @property userIds Required. The list of user Matrix IDs to query information about.
- */
-@JsonClass(generateAdapter = true)
-internal data class TchapGetUsersInfoParams(
-        @Json(name = "user_ids") val userIds: List<String>
-)
+internal interface UsersInfoAPI {
+
+    /**
+     * Get the expiration and deactivation information about the given user ids.
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "users/info")
+    suspend fun getUsersInfo(@Body usersInfoParams: GetUsersInfoParams): Map<String, GetUsersInfoResult>
+}

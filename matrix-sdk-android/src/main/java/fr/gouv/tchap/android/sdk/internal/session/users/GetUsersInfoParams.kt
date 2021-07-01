@@ -16,16 +16,13 @@
 
 package fr.gouv.tchap.android.sdk.internal.session.users
 
-import fr.gouv.tchap.android.sdk.api.session.userinfo.TchapUserInfoService
-import fr.gouv.tchap.android.sdk.api.session.userinfo.model.TchapUserInfo
-import javax.inject.Inject
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-internal class TchapDefaultUserInfoService @Inject constructor(
-        private val getUsersInfoTask: TchapGetUsersInfoTask
-) : TchapUserInfoService {
-    override suspend fun getUsersInfo(userIds: List<String>): Map<String, TchapUserInfo> {
-        return getUsersInfoTask.execute(
-                TchapGetUsersInfoParams(userIds)
-        )
-    }
-}
+/**
+ * @property userIds Required. The list of user Matrix IDs to query information about.
+ */
+@JsonClass(generateAdapter = true)
+internal data class GetUsersInfoParams(
+        @Json(name = "user_ids") val userIds: List<String>
+)

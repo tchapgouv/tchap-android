@@ -19,26 +19,26 @@ package fr.gouv.tchap.android.sdk.internal.session.users
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import fr.gouv.tchap.android.sdk.api.session.userinfo.TchapUserInfoService
+import fr.gouv.tchap.android.sdk.api.session.userinfo.UsersInfoService
 import org.matrix.android.sdk.internal.session.SessionScope
 import retrofit2.Retrofit
 
 @Module
-internal abstract class TchapUserInfoModule {
+internal abstract class TchapUsersInfoModule {
 
     @Module
     companion object {
         @JvmStatic
         @Provides
         @SessionScope
-        fun providesUserInfoAPI(retrofit: Retrofit): TchapUserInfoAPI {
-            return retrofit.create(TchapUserInfoAPI::class.java)
+        fun providesUsersInfoAPI(retrofit: Retrofit): UsersInfoAPI {
+            return retrofit.create(UsersInfoAPI::class.java)
         }
     }
 
     @Binds
-    abstract fun bindUserInfoService(service: TchapDefaultUserInfoService): TchapUserInfoService
+    abstract fun bindUsersInfoService(service: TchapUsersInfoService): UsersInfoService
 
     @Binds
-    abstract fun bindGetUserInfoTask(task: TchapDefaultGetUsersInfoTask): TchapGetUsersInfoTask
+    abstract fun bindGetUsersInfoTask(task: TchapGetUsersInfoTask): GetUsersInfoTask
 }

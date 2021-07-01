@@ -16,15 +16,10 @@
 
 package fr.gouv.tchap.android.sdk.internal.session.users
 
-import org.matrix.android.sdk.internal.network.NetworkConstants
-import retrofit2.http.Body
-import retrofit2.http.POST
+import com.squareup.moshi.JsonClass
 
-internal interface TchapUserInfoAPI {
-
-    /**
-     * Get the expiration and deactivation information about the given user ids.
-     */
-    @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "users/info")
-    suspend fun getUsersInfo(@Body usersInfoParams: TchapGetUsersInfoParams): Map<String, TchapGetUserInfoResult>
-}
+@JsonClass(generateAdapter = true)
+internal data class GetUsersInfoResult(
+        val expired: Boolean,
+        val deactivated: Boolean
+)

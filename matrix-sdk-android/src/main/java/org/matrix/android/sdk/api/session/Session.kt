@@ -18,7 +18,7 @@ package org.matrix.android.sdk.api.session
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
-import fr.gouv.tchap.android.sdk.api.session.userinfo.TchapUserInfoService
+import fr.gouv.tchap.android.sdk.api.session.userinfo.UsersInfoService
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
@@ -245,9 +245,9 @@ interface Session :
     fun userAccountDataService(): AccountDataService
 
     /**
-     * Returns the Tchap user info service associated with the session
+     * Returns the users info service associated with the session
      */
-    fun tchapUserInfoService(): TchapUserInfoService
+    fun usersInfoService(): UsersInfoService
 
     /**
      * Add a listener to the session.

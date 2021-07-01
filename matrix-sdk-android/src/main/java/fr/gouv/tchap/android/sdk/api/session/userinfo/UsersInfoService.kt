@@ -16,13 +16,13 @@
 
 package fr.gouv.tchap.android.sdk.api.session.userinfo
 
-import fr.gouv.tchap.android.sdk.api.session.userinfo.model.TchapUserInfo
+import fr.gouv.tchap.android.sdk.api.session.userinfo.model.UserInfo
 
-interface TchapUserInfoService {
+interface UsersInfoService {
     /**
      * Get users information
      *
      * @param userIds user Matrix Ids
      */
-    suspend fun getUsersInfo(userIds: List<String>): Map<String, TchapUserInfo>
+    suspend fun getUsersInfo(userIds: List<String>): Map<String, UserInfo>
 }

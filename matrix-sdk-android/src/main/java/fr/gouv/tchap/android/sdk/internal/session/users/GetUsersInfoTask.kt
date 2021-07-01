@@ -16,24 +16,24 @@
 
 package fr.gouv.tchap.android.sdk.internal.session.users
 
-import fr.gouv.tchap.android.sdk.api.session.userinfo.model.TchapUserInfo
+import fr.gouv.tchap.android.sdk.api.session.userinfo.model.UserInfo
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
-internal interface TchapGetUsersInfoTask : Task<TchapGetUsersInfoParams, Map<String, TchapUserInfo>>
+internal interface GetUsersInfoTask : Task<GetUsersInfoParams, Map<String, UserInfo>>
 
-internal class TchapDefaultGetUsersInfoTask @Inject constructor(
-        private val usersAPI: TchapUserInfoAPI
-) : TchapGetUsersInfoTask {
+internal class TchapGetUsersInfoTask @Inject constructor(
+        private val usersAPI: UsersInfoAPI
+) : GetUsersInfoTask {
 
-    override suspend fun execute(params: TchapGetUsersInfoParams): Map<String, TchapUserInfo> {
+    override suspend fun execute(params: GetUsersInfoParams): Map<String, UserInfo> {
         val result = executeRequest(null) {
             usersAPI.getUsersInfo(params)
         }
 
         return result.mapValues {
-            TchapUserInfo(
+            UserInfo(
                     expired = it.value.expired,
                     deactivated = it.value.deactivated
             )
