@@ -43,17 +43,21 @@ abstract class UserDirectoryUserItem : VectorEpoxyModel<UserDirectoryUserItem.Ho
         super.bind(holder)
         holder.view.setOnClickListener(clickListener)
         val displayName = matrixItem.displayName
-        if (displayName.isNullOrEmpty()) {
-            holder.nameView.text = matrixItem.id
-        } else {
-            holder.nameView.text = TchapUtils.getNameFromDisplayName(displayName)
-            holder.domainView.text = TchapUtils.getDomainFromDisplayName(displayName)
+        when {
+            TchapUtils.isExternalTchapUser(matrixItem.id) -> {
+                holder.nameView.text = matrixItem.id
+                holder.domainView.text = holder.view.context.resources.getString(R.string.tchap_contact_external)
+                holder.domainView.setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_contact_external_color))
+            }
+            displayName.isNullOrBlank()                   -> {
+                holder.nameView.text = matrixItem.id
+            }
+            else                                          -> {
+                holder.nameView.text = TchapUtils.getNameFromDisplayName(displayName)
+                holder.domainView.text = TchapUtils.getDomainFromDisplayName(displayName)
+                holder.domainView.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.secondary_text_color))
+            }
         }
-        holder.domainView.setTextColor(if (TchapUtils.isExternalTchapUser(matrixItem.id)) {
-            ContextCompat.getColor(holder.view.context, R.color.tchap_contact_external_color)
-        } else {
-            ThemeUtils.getColor(holder.view.context, R.attr.secondary_text_color)
-        })
         renderSelection(holder, selected)
     }
 
