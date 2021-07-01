@@ -17,6 +17,7 @@
 package fr.gouv.tchap.android.sdk.internal.session.users
 
 import fr.gouv.tchap.android.sdk.api.session.userinfo.model.UserInfo
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
@@ -24,11 +25,12 @@ import javax.inject.Inject
 internal interface GetUsersInfoTask : Task<GetUsersInfoParams, Map<String, UserInfo>>
 
 internal class TchapGetUsersInfoTask @Inject constructor(
-        private val usersAPI: UsersInfoAPI
+        private val usersAPI: UsersInfoAPI,
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetUsersInfoTask {
 
     override suspend fun execute(params: GetUsersInfoParams): Map<String, UserInfo> {
-        val result = executeRequest(null) {
+        val result = executeRequest(globalErrorReceiver) {
             usersAPI.getUsersInfo(params)
         }
 
