@@ -44,20 +44,16 @@ abstract class UserDirectoryUserItem : VectorEpoxyModel<UserDirectoryUserItem.Ho
         super.bind(holder)
         holder.view.setOnClickListener(clickListener)
         val displayName = matrixItem.displayName
-        when {
-            TchapUtils.isExternalTchapUser(matrixItem.id) -> {
-                holder.nameView.text = matrixItem.id
-                holder.domainView.text = holder.view.context.resources.getString(R.string.tchap_contact_external)
-                holder.domainView.setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_contact_external_color))
-            }
-            displayName.isNullOrBlank()                   -> {
-                holder.nameView.text = matrixItem.id
-            }
-            else                                          -> {
-                holder.nameView.text = TchapUtils.getNameFromDisplayName(displayName)
-                holder.domainView.text = TchapUtils.getDomainFromDisplayName(displayName)
-                holder.domainView.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.secondary_text_color))
-            }
+                ?.takeUnless { it.isEmpty() }
+                ?: TchapUtils.computeDisplayNameFromUserId(matrixItem.id).orEmpty()
+        if (TchapUtils.isExternalTchapUser(matrixItem.id)) {
+            holder.nameView.text = displayName
+            holder.domainView.text = holder.view.context.resources.getString(R.string.tchap_contact_external)
+            holder.domainView.setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_contact_external_color))
+        } else {
+            holder.nameView.text = TchapUtils.getNameFromDisplayName(displayName)
+            holder.domainView.text = TchapUtils.getDomainFromDisplayName(displayName)
+            holder.domainView.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.secondary_text_color))
         }
         holder.statusImageView.isVisible = false // Todo: Handle user status
         renderSelection(holder, selected)
