@@ -228,7 +228,7 @@ class HomeDetailFragment @Inject constructor(
         platformViewModel.observeViewEvents {
             when (it) {
                 is PlatformViewEvents.Loading -> showLoading(it.message)
-                is PlatformViewEvents.Failure -> viewModel.handle(HomeDetailAction.UnauthorizeEmail)
+                is PlatformViewEvents.Failure -> viewModel.handle(HomeDetailAction.UnauthorizedEmail)
                 is PlatformViewEvents.Success -> viewModel.handle(HomeDetailAction.CreateDiscussion(it.platform))
             }.exhaustive
         }

@@ -28,8 +28,6 @@ import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.raw.wellknown.getElementWellknown
-import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.ui.UiStateRepository
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
@@ -102,8 +100,8 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
             is HomeDetailAction.SwitchDisplayMode -> handleSwitchDisplayMode(action)
             HomeDetailAction.MarkAllRoomsRead     -> handleMarkAllRoomsRead()
             is HomeDetailAction.InviteByEmail     -> handleIndividualInviteByEmail(action)
-            is HomeDetailAction.CreateDiscussion  -> handleCreateDiscussion(action)
-            HomeDetailAction.UnauthorizeEmail     -> handleUnauthorizeEmail()
+            is HomeDetailAction.CreateDiscussion -> handleCreateDiscussion(action)
+            HomeDetailAction.UnauthorizedEmail   -> handleUnauthorizedEmail()
         }
     }
 
@@ -159,63 +157,57 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         }
     }
 
-    private fun handleUnauthorizeEmail() = withState {
-        if (it.inviteEmail != null) {
-            if (it.existingRoom.isNullOrEmpty()) {
-                _viewEvents.post(TchapHomeViewEvents.InviteIgnoredForUnauthorizedEmail(it.inviteEmail))
+    private fun handleUnauthorizedEmail() = withState {
+        it.inviteEmail ?: return@withState
+
+        if (it.existingRoom.isNullOrEmpty()) {
+            _viewEvents.post(TchapHomeViewEvents.InviteIgnoredForUnauthorizedEmail(it.inviteEmail))
+        } else {
+            // Ignore the error, notify the user that the invite has been already sent
+            _viewEvents.post(TchapHomeViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
+        }
+    }
+
+    private fun handleCreateDiscussion(action: HomeDetailAction.CreateDiscussion) = withState {
+        it.inviteEmail ?: return@withState
+
+        if (it.existingRoom.isNullOrEmpty()) {
+            if (action.platform.hs.isNotEmpty()) {
+                // Send the invite if the email is authorized
+                viewModelScope.launch {
+                    createDiscussion(it.inviteEmail)
+                }
             } else {
-                // Ignore the error, notify the user that the invite has been already sent
+                _viewEvents.post(TchapHomeViewEvents.InviteIgnoredForUnauthorizedEmail(it.inviteEmail))
+            }
+        } else {
+            // There is already a discussion with this email
+            // We do not re-invite the NoTchapUser except if
+            // the email is bound to the external instance (for which the invites may expire).
+            if (action.platform.hs.isNotEmpty()) {
+                // Revoke the pending invite and leave this empty discussion, we will invite again this email.
+                // We don't have a way for the moment to check if the invite expired or not...
+                viewModelScope.launch {
+                    try {
+                        revokePendingInviteAndLeave(it.existingRoom)
+                        createDiscussion(it.inviteEmail)
+                    } catch (failure: Throwable) {
+                        // Ignore the error, notify the user that the invite has been already sent
+                        _viewEvents.post(TchapHomeViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
+                    }
+                }
+            } else {
+                // Notify the user that the invite has been already sent
                 _viewEvents.post(TchapHomeViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
             }
         }
     }
 
-    private fun handleCreateDiscussion(action: HomeDetailAction.CreateDiscussion) = withState {
-        if (it.inviteEmail != null) {
-            // Pursue the invite process by checking whether an invite has been already sent
-            if (it.existingRoom.isNullOrEmpty()) {
-                if (action.platform.hs.isNotEmpty()) {
-                    // Send the invite if the email is authorized
-                    viewModelScope.launch {
-                        createDiscussion(it.inviteEmail)
-                    }
-                } else {
-                    _viewEvents.post(TchapHomeViewEvents.InviteIgnoredForUnauthorizedEmail(it.inviteEmail))
-                }
-            } else {
-                // There is already a discussion with this email
-                // We do not re-invite the NoTchapUser except if
-                // the email is bound to the external instance (for which the invites may expire).
-                if (action.platform.hs.isNotEmpty()) {
-                    // Revoke the pending invite and leave this empty discussion, we will invite again this email.
-                    // We don't have a way for the moment to check if the invite expired or not...
-                    viewModelScope.launch {
-                        try {
-                            revokePendingInviteAndLeave(it.existingRoom)
-                            createDiscussion(it.inviteEmail)
-                        } catch (failure: Throwable) {
-                            // Ignore the error, notify the user that the invite has been already sent
-                            _viewEvents.post(TchapHomeViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
-                        }
-                    }
-                } else {
-                    // Notify the user that the invite has been already sent
-                    _viewEvents.post(TchapHomeViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
-                }
-            }
-        }
-    }
-
     private suspend fun createDiscussion(email: String) {
-        val adminE2EByDefault = rawService.getElementWellknown(session.myUserId)
-                ?.isE2EByDefault()
-                ?: true
-
         val roomParams = CreateRoomParams()
                 .apply {
                     invite3pids.add(ThreePid.Email(email))
                     setDirectMessage()
-                    enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
                 }
 
         val roomId = session.createRoom(roomParams)

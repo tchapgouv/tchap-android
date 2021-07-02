@@ -23,6 +23,6 @@ sealed class HomeDetailAction : VectorViewModelAction {
     data class SwitchDisplayMode(val displayMode: RoomListDisplayMode) : HomeDetailAction()
     object MarkAllRoomsRead : HomeDetailAction()
     data class InviteByEmail(val email: String) : HomeDetailAction()
-    object UnauthorizeEmail : HomeDetailAction()
+    object UnauthorizedEmail : HomeDetailAction()
     data class CreateDiscussion(val platform: Platform) : HomeDetailAction()
 }

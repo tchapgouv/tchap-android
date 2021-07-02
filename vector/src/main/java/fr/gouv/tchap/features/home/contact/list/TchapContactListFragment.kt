@@ -146,7 +146,6 @@ class TchapContactListFragment @Inject constructor(
                     val text = views.inviteByIdEditText.text.toString().lowercase(VectorLocale.applicationLocale).trim()
 
                     if (text.isEmail()) {
-                        // Invite one by one the provided email addresses
                         view?.hideKeyboard()
                         viewModel.handle(TchapContactListAction.AddPendingSelection(PendingSelection.ThreePidPendingSelection(ThreePid.Email(text))))
                         sharedActionViewModel.post(TchapContactListSharedAction.OnInviteByEmail(text))
