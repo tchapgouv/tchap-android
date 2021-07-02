@@ -17,7 +17,6 @@
 package im.vector.app.features.home
 
 import android.os.Bundle
-import android.text.SpannableString
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -32,6 +31,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
+import fr.gouv.tchap.core.utils.TchapUtils
 import fr.gouv.tchap.features.home.TchapHomeViewEvents
 import fr.gouv.tchap.features.home.contact.list.TchapContactListFragment
 import fr.gouv.tchap.features.home.contact.list.TchapContactListFragmentArgs
@@ -224,18 +224,29 @@ class HomeDetailFragment @Inject constructor(
                 is TchapContactListViewEvents.CancelSearch -> closeSearchView()
             }
         }
-        
+
         platformViewModel.observeViewEvents {
             when (it) {
                 is PlatformViewEvents.Loading -> showLoading(it.message)
                 is PlatformViewEvents.Failure -> viewModel.handle(HomeDetailAction.UnauthorizedEmail)
-                is PlatformViewEvents.Success -> viewModel.handle(HomeDetailAction.CreateDiscussion(it.platform))
+                is PlatformViewEvents.Success -> {
+                    if (it.platform.hs.isNotEmpty()) {
+                        viewModel.handle(HomeDetailAction.CreateDiscussion(TchapUtils.isExternalTchapServer(it.platform.hs)))
+                    } else {
+                        viewModel.handle(HomeDetailAction.UnauthorizedEmail)
+                    }
+                }
             }.exhaustive
         }
 
         viewModel.observeViewEvents {
             when (it) {
-                is TchapHomeViewEvents.InviteIgnoredForDiscoveredUser       -> {
+                is TchapHomeViewEvents.InviteIgnoredForDiscoveredUser    -> {
+                    // TODO display a dialog to inform that an account already exist for this email, prompt the user to send a direct message
+                    //  note: the potential DM is already known see the existing room from state.
+//                    withState(viewModel) {
+//                        it.existingRoom
+//                    }
                     Toast.makeText(requireContext(), getString(R.string.tchap_discussion_already_exist, it.email), Toast.LENGTH_LONG).show()
                 }
                 is TchapHomeViewEvents.InviteIgnoredForUnauthorizedEmail -> {
@@ -245,10 +256,10 @@ class HomeDetailFragment @Inject constructor(
                     Toast.makeText(requireContext(), getString(R.string.tchap_invite_already_send_message, it.email), Toast.LENGTH_LONG).show()
                 }
                 TchapHomeViewEvents.InviteNoTchapUserByEmail             -> {
-                    val text = SpannableString(resources.getQuantityString(R.plurals.tchap_success_invite_notification, 1))
-                    Toast.makeText(requireContext(), "$text \n ${getString(R.string.tchap_send_invite_confirmation)}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(),
+                            "${getString(R.string.tchap_invite_sending_succeeded)} \n ${getString(R.string.tchap_send_invite_confirmation)}", Toast.LENGTH_LONG).show()
                 }
-                is TchapHomeViewEvents.GetPlatform                          -> platformViewModel.handle(PlatformAction.DiscoverTchapPlatform(it.email))
+                is TchapHomeViewEvents.GetPlatform                       -> platformViewModel.handle(PlatformAction.DiscoverTchapPlatform(it.email))
             }
         }
     }

@@ -65,7 +65,7 @@ class TchapContactListController @Inject constructor(private val session: Sessio
                 })
             }
         }
-        
+
         if (currentState.showInviteActions) {
             actionItem {
                 id(R.drawable.ic_tchap_invite_email)

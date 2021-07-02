@@ -79,7 +79,7 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                     excludedUserIds = null,
                     singleSelection = true,
                     showSearch = true,
-                    showInviteActions = true
+                    showInviteActions = false
             )
         }
 
@@ -105,6 +105,14 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                     identityServerUrl = session.identityService().getCurrentIdentityServerUrl(),
                     userConsent = session.identityService().getUserConsent()
             )
+        }
+
+        if (!TchapUtils.isExternalTchapUser(session.myUserId)) {
+            setState {
+                copy(
+                        showInviteActions = true
+                )
+            }
         }
     }
 

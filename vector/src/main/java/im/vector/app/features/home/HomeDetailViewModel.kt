@@ -172,19 +172,15 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         it.inviteEmail ?: return@withState
 
         if (it.existingRoom.isNullOrEmpty()) {
-            if (action.platform.hs.isNotEmpty()) {
-                // Send the invite if the email is authorized
-                viewModelScope.launch {
-                    createDiscussion(it.inviteEmail)
-                }
-            } else {
-                _viewEvents.post(TchapHomeViewEvents.InviteIgnoredForUnauthorizedEmail(it.inviteEmail))
+            // Send the invite if the email is authorized
+            viewModelScope.launch {
+                createDiscussion(it.inviteEmail)
             }
         } else {
             // There is already a discussion with this email
             // We do not re-invite the NoTchapUser except if
             // the email is bound to the external instance (for which the invites may expire).
-            if (action.platform.hs.isNotEmpty()) {
+            if (action.isExternalEmail) {
                 // Revoke the pending invite and leave this empty discussion, we will invite again this email.
                 // We don't have a way for the moment to check if the invite expired or not...
                 viewModelScope.launch {
