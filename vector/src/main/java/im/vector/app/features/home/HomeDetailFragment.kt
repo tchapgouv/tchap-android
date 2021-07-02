@@ -256,10 +256,11 @@ class HomeDetailFragment @Inject constructor(
                     Toast.makeText(requireContext(), getString(R.string.tchap_invite_already_send_message, it.email), Toast.LENGTH_LONG).show()
                 }
                 TchapHomeViewEvents.InviteNoTchapUserByEmail             -> {
-                    Toast.makeText(requireContext(),
-                            "${getString(R.string.tchap_invite_sending_succeeded)} \n ${getString(R.string.tchap_send_invite_confirmation)}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "${getString(R.string.tchap_invite_sending_succeeded)}\n" +
+                            "${getString(R.string.tchap_send_invite_confirmation)}", Toast.LENGTH_LONG).show()
                 }
                 is TchapHomeViewEvents.GetPlatform                       -> platformViewModel.handle(PlatformAction.DiscoverTchapPlatform(it.email))
+                is TchapHomeViewEvents.Failure                           -> showFailure(it.throwable)
             }
         }
     }

@@ -27,4 +27,5 @@ sealed class TchapHomeViewEvents : VectorViewEvents {
     data class InviteIgnoredForExistingRoom(val email: String) : TchapHomeViewEvents()
     object InviteNoTchapUserByEmail : TchapHomeViewEvents()
     data class GetPlatform(val email: String) : TchapHomeViewEvents()
+    data class Failure(val throwable: Throwable) : TchapHomeViewEvents()
 }

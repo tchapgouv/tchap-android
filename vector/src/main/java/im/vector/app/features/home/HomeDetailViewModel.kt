@@ -206,12 +206,10 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                     setDirectMessage()
                 }
 
-        val roomId = session.createRoom(roomParams)
-        if (roomId.isNotEmpty()) {
-            _viewEvents.post(TchapHomeViewEvents.InviteNoTchapUserByEmail)
-        } else {
-            // TODO room was not created
-        }
+        runCatching { session.createRoom(roomParams) }.fold(
+                { _ -> _viewEvents.post(TchapHomeViewEvents.InviteNoTchapUserByEmail) },
+                { failure -> _viewEvents.post(TchapHomeViewEvents.Failure(failure)) }
+        )
     }
 
     private suspend fun revokePendingInviteAndLeave(roomId: String) = withState {
