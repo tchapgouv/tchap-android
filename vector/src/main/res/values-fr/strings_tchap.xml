@@ -71,6 +71,9 @@
         <item quantity="other">Historique limité à %d jours</item>
     </plurals>
     <string name="tchap_room_invited_you">%s vous a invité</string>
+    <string name="tchap_fab_new_direct_message">Nouveau message direct</string>
+    <string name="tchap_fab_new_room_forum">Nouveau salon/forum</string>
+    <string name="tchap_fab_join_forum_from_directory">Rejoindre un forum depuis l\'annuaire</string>
 
     <!-- tchap scan media -->
     <string name="tchap_scan_media_unavailable">Analyse Indisponible</string>
