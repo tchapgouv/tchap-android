@@ -39,7 +39,7 @@
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:importantForAccessibility="no"
-        android:text="@string/tchap_fab_new_direct_message" />
+        android:text="@string/fab_menu_create_chat" />
 
     <!-- Sub menu item 2 -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -62,7 +62,7 @@
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:importantForAccessibility="no"
-        android:text="@string/tchap_fab_new_room_forum" />
+        android:text="@string/fab_menu_create_room" />
 
     <!-- Sub menu item 1 -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -71,7 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:accessibilityTraversalBefore="@id/roomListView"
-        android:contentDescription="@string/tchap_fab_join_forum_from_directory"
+        android:contentDescription="@string/tchap_fab_join_public_room"
         android:src="@drawable/ic_tchap_join_public"
         app:fabCustomSize="48dp"
         app:maxImageSize="26dp"
@@ -85,7 +85,7 @@
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:importantForAccessibility="no"
-        android:text="@string/tchap_fab_join_forum_from_directory" />
+        android:text="@string/tchap_fab_join_public_room" />
 
     <!-- Menu -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
