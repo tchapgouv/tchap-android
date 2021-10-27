@@ -127,8 +127,8 @@
     <string name="tchap_unsupported_android_version_default_msg">You may uninstall the application.</string>
 
     <!-- Login/Register Tchap -->
-    <string name="tchap_register_title">Sign up to Tchap</string>
-    <string name="tchap_connection_title">Login to Tchap</string>
+    <string name="template_tchap_register_title">Sign up to ${app_name}</string>
+    <string name="template_tchap_connection_title">Login to ${app_name}</string>
     <string name="tchap_has_account_no">I do not have\nan account</string>
     <string name="tchap_has_account_yes">I already have\nan account</string>
     <string name="tchap_connection_email">Email</string>

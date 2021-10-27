@@ -126,8 +126,8 @@
     <string name="tchap_unsupported_android_version_default_msg">Merci de votre compréhension.</string>
 
     <!-- Login/Register Tchap -->
-    <string name="tchap_register_title">Inscription Tchap</string>
-    <string name="tchap_connection_title">Connexion Tchap</string>
+    <string name="template_tchap_register_title">Inscription ${app_name}</string>
+    <string name="template_tchap_connection_title">Connexion ${app_name}</string>
     <string name="tchap_has_account_no">Je n’ai pas\nde compte</string>
     <string name="tchap_has_account_yes">J’ai un compte</string>
     <string name="tchap_connection_email">Adresse email</string>
