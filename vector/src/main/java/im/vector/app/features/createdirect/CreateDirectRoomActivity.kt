@@ -86,7 +86,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                             title = getString(R.string.fab_menu_create_chat),
                             menuResId = R.menu.vector_create_direct_room,
                             singleSelection = true,
-                            showContactBookAction = false,
+                            showContactBookAction = true,
                             showInviteActions = false
                     )
             )
