@@ -40,9 +40,10 @@ fun Context.displayInWebView(url: String) {
             .show()
 }
 
+@Suppress("UNUSED_PARAMETER")
 fun Context.showIdentityServerConsentDialog(configuredIdentityServer: String?, policyLinkCallback: () -> Unit, consentCallBack: (() -> Unit)) {
     MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.identity_server_consent_dialog_title_2, configuredIdentityServer ?: ""))
+            .setTitle(R.string.identity_server_consent_dialog_title_2)
             .setMessage(R.string.identity_server_consent_dialog_content_2)
             .setPositiveButton(R.string.yes) { _, _ ->
                 consentCallBack.invoke()

@@ -291,7 +291,7 @@
     <string name="low_priority_header">Priorité basse</string>
     <string name="direct_chats_header">Discussions</string>
     <string name="template_local_address_book_header">Contacts ${app_name}</string>
-    <string name="template_matrix_only_filter">Contacts ${app_name} uniquement</string>
+    <string name="matrix_only_filter">Contacts Matrix uniquement</string>
     <string name="no_conversation_placeholder">Aucune discussion</string>
     <string name="template_no_contact_access_placeholder">Vous n’avez pas autorisé ${app_name} à accéder à votre carnet d’adresses</string>
     <string name="no_result_placeholder">Aucun résultat</string>
@@ -2440,14 +2440,19 @@
     <string name="a11y_create_direct_message_by_qr_code">Créer une nouvelle conversation privée en scannant un code QR</string>
     <string name="attachment_viewer_item_x_of_y">%1$d de %2$d</string>
     <string name="a11y_create_direct_message_by_mxid">Créer une nouvelle conversation privée avec un identifiant Matrix</string>
+    <string name="identity_server_consent_dialog_title">Envoyer des e\u2011mails et des numéros de téléphone</string>
+    <string name="identity_server_consent_dialog_title_2">Demande de consentement</string>
     <string name="identity_server_consent_dialog_content">Dans le but de découvrir des contacts que vous connaîtriez, acceptez-vous d\'envoyer vos données de contact (numéros de téléphone et/ou e\u2011mails) au serveur d’identité configuré (%1$s) \?
 \n
 \nPour une meilleure protection de la vie privée, les données seront condensées (hash) avant l’envoi.</string>
-    <string name="identity_server_consent_dialog_title">Envoyer des e\u2011mails et des numéros de téléphone</string>
+    <string name="template_identity_server_consent_dialog_content_2">Dans le but de découvrir des utilisateurs ${app_name} que vous connaîtriez, acceptez-vous d’envoyer les adresses email saisies dans l’application au serveur ${app_name} \?
+\n
+\nCes données personnelles ne sont pas mémorisées sur les serveurs.
+\nPour plus d’informations, veuillez consulter les termes et conditions.</string>
     <string name="settings_discovery_consent_action_give_consent">Autoriser</string>
     <string name="settings_discovery_consent_action_revoke">Révoquer mon autorisation</string>
-    <string name="template_settings_discovery_consent_notice_off">Vous n’avez pas donné votre autorisation pour envoyer des e\u2011mails au serveur ${app_name} pour découvrir d\'autres utilisateurs à partir de vos contacts.</string>
-    <string name="template_settings_discovery_consent_notice_on">Vous avez donné votre autorisation pour envoyer des e\u2011mails au serveur ${app_name} pour découvrir d\'autres utilisateurs à partir de vos contacts.</string>
+    <string name="template_settings_discovery_consent_notice_off">Vous n’avez pas donné votre autorisation pour envoyer des e\u2011mails au serveur ${app_name} pour découvrir d’autres utilisateurs.</string>
+    <string name="template_settings_discovery_consent_notice_on">Vous avez donné votre autorisation pour envoyer des e\u2011mails au serveur ${app_name} pour découvrir d’autres utilisateurs.</string>
     <string name="settings_discovery_consent_title">Envoyer des e\u2011mails</string>
     <string name="direct_room_user_list_suggestions_title">Suggestions</string>
     <string name="direct_room_user_list_contacts_title">Contacts</string>
@@ -2978,7 +2983,7 @@
     <string name="settings_developer_mode_show_info_on_screen_summary">Affiche des informations nécessaire au débogage de l’application</string>
     <string name="settings_developer_mode_show_info_on_screen_title">Afficher les informations de débogage à l’écran</string>
     <string name="does_not_look_like_valid_email">Ceci ne ressemble pas à une adresse de courriel valide</string>
-    <string name="identity_server_consent_dialog_neutral_policy">Politique</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Termes et conditions</string>
     <string name="settings_discovery_no_policy_provided">Aucune politique fournie par le serveur d’identité</string>
     <string name="settings_discovery_hide_identity_server_policy_title">Cacher la politique du serveur d’identité</string>
     <string name="settings_discovery_show_identity_server_policy_title">Afficher la politique du serveur d’identité</string>

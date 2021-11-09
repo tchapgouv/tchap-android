@@ -490,7 +490,7 @@
     <string name="direct_chats_header">Conversations</string>
     <string name="template_local_address_book_header">${app_name} contacts</string>
     <string name="template_user_directory_header">${app_name} directory</string>
-    <string name="template_matrix_only_filter">${app_name} contacts only</string>
+    <string name="matrix_only_filter">Matrix contacts only</string>
     <string name="no_conversation_placeholder">No conversations</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="template_no_contact_access_placeholder">You didn’t allow ${app_name} to access your local contacts</string>
@@ -2369,17 +2369,20 @@
     <string name="settings_discovery_confirm_mail_not_clicked">We sent you a confirm email to %s, please first check your email and click on the confirmation link</string>
     <string name="settings_discovery_mail_pending">Pending</string>
     <string name="settings_discovery_consent_title">Send emails</string>
-    <string name="template_settings_discovery_consent_notice_on">You have given your consent to send emails to the ${app_name} server to discover other users from your contacts.</string>
-    <string name="template_settings_discovery_consent_notice_off">You have not given your consent to send emails to the ${app_name} server to discover other users from your contacts.</string>
+    <string name="template_settings_discovery_consent_notice_on">You have given your consent to send emails to the ${app_name} server to discover other users.</string>
+    <string name="template_settings_discovery_consent_notice_off">You have not given your consent to send emails to the ${app_name} server to discover other users.</string>
     <string name="settings_discovery_consent_notice_off_2">Your contacts are private. To discover users from your contacts, we need your permission to send contact info to your identity server.</string>
     <string name="settings_discovery_consent_action_revoke">Revoke my consent</string>
     <string name="settings_discovery_consent_action_give_consent">Give consent</string>
 
     <string name="identity_server_consent_dialog_title">Send emails and phone numbers</string>
-    <string name="identity_server_consent_dialog_title_2">Send emails and phone numbers to %s</string>
+    <string name="identity_server_consent_dialog_title_2">Consent request</string>
     <string name="identity_server_consent_dialog_content">In order to discover existing contacts you know, do you accept to send your contact data (phone numbers and/or emails) to the configured identity server (%1$s)?\n\nFor more privacy, the sent data will be hashed before being sent.</string>
-    <string name="identity_server_consent_dialog_content_2">To discover existing contacts, you need to send contact info to your identity server.\n\nWe hash your data before sending for privacy. Do you consent to send this info?</string>
-    <string name="identity_server_consent_dialog_neutral_policy">Policy</string>
+    <string name="template_identity_server_consent_dialog_content_2">In order to discover existing ${app_name} users you know, do you accept to send email addresses to the ${app_name} server?
+\n
+\nThese personal data are not stored on the servers.
+\nFor more information, please review the terms and conditions.</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Terms and conditions</string>
 
     <string name="settings_discovery_enter_identity_server">Enter an identity server URL</string>
     <string name="settings_discovery_bad_identity_server">Could not connect to identity server</string>
