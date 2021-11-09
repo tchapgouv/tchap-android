@@ -490,7 +490,7 @@
     <string name="direct_chats_header">Conversations</string>
     <string name="template_local_address_book_header">${app_name} contacts</string>
     <string name="template_user_directory_header">${app_name} directory</string>
-    <string name="matrix_only_filter">Matrix contacts only</string>
+    <string name="template_matrix_only_filter">${app_name} contacts only</string>
     <string name="no_conversation_placeholder">No conversations</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="template_no_contact_access_placeholder">You didn’t allow ${app_name} to access your local contacts</string>
@@ -3271,7 +3271,7 @@
     <string name="loading_contact_book">Retrieving your contacts…</string>
     <string name="empty_contact_book">Your contact book is empty</string>
     <string name="contacts_book_title">Contacts book</string>
-    <string name="phone_book_perform_lookup">Search for contacts on Matrix</string>
+    <string name="template_phone_book_perform_lookup">Search for contacts on ${app_name}</string>
 
     <string name="three_pid_revoke_invite_dialog_title">Revoke invite</string>
     <string name="three_pid_revoke_invite_dialog_content">Revoke invite to %1$s?</string>

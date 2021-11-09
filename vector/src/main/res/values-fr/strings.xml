@@ -291,7 +291,7 @@
     <string name="low_priority_header">Priorité basse</string>
     <string name="direct_chats_header">Discussions</string>
     <string name="template_local_address_book_header">Contacts ${app_name}</string>
-    <string name="matrix_only_filter">Contacts Matrix uniquement</string>
+    <string name="template_matrix_only_filter">Contacts ${app_name} uniquement</string>
     <string name="no_conversation_placeholder">Aucune discussion</string>
     <string name="template_no_contact_access_placeholder">Vous n’avez pas autorisé ${app_name} à accéder à votre carnet d’adresses</string>
     <string name="no_result_placeholder">Aucun résultat</string>
@@ -2463,7 +2463,7 @@
     <string name="invalid_qr_code_uri">Code QR invalide (URI invalide) !</string>
     <string name="cannot_dm_self">Impossible avec vous-même !</string>
     <string name="share_by_text">Partager par SMS</string>
-    <string name="phone_book_perform_lookup">Rechercher des contacts sur Matrix</string>
+    <string name="template_phone_book_perform_lookup">Rechercher des contacts sur ${app_name}</string>
     <string name="room_settings_set_avatar">Définir l’avatar</string>
     <string name="identity_server_user_consent_not_provided">Le consentement de l’utilisateur n’a pas été fourni.</string>
     <string name="user_code_info_text">Partagez ce code avec des gens pour qu’ils puissent le scanner pour vous ajouter et commencer à discuter.</string>
