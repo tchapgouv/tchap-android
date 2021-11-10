@@ -79,10 +79,11 @@
     <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_category_timeline">
 
         <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="SETTINGS_SHOW_URL_PREVIEW_KEY"
             android:summary="@string/settings_inline_url_preview_summary"
-            android:title="@string/settings_inline_url_preview" />
+            android:title="@string/settings_inline_url_preview"
+            app:isPreferenceVisible="false" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:key="SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY"
@@ -106,13 +107,13 @@
             android:title="@string/settings_show_redacted" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY"
             android:summary="@string/settings_show_join_leave_messages_summary"
             android:title="@string/settings_show_join_leave_messages" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY"
             android:summary="@string/settings_show_avatar_display_name_changes_messages_summary"
             android:title="@string/settings_show_avatar_display_name_changes_messages" />
@@ -124,14 +125,14 @@
             android:title="@string/settings_chat_effects_title" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY"
             android:summary="@string/settings_show_join_leave_messages_summary"
             android:title="@string/settings_show_join_leave_messages"
             app:isPreferenceVisible="@bool/false_not_implemented" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY"
             android:summary="@string/settings_show_avatar_display_name_changes_messages_summary"
             android:title="@string/settings_show_avatar_display_name_changes_messages"
@@ -202,9 +203,12 @@
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
-    <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_category_room_directory">
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:title="@string/settings_category_room_directory"
+        app:isPreferenceVisible="false">
 
         <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
             android:key="SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS"
             android:summary="@string/settings_room_directory_show_all_rooms_summary"
             android:title="@string/settings_room_directory_show_all_rooms" />

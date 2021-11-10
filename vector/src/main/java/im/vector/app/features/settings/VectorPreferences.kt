@@ -409,7 +409,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * @return true if the join and leave membership events should be shown in the messages list
      */
     fun showJoinLeaveMessages(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY, true)
+        return defaultPrefs.getBoolean(SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY, false)
     }
 
     /**
@@ -418,7 +418,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * @return true true if the avatar and display name events should be shown in the messages list.
      */
     fun showAvatarDisplayNameChangeMessages(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY, true)
+        return defaultPrefs.getBoolean(SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY, false)
     }
 
     /**
@@ -443,7 +443,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * Show all rooms in room directory
      */
     fun showAllPublicRooms(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS, false)
+        return defaultPrefs.getBoolean(SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS, true)
     }
 
     /**
@@ -839,7 +839,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * @return true if the user wants to see URL previews in the timeline
      */
     fun showUrlPreviews(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_SHOW_URL_PREVIEW_KEY, true)
+        return defaultPrefs.getBoolean(SETTINGS_SHOW_URL_PREVIEW_KEY, false)
     }
 
     /**
