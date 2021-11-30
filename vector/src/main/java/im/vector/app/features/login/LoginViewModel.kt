@@ -848,7 +848,6 @@ class LoginViewModel @AssistedInject constructor(
             } else {
                 _viewEvents.post(LoginViewEvents.OnLoginFlowRetrieved)
             }
-            _viewEvents.post(LoginViewEvents.OnLoginFlowRetrieved)
         }
     }
 
