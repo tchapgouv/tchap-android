@@ -249,15 +249,17 @@ class HomeActivityViewModel @AssistedInject constructor(
 
     private fun updateIdentityServer(session: Session) {
         viewModelScope.launch {
-            val currentIdentityServerUrl = tryOrNull {
-                session.identityService().getCurrentIdentityServerUrl()
-            }
+            with(session.identityService()) {
+                if (getCurrentIdentityServerUrl() == null) {
+                    setNewIdentityServer(session.sessionParams.homeServerUrl)
+                    Timber.d("## updateIdentityServer succeeded (${getCurrentIdentityServerUrl()})")
+                }
 
-            if (currentIdentityServerUrl == null) {
-                val identityServerUrl = session.sessionParams.homeServerUrl
-
-                session.identityService().setNewIdentityServer(identityServerUrl)
-                Timber.d("## updateIdentityServer succeeded ($identityServerUrl)")
+                // Tchap: Force user consent as it should have been already accepted in TAC
+                if (!getUserConsent()) {
+                    setUserConsent(true)
+                    Timber.d("## updateIdentityServer user consent succeeded")
+                }
             }
         }
     }
