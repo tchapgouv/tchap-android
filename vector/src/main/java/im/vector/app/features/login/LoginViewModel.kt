@@ -845,9 +845,8 @@ class LoginViewModel @AssistedInject constructor(
                     data.isOutdatedHomeserver) {
                 // Notify the UI
                 _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
-            } else {
-                _viewEvents.post(LoginViewEvents.OnLoginFlowRetrieved)
             }
+            _viewEvents.post(LoginViewEvents.OnLoginFlowRetrieved)
         }
     }
 
