@@ -16,14 +16,12 @@
 
 package im.vector.app.core.epoxy.profiles
 
-import android.view.View
 import androidx.annotation.CallSuper
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
-import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
@@ -44,15 +42,15 @@ abstract class BaseProfileMatrixItem<T : ProfileMatrixItem.Holder> : VectorEpoxy
     override fun bind(holder: T) {
         super.bind(holder)
         val bestName = matrixItem.getBestName()
+        // Tchap: Hide the Matrix Id
 //        val matrixId = matrixItem.id
 //                .takeIf { it != bestName }
 //                // Special case for ThreePid fake matrix item
 //                .takeIf { it != "@" }
         holder.view.onClick(clickListener?.takeIf { editable })
         holder.titleView.text = bestName
-        //holder.subtitleView.setTextOrHide(matrixId)
-        // Tchap: Hide the Matrix Id
-        holder.subtitleView.visibility = View.GONE
+//         holder.subtitleView.setTextOrHide(matrixId)
+        holder.subtitleView.isVisible = false
         holder.editableView.isVisible = editable
         avatarRenderer.render(matrixItem, holder.avatarImageView)
         holder.avatarDecorationImageView.render(userEncryptionTrustLevel)
