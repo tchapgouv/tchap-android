@@ -51,7 +51,7 @@ abstract class BaseProfileMatrixItem<T : ProfileMatrixItem.Holder> : VectorEpoxy
         holder.view.onClick(clickListener?.takeIf { editable })
         holder.titleView.text = bestName
         //holder.subtitleView.setTextOrHide(matrixId)
-        // Hide the Matrix Id for Tchap
+        // Tchap: Hide the Matrix Id
         holder.subtitleView.visibility = View.GONE
         holder.editableView.isVisible = editable
         avatarRenderer.render(matrixItem, holder.avatarImageView)
