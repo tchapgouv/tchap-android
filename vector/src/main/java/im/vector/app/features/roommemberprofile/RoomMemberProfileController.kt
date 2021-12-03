@@ -121,8 +121,9 @@ class RoomMemberProfileController @Inject constructor(
                             editable = true,
                             icon = icon,
                             tintIcon = false,
-                            divider = false,
-                            action = { callback?.onShowDeviceList() }
+                            divider = false
+                            // Tchap: disable onClick for "Learn more" part
+//                            action = { callback?.onShowDeviceList() }
                     )
                 } else {
                     // Not trusted, propose to verify
@@ -132,16 +133,18 @@ class RoomMemberProfileController @Inject constructor(
                                 title = stringProvider.getString(R.string.verification_profile_verify),
                                 editable = true,
                                 icon = R.drawable.ic_shield_black,
-                                divider = false,
-                                action = { callback?.onTapVerify() }
+                                divider = false
+                                // Tchap: disable onClick for "Learn more" part
+//                                action = { callback?.onTapVerify() }
                         )
                     } else {
                         buildProfileAction(
                                 id = "learn_more",
                                 title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
                                 editable = false,
-                                divider = false,
-                                action = { callback?.onShowDeviceListNoCrossSigning() }
+                                divider = false
+                                // Tchap: disable onClick for "Learn more" part
+//                                action = { callback?.onShowDeviceListNoCrossSigning() }
                         )
                     }
 
@@ -157,8 +160,9 @@ class RoomMemberProfileController @Inject constructor(
                         title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
                         editable = false,
                         divider = false,
-                        subtitle = stringProvider.getString(R.string.room_profile_encrypted_subtitle),
-                        action = { callback?.onShowDeviceListNoCrossSigning() }
+                        subtitle = stringProvider.getString(R.string.room_profile_encrypted_subtitle)
+                        // Tchap: disable onClick for "Learn more" part
+//                         action = { callback?.onShowDeviceListNoCrossSigning() }
                 )
             }
         } else {
