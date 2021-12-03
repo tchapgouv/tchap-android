@@ -2964,7 +2964,7 @@
     <string name="you_will_leave_all_in">Vous allez quitter tous les salons et espaces de %s.</string>
     <string name="leave_all_rooms_and_spaces">Quitter tous les salons et espaces</string>
     <string name="space_leave_prompt_msg_with_name">Voulez-vous vraiment quitter %s \?</string>
-    <string name="discovery_section">Découverte (%s)</string>
+    <string name="discovery_section">Utilisateur découvert</string>
     <string name="finish_setup">Terminer le réglage</string>
     <string name="discovery_invite">Inviter par courriel, trouver des contacts et plus…</string>
     <string name="finish_setting_up_discovery">Terminer le réglage de la découverte.</string>
