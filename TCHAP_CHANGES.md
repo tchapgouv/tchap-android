@@ -3,6 +3,9 @@ Changes in Tchap 1.99.3 (2021-xx-xx)
 
 Bugfix 🐛:
  - [Login Screen] An unexpected error on the password field #276
+
+Improvements 🙌:
+- Hide encryption trust shields PR #296
   
 Changes in Tchap 1.99.2 (2021-11-08)
 ===================================================
