@@ -296,12 +296,14 @@ android {
             dimension "voip"
 
             buildConfigField "boolean", "IS_VOIP_SUPPORTED", "true"
+            resValue "bool", "is_voip_supported", "true"
         }
 
         withoutvoip {
             dimension "voip"
 
             buildConfigField "boolean", "IS_VOIP_SUPPORTED", "false"
+            resValue "bool", "is_voip_supported", "false"
         }
 
         withpinning {
