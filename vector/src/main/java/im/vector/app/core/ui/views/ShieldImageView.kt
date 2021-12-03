@@ -34,10 +34,13 @@ class ShieldImageView @JvmOverloads constructor(
         if (isInEditMode) {
             render(RoomEncryptionTrustLevel.Trusted)
         }
+        // Tchap: Hide the shield
+        isVisible = false
     }
 
     fun render(roomEncryptionTrustLevel: RoomEncryptionTrustLevel?) {
-        isVisible = roomEncryptionTrustLevel != null
+        // Tchap: Hide the shield
+//        isVisible = roomEncryptionTrustLevel != null
 
         when (roomEncryptionTrustLevel) {
             RoomEncryptionTrustLevel.Default -> {
