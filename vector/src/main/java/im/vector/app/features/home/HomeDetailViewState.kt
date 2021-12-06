@@ -42,9 +42,7 @@ data class HomeDetailViewState(
         val syncState: SyncState = SyncState.Idle,
         val incrementalSyncStatus: SyncStatusService.Status.IncrementalSyncStatus = SyncStatusService.Status.IncrementalSyncIdle,
         val pushCounter: Int = 0,
-        val showDialPadTab: Boolean = false,
-        val inviteEmail: String? = null,
-        val existingRoom: String? = null
+        val showDialPadTab: Boolean = false
 ) : MavericksState
 
 sealed class HomeTab(@StringRes val titleRes: Int) {

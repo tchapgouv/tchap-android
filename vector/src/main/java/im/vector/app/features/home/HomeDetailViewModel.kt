@@ -128,7 +128,6 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
             HomeDetailAction.MarkAllRoomsRead               -> handleMarkAllRoomsRead()
             is HomeDetailAction.StartCallWithPhoneNumber    -> handleStartCallWithPhoneNumber(action)
             is HomeDetailAction.InviteByEmail               -> handleIndividualInviteByEmail(action)
-            is HomeDetailAction.SelectContact               -> handleSelectContact(action)
             is HomeDetailAction.CreateDirectMessageByUserId -> handleCreateDirectMessageByUserId(action)
         }
     }
@@ -194,77 +193,59 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
 
     private fun handleIndividualInviteByEmail(action: HomeDetailAction.InviteByEmail) {
         val existingRoom = session.getExistingDirectRoomWithUser(action.email)
-
-        setState {
-            copy(
-                    inviteEmail = action.email,
-                    existingRoom = existingRoom
-            )
-        }
-
         viewModelScope.launch(Dispatchers.IO) {
             // Start the invite process by checking whether a Tchap account has been created for this email.
-            val data = tryOrNull { session.identityService().lookUp(listOf(ThreePid.Email(action.email))) }
+            val userId = tryOrNull { session.identityService().lookUp(listOf(ThreePid.Email(action.email))) }
+                    ?.find { it.threePid.value == action.email }
+                    ?.matrixId
 
-            if (data.isNullOrEmpty()) {
-                val hs = (getPlatformTask.execute(Params(action.email)) as? GetPlatformResult.Success)?.platform?.hs
-                if (hs.isNullOrEmpty()) {
-                    handleUnauthorizedEmail()
-                } else {
-                    handleCreateDirectMessageByEmail(TchapUtils.isExternalTchapServer(hs))
-                }
+            // Email matches with an existing account
+            if (userId != null) {
+                val user = tryOrNull { session.resolveUser(userId) } ?: User(userId, TchapUtils.computeDisplayNameFromUserId(userId), null)
+                _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForDiscoveredUser(user))
             } else {
-                val userId = data.find { it.threePid.value == action.email }?.matrixId
-                userId?.let {
-                    val user = tryOrNull { session.resolveUser(it) } ?: User(it, TchapUtils.computeDisplayNameFromUserId(it), null)
-                    _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForDiscoveredUser(user))
+                val homeServer = (getPlatformTask.execute(Params(action.email)) as? GetPlatformResult.Success)?.platform?.hs
+                if (homeServer.isNullOrEmpty()) {
+                    handleUnauthorizedEmail(existingRoom, action.email)
+                } else {
+                    handleCreateDirectMessageByEmail(existingRoom, action.email, TchapUtils.isExternalTchapServer(homeServer))
                 }
             }
         }
     }
 
-    private fun handleSelectContact(action: HomeDetailAction.SelectContact) {
-        val directRoomId = session.getExistingDirectRoomWithUser(action.user.userId)
-        if (directRoomId != null) {
-            _viewEvents.post(HomeDetailViewEvents.OpenDirectChat(directRoomId))
-        } else {
-            _viewEvents.post(HomeDetailViewEvents.PromptCreateDirectChat(action.user))
-        }
-    }
-
-    private fun handleUnauthorizedEmail() = withState {
-        it.inviteEmail ?: return@withState
-
-        if (it.existingRoom.isNullOrEmpty()) {
-            _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForUnauthorizedEmail(it.inviteEmail))
+    private fun handleUnauthorizedEmail(existingRoom: String?, email: String) {
+        if (existingRoom.isNullOrEmpty()) {
+            _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForUnauthorizedEmail(email))
         } else {
             // Ignore the error, notify the user that the invite has been already sent
-            _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
+            _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForExistingRoom(email))
         }
     }
 
-    private fun handleCreateDirectMessageByEmail(isExternalEmail: Boolean) = withState {
-        it.inviteEmail ?: return@withState
-
-        if (it.existingRoom.isNullOrEmpty()) {
-            // Send the invite if the email is authorized
-            viewModelScope.launch {
-                createDirectMessage(it.inviteEmail)
-            }
+    private fun handleCreateDirectMessageByEmail(existingRoom: String?, email: String, isExternalEmail: Boolean) {
+        // Notify the user that the invite has been already sent
+        if (existingRoom?.isNotEmpty() == true && !isExternalEmail) {
+            _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForExistingRoom(email))
         } else {
-            // There is already a discussion with this email
-            // We do not re-invite the NoTchapUser except if
-            // the email is bound to the external instance (for which the invites may expire).
-            if (isExternalEmail) {
-                // Revoke the pending invite and leave this empty discussion, we will invite again this email.
+            viewModelScope.launch(Dispatchers.IO) {
+                // There is already a discussion with this email
+                // We have to re-invite the NoTchapUser if the email is bound to the external instance (for which the invites may expire).
                 // We don't have a way for the moment to check if the invite expired or not...
-                viewModelScope.launch {
-                    revokePendingInviteAndLeave(it.existingRoom)
-                    createDirectMessage(it.inviteEmail)
+                if (existingRoom?.isNotEmpty() == true && isExternalEmail) {
+                    revokePendingInviteAndLeave(existingRoom)
                 }
-            } else {
-                // Notify the user that the invite has been already sent
-                _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
+
+                val roomParams = CreateRoomParams()
+                        .apply {
+                            invite3pids.add(ThreePid.Email(email))
+                            setDirectMessage()
+                        }
+
+                runCatching { session.createRoom(roomParams) }.fold(
+                        { _ -> _viewEvents.post(HomeDetailViewEvents.InviteNoTchapUserByEmail) },
+                        { failure -> _viewEvents.post(HomeDetailViewEvents.Failure(failure)) }
+                )
             }
         }
     }
@@ -279,19 +260,6 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
             }
             _viewEvents.post(HomeDetailViewEvents.OpenDirectChat(roomId = roomId))
         }
-    }
-
-    private suspend fun createDirectMessage(email: String) {
-        val roomParams = CreateRoomParams()
-                .apply {
-                    invite3pids.add(ThreePid.Email(email))
-                    setDirectMessage()
-                }
-
-        runCatching { session.createRoom(roomParams) }.fold(
-                { _ -> _viewEvents.post(HomeDetailViewEvents.InviteNoTchapUserByEmail) },
-                { failure -> _viewEvents.post(HomeDetailViewEvents.Failure(failure)) }
-        )
     }
 
     private suspend fun revokePendingInviteAndLeave(roomId: String) {

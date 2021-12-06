@@ -34,7 +34,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.AppStateHandler
 import im.vector.app.BuildConfig
 import im.vector.app.R
@@ -184,13 +183,12 @@ class HomeDetailFragment @Inject constructor(
                 HomeDetailViewEvents.Loading                              -> showLoadingDialog()
                 is HomeDetailViewEvents.InviteIgnoredForDiscoveredUser    -> handleExistingUser(viewEvent.user)
                 is HomeDetailViewEvents.InviteIgnoredForUnauthorizedEmail ->
-                    handleInviteByEmailFailed(getString(R.string.tchap_invite_unauthorized_message, viewEvent.email))
+                    handleInviteByEmailResult(getString(R.string.tchap_invite_unauthorized_message, viewEvent.email))
                 is HomeDetailViewEvents.InviteIgnoredForExistingRoom      ->
-                    handleInviteByEmailFailed(getString(R.string.tchap_invite_already_send_message, viewEvent.email))
+                    handleInviteByEmailResult(getString(R.string.tchap_invite_already_send_message, viewEvent.email))
                 HomeDetailViewEvents.InviteNoTchapUserByEmail             ->
-                    handleInviteByEmailFailed(getString(R.string.tchap_invite_sending_succeeded) + "\n" + getString(R.string.tchap_send_invite_confirmation))
+                    handleInviteByEmailResult(getString(R.string.tchap_invite_sending_succeeded) + "\n" + getString(R.string.tchap_send_invite_confirmation))
                 is HomeDetailViewEvents.OpenDirectChat                    -> openRoom(viewEvent.roomId)
-                is HomeDetailViewEvents.PromptCreateDirectChat            -> showCreateRoomDialog(viewEvent.user)
                 is HomeDetailViewEvents.Failure                           -> showFailure(viewEvent.throwable)
             }
         }.exhaustive
@@ -618,19 +616,7 @@ class HomeDetailFragment @Inject constructor(
         cancelSearch()
     }
 
-    private fun showCreateRoomDialog(user: User) {
-        val name = user.displayName?.let { TchapUtils.getNameFromDisplayName(it) }
-        MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.fab_menu_create_chat)
-                .setMessage(getString(R.string.tchap_dialog_prompt_new_direct_chat, name))
-                .setPositiveButton(R.string.yes) { _, _ ->
-                    viewModel.handle(HomeDetailAction.CreateDirectMessageByUserId(user.userId))
-                }
-                .setNegativeButton(R.string.no, null)
-                .show()
-    }
-
-    private fun handleInviteByEmailFailed(message: String) {
+    private fun handleInviteByEmailResult(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
