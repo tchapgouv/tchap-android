@@ -68,7 +68,7 @@ class LoginResetPasswordFragment @Inject constructor(
 
         viewModel.observeViewEvents {
             when (it) {
-                is PlatformViewEvents.Loading -> showLoading(it.message)
+                PlatformViewEvents.Loading    -> showLoading(null)
                 is PlatformViewEvents.Failure -> {
                     // Dialog is displayed by the Activity
                 }

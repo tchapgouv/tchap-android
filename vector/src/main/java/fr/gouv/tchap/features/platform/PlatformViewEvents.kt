@@ -20,7 +20,7 @@ import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.mode
 import im.vector.app.core.platform.VectorViewEvents
 
 sealed class PlatformViewEvents : VectorViewEvents {
-    data class Loading(val message: CharSequence? = null) : PlatformViewEvents()
+    object Loading : PlatformViewEvents()
     data class Failure(val throwable: Throwable) : PlatformViewEvents()
     data class Success(val platform: Platform) : PlatformViewEvents()
 }

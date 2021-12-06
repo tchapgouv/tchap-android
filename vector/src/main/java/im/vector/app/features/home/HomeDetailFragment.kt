@@ -243,7 +243,7 @@ class HomeDetailFragment @Inject constructor(
 
         platformViewModel.observeViewEvents {
             when (it) {
-                is PlatformViewEvents.Loading -> showLoading(it.message)
+                PlatformViewEvents.Loading    -> showLoading(null)
                 is PlatformViewEvents.Failure -> viewModel.handle(HomeDetailAction.UnauthorizedEmail)
                 is PlatformViewEvents.Success -> {
                     if (it.platform.hs.isNotEmpty()) {

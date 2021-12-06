@@ -34,7 +34,6 @@ import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import timber.log.Timber
 import java.util.ArrayList
-import java.util.Arrays
 import java.util.Random
 
 class PlatformViewModel @AssistedInject constructor(
@@ -53,10 +52,6 @@ class PlatformViewModel @AssistedInject constructor(
 
     /**
      * Get the Tchap platform configuration (HS/IS) for the provided email address.
-     *
-     * @param activity     current activity
-     * @param emailAddress the email address to consider
-     * @param callback     the asynchronous callback
      */
     private fun handleDiscoverTchapPlatform(action: PlatformAction.DiscoverTchapPlatform) {
         Timber.d("## discoverTchapPlatform [${action.email}]")
@@ -74,8 +69,8 @@ class PlatformViewModel @AssistedInject constructor(
         }
 
         // Add randomly the preferred known ISes
-        var currentHosts: MutableList<String> = ArrayList(Arrays.asList(*context.resources.getStringArray(R.array.preferred_identity_server_names)))
-        while (!currentHosts.isEmpty()) {
+        var currentHosts: MutableList<String> = ArrayList(listOf(*context.resources.getStringArray(R.array.preferred_identity_server_names)))
+        while (currentHosts.isNotEmpty()) {
             val index = Random().nextInt(currentHosts.size)
             val host: String = currentHosts.removeAt(index)
             val idServerUrl = context.getString(R.string.server_url_prefix) + host
@@ -85,8 +80,8 @@ class PlatformViewModel @AssistedInject constructor(
         }
 
         // Add randomly the other known ISes
-        currentHosts = ArrayList(Arrays.asList(*context.resources.getStringArray(R.array.identity_server_names)))
-        while (!currentHosts.isEmpty()) {
+        currentHosts = ArrayList(listOf(*context.resources.getStringArray(R.array.identity_server_names)))
+        while (currentHosts.isNotEmpty()) {
             val index = Random().nextInt(currentHosts.size)
             val host: String = currentHosts.removeAt(index)
             val idServerUrl = context.getString(R.string.server_url_prefix) + host
@@ -102,7 +97,6 @@ class PlatformViewModel @AssistedInject constructor(
      *
      * @param emailAddress       the email address to consider
      * @param identityServerUrls the list of the available identity server urls
-     * @param callback           the asynchronous callback
      */
     private fun handleDiscoverTchapPlatform(emailAddress: String, identityServerUrls: MutableList<String>) {
         if (identityServerUrls.isEmpty()) {
@@ -115,6 +109,7 @@ class PlatformViewModel @AssistedInject constructor(
         // Retrieve the first identity server url by removing it from the list.
         val selectedUrl: String = identityServerUrls.removeAt(0)
 
+        _viewEvents.post(PlatformViewEvents.Loading)
         viewModelScope.launch {
             try {
                 val platform = matrix.threePidPlatformDiscoverService().getPlatform(selectedUrl, ThreePid.Email(emailAddress))
