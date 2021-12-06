@@ -22,10 +22,6 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import fr.gouv.tchap.core.utils.TchapUtils
-import fr.gouv.tchap.features.platform.GetPlatformResult
-import fr.gouv.tchap.features.platform.Params
-import fr.gouv.tchap.features.platform.TchapGetPlatformTask
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
@@ -49,18 +45,13 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
@@ -76,8 +67,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                                       private val callManager: WebRtcCallManager,
                                                       private val directRoomHelper: DirectRoomHelper,
                                                       private val appStateHandler: AppStateHandler,
-                                                      private val autoAcceptInvites: AutoAcceptInvites,
-                                                      private val getPlatformTask: TchapGetPlatformTask) :
+                                                      private val autoAcceptInvites: AutoAcceptInvites) :
         VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
         CallProtocolsChecker.Listener {
 
@@ -124,11 +114,9 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
 
     override fun handle(action: HomeDetailAction) {
         when (action) {
-            is HomeDetailAction.SwitchTab                   -> handleSwitchTab(action)
-            HomeDetailAction.MarkAllRoomsRead               -> handleMarkAllRoomsRead()
-            is HomeDetailAction.StartCallWithPhoneNumber    -> handleStartCallWithPhoneNumber(action)
-            is HomeDetailAction.InviteByEmail               -> handleIndividualInviteByEmail(action)
-            is HomeDetailAction.CreateDirectMessageByUserId -> handleCreateDirectMessageByUserId(action)
+            is HomeDetailAction.SwitchTab                -> handleSwitchTab(action)
+            HomeDetailAction.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
+            is HomeDetailAction.StartCallWithPhoneNumber -> handleStartCallWithPhoneNumber(action)
         }
     }
 
@@ -187,99 +175,6 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 session.markAllAsRead(roomIds)
             } catch (failure: Throwable) {
                 Timber.d(failure, "Failed to mark all as read")
-            }
-        }
-    }
-
-    private fun handleIndividualInviteByEmail(action: HomeDetailAction.InviteByEmail) {
-        val existingRoom = session.getExistingDirectRoomWithUser(action.email)
-        viewModelScope.launch(Dispatchers.IO) {
-            // Start the invite process by checking whether a Tchap account has been created for this email.
-            val userId = tryOrNull { session.identityService().lookUp(listOf(ThreePid.Email(action.email))) }
-                    ?.find { it.threePid.value == action.email }
-                    ?.matrixId
-
-            // Email matches with an existing account
-            if (userId != null) {
-                val user = tryOrNull { session.resolveUser(userId) } ?: User(userId, TchapUtils.computeDisplayNameFromUserId(userId), null)
-                _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForDiscoveredUser(user))
-            } else {
-                val homeServer = (getPlatformTask.execute(Params(action.email)) as? GetPlatformResult.Success)?.platform?.hs
-                if (homeServer.isNullOrEmpty()) {
-                    handleUnauthorizedEmail(existingRoom, action.email)
-                } else {
-                    handleCreateDirectMessageByEmail(existingRoom, action.email, TchapUtils.isExternalTchapServer(homeServer))
-                }
-            }
-        }
-    }
-
-    private fun handleUnauthorizedEmail(existingRoom: String?, email: String) {
-        if (existingRoom.isNullOrEmpty()) {
-            _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForUnauthorizedEmail(email))
-        } else {
-            // Ignore the error, notify the user that the invite has been already sent
-            _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForExistingRoom(email))
-        }
-    }
-
-    private fun handleCreateDirectMessageByEmail(existingRoom: String?, email: String, isExternalEmail: Boolean) {
-        // Notify the user that the invite has been already sent
-        if (existingRoom?.isNotEmpty() == true && !isExternalEmail) {
-            _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForExistingRoom(email))
-        } else {
-            viewModelScope.launch(Dispatchers.IO) {
-                // There is already a discussion with this email
-                // We have to re-invite the NoTchapUser if the email is bound to the external instance (for which the invites may expire).
-                // We don't have a way for the moment to check if the invite expired or not...
-                if (existingRoom?.isNotEmpty() == true && isExternalEmail) {
-                    revokePendingInviteAndLeave(existingRoom)
-                }
-
-                val roomParams = CreateRoomParams()
-                        .apply {
-                            invite3pids.add(ThreePid.Email(email))
-                            setDirectMessage()
-                        }
-
-                runCatching { session.createRoom(roomParams) }.fold(
-                        { _ -> _viewEvents.post(HomeDetailViewEvents.InviteNoTchapUserByEmail) },
-                        { failure -> _viewEvents.post(HomeDetailViewEvents.Failure(failure)) }
-                )
-            }
-        }
-    }
-
-    private fun handleCreateDirectMessageByUserId(action: HomeDetailAction.CreateDirectMessageByUserId) {
-        viewModelScope.launch {
-            val roomId = try {
-                directRoomHelper.ensureDMExists(action.userId)
-            } catch (failure: Throwable) {
-                _viewEvents.post(HomeDetailViewEvents.Failure(failure))
-                return@launch
-            }
-            _viewEvents.post(HomeDetailViewEvents.OpenDirectChat(roomId = roomId))
-        }
-    }
-
-    private suspend fun revokePendingInviteAndLeave(roomId: String) {
-        session.getRoom(roomId)?.let { room ->
-            val token = room.getStateEvent(EventType.STATE_ROOM_THIRD_PARTY_INVITE)?.stateKey
-
-            try {
-                if (!token.isNullOrEmpty()) {
-                    room.sendStateEvent(
-                            eventType = EventType.STATE_ROOM_THIRD_PARTY_INVITE,
-                            stateKey = token,
-                            body = emptyMap()
-                    )
-                } else {
-                    Timber.d("unable to revoke invite (no pending invite)")
-                }
-
-                room.leave()
-            } catch (failure: Throwable) {
-                _viewEvents.post(HomeDetailViewEvents.Failure(failure))
             }
         }
     }

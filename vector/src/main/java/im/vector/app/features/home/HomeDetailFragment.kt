@@ -54,6 +54,10 @@ import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.webrtc.WebRtcCallManager
+import im.vector.app.features.createdirect.CreateDirectRoomAction
+import im.vector.app.features.createdirect.CreateDirectRoomViewEvents
+import im.vector.app.features.createdirect.CreateDirectRoomViewModel
+import im.vector.app.features.createdirect.CreateDirectRoomViewState
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.RoomListParams
 import im.vector.app.features.home.room.list.RoomListViewEvents
@@ -93,6 +97,7 @@ class HomeDetailFragment @Inject constructor(
     private val unreadMessagesSharedViewModel: UnreadMessagesSharedViewModel by activityViewModel()
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
     private val roomListViewModel: RoomListViewModel by activityViewModel()
+    private val createDirectRoomViewModel: CreateDirectRoomViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private lateinit var sharedCallActionViewModel: SharedKnownCallsViewModel
@@ -178,18 +183,9 @@ class HomeDetailFragment @Inject constructor(
 
         viewModel.observeViewEvents { viewEvent ->
             when (viewEvent) {
-                HomeDetailViewEvents.CallStarted                          -> handleCallStarted()
-                is HomeDetailViewEvents.FailToCall                        -> showFailure(viewEvent.failure)
-                HomeDetailViewEvents.Loading                              -> showLoadingDialog()
-                is HomeDetailViewEvents.InviteIgnoredForDiscoveredUser    -> handleExistingUser(viewEvent.user)
-                is HomeDetailViewEvents.InviteIgnoredForUnauthorizedEmail ->
-                    handleInviteByEmailResult(getString(R.string.tchap_invite_unauthorized_message, viewEvent.email))
-                is HomeDetailViewEvents.InviteIgnoredForExistingRoom      ->
-                    handleInviteByEmailResult(getString(R.string.tchap_invite_already_send_message, viewEvent.email))
-                HomeDetailViewEvents.InviteNoTchapUserByEmail             ->
-                    handleInviteByEmailResult(getString(R.string.tchap_invite_sending_succeeded) + "\n" + getString(R.string.tchap_send_invite_confirmation))
-                is HomeDetailViewEvents.OpenDirectChat                    -> openRoom(viewEvent.roomId)
-                is HomeDetailViewEvents.Failure                           -> showFailure(viewEvent.throwable)
+                HomeDetailViewEvents.CallStarted   -> handleCallStarted()
+                is HomeDetailViewEvents.FailToCall -> showFailure(viewEvent.failure)
+                HomeDetailViewEvents.Loading       -> showLoadingDialog()
             }
         }.exhaustive
 
@@ -233,6 +229,37 @@ class HomeDetailFragment @Inject constructor(
                 cancelSearch()
             }
         }
+
+        createDirectRoomViewModel.onEach(CreateDirectRoomViewState::isLoading) { isLoading ->
+            if (isLoading) {
+                showLoadingDialog(null)
+            } else {
+                dismissLoadingDialog()
+            }
+        }
+
+        createDirectRoomViewModel.viewEvents
+                .stream()
+                .onEach { viewEvent ->
+                    when (viewEvent) {
+                        CreateDirectRoomViewEvents.InviteSent                 -> {
+                            handleInviteByEmailResult(buildString {
+                                appendLine(getString(R.string.tchap_invite_sending_succeeded))
+                                append(getString(R.string.tchap_send_invite_confirmation))
+                            })
+                        }
+                        is CreateDirectRoomViewEvents.Failure                 -> showFailure(viewEvent.throwable)
+                        is CreateDirectRoomViewEvents.UserDiscovered          -> handleExistingUser(viewEvent.user)
+                        is CreateDirectRoomViewEvents.InviteAlreadySent       -> {
+                            handleInviteByEmailResult(getString(R.string.tchap_invite_already_send_message, viewEvent.email))
+                        }
+                        is CreateDirectRoomViewEvents.InviteUnauthorizedEmail -> {
+                            handleInviteByEmailResult(getString(R.string.tchap_invite_unauthorized_message, viewEvent.email))
+                        }
+                        is CreateDirectRoomViewEvents.OpenDirectChat          -> openRoom(viewEvent.roomId)
+                    }.exhaustive
+                }
+                .launchIn(lifecycleScope)
 
         sharedActionViewModel
                 .stream()
@@ -382,7 +409,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun onInviteByEmail(email: String) {
-        viewModel.handle(HomeDetailAction.InviteByEmail(email))
+        createDirectRoomViewModel.handle(CreateDirectRoomAction.InviteByEmail(email))
     }
 
     private fun setupKeysBackupBanner() {
@@ -625,7 +652,7 @@ class HomeDetailFragment @Inject constructor(
                 .setTitle(R.string.permissions_rationale_popup_title)
                 .setMessage(R.string.tchap_invite_not_sent_for_discovered_user)
                 .setPositiveButton(R.string.ok) { _, _ ->
-                    viewModel.handle(HomeDetailAction.CreateDirectMessageByUserId(user.userId))
+                    createDirectRoomViewModel.handle(CreateDirectRoomAction.CreateDirectMessageByUserId(user.userId))
                 }
                 .show()
     }
