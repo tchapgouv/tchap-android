@@ -114,7 +114,7 @@ class PlatformViewModel @AssistedInject constructor(
             try {
                 val platform = matrix.threePidPlatformDiscoverService().getPlatform(selectedUrl, ThreePid.Email(emailAddress))
                 _viewEvents.post(PlatformViewEvents.Success(platform))
-                Timber.d("## discoverTchapPlatform succeeded (" + platform.hs.toString() + ")")
+                Timber.d("## discoverTchapPlatform succeeded (${platform.hs})")
             } catch (failure: Throwable) {
                 Timber.e(failure, "## discoverTchapPlatform failed ")
                 if (identityServerUrls.isEmpty()) {
