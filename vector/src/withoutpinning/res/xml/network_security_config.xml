@@ -1,11 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <!-- Do not allow clearText traffic -->
-    <base-config cleartextTrafficPermitted="false">
+    <!-- Ref: https://developer.android.com/training/articles/security-config.html -->
+    <!-- By default, do not allow clearText traffic -->
+    <base-config cleartextTrafficPermitted="false" />
+
+    <!-- Allow clearText traffic on some specified host -->
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- Localhost -->
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+        <!-- Localhost for Android emulator -->
+        <domain includeSubdomains="true">10.0.2.2</domain>
+        <!-- Onion services -->
+        <domain includeSubdomains="true">onion</domain>
+
+        <!-- Domains that are used for LANs -->
+        <!-- These are IANA recognized special use domain names, see https://www.iana.org/assignments/special-use-domain-names/special-use-domain-names.xhtml -->
+        <domain includeSubdomains="true">home.arpa</domain>
+        <domain includeSubdomains="true">local</domain> <!-- Note this has been reserved for use with mDNS -->
+        <domain includeSubdomains="true">test</domain>
+        <!-- These are observed in the wild either by convention or RFCs that have not been accepted, and are not currently TLDs -->
+        <domain includeSubdomains="true">home</domain>
+        <domain includeSubdomains="true">lan</domain>
+        <domain includeSubdomains="true">localdomain</domain>
+    </domain-config>
+
+    <debug-overrides>
         <trust-anchors>
             <certificates src="system" />
-            <!-- Give access to the user certificate, as per default behaviour when targeting API 23 or lower -->
             <certificates src="user" />
         </trust-anchors>
-    </base-config>
+    </debug-overrides>
+
 </network-security-config>
