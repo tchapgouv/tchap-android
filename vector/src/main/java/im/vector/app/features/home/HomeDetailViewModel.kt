@@ -23,6 +23,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import fr.gouv.tchap.core.utils.TchapUtils
+import fr.gouv.tchap.features.platform.GetPlatformResult
+import fr.gouv.tchap.features.platform.Params
+import fr.gouv.tchap.features.platform.TchapGetPlatformTask
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
@@ -73,7 +76,8 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                                       private val callManager: WebRtcCallManager,
                                                       private val directRoomHelper: DirectRoomHelper,
                                                       private val appStateHandler: AppStateHandler,
-                                                      private val autoAcceptInvites: AutoAcceptInvites) :
+                                                      private val autoAcceptInvites: AutoAcceptInvites,
+                                                      private val getPlatformTask: TchapGetPlatformTask) :
         VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
         CallProtocolsChecker.Listener {
 
@@ -125,9 +129,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
             is HomeDetailAction.StartCallWithPhoneNumber    -> handleStartCallWithPhoneNumber(action)
             is HomeDetailAction.InviteByEmail               -> handleIndividualInviteByEmail(action)
             is HomeDetailAction.SelectContact               -> handleSelectContact(action)
-            is HomeDetailAction.CreateDirectMessageByEmail  -> handleCreateDirectMessage(action)
-            is HomeDetailAction.CreateDirectMessageByUserId -> handleCreateDirectMessage(action)
-            HomeDetailAction.UnauthorizedEmail              -> handleUnauthorizedEmail()
+            is HomeDetailAction.CreateDirectMessageByUserId -> handleCreateDirectMessageByUserId(action)
         }
     }
 
@@ -205,7 +207,12 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
             val data = tryOrNull { session.identityService().lookUp(listOf(ThreePid.Email(action.email))) }
 
             if (data.isNullOrEmpty()) {
-                _viewEvents.post(HomeDetailViewEvents.GetPlatform(action.email))
+                val hs = (getPlatformTask.execute(Params(action.email)) as? GetPlatformResult.Success)?.platform?.hs
+                if (hs.isNullOrEmpty()) {
+                    handleUnauthorizedEmail()
+                } else {
+                    handleCreateDirectMessageByEmail(TchapUtils.isExternalTchapServer(hs))
+                }
             } else {
                 val userId = data.find { it.threePid.value == action.email }?.matrixId
                 userId?.let {
@@ -236,7 +243,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         }
     }
 
-    private fun handleCreateDirectMessage(action: HomeDetailAction.CreateDirectMessageByEmail) = withState {
+    private fun handleCreateDirectMessageByEmail(isExternalEmail: Boolean) = withState {
         it.inviteEmail ?: return@withState
 
         if (it.existingRoom.isNullOrEmpty()) {
@@ -248,7 +255,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
             // There is already a discussion with this email
             // We do not re-invite the NoTchapUser except if
             // the email is bound to the external instance (for which the invites may expire).
-            if (action.isExternalEmail) {
+            if (isExternalEmail) {
                 // Revoke the pending invite and leave this empty discussion, we will invite again this email.
                 // We don't have a way for the moment to check if the invite expired or not...
                 viewModelScope.launch {
@@ -262,7 +269,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         }
     }
 
-    private fun handleCreateDirectMessage(action: HomeDetailAction.CreateDirectMessageByUserId) {
+    private fun handleCreateDirectMessageByUserId(action: HomeDetailAction.CreateDirectMessageByUserId) {
         viewModelScope.launch {
             val roomId = try {
                 directRoomHelper.ensureDMExists(action.userId)

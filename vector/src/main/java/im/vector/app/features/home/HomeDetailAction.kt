@@ -25,7 +25,5 @@ sealed class HomeDetailAction : VectorViewModelAction {
     data class StartCallWithPhoneNumber(val phoneNumber: String) : HomeDetailAction()
     data class InviteByEmail(val email: String) : HomeDetailAction()
     data class SelectContact(val user: User) : HomeDetailAction()
-    object UnauthorizedEmail : HomeDetailAction()
-    data class CreateDirectMessageByEmail(val isExternalEmail: Boolean) : HomeDetailAction()
     data class CreateDirectMessageByUserId(val userId: String) : HomeDetailAction()
 }

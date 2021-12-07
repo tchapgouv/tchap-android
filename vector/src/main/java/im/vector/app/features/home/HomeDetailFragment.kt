@@ -35,9 +35,6 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import fr.gouv.tchap.core.utils.TchapUtils
-import fr.gouv.tchap.features.platform.PlatformAction
-import fr.gouv.tchap.features.platform.PlatformViewEvents
-import fr.gouv.tchap.features.platform.PlatformViewModel
 import im.vector.app.AppStateHandler
 import im.vector.app.BuildConfig
 import im.vector.app.R
@@ -93,7 +90,6 @@ class HomeDetailFragment @Inject constructor(
         CurrentCallsView.Callback {
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
-    private val platformViewModel: PlatformViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
     private val unreadMessagesSharedViewModel: UnreadMessagesSharedViewModel by activityViewModel()
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
@@ -193,7 +189,6 @@ class HomeDetailFragment @Inject constructor(
                     handleInviteByEmailFailed(getString(R.string.tchap_invite_already_send_message, viewEvent.email))
                 HomeDetailViewEvents.InviteNoTchapUserByEmail             ->
                     handleInviteByEmailFailed(getString(R.string.tchap_invite_sending_succeeded) + "\n" + getString(R.string.tchap_send_invite_confirmation))
-                is HomeDetailViewEvents.GetPlatform                       -> platformViewModel.handle(PlatformAction.DiscoverTchapPlatform(viewEvent.email))
                 is HomeDetailViewEvents.OpenDirectChat                    -> openRoom(viewEvent.roomId)
                 is HomeDetailViewEvents.PromptCreateDirectChat            -> showCreateRoomDialog(viewEvent.user)
                 is HomeDetailViewEvents.Failure                           -> showFailure(viewEvent.throwable)
@@ -239,20 +234,6 @@ class HomeDetailFragment @Inject constructor(
                 // prevent glitch caused by search refresh during activity transition
                 cancelSearch()
             }
-        }
-
-        platformViewModel.observeViewEvents {
-            when (it) {
-                PlatformViewEvents.Loading    -> showLoading(null)
-                is PlatformViewEvents.Failure -> viewModel.handle(HomeDetailAction.UnauthorizedEmail)
-                is PlatformViewEvents.Success -> {
-                    if (it.platform.hs.isNotEmpty()) {
-                        viewModel.handle(HomeDetailAction.CreateDirectMessageByEmail(TchapUtils.isExternalTchapServer(it.platform.hs)))
-                    } else {
-                        viewModel.handle(HomeDetailAction.UnauthorizedEmail)
-                    }
-                }
-            }.exhaustive
         }
 
         sharedActionViewModel
