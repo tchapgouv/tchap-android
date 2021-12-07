@@ -121,22 +121,21 @@ class RoomMemberProfileController @Inject constructor(
                             editable = true,
                             icon = icon,
                             tintIcon = false,
-                            divider = false
-                            // Tchap: disable onClick for "Learn more" part
-//                            action = { callback?.onShowDeviceList() }
+                            divider = false,
+                            action = { callback?.onShowDeviceList() }
                     )
                 } else {
                     // Not trusted, propose to verify
                     if (!state.isMine) {
-                        buildProfileAction(
-                                id = "learn_more",
-                                title = stringProvider.getString(R.string.verification_profile_verify),
-                                editable = true,
-                                icon = R.drawable.ic_shield_black,
-                                divider = false
-                                // Tchap: disable onClick for "Learn more" part
+                        // Tchap: Hide "verify" part
+//                        buildProfileAction(
+//                                id = "learn_more",
+//                                title = stringProvider.getString(R.string.verification_profile_verify),
+//                                editable = true,
+//                                icon = R.drawable.ic_shield_black,
+//                                divider = false,
 //                                action = { callback?.onTapVerify() }
-                        )
+//                        )
                     } else {
                         buildProfileAction(
                                 id = "learn_more",
