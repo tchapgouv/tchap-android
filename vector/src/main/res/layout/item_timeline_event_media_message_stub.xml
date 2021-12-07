@@ -60,7 +60,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/messageThumbnailView"
+        app:layout_constraintTop_toBottomOf="@id/messageThumbnailView"
         tools:drawableLeft="@drawable/ic_av_checked"
         tools:text="@string/antivirus_infected"
         tools:visibility="visible" />
@@ -77,6 +77,6 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/messageMediaAvText"
+        app:layout_constraintTop_toBottomOf="@id/messageMediaAvText"
         tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

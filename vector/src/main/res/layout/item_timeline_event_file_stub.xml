@@ -72,7 +72,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontalBarrier"
+        app:layout_constraintTop_toBottomOf="@id/horizontalBarrier"
         tools:drawableLeft="@drawable/ic_av_checked"
         tools:text="@string/antivirus_infected"
         tools:visibility="visible" />
@@ -87,7 +87,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/messageFileAvText"
+        app:layout_constraintTop_toBottomOf="@id/messageFileAvText"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

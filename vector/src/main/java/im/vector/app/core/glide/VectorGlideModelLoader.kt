@@ -139,7 +139,6 @@ class VectorGlideDataFetcher(context: Context,
                         { callback.onDataReady(it.inputStream()) },
                         { failure ->
                             if (failure is ScanFailure) {
-                                // {"info":"Client error: Bad decryption: OLM.BAD_MESSAGE_MAC","reason":"MCS_BAD_DECRYPTION"}
                                 if (failure.error.reason == ContentScannerError.REASON_MCS_BAD_DECRYPTION) {
                                     // the public key might have changed, try to get it again?
                                     activeSessionHolder.getSafeActiveSession()?.contentScannerService()?.getServerPublicKey(true)

@@ -39,14 +39,15 @@ fun Session.configureAndStart(context: Context, startSyncing: Boolean = true) {
 }
 
 private fun Session.configureContentScanner() {
-    sessionParams.homeServerConnectionConfig.antiVirusServerUri
-            ?.let { url ->
-                contentScannerService().let {
-                    it.enableScanner(true)
-                    it.setScannerUrl(url.toString())
-                }
-            }
-            ?: run { Timber.w("Content scanner is disabled.") }
+    val url = sessionParams.homeServerConnectionConfig.antiVirusServerUri
+    if (url != null) {
+        with(contentScannerService()) {
+            enableScanner(true)
+            setScannerUrl(url.toString())
+        }
+    } else {
+        Timber.w("Content scanner is disabled.")
+    }
 }
 
 fun Session.startSyncing(context: Context) {
