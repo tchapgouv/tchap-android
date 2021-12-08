@@ -73,10 +73,10 @@
             android:title="@string/settings_notifications_targets"
             app:fragment="im.vector.app.features.settings.push.PushGatewaysFragment" />
 
-        <im.vector.app.core.preference.VectorPreference
-            android:persistent="false"
-            android:title="@string/settings_push_rules"
-            app:fragment="im.vector.app.features.settings.push.PushRulesFragment" />
+<!--        <im.vector.app.core.preference.VectorPreference-->
+<!--            android:persistent="false"-->
+<!--            android:title="@string/settings_push_rules"-->
+<!--            app:fragment="im.vector.app.features.settings.push.PushRulesFragment" />-->
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory
