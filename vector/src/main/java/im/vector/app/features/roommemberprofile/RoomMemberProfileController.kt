@@ -99,35 +99,35 @@ class RoomMemberProfileController @Inject constructor(
         val host = this
 
         if (state.isRoomEncrypted) {
-            if (state.userMXCrossSigningInfo != null) {
-                // Cross signing is enabled for this user
-                if (state.userMXCrossSigningInfo.isTrusted()) {
-                    // User is trusted
-                    val icon = if (state.allDevicesAreTrusted) {
-                        R.drawable.ic_shield_trusted
-                    } else {
-                        R.drawable.ic_shield_warning
-                    }
-
-                    val titleRes = if (state.allDevicesAreTrusted) {
-                        R.string.verification_profile_verified
-                    } else {
-                        R.string.verification_profile_warning
-                    }
-
-                    buildProfileAction(
-                            id = "learn_more",
-                            title = stringProvider.getString(titleRes),
-                            editable = true,
-                            icon = icon,
-                            tintIcon = false,
-                            divider = false,
-                            action = { callback?.onShowDeviceList() }
-                    )
-                } else {
-                    // Not trusted, propose to verify
-                    if (!state.isMine) {
-                        // Tchap: Hide "verify" part
+            // Tchap: Hide the security part, we keep the footer.
+//            if (state.userMXCrossSigningInfo != null) {
+//                // Cross signing is enabled for this user
+//                if (state.userMXCrossSigningInfo.isTrusted()) {
+//                    // User is trusted
+//                    val icon = if (state.allDevicesAreTrusted) {
+//                        R.drawable.ic_shield_trusted
+//                    } else {
+//                        R.drawable.ic_shield_warning
+//                    }
+//
+//                    val titleRes = if (state.allDevicesAreTrusted) {
+//                        R.string.verification_profile_verified
+//                    } else {
+//                        R.string.verification_profile_warning
+//                    }
+//
+//                    buildProfileAction(
+//                            id = "learn_more",
+//                            title = stringProvider.getString(titleRes),
+//                            editable = true,
+//                            icon = icon,
+//                            tintIcon = false,
+//                            divider = false,
+//                            action = { callback?.onShowDeviceList() }
+//                    )
+//                } else {
+//                    // Not trusted, propose to verify
+//                    if (!state.isMine) {
 //                        buildProfileAction(
 //                                id = "learn_more",
 //                                title = stringProvider.getString(R.string.verification_profile_verify),
@@ -136,33 +136,36 @@ class RoomMemberProfileController @Inject constructor(
 //                                divider = false,
 //                                action = { callback?.onTapVerify() }
 //                        )
-                    } else {
-                        buildProfileAction(
-                                id = "learn_more",
-                                title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
-                                editable = false,
-                                divider = false
-                                // Tchap: disable onClick for "Learn more" part
+//                    } else {
+//                        buildProfileAction(
+//                                id = "learn_more",
+//                                title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
+//                                editable = false,
+//                                divider = false,
 //                                action = { callback?.onShowDeviceListNoCrossSigning() }
-                        )
-                    }
-
-                    genericFooterItem {
-                        id("verify_footer")
-                        text(host.stringProvider.getString(R.string.room_profile_encrypted_subtitle))
-                        centered(false)
-                    }
-                }
-            } else {
-                buildProfileAction(
-                        id = "learn_more",
-                        title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
-                        editable = false,
-                        divider = false,
-                        subtitle = stringProvider.getString(R.string.room_profile_encrypted_subtitle)
-                        // Tchap: disable onClick for "Learn more" part
-//                         action = { callback?.onShowDeviceListNoCrossSigning() }
-                )
+//                        )
+//                    }
+//
+//                    genericFooterItem {
+//                        id("verify_footer")
+//                        text(host.stringProvider.getString(R.string.room_profile_encrypted_subtitle))
+//                        centered(false)
+//                    }
+//                }
+//            } else {
+//                buildProfileAction(
+//                        id = "learn_more",
+//                        title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
+//                        editable = false,
+//                        divider = false,
+//                        subtitle = stringProvider.getString(R.string.room_profile_encrypted_subtitle),
+//                        action = { callback?.onShowDeviceListNoCrossSigning() }
+//                )
+//            }
+            genericFooterItem {
+                id("verify_footer")
+                text(host.stringProvider.getString(R.string.room_profile_encrypted_subtitle))
+                centered(false)
             }
         } else {
             genericFooterItem {
