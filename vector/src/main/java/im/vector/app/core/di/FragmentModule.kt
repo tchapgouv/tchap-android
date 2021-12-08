@@ -24,7 +24,6 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.multibindings.IntoMap
-import fr.gouv.tchap.features.home.contact.list.TchapContactListFragment
 import fr.gouv.tchap.features.login.TchapLoginFragment
 import fr.gouv.tchap.features.login.TchapWelcomeFragment
 import fr.gouv.tchap.features.login.registration.TchapRegisterFragment
@@ -784,11 +783,6 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(TchapRegisterWaitForEmailFragment::class)
     fun bindTchapRegisterWaitForEmailFragment(fragment: TchapRegisterWaitForEmailFragment): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(TchapContactListFragment::class)
-    fun bindTchapContactListFragment(fragment: TchapContactListFragment): Fragment
 
     @Binds
     @IntoMap
