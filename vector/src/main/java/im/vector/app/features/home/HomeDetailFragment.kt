@@ -625,7 +625,7 @@ class HomeDetailFragment @Inject constructor(
                 .setTitle(R.string.permissions_rationale_popup_title)
                 .setMessage(R.string.tchap_invite_not_sent_for_discovered_user)
                 .setPositiveButton(R.string.ok) { _, _ ->
-                    viewModel.handle(HomeDetailAction.SelectContact(user))
+                    viewModel.handle(HomeDetailAction.CreateDirectMessageByUserId(user.userId))
                 }
                 .show()
     }
