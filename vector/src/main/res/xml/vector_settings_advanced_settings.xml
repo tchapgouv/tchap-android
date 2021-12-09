@@ -77,7 +77,7 @@
             android:persistent="false"
             android:title="@string/settings_push_rules"
             app:fragment="im.vector.app.features.settings.push.PushRulesFragment"
-            app:isPreferenceVisible="@bool/false_tchap_hidden"/>
+            app:isPreferenceVisible="@bool/false_tchap_hidden" />
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory

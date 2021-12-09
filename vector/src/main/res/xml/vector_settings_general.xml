@@ -36,9 +36,9 @@
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_DISCOVERY_PREFERENCE_KEY"
             android:persistent="false"
-            app:isPreferenceVisible="@bool/false_tchap_hidden"
             android:summary="@string/settings_discovery_manage"
-            android:title="@string/settings_discovery_category" />
+            android:title="@string/settings_discovery_category"
+            app:isPreferenceVisible="@bool/false_tchap_hidden" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
