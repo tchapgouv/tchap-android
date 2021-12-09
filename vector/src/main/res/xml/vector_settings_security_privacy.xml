@@ -49,7 +49,8 @@
             android:enabled="true"
             android:key="SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY"
             android:summary="@string/encryption_never_send_to_unverified_devices_summary"
-            android:title="@string/encryption_never_send_to_unverified_devices_title" />
+            android:title="@string/encryption_never_send_to_unverified_devices_title"
+            app:isPreferenceVisible="@bool/false_tchap_hidden" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
@@ -90,7 +91,9 @@
             android:key="SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
             android:persistent="false"
             android:summary="@string/encryption_settings_manage_message_recovery_summary"
-            android:title="@string/encryption_message_recovery" />
+            android:title="@string/encryption_message_recovery"
+            app:isPreferenceVisible="@bool/false_tchap_hidden" />
+
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
             android:summary="@string/encryption_export_room_keys_summary"
@@ -99,7 +102,8 @@
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
             android:summary="@string/encryption_import_room_keys_summary"
-            android:title="@string/encryption_import_e2e_room_keys" />
+            android:title="@string/encryption_import_e2e_room_keys"
+            app:isPreferenceVisible="false" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
@@ -127,7 +131,7 @@
             android:title="@string/settings_security_application_protection_title" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="SETTINGS_SECURITY_USE_FLAG_SECURE"
             android:summary="@string/settings_security_prevent_screenshots_summary"
             android:title="@string/settings_security_prevent_screenshots_title" />
