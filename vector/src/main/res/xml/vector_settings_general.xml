@@ -36,7 +36,7 @@
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_DISCOVERY_PREFERENCE_KEY"
             android:persistent="false"
-            app:isPreferenceVisible="false"
+            app:isPreferenceVisible="@bool/false_tchap_hidden"
             android:summary="@string/settings_discovery_manage"
             android:title="@string/settings_discovery_category" />
 
@@ -60,7 +60,7 @@
 
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:title="@string/settings_integrations"
-        app:isPreferenceVisible="false">
+        app:isPreferenceVisible="@bool/false_tchap_hidden">
 
         <im.vector.app.core.preference.VectorPreference
             android:focusable="false"
@@ -85,20 +85,20 @@
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_LOGGED_IN_PREFERENCE_KEY"
             android:title="@string/settings_logged_in"
-            app:isPreferenceVisible="false"
+            app:isPreferenceVisible="@bool/false_tchap_hidden"
             tools:summary="\@user:matrix.org" />
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_HOME_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_home_server"
             app:fragment="im.vector.app.features.settings.homeserver.HomeserverSettingsFragment"
-            app:isPreferenceVisible="false"
+            app:isPreferenceVisible="@bool/false_tchap_hidden"
             tools:summary="https://homeserver.org" />
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_identity_server"
-            app:isPreferenceVisible="false"
+            app:isPreferenceVisible="@bool/false_tchap_hidden"
             tools:summary="https://identity.server.url" />
 
         <im.vector.app.core.preference.VectorPreference
