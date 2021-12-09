@@ -132,7 +132,7 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
     private fun renderFailure(e: GlideException?, context: Context, target: Target<Drawable>?) {
         if (e?.rootCauses?.firstOrNull()?.toScanFailure() != null) {
             // Infected file
-            target?.onLoadFailed(AppCompatResources.getDrawable(context, R.drawable.ic_av_bug_red))
+            target?.onLoadFailed(AppCompatResources.getDrawable(context, R.drawable.ic_tchap_danger))
         } else {
             // Other error
             target?.onLoadFailed(AppCompatResources.getDrawable(context, R.drawable.ic_broken_image))

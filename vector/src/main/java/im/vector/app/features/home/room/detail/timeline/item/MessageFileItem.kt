@@ -152,12 +152,9 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
                 filenameView.setOnClickListener(null)
                 filenameView.setOnLongClickListener(null)
 
-                fileImageWrapper.background = ThemeUtils.tintDrawableWithColor(
-                        ContextCompat.getDrawable(view.context, R.drawable.rounded_rect_shape_8)!!,
-                        ThemeUtils.getColor(view.context, R.attr.colorError)
-                )
+                fileImageWrapper.background = ContextCompat.getDrawable(view.context, R.drawable.rounded_rect_shape_8)
                 fileDownloadProgress.isVisible = false
-                fileImageView.setImageResource(R.drawable.ic_av_bug)
+                fileImageView.setImageResource(R.drawable.ic_tchap_danger)
                 fileImageView.imageTintList = null
 
                 messageFileAvText.text = span(view.context.getText(R.string.antivirus_infected)) {

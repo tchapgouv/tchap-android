@@ -31,26 +31,18 @@
         app:layout_constraintTop_toTopOf="@id/messageThumbnailView"
         tools:visibility="visible" />
 
-    <RelativeLayout
+    <ImageView
         android:id="@+id/messageMediaInfectedIcon"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:background="@drawable/ic_av_bug_background"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:contentDescription="@string/antivirus_infected"
+        android:src="@drawable/ic_tchap_danger"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/messageThumbnailView"
         app:layout_constraintEnd_toEndOf="@id/messageThumbnailView"
         app:layout_constraintStart_toStartOf="@id/messageThumbnailView"
         app:layout_constraintTop_toTopOf="@id/messageThumbnailView"
-        tools:visibility="visible">
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerInParent="true"
-            android:contentDescription="@string/antivirus_infected"
-            android:src="@drawable/ic_av_bug" />
-
-    </RelativeLayout>
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/messageMediaAvText"

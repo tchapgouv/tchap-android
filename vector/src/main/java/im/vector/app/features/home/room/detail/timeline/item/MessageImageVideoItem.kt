@@ -104,7 +104,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         val mediaContentView by bind<ViewGroup>(R.id.messageContentMedia)
         val failedToSendIndicator by bind<ImageView>(R.id.messageFailToSendIndicator)
 
-        val avInfectedIndicator by bind<ViewGroup>(R.id.messageMediaInfectedIcon)
+        val avInfectedIndicator by bind<ImageView>(R.id.messageMediaInfectedIcon)
         val messageMediaAvText by bind<TextView>(R.id.messageMediaAvText)
 
         fun resetAV() {
