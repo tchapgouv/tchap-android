@@ -7,6 +7,7 @@ Bugfix 🐛:
 Improvements 🙌:
  - Remove irrelevant Matrix Id PR #294
  - [Pinning] Finalize the configuration about pinning #287
+ - Hide encryption trust shields PR #296
  - Hide share icon in room member profile detail ActionBar #273
 
 Changes in Tchap 1.99.2 (2021-11-08)

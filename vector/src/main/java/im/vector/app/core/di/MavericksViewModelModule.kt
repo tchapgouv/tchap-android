@@ -20,7 +20,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.multibindings.IntoMap
-import fr.gouv.tchap.features.home.contact.list.TchapContactListViewModel
 import fr.gouv.tchap.features.platform.PlatformViewModel
 import im.vector.app.features.auth.ReAuthViewModel
 import im.vector.app.features.call.VectorCallViewModel
@@ -559,9 +558,4 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(PlatformViewModel::class)
     fun createPlatformViewModelFactory(factory: PlatformViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
-
-    @Binds
-    @IntoMap
-    @MavericksViewModelKey(TchapContactListViewModel::class)
-    fun createTchapContactListViewModelFactory(factory: TchapContactListViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }
