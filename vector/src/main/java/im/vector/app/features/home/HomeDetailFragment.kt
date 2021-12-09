@@ -23,6 +23,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
@@ -34,15 +35,9 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import fr.gouv.tchap.core.utils.TchapUtils
-import fr.gouv.tchap.features.home.contact.list.TchapContactListFragment
-import fr.gouv.tchap.features.home.contact.list.TchapContactListFragmentArgs
-import fr.gouv.tchap.features.home.contact.list.TchapContactListViewEvents
-import fr.gouv.tchap.features.home.contact.list.TchapContactListViewModel
 import fr.gouv.tchap.features.platform.PlatformAction
 import fr.gouv.tchap.features.platform.PlatformViewEvents
 import fr.gouv.tchap.features.platform.PlatformViewModel
-import fr.gouv.tchap.features.userdirectory.TchapContactListSharedAction
-import fr.gouv.tchap.features.userdirectory.TchapContactListSharedActionViewModel
 import im.vector.app.AppStateHandler
 import im.vector.app.BuildConfig
 import im.vector.app.R
@@ -103,11 +98,9 @@ class HomeDetailFragment @Inject constructor(
     private val unreadMessagesSharedViewModel: UnreadMessagesSharedViewModel by activityViewModel()
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
     private val roomListViewModel: RoomListViewModel by activityViewModel()
-    private val tchapContactListViewModel: TchapContactListViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private lateinit var sharedCallActionViewModel: SharedKnownCallsViewModel
-    private lateinit var sharedContactActionViewModel: TchapContactListSharedActionViewModel
 
     private var hasUnreadRooms = false
         set(value) {
@@ -158,7 +151,6 @@ class HomeDetailFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         sharedCallActionViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
-        sharedContactActionViewModel = activityViewModelProvider.get(TchapContactListSharedActionViewModel::class.java)
 
         setupBottomNavigationView()
         setupToolbar()
@@ -235,16 +227,6 @@ class HomeDetailFragment @Inject constructor(
             )
         }
 
-        sharedContactActionViewModel
-                .stream()
-                .onEach { action ->
-                    when (action) {
-                        is TchapContactListSharedAction.OnInviteByEmail -> onInviteByEmail(action.email)
-                        is TchapContactListSharedAction.OnSelectContact -> onSelectContact(action)
-                    }.exhaustive
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
         sharedCallActionViewModel
                 .liveKnownCalls
                 .observe(viewLifecycleOwner) {
@@ -257,13 +239,6 @@ class HomeDetailFragment @Inject constructor(
                 // prevent glitch caused by search refresh during activity transition
                 cancelSearch()
             }
-        }
-
-        tchapContactListViewModel.observeViewEvents {
-            when (it) {
-                is TchapContactListViewEvents.OpenSearch   -> openSearchView()
-                is TchapContactListViewEvents.CancelSearch -> cancelSearch()
-            }.exhaustive
         }
 
         platformViewModel.observeViewEvents {
@@ -431,10 +406,6 @@ class HomeDetailFragment @Inject constructor(
         viewModel.handle(HomeDetailAction.InviteByEmail(email))
     }
 
-    private fun onSelectContact(action: TchapContactListSharedAction.OnSelectContact) {
-        viewModel.handle(HomeDetailAction.SelectContact(action.user))
-    }
-
     private fun setupKeysBackupBanner() {
         serverBackupStatusViewModel
                 .onEach {
@@ -486,15 +457,10 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun setupBottomNavigationView() {
-        withState(viewModel) {
-            // Update the navigation view if needed (for when we restore the tabs)
-            views.bottomNavigationView.selectedItemId = it.currentTab.toMenuId()
-        }
-
         views.bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
         views.bottomNavigationView.setOnItemSelectedListener {
             val tab = when (it.itemId) {
-                R.id.bottom_action_people       -> HomeTab.ContactList
+                R.id.bottom_action_people       -> HomeTab.RoomList(RoomListDisplayMode.PEOPLE)
                 R.id.bottom_action_rooms        -> HomeTab.RoomList(RoomListDisplayMode.ROOMS)
                 R.id.bottom_action_notification -> HomeTab.RoomList(RoomListDisplayMode.NOTIFICATIONS)
                 else                            -> HomeTab.DialPad
@@ -536,16 +502,12 @@ class HomeDetailFragment @Inject constructor(
                     }
             if (fragmentToShow == null) {
                 when (tab) {
-                    is HomeTab.RoomList    -> {
+                    is HomeTab.RoomList -> {
                         val params = RoomListParams(tab.displayMode)
                         add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
                     }
-                    is HomeTab.DialPad     -> {
+                    is HomeTab.DialPad  -> {
                         add(R.id.roomListContainer, createDialPadFragment(), fragmentTag)
-                    }
-                    is HomeTab.ContactList -> {
-                        val params = TchapContactListFragmentArgs(title = getString(R.string.invite_users_to_room_title))
-                        add(R.id.roomListContainer, TchapContactListFragment::class.java, params.toMvRxBundle(), fragmentTag)
                     }
                 }
             } else {
@@ -563,9 +525,8 @@ class HomeDetailFragment @Inject constructor(
             val fragmentTag = "$FRAGMENT_TAG_PREFIX$tab"
             val fragment = childFragmentManager.findFragmentByTag(fragmentTag)
             when (tab) {
-                is HomeTab.ContactList -> (fragment as? TchapContactListFragment)?.searchContactsWith(value)
-                is HomeTab.RoomList    -> (fragment as? RoomListFragment)?.filterRoomsWith(value)
-                else                   -> Unit // nothing to do
+                is HomeTab.RoomList -> (fragment as? RoomListFragment)?.filterRoomsWith(value)
+                else                -> Unit // nothing to do
             }
         }
     }
@@ -585,6 +546,9 @@ class HomeDetailFragment @Inject constructor(
     private fun updateTabVisibilitySafely(tabId: Int, isVisible: Boolean) {
         val wasVisible = views.bottomNavigationView.menu.findItem(tabId).isVisible
         views.bottomNavigationView.menu.findItem(tabId).isVisible = isVisible
+        // Tchap: Show navigation menu if there is at least two visible items
+        val showNavigationMenu = views.bottomNavigationView.menu.children.count { it.isVisible } > 1
+        views.bottomNavigationView.isVisible = showNavigationMenu
         if (wasVisible && !isVisible) {
             // As we hide it check if it's not the current item!
             withState(viewModel) {
@@ -609,6 +573,7 @@ class HomeDetailFragment @Inject constructor(
 
     override fun invalidate() = withState(viewModel) {
 //        Timber.v(it.toString())
+        views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_people).render(it.notificationCountPeople, it.notificationHighlightPeople)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
         views.syncStateView.render(
@@ -639,7 +604,6 @@ class HomeDetailFragment @Inject constructor(
             RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
             else                       -> R.id.bottom_action_notification
         }
-        HomeTab.ContactList -> R.id.bottom_action_people
     }
 
     override fun onTapToReturnToCall() {
