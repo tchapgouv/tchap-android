@@ -83,7 +83,7 @@
             android:key="SETTINGS_SHOW_URL_PREVIEW_KEY"
             android:summary="@string/settings_inline_url_preview_summary"
             android:title="@string/settings_inline_url_preview"
-            app:isPreferenceVisible="false" />
+            app:isPreferenceVisible="@bool/false_tchap_hidden" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:key="SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY"
@@ -191,7 +191,7 @@
 
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:title="@string/settings_category_room_directory"
-        app:isPreferenceVisible="false">
+        app:isPreferenceVisible="@bool/false_tchap_hidden">
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"
