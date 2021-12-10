@@ -18,6 +18,7 @@ package im.vector.app.features.command
 
 import androidx.annotation.StringRes
 import im.vector.app.R
+import im.vector.app.core.extensions.exhaustive
 
 /**
  * Defines the command line operations
@@ -47,7 +48,6 @@ enum class Command(val command: String, val parameters: String, @StringRes val d
     RAINBOW_EMOTE("/rainbowme", "<message>", R.string.command_description_rainbow_emote, false),
     CLEAR_SCALAR_TOKEN("/clear_scalar_token", "", R.string.command_description_clear_scalar_token, false),
     SPOILER("/spoiler", "<message>", R.string.command_description_spoiler, false),
-    POLL("/poll", "Question | Option 1 | Option 2 ...", R.string.command_description_poll, false),
     SHRUG("/shrug", "<message>", R.string.command_description_shrug, false),
     LENNY("/lenny", "<message>", R.string.command_description_lenny, false),
     PLAIN("/plain", "<message>", R.string.command_description_plain, false),
@@ -63,4 +63,45 @@ enum class Command(val command: String, val parameters: String, @StringRes val d
 
     val length
         get() = command.length + 1
+
+    /**
+     * Whether this command is available in Tchap.
+     */
+    val isTchapCommand
+        get() = when (this) {
+            EMOTE,
+            MARKDOWN,
+            RAINBOW,
+            RAINBOW_EMOTE,
+            SHRUG,
+            LENNY,
+            PLAIN,
+            CONFETTI,
+            SNOWFALL,
+            UPGRADE_ROOM -> true
+            BAN_USER,
+            UNBAN_USER,
+            IGNORE_USER,
+            UNIGNORE_USER,
+            SET_USER_POWER_LEVEL,
+            RESET_USER_POWER_LEVEL,
+            ROOM_NAME,
+            INVITE,
+            JOIN_ROOM,
+            PART,
+            TOPIC,
+            KICK_USER,
+            CHANGE_DISPLAY_NAME,
+            CHANGE_DISPLAY_NAME_FOR_ROOM,
+            ROOM_AVATAR,
+            CHANGE_AVATAR_FOR_ROOM,
+            CLEAR_SCALAR_TOKEN,
+            SPOILER,
+            WHOIS,
+            DISCARD_SESSION,
+            CREATE_SPACE,
+            ADD_TO_SPACE,
+            JOIN_SPACE,
+            LEAVE_ROOM   -> false
+        }.exhaustive
 }

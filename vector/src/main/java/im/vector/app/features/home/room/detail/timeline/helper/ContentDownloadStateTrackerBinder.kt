@@ -17,18 +17,19 @@
 package im.vector.app.features.home.room.detail.timeline.helper
 
 import android.graphics.drawable.Drawable
+import androidx.core.view.isVisible
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
+import dagger.hilt.android.scopes.ActivityScoped
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.ScreenScope
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem
 import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
 import javax.inject.Inject
 
-@ScreenScope
+@ActivityScoped
 class ContentDownloadStateTrackerBinder @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
                                                             private val messageColorProvider: MessageColorProvider,
                                                             private val errorFormatter: ErrorFormatter) {
@@ -105,6 +106,7 @@ private class ContentDownloadUpdater(private val holder: MessageFileItem.Holder,
     private fun doHandleProgress(current: Long, total: Long) {
         val percent = 100L * (current.toFloat() / total.toFloat())
         holder.fileDownloadProgress.isIndeterminate = false
+        holder.fileDownloadProgress.isVisible = true
         holder.fileDownloadProgress.progress = percent.toInt()
         if (animatedDrawable == null) {
             animatedDrawable = AnimatedVectorDrawableCompat.create(holder.view.context, R.drawable.ic_download_anim)

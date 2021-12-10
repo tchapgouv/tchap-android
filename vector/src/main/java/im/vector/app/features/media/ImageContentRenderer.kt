@@ -16,11 +16,13 @@
 
 package im.vector.app.features.media
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Parcelable
 import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.updateLayoutParams
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -42,6 +44,7 @@ import im.vector.app.core.utils.DimensionConverter
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
+import org.matrix.android.sdk.api.session.contentscanner.toScanFailure
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import timber.log.Timber
 import java.io.File
@@ -106,7 +109,34 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
 
         createGlideRequest(data, Mode.THUMBNAIL, imageView, Size(size, size))
                 .placeholder(R.drawable.ic_image)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(e: GlideException?,
+                                              model: Any?,
+                                              target: Target<Drawable>?,
+                                              isFirstResource: Boolean): Boolean {
+                        renderFailure(e, imageView.context, target)
+                        return true
+                    }
+
+                    override fun onResourceReady(resource: Drawable?,
+                                                 model: Any?,
+                                                 target: Target<Drawable>?,
+                                                 dataSource: DataSource?,
+                                                 isFirstResource: Boolean): Boolean {
+                        return false
+                    }
+                })
                 .into(imageView)
+    }
+
+    private fun renderFailure(e: GlideException?, context: Context, target: Target<Drawable>?) {
+        if (e?.rootCauses?.firstOrNull()?.toScanFailure() != null) {
+            // Infected file
+            target?.onLoadFailed(AppCompatResources.getDrawable(context, R.drawable.ic_tchap_danger))
+        } else {
+            // Other error
+            target?.onLoadFailed(AppCompatResources.getDrawable(context, R.drawable.ic_broken_image))
+        }
     }
 
     fun render(data: Data, mode: Mode, imageView: ImageView) {
@@ -213,7 +243,8 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                                       target: Target<Drawable>?,
                                       isFirstResource: Boolean): Boolean {
                 callback?.invoke(false)
-                return false
+                renderFailure(e, imageView.context, target)
+                return true
             }
 
             override fun onResourceReady(resource: Drawable?,

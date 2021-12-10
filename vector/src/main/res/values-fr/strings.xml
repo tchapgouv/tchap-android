@@ -68,7 +68,8 @@
     <string name="initial_sync_start_importing_account_rooms">Synchronisation initiale :
 \nImportation des salons</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Synchronisation initiale :
-\nImportation des salons que vous avez rejoints</string>
+\nChargement des conversations
+\nCela peut prendre du temps si vous avez rejoint beaucoup de salons</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Synchronisation initiale :
 \nImportation des salons où vous avez été invité</string>
     <string name="initial_sync_start_importing_account_left_rooms">Synchronisation initiale :
@@ -2214,8 +2215,8 @@
     <string name="save_recovery_key_chooser_hint">Enregistrer la clé de récupération</string>
     <string name="disclaimer_positive_button">EN SAVOIR PLUS</string>
     <string name="disclaimer_negative_button">COMPRIS</string>
-    <string name="disclaimer_content">Nous sommes heureux de vous annoncer que nous avons un nouveau nom ! Votre application est à jour et vous êtes connectés à votre compte.</string>
-    <string name="disclaimer_title">Riot est désormais Element !</string>
+    <string name="disclaimer_content">L’apparence et l’organisation de votre application évoluent.\nDe nouveaux changements seront introduits progressivement pour faciliter et enrichir votre expérience.</string>
+    <string name="disclaimer_title">Bienvenue dans la nouvelle version de Tchap !</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Attente de l’historique du chiffrement</string>
     <string name="crypto_error_withheld_generic">Impossible d’accéder à ce message car l’envoyeur n’a intentionnellement pas envoyé les clés</string>
     <string name="crypto_error_withheld_unverified">Vous ne pouvez pas accéder à ce message car l’envoyeur n’a pas confiance en votre session</string>
@@ -2342,7 +2343,7 @@
         <item quantity="other">%d utilisateurs bannis</item>
     </plurals>
     <string name="settings_emails_and_phone_numbers_summary">Gérer les e\u2011mails et numéros de téléphone liés à votre compte Matrix</string>
-    <string name="settings_emails_and_phone_numbers_title">E\u2011mails et numéros de téléphone</string>
+    <string name="settings_emails_and_phone_numbers_title">E\u2011mail</string>
     <string name="bottom_sheet_setup_secure_backup_title">Sauvegarde sécurisée</string>
     <string name="settings_setup_secure_backup">Activer la sauvegarde sécurisée</string>
     <string name="a11y_start_camera">Démarrer la caméra</string>
@@ -3014,4 +3015,7 @@
     <string name="a11y_presence_unavailable">Indisponible</string>
     <string name="a11y_presence_offline">Hors ligne</string>
     <string name="a11y_presence_online">En ligne</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Choisir un serveur d’accueil</string>
+    <string name="login_error_homeserver_from_url_not_found">Impossible de contacter un serveur d’accueil à l’URL %s. Veuillez vérifier votre lien ou choisir manuellement un serveur d’accueil.</string>
+    <string name="notification_listening_for_notifications">Écoute des notifications</string>
 </resources>

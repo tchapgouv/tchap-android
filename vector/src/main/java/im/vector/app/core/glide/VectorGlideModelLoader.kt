@@ -25,7 +25,8 @@ import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
-import im.vector.app.core.extensions.vectorComponent
+import com.squareup.moshi.Moshi
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.session.coroutineScope
@@ -33,9 +34,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.session.contentscanner.ContentScannerError
+import org.matrix.android.sdk.api.session.contentscanner.ScanFailure
+import org.matrix.android.sdk.api.session.contentscanner.toException
 import timber.log.Timber
 import java.io.IOException
 import java.io.InputStream
+import java.util.concurrent.TimeUnit
 
 class VectorGlideModelLoaderFactory(private val context: Context) : ModelLoaderFactory<ImageContentRenderer.Data, InputStream> {
 
@@ -67,9 +72,16 @@ class VectorGlideDataFetcher(context: Context,
     DataFetcher<InputStream> {
 
     private val localFilesHelper = LocalFilesHelper(context)
-    private val activeSessionHolder = context.vectorComponent().activeSessionHolder()
+    private val activeSessionHolder = context.singletonEntryPoint().activeSessionHolder()
 
-    private val client = activeSessionHolder.getSafeActiveSession()?.getOkHttpClient() ?: OkHttpClient()
+    private val client = (activeSessionHolder.getSafeActiveSession()?.getOkHttpClient() ?: OkHttpClient()).newBuilder()
+            // Raise timeouts for antivirus scanner
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build()
+
+    private val moshi = Moshi.Builder().build()
 
     override fun getDataClass(): Class<InputStream> {
         return InputStream::class.java
@@ -109,7 +121,6 @@ class VectorGlideDataFetcher(context: Context,
             }
             return
         }
-//        val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
 
         val fileService = activeSessionHolder.getSafeActiveSession()?.fileService() ?: return Unit.also {
             callback.onLoadFailed(IllegalArgumentException("No File service"))
@@ -126,7 +137,17 @@ class VectorGlideDataFetcher(context: Context,
             withContext(Dispatchers.Main) {
                 result.fold(
                         { callback.onDataReady(it.inputStream()) },
-                        { callback.onLoadFailed(it as? Exception ?: IOException(it.localizedMessage)) }
+                        { failure ->
+                            if (failure is ScanFailure) {
+                                if (failure.error.reason == ContentScannerError.REASON_MCS_BAD_DECRYPTION) {
+                                    // the public key might have changed, try to get it again?
+                                    activeSessionHolder.getSafeActiveSession()?.contentScannerService()?.getServerPublicKey(true)
+                                }
+                                callback.onLoadFailed(failure.toException())
+                            } else {
+                                callback.onLoadFailed(failure as? Exception ?: IOException(failure.localizedMessage))
+                            }
+                        }
                 )
             }
         }

@@ -61,6 +61,11 @@ object CommandParser {
                 return ParsedCommand.ErrorEmptySlashCommand
             }
 
+            val command = Command.values().find { it.command == messageParts.first() }
+            if (command?.isTchapCommand == false) {
+                return ParsedCommand.ErrorNotACommand
+            }
+
             return when (val slashCommand = messageParts.first()) {
                 Command.PLAIN.command                        -> {
                     val text = textMessage.substring(Command.PLAIN.command.length).trim()
@@ -344,15 +349,6 @@ object CommandParser {
                     val message = textMessage.substring(Command.LENNY.command.length).trim()
 
                     ParsedCommand.SendLenny(message)
-                }
-                Command.POLL.command                         -> {
-                    val rawCommand = textMessage.substring(Command.POLL.command.length).trim()
-                    val split = rawCommand.split("|").map { it.trim() }
-                    if (split.size > 2) {
-                        ParsedCommand.SendPoll(split[0], split.subList(1, split.size))
-                    } else {
-                        ParsedCommand.ErrorSyntax(Command.POLL)
-                    }
                 }
                 Command.DISCARD_SESSION.command              -> {
                     ParsedCommand.DiscardSession

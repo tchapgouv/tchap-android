@@ -1,3 +1,26 @@
+Changes in Tchap 1.99.3 (2021-12-10)
+===================================================
+
+Bugfix 🐛:
+ - [Login Screen] An unexpected error on the password field #276
+
+Improvements 🙌:
+ - Rebase/element android v1.3.8 PR #286
+ - Antivirus: Add MediaScan in the attachments handling #204
+ - Remove the tab contacts #290
+ - Remove irrelevant Matrix Id PR #294
+ - [Pinning] Finalize the configuration about pinning #287
+ - Hide encryption trust shields PR #296
+ - Hide share icon in room member profile detail ActionBar #273
+ - [Settings] Hide "Push Rules" option in Advanced settings>Notifications #271
+ - Tchap V2 - Update migration dialog #302
+ - [Direct chat] Disable the click on the room name in the room settings
+ - [Direct Message] Adapt the Id server consents #246
+ - [Settings] adjust Security & Privacy section #270
+ - [Settings] hide "Voice & Video" section when the voip is not available #269
+ - [Settings] Adjust Preferences #268
+ - [Settings] Hide General/Discovery settings #251
+
 Changes in Tchap 1.99.2 (2021-11-08)
 ===================================================
 
@@ -8,7 +31,7 @@ Changes in Tchap 1.99.1 (2021-11-05)
 ===================================================
 
 Improvements 🙌:
-- Prepare the Tchap release/pre-release #253
+ - Prepare the Tchap release/pre-release #253
 
 Changes in Tchap 1.99.0 (2021-11-05)
 ===================================================
