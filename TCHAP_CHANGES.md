@@ -10,6 +10,7 @@ Improvements 🙌:
  - Hide encryption trust shields PR #296
  - Hide share icon in room member profile detail ActionBar #273
  - [Settings] Hide "Push Rules" option in Advanced settings>Notifications #271
+ - Tchap V2 - Update migration dialog #302
  - [Direct chat] Disable the click on the room name in the room settings
 
 Changes in Tchap 1.99.2 (2021-11-08)

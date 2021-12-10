@@ -40,6 +40,7 @@ import im.vector.app.features.home.room.detail.timeline.factory.ReadReceiptsItem
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactory
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactoryParams
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
+import im.vector.app.features.home.room.detail.timeline.helper.ContentScannerStateTracker
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineControllerInterceptorHelper
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventDiffUtilCallback
@@ -76,6 +77,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                                                   private val vectorPreferences: VectorPreferences,
                                                   private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
                                                   private val contentDownloadStateTrackerBinder: ContentDownloadStateTrackerBinder,
+                                                  private val contentScannerStateTracker: ContentScannerStateTracker,
                                                   private val timelineItemFactory: TimelineItemFactory,
                                                   private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
                                                   private val mergedHeaderItemFactory: MergedHeaderItemFactory,
@@ -273,6 +275,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         timelineMediaSizeProvider.recyclerView = null
         contentUploadStateTrackerBinder.clear()
         contentDownloadStateTrackerBinder.clear()
+        contentScannerStateTracker.clear()
         timeline?.removeListener(this)
         super.onDetachedFromRecyclerView(recyclerView)
     }

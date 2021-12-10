@@ -80,6 +80,7 @@
     <string name="tchap_scan_media_in_progress">Analyse Antivirus</string>
     <string name="tchap_scan_media_untrusted_content">Fichier Bloqué</string>
     <string name="tchap_scan_media_untrusted_content_message">Le document (%s) a été filtré par la politique de sécurité</string>
+    <string name="tchap_scan_media_error_file_is_infected">Le fichier est infecté, impossible de le télécharger.</string>
 
     <!-- tchap room settings -->
     <string name="tchap_room_settings_remove_from_directory">Retirer ce salon de la liste des forums</string>
