@@ -39,7 +39,7 @@ data class HomeServerConnectionConfig(
         // included in the login response
         val homeServerUriBase: Uri = homeServerUri,
         val identityServerUri: Uri? = null,
-        val antiVirusServerUri: Uri? = null,
+        val antiVirusServerUri: Uri? = homeServerUri,
         val allowedFingerprints: List<Fingerprint> = emptyList(),
         val shouldPin: Boolean = false,
         val tlsVersions: List<TlsVersion>? = null,

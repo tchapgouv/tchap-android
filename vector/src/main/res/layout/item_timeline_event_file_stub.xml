@@ -64,6 +64,19 @@
         app:barrierDirection="bottom"
         app:constraint_referenced_ids="messageFileImageView,messageFilenameView" />
 
+    <TextView
+        android:id="@+id/messageFileAvText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="4dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/horizontalBarrier"
+        tools:drawableLeft="@drawable/ic_av_checked"
+        tools:text="@string/antivirus_infected"
+        tools:visibility="visible" />
+
     <include
         android:id="@+id/messageFileUploadProgressLayout"
         layout="@layout/media_upload_download_progress_layout"
@@ -74,7 +87,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontalBarrier"
+        app:layout_constraintTop_toBottomOf="@id/messageFileAvText"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

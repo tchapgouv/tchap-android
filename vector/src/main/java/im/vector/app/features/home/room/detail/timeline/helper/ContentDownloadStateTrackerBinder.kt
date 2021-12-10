@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.detail.timeline.helper
 
 import android.graphics.drawable.Drawable
+import androidx.core.view.isVisible
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import dagger.hilt.android.scopes.ActivityScoped
@@ -105,6 +106,7 @@ private class ContentDownloadUpdater(private val holder: MessageFileItem.Holder,
     private fun doHandleProgress(current: Long, total: Long) {
         val percent = 100L * (current.toFloat() / total.toFloat())
         holder.fileDownloadProgress.isIndeterminate = false
+        holder.fileDownloadProgress.isVisible = true
         holder.fileDownloadProgress.progress = percent.toInt()
         if (animatedDrawable == null) {
             animatedDrawable = AnimatedVectorDrawableCompat.create(holder.view.context, R.drawable.ic_download_anim)
