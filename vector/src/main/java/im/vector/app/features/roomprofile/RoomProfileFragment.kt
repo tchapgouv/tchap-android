@@ -143,11 +143,12 @@ class RoomProfileFragment @Inject constructor(
         setOf(
                 headerViews.roomProfileNameView,
                 views.matrixProfileToolbarTitleView
-        ).forEach {
-            it.setOnClickListener {
-                roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomSettings)
-            }
-        }
+        )
+        // Tchap: Disable the room settings access
+//        .forEach {
+//            it.setOnClickListener { roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomSettings)
+//            }
+//        }
         // Shortcut to room alias
         headerViews.roomProfileAliasView.setOnClickListener {
             roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomAliasesSettings)
