@@ -12,6 +12,7 @@ Improvements 🙌:
  - [Settings] Hide "Push Rules" option in Advanced settings>Notifications #271
  - Tchap V2 - Update migration dialog #302
  - [Direct chat] Disable the click on the room name in the room settings
+ - [Settings] adjust Security & Privacy section #270
 
 Changes in Tchap 1.99.2 (2021-11-08)
 ===================================================

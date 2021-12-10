@@ -909,7 +909,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * The user does not allow screenshots of the application
      */
     fun useFlagSecure(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_FLAG_SECURE, false)
+        return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_FLAG_SECURE, true)
     }
 
     /**
