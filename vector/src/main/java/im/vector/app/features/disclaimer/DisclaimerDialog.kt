@@ -22,8 +22,6 @@ import androidx.core.content.edit
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
-import im.vector.app.core.utils.openUrlInChromeCustomTab
-import im.vector.app.features.settings.VectorSettingsUrls
 
 // Increase this value to show again the disclaimer dialog after an upgrade of the application
 private const val CURRENT_DISCLAIMER_VALUE = 2
@@ -43,10 +41,7 @@ fun showDisclaimerDialog(activity: Activity) {
         MaterialAlertDialogBuilder(activity)
                 .setView(dialogLayout)
                 .setCancelable(false)
-                .setNegativeButton(R.string.disclaimer_negative_button, null)
-                .setPositiveButton(R.string.disclaimer_positive_button) { _, _ ->
-                    openUrlInChromeCustomTab(activity, null, VectorSettingsUrls.DISCLAIMER_URL)
-                }
+                .setNeutralButton(R.string.ok, null)
                 .show()
     }
 }

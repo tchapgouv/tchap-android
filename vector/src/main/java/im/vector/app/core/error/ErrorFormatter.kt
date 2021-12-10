@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.failure.isInvalidPassword
+import org.matrix.android.sdk.api.session.contentscanner.ScanFailure
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
@@ -118,6 +119,7 @@ class DefaultErrorFormatter @Inject constructor(
                         throwable.localizedMessage
                 }
             }
+            is ScanFailure                         -> stringProvider.getString(R.string.tchap_scan_media_error_file_is_infected)
             is DialPadLookup.Failure.NumberIsYours ->
                 stringProvider.getString(R.string.cannot_call_yourself)
             is DialPadLookup.Failure.NoResult      ->

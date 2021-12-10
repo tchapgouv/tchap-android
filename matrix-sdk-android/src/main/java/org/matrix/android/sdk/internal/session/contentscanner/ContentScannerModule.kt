@@ -65,7 +65,7 @@ internal abstract class ContentScannerModule {
     }
 
     @Binds
-    abstract fun bindContentScannerService(service: DisabledContentScannerService): ContentScannerService
+    abstract fun bindContentScannerService(service: DefaultContentScannerService): ContentScannerService
 
     @Binds
     abstract fun bindContentScannerStore(store: RealmContentScannerStore): ContentScannerStore
