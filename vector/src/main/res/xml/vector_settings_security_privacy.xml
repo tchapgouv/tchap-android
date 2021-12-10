@@ -102,8 +102,7 @@
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
             android:summary="@string/encryption_import_room_keys_summary"
-            android:title="@string/encryption_import_e2e_room_keys"
-            app:isPreferenceVisible="false" />
+            android:title="@string/encryption_import_e2e_room_keys" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
