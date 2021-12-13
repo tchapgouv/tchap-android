@@ -149,6 +149,7 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
                 // disable click on infected files
                 fileImageView.setOnClickListener(null)
                 fileImageView.setOnLongClickListener(null)
+                fileImageWrapper.setOnClickListener(null)
                 filenameView.setOnClickListener(null)
                 filenameView.setOnLongClickListener(null)
 
