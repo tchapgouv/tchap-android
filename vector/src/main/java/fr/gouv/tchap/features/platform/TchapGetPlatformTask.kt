@@ -61,22 +61,18 @@ class TchapGetPlatformTask @Inject constructor(
         }
 
         var failure: Throwable? = null
-        val platform = idServerUrls.firstNotNullOfOrNull { url ->
+        idServerUrls.onEach { url ->
             try {
-                matrix.threePidPlatformDiscoverService().getPlatform(url, ThreePid.Email(params.email))
+                val platform = matrix.threePidPlatformDiscoverService().getPlatform(url, ThreePid.Email(params.email))
+                Timber.d("## TchapGetPlatformTask succeeded (${platform.hs})")
+                return GetPlatformResult.Success(platform)
             } catch (throwable: Throwable) {
+                Timber.e(throwable, "## TchapGetPlatformTask failed ")
                 failure = throwable
-                null
             }
         }
 
-        return if (platform != null) {
-            Timber.d("## TchapGetPlatformTask succeeded (${platform.hs})")
-            GetPlatformResult.Success(platform)
-        } else {
-            Timber.e("## TchapGetPlatformTask failed ")
-            GetPlatformResult.Failure(failure ?: Failure.Unknown(null))
-        }
+        return GetPlatformResult.Failure(failure ?: Failure.Unknown(null))
     }
 
     private fun buildIdServerUrls(): List<String> {

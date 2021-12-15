@@ -65,10 +65,16 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
      * If users already have a DM room then navigate to it instead of creating a new room.
      */
     private fun onSubmitInvitees(action: CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers) {
+        // Tchap: All the user invite and DM creation process has been reworked
+        // Tchap: - multi-selection is forbidden, DM are restricted to 1:1
+        // Tchap: - invites by email might expire for external accounts so we have to cancel pending invites to send a new ones
+        // Tchap: - invites by msisdn are not supported yet
         val selection = action.selections.singleOrNull() ?: return
         setState { copy(isLoading = true) }
         when (selection) {
+            // User already exists, so we can create or retrieve the DM with him
             is PendingSelection.UserPendingSelection     -> handleCreateDirectMessageByUserId(selection.user.userId)
+            // User is unknown, so we have to invite him before creating the DM
             is PendingSelection.ThreePidPendingSelection -> {
                 if (selection.threePid is ThreePid.Email) {
                     handleIndividualInviteByEmail(selection.threePid.email)
@@ -83,6 +89,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
     private fun handleCreateDirectMessageByUserId(userId: String) {
         setState { copy(isLoading = true) }
         viewModelScope.launch(Dispatchers.IO) {
+            // Create or retrieve the DM and notify UI about the result
             runCatching { directRoomHelper.ensureDMExists(userId) }.fold(
                     {
                         setState { copy(isLoading = false) }
@@ -105,16 +112,21 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                     ?.find { it.threePid.value == email }
                     ?.matrixId
 
-            // Email matches with an existing account
+            // Email matches with an existing account, notify the UI with the resulting user
             if (userId != null) {
-                val user = tryOrNull { session.resolveUser(userId) } ?: User(userId, TchapUtils.computeDisplayNameFromUserId(userId), null)
                 setState { copy(isLoading = false) }
+                val user = tryOrNull { session.resolveUser(userId) } ?: User(userId, TchapUtils.computeDisplayNameFromUserId(userId), null)
                 _viewEvents.post(CreateDirectRoomViewEvents.UserDiscovered(user))
-            } else {
+            }
+            // Email does not match with an existing account, try to invite him before creating the DM
+            else {
                 val homeServer = (getPlatformTask.execute(Params(email)) as? GetPlatformResult.Success)?.platform?.hs
+                // Email does not match with a known homeserver, cannot send the invite
                 if (homeServer.isNullOrEmpty()) {
                     handleUnauthorizedEmail(existingRoom, email)
-                } else {
+                }
+                // Invite the user by email and create the DM
+                else {
                     handleCreateDirectMessageByEmail(existingRoom, email, TchapUtils.isExternalTchapServer(homeServer))
                 }
             }
@@ -123,10 +135,12 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
 
     private fun handleUnauthorizedEmail(existingRoom: String?, email: String) {
         setState { copy(isLoading = false) }
+        // There is no existing room, so notify the UI that the provided email is unauthorized
         if (existingRoom.isNullOrEmpty()) {
             _viewEvents.post(CreateDirectRoomViewEvents.InviteUnauthorizedEmail(email))
-        } else {
-            // Ignore the error, notify the user that the invite has been already sent
+        }
+        // A DM already exists with the provided email, so ignore the error and notify the user that the invite has been already sent
+        else {
             _viewEvents.post(CreateDirectRoomViewEvents.InviteAlreadySent(email))
         }
     }
@@ -134,15 +148,15 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
     private fun handleCreateDirectMessageByEmail(existingRoom: String?, email: String, isExternalEmail: Boolean) {
         setState { copy(isLoading = true) }
 
-        // Notify the user that the invite has been already sent
+        // A DM already exists and the email is not external, so notify the user that the invite has been already sent
         if (existingRoom?.isNotEmpty() == true && !isExternalEmail) {
             setState { copy(isLoading = false) }
             _viewEvents.post(CreateDirectRoomViewEvents.InviteAlreadySent(email))
         } else {
             viewModelScope.launch(Dispatchers.IO) {
-                // There is already a discussion with this email
-                // We have to re-invite the NoTchapUser if the email is bound to the external instance (for which the invites may expire).
-                // We don't have a way for the moment to check if the invite expired or not...
+                // There is already a discussion with this email but the email is bound to the external instance (for which the invites may expire).
+                // We have to re-invite the NoTchapUser by cancelling the pending invite and sending a new one.
+                // We don't have a way for the moment to check if the invite has expired or not...
                 if (existingRoom?.isNotEmpty() == true && isExternalEmail) {
                     revokePendingInviteAndLeave(existingRoom)
                 }
@@ -152,6 +166,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                     setDirectMessage()
                 }
 
+                // Create the DM and notify UI about the result
                 runCatching { session.createRoom(roomParams) }.fold(
                         {
                             setState { copy(isLoading = false) }

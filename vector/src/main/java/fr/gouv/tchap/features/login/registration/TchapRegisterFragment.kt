@@ -69,7 +69,7 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
 
         viewModel.observeViewEvents {
             when (it) {
-                PlatformViewEvents.Loading -> showLoading(null)
+                PlatformViewEvents.Loading    -> showLoading(null)
                 is PlatformViewEvents.Failure -> {
                     // Dialog is displayed by the Activity
                 }
@@ -79,7 +79,7 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
 
         loginViewModel.observeViewEvents { loginViewEvents ->
             when (loginViewEvents) {
-                LoginViewEvents.OnLoginFlowRetrieved           ->
+                LoginViewEvents.OnLoginFlowRetrieved      ->
                     loginViewModel.handle(LoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
                 is LoginViewEvents.RegistrationFlowResult -> {
                     // Result from registration request when the account password is set.
@@ -97,7 +97,7 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
                         Unit
                     }
                 }
-                else                                             -> Unit // This is handled by the Activity
+                else                                      -> Unit // This is handled by the Activity
             }.exhaustive
         }
     }
