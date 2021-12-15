@@ -34,5 +34,4 @@ sealed class RoomListAction : VectorViewModelAction {
     object CreateDirectChat : RoomListAction()
     data class CreateRoom(val initialName: String = "") : RoomListAction()
     data class OpenRoomDirectory(val filter: String = "") : RoomListAction()
-    object CancelSearch : RoomListAction()
 }
