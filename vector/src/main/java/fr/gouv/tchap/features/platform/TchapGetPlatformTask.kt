@@ -52,7 +52,7 @@ class TchapGetPlatformTask @Inject constructor(
         Timber.d("## TchapGetPlatformTask [${params.email}]")
 
         // Prepare the list of the known IS urls in order to run over the list until to get an answer.
-        val idServerUrls = buildIdServerUrls().toMutableList()
+        val idServerUrls = buildIdServerUrls()
         if (idServerUrls.isEmpty()) {
             return GetPlatformResult.Failure(Failure.ServerError(MatrixError(
                     code = MatrixError.M_UNKNOWN,
