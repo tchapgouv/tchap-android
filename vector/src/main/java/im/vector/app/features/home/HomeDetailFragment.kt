@@ -60,8 +60,6 @@ import im.vector.app.features.createdirect.CreateDirectRoomViewModel
 import im.vector.app.features.createdirect.CreateDirectRoomViewState
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.RoomListParams
-import im.vector.app.features.home.room.list.RoomListViewEvents
-import im.vector.app.features.home.room.list.RoomListViewModel
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
@@ -96,7 +94,6 @@ class HomeDetailFragment @Inject constructor(
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
     private val unreadMessagesSharedViewModel: UnreadMessagesSharedViewModel by activityViewModel()
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
-    private val roomListViewModel: RoomListViewModel by activityViewModel()
     private val createDirectRoomViewModel: CreateDirectRoomViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
@@ -223,12 +220,17 @@ class HomeDetailFragment @Inject constructor(
                     invalidateOptionsMenu()
                 }
 
-        roomListViewModel.observeViewEvents {
-            if (it is RoomListViewEvents.CancelSearch) {
-                // prevent glitch caused by search refresh during activity transition
-                cancelSearch()
-            }
-        }
+        sharedActionViewModel
+                .stream()
+                .onEach { action ->
+                    when (action) {
+                        is HomeActivitySharedAction.InviteByEmail -> onInviteByEmail(action.email)
+                        // prevent glitch caused by search refresh during activity transition
+                        HomeActivitySharedAction.CancelSearch     -> cancelSearch()
+                        else                                      -> Unit // no-op
+                    }.exhaustive
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         createDirectRoomViewModel.onEach(CreateDirectRoomViewState::isLoading) { isLoading ->
             if (isLoading) {
@@ -260,16 +262,6 @@ class HomeDetailFragment @Inject constructor(
                     }.exhaustive
                 }
                 .launchIn(lifecycleScope)
-
-        sharedActionViewModel
-                .stream()
-                .onEach { action ->
-                    when (action) {
-                        is HomeActivitySharedAction.InviteByEmail -> onInviteByEmail(action.email)
-                        else                                      -> Unit // no-op
-                    }.exhaustive
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun handleCallStarted() {

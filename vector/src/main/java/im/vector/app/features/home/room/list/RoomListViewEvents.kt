@@ -34,6 +34,4 @@ sealed class RoomListViewEvents : VectorViewEvents {
     object CreateDirectChat : RoomListViewEvents()
     data class CreateRoom(val initialName: String) : RoomListViewEvents()
     data class OpenRoomDirectory(val filter: String) : RoomListViewEvents()
-
-    object CancelSearch : RoomListViewEvents()
 }
