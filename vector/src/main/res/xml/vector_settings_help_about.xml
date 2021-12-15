@@ -26,7 +26,7 @@
     <im.vector.app.core.preference.VectorPreference
         android:key="SETTINGS_COPYRIGHT_PREFERENCE_KEY"
         android:title="@string/settings_copyright"
-        app:isPreferenceVisible="@bool/false_tchap_hidden"/>
+        app:isPreferenceVisible="@bool/false_tchap_hidden" />
 
     <im.vector.app.core.preference.VectorPreference
         android:key="SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY"
@@ -35,7 +35,7 @@
     <im.vector.app.core.preference.VectorPreference
         android:key="SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY"
         android:title="@string/settings_privacy_policy"
-        app:isPreferenceVisible="@bool/false_tchap_hidden"/>
+        app:isPreferenceVisible="@bool/false_tchap_hidden" />
 
     <im.vector.app.core.preference.VectorPreference
         android:key="SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY"
