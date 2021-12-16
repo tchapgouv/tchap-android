@@ -4,7 +4,7 @@
     filename = "TCHAP_CHANGES.md"
     name = "Changes in Tchap"
     template = "tools/towncrier/template.md"
-    issue_format = "[#{issue}](https://github.com/tchapgouv/tchap-android-v2/issues)"
+    issue_format = "[#{issue}](https://github.com/tchapgouv/tchap-android-v2/issues/{issue})"
 
     [[tool.towncrier.type]]
         directory = "feature"
