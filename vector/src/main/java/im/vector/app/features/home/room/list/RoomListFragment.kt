@@ -29,8 +29,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.OnModelBuildFinishedListener
-import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
+import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import fr.gouv.tchap.core.utils.TchapUtils
@@ -43,6 +43,8 @@ import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.databinding.FragmentRoomListBinding
+import im.vector.app.features.home.HomeActivitySharedAction
+import im.vector.app.features.home.HomeSharedActionViewModel
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
@@ -81,8 +83,9 @@ class RoomListFragment @Inject constructor(
 
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
+    private lateinit var homeSharedActionViewModel: HomeSharedActionViewModel
     private val roomListParams: RoomListParams by args()
-    private val roomListViewModel: RoomListViewModel by activityViewModel()
+    private val roomListViewModel: RoomListViewModel by fragmentViewModel()
     private lateinit var stateRestorer: LayoutManagerStateRestorer
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomListBinding {
@@ -111,6 +114,7 @@ class RoomListFragment @Inject constructor(
         setupCreateRoomButton()
         setupRecyclerView()
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
+        homeSharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         roomListViewModel.observeViewEvents {
             when (it) {
                 is RoomListViewEvents.Loading                   -> showLoading(it.message)
@@ -121,7 +125,6 @@ class RoomListFragment @Inject constructor(
                 RoomListViewEvents.CreateDirectChat             -> handleCreateDirectChat()
                 is RoomListViewEvents.CreateRoom                -> handleCreateRoom(it.initialName)
                 is RoomListViewEvents.OpenRoomDirectory         -> handleOpenRoomDirectory(it.filter)
-                RoomListViewEvents.CancelSearch                 -> Unit
             }.exhaustive
         }
 
@@ -186,22 +189,22 @@ class RoomListFragment @Inject constructor(
 
     private fun handleSelectRoom(event: RoomListViewEvents.SelectRoom) {
         navigator.openRoom(requireActivity(), event.roomSummary.roomId)
-        roomListViewModel.handle(RoomListAction.CancelSearch)
+        homeSharedActionViewModel.post(HomeActivitySharedAction.CancelSearch)
     }
 
     private fun handleCreateDirectChat() {
         navigator.openCreateDirectRoom(requireActivity())
-        roomListViewModel.handle(RoomListAction.CancelSearch)
+        homeSharedActionViewModel.post(HomeActivitySharedAction.CancelSearch)
     }
 
     private fun handleCreateRoom(name: String) {
         navigator.openCreateRoom(requireActivity(), name)
-        roomListViewModel.handle(RoomListAction.CancelSearch)
+        homeSharedActionViewModel.post(HomeActivitySharedAction.CancelSearch)
     }
 
     private fun handleOpenRoomDirectory(filter: String) {
         navigator.openRoomDirectory(requireActivity(), filter)
-        roomListViewModel.handle(RoomListAction.CancelSearch)
+        homeSharedActionViewModel.post(HomeActivitySharedAction.CancelSearch)
     }
 
     private fun setupCreateRoomButton() {
