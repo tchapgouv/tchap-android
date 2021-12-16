@@ -1,3 +1,12 @@
+Changes in Tchap 1.99.4 (YYYY-MM-DD)
+===================================================
+
+Bugfix 🐛:
+ - Application tabs are not updated correctly #307
+
+Improvements 🙌:
+- Wrong icon displayed for an infected file #306
+
 Changes in Tchap 1.99.3 (2021-12-10)
 ===================================================
 
@@ -20,7 +29,7 @@ Improvements 🙌:
  - [Settings] hide "Voice & Video" section when the voip is not available #269
  - [Settings] Adjust Preferences #268
  - [Settings] Hide General/Discovery settings #251
- - Wrong icon displayed for an infected file #306
+ - [Settings] adjust Help & About section #308
 
 Changes in Tchap 1.99.2 (2021-11-08)
 ===================================================
