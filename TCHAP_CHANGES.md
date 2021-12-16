@@ -1,11 +1,3 @@
-Changes in Tchap 1.99.4 (YYYY-MM-DD)
-===================================================
-
-Bugfix 🐛:
- - Application tabs are not updated correctly #307
-
-Improvements 🙌:
-
 Changes in Tchap 1.99.3 (2021-12-10)
 ===================================================
 
