@@ -22,7 +22,6 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
@@ -46,18 +45,13 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
@@ -120,14 +114,9 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
 
     override fun handle(action: HomeDetailAction) {
         when (action) {
-            is HomeDetailAction.SwitchTab                   -> handleSwitchTab(action)
-            HomeDetailAction.MarkAllRoomsRead               -> handleMarkAllRoomsRead()
-            is HomeDetailAction.StartCallWithPhoneNumber    -> handleStartCallWithPhoneNumber(action)
-            is HomeDetailAction.InviteByEmail               -> handleIndividualInviteByEmail(action)
-            is HomeDetailAction.SelectContact               -> handleSelectContact(action)
-            is HomeDetailAction.CreateDirectMessageByEmail  -> handleCreateDirectMessage(action)
-            is HomeDetailAction.CreateDirectMessageByUserId -> handleCreateDirectMessage(action)
-            HomeDetailAction.UnauthorizedEmail              -> handleUnauthorizedEmail()
+            is HomeDetailAction.SwitchTab                -> handleSwitchTab(action)
+            HomeDetailAction.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
+            is HomeDetailAction.StartCallWithPhoneNumber -> handleStartCallWithPhoneNumber(action)
         }
     }
 
@@ -186,125 +175,6 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 session.markAllAsRead(roomIds)
             } catch (failure: Throwable) {
                 Timber.d(failure, "Failed to mark all as read")
-            }
-        }
-    }
-
-    private fun handleIndividualInviteByEmail(action: HomeDetailAction.InviteByEmail) {
-        val existingRoom = session.getExistingDirectRoomWithUser(action.email)
-
-        setState {
-            copy(
-                    inviteEmail = action.email,
-                    existingRoom = existingRoom
-            )
-        }
-
-        viewModelScope.launch(Dispatchers.IO) {
-            // Start the invite process by checking whether a Tchap account has been created for this email.
-            val data = tryOrNull { session.identityService().lookUp(listOf(ThreePid.Email(action.email))) }
-
-            if (data.isNullOrEmpty()) {
-                _viewEvents.post(HomeDetailViewEvents.GetPlatform(action.email))
-            } else {
-                val userId = data.find { it.threePid.value == action.email }?.matrixId
-                userId?.let {
-                    val user = tryOrNull { session.resolveUser(it) } ?: User(it, TchapUtils.computeDisplayNameFromUserId(it), null)
-                    _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForDiscoveredUser(user))
-                }
-            }
-        }
-    }
-
-    private fun handleSelectContact(action: HomeDetailAction.SelectContact) {
-        val directRoomId = session.getExistingDirectRoomWithUser(action.user.userId)
-        if (directRoomId != null) {
-            _viewEvents.post(HomeDetailViewEvents.OpenDirectChat(directRoomId))
-        } else {
-            _viewEvents.post(HomeDetailViewEvents.PromptCreateDirectChat(action.user))
-        }
-    }
-
-    private fun handleUnauthorizedEmail() = withState {
-        it.inviteEmail ?: return@withState
-
-        if (it.existingRoom.isNullOrEmpty()) {
-            _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForUnauthorizedEmail(it.inviteEmail))
-        } else {
-            // Ignore the error, notify the user that the invite has been already sent
-            _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
-        }
-    }
-
-    private fun handleCreateDirectMessage(action: HomeDetailAction.CreateDirectMessageByEmail) = withState {
-        it.inviteEmail ?: return@withState
-
-        if (it.existingRoom.isNullOrEmpty()) {
-            // Send the invite if the email is authorized
-            viewModelScope.launch {
-                createDirectMessage(it.inviteEmail)
-            }
-        } else {
-            // There is already a discussion with this email
-            // We do not re-invite the NoTchapUser except if
-            // the email is bound to the external instance (for which the invites may expire).
-            if (action.isExternalEmail) {
-                // Revoke the pending invite and leave this empty discussion, we will invite again this email.
-                // We don't have a way for the moment to check if the invite expired or not...
-                viewModelScope.launch {
-                    revokePendingInviteAndLeave(it.existingRoom)
-                    createDirectMessage(it.inviteEmail)
-                }
-            } else {
-                // Notify the user that the invite has been already sent
-                _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
-            }
-        }
-    }
-
-    private fun handleCreateDirectMessage(action: HomeDetailAction.CreateDirectMessageByUserId) {
-        viewModelScope.launch {
-            val roomId = try {
-                directRoomHelper.ensureDMExists(action.userId)
-            } catch (failure: Throwable) {
-                _viewEvents.post(HomeDetailViewEvents.Failure(failure))
-                return@launch
-            }
-            _viewEvents.post(HomeDetailViewEvents.OpenDirectChat(roomId = roomId))
-        }
-    }
-
-    private suspend fun createDirectMessage(email: String) {
-        val roomParams = CreateRoomParams()
-                .apply {
-                    invite3pids.add(ThreePid.Email(email))
-                    setDirectMessage()
-                }
-
-        runCatching { session.createRoom(roomParams) }.fold(
-                { _ -> _viewEvents.post(HomeDetailViewEvents.InviteNoTchapUserByEmail) },
-                { failure -> _viewEvents.post(HomeDetailViewEvents.Failure(failure)) }
-        )
-    }
-
-    private suspend fun revokePendingInviteAndLeave(roomId: String) {
-        session.getRoom(roomId)?.let { room ->
-            val token = room.getStateEvent(EventType.STATE_ROOM_THIRD_PARTY_INVITE)?.stateKey
-
-            try {
-                if (!token.isNullOrEmpty()) {
-                    room.sendStateEvent(
-                            eventType = EventType.STATE_ROOM_THIRD_PARTY_INVITE,
-                            stateKey = token,
-                            body = emptyMap()
-                    )
-                } else {
-                    Timber.d("unable to revoke invite (no pending invite)")
-                }
-
-                room.leave()
-            } catch (failure: Throwable) {
-                _viewEvents.post(HomeDetailViewEvents.Failure(failure))
             }
         }
     }
