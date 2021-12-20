@@ -84,19 +84,17 @@ class RoomUploadsViewModel @AssistedInject constructor(
                                     it.contentWithAttachmentContent.msgType == MessageType.MSGTYPE_VIDEO
                         }
 
+                val mediaTrusted = groupedUploadEvents[true]?.filter {
+                    val url = it.contentWithAttachmentContent.encryptedFileInfo?.url ?: return@filter false
+                    session.contentScannerService().getCachedScanResultForFile(url)?.state == ScanState.TRUSTED
+                }
+
+                val filesTrusted = groupedUploadEvents[false]?.filter {
+                    val url = it.contentWithAttachmentContent.encryptedFileInfo?.url ?: return@filter false
+                    session.contentScannerService().getCachedScanResultForFile(url)?.state == ScanState.TRUSTED
+                }
+
                 setState {
-                    val filesTrusted = groupedUploadEvents[false]?.filter {
-                        it.contentWithAttachmentContent.encryptedFileInfo?.url?.let { url ->
-                            session.contentScannerService().getCachedScanResultForFile(url)?.state == ScanState.TRUSTED
-                        } ?: false
-                    }
-
-                    val mediaTrusted = groupedUploadEvents[true]?.filter {
-                        it.contentWithAttachmentContent.encryptedFileInfo?.url?.let { url ->
-                            session.contentScannerService().getCachedScanResultForFile(url)?.state == ScanState.TRUSTED
-                        } ?: false
-                    }
-
                     copy(
                             asyncEventsRequest = Success(Unit),
                             mediaEvents = this.mediaEvents + mediaTrusted.orEmpty(),
