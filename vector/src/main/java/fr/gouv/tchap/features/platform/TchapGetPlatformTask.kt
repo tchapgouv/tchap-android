@@ -91,7 +91,7 @@ class TchapGetPlatformTask @Inject constructor(
             val index = Random().nextInt(currentHosts.size)
             val host: String = currentHosts.removeAt(index)
             val idServerUrl = context.getString(R.string.server_url_prefix) + host
-            if (null == currentIdServerUrl || idServerUrl != currentIdServerUrl) {
+            if (currentIdServerUrl == null || idServerUrl != currentIdServerUrl) {
                 idServerUrls.add(idServerUrl)
             }
         }
@@ -102,7 +102,7 @@ class TchapGetPlatformTask @Inject constructor(
             val index = Random().nextInt(currentHosts.size)
             val host: String = currentHosts.removeAt(index)
             val idServerUrl = context.getString(R.string.server_url_prefix) + host
-            if (null == currentIdServerUrl || idServerUrl != currentIdServerUrl) {
+            if (currentIdServerUrl == null || idServerUrl != currentIdServerUrl) {
                 idServerUrls.add(idServerUrl)
             }
         }
