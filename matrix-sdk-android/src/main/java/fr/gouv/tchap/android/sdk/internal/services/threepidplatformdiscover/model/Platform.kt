@@ -30,6 +30,11 @@ data class Platform(
         @Json(name = "hs") val hs: String,
 
         /**
+         * The publicly-accessible homeserver name.
+         */
+        @Json(name = "shadow_hs") val shadowHs: String? = null,
+
+        /**
          * The new homeserver name.
          */
         @Json(name = "new_hs") val newHs: String? = null

@@ -22,11 +22,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,6 +48,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
+import org.matrix.android.sdk.api.session.user.model.User
 import java.net.HttpURLConnection
 import javax.inject.Inject
 
@@ -91,9 +89,37 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     )
             )
         }
-        viewModel.onEach(CreateDirectRoomViewState::createAndInviteState) {
-            renderCreateAndInviteState(it)
+        viewModel.onEach(CreateDirectRoomViewState::isLoading) { isLoading ->
+            if (isLoading) {
+                renderCreationLoading()
+            } else {
+                hideWaitingView()
+            }
         }
+        viewModel.viewEvents
+                .stream()
+                .onEach { viewEvent ->
+                    when (viewEvent) {
+                        CreateDirectRoomViewEvents.InviteSent                 -> {
+                            handleInviteByEmailResult(buildString {
+                                appendLine(getString(R.string.tchap_invite_sending_succeeded))
+                                append(getString(R.string.tchap_send_invite_confirmation))
+                            })
+                        }
+                        is CreateDirectRoomViewEvents.Failure                 -> renderCreationFailure(viewEvent.throwable)
+                        is CreateDirectRoomViewEvents.UserDiscovered          -> handleExistingUser(viewEvent.user)
+                        is CreateDirectRoomViewEvents.InviteAlreadySent       -> {
+                            handleInviteByEmailResult(getString(R.string.tchap_invite_already_send_message, viewEvent.email))
+                        }
+                        is CreateDirectRoomViewEvents.InviteUnauthorizedEmail -> {
+                            handleInviteByEmailResult(getString(R.string.tchap_invite_unauthorized_message, viewEvent.email))
+                        }
+                        is CreateDirectRoomViewEvents.OpenDirectChat          -> {
+                            renderCreationSuccess(viewEvent.roomId)
+                        }
+                    }.exhaustive
+                }
+                .launchIn(lifecycleScope)
     }
 
     private fun openAddByQrCode() {
@@ -131,14 +157,6 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         }
     }
 
-    private fun renderCreateAndInviteState(state: Async<String>) {
-        when (state) {
-            is Loading -> renderCreationLoading()
-            is Success -> renderCreationSuccess(state())
-            is Fail    -> renderCreationFailure(state.error)
-        }
-    }
-
     private fun renderCreationLoading() {
         updateWaitingView(WaitingViewData(getString(R.string.creating_direct_room)))
     }
@@ -171,12 +189,19 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         }
     }
 
-    private fun renderCreationSuccess(roomId: String?) {
+    private fun renderCreationSuccess(roomId: String) {
         // Navigate to freshly created room
-        if (roomId != null) {
-            navigator.openRoom(this, roomId)
-        }
+        navigator.openRoom(this, roomId)
         finish()
+    }
+
+    private fun handleInviteByEmailResult(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        finish()
+    }
+
+    private fun handleExistingUser(user: User) {
+        viewModel.handle(CreateDirectRoomAction.CreateDirectMessageByUserId(user.userId))
     }
 
     companion object {

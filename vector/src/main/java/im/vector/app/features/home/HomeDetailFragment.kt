@@ -34,10 +34,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import fr.gouv.tchap.core.utils.TchapUtils
-import fr.gouv.tchap.features.platform.PlatformAction
-import fr.gouv.tchap.features.platform.PlatformViewEvents
-import fr.gouv.tchap.features.platform.PlatformViewModel
 import im.vector.app.AppStateHandler
 import im.vector.app.BuildConfig
 import im.vector.app.R
@@ -58,10 +54,12 @@ import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.webrtc.WebRtcCallManager
+import im.vector.app.features.createdirect.CreateDirectRoomAction
+import im.vector.app.features.createdirect.CreateDirectRoomViewEvents
+import im.vector.app.features.createdirect.CreateDirectRoomViewModel
+import im.vector.app.features.createdirect.CreateDirectRoomViewState
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.RoomListParams
-import im.vector.app.features.home.room.list.RoomListViewEvents
-import im.vector.app.features.home.room.list.RoomListViewModel
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
@@ -93,11 +91,10 @@ class HomeDetailFragment @Inject constructor(
         CurrentCallsView.Callback {
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
-    private val platformViewModel: PlatformViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
     private val unreadMessagesSharedViewModel: UnreadMessagesSharedViewModel by activityViewModel()
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
-    private val roomListViewModel: RoomListViewModel by activityViewModel()
+    private val createDirectRoomViewModel: CreateDirectRoomViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private lateinit var sharedCallActionViewModel: SharedKnownCallsViewModel
@@ -183,20 +180,9 @@ class HomeDetailFragment @Inject constructor(
 
         viewModel.observeViewEvents { viewEvent ->
             when (viewEvent) {
-                HomeDetailViewEvents.CallStarted                          -> handleCallStarted()
-                is HomeDetailViewEvents.FailToCall                        -> showFailure(viewEvent.failure)
-                HomeDetailViewEvents.Loading                              -> showLoadingDialog()
-                is HomeDetailViewEvents.InviteIgnoredForDiscoveredUser    -> handleExistingUser(viewEvent.user)
-                is HomeDetailViewEvents.InviteIgnoredForUnauthorizedEmail ->
-                    handleInviteByEmailFailed(getString(R.string.tchap_invite_unauthorized_message, viewEvent.email))
-                is HomeDetailViewEvents.InviteIgnoredForExistingRoom      ->
-                    handleInviteByEmailFailed(getString(R.string.tchap_invite_already_send_message, viewEvent.email))
-                HomeDetailViewEvents.InviteNoTchapUserByEmail             ->
-                    handleInviteByEmailFailed(getString(R.string.tchap_invite_sending_succeeded) + "\n" + getString(R.string.tchap_send_invite_confirmation))
-                is HomeDetailViewEvents.GetPlatform                       -> platformViewModel.handle(PlatformAction.DiscoverTchapPlatform(viewEvent.email))
-                is HomeDetailViewEvents.OpenDirectChat                    -> openRoom(viewEvent.roomId)
-                is HomeDetailViewEvents.PromptCreateDirectChat            -> showCreateRoomDialog(viewEvent.user)
-                is HomeDetailViewEvents.Failure                           -> showFailure(viewEvent.throwable)
+                HomeDetailViewEvents.CallStarted   -> handleCallStarted()
+                is HomeDetailViewEvents.FailToCall -> showFailure(viewEvent.failure)
+                HomeDetailViewEvents.Loading       -> showLoadingDialog()
             }
         }.exhaustive
 
@@ -234,36 +220,48 @@ class HomeDetailFragment @Inject constructor(
                     invalidateOptionsMenu()
                 }
 
-        roomListViewModel.observeViewEvents {
-            if (it is RoomListViewEvents.CancelSearch) {
-                // prevent glitch caused by search refresh during activity transition
-                cancelSearch()
-            }
-        }
-
-        platformViewModel.observeViewEvents {
-            when (it) {
-                is PlatformViewEvents.Loading -> showLoading(it.message)
-                is PlatformViewEvents.Failure -> viewModel.handle(HomeDetailAction.UnauthorizedEmail)
-                is PlatformViewEvents.Success -> {
-                    if (it.platform.hs.isNotEmpty()) {
-                        viewModel.handle(HomeDetailAction.CreateDirectMessageByEmail(TchapUtils.isExternalTchapServer(it.platform.hs)))
-                    } else {
-                        viewModel.handle(HomeDetailAction.UnauthorizedEmail)
-                    }
-                }
-            }.exhaustive
-        }
-
         sharedActionViewModel
                 .stream()
                 .onEach { action ->
                     when (action) {
                         is HomeActivitySharedAction.InviteByEmail -> onInviteByEmail(action.email)
+                        // prevent glitch caused by search refresh during activity transition
+                        HomeActivitySharedAction.CancelSearch     -> cancelSearch()
                         else                                      -> Unit // no-op
                     }.exhaustive
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        createDirectRoomViewModel.onEach(CreateDirectRoomViewState::isLoading) { isLoading ->
+            if (isLoading) {
+                showLoadingDialog(null)
+            } else {
+                dismissLoadingDialog()
+            }
+        }
+
+        createDirectRoomViewModel.viewEvents
+                .stream()
+                .onEach { viewEvent ->
+                    when (viewEvent) {
+                        CreateDirectRoomViewEvents.InviteSent                 -> {
+                            handleInviteByEmailResult(buildString {
+                                appendLine(getString(R.string.tchap_invite_sending_succeeded))
+                                append(getString(R.string.tchap_send_invite_confirmation))
+                            })
+                        }
+                        is CreateDirectRoomViewEvents.Failure                 -> showFailure(viewEvent.throwable)
+                        is CreateDirectRoomViewEvents.UserDiscovered          -> handleExistingUser(viewEvent.user)
+                        is CreateDirectRoomViewEvents.InviteAlreadySent       -> {
+                            handleInviteByEmailResult(getString(R.string.tchap_invite_already_send_message, viewEvent.email))
+                        }
+                        is CreateDirectRoomViewEvents.InviteUnauthorizedEmail -> {
+                            handleInviteByEmailResult(getString(R.string.tchap_invite_unauthorized_message, viewEvent.email))
+                        }
+                        is CreateDirectRoomViewEvents.OpenDirectChat          -> openRoom(viewEvent.roomId)
+                    }.exhaustive
+                }
+                .launchIn(lifecycleScope)
     }
 
     private fun handleCallStarted() {
@@ -403,7 +401,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun onInviteByEmail(email: String) {
-        viewModel.handle(HomeDetailAction.InviteByEmail(email))
+        createDirectRoomViewModel.handle(CreateDirectRoomAction.InviteByEmail(email))
     }
 
     private fun setupKeysBackupBanner() {
@@ -637,19 +635,7 @@ class HomeDetailFragment @Inject constructor(
         cancelSearch()
     }
 
-    private fun showCreateRoomDialog(user: User) {
-        val name = user.displayName?.let { TchapUtils.getNameFromDisplayName(it) }
-        MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.fab_menu_create_chat)
-                .setMessage(getString(R.string.tchap_dialog_prompt_new_direct_chat, name))
-                .setPositiveButton(R.string.yes) { _, _ ->
-                    viewModel.handle(HomeDetailAction.CreateDirectMessageByUserId(user.userId))
-                }
-                .setNegativeButton(R.string.no, null)
-                .show()
-    }
-
-    private fun handleInviteByEmailFailed(message: String) {
+    private fun handleInviteByEmailResult(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
@@ -658,7 +644,7 @@ class HomeDetailFragment @Inject constructor(
                 .setTitle(R.string.permissions_rationale_popup_title)
                 .setMessage(R.string.tchap_invite_not_sent_for_discovered_user)
                 .setPositiveButton(R.string.ok) { _, _ ->
-                    viewModel.handle(HomeDetailAction.SelectContact(user))
+                    createDirectRoomViewModel.handle(CreateDirectRoomAction.CreateDirectMessageByUserId(user.userId))
                 }
                 .show()
     }

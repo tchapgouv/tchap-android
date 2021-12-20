@@ -20,7 +20,7 @@ Improvements 🙌:
  - [Settings] hide "Voice & Video" section when the voip is not available #269
  - [Settings] Adjust Preferences #268
  - [Settings] Hide General/Discovery settings #251
- - [Room settings] Actions must be disabled on infected attachment in the attachments list #304
+ - [Settings] adjust Help & About section #308
 
 Changes in Tchap 1.99.2 (2021-11-08)
 ===================================================
