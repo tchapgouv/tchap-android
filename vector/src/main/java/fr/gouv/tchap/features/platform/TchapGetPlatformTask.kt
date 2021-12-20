@@ -26,8 +26,6 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import timber.log.Timber
-import java.util.ArrayList
-import java.util.Random
 import javax.inject.Inject
 
 sealed class GetPlatformResult {
@@ -75,37 +73,19 @@ class TchapGetPlatformTask @Inject constructor(
         return GetPlatformResult.Failure(failure ?: Failure.Unknown(null))
     }
 
-    private fun buildIdServerUrls(): List<String> {
-        val identityService = activeSessionHolder.getSafeActiveSession()?.identityService()
-        val idServerUrls: MutableList<String> = ArrayList()
+    private fun buildIdServerUrls(): Set<String> {
+        val idServerUrls = mutableSetOf<String>()
 
         // Consider first the current identity server if any.
-        val currentIdServerUrl = identityService?.getCurrentIdentityServerUrl()
+        val currentIdServerUrl = activeSessionHolder.getSafeActiveSession()?.identityService()?.getCurrentIdentityServerUrl()
         if (currentIdServerUrl != null) {
-            idServerUrls.add(currentIdServerUrl)
+            idServerUrls.add(currentIdServerUrl.removeSuffix("/"))
         }
 
-        // Add randomly the preferred known ISes
-        var currentHosts: MutableList<String> = mutableListOf(*context.resources.getStringArray(R.array.preferred_identity_server_names))
-        while (currentHosts.isNotEmpty()) {
-            val index = Random().nextInt(currentHosts.size)
-            val host: String = currentHosts.removeAt(index)
-            val idServerUrl = context.getString(R.string.server_url_prefix) + host
-            if (currentIdServerUrl == null || idServerUrl != currentIdServerUrl) {
-                idServerUrls.add(idServerUrl)
-            }
-        }
-
-        // Add randomly the other known ISes
-        currentHosts = mutableListOf(*context.resources.getStringArray(R.array.identity_server_names))
-        while (currentHosts.isNotEmpty()) {
-            val index = Random().nextInt(currentHosts.size)
-            val host: String = currentHosts.removeAt(index)
-            val idServerUrl = context.getString(R.string.server_url_prefix) + host
-            if (currentIdServerUrl == null || idServerUrl != currentIdServerUrl) {
-                idServerUrls.add(idServerUrl)
-            }
-        }
+        // add randomly the preferred known ISes plus the other known ISes
+        idServerUrls += context.resources.getStringArray(R.array.preferred_identity_server_names).toList().shuffled()
+                .plus(context.resources.getStringArray(R.array.identity_server_names).toList().shuffled())
+                .map { host -> context.getString(R.string.server_url_prefix) + host.removeSuffix("/") }
 
         return idServerUrls
     }
