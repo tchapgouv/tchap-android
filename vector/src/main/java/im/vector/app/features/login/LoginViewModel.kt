@@ -685,14 +685,6 @@ class LoginViewModel @AssistedInject constructor(
     }
 
     private fun handleLogin(action: LoginAction.LoginOrRegister) {
-        currentJob = viewModelScope.launch {
-            val result = tchapGetPlatformTask.execute(Params(action.username))
-            if (result is GetPlatformResult.Success) {
-                val homeServerUrl = applicationContext.resources.getString(R.string.server_url_prefix) + result.platform.hs
-                handleUpdateHomeserver(LoginAction.UpdateHomeServer(homeServerUrl))
-            }
-        }
-
         val safeLoginWizard = loginWizard
 
         if (safeLoginWizard == null) {
