@@ -409,7 +409,8 @@ class LoginViewModel @AssistedInject constructor(
                     setState {
                         copy(
                                 asyncLoginAction = Uninitialized,
-                                asyncRegistration = Uninitialized
+                                asyncRegistration = Uninitialized,
+                                asyncRetrieveHomeServer = Uninitialized
                         )
                     }
                 }
@@ -419,7 +420,8 @@ class LoginViewModel @AssistedInject constructor(
                     copy(
                             asyncResetPassword = Uninitialized,
                             asyncResetMailConfirmed = Uninitialized,
-                            resetPasswordEmail = null
+                            resetPasswordEmail = null,
+                            asyncRetrieveHomeServer = Uninitialized
                     )
                 }
             }
@@ -876,10 +878,17 @@ class LoginViewModel @AssistedInject constructor(
     }
 
     private fun handleRetrieveHomeServer(action: LoginAction.RetrieveHomeServer) {
-        viewModelScope.launch {
-            val result = tchapGetPlatformTask.execute(Params(action.email))
-            if (result is GetPlatformResult.Success) {
-                _viewEvents.post(LoginViewEvents.OnHomeServerRetrieved(result.platform.hs))
+        setState { copy(asyncRetrieveHomeServer = Loading()) }
+        currentJob = viewModelScope.launch {
+            when (val result = tchapGetPlatformTask.execute(Params(action.email))) {
+                is GetPlatformResult.Success -> {
+                    _viewEvents.post(LoginViewEvents.OnHomeServerRetrieved(result.platform.hs))
+                    setState { copy(asyncRetrieveHomeServer = Uninitialized) }
+                }
+                is GetPlatformResult.Failure -> {
+                    _viewEvents.post(LoginViewEvents.Failure(result.throwable))
+                    setState { copy(asyncRetrieveHomeServer = Fail(result.throwable)) }
+                }
             }
         }
     }
