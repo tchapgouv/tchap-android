@@ -108,17 +108,17 @@ class TchapLoginFragment @Inject constructor(
     private fun submit() {
         cleanupUi()
 
-        login = views.tchapLoginEmail.text.toString()
-        password = views.tchapLoginPassword.text.toString()
+        login = views.tchapLoginField.text.toString()
+        password = views.tchapPasswordField.text.toString()
 
         // This can be called by the IME action, so deal with empty cases
         var error = 0
         if (login.isEmpty() || !login.isEmail()) {
-            views.tchapLoginEmail.error = getString(R.string.auth_invalid_email)
+            views.tchapLoginFieldTil.error = getString(R.string.auth_invalid_email)
             error++
         }
         if (password.isEmpty()) {
-            views.tchapLoginPassword.error = getString(R.string.error_empty_field_your_password)
+            views.tchapPasswordFieldTil.error = getString(R.string.error_empty_field_your_password)
             error++
         }
 
@@ -129,8 +129,8 @@ class TchapLoginFragment @Inject constructor(
 
     private fun cleanupUi() {
 //        views.loginSubmit.hideKeyboard()
-        views.tchapLoginEmail.error = null
-        views.tchapLoginPassword.error = null
+        views.tchapLoginFieldTil.error = null
+        views.tchapPasswordFieldTil.error = null
     }
 
     private fun updateHomeServer(platform: Platform) {
@@ -146,7 +146,7 @@ class TchapLoginFragment @Inject constructor(
     }
 
     override fun onError(throwable: Throwable) {
-        views.tchapLoginEmail.error = errorFormatter.toHumanReadable(throwable)
+        views.tchapLoginFieldTil.error = errorFormatter.toHumanReadable(throwable)
     }
 
     override fun updateWithState(state: LoginViewState) {
@@ -158,12 +158,12 @@ class TchapLoginFragment @Inject constructor(
                         error.error.code == MatrixError.M_FORBIDDEN &&
                         error.error.message.isEmpty()) {
                     // Login with email, but email unknown
-                    views.tchapLoginEmail.error = getString(R.string.login_error_forbidden)
+                    views.tchapLoginFieldTil.error = getString(R.string.login_error_forbidden)
                 } else {
                     if (error.isInvalidPassword() && spaceInPassword()) {
-                        views.tchapLoginPassword.error = getString(R.string.auth_invalid_login_param_space_in_password)
+                        views.tchapPasswordFieldTil.error = getString(R.string.auth_invalid_login_param_space_in_password)
                     } else {
-                        views.tchapLoginPassword.error = errorFormatter.toHumanReadable(error)
+                        views.tchapPasswordFieldTil.error = errorFormatter.toHumanReadable(error)
                     }
                 }
             }
@@ -179,5 +179,5 @@ class TchapLoginFragment @Inject constructor(
     /**
      * Detect if password ends or starts with spaces
      */
-    private fun spaceInPassword() = views.tchapLoginPassword.text.toString().let { it.trim() != it }
+    private fun spaceInPassword() = views.tchapPasswordField.text.toString().let { it.trim() != it }
 }

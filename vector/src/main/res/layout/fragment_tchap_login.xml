@@ -23,7 +23,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tchap_login_email_layout"
+        android:id="@+id/tchapLoginFieldTil"
         style="@style/Widget.Vector.TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@id/appBarLayout">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tchap_login_email"
+            android:id="@+id/tchapLoginField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/tchap_connection_email"
@@ -45,7 +45,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tchap_login_password_layout"
+        android:id="@+id/tchapPasswordFieldTil"
         style="@style/Widget.Vector.TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -54,10 +54,10 @@
         android:paddingRight="22dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tchap_login_email_layout">
+        app:layout_constraintTop_toBottomOf="@+id/tchapLoginFieldTil">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tchap_login_password"
+            android:id="@+id/tchapPasswordField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/tchap_connection_password"
@@ -77,6 +77,6 @@
         android:text="@string/auth_forgot_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tchap_login_password_layout" />
+        app:layout_constraintTop_toBottomOf="@id/tchapPasswordFieldTil" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
