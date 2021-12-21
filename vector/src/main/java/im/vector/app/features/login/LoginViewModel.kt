@@ -878,7 +878,12 @@ class LoginViewModel @AssistedInject constructor(
     }
 
     private fun handleRetrieveHomeServer(action: LoginAction.RetrieveHomeServer) {
-        setState { copy(asyncRetrieveHomeServer = Loading()) }
+        setState {
+            copy(
+                    asyncLoginAction = Uninitialized,
+                    asyncRetrieveHomeServer = Loading()
+            )
+        }
         currentJob = viewModelScope.launch {
             when (val result = tchapGetPlatformTask.execute(Params(action.email))) {
                 is GetPlatformResult.Success -> {
