@@ -24,12 +24,7 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.fragmentViewModel
 import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
-import fr.gouv.tchap.features.platform.PlatformAction
-import fr.gouv.tchap.features.platform.PlatformViewEvents
-import fr.gouv.tchap.features.platform.PlatformViewModel
-import fr.gouv.tchap.features.platform.PlatformViewState
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.isEmail
@@ -48,11 +43,8 @@ import javax.inject.Inject
  * - the user is asked for email and password to sign in to a homeserver.
  * - He also can reset his password
  */
-class TchapLoginFragment @Inject constructor(
-        private val platformViewModelFactory: PlatformViewModel.Factory
-) : AbstractLoginFragment<FragmentTchapLoginBinding>(), PlatformViewModel.Factory {
+class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentTchapLoginBinding>() {
 
-    private val viewModel: PlatformViewModel by fragmentViewModel()
     private lateinit var login: String
     private lateinit var password: String
 
@@ -67,21 +59,15 @@ class TchapLoginFragment @Inject constructor(
 
         setupForgottenPasswordButton()
 
-        viewModel.observeViewEvents {
-            when (it) {
-                PlatformViewEvents.Loading    -> showLoading(null)
-                is PlatformViewEvents.Failure -> {
-                    // Dialog is displayed by the Activity
-                }
-                is PlatformViewEvents.Success -> updateHomeServer(it.platform)
-            }.exhaustive
-        }
-
         loginViewModel.observeViewEvents {
             when (it) {
                 LoginViewEvents.OnLoginFlowRetrieved ->
                     loginViewModel.handle(LoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
-                else                                      ->
+                is LoginViewEvents.OnHomeServerRetrieved -> {
+                    val homeServerUrl = resources.getString(R.string.server_url_prefix) + it.hs
+                    loginViewModel.handle(LoginAction.UpdateHomeServer(homeServerUrl))
+                }
+                else                                 ->
                     // This is handled by the Activity
                     Unit
             }.exhaustive
@@ -123,7 +109,7 @@ class TchapLoginFragment @Inject constructor(
         }
 
         if (error == 0) {
-            viewModel.handle(PlatformAction.DiscoverTchapPlatform(login))
+            loginViewModel.handle(LoginAction.RetrieveHomeServer(login))
         }
     }
 
@@ -170,10 +156,6 @@ class TchapLoginFragment @Inject constructor(
             // Success is handled by the LoginActivity
             is Success -> Unit
         }
-    }
-
-    override fun create(initialState: PlatformViewState): PlatformViewModel {
-        return platformViewModelFactory.create(initialState)
     }
 
     /**
