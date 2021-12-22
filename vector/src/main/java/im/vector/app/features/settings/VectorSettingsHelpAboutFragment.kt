@@ -26,6 +26,7 @@ import im.vector.app.core.utils.displayInWebView
 import im.vector.app.core.utils.openAppSettingsPage
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.version.VersionProvider
+import im.vector.app.features.webview.VectorWebViewActivity
 import im.vector.app.openOssLicensesMenuActivity
 import org.matrix.android.sdk.api.Matrix
 import javax.inject.Inject
@@ -87,7 +88,9 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
         // terms & conditions
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.TAC)
+            // Tchap: Term and conditions are detected as permalinks (same structure), so open it in a WebView
+            val intent = VectorWebViewActivity.getIntent(requireActivity(), VectorSettingsUrls.TAC, resources.getString(R.string.settings_app_term_conditions))
+            activity?.startActivity(intent)
             false
         }
 
