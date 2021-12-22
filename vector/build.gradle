@@ -158,18 +158,21 @@ android {
         //  This *must* only be set in trusted environments.
         buildConfigField "Boolean", "handleCallAssertedIdentityEvents", "false"
 
-        // Key Backup is not supported
+        // Tchap: Key Backup is not supported
         buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
 
-        // CrossSigning initialization is disabled
+        // Tchap: CrossSigning initialization is disabled
         def enableCrossSigning = false
         buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
         resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
 
-        // Spaces feature is hidden
+        // Tchap: Spaces feature is hidden
         def showSpaces = false
         buildConfigField "Boolean", "SHOW_SPACES", "${showSpaces}"
         resValue "bool", "show_spaces", "${showSpaces}"
+
+        // Tchap: Hide voice message recorder button
+        buildConfigField "Boolean", "SHOW_VOICE_RECORDER", "false"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

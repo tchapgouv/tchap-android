@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.detail.composer
 
 import com.airbnb.mvrx.MavericksState
+import im.vector.app.BuildConfig
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
@@ -50,7 +51,7 @@ data class TextComposerViewState(
 ) : MavericksState {
 
     val isComposerVisible = canSendMessage && !isVoiceRecording
-    val isVoiceMessageRecorderVisible = canSendMessage && !isSendButtonVisible
+    val isVoiceMessageRecorderVisible = canSendMessage && !isSendButtonVisible && BuildConfig.SHOW_VOICE_RECORDER
 
     constructor(args: RoomDetailArgs) : this(roomId = args.roomId)
 }
