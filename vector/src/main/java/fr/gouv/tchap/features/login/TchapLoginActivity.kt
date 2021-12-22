@@ -55,7 +55,6 @@ import im.vector.app.features.login.isSupported
 import im.vector.app.features.pin.UnlockedActivity
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
-import javax.inject.Inject
 
 /**
  * The LoginActivity manages the fragment navigation and also display the loading View
@@ -64,8 +63,6 @@ import javax.inject.Inject
 open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarConfigurable, UnlockedActivity {
 
     private val loginViewModel: LoginViewModel by viewModel()
-
-    @Inject lateinit var loginViewModelFactory: LoginViewModel.Factory
 
     private val enterAnim = R.anim.enter_fade_in
     private val exitAnim = R.anim.exit_fade_out

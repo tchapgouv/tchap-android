@@ -75,4 +75,6 @@ sealed class LoginAction : VectorViewModelAction {
     data class UserAcceptCertificate(val fingerprint: Fingerprint) : LoginAction()
 
     data class CheckPasswordPolicy(val newPassword: String) : LoginAction()
+
+    data class RetrieveHomeServer(val email: String) : LoginAction()
 }

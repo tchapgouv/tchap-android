@@ -20,7 +20,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.multibindings.IntoMap
-import fr.gouv.tchap.features.platform.PlatformViewModel
 import im.vector.app.features.auth.ReAuthViewModel
 import im.vector.app.features.call.VectorCallViewModel
 import im.vector.app.features.call.conference.JitsiCallViewModel
@@ -553,9 +552,4 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(CreatePollViewModel::class)
     fun createPollViewModelFactory(factory: CreatePollViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
-
-    @Binds
-    @IntoMap
-    @MavericksViewModelKey(PlatformViewModel::class)
-    fun createPlatformViewModelFactory(factory: PlatformViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }
