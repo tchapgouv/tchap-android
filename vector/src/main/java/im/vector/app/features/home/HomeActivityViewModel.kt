@@ -43,7 +43,6 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.pushrules.RuleIds
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
@@ -133,7 +132,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                             }
                         }
                         is SyncStatusService.Status.Idle        -> {
-                            updateIdentityServer(session)
+                            updateIdentityServer()
                             if (checkBootstrap) {
                                 checkBootstrap = false
                                 maybeBootstrapCrossSigningAfterInitialSync()
@@ -247,7 +246,11 @@ class HomeActivityViewModel @AssistedInject constructor(
         }
     }
 
-    private fun updateIdentityServer(session: Session) {
+    /**
+     * Update the identity server url.
+     */
+    fun updateIdentityServer() {
+        val session = activeSessionHolder.getSafeActiveSession() ?: return
         viewModelScope.launch {
             with(session.identityService()) {
                 if (getCurrentIdentityServerUrl() == null) {

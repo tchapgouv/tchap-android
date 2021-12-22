@@ -28,10 +28,14 @@ private const val CURRENT_DISCLAIMER_VALUE = 2
 
 const val SHARED_PREF_KEY = "LAST_DISCLAIMER_VERSION_VALUE"
 
+fun shouldShowDisclaimerDialog(activity: Activity): Boolean {
+    val sharedPrefs = DefaultSharedPreferences.getInstance(activity)
+    return sharedPrefs.getInt(SHARED_PREF_KEY, 0) < CURRENT_DISCLAIMER_VALUE
+}
+
 fun showDisclaimerDialog(activity: Activity) {
     val sharedPrefs = DefaultSharedPreferences.getInstance(activity)
-
-    if (sharedPrefs.getInt(SHARED_PREF_KEY, 0) < CURRENT_DISCLAIMER_VALUE) {
+    if (shouldShowDisclaimerDialog(activity)) {
         sharedPrefs.edit {
             putInt(SHARED_PREF_KEY, CURRENT_DISCLAIMER_VALUE)
         }
