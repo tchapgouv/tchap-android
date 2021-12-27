@@ -269,6 +269,10 @@ class HomeActivityViewModel @AssistedInject constructor(
             HomeActivityViewActions.PushPromptHasBeenReviewed -> {
                 vectorPreferences.setDidAskUserToEnableSessionPush()
             }
+            HomeActivityViewActions.DisclamerDialogShown -> {
+                val session = activeSessionHolder.getSafeActiveSession() ?: return
+                updateIdentityServer(session)
+            }
         }.exhaustive
     }
 }

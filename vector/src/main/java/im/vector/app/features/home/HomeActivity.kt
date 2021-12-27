@@ -465,6 +465,7 @@ class HomeActivity :
                     .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile(this) }
                     .show()
         } else {
+            homeActivityViewModel.handle(HomeActivityViewActions.DisclamerDialogShown)
             showDisclaimerDialog(this)
         }
 
