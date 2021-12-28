@@ -18,6 +18,7 @@ package fr.gouv.tchap.features.login
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
@@ -42,6 +43,7 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.login.LoginAction
+import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginFragment
 import im.vector.app.features.login.LoginResetPasswordFragment
@@ -71,7 +73,7 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
     private val popExitAnim = R.anim.exit_fade_out
 
     private val topFragment: Fragment?
-        get() = supportFragmentManager.findFragmentById(R.id.loginFragmentContainer)
+        get() = supportFragmentManager.findFragmentById(views.loginFragmentContainer.id)
 
     private val commonOption: (FragmentTransaction) -> Unit = { ft ->
         // Find the loginLogo on the current Fragment, this should not return null
@@ -105,7 +107,7 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
     }
 
     protected open fun addFirstFragment() {
-        addFragment(R.id.loginFragmentContainer, TchapWelcomeFragment::class.java)
+        addFragment(views.loginFragmentContainer, TchapWelcomeFragment::class.java)
     }
 
     private fun handleLoginViewEvents(loginViewEvents: LoginViewEvents) {
@@ -123,7 +125,7 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
                         // First ask for login and password
                         // I add a tag to indicate that this fragment is a registration stage.
                         // This way it will be automatically popped in when starting the next registration stage
-                        addFragmentToBackstack(R.id.loginFragmentContainer,
+                        addFragmentToBackstack(views.loginFragmentContainer,
                                 LoginFragment::class.java,
                                 tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                                 option = commonOption
@@ -142,18 +144,18 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
             is LoginViewEvents.OnSignModeSelected                         -> onSignModeSelected(loginViewEvents)
             is LoginViewEvents.OnLoginFlowRetrieved                       -> Unit // Handled by the Tchap login fragment
             is LoginViewEvents.OnForgetPasswordClicked                    ->
-                addFragmentToBackstack(R.id.loginFragmentContainer,
+                addFragmentToBackstack(views.loginFragmentContainer,
                         LoginResetPasswordFragment::class.java,
                         option = commonOption)
             is LoginViewEvents.OnResetPasswordSendThreePidDone            -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
-                addFragmentToBackstack(R.id.loginFragmentContainer,
+                addFragmentToBackstack(views.loginFragmentContainer,
                         LoginResetPasswordMailConfirmationFragment::class.java,
                         option = commonOption)
             }
             is LoginViewEvents.OnResetPasswordMailConfirmationSuccess     -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
-                addFragmentToBackstack(R.id.loginFragmentContainer,
+                addFragmentToBackstack(views.loginFragmentContainer,
                         LoginResetPasswordSuccessFragment::class.java,
                         option = commonOption)
             }
@@ -162,7 +164,7 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
             }
             is LoginViewEvents.OnSendEmailSuccess                         ->
-                addFragmentToBackstack(R.id.loginFragmentContainer,
+                addFragmentToBackstack(views.loginFragmentContainer,
                         TchapRegisterWaitForEmailFragment::class.java,
                         TchapRegisterWaitForEmailFragmentArgument(loginViewEvents.email),
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
@@ -196,11 +198,11 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
         // state.signMode could not be ready yet. So use value from the ViewEvent
         when (loginViewEvents.signMode) {
             SignMode.Unknown            -> error("Sign mode has to be set before calling this method")
-            SignMode.SignUp             -> addFragmentToBackstack(R.id.loginFragmentContainer,
+            SignMode.SignUp             -> addFragmentToBackstack(views.loginFragmentContainer,
                     TchapRegisterFragment::class.java,
                     tag = FRAGMENT_REGISTER_TAG,
                     option = commonOption)
-            SignMode.SignIn             -> addFragmentToBackstack(R.id.loginFragmentContainer,
+            SignMode.SignIn             -> addFragmentToBackstack(views.loginFragmentContainer,
                     TchapLoginFragment::class.java,
                     tag = FRAGMENT_LOGIN_TAG,
                     option = commonOption)
@@ -260,6 +262,12 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
         fun newIntent(context: Context, loginConfig: LoginConfig?): Intent {
             return Intent(context, TchapLoginActivity::class.java).apply {
                 putExtra(EXTRA_CONFIG, loginConfig)
+            }
+        }
+
+        fun redirectIntent(context: Context, data: Uri?): Intent {
+            return Intent(context, LoginActivity::class.java).apply {
+                setData(data)
             }
         }
     }
