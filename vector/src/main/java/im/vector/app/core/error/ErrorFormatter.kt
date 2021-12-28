@@ -111,7 +111,7 @@ class DefaultErrorFormatter @Inject constructor(
                         stringProvider.getString(R.string.tchap_register_pwd_no_uppercase)
                     }
                     throwable.error.code == MatrixError.M_PASSWORD_NO_LOWERCASE -> {
-                        stringProvider.getString(R.string.tchap_register_pwd_no_uppercase)
+                        stringProvider.getString(R.string.tchap_register_pwd_no_lowercase)
                     }
                     throwable.error.code == MatrixError.M_PASSWORD_NO_SYMBOL -> {
                         stringProvider.getString(R.string.tchap_register_pwd_no_symbol)
