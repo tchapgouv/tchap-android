@@ -88,7 +88,8 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
         // terms & conditions
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            // Tchap: the Term And Conditions url is detected as a permalink (same prefix), which make the application fail to open it from ChromeCustomTab, so we open it here directly in a WebView
+            // Tchap: the Term And Conditions url is detected as a permalink (same prefix), which make the application fail to open it from ChromeCustomTab,
+            // so we open it here directly in a WebView
             val intent = VectorWebViewActivity.getIntent(requireActivity(), VectorSettingsUrls.TAC, resources.getString(R.string.settings_app_term_conditions))
             activity?.startActivity(intent)
             false
