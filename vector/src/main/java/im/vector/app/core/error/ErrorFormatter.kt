@@ -101,6 +101,21 @@ class DefaultErrorFormatter @Inject constructor(
                     throwable.error.code == MatrixError.M_THREEPID_AUTH_FAILED    -> {
                         stringProvider.getString(R.string.error_threepid_auth_failed)
                     }
+                    throwable.error.code == MatrixError.M_PASSWORD_TOO_SHORT -> {
+                        stringProvider.getString(R.string.tchap_register_pwd_too_short)
+                    }
+                    throwable.error.code == MatrixError.M_PASSWORD_NO_UPPERCASE -> {
+                        stringProvider.getString(R.string.tchap_register_pwd_no_uppercase)
+                    }
+                    throwable.error.code == MatrixError.M_PASSWORD_NO_DIGIT -> {
+                        stringProvider.getString(R.string.tchap_register_pwd_no_digit)
+                    }
+                    throwable.error.code == MatrixError.M_PASSWORD_NO_LOWERCASE -> {
+                        stringProvider.getString(R.string.tchap_register_pwd_no_lowercase)
+                    }
+                    throwable.error.code == MatrixError.M_PASSWORD_NO_SYMBOL -> {
+                        stringProvider.getString(R.string.tchap_register_pwd_no_symbol)
+                    }
                     else                                                          -> {
                         throwable.error.message.takeIf { it.isNotEmpty() }
                                 ?: throwable.error.code.takeIf { it.isNotEmpty() }
