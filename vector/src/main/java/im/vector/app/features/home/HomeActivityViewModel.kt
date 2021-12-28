@@ -43,7 +43,6 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.pushrules.RuleIds
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
@@ -133,7 +132,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                             }
                         }
                         is SyncStatusService.Status.Idle        -> {
-                            updateIdentityServer(session)
+                            updateIdentityServer()
                             if (checkBootstrap) {
                                 checkBootstrap = false
                                 maybeBootstrapCrossSigningAfterInitialSync()
@@ -247,8 +246,9 @@ class HomeActivityViewModel @AssistedInject constructor(
         }
     }
 
-    private fun updateIdentityServer(session: Session) {
-        viewModelScope.launch {
+    private fun updateIdentityServer() {
+        val session = activeSessionHolder.getSafeActiveSession() ?: return
+        session.coroutineScope.launch {
             with(session.identityService()) {
                 if (getCurrentIdentityServerUrl() == null) {
                     setNewIdentityServer(session.sessionParams.homeServerUrl)
@@ -268,6 +268,10 @@ class HomeActivityViewModel @AssistedInject constructor(
         when (action) {
             HomeActivityViewActions.PushPromptHasBeenReviewed -> {
                 vectorPreferences.setDidAskUserToEnableSessionPush()
+            }
+            HomeActivityViewActions.DisclaimerDialogShown     -> {
+                // Tchap: in case of migration, there is no initial sync, so force the update of the identity server url
+                updateIdentityServer()
             }
         }.exhaustive
     }

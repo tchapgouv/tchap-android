@@ -44,6 +44,7 @@ import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.databinding.ActivityHomeBinding
+import im.vector.app.features.disclaimer.shouldShowDisclaimerDialog
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.navigation.Navigator
@@ -467,8 +468,9 @@ class HomeActivity :
                     .setPositiveButton(R.string.yes) { _, _ -> bugReporter.openBugReportScreen(this) }
                     .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile(this) }
                     .show()
-        } else {
+        } else if (shouldShowDisclaimerDialog(this)) {
             showDisclaimerDialog(this)
+            homeActivityViewModel.handle(HomeActivityViewActions.DisclaimerDialogShown)
         }
 
         // Force remote backup state update to update the banner if needed
