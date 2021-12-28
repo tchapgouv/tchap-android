@@ -49,6 +49,7 @@ import androidx.core.text.toSpannable
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
+import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
@@ -68,6 +69,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.vanniktech.emoji.EmojiPopup
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
@@ -478,7 +480,7 @@ class RoomDetailFragment @Inject constructor(
         } else {
             views.composerLayout.views.sendButton.isInvisible = true
             views.voiceMessageRecorderView.alpha = 0f
-            views.voiceMessageRecorderView.isVisible = true
+            views.voiceMessageRecorderView.isVisible = BuildConfig.SHOW_VOICE_RECORDER
             views.voiceMessageRecorderView.animate().alpha(1f).setDuration(150).start()
         }
     }
@@ -1404,7 +1406,12 @@ class RoomDetailFragment @Inject constructor(
             if (mainState.tombstoneEvent == null) {
                 views.composerLayout.isInvisible = !textComposerState.isComposerVisible
                 views.voiceMessageRecorderView.isVisible = textComposerState.isVoiceMessageRecorderVisible
-                views.composerLayout.views.sendButton.isInvisible = !textComposerState.isSendButtonVisible
+                if (BuildConfig.SHOW_VOICE_RECORDER) {
+                    views.composerLayout.views.sendButton.isInvisible = !textComposerState.isSendButtonVisible
+                } else {
+                    // Tchap: set visibility to gone if there is no voice recorder button
+                    views.composerLayout.views.sendButton.isGone = !textComposerState.isSendButtonVisible
+                }
                 views.composerLayout.setRoomEncrypted(summary.isEncrypted)
                 // views.composerLayout.alwaysShowSendButton = false
                 if (textComposerState.canSendMessage) {
