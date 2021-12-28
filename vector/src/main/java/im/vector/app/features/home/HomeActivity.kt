@@ -43,7 +43,6 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
-import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
@@ -69,6 +68,7 @@ import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
 import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.app.features.webview.VectorWebViewActivity
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.flow.launchIn
@@ -220,7 +220,9 @@ class HomeActivity :
                         }
                         is HomeActivitySharedAction.InviteByEmail      -> Unit // no-op
                         HomeActivitySharedAction.OpenTermAndConditions -> {
-                            openUrlInChromeCustomTab(this, null, VectorSettingsUrls.TAC)
+                            // Tchap: the Term And Conditions url is detected as a permalink (same prefix), which make the application fail to open it from ChromeCustomTab, so we open it here directly in a WebView
+                            val intent = VectorWebViewActivity.getIntent(this, VectorSettingsUrls.TAC, getString(R.string.settings_app_term_conditions))
+                            startActivity(intent)
                         }
                         HomeActivitySharedAction.OpenBugReport         -> {
                             views.drawerLayout.closeDrawer(GravityCompat.START)
