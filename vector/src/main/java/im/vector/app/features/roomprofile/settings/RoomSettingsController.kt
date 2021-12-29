@@ -17,7 +17,6 @@
 package im.vector.app.features.roomprofile.settings
 
 import com.airbnb.epoxy.TypedEpoxyController
-import com.airbnb.mvrx.Success
 import fr.gouv.tchap.core.utils.RoomUtils
 import fr.gouv.tchap.core.utils.TchapRoomType
 import im.vector.app.R
@@ -60,12 +59,14 @@ class RoomSettingsController @Inject constructor(
         fun onToggleGuestAccess()
         fun onRemoveFromRoomsDirectory()
         fun onAccessByLinkClicked()
+        fun onAllowExternalUsersToJoin()
     }
 
     var callback: Callback? = null
 
     override fun buildModels(data: RoomSettingsViewState?) {
         val roomSummary = data?.roomSummary?.invoke() ?: return
+        val roomType = RoomUtils.getRoomType(roomSummary)
         val host = this
 
         formEditableAvatarItem {
@@ -152,14 +153,12 @@ class RoomSettingsController @Inject constructor(
                 }
         )
 
-        RoomUtils.getRoomType(roomSummary).let {
-            if (data.actionPermissions.canRemoveFromRoomsDirectory &&
-                    (it == TchapRoomType.FORUM ||
-                            (it == TchapRoomType.UNKNOWN &&
-                                    data.roomDirectoryVisibility is Success &&
-                                    data.roomDirectoryVisibility() == RoomDirectoryVisibility.PUBLIC))) {
-                buildRemoveFromRoomsDirectory()
-            }
+        buildRoomAccessRules(data, roomType)
+
+        if (data.actionPermissions.canRemoveFromRoomsDirectory &&
+                (roomType == TchapRoomType.FORUM ||
+                        (roomType == TchapRoomType.UNKNOWN && data.roomDirectoryVisibility() == RoomDirectoryVisibility.PUBLIC))) {
+            buildRemoveFromRoomsDirectory()
         }
 
         val isPublic = (data.newRoomJoinRules.newJoinRules ?: data.currentRoomJoinRules) == RoomJoinRules.PUBLIC
@@ -190,5 +189,29 @@ class RoomSettingsController @Inject constructor(
                 editable = false,
                 action = { host.callback?.onRemoveFromRoomsDirectory() }
         )
+    }
+
+    private fun buildRoomAccessRules(data: RoomSettingsViewState, roomType: TchapRoomType) {
+        val host = this
+        if (data.actionPermissions.canChangeRoomAccessRules && roomType == TchapRoomType.PRIVATE) {
+            buildProfileAction(
+                    id = "allowExternalUsers",
+                    title = stringProvider.getString(R.string.tchap_room_settings_allow_external_users_to_join),
+                    divider = true,
+                    editable = false,
+                    action = { host.callback?.onAllowExternalUsersToJoin() }
+            )
+        } else {
+            buildProfileAction(
+                    id = "roomAccessRules",
+                    title = stringProvider.getString(R.string.tchap_room_settings_room_access_title),
+                    subtitle = stringProvider.getString(
+                            if (roomType == TchapRoomType.EXTERNAL) R.string.tchap_room_settings_room_access_unrestricted
+                            else R.string.tchap_room_settings_room_access_restricted
+                    ),
+                    divider = true,
+                    editable = false
+            )
+        }
     }
 }

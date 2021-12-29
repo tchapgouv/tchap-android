@@ -24,6 +24,9 @@ import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import fr.gouv.tchap.android.sdk.api.session.events.model.TchapEventType
+import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRules
+import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRulesContent
 import fr.gouv.tchap.core.utils.RoomUtils
 import fr.gouv.tchap.core.utils.TchapRoomType
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
@@ -31,6 +34,7 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
+import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
@@ -40,6 +44,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
@@ -184,7 +189,8 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             canRemoveFromRoomsDirectory = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_JOIN_RULES) &&
                                     powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_CANONICAL_ALIAS) &&
                                     powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION) &&
-                                    powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_HISTORY_VISIBILITY)
+                                    powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_HISTORY_VISIBILITY),
+                            canChangeRoomAccessRules = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, TchapEventType.STATE_ROOM_ACCESS_RULES)
                     )
                     setState {
                         copy(actionPermissions = permissions)
@@ -247,6 +253,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
             is RoomSettingsAction.SetRoomJoinRule          -> handleSetRoomJoinRule(action)
             is RoomSettingsAction.SetRoomGuestAccess       -> handleSetGuestAccess(action)
             RoomSettingsAction.RemoveFromRoomsDirectory    -> handleRemoveFromRoomsDirectory()
+            RoomSettingsAction.AllowExternalUsersToJoin    -> handleAllowExternalUsersToJoin()
             is RoomSettingsAction.Save                     -> saveSettings()
             is RoomSettingsAction.Cancel                   -> cancel()
         }.exhaustive
@@ -285,7 +292,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
      * The history visibility value is replaced with invited
      */
     private fun handleRemoveFromRoomsDirectory() {
-        viewModelScope.launch {
+        session.coroutineScope.launch {
             updateLoadingState(isLoading = true)
             try {
                 // Update first the joinrule to INVITE.
@@ -300,6 +307,23 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
             }
             // Update history visibility.
             tryOrNull { room.updateHistoryReadability(RoomHistoryVisibility.INVITED) }
+            updateLoadingState(isLoading = false)
+        }
+    }
+
+    private fun handleAllowExternalUsersToJoin() {
+        session.coroutineScope.launch {
+            updateLoadingState(isLoading = true)
+            try {
+                room.sendStateEvent(
+                        eventType = TchapEventType.STATE_ROOM_ACCESS_RULES,
+                        stateKey = null,
+                        body = RoomAccessRulesContent(RoomAccessRules.UNRESTRICTED.value).toContent()
+                )
+            } catch (failure: Throwable) {
+                updateLoadingState(isLoading = false)
+                _viewEvents.post(RoomSettingsViewEvents.Failure(failure))
+            }
             updateLoadingState(isLoading = false)
         }
     }

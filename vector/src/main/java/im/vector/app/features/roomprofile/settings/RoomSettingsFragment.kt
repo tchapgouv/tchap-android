@@ -235,6 +235,17 @@ class RoomSettingsFragment @Inject constructor(
         galleryOrCameraDialogHelper.show()
     }
 
+    override fun onAllowExternalUsersToJoin() {
+        MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.dialog_title_warning)
+                .setMessage(R.string.tchap_room_settings_allow_external_users_to_join_prompt_msg)
+                .setPositiveButton(R.string.yes) { _, _ ->
+                    viewModel.handle(RoomSettingsAction.AllowExternalUsersToJoin)
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+    }
+
     private var ignoreChanges = false
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
