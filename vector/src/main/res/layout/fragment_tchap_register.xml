@@ -50,7 +50,7 @@
         android:paddingRight="22dp"
         android:text="@string/tchap_connection_email_help"
         android:textStyle="italic"
-        app:layout_constraintTop_toBottomOf="@+id/tchap_register_email_layout" />
+        app:layout_constraintTop_toBottomOf="@id/tchap_register_email_layout" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tchap_register_password_layout"
@@ -62,7 +62,7 @@
         android:paddingRight="22dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tchap_register_email_help">
+        app:layout_constraintTop_toBottomOf="@id/tchap_register_email_help">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tchap_register_password"
@@ -87,7 +87,7 @@
         android:paddingRight="22dp"
         android:text="@string/tchap_connection_password_help"
         android:textStyle="italic"
-        app:layout_constraintTop_toBottomOf="@+id/tchap_register_password_layout" />
+        app:layout_constraintTop_toBottomOf="@id/tchap_register_password_layout" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tchap_register_password_confirm_layout"
@@ -99,7 +99,7 @@
         android:paddingRight="22dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tchap_register_password_help">
+        app:layout_constraintTop_toBottomOf="@id/tchap_register_password_help">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tchap_register_password_confirm"

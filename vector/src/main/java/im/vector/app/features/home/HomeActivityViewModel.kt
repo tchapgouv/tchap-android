@@ -22,11 +22,13 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.BuildConfig
+import im.vector.app.config.analyticsConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.analytics.store.AnalyticsStore
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
@@ -60,6 +62,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         @Assisted initialState: HomeActivityViewState,
         private val activeSessionHolder: ActiveSessionHolder,
         private val reAuthHelper: ReAuthHelper,
+        private val analyticsStore: AnalyticsStore,
         private val vectorPreferences: VectorPreferences
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
@@ -70,14 +73,33 @@ class HomeActivityViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<HomeActivityViewModel, HomeActivityViewState> by hiltMavericksViewModelFactory()
 
+    private var isInitialized = false
     private var checkBootstrap = false
     private var onceTrusted = false
 
-    init {
+    private fun initialize() {
+        if (isInitialized) return
+        isInitialized = true
         cleanupFiles()
         observeInitialSync()
         checkSessionPushIsOn()
         observeCrossSigningReset()
+        // Disable Analytics opt-in automatic display
+        // Waiting for translation and for analytic events to be actually sent
+        // observeAnalytics()
+    }
+
+    @Suppress("unused")
+    private fun observeAnalytics() {
+        if (analyticsConfig.isEnabled) {
+            analyticsStore.didAskUserConsentFlow
+                    .onEach { didAskUser ->
+                        if (!didAskUser) {
+                            _viewEvents.post(HomeActivityViewEvents.ShowAnalyticsOptIn)
+                        }
+                    }
+                    .launchIn(viewModelScope)
+        }
     }
 
     private fun cleanupFiles() {
@@ -268,6 +290,9 @@ class HomeActivityViewModel @AssistedInject constructor(
         when (action) {
             HomeActivityViewActions.PushPromptHasBeenReviewed -> {
                 vectorPreferences.setDidAskUserToEnableSessionPush()
+            }
+            HomeActivityViewActions.ViewStarted               -> {
+                initialize()
             }
             HomeActivityViewActions.DisclaimerDialogShown     -> {
                 // Tchap: in case of migration, there is no initial sync, so force the update of the identity server url

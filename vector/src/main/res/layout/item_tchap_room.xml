@@ -69,7 +69,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/ic_tchap_pin_room"
         android:scaleType="center"
-        app:layout_constraintStart_toEndOf="@+id/roomUnreadIndicator"
+        app:layout_constraintStart_toEndOf="@id/roomUnreadIndicator"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription"
         tools:visibility="visible" />
@@ -113,11 +113,11 @@
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="8dp"
         app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toStartOf="@+id/roomDomainNameView"
+        app:layout_constraintEnd_toStartOf="@id/roomDomainNameView"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/roomAvatarContainer"
-        app:layout_constraintTop_toTopOf="@+id/roomAvatarContainer">
+        app:layout_constraintTop_toTopOf="@id/roomAvatarContainer">
 
 <!--        todo fix color -->
         <TextView
@@ -133,7 +133,7 @@
             android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toStartOf="@+id/roomDisabledNotificationsBadge"
+            app:layout_constraintEnd_toStartOf="@id/roomDisabledNotificationsBadge"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@sample/users.json/data/displayName" />
@@ -145,9 +145,9 @@
             android:layout_marginStart="4dp"
             android:contentDescription="@string/alert_push_are_disabled_title"
             android:src="@drawable/ic_disabled_notifications"
-            app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
+            app:layout_constraintBottom_toBottomOf="@id/roomNameView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/roomNameView"
+            app:layout_constraintStart_toEndOf="@id/roomNameView"
             app:tint="?vctr_content_primary"
             tools:ignore="MissingPrefix"
             tools:visibility="visible" />
@@ -160,8 +160,8 @@
             android:contentDescription="@string/a11y_unsent_draft"
             android:src="@drawable/ic_edit"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
-            app:layout_constraintStart_toEndOf="@+id/roomDisabledNotificationsBadge"
+            app:layout_constraintBottom_toBottomOf="@id/roomNameView"
+            app:layout_constraintStart_toEndOf="@id/roomDisabledNotificationsBadge"
             app:tint="?vctr_content_primary"
             tools:ignore="MissingPrefix" />
 
@@ -178,9 +178,9 @@
         android:gravity="end"
         android:includeFontPadding="false"
         android:textColor="?vctr_content_primary"
-        app:layout_constraintBottom_toBottomOf="@+id/roomNameContainer"
+        app:layout_constraintBottom_toBottomOf="@id/roomNameContainer"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/roomAvatarContainer"
+        app:layout_constraintTop_toTopOf="@id/roomAvatarContainer"
         tools:text="@tools:sample/lorem" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -188,9 +188,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/roomLastEventTimeView"
+        app:layout_constraintBottom_toTopOf="@id/roomLastEventTimeView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roomDomainNameView">
+        app:layout_constraintTop_toBottomOf="@id/roomDomainNameView">
 
         <TextView
             android:id="@+id/roomUnreadCounterBadgeView"
@@ -222,7 +222,7 @@
             android:text="@string/tchap_exclamation_mark"
             android:textColor="@android:color/white"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/roomUnreadCounterBadgeView"
+            app:layout_constraintEnd_toStartOf="@id/roomUnreadCounterBadgeView"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -234,7 +234,7 @@
         android:layout_marginEnd="12dp"
         android:gravity="end"
         android:includeFontPadding="false"
-        app:layout_constraintBottom_toBottomOf="@+id/roomAvatarContainer"
+        app:layout_constraintBottom_toBottomOf="@id/roomAvatarContainer"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="@tools:sample/date/hhmm" />
 
@@ -249,9 +249,9 @@
         android:maxLines="2"
         android:minLines="2"
         android:textColor="?vctr_content_secondary"
-        app:layout_constraintBottom_toBottomOf="@+id/roomAvatarContainer"
-        app:layout_constraintEnd_toStartOf="@+id/roomLastEventTimeView"
-        app:layout_constraintStart_toStartOf="@+id/roomNameContainer"
+        app:layout_constraintBottom_toBottomOf="@id/roomAvatarContainer"
+        app:layout_constraintEnd_toStartOf="@id/roomLastEventTimeView"
+        app:layout_constraintStart_toStartOf="@id/roomNameContainer"
         tools:text="@sample/messages.json/data/message" />
 
     <TextView
@@ -263,9 +263,9 @@
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="2"
-        app:layout_constraintEnd_toStartOf="@+id/roomLastEventTimeView"
-        app:layout_constraintStart_toStartOf="@+id/roomNameContainer"
-        app:layout_constraintTop_toBottomOf="@+id/roomNameContainer"
+        app:layout_constraintEnd_toStartOf="@id/roomLastEventTimeView"
+        app:layout_constraintStart_toStartOf="@id/roomNameContainer"
+        app:layout_constraintTop_toBottomOf="@id/roomNameContainer"
         tools:text="Alice is typing…" />
 
     <!-- Margin bottom does not work, so I use space -->
@@ -274,7 +274,7 @@
         android:layout_width="0dp"
         android:layout_height="7dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roomLastEventView"
+        app:layout_constraintTop_toBottomOf="@id/roomLastEventView"
         tools:layout_marginStart="120dp" />
 
     <View
@@ -284,6 +284,6 @@
         android:background="?vctr_list_separator"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/roomLastEventView" />
+        app:layout_constraintStart_toStartOf="@id/roomLastEventView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

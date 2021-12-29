@@ -64,10 +64,6 @@ class RoomSettingsController @Inject constructor(
 
     var callback: Callback? = null
 
-    init {
-        setData(null)
-    }
-
     override fun buildModels(data: RoomSettingsViewState?) {
         val roomSummary = data?.roomSummary?.invoke() ?: return
         val host = this

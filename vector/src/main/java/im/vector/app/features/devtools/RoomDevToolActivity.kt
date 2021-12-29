@@ -18,7 +18,6 @@ package im.vector.app.features.devtools
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
@@ -37,7 +36,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.replaceFragment
-import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.createJSonViewerStyleProvider
@@ -93,7 +91,7 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
                     val classJava = RoomDevToolFragment::class.java
                     val tag = classJava.name
                     if (supportFragmentManager.findFragmentByTag(tag) == null) {
-                        replaceFragment(R.id.container, RoomDevToolFragment::class.java)
+                        replaceFragment(views.container, RoomDevToolFragment::class.java)
                     } else {
                         supportFragmentManager.popBackStack()
                     }
@@ -109,15 +107,15 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
                 }
                 RoomDevToolViewState.Mode.StateEventList,
                 RoomDevToolViewState.Mode.StateEventListByType -> {
-                    val frag = createFragment(RoomDevToolStateEventListFragment::class.java, Bundle().toMvRxBundle())
+                    val frag = createFragment(RoomDevToolStateEventListFragment::class.java)
                     navigateTo(frag)
                 }
                 RoomDevToolViewState.Mode.EditEventContent     -> {
-                    val frag = createFragment(RoomDevToolEditFragment::class.java, Bundle().toMvRxBundle())
+                    val frag = createFragment(RoomDevToolEditFragment::class.java)
                     navigateTo(frag)
                 }
                 is RoomDevToolViewState.Mode.SendEventForm     -> {
-                    val frag = createFragment(RoomDevToolSendFormFragment::class.java, Bundle().toMvRxBundle())
+                    val frag = createFragment(RoomDevToolSendFormFragment::class.java)
                     navigateTo(frag)
                 }
             }
@@ -157,14 +155,14 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
         if (supportFragmentManager.findFragmentByTag(tag) == null) {
             supportFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
-                    .replace(R.id.container, fragment, tag)
+                    .replace(views.container.id, fragment, tag)
                     .addToBackStack(tag)
                     .commit()
         } else {
             if (!supportFragmentManager.popBackStackImmediate(tag, 0)) {
                 supportFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
-                        .replace(R.id.container, fragment, tag)
+                        .replace(views.container.id, fragment, tag)
                         .addToBackStack(tag)
                         .commit()
             }

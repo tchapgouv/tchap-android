@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/invite_by_id_text_view">
+        app:layout_constraintTop_toBottomOf="@id/invite_by_id_text_view">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/invite_by_id_edit_text"
