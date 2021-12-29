@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/preference_help">
+    <!-- TODO: Tchap - Set visible and redirect to the Tchap Landing Page -->
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:title="@string/preference_help"
+        app:isPreferenceVisible="@bool/false_tchap_hidden">
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_HELP_PREFERENCE_KEY"
