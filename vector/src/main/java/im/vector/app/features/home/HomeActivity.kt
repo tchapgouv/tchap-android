@@ -44,10 +44,8 @@ import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.databinding.ActivityHomeBinding
-import im.vector.app.features.disclaimer.shouldShowDisclaimerDialog
-import im.vector.app.features.MainActivity
-import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
+import im.vector.app.features.disclaimer.shouldShowDisclaimerDialog
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.navigation.Navigator
@@ -103,6 +101,7 @@ class HomeActivity :
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
+
     @Suppress("UNUSED")
     private val analyticsAccountDataViewModel: AnalyticsAccountDataViewModel by viewModel()
 
