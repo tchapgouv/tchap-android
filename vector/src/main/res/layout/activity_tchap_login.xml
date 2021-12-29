@@ -1,5 +1,4 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,13 +7,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-<!--    android:theme="@style/Vector.ActionBarTheme.TchapLogin"-->
+    <!--    android:theme="@style/Vector.ActionBarTheme.TchapLogin"-->
 
     <!-- the main body is defined in a scroll view to avoid split items -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar">
+        android:layout_below="@id/toolbar">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,7 +26,7 @@
 
             <include layout="@layout/fragment_tchap_forgotten_password" />
 
-<!--            <include layout="@layout/fragment_tchap_message_button" />-->
+            <!--            <include layout="@layout/fragment_tchap_message_button" />-->
 
         </LinearLayout>
 
@@ -39,7 +38,7 @@
         layout="@layout/fragment_tchap_register_wait_for_email"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar" />
+        android:layout_below="@id/toolbar" />
 
     <!-- flow mask view: to be displayed above the entire screen -->
     <RelativeLayout

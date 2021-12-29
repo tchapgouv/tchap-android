@@ -43,7 +43,7 @@
         android:paddingRight="22dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_tchap_register_wait_for_email_title"
+        app:layout_constraintTop_toBottomOf="@id/fragment_tchap_register_wait_for_email_title"
         tools:text="jerome.martin@test.gouv.fr" />
 
     <TextView
@@ -60,7 +60,7 @@
         android:textColor="?colorPrimaryVariant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_tchap_register_wait_for_email_email" />
+        app:layout_constraintTop_toBottomOf="@id/fragment_tchap_register_wait_for_email_email" />
 
     <Button
         android:id="@+id/fragment_tchap_register_wait_for_email_login_button"

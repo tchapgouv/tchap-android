@@ -57,7 +57,7 @@
         android:text="@string/app_name"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/itemPublicRoomName"
+        app:layout_constraintBottom_toBottomOf="@id/itemPublicRoomName"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="Modernisation" />
 
