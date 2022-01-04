@@ -116,6 +116,10 @@ class DefaultErrorFormatter @Inject constructor(
                     throwable.error.code == MatrixError.M_PASSWORD_NO_SYMBOL -> {
                         stringProvider.getString(R.string.tchap_register_pwd_no_symbol)
                     }
+                    throwable.error.code == MatrixError.M_UNKNOWN &&
+                            throwable.error.message == "Not allowed to join this room" -> {
+                        stringProvider.getString(R.string.tchap_room_access_unauthorized_to_externs)
+                    }
                     else                                                          -> {
                         throwable.error.message.takeIf { it.isNotEmpty() }
                                 ?: throwable.error.code.takeIf { it.isNotEmpty() }

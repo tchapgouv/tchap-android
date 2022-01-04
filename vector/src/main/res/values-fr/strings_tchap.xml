@@ -74,6 +74,7 @@
     </plurals>
     <string name="tchap_room_invited_you">%s vous a invité</string>
     <string name="tchap_fab_join_public_room">Rejoindre un forum depuis l\'annuaire</string>
+    <string name="tchap_room_access_unauthorized_to_externs">Vous n’êtes pas autorisé à rejoindre ce salon</string>
 
     <!-- tchap scan media -->
     <string name="tchap_scan_media_unavailable">Analyse Indisponible</string>

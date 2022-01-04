@@ -112,6 +112,7 @@
     <string name="tchap_room_settings_room_access_by_link_share">Share the link</string>
     <string name="tchap_room_settings_room_access_by_link_forbidden">This change is currently forbidden when externals are allowed to join the room</string>
     <string name="tchap_room_settings_allow_external_users_forbidden">This change is currently forbidden when the room is accessible by link</string>
+    <string name="tchap_room_access_unauthorized_to_externs">You are not allowed to join this room</string>
 
     <!-- tchap account validity -->
     <string name="tchap_expired_account_msg">The validity period of your account has expired. An email has been sent to you in order to renew it. Once you’ve followed the link it contains, click below.</string>
