@@ -60,7 +60,8 @@ data class RoomSettingsViewState(
             val canChangeJoinRule: Boolean = false,
             val canChangeCanonicalAlias: Boolean = false,
             val canAddChildren: Boolean = false,
-            val canRemoveFromRoomsDirectory: Boolean = false
+            val canRemoveFromRoomsDirectory: Boolean = false,
+            val canChangeRoomAccessRules: Boolean = false
     ) {
         val canChangeAccessByLink: Boolean
             get() = canChangeJoinRule && canChangeCanonicalAlias
