@@ -161,22 +161,23 @@ class RoomSettingsController @Inject constructor(
             buildRemoveFromRoomsDirectory()
         }
 
-        val isPublic = (data.newRoomJoinRules.newJoinRules ?: data.currentRoomJoinRules) == RoomJoinRules.PUBLIC
-        if (vectorPreferences.developerMode() && isPublic) {
-            val guestAccess = data.newRoomJoinRules.newGuestAccess ?: data.currentGuestAccess
-            // add guest access option?
-            formSwitchItem {
-                id("guest_access")
-                title(host.stringProvider.getString(R.string.room_settings_guest_access_title))
-                switchChecked(guestAccess == GuestAccess.CanJoin)
-                listener {
-                    host.callback?.onToggleGuestAccess()
-                }
-            }
-            dividerItem {
-                id("guestAccessDivider")
-            }
-        }
+        // Tchap: Disable "Allow guest to join" switch
+//        val isPublic = (data.newRoomJoinRules.newJoinRules ?: data.currentRoomJoinRules) == RoomJoinRules.PUBLIC
+//        if (vectorPreferences.developerMode() && isPublic) {
+//            val guestAccess = data.newRoomJoinRules.newGuestAccess ?: data.currentGuestAccess
+//            // add guest access option?
+//            formSwitchItem {
+//                id("guest_access")
+//                title(host.stringProvider.getString(R.string.room_settings_guest_access_title))
+//                switchChecked(guestAccess == GuestAccess.CanJoin)
+//                listener {
+//                    host.callback?.onToggleGuestAccess()
+//                }
+//            }
+//            dividerItem {
+//                id("guestAccessDivider")
+//            }
+//        }
     }
 
     private fun buildRemoveFromRoomsDirectory() {
