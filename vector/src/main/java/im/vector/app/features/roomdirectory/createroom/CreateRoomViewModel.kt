@@ -106,10 +106,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
     }
 
     private fun initUserDomain() {
-//        val displayName = session.run { getUser(myUserId) }?.toMatrixItem()?.getBestName().orEmpty()
-
-        // Tchap: Use home server Name for user domain in create room view
-        setState { copy(userDomain = TchapUtils.getHomeServerNameFromMXIdentifier(session.myUserId)) }
+        setState { copy(userDomain = TchapUtils.getHomeServerDisplayNameFromMXIdentifier(session.myUserId)) }
     }
 
     private var adminE2EByDefault = true
