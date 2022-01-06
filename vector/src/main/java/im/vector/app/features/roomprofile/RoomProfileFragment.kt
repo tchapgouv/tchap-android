@@ -271,13 +271,19 @@ class RoomProfileFragment @Inject constructor(
         ShortcutManagerCompat.requestPinShortcut(requireContext(), onShortcutReady.shortcutInfo, null)
     }
 
-    override fun onLeaveRoomClicked() {
+    override fun onLeaveRoomClicked(isLastAdmin: Boolean) {
         val isPublicRoom = roomProfileViewModel.isPublicRoom()
         val message = buildString {
             append(getString(R.string.room_participants_leave_prompt_msg))
-            if (!isPublicRoom) {
+            if (!isLastAdmin) {
                 append("\n\n")
-                append(getString(R.string.room_participants_leave_private_warning))
+                if (!isPublicRoom) {
+                    append(getString(R.string.tchap_room_admin_leave_prompt_msg))
+                }
+            } else {
+                if (!isPublicRoom) {
+                    append(getString(R.string.tchap_room_last_admin_leave_prompt_msg))
+                }
             }
         }
         MaterialAlertDialogBuilder(requireContext(), if (isPublicRoom) 0 else R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)

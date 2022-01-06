@@ -54,7 +54,7 @@ class RoomProfileController @Inject constructor(
         fun onUploadsClicked()
         fun createShortcut()
         fun onSettingsClicked()
-        fun onLeaveRoomClicked()
+        fun onLeaveRoomClicked(isLastAdmin: Boolean)
         fun onRoomAliasesClicked()
         fun onRoomPermissionsClicked()
         fun onRoomIdClicked()
@@ -199,7 +199,7 @@ class RoomProfileController @Inject constructor(
                 destructive = true,
                 icon = R.drawable.ic_room_actions_leave,
                 editable = false,
-                action = { callback?.onLeaveRoomClicked() }
+                action = { callback?.onLeaveRoomClicked(data.isLastAdmin) }
         )
 
         if (roomType != TchapRoomType.DIRECT) {
