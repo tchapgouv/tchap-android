@@ -56,10 +56,11 @@ class VerificationConclusionController @Inject constructor(
                             else R.string.verification_conclusion_ok_notice))
                 }
 
-                bottomSheetVerificationBigImageItem {
-                    id("image")
-                    roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Trusted)
-                }
+                // Tchap: Hide shield
+//                bottomSheetVerificationBigImageItem {
+//                    id("image")
+//                    roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Trusted)
+//                }
 
                 bottomDone()
             }
@@ -69,10 +70,11 @@ class VerificationConclusionController @Inject constructor(
                     notice(host.stringProvider.getString(R.string.verification_conclusion_not_secure))
                 }
 
-                bottomSheetVerificationBigImageItem {
-                    id("image")
-                    roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Warning)
-                }
+                // Tchap: Hide shield
+//                bottomSheetVerificationBigImageItem {
+//                    id("image")
+//                    roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Warning)
+//                }
 
                 bottomSheetVerificationNoticeItem {
                     id("warning_notice")
