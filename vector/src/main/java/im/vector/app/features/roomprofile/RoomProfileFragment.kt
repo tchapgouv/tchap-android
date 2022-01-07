@@ -276,14 +276,13 @@ class RoomProfileFragment @Inject constructor(
         val message = buildString {
             append(getString(R.string.room_participants_leave_prompt_msg))
             if (!isLastAdmin) {
-                append("\n\n")
                 if (!isPublicRoom) {
+                    append("\n\n")
                     append(getString(R.string.tchap_room_admin_leave_prompt_msg))
                 }
             } else {
-                if (!isPublicRoom) {
-                    append(getString(R.string.tchap_room_last_admin_leave_prompt_msg))
-                }
+                append("\n\n")
+                append(getString(R.string.tchap_room_last_admin_leave_prompt_msg))
             }
         }
         MaterialAlertDialogBuilder(requireContext(), if (isPublicRoom) 0 else R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
