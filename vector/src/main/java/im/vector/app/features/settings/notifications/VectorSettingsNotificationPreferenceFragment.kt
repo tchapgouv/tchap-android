@@ -134,7 +134,8 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 if (newValue is String) {
                     val syncDelay = tryOrNull { Integer.parseInt(newValue) } ?: BackgroundSyncMode.DEFAULT_SYNC_DELAY_SECONDS
-                    vectorPreferences.setBackgroundSyncDelay(maxOf(0, syncDelay))
+                    // Tchap: Force a minimum value: 10 sec
+                    vectorPreferences.setBackgroundSyncDelay(maxOf(syncDelay, 10))
                     refreshBackgroundSyncPrefs()
                 }
                 true
