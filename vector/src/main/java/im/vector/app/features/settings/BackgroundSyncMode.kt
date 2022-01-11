@@ -42,6 +42,7 @@ enum class BackgroundSyncMode {
         // Tchap: Force a default value: 120 sec
         const val DEFAULT_SYNC_DELAY_SECONDS = 120
         const val DEFAULT_SYNC_TIMEOUT_SECONDS = 6
+
         // Tchap: Force a minimum value: 10 sec
         const val MINIMUM_SYNC_DELAY_SECONDS = 10
 
