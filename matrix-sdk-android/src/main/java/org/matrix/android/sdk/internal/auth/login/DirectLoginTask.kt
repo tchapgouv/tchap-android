@@ -20,6 +20,8 @@ import dagger.Lazy
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.internal.auth.AuthAPI
 import org.matrix.android.sdk.internal.auth.SessionCreator
@@ -64,9 +66,12 @@ internal class DefaultDirectLoginTask @Inject constructor(
         )
 
         val credentials = try {
-            executeRequest(null) {
-                authAPI.login(loginParams)
-            }
+            executeRequest(null,
+                    canRetryOnFailure = { throwable ->
+                        // Tchap: Do not retry on limit exceeded error in login
+                        (throwable as? Failure.ServerError)?.error?.code != MatrixError.M_LIMIT_EXCEEDED && throwable.shouldBeRetried()
+                    },
+                    requestBlock = { authAPI.login(loginParams) })
         } catch (throwable: Throwable) {
             throw when (throwable) {
                 is UnrecognizedCertificateException -> Failure.UnrecognizedCertificateFailure(

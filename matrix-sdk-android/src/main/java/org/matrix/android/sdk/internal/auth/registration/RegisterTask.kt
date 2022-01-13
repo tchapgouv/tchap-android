@@ -18,6 +18,8 @@ package org.matrix.android.sdk.internal.auth.registration
 
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
 import org.matrix.android.sdk.internal.auth.AuthAPI
 import org.matrix.android.sdk.internal.network.executeRequest
@@ -35,9 +37,12 @@ internal class DefaultRegisterTask(
 
     override suspend fun execute(params: RegisterTask.Params): Credentials {
         try {
-            return executeRequest(null) {
-                authAPI.register(params.registrationParams)
-            }
+            return executeRequest(null,
+                    canRetryOnFailure = { throwable ->
+                        // Tchap: Do not retry on limit exceeded error in registration
+                        (throwable as? Failure.ServerError)?.error?.code != MatrixError.M_LIMIT_EXCEEDED && throwable.shouldBeRetried()
+                    },
+                    requestBlock = { authAPI.register(params.registrationParams) })
         } catch (throwable: Throwable) {
             throw throwable.toRegistrationFlowResponse()
                     ?.let { Failure.RegistrationFlowError(it) }
