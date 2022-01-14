@@ -432,9 +432,6 @@ class HomeActivity :
                         description = getString(descRes),
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
-                    // Tchap: Use custom background color and text color
-                    colorRes = R.color.palette_tchap_dark_blue
-                    textStyle = R.style.WidgetTchapTextButtonVerificationAlert
                     viewBinder = VerificationVectorAlert.ViewBinder(userItem, avatarRenderer)
                     colorInt = ThemeUtils.getColor(this@HomeActivity, R.attr.colorPrimary)
                     contentAction = Runnable {
