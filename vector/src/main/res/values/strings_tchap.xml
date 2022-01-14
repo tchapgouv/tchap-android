@@ -175,6 +175,6 @@
 
     <string name="tchap_dialog_user_consent_homeserver_name">Tchap</string>
 
-    <!--    Verification-->
+    <!-- Verification -->
     <string name="tchap_verification_conclusion_not_secure">Failed to verify your new session.</string>
 </resources>
