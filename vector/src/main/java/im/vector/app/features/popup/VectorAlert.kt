@@ -23,7 +23,6 @@ import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
-import androidx.annotation.StyleRes
 import im.vector.app.R
 import java.lang.ref.WeakReference
 
