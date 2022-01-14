@@ -82,6 +82,9 @@ class IncomingVerificationRequestHandler @Inject constructor(
                         }
                 )
                         .apply {
+                            // Tchap: Use custom background color and text color
+                            colorRes = R.color.palette_tchap_dark_blue
+                            textStyle = R.style.WidgetTchapTextButtonVerificationAlert
                             viewBinder = VerificationVectorAlert.ViewBinder(user?.toMatrixItem(), avatarRenderer.get())
                             contentAction = Runnable {
                                 (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
@@ -149,6 +152,9 @@ class IncomingVerificationRequestHandler @Inject constructor(
                     }
             )
                     .apply {
+                        // Tchap: Use custom background color and text color
+                        colorRes = R.color.palette_tchap_dark_blue
+                        textStyle = R.style.WidgetTchapTextButtonVerificationAlert
                         viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer.get())
                         contentAction = Runnable {
                             (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {

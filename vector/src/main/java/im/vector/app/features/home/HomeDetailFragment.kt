@@ -334,6 +334,9 @@ class HomeDetailFragment @Inject constructor(
                         description = getString(R.string.verify_this_session, newest.displayName ?: newest.deviceId ?: ""),
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
+                    // Tchap: Use custom background color and text color
+                    colorRes = R.color.palette_tchap_dark_blue
+                    textStyle = R.style.WidgetTchapTextButtonVerificationAlert
                     viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer)
                     colorInt = colorProvider.getColorFromAttribute(R.attr.colorPrimary)
                     contentAction = Runnable {
@@ -362,6 +365,9 @@ class HomeDetailFragment @Inject constructor(
                         description = getString(R.string.verify_other_sessions),
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
+                    // Tchap: Use custom background color and text color
+                    colorRes = R.color.palette_tchap_dark_blue
+                    textStyle = R.style.WidgetTchapTextButtonVerificationAlert
                     viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer)
                     colorInt = colorProvider.getColorFromAttribute(R.attr.colorPrimary)
                     contentAction = Runnable {

@@ -80,6 +80,15 @@
         <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayOnPrimary</item>
     </style>
 
+    <style name="WidgetTchapTextButtonVerificationAlert" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/palette_white</item>
+        <item name="colorControlHighlight">?colorSecondary</item>
+        <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayPositive</item>
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="lineHeight">24sp</item>
+    </style>
+
     <style name="VectorMaterialThemeOverlayOnPrimary">
         <item name="colorPrimary">?colorOnPrimary</item>
     </style>
