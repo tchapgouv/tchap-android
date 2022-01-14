@@ -174,4 +174,7 @@
     <string name="tchap_settings_show_external_user_in_users_directory_prompt">To disable this option, you must accept that your email address is visible to the other users.</string>
 
     <string name="tchap_dialog_user_consent_homeserver_name">Tchap</string>
+
+    <!--    Verification-->
+    <string name="tchap_verification_conclusion_not_secure">Failed to verify your new session</string>
 </resources>

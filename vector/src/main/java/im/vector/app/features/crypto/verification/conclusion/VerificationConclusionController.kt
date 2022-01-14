@@ -65,7 +65,7 @@ class VerificationConclusionController @Inject constructor(
             ConclusionState.WARNING   -> {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
-                    notice(host.stringProvider.getString(R.string.verification_conclusion_not_secure))
+                    notice(host.stringProvider.getString(R.string.tchap_verification_conclusion_not_secure))
                 }
 
                 // Tchap: Hide shield
