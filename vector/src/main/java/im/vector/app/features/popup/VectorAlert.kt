@@ -110,6 +110,6 @@ open class DefaultVectorAlert(
 
     @AttrRes
     override var colorAttribute: Int? = null
-    
+
     override var viewBinder: VectorAlert.ViewBinder? = null
 }
