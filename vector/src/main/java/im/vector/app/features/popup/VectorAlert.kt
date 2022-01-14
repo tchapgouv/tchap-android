@@ -64,8 +64,6 @@ interface VectorAlert {
 
     var colorAttribute: Int?
 
-    var textStyle: Int?
-
     interface ViewBinder {
         fun bind(view: View)
     }
@@ -113,9 +111,6 @@ open class DefaultVectorAlert(
 
     @AttrRes
     override var colorAttribute: Int? = null
-
-    @StyleRes
-    override var textStyle: Int? = null
-
+    
     override var viewBinder: VectorAlert.ViewBinder? = null
 }
