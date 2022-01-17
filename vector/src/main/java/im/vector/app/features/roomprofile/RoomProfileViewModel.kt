@@ -141,12 +141,9 @@ class RoomProfileViewModel @AssistedInject constructor(
     }
 
     private fun buildAdminMembersList(powerLevelsContent: PowerLevelsContent, roomMembers: List<RoomMemberSummary>): List<RoomMemberSummary> {
-        val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
-
         return roomMembers
                 .mapNotNull { roomMember ->
-                    val userRole = powerLevelsHelper.getUserRole(roomMember.userId)
-                    if (userRole == Role.Admin) roomMember else null
+                    if (PowerLevelsHelper(powerLevelsContent).getUserRole(roomMember.userId) == Role.Admin) roomMember else null
                 }
     }
 
