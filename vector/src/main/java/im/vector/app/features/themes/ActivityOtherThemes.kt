@@ -32,8 +32,8 @@ sealed class ActivityOtherThemes(@StyleRes val dark: Int,
     )
 
     object Launcher : ActivityOtherThemes(
-            R.style.Theme_Vector_Launcher,
-            R.style.Theme_Vector_Launcher
+            R.style.Theme_Tchap_Launcher,
+            R.style.Theme_Tchap_Launcher
     )
 
     object AttachmentsPreview : ActivityOtherThemes(
