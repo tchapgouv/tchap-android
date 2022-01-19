@@ -207,12 +207,6 @@ object TchapUtils {
     private const val DISPLAY_NAME_SECOND_DELIMITER = "]"
     private const val DEFAULT_EMPTY_STRING = ""
 
-    enum class ConfigurationVariant {
-        PREPROD,
-        AGENT,
-        SECURE
-    }
-
     /**
      * Get the current configuration variant
      * @return the ConfigurationVariant
@@ -225,4 +219,10 @@ object TchapUtils {
             else      -> ConfigurationVariant.SECURE
         }
     }
+}
+
+enum class ConfigurationVariant {
+    PREPROD,
+    AGENT,
+    SECURE
 }
