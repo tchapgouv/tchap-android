@@ -31,6 +31,9 @@ import im.vector.app.features.home.ShortcutCreator
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -132,18 +135,18 @@ class RoomProfileViewModel @AssistedInject constructor(
         ) { roomMembers, powerLevelsContent ->
             buildAdminMembersList(powerLevelsContent, roomMembers)
         }
-                .execute { async ->
-                    copy(isLastAdmin = async.invoke()?.size == 1 &&
-                            async.invoke()?.find { roomMember ->
-                                roomMember.userId == session.myUserId
-                            } != null)
+                .distinctUntilChanged()
+                .onEach { adminsMembers ->
+                    setState {
+                        copy(isLastAdmin = adminsMembers.singleOrNull()?.userId == session.myUserId)
+                    }
                 }
+                .launchIn(viewModelScope)
     }
 
     private fun buildAdminMembersList(powerLevelsContent: PowerLevelsContent, roomMembers: List<RoomMemberSummary>): List<RoomMemberSummary> {
-        return roomMembers
-                .mapNotNull { roomMember ->
-                    if (PowerLevelsHelper(powerLevelsContent).getUserRole(roomMember.userId) == Role.Admin) roomMember else null
+        return roomMembers.filter { roomMember ->
+                    PowerLevelsHelper(powerLevelsContent).getUserRole(roomMember.userId) == Role.Admin
                 }
     }
 
