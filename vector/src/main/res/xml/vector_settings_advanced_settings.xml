@@ -2,7 +2,9 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_developer_mode">
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_DEVELOPER_MODE_CATEGORY_KEY"
+        android:title="@string/settings_developer_mode">
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"
