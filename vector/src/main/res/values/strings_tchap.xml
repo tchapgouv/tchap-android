@@ -32,7 +32,6 @@
     <string name="tchap_dialog_prompt_new_direct_chat">You don\'t have a direct chat with %s, do you want to send him an invitation?</string>
 
     <!-- tchap new strings -->
-    <string name="tchap_room_admin_leave_prompt_msg">This room is not public. You will not be able to join it without an invitation.</string>
     <string name="tchap_room_last_admin_leave_prompt_msg">The room will no longer be administered, and you may not be able to join it again</string>
     <string name="template_tchap_invite_contacts_to_tchap">Invite contacts in ${app_name}</string>
     <string name="tchap_invite_contacts_by_email">Invite by email</string>

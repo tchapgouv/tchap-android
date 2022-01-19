@@ -278,7 +278,7 @@ class RoomProfileFragment @Inject constructor(
             if (!isLastAdmin) {
                 if (!isPublicRoom) {
                     append("\n\n")
-                    append(getString(R.string.tchap_room_admin_leave_prompt_msg))
+                    append(getString(R.string.room_participants_leave_private_warning))
                 }
             } else {
                 append("\n\n")

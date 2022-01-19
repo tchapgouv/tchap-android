@@ -33,7 +33,6 @@
 
     <!-- tchap new strings -->
     <string name="tchap_room_last_admin_leave_prompt_msg">Ce salon ne sera plus administré, et vous risquez de ne plus pouvoir le joindre de nouveau.</string>
-    <string name="tchap_room_admin_leave_prompt_msg">Ce salon n\'est pas public. Vous ne pourrez pas le rejoindre sans invitation</string>
     <string name="template_tchap_invite_contacts_to_tchap">Inviter à rejoindre ${app_name}</string>
     <string name="tchap_invite_contacts_by_email">Inviter par e\u2011mail</string>
     <string name="tchap_invite_contacts_by_link">Inviter par lien</string>
