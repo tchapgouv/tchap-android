@@ -212,7 +212,7 @@ object TchapUtils {
         AGENT,
         SECURE
     }
-    
+
     /**
      * Get the current configuration variant
      * @return the ConfigurationVariant
