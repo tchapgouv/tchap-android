@@ -32,7 +32,7 @@
     <string name="tchap_dialog_prompt_new_direct_chat">Vous n\'avez pas de message direct avec %s, voulez-vous lui envoyer une invitation ?</string>
 
     <!-- tchap new strings -->
-    <string name="tchap_room_admin_leave_prompt_msg">Voulez-vous vraiment quitter cette conversation ?\n\nElle ne sera plus administrée, et vous risquez de ne plus pouvoir la joindre de nouveau.</string>
+    <string name="tchap_room_last_admin_leave_prompt_msg">Ce salon ne sera plus administré, et vous risquez de ne plus pouvoir le joindre de nouveau.</string>
     <string name="template_tchap_invite_contacts_to_tchap">Inviter à rejoindre ${app_name}</string>
     <string name="tchap_invite_contacts_by_email">Inviter par e\u2011mail</string>
     <string name="tchap_invite_contacts_by_link">Inviter par lien</string>

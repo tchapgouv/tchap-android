@@ -394,7 +394,7 @@
     <string name="room_creation_title">Nouveau salon</string>
     <string name="room_creation_add_member">Ajouter un membre</string>
     <string name="room_title_one_member">1 membre</string>
-    <string name="room_participants_leave_prompt_title">Quitter la conversation</string>
+    <string name="room_participants_leave_prompt_title">Quitter le salon</string>
     <string name="room_participants_create">Créer</string>
     <string name="room_participants_online">En ligne</string>
     <string name="room_participants_offline">Hors ligne</string>
@@ -665,7 +665,7 @@
 \nVous pouvez vous identifier avec un compte différent ou ajouter cette adresse e\u2011mail à votre compte.</string>
     <string name="room_preview_try_join_an_unknown_room">Vous essayez d’accéder à %s. Souhaitez-vous rejoindre la conversation pour y participer ?</string>
     <string name="room_preview_room_interactions_disabled">Ceci est un aperçu de la conversation. Vous ne pouvez pas interagir.</string>
-    <string name="room_participants_leave_prompt_msg">Voulez-vous vraiment quitter cette conversation ?</string>
+    <string name="room_participants_leave_prompt_msg">Voulez-vous vraiment quitter ce salon ?</string>
     <string name="room_participants_remove_prompt_msg">Voulez-vous vraiment retirer %s de cette conversation ?</string>
     <string name="room_participants_idle">Inactif</string>
     <string name="room_participants_action_ignore">Ignorer</string>
