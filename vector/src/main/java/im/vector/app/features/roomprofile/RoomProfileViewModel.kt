@@ -118,6 +118,7 @@ class RoomProfileViewModel @AssistedInject constructor(
                 }
     }
 
+    // Tchap: Observe the admin members to know if the user is the last admin of the room
     private fun observeAdminMembers() {
         val roomMemberQueryParams = roomMemberQueryParams {
             displayName = QueryStringValue.IsNotEmpty

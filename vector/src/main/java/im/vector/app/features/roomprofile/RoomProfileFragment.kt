@@ -275,6 +275,7 @@ class RoomProfileFragment @Inject constructor(
         val isPublicRoom = roomProfileViewModel.isPublicRoom()
         val message = buildString {
             append(getString(R.string.room_participants_leave_prompt_msg))
+            // Tchap: Add custom string when the user is the last admin of the room
             if (!isLastAdmin) {
                 if (!isPublicRoom) {
                     append("\n\n")
