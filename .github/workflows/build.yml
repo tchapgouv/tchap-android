@@ -35,7 +35,10 @@ jobs:
       - name: Upload ${{ matrix.target }} debug APKs
         uses: actions/upload-artifact@v2
         with:
-          name: vector-${{ matrix.target }}-debug
+          name:
+            cond: ${{ matrix.target == "GplayPreprodWithoutvoipWithoutpinning" || matrix.target == "FdroidPreprodWithoutvoipWithoutpinning }}
+            if_true: Btchap${{ matrix.target }}-debug
+            if_false: Tchap${{ matrix.target }}-debug
           path: |
             vector/build/outputs/apk/*/debug/*.apk
 
@@ -46,7 +49,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ GplayPreprodWithoutvoipWithoutpinning, GplayAgentWithoutvoipWithpinning, FdroidSecureWithoutvoipWithoutpinning, FdroidPreprodWithoutvoipWithoutpinning, FdroidAgentWithoutvoipWithoutpinning ]
+        target: [ GplayAgentWithoutvoipWithpinning, FdroidSecureWithoutvoipWithoutpinning, FdroidAgentWithoutvoipWithoutpinning, GplayPreprodWithoutvoipWithpinning, FdroidPreprodWithoutvoipWithoutpinning ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -62,7 +65,10 @@ jobs:
       - name: Upload ${{ matrix.target }} unsigned APKs
         uses: actions/upload-artifact@v2
         with:
-          name: vector-${{ matrix.target }}-release-unsigned
+          name:
+            cond: ${{ matrix.target == "FdroidPreprodWithoutvoipWithoutpinning" || matrix.target == "GplayPreprodWithoutvoipWithpinning }}
+            if_true: Btchap${{ matrix.target }}-release-unsigned
+            if_false: Tchap${{ matrix.target }}-release-unsigned
           path: |
             vector/build/outputs/apk/*/release/*.apk
 

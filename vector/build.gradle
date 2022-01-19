@@ -189,7 +189,7 @@ android {
                 include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
 
                 // Generate a universal APK that includes all ABIs, so user who install from CI tool can use this one by default.
-                universalApk true
+                universalApk false
             }
         }
 
