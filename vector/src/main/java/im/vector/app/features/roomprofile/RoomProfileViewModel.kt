@@ -32,8 +32,6 @@ import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -136,12 +134,9 @@ class RoomProfileViewModel @AssistedInject constructor(
             buildAdminMembersList(powerLevelsContent, roomMembers)
         }
                 .distinctUntilChanged()
-                .onEach { adminsMembers ->
-                    setState {
+                .setOnEach { adminsMembers ->
                         copy(isLastAdmin = adminsMembers.singleOrNull()?.userId == session.myUserId)
-                    }
                 }
-                .launchIn(viewModelScope)
     }
 
     private fun buildAdminMembersList(powerLevelsContent: PowerLevelsContent, roomMembers: List<RoomMemberSummary>): List<RoomMemberSummary> {
