@@ -65,7 +65,7 @@ jobs:
       - name: Upload ${{ matrix.target }} unsigned APKs
         uses: actions/upload-artifact@v2
         with:
-            name:
+          name:
             cond: ${{ matrix.target == "FdroidPreprodWithoutvoipWithoutpinning" || matrix.target == "GplayPreprodWithoutvoipWithpinning }}
             if_true: Btchap${{ matrix.target }}-release-unsigned
             if_false: Tchap${{ matrix.target }}-release-unsigned
