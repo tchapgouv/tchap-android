@@ -206,23 +206,4 @@ object TchapUtils {
     private const val DISPLAY_NAME_FIRST_DELIMITER = "["
     private const val DISPLAY_NAME_SECOND_DELIMITER = "]"
     private const val DEFAULT_EMPTY_STRING = ""
-
-    enum class ConfigurationVariant {
-        PREPROD,
-        AGENT,
-        SECURE
-    }
-
-    /**
-     * Get the current configuration variant
-     * @return the ConfigurationVariant
-     */
-    fun getConfigurationVariant(): ConfigurationVariant {
-        return when (BuildConfig.FLAVOR_target) {
-            "preprod" -> ConfigurationVariant.PREPROD
-            "agent"   -> ConfigurationVariant.AGENT
-            "secure"  -> ConfigurationVariant.SECURE
-            else      -> ConfigurationVariant.SECURE
-        }
-    }
 }

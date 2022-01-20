@@ -16,10 +16,8 @@
 
 package im.vector.app.features.settings
 
-import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.SeekBarPreference
-import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.preference.VectorPreferenceCategory
@@ -32,13 +30,6 @@ class VectorSettingsAdvancedSettingsFragment : VectorSettingsBaseFragment() {
     override val preferenceXmlRes = R.xml.vector_settings_advanced_settings
 
     private var rageshake: RageShake? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Tchap: Show developer mode part only on preprod
-        manageDeveloperModePart()
-    }
 
     override fun onResume() {
         super.onResume()
@@ -83,13 +74,6 @@ class VectorSettingsAdvancedSettingsFragment : VectorSettingsBaseFragment() {
             }
         } else {
             findPreference<VectorPreferenceCategory>("SETTINGS_RAGE_SHAKE_CATEGORY_KEY")!!.isVisible = false
-        }
-    }
-
-    private fun manageDeveloperModePart() {
-        val configurationVariant = TchapUtils.getConfigurationVariant()
-        if (configurationVariant != TchapUtils.ConfigurationVariant.PREPROD) {
-            findPreference<VectorPreferenceCategory>("SETTINGS_DEVELOPER_MODE_CATEGORY_KEY")!!.isVisible = false
         }
     }
 }

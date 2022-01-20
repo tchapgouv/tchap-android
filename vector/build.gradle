@@ -235,6 +235,8 @@ android {
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             // Set to true if you want to enable strict mode in debug
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
+            // Tchap: Show developer mode only in debug
+            resValue "bool", "developer_mode_visible", "true"
 
             signingConfig signingConfigs.debug
         }
@@ -243,6 +245,8 @@ android {
             resValue "bool", "debug_mode", "false"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
+            // Tchap: Show developer mode only in debug
+            resValue "bool", "developer_mode_visible", "false"
 
             postprocessing {
                 removeUnusedCode true
