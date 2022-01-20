@@ -65,11 +65,15 @@ jobs:
       - name: Upload ${{ matrix.target }} unsigned APKs
         uses: actions/upload-artifact@v2
         with:
-          name:
+            name:
             cond: ${{ matrix.target == "FdroidPreprodWithoutvoipWithoutpinning" || matrix.target == "GplayPreprodWithoutvoipWithpinning }}
             if_true: Btchap${{ matrix.target }}-release-unsigned
             if_false: Tchap${{ matrix.target }}-release-unsigned
           path: |
             vector/build/outputs/apk/*/release/*.apk
+
+
+  - name: Conditional value for GitHub Action
+    uses: haya14busa/action-cond@v1.0.0
 
 # TODO: add exodus checks
