@@ -21,6 +21,8 @@ jobs:
       matrix:
         target: [ GplayPreprodWithoutvoipWithoutpinning, FdroidPreprodWithoutvoipWithoutpinning ]
     steps:
+      - name: Conditional value for GitHub Action
+          uses: haya14busa/action-cond@v1.0.0
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
         with:
@@ -51,6 +53,8 @@ jobs:
       matrix:
         target: [ GplayAgentWithoutvoipWithpinning, FdroidSecureWithoutvoipWithoutpinning, FdroidAgentWithoutvoipWithoutpinning, GplayPreprodWithoutvoipWithpinning, FdroidPreprodWithoutvoipWithoutpinning ]
     steps:
+      - name: Conditional value for GitHub Action
+          uses: haya14busa/action-cond@v1.0.0
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
         with:
@@ -71,9 +75,5 @@ jobs:
             if_false: Tchap${{ matrix.target }}-release-unsigned
           path: |
             vector/build/outputs/apk/*/release/*.apk
-
-
-  - name: Conditional value for GitHub Action
-    uses: haya14busa/action-cond@v1.0.0
 
 # TODO: add exodus checks
