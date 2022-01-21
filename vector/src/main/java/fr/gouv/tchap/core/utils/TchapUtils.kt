@@ -16,7 +16,6 @@
 
 package fr.gouv.tchap.core.utils
 
-import im.vector.app.BuildConfig
 import im.vector.app.core.utils.safeCapitalize
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.Session
