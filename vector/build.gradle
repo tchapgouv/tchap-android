@@ -308,15 +308,6 @@ android {
             dimension "pinning"
         }
 
-        secure {
-            dimension "target"
-
-            resValue "string", "app_name", "Tchap"
-
-            applicationId "fr.gouv.tchap"
-            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_s"
-        }
-
         Btchap {
             dimension "target"
 
