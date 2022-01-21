@@ -329,17 +329,12 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            def appId = variant.applicationId// com.exampleFree.app OR com.examplePaid.app
-            def versionName = variant.versionName
-            def versionCode = variant.versionCode // e.g 1.0
-            def flavorName = variant.flavorName // e. g. Free
-            def buildType = variant.buildType.name // e. g. debug
-            def variantName = variant.name // e. g. FreeDebug
 
-            //customize your app name by using variables
-            outputFileName
-                    .replace("vector", "")
-                    .replace("release", "v${variant.versionName}")
+            def outputFileNameUpdated = outputFileName
+                    .replace("vector-", "")
+                    .replace("release", "v${versionName}")
+
+            outputFileName = outputFileNameUpdated
         }
 
     }
