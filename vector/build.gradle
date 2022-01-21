@@ -336,7 +336,7 @@ android {
         }
     }
 
-    applicationVariants.all { variant ->
+/*    applicationVariants.all { variant ->
         variant.outputs.all { output ->
             def appId = variant.applicationId// com.exampleFree.app OR com.examplePaid.app
             def versionName = variant.versionName
@@ -348,7 +348,7 @@ android {
             //customize your app name by using variables
             outputFileName = "${buildType}-${flavorName}-v${versionCode}.apk"
         }
-    }
+    }*/
 
     lintOptions {
         lintConfig file("lint.xml")
