@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <im.vector.app.core.preference.VectorPreferenceCategory
-        app:isPreferenceVisible="@bool/developer_mode_visible"
-        android:title="@string/settings_developer_mode">
+        android:title="@string/settings_developer_mode"
+        app:isPreferenceVisible="@bool/developer_mode_visible">
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"
