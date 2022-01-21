@@ -259,7 +259,7 @@ android {
     // The 'target' dimension permits to specify which platform are used
     // The 'voip' flavor dimension permits to include/exclude jitsi at compilation time
     // The 'pinning' flavor dimension permits to enable/disable certificate pinning with fingerprint check
-    flavorDimensions "store", "target", "voip", "pinning"
+    flavorDimensions "target", "store", "voip", "pinning"
 
     productFlavors {
         gplay {
@@ -317,7 +317,7 @@ android {
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_s"
         }
 
-        preprod {
+        btchap {
             dimension "target"
 
             resValue "string", "app_name", "Btchap"
@@ -326,13 +326,27 @@ android {
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_b"
         }
 
-        agent {
+        tchap {
             dimension "target"
 
             resValue "string", "app_name", "Tchap"
 
             applicationId "fr.gouv.tchap.a"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}"
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def appId = variant.applicationId// com.exampleFree.app OR com.examplePaid.app
+            def versionName = variant.versionName
+            def versionCode = variant.versionCode // e.g 1.0
+            def flavorName = variant.flavorName // e. g. Free
+            def buildType = variant.buildType.name // e. g. debug
+            def variantName = variant.name // e. g. FreeDebug
+
+            //customize your app name by using variables
+            outputFileName = "${buildType}-${flavorName}-v${versionCode}.apk"
         }
     }
 
