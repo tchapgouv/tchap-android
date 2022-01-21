@@ -308,7 +308,7 @@ android {
             dimension "pinning"
         }
 
-        Btchap {
+        btchap {
             dimension "target"
 
             resValue "string", "app_name", "Btchap"
@@ -317,7 +317,7 @@ android {
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_b"
         }
 
-        Tchap {
+        tchap {
             dimension "target"
 
             resValue "string", "app_name", "Tchap"
@@ -327,7 +327,7 @@ android {
         }
     }
 
-/*    applicationVariants.all { variant ->
+    applicationVariants.all { variant ->
         variant.outputs.all { output ->
             def appId = variant.applicationId// com.exampleFree.app OR com.examplePaid.app
             def versionName = variant.versionName
@@ -337,9 +337,12 @@ android {
             def variantName = variant.name // e. g. FreeDebug
 
             //customize your app name by using variables
-            outputFileName = "${buildType}-${flavorName}-v${versionCode}.apk"
+            outputFileName
+                    .replace("vector", "")
+                    .replace("release", "v${variant.versionName}")
         }
-    }*/
+
+    }
 
     lintOptions {
         lintConfig file("lint.xml")

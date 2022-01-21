@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ TchapGplayWithoutvoipWithoutpinning, BtchapFdroidWithoutvoipWithoutpinning ]
+        target: [ tchapGplayWithoutvoipWithoutpinning, btchapFdroidWithoutvoipWithoutpinning ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -46,7 +46,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ BtchapGplayWithoutvoipWithpinning, BtchapFdroidWithoutvoipWithoutpinning, TchapGplayWithoutvoipWithpinning, TchapFdroidAWithoutvoipWithoutpinning ]
+        target: [ btchapGplayWithoutvoipWithpinning, btchapFdroidWithoutvoipWithoutpinning, tchapGplayWithoutvoipWithpinning, tchapFdroidAWithoutvoipWithoutpinning ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -64,5 +64,5 @@ jobs:
         with:
           name: ${{ matrix.target }}-release-unsigned
           path: |
-            vector/build/outputs/apk/*/release/Tchap*.apk
+            vector/build/outputs/apk/*/release/*.apk
 # TODO: add exodus checks
