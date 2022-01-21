@@ -317,7 +317,7 @@ android {
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_s"
         }
 
-        btchap {
+        Btchap {
             dimension "target"
 
             resValue "string", "app_name", "Btchap"
@@ -326,7 +326,7 @@ android {
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_b"
         }
 
-        tchap {
+        Tchap {
             dimension "target"
 
             resValue "string", "app_name", "Tchap"
