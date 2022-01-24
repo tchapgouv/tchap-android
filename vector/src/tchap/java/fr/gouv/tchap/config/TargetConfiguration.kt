@@ -19,7 +19,7 @@ package fr.gouv.tchap.config
 // Configure here the optional features (if any)
 // ex: const val ENABLE_FEATURE1 = true
 
-const val CONFIGURATION_VARIANT = "agent"
+const val CONFIGURATION_VARIANT = "tchap"
 
 const val ENABLE_ROOM_RETENTION = false
 
