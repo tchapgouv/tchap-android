@@ -167,10 +167,11 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        // Tchap: Disable universalApk
         // Keep abiFilter for the universalApk
-        ndk {
-            abiFilters "armeabi-v7a", "x86", 'arm64-v8a', 'x86_64'
-        }
+//        ndk {
+//            abiFilters "armeabi-v7a", "x86", 'arm64-v8a', 'x86_64'
+//        }
 
         // Ref: https://developer.android.com/studio/build/configure-apk-splits.html
         splits {
@@ -188,8 +189,9 @@ android {
                 // Specifies a list of ABIs that Gradle should create APKs for.
                 include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
 
+                // Tchap: Disable universalApk
                 // Generate a universal APK that includes all ABIs, so user who install from CI tool can use this one by default.
-                universalApk true
+                universalApk false
             }
         }
 
