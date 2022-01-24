@@ -31,7 +31,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Assemble ${{ matrix.target }} debug apk
-        run: ./gradlew assemble${{ matrix.target }}Debug $CI_GRADLE_ARG_PROPERTIES --stacktrace
+        run: ./gradlew assemble${{ matrix.target }}Debug $CI_GRADLE_ARG_PROPERTIES --stacktrace --debug --info
       - name: Upload ${{ matrix.target }} debug APKs
         uses: actions/upload-artifact@v2
         with:
@@ -58,7 +58,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Assemble ${{ matrix.target }} unsigned apk
-        run: ./gradlew clean assemble${{ matrix.target }}Release $CI_GRADLE_ARG_PROPERTIES  --stacktrace
+        run: ./gradlew clean assemble${{ matrix.target }}Release $CI_GRADLE_ARG_PROPERTIES  --stacktrace --debug --info
       - name: Upload ${{ matrix.target }} unsigned APKs
         uses: actions/upload-artifact@v2
         with:
