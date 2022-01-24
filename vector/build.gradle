@@ -165,6 +165,9 @@ android {
         // Tchap: Hide voice message recorder button
         buildConfigField "Boolean", "SHOW_VOICE_RECORDER", "false"
 
+        // Tchap: Disable add messages reaction
+        buildConfigField "Boolean", "SHOW_ADD_MESSAGE_REACTION", "false"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // Keep abiFilter for the universalApk

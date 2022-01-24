@@ -20,6 +20,7 @@ import dagger.Lazy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
@@ -355,11 +356,15 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.Copy(messageContent!!.body))
             }
 
-            if (timelineEvent.canReact() && actionPermissions.canReact) {
+            // Tchap: Disable message reaction
+            if (timelineEvent.canReact() && actionPermissions.canReact &&
+                    BuildConfig.SHOW_ADD_MESSAGE_REACTION) {
                 add(EventSharedAction.AddReaction(eventId))
             }
 
-            if (canViewReactions(timelineEvent)) {
+            // Tchap: Disable message reaction
+            if (canViewReactions(timelineEvent) &&
+                    BuildConfig.SHOW_ADD_MESSAGE_REACTION) {
                 add(EventSharedAction.ViewReactions(informationData))
             }
 
