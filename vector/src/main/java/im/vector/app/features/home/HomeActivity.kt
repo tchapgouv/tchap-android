@@ -22,6 +22,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
@@ -498,17 +499,17 @@ class HomeActivity :
 //        menu.findItem(R.id.menu_home_init_sync_optimized).isVisible = vectorPreferences.developerMode()
 //        return super.onPrepareOptionsMenu(menu)
 //    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
 //            R.id.menu_home_suggestion          -> {
 //                bugReporter.openBugReportScreen(this, ReportType.SUGGESTION)
 //                return true
 //            }
-//            R.id.menu_home_report_bug          -> {
-//                bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT)
-//                return true
-//            }
+            R.id.menu_home_report_bug -> {
+                bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT)
+                return true
+            }
 //            R.id.menu_home_init_sync_legacy    -> {
 //                // Configure the SDK
 //                initialSyncStrategy = InitialSyncStrategy.Legacy
@@ -527,14 +528,14 @@ class HomeActivity :
 //                navigator.openRoomsFiltering(this)
 //                return true
 //            }
-//            R.id.menu_home_setting             -> {
-//                navigator.openSettings(this)
-//                return true
-//            }
-//        }
-//
-//        return super.onOptionsItemSelected(item)
-//    }
+            R.id.menu_home_setting    -> {
+                navigator.openSettings(this)
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
 
     override fun onBackPressed() {
         if (views.drawerLayout.isDrawerOpen(GravityCompat.START)) {
