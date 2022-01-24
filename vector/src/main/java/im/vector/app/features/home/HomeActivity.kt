@@ -234,7 +234,6 @@ class HomeActivity :
                             views.drawerLayout.closeDrawer(GravityCompat.START)
                             bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT, false)
                         }
-                        HomeActivitySharedAction.CancelSearch          -> Unit // do nothing, action is handled by the HomeDetailFragment
                     }.exhaustive
                 }
                 .launchIn(lifecycleScope)
