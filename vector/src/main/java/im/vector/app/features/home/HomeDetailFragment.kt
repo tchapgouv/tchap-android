@@ -107,7 +107,7 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
-    override fun getMenuRes() = R.menu.tchap_menu_home
+    override fun getMenuRes() = R.menu.tchap_home
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
