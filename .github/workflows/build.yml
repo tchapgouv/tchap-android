@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ GplayPreprodWithoutvoipWithoutpinning, FdroidPreprodWithoutvoipWithoutpinning ]
+        target: [ GplayBtchapWithoutvoipWithoutpinning, FdroidBtchapWithoutvoipWithoutpinning ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -35,7 +35,7 @@ jobs:
       - name: Upload ${{ matrix.target }} debug APKs
         uses: actions/upload-artifact@v2
         with:
-          name: vector-${{ matrix.target }}-debug
+          name: ${{ matrix.target }}-debug
           path: |
             vector/build/outputs/apk/*/debug/*.apk
 
@@ -46,7 +46,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ GplayPreprodWithoutvoipWithoutpinning, GplayAgentWithoutvoipWithpinning, FdroidSecureWithoutvoipWithoutpinning, FdroidPreprodWithoutvoipWithoutpinning, FdroidAgentWithoutvoipWithoutpinning ]
+        target: [ GplayBtchapWithoutvoipWithoutpinning, GplayTchapWithoutvoipWithpinning, FdroidSecureWithoutvoipWithoutpinning, FdroidBtchapWithoutvoipWithoutpinning, FdroidTchapWithoutvoipWithoutpinning ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -62,7 +62,7 @@ jobs:
       - name: Upload ${{ matrix.target }} unsigned APKs
         uses: actions/upload-artifact@v2
         with:
-          name: vector-${{ matrix.target }}-release-unsigned
+          name: ${{ matrix.target }}-release-unsigned
           path: |
             vector/build/outputs/apk/*/release/*.apk
 
