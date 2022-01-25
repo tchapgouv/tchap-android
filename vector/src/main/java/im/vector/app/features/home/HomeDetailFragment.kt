@@ -211,6 +211,7 @@ class HomeDetailFragment @Inject constructor(
                 .onEach { action ->
                     when (action) {
                         is HomeActivitySharedAction.InviteByEmail -> onInviteByEmail(action.email)
+                        is HomeActivitySharedAction.SelectTab     -> viewModel.handle(HomeDetailAction.SwitchTab(action.tab))
                         else                                      -> Unit // no-op
                     }.exhaustive
                 }
@@ -409,7 +410,8 @@ class HomeDetailFragment @Inject constructor(
                 R.id.bottom_action_notification -> HomeTab.RoomList(RoomListDisplayMode.NOTIFICATIONS)
                 else                            -> HomeTab.DialPad
             }
-            viewModel.handle(HomeDetailAction.SwitchTab(tab))
+            // Tchap: Send event to shared VM to catch it in sub-fragments
+            sharedActionViewModel.post(HomeActivitySharedAction.SelectTab(tab))
             true
         }
 

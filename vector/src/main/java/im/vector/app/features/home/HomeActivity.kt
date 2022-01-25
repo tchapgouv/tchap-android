@@ -234,6 +234,7 @@ class HomeActivity :
                             views.drawerLayout.closeDrawer(GravityCompat.START)
                             bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT, false)
                         }
+                        is HomeActivitySharedAction.SelectTab          -> Unit // no-op
                     }.exhaustive
                 }
                 .launchIn(lifecycleScope)

@@ -46,6 +46,9 @@ import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.databinding.FragmentRoomListBinding
+import im.vector.app.features.home.HomeActivitySharedAction
+import im.vector.app.features.home.HomeSharedActionViewModel
+import im.vector.app.features.home.HomeTab
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
@@ -56,6 +59,7 @@ import im.vector.app.features.home.room.list.widget.TchapRoomsFabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.orTrue
@@ -85,6 +89,7 @@ class RoomListFragment @Inject constructor(
 
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
+    private lateinit var homeSharedActionViewModel: HomeSharedActionViewModel
     private val roomListParams: RoomListParams by args()
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
     private lateinit var stateRestorer: LayoutManagerStateRestorer
@@ -117,6 +122,7 @@ class RoomListFragment @Inject constructor(
         setupCreateRoomButton()
         setupRecyclerView()
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
+        homeSharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         roomListViewModel.observeViewEvents {
             when (it) {
                 is RoomListViewEvents.Loading                   -> showLoading(it.message)
@@ -145,6 +151,12 @@ class RoomListFragment @Inject constructor(
                         (it.contentEpoxyController as? RoomSummaryPagedController)?.roomChangeMembershipStates = ms
                     }
         }
+
+        homeSharedActionViewModel
+                .stream()
+                .mapNotNull { it as? HomeActivitySharedAction.SelectTab }
+                .onEach { handleSelectTab(it.tab) }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -228,6 +240,12 @@ class RoomListFragment @Inject constructor(
     private fun handleOpenRoomDirectory(filter: String) {
         navigator.openRoomDirectory(requireActivity(), filter)
         resetFilter()
+    }
+
+    private fun handleSelectTab(tab: HomeTab) {
+        if ((tab as? HomeTab.RoomList)?.displayMode != roomListParams.displayMode) {
+            resetFilter()
+        }
     }
 
     private fun setupCreateRoomButton() {
