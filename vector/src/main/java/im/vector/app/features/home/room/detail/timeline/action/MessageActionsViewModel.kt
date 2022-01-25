@@ -362,9 +362,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.AddReaction(eventId))
             }
 
-            // Tchap: Disable message reaction
-            if (canViewReactions(timelineEvent) &&
-                    BuildConfig.SHOW_ADD_MESSAGE_REACTION) {
+            if (canViewReactions(timelineEvent)) {
                 add(EventSharedAction.ViewReactions(informationData))
             }
 
