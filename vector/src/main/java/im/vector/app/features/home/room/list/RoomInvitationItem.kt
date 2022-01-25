@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.list
 
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -55,17 +54,7 @@ abstract class RoomInvitationItem : VectorEpoxyModel<RoomInvitationItem.Holder>(
         InviteButtonStateBinder.bind(holder.acceptView, holder.rejectView, changeMembershipState)
         holder.titleView.text = matrixItem.getBestName()
         holder.subtitleView.setTextOrHide(secondLine)
-        renderAvatar(holder)
         avatarRenderer.render(matrixItem, holder.avatarImageView)
-    }
-
-    private fun renderAvatar(holder: Holder) {
-        holder.avatarImageView.visibility = if (isDirect) View.VISIBLE else View.GONE
-
-        avatarRenderer.render(
-                matrixItem,
-                holder.avatarImageView
-        )
     }
 
     class Holder : VectorEpoxyHolder() {
