@@ -28,7 +28,6 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import fr.gouv.tchap.core.ui.views.HexagonMaskView
 import fr.gouv.tchap.core.utils.TchapRoomType
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener

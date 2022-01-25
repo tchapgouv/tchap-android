@@ -22,7 +22,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import fr.gouv.tchap.core.ui.views.HexagonMaskView
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
@@ -62,15 +61,10 @@ abstract class RoomInvitationItem : VectorEpoxyModel<RoomInvitationItem.Holder>(
 
     private fun renderAvatar(holder: Holder) {
         holder.avatarImageView.visibility = if (isDirect) View.VISIBLE else View.GONE
-        holder.avatarHexagonImageView.visibility = if (isDirect) View.GONE else View.VISIBLE
 
         avatarRenderer.render(
                 matrixItem,
-                if (isDirect) {
-                    holder.avatarImageView
-                } else {
-                    holder.avatarHexagonImageView
-                }
+                holder.avatarImageView
         )
     }
 
@@ -80,7 +74,6 @@ abstract class RoomInvitationItem : VectorEpoxyModel<RoomInvitationItem.Holder>(
         val acceptView by bind<ButtonStateView>(R.id.roomInvitationAccept)
         val rejectView by bind<ButtonStateView>(R.id.roomInvitationReject)
         val avatarImageView by bind<ImageView>(R.id.roomInvitationAvatarImageView)
-        val avatarHexagonImageView by bind<HexagonMaskView>(R.id.roomInvitationAvatarHexagonImageView)
         val rootView by bind<ViewGroup>(R.id.itemRoomInvitationLayout)
     }
 }
