@@ -114,6 +114,8 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
     }
 
     private fun renderAvatar(holder: Holder) {
+        // Tchap : Hide Hexagon avatar
+/*
         if (roomType == TchapRoomType.DIRECT) {
             holder.avatarImageView.visibility = View.VISIBLE
             holder.avatarHexagonImageView.visibility = View.GONE
@@ -125,6 +127,12 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
 
             avatarRenderer.render(matrixItem, holder.avatarHexagonImageView)
         }
+*/
+
+        holder.avatarImageView.visibility = View.VISIBLE
+        holder.avatarHexagonImageView.visibility = View.GONE
+
+        avatarRenderer.render(matrixItem, holder.avatarImageView)
     }
 
     private fun renderRoomType(holder: Holder) {

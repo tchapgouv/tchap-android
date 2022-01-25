@@ -158,7 +158,7 @@ abstract class TchapRoomAvatarWithNameItem : EpoxyModelWithHolder<TchapRoomAvata
     class Holder : VectorEpoxyHolder() {
         // Avatar
         val imageContainer by bind<View>(R.id.itemEditableAvatarImageContainer)
-        val image by bind<HexagonMaskView>(R.id.itemEditableAvatarImage)
+        val image by bind<ImageView>(R.id.itemEditableAvatarImage)
         val addImage by bind<View>(R.id.addImageIcon)
         val delete by bind<View>(R.id.itemEditableAvatarDelete)
         val roomTypeIcon by bind<ImageView>(R.id.itemEditableAvatarRoomType)
