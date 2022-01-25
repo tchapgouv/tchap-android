@@ -20,6 +20,7 @@ import dagger.Lazy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
@@ -283,7 +284,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             add(EventSharedAction.Resend(eventId))
         }
         add(EventSharedAction.Remove(eventId))
-        if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
+        // Tchap: Disable editing messages
+        if (canEdit(timelineEvent, session.myUserId, actionPermissions) &&
+                BuildConfig.SHOW_EDIT_MESSAGE) {
             add(EventSharedAction.Edit(eventId))
         }
         if (canCopy(msgType)) {
@@ -328,7 +331,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.EndPoll(timelineEvent.eventId))
             }
 
-            if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
+            // Tchap: Disable editing messages
+            if (canEdit(timelineEvent, session.myUserId, actionPermissions) &&
+                    BuildConfig.SHOW_EDIT_MESSAGE) {
                 add(EventSharedAction.Edit(eventId))
             }
 
