@@ -284,7 +284,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             add(EventSharedAction.Resend(eventId))
         }
         add(EventSharedAction.Remove(eventId))
-        if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
+        // Tchap: Disable editing messages
+        if (canEdit(timelineEvent, session.myUserId, actionPermissions) &&
+                BuildConfig.SHOW_EDIT_MESSAGE) {
             add(EventSharedAction.Edit(eventId))
         }
         if (canCopy(msgType)) {
@@ -329,7 +331,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.EndPoll(timelineEvent.eventId))
             }
 
-            if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
+            // Tchap: Disable editing messages
+            if (canEdit(timelineEvent, session.myUserId, actionPermissions) &&
+                    BuildConfig.SHOW_EDIT_MESSAGE) {
                 add(EventSharedAction.Edit(eventId))
             }
 

@@ -168,6 +168,9 @@ android {
         // Tchap: Disable add messages reaction
         buildConfigField "Boolean", "SHOW_ADD_MESSAGE_REACTION", "false"
 
+        // Tchap: Disable editing messages
+        buildConfigField "Boolean", "SHOW_EDIT_MESSAGE", "false"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // Keep abiFilter for the universalApk
