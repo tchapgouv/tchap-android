@@ -360,7 +360,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.Copy(messageContent!!.body))
             }
 
-            if (timelineEvent.canReact() && actionPermissions.canReact) {
+            // Tchap: Disable message reaction
+            if (timelineEvent.canReact() && actionPermissions.canReact &&
+                    BuildConfig.SHOW_ADD_MESSAGE_REACTION) {
                 add(EventSharedAction.AddReaction(eventId))
             }
 
