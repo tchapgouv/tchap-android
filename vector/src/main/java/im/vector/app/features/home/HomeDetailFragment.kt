@@ -18,10 +18,12 @@ package im.vector.app.features.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -115,14 +117,18 @@ class HomeDetailFragment @Inject constructor(
         }
     }
 
-    // Tchap: Hidden mark all as read item
-//    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        // Tchap: Hidden mark all as read item
 //        withState(viewModel) { state ->
 //            val isRoomList = state.currentTab is HomeTab.RoomList
 //            menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
 //        }
-//        super.onPrepareOptionsMenu(menu)
-//    }
+
+        val searchView = menu.findItem(R.id.menu_home_search_action)?.actionView as? SearchView
+        searchView?.maxWidth = Int.MAX_VALUE
+
+        super.onPrepareOptionsMenu(menu)
+    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeDetailBinding {
         return FragmentHomeDetailBinding.inflate(inflater, container, false)
