@@ -42,6 +42,7 @@ import dagger.hilt.android.HiltAndroidApp
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.startSyncing
+import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.disclaimer.doNotShowDisclaimerDialog
@@ -95,6 +96,7 @@ class VectorApplication :
     @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var invitesAcceptor: InvitesAcceptor
     @Inject lateinit var vectorFileLogger: VectorFileLogger
+    @Inject lateinit var vectorAnalytics: VectorAnalytics
 
     // font thread handler
     private var fontThreadHandler: Handler? = null
@@ -112,6 +114,7 @@ class VectorApplication :
         enableStrictModeIfNeeded()
         super.onCreate()
         appContext = this
+        vectorAnalytics.init()
         invitesAcceptor.initialize()
         vectorUncaughtExceptionHandler.activate(this)
 
@@ -176,8 +179,7 @@ class VectorApplication :
             }
 
             override fun onPause(owner: LifecycleOwner) {
-                Timber.i("App entered background") // call persistInfo
-                notificationDrawerManager.persistInfo()
+                Timber.i("App entered background")
                 FcmHelper.onEnterBackground(appContext, vectorPreferences, activeSessionHolder)
             }
         })
@@ -223,6 +225,7 @@ class VectorApplication :
 
     override fun getWorkManagerConfiguration(): WorkConfiguration {
         return WorkConfiguration.Builder()
+                .setWorkerFactory(Matrix.getInstance(this.appContext).workerFactory())
                 .setExecutor(Executors.newCachedThreadPool())
                 .build()
     }

@@ -48,4 +48,5 @@ sealed class LoginViewEvents : VectorViewEvents {
     data class OnWebLoginError(val errorCode: Int, val description: String, val failingUrl: String) : LoginViewEvents()
 
     object OnPasswordValidated : LoginViewEvents()
+    data class OnHomeServerRetrieved(val hs: String) : LoginViewEvents()
 }

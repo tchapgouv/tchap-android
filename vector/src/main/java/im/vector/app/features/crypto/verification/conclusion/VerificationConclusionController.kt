@@ -22,10 +22,8 @@ import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
-import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationBigImageItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.html.EventHtmlRenderer
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
 class VerificationConclusionController @Inject constructor(
@@ -56,23 +54,25 @@ class VerificationConclusionController @Inject constructor(
                             else R.string.verification_conclusion_ok_notice))
                 }
 
-                bottomSheetVerificationBigImageItem {
-                    id("image")
-                    roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Trusted)
-                }
+                // Tchap: Hide shield
+//                bottomSheetVerificationBigImageItem {
+//                    id("image")
+//                    roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Trusted)
+//                }
 
                 bottomDone()
             }
             ConclusionState.WARNING   -> {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
-                    notice(host.stringProvider.getString(R.string.verification_conclusion_not_secure))
+                    notice(host.stringProvider.getString(R.string.tchap_verification_conclusion_not_secure))
                 }
 
-                bottomSheetVerificationBigImageItem {
-                    id("image")
-                    roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Warning)
-                }
+                // Tchap: Hide shield
+//                bottomSheetVerificationBigImageItem {
+//                    id("image")
+//                    roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Warning)
+//                }
 
                 bottomSheetVerificationNoticeItem {
                     id("warning_notice")

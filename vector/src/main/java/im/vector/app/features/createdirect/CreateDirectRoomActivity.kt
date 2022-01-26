@@ -22,11 +22,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,6 +48,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
+import org.matrix.android.sdk.api.session.user.model.User
 import java.net.HttpURLConnection
 import javax.inject.Inject
 
@@ -80,7 +78,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                 .launchIn(lifecycleScope)
         if (isFirstCreation()) {
             addFragment(
-                    R.id.container,
+                    views.container,
                     UserListFragment::class.java,
                     UserListFragmentArgs(
                             title = getString(R.string.fab_menu_create_chat),
@@ -91,27 +89,55 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     )
             )
         }
-        viewModel.onEach(CreateDirectRoomViewState::createAndInviteState) {
-            renderCreateAndInviteState(it)
+        viewModel.onEach(CreateDirectRoomViewState::isLoading) { isLoading ->
+            if (isLoading) {
+                renderCreationLoading()
+            } else {
+                hideWaitingView()
+            }
         }
+        viewModel.viewEvents
+                .stream()
+                .onEach { viewEvent ->
+                    when (viewEvent) {
+                        CreateDirectRoomViewEvents.InviteSent                 -> {
+                            handleInviteByEmailResult(buildString {
+                                appendLine(getString(R.string.tchap_invite_sending_succeeded))
+                                append(getString(R.string.tchap_send_invite_confirmation))
+                            })
+                        }
+                        is CreateDirectRoomViewEvents.Failure                 -> renderCreationFailure(viewEvent.throwable)
+                        is CreateDirectRoomViewEvents.UserDiscovered          -> handleExistingUser(viewEvent.user)
+                        is CreateDirectRoomViewEvents.InviteAlreadySent       -> {
+                            handleInviteByEmailResult(getString(R.string.tchap_invite_already_send_message, viewEvent.email))
+                        }
+                        is CreateDirectRoomViewEvents.InviteUnauthorizedEmail -> {
+                            handleInviteByEmailResult(getString(R.string.tchap_invite_unauthorized_message, viewEvent.email))
+                        }
+                        is CreateDirectRoomViewEvents.OpenDirectChat          -> {
+                            renderCreationSuccess(viewEvent.roomId)
+                        }
+                    }.exhaustive
+                }
+                .launchIn(lifecycleScope)
     }
 
     private fun openAddByQrCode() {
         if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, permissionCameraLauncher)) {
-            addFragment(R.id.container, CreateDirectRoomByQrCodeFragment::class.java)
+            addFragment(views.container, CreateDirectRoomByQrCodeFragment::class.java)
         }
     }
 
     private fun openPhoneBook() {
         // Check permission first
         if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, this, permissionReadContactLauncher)) {
-            addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java)
+            addFragmentToBackstack(views.container, ContactsBookFragment::class.java)
         }
     }
 
     private val permissionReadContactLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
-            doOnPostResume { addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
+            doOnPostResume { addFragmentToBackstack(views.container, ContactsBookFragment::class.java) }
         } else if (deniedPermanently) {
             onPermissionDeniedSnackbar(R.string.permissions_denied_add_contact)
         }
@@ -119,7 +145,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private val permissionCameraLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
-            addFragment(R.id.container, CreateDirectRoomByQrCodeFragment::class.java)
+            addFragment(views.container, CreateDirectRoomByQrCodeFragment::class.java)
         } else if (deniedPermanently) {
             onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
         }
@@ -128,14 +154,6 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     private fun onMenuItemSelected(action: UserListSharedAction.OnMenuItemSelected) {
         if (action.itemId == R.id.action_create_direct_room) {
             viewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(action.selections))
-        }
-    }
-
-    private fun renderCreateAndInviteState(state: Async<String>) {
-        when (state) {
-            is Loading -> renderCreationLoading()
-            is Success -> renderCreationSuccess(state())
-            is Fail    -> renderCreationFailure(state.error)
         }
     }
 
@@ -171,12 +189,19 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         }
     }
 
-    private fun renderCreationSuccess(roomId: String?) {
+    private fun renderCreationSuccess(roomId: String) {
         // Navigate to freshly created room
-        if (roomId != null) {
-            navigator.openRoom(this, roomId)
-        }
+        navigator.openRoom(this, roomId)
         finish()
+    }
+
+    private fun handleInviteByEmailResult(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        finish()
+    }
+
+    private fun handleExistingUser(user: User) {
+        viewModel.handle(CreateDirectRoomAction.CreateDirectMessageByUserId(user.userId))
     }
 
     companion object {

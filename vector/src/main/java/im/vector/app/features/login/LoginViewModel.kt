@@ -26,6 +26,9 @@ import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import fr.gouv.tchap.features.platform.GetPlatformResult
+import fr.gouv.tchap.features.platform.Params
+import fr.gouv.tchap.features.platform.TchapGetPlatformTask
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
@@ -66,7 +69,8 @@ class LoginViewModel @AssistedInject constructor(
         private val homeServerConnectionConfigFactory: HomeServerConnectionConfigFactory,
         private val reAuthHelper: ReAuthHelper,
         private val stringProvider: StringProvider,
-        private val homeServerHistoryService: HomeServerHistoryService
+        private val homeServerHistoryService: HomeServerHistoryService,
+        private val tchapGetPlatformTask: TchapGetPlatformTask
 ) : VectorViewModel<LoginViewState, LoginAction, LoginViewEvents>(initialState) {
 
     @AssistedFactory
@@ -133,6 +137,7 @@ class LoginViewModel @AssistedInject constructor(
             LoginAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
             is LoginAction.CheckPasswordPolicy        -> handleCheckPasswordPolicy(action)
             is LoginAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
+            is LoginAction.RetrieveHomeServer         -> handleRetrieveHomeServer(action)
         }.exhaustive
     }
 
@@ -404,7 +409,8 @@ class LoginViewModel @AssistedInject constructor(
                     setState {
                         copy(
                                 asyncLoginAction = Uninitialized,
-                                asyncRegistration = Uninitialized
+                                asyncRegistration = Uninitialized,
+                                asyncRetrieveHomeServer = Uninitialized
                         )
                     }
                 }
@@ -414,7 +420,8 @@ class LoginViewModel @AssistedInject constructor(
                     copy(
                             asyncResetPassword = Uninitialized,
                             asyncResetMailConfirmed = Uninitialized,
-                            resetPasswordEmail = null
+                            resetPasswordEmail = null,
+                            asyncRetrieveHomeServer = Uninitialized
                     )
                 }
             }
@@ -860,5 +867,26 @@ class LoginViewModel @AssistedInject constructor(
 
     fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String? {
         return authenticationService.getFallbackUrl(forSignIn, deviceId)
+    }
+
+    private fun handleRetrieveHomeServer(action: LoginAction.RetrieveHomeServer) {
+        setState {
+            copy(
+                    asyncLoginAction = Uninitialized,
+                    asyncRetrieveHomeServer = Loading()
+            )
+        }
+        currentJob = viewModelScope.launch {
+            when (val result = tchapGetPlatformTask.execute(Params(action.email))) {
+                is GetPlatformResult.Success -> {
+                    _viewEvents.post(LoginViewEvents.OnHomeServerRetrieved(result.platform.hs))
+                    setState { copy(asyncRetrieveHomeServer = Uninitialized) }
+                }
+                is GetPlatformResult.Failure -> {
+                    _viewEvents.post(LoginViewEvents.Failure(result.throwable))
+                    setState { copy(asyncRetrieveHomeServer = Fail(result.throwable)) }
+                }
+            }
+        }
     }
 }

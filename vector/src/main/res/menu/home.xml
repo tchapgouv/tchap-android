@@ -29,11 +29,12 @@
         android:title="Do an optimized init sync"
         tools:ignore="HardcodedText" />
 
+    <!-- Tchap: Use searchView widget -->
     <item
         android:id="@+id/menu_home_search_action"
         android:icon="@drawable/ic_search"
-        android:title="@string/home_filter_placeholder_home"
-        app:iconTint="?vctr_content_secondary"
-        app:showAsAction="always" />
+        android:title="@string/search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="collapseActionView|always" />
 
 </menu>

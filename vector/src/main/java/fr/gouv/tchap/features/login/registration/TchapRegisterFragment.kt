@@ -21,14 +21,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.fragmentViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
 import fr.gouv.tchap.core.utils.TchapUtils
-import fr.gouv.tchap.features.platform.PlatformAction
-import fr.gouv.tchap.features.platform.PlatformViewEvents
-import fr.gouv.tchap.features.platform.PlatformViewModel
-import fr.gouv.tchap.features.platform.PlatformViewState
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.isEmail
@@ -51,10 +45,8 @@ import javax.inject.Inject
  * In signup mode:
  * - the user is asked for login and password
  */
-class TchapRegisterFragment @Inject constructor(private val platformViewModelFactory: PlatformViewModel.Factory
-) : AbstractLoginFragment<FragmentTchapRegisterBinding>(), PlatformViewModel.Factory {
+class TchapRegisterFragment @Inject constructor() : AbstractLoginFragment<FragmentTchapRegisterBinding>() {
 
-    private val viewModel: PlatformViewModel by fragmentViewModel()
     private lateinit var login: String
     private lateinit var password: String
 
@@ -67,19 +59,9 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
         setupToolbar(views.toolbar)
         views.toolbar.setTitle(R.string.tchap_register_title)
 
-        viewModel.observeViewEvents {
-            when (it) {
-                is PlatformViewEvents.Loading -> showLoading(it.message)
-                is PlatformViewEvents.Failure -> {
-                    // Dialog is displayed by the Activity
-                }
-                is PlatformViewEvents.Success -> updateHomeServer(it.platform)
-            }.exhaustive
-        }
-
         loginViewModel.observeViewEvents { loginViewEvents ->
             when (loginViewEvents) {
-                LoginViewEvents.OnLoginFlowRetrieved           ->
+                LoginViewEvents.OnLoginFlowRetrieved      ->
                     loginViewModel.handle(LoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
                 is LoginViewEvents.RegistrationFlowResult -> {
                     // Result from registration request when the account password is set.
@@ -97,7 +79,8 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
                         Unit
                     }
                 }
-                else                                             -> Unit // This is handled by the Activity
+                is LoginViewEvents.OnHomeServerRetrieved  -> updateHomeServer(loginViewEvents.hs)
+                else                                      -> Unit // This is handled by the Activity
             }.exhaustive
         }
     }
@@ -138,7 +121,7 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
         }
 
         if (error == 0) {
-            viewModel.handle(PlatformAction.DiscoverTchapPlatform(login))
+            loginViewModel.handle(LoginAction.RetrieveHomeServer(login))
         }
     }
 
@@ -148,19 +131,19 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
         views.tchapRegisterPassword.error = null
     }
 
-    private fun updateHomeServer(platform: Platform) {
-        if (TchapUtils.isExternalTchapServer(platform.hs)) {
+    private fun updateHomeServer(hs: String) {
+        if (TchapUtils.isExternalTchapServer(hs)) {
             MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.tchap_register_warning_for_external_title)
                     .setCancelable(false)
                     .setMessage(R.string.tchap_register_warning_for_external)
                     .setPositiveButton(R.string.tchap_register_warning_for_external_proceed) { _, _ ->
-                        loginViewModel.handle(LoginAction.UpdateHomeServer(getString(R.string.server_url_prefix) + platform.hs))
+                        loginViewModel.handle(LoginAction.UpdateHomeServer(getString(R.string.server_url_prefix) + hs))
                     }
                     .setNegativeButton(R.string.cancel, null)
                     .show()
         } else {
-            loginViewModel.handle(LoginAction.UpdateHomeServer(getString(R.string.server_url_prefix) + platform.hs))
+            loginViewModel.handle(LoginAction.UpdateHomeServer(getString(R.string.server_url_prefix) + hs))
         }
     }
 
@@ -182,9 +165,5 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
         } else {
             views.tchapRegisterEmail.error = errorFormatter.toHumanReadable(throwable)
         }
-    }
-
-    override fun create(initialState: PlatformViewState): PlatformViewModel {
-        return platformViewModelFactory.create(initialState)
     }
 }

@@ -22,6 +22,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.Menu
+import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
@@ -43,8 +45,11 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
-import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.ActivityHomeBinding
+import im.vector.app.features.MainActivity
+import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
+import im.vector.app.features.disclaimer.shouldShowDisclaimerDialog
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.navigation.Navigator
@@ -69,6 +74,7 @@ import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
 import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.app.features.webview.VectorWebViewActivity
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.flow.launchIn
@@ -78,6 +84,8 @@ import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
+import org.matrix.android.sdk.internal.session.sync.initialSyncStrategy
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -99,6 +107,9 @@ class HomeActivity :
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
+
+    @Suppress("UNUSED")
+    private val analyticsAccountDataViewModel: AnalyticsAccountDataViewModel by viewModel()
 
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by viewModel()
     private val promoteRestrictedViewModel: PromoteRestrictedViewModel by viewModel()
@@ -171,8 +182,8 @@ class HomeActivity :
         sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
-            replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java)
-            replaceFragment(R.id.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
+            replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java)
+            replaceFragment(views.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
         }
 
         sharedActionViewModel
@@ -188,7 +199,7 @@ class HomeActivity :
                             // When switching from space to group or group to space, we need to reload the fragment
                             // To be removed when dropping legacy groups
                             if (sharedAction.clearFragment) {
-                                replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
+                                replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
                             } else {
                                 // no-op
                             }
@@ -220,12 +231,16 @@ class HomeActivity :
                         }
                         is HomeActivitySharedAction.InviteByEmail      -> Unit // no-op
                         HomeActivitySharedAction.OpenTermAndConditions -> {
-                            openUrlInChromeCustomTab(this, null, VectorSettingsUrls.TAC)
+                            // Tchap: the Term And Conditions url is detected as a permalink (same prefix), which make the application fail to open it from
+                            // ChromeCustomTab, so we open it here directly in a WebView
+                            val intent = VectorWebViewActivity.getIntent(this, VectorSettingsUrls.TAC, getString(R.string.settings_app_term_conditions))
+                            startActivity(intent)
                         }
                         HomeActivitySharedAction.OpenBugReport         -> {
                             views.drawerLayout.closeDrawer(GravityCompat.START)
                             bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT, false)
                         }
+                        is HomeActivitySharedAction.SelectTab          -> Unit // no-op
                     }.exhaustive
                 }
                 .launchIn(lifecycleScope)
@@ -247,6 +262,7 @@ class HomeActivity :
                 is HomeActivityViewEvents.OnNewSession                  -> handleOnNewSession(it)
                 HomeActivityViewEvents.PromptToEnableSessionPush        -> handlePromptToEnablePush()
                 is HomeActivityViewEvents.OnCrossSignedInvalidated      -> handleCrossSigningInvalidated(it)
+                HomeActivityViewEvents.ShowAnalyticsOptIn               -> handleShowAnalyticsOptIn()
             }.exhaustive
         }
         homeActivityViewModel.onEach { renderState(it) }
@@ -271,6 +287,11 @@ class HomeActivity :
         if (isFirstCreation()) {
             handleIntent(intent)
         }
+        homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
+    }
+
+    private fun handleShowAnalyticsOptIn() {
+        navigator.openAnalyticsOptIn(this)
     }
 
     private fun handleIntent(intent: Intent?) {
@@ -463,8 +484,9 @@ class HomeActivity :
                     .setPositiveButton(R.string.yes) { _, _ -> bugReporter.openBugReportScreen(this) }
                     .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile(this) }
                     .show()
-        } else {
+        } else if (shouldShowDisclaimerDialog(this)) {
             showDisclaimerDialog(this)
+            homeActivityViewModel.handle(HomeActivityViewActions.DisclaimerDialogShown)
         }
 
         // Force remote backup state update to update the banner if needed
@@ -475,50 +497,51 @@ class HomeActivity :
         configureToolbar(toolbar, false)
     }
 
-//    override fun getMenuRes() = R.menu.home
-//
-//    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-//        menu.findItem(R.id.menu_home_init_sync_legacy).isVisible = vectorPreferences.developerMode()
-//        menu.findItem(R.id.menu_home_init_sync_optimized).isVisible = vectorPreferences.developerMode()
-//        return super.onPrepareOptionsMenu(menu)
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
-//            R.id.menu_home_suggestion          -> {
-//                bugReporter.openBugReportScreen(this, ReportType.SUGGESTION)
-//                return true
-//            }
-//            R.id.menu_home_report_bug          -> {
-//                bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT)
-//                return true
-//            }
-//            R.id.menu_home_init_sync_legacy    -> {
-//                // Configure the SDK
-//                initialSyncStrategy = InitialSyncStrategy.Legacy
-//                // And clear cache
-//                MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
-//                return true
-//            }
-//            R.id.menu_home_init_sync_optimized -> {
-//                // Configure the SDK
-//                initialSyncStrategy = InitialSyncStrategy.Optimized()
-//                // And clear cache
-//                MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
-//                return true
-//            }
+    override fun getMenuRes() = R.menu.home
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menu.findItem(R.id.menu_home_init_sync_legacy).isVisible = vectorPreferences.developerMode()
+        menu.findItem(R.id.menu_home_init_sync_optimized).isVisible = vectorPreferences.developerMode()
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_home_suggestion          -> {
+                bugReporter.openBugReportScreen(this, ReportType.SUGGESTION)
+                return true
+            }
+            R.id.menu_home_report_bug          -> {
+                bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT)
+                return true
+            }
+            R.id.menu_home_init_sync_legacy    -> {
+                // Configure the SDK
+                initialSyncStrategy = InitialSyncStrategy.Legacy
+                // And clear cache
+                MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
+                return true
+            }
+            R.id.menu_home_init_sync_optimized -> {
+                // Configure the SDK
+                initialSyncStrategy = InitialSyncStrategy.Optimized()
+                // And clear cache
+                MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
+                return true
+            }
+            // Tchap: search is handled in RoomListFragment
 //            R.id.menu_home_filter              -> {
 //                navigator.openRoomsFiltering(this)
 //                return true
 //            }
-//            R.id.menu_home_setting             -> {
-//                navigator.openSettings(this)
-//                return true
-//            }
-//        }
-//
-//        return super.onOptionsItemSelected(item)
-//    }
+            R.id.menu_home_setting             -> {
+                navigator.openSettings(this)
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
 
     override fun onBackPressed() {
         if (views.drawerLayout.isDrawerOpen(GravityCompat.START)) {

@@ -33,7 +33,7 @@ data class CreateRoomViewState(
         val isEncrypted: Boolean? = null,
         val defaultEncrypted: Map<RoomJoinRules, Boolean> = emptyMap(),
         val showAdvanced: Boolean = false,
-        val disableFederation: Boolean = true,
+        val disableFederation: Boolean = false,
         val isFederationSettingAvailable: Boolean = true,
         val homeServerName: String = "",
         val userDomain: String = "",

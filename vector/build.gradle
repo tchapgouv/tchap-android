@@ -15,7 +15,7 @@ kapt {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 99
-ext.versionPatch = 3
+ext.versionPatch = 4
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -139,16 +139,7 @@ android {
         buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
         resValue "string", "build_number", "\"${buildNumber}\""
 
-        // The two booleans must not have the same value. We need two values for the manifest
-        // LoginFlowV2 is disabled to be merged on develop (changelog: Improve login/register flow (#1410, #2585, #3172))
-        resValue "bool", "useLoginV1", "true"
-        resValue "bool", "useLoginV2", "false"
-
-        // NotificationSettingsV2 is disabled. To be released in conjunction with iOS/Web
-        def useNotificationSettingsV2 = true
-        buildConfigField "Boolean", "USE_NOTIFICATION_SETTINGS_V2", "${useNotificationSettingsV2}"
-        resValue "bool", "useNotificationSettingsV1", "${!useNotificationSettingsV2}"
-        resValue "bool", "useNotificationSettingsV2", "${useNotificationSettingsV2}"
+        buildConfigField "im.vector.app.features.VectorFeatures.LoginVersion", "LOGIN_VERSION", "im.vector.app.features.VectorFeatures.LoginVersion.V1"
 
         buildConfigField "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy", "outboundSessionKeySharingStrategy", "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy.WhenTyping"
 
@@ -158,25 +149,35 @@ android {
         //  This *must* only be set in trusted environments.
         buildConfigField "Boolean", "handleCallAssertedIdentityEvents", "false"
 
-        // Key Backup is not supported
+        // Tchap: Key Backup is not supported
         buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
 
-        // CrossSigning initialization is disabled
+        // Tchap: CrossSigning initialization is disabled
         def enableCrossSigning = false
         buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
         resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
 
-        // Spaces feature is hidden
+        // Tchap: Spaces feature is hidden
         def showSpaces = false
         buildConfigField "Boolean", "SHOW_SPACES", "${showSpaces}"
         resValue "bool", "show_spaces", "${showSpaces}"
 
+        // Tchap: Hide voice message recorder button
+        buildConfigField "Boolean", "SHOW_VOICE_RECORDER", "false"
+
+        // Tchap: Disable add messages reaction
+        buildConfigField "Boolean", "SHOW_ADD_MESSAGE_REACTION", "false"
+
+        // Tchap: Disable editing messages
+        buildConfigField "Boolean", "SHOW_EDIT_MESSAGE", "false"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        // Tchap: Disable universalApk
         // Keep abiFilter for the universalApk
-        ndk {
-            abiFilters "armeabi-v7a", "x86", 'arm64-v8a', 'x86_64'
-        }
+//        ndk {
+//            abiFilters "armeabi-v7a", "x86", 'arm64-v8a', 'x86_64'
+//        }
 
         // Ref: https://developer.android.com/studio/build/configure-apk-splits.html
         splits {
@@ -194,8 +195,9 @@ android {
                 // Specifies a list of ABIs that Gradle should create APKs for.
                 include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
 
+                // Tchap: Disable universalApk
                 // Generate a universal APK that includes all ABIs, so user who install from CI tool can use this one by default.
-                universalApk true
+                universalApk false
             }
         }
 
@@ -241,6 +243,8 @@ android {
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             // Set to true if you want to enable strict mode in debug
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
+            // Tchap: Show developer mode only in debug
+            resValue "bool", "developer_mode_visible", "true"
 
             signingConfig signingConfigs.debug
         }
@@ -249,6 +253,8 @@ android {
             resValue "bool", "debug_mode", "false"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
+            // Tchap: Show developer mode only in debug
+            resValue "bool", "developer_mode_visible", "false"
 
             postprocessing {
                 removeUnusedCode true
@@ -314,32 +320,41 @@ android {
             dimension "pinning"
         }
 
-        secure {
-            dimension "target"
-
-            resValue "string", "app_name", "Tchap"
-
-            applicationId "fr.gouv.tchap"
-            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_s"
-        }
-
-        preprod {
+        btchap {
             dimension "target"
 
             resValue "string", "app_name", "Btchap"
 
             applicationId "fr.gouv.rie.tchap"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_b"
+
+            // Tchap: Show labs menu item in btchap
+            resValue "bool", "labs_settings_visible", "true"
         }
 
-        agent {
+        tchap {
             dimension "target"
 
             resValue "string", "app_name", "Tchap"
 
             applicationId "fr.gouv.tchap.a"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}"
+
+            // Tchap: Hide labs menu item in tchap
+            resValue "bool", "labs_settings_visible", "false"
         }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+
+            def outputFileNameUpdated = outputFileName
+                    .replace("vector-", "")
+                    .replace("release", "v${versionName}")
+
+            outputFileName = outputFileNameUpdated
+        }
+
     }
 
     lintOptions {
@@ -380,11 +395,6 @@ android {
     buildFeatures {
         viewBinding true
     }
-}
-
-configurations {
-    // videocache includes a sl4j logger which causes mockk to attempt to call the static android Log
-    testImplementation.exclude group: 'org.slf4j', module: 'slf4j-android'
 }
 
 dependencies {
@@ -430,7 +440,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.37'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.39'
 
     // FlowBinding
     implementation libs.github.flowBinding
@@ -463,7 +473,7 @@ dependencies {
     implementation libs.markwon.html
     implementation 'com.googlecode.htmlcompressor:htmlcompressor:1.5.2'
     implementation 'me.saket:better-link-movement-method:2.2.0'
-    implementation 'com.google.android:flexbox:2.0.1'
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
     implementation libs.androidx.autoFill
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'com.github.vector-im:PFLockScreen-Android:1.0.0-beta12'
@@ -480,7 +490,7 @@ dependencies {
     implementation 'com.arthenica:ffmpeg-kit-audio:4.5.LTS'
 
     // Alerter
-    implementation 'com.tapadoo.android:alerter:7.0.1'
+    implementation 'com.github.tapadoo:alerter:7.2.4'
 
     implementation 'com.otaliastudios:autocomplete:1.1.0'
 
@@ -498,7 +508,6 @@ dependencies {
 
     implementation libs.github.glide
     kapt libs.github.glideCompiler
-    implementation 'com.danikula:videocache:2.7.1'
     implementation 'com.github.yalantis:ucrop:2.2.7'
 
     // Badge for compatibility
@@ -511,6 +520,9 @@ dependencies {
     implementation libs.dagger.hilt
     kapt libs.dagger.hiltCompiler
 
+    // Analytics
+    implementation 'com.posthog.android:posthog:1.1.2'
+
     // gplay flavor only
     gplayImplementation('com.google.firebase:firebase-messaging:23.0.0') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
@@ -521,16 +533,16 @@ dependencies {
     // OSS License, gplay flavor only
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
-    implementation "androidx.emoji:emoji-appcompat:1.1.0"
+    implementation "androidx.emoji2:emoji2:1.0.0"
     implementation('com.github.BillCarsonFr:JsonViewer:0.7')
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
     // implementation 'org.webrtc:google-webrtc:1.0.+'
-    withvoipImplementation('com.facebook.react:react-native-webrtc:1.87.3-jitsi-6624067@aar')
+    withvoipImplementation('com.facebook.react:react-native-webrtc:1.92.1-jitsi-9093212@aar')
 
     // Jitsi
-    withvoipImplementation('org.jitsi.react:jitsi-meet-sdk:3.1.0') {
+    withvoipImplementation('org.jitsi.react:jitsi-meet-sdk:3.10.0') {
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'

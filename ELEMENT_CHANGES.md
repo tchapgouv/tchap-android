@@ -1,8 +1,103 @@
+Changes in Element v1.3.12 (2021-12-20)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fixing emoji related crashes on android 8.1.1 and below ([#4769](https://github.com/vector-im/element-android/issues/4769))
+
+
+Changes in Element v1.3.11 (2021-12-17)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fixing proximity sensor still being active after a call ([#2467](https://github.com/vector-im/element-android/issues/2467))
+ - Fix name and shield are truncated in the room detail screen ([#4700](https://github.com/vector-im/element-android/issues/4700))
+ - Call banner: center text vertically ([#4710](https://github.com/vector-im/element-android/issues/4710))
+ - Fixes unable to render messages by allowing them to render whilst the emoji library is initialising ([#4733](https://github.com/vector-im/element-android/issues/4733))
+ - Fix app crash uppon long press on a reply event ([#4742](https://github.com/vector-im/element-android/issues/4742))
+ - Fixes crash when launching rooms which contain emojis in the emote content on android 12+ ([#4743](https://github.com/vector-im/element-android/issues/4743))
+
+Other changes
+-------------
+ - Avoids leaking the activity windows when loading dialogs are displaying ([#4713](https://github.com/vector-im/element-android/issues/4713))
+
+
+Changes in Element v1.3.10 (2021-12-14)
+=======================================
+
+Features ✨
+----------
+ - Poll Feature - Render in timeline ([#4653](https://github.com/vector-im/element-android/issues/4653))
+ - Updates URL previews to match latest designs ([#4278](https://github.com/vector-im/element-android/issues/4278))
+ - Setup Analytics framework using PostHog. Analytics are disabled by default. Opt-in screen not automatically displayed yet. ([#4559](https://github.com/vector-im/element-android/issues/4559))
+ - Create a legal screen in the setting to group all the different policies. ([#4660](https://github.com/vector-im/element-android/issues/4660))
+ - Add a help section in the settings. ([#4638](https://github.com/vector-im/element-android/issues/4638))
+ - MSC2732: Olm fallback keys ([#3473](https://github.com/vector-im/element-android/issues/3473))
+
+Bugfixes 🐛
+----------
+ - Fixes message menu showing when copying message urls ([#4324](https://github.com/vector-im/element-android/issues/4324))
+ - Fix lots of integration tests by introducing TestMatrix class and MatrixWorkerFactory. ([#4546](https://github.com/vector-im/element-android/issues/4546))
+ - Fix empty Dev Tools screen issue. ([#4592](https://github.com/vector-im/element-android/issues/4592))
+ - Fix for outgoing voip call via sip bridge failing after 1 minute. ([#4621](https://github.com/vector-im/element-android/issues/4621))
+ - Update log warning for call selection during voip calls. ([#4636](https://github.com/vector-im/element-android/issues/4636))
+ - Fix possible crash when having identical subspaces in multiple root spaces ([#4693](https://github.com/vector-im/element-android/issues/4693))
+ - Fix a crash in the timeline with some Emojis. Also migrate to androidx.emoji2 ([#4698](https://github.com/vector-im/element-android/issues/4698))
+ - At the very first room search after opening the app sometimes no results are displayed ([#4600](https://github.com/vector-im/element-android/issues/4600))
+
+Other changes
+-------------
+ - Upgrade OLM to v3.2.7 and get it from our maven repository. ([#4647](https://github.com/vector-im/element-android/issues/4647))
+ - Add explicit dependency location, regarding the several maven repository. Also update some libraries (flexbox and alerter), and do some cleanup. ([#4670](https://github.com/vector-im/element-android/issues/4670))
+ - Introducing feature flagging to the login and notification settings flows ([#4626](https://github.com/vector-im/element-android/issues/4626))
+ - There is no need to call job.cancel() when we are using viewModelScope() ([#4602](https://github.com/vector-im/element-android/issues/4602))
+ - Debounce some clicks ([#4645](https://github.com/vector-im/element-android/issues/4645))
+ - Improve issue automation workflows ([#4617](https://github.com/vector-im/element-android/issues/4617))
+ - Add automation to move message bubbles issues to message bubbles board. ([#4666](https://github.com/vector-im/element-android/issues/4666))
+ - Fix graphql warning in issue workflow automation ([#4671](https://github.com/vector-im/element-android/issues/4671))
+ - Cleanup the layout files ([#4604](https://github.com/vector-im/element-android/issues/4604))
+ - Cleanup id ref. Use type views instead ([#4650](https://github.com/vector-im/element-android/issues/4650))
+
+
+Changes in Element v1.3.9 (2021-12-01)
+======================================
+
+Features ✨
+----------
+ - Voice messages: Persist drafts of voice messages when navigating between rooms ([#3922](https://github.com/vector-im/element-android/issues/3922))
+ - Make Element Android Thread aware ([#4246](https://github.com/vector-im/element-android/issues/4246))
+ - Iterate on the consent dialog of the identity server. ([#4577](https://github.com/vector-im/element-android/issues/4577))
+
+Bugfixes 🐛
+----------
+ - Fixes left over text when inserting emojis via the ':' menu and replaces the last typed ':' rather than the one at the end of the message ([#3449](https://github.com/vector-im/element-android/issues/3449))
+ - Fixing queued voice message failing to send or retry ([#3833](https://github.com/vector-im/element-android/issues/3833))
+ - Keeping device screen on whilst recording and playing back voice messages ([#4022](https://github.com/vector-im/element-android/issues/4022))
+ - Allow voice messages to continue recording during device rotation ([#4067](https://github.com/vector-im/element-android/issues/4067))
+ - Allowing users to hang up VOIP calls during the initialisation phase (avoids getting stuck in the call screen if something goes wrong) ([#4144](https://github.com/vector-im/element-android/issues/4144))
+ - Make the verification shields the same in Element Web and Element Android ([#4338](https://github.com/vector-im/element-android/issues/4338))
+ - Fix a display issue in the composer when the replied message is changed. ([#4343](https://github.com/vector-im/element-android/issues/4343))
+ - Dismissing the Fdroid variant Listening for notifications on sign out, fixes crash when tapping the notification when signed out ([#4488](https://github.com/vector-im/element-android/issues/4488))
+ - Fix a crash when displaying the bootstrap bottom sheet ([#4520](https://github.com/vector-im/element-android/issues/4520))
+ - Remove duplicated settings declaration ([#4539](https://github.com/vector-im/element-android/issues/4539))
+ - Fixes .ogg files failing to upload to rooms ([#4552](https://github.com/vector-im/element-android/issues/4552))
+ - Add robustness when getting data from cursors ([#4605](https://github.com/vector-im/element-android/issues/4605))
+
+Other changes
+-------------
+ - Upgrade Jitsi lib (and so webrtc) from Jitsi android-sdk-3.1.0 to android-sdk-3.10.0 ([#4504](https://github.com/vector-im/element-android/issues/4504))
+ - Improve crypto logs to help debug decryption failures ([#4507](https://github.com/vector-im/element-android/issues/4507))
+ - Voice recording mic button refactor with small animation tweaks in preparation for voice drafts ([#4515](https://github.com/vector-im/element-android/issues/4515))
+ - Remove requestModelBuild() from epoxy Controllers init{} block ([#4591](https://github.com/vector-im/element-android/issues/4591))
+
+
 Changes in Element v1.3.8 (2021-11-17)
 ======================================
 
 Features ✨
 ----------
+ - Android 12 support ([#4433](https://github.com/vector-im/element-android/issues/4433))
  - Make notification text spoiler aware ([#3477](https://github.com/vector-im/element-android/issues/3477))
  - Poll Feature - Create Poll Screen (Disabled for now) ([#4367](https://github.com/vector-im/element-android/issues/4367))
  - Adds support for images inside message notifications ([#4402](https://github.com/vector-im/element-android/issues/4402))

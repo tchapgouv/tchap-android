@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.extensions.orTrue
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -45,6 +46,8 @@ import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import timber.log.Timber
+
+private val loggerTag = LoggerTag("MXMegolmDecryption", LoggerTag.CRYPTO)
 
 internal class MXMegolmDecryption(private val userId: String,
                                   private val olmDevice: MXOlmDevice,
@@ -77,7 +80,7 @@ internal class MXMegolmDecryption(private val userId: String,
 
     @Throws(MXCryptoError::class)
     private fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): MXEventDecryptionResult {
-        Timber.v("## CRYPTO | decryptEvent ${event.eventId}, requestKeysOnFail:$requestKeysOnFail")
+        Timber.tag(loggerTag.value).v("decryptEvent ${event.eventId}, requestKeysOnFail:$requestKeysOnFail")
         if (event.roomId.isNullOrBlank()) {
             throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
         }
@@ -233,7 +236,7 @@ internal class MXMegolmDecryption(private val userId: String,
      * @param event the key event.
      */
     override fun onRoomKeyEvent(event: Event, defaultKeysBackupService: DefaultKeysBackupService) {
-        Timber.v("## CRYPTO | onRoomKeyEvent()")
+        Timber.tag(loggerTag.value).v("onRoomKeyEvent()")
         var exportFormat = false
         val roomKeyContent = event.getClearContent().toModel<RoomKeyContent>() ?: return
 
@@ -242,11 +245,11 @@ internal class MXMegolmDecryption(private val userId: String,
         val forwardingCurve25519KeyChain: MutableList<String> = ArrayList()
 
         if (roomKeyContent.roomId.isNullOrEmpty() || roomKeyContent.sessionId.isNullOrEmpty() || roomKeyContent.sessionKey.isNullOrEmpty()) {
-            Timber.e("## CRYPTO | onRoomKeyEvent() :  Key event is missing fields")
+            Timber.tag(loggerTag.value).e("onRoomKeyEvent() :  Key event is missing fields")
             return
         }
         if (event.getClearType() == EventType.FORWARDED_ROOM_KEY) {
-            Timber.i("## CRYPTO | onRoomKeyEvent(), forward adding key : ${roomKeyContent.roomId}|${roomKeyContent.sessionId}")
+            Timber.tag(loggerTag.value).i("onRoomKeyEvent(), forward adding key : ${roomKeyContent.roomId}|${roomKeyContent.sessionId}")
             val forwardedRoomKeyContent = event.getClearContent().toModel<ForwardedRoomKeyContent>()
                     ?: return
 
@@ -255,7 +258,7 @@ internal class MXMegolmDecryption(private val userId: String,
             }
 
             if (senderKey == null) {
-                Timber.e("## CRYPTO | onRoomKeyEvent() : event is missing sender_key field")
+                Timber.tag(loggerTag.value).e("onRoomKeyEvent() : event is missing sender_key field")
                 return
             }
 
@@ -264,20 +267,20 @@ internal class MXMegolmDecryption(private val userId: String,
             exportFormat = true
             senderKey = forwardedRoomKeyContent.senderKey
             if (null == senderKey) {
-                Timber.e("## CRYPTO | onRoomKeyEvent() : forwarded_room_key event is missing sender_key field")
+                Timber.tag(loggerTag.value).e("onRoomKeyEvent() : forwarded_room_key event is missing sender_key field")
                 return
             }
 
             if (null == forwardedRoomKeyContent.senderClaimedEd25519Key) {
-                Timber.e("## CRYPTO | forwarded_room_key_event is missing sender_claimed_ed25519_key field")
+                Timber.tag(loggerTag.value).e("forwarded_room_key_event is missing sender_claimed_ed25519_key field")
                 return
             }
 
             keysClaimed["ed25519"] = forwardedRoomKeyContent.senderClaimedEd25519Key
         } else {
-            Timber.i("## CRYPTO | onRoomKeyEvent(), Adding key : ${roomKeyContent.roomId}|${roomKeyContent.sessionId}")
+            Timber.tag(loggerTag.value).i("onRoomKeyEvent(), Adding key : ${roomKeyContent.roomId}|${roomKeyContent.sessionId}")
             if (null == senderKey) {
-                Timber.e("## onRoomKeyEvent() : key event has no sender key (not encrypted?)")
+                Timber.tag(loggerTag.value).e("## onRoomKeyEvent() : key event has no sender key (not encrypted?)")
                 return
             }
 
@@ -285,7 +288,7 @@ internal class MXMegolmDecryption(private val userId: String,
             keysClaimed = event.getKeysClaimed().toMutableMap()
         }
 
-        Timber.i("## CRYPTO | onRoomKeyEvent addInboundGroupSession ${roomKeyContent.sessionId}")
+        Timber.tag(loggerTag.value).i("onRoomKeyEvent addInboundGroupSession ${roomKeyContent.sessionId}")
         val added = olmDevice.addInboundGroupSession(roomKeyContent.sessionId,
                 roomKeyContent.sessionKey,
                 roomKeyContent.roomId,
@@ -317,7 +320,7 @@ internal class MXMegolmDecryption(private val userId: String,
      * @param sessionId the session id
      */
     override fun onNewSession(senderKey: String, sessionId: String) {
-        Timber.v(" CRYPTO | ON NEW SESSION $sessionId - $senderKey")
+        Timber.tag(loggerTag.value).v("ON NEW SESSION $sessionId - $senderKey")
         newSessionListener?.onNewSession(null, senderKey, sessionId)
     }
 
@@ -349,10 +352,10 @@ internal class MXMegolmDecryption(private val userId: String,
                             if (olmSessionResult?.sessionId == null) {
                                 // no session with this device, probably because there
                                 // were no one-time keys.
-                                Timber.e("no session with this device $deviceId, probably because there were no one-time keys.")
+                                Timber.tag(loggerTag.value).e("no session with this device $deviceId, probably because there were no one-time keys.")
                                 return@mapCatching
                             }
-                            Timber.i("## CRYPTO | shareKeysWithDevice() : sharing session ${body.sessionId} with device $userId:$deviceId")
+                            Timber.tag(loggerTag.value).i("shareKeysWithDevice() : sharing session ${body.sessionId} with device $userId:$deviceId")
 
                             val payloadJson = mutableMapOf<String, Any>("type" to EventType.FORWARDED_ROOM_KEY)
                             runCatching { olmDevice.getInboundGroupSession(body.sessionId, body.senderKey, body.roomId) }
@@ -363,7 +366,7 @@ internal class MXMegolmDecryption(private val userId: String,
                                             },
                                             {
                                                 // TODO
-                                                Timber.e(it, "## CRYPTO | shareKeysWithDevice: failed to get session for request $body")
+                                                Timber.tag(loggerTag.value).e(it, "shareKeysWithDevice: failed to get session for request $body")
                                             }
 
                                     )
@@ -371,12 +374,12 @@ internal class MXMegolmDecryption(private val userId: String,
                             val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
                             val sendToDeviceMap = MXUsersDevicesMap<Any>()
                             sendToDeviceMap.setObject(userId, deviceId, encodedPayload)
-                            Timber.i("## CRYPTO | shareKeysWithDevice() : sending ${body.sessionId} to $userId:$deviceId")
+                            Timber.tag(loggerTag.value).i("shareKeysWithDevice() : sending ${body.sessionId} to $userId:$deviceId")
                             val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
                             try {
                                 sendToDeviceTask.execute(sendToDeviceParams)
                             } catch (failure: Throwable) {
-                                Timber.e(failure, "## CRYPTO | shareKeysWithDevice() : Failed to send ${body.sessionId} to $userId:$deviceId")
+                                Timber.tag(loggerTag.value).e(failure, "shareKeysWithDevice() : Failed to send ${body.sessionId} to $userId:$deviceId")
                             }
                         }
                     }

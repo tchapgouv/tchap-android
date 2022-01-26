@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:accessibilityTraversalBefore="@+id/createRoomItemGroup"
+        android:accessibilityTraversalBefore="@id/createRoomItemGroup"
         android:contentDescription="@string/a11y_create_direct_message"
         android:src="@drawable/ic_tchap_new_discussion"
         app:fabCustomSize="48dp"

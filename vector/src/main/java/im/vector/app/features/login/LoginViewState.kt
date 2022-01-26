@@ -25,6 +25,7 @@ import com.airbnb.mvrx.Uninitialized
 
 data class LoginViewState(
         val asyncLoginAction: Async<Unit> = Uninitialized,
+        val asyncRetrieveHomeServer: Async<Unit> = Uninitialized,
         val asyncHomeServerLoginFlowRequest: Async<Unit> = Uninitialized,
         val asyncResetPassword: Async<Unit> = Uninitialized,
         val asyncResetMailConfirmed: Async<Unit> = Uninitialized,
@@ -64,7 +65,8 @@ data class LoginViewState(
                 asyncResetMailConfirmed is Loading ||
                 asyncRegistration is Loading ||
                 // Keep loading when it is success because of the delay to switch to the next Activity
-                asyncLoginAction is Success
+                asyncLoginAction is Success ||
+                asyncRetrieveHomeServer is Loading
     }
 
     fun isUserLogged(): Boolean {

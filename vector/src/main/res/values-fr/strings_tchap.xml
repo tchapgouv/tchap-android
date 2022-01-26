@@ -32,7 +32,7 @@
     <string name="tchap_dialog_prompt_new_direct_chat">Vous n\'avez pas de message direct avec %s, voulez-vous lui envoyer une invitation ?</string>
 
     <!-- tchap new strings -->
-    <string name="tchap_room_admin_leave_prompt_msg">Voulez-vous vraiment quitter cette conversation ?\n\nElle ne sera plus administrée, et vous risquez de ne plus pouvoir la joindre de nouveau.</string>
+    <string name="tchap_room_last_admin_leave_prompt_msg">Ce salon ne sera plus administré, et vous risquez de ne plus pouvoir le joindre de nouveau.</string>
     <string name="template_tchap_invite_contacts_to_tchap">Inviter à rejoindre ${app_name}</string>
     <string name="tchap_invite_contacts_by_email">Inviter par e\u2011mail</string>
     <string name="tchap_invite_contacts_by_link">Inviter par lien</string>
@@ -151,6 +151,11 @@
     <string name="tchap_email_validation_failed">La validation de l’e\u2011mail a échouée. Le lien a expiré, ou il n’est pas valide.</string>
     <string name="tchap_change_password_help">Votre nouveau mot de passe doit contenir au moins 8 caractères, avec au moins un caractère de chaque type : majuscule, minuscule, chiffre, caractère spécial.</string>
     <string name="tchap_login_reset_password_warning_content">Le changement de mot de passe réinitialisera toutes les clés de chiffrement sur toutes vos sessions, rendant l’historique des discussions chiffrées illisible. Exportez vos clés de salon depuis une autre session avant de réinitialiser votre mot de passe.</string>
+    <string name="tchap_register_pwd_too_short">Ce mot de passe est trop court. Il doit contenir au moins 8 caractères</string>
+    <string name="tchap_register_pwd_no_uppercase">Ce mot de passe doit contenir au moins une majuscule</string>
+    <string name="tchap_register_pwd_no_digit">Ce mot de passe doit contenir au moins un chiffre</string>
+    <string name="tchap_register_pwd_no_lowercase">Ce mot de passe doit contenir au moins une minuscule</string>
+    <string name="tchap_register_pwd_no_symbol">Ce mot de passe doit contenir au moins un caractère spécial</string>
 
     <!-- Logout Tchap -->
     <string name="tchap_action_sign_out_confirmation">Pour des raisons de sécurité, la déconnexion supprimera toutes les clés de chiffrement de bout en bout, rendant l’historique des conversations chiffrées inaccessible lorsque vous vous reconnecterez. Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
@@ -168,4 +173,7 @@
     <string name="tchap_settings_show_external_user_in_users_directory_prompt">Pour désactiver cette option, vous devez accepter que votre adresse e\u2011mail soit visible des autres utilisateurs lors de leurs recherches.</string>
 
     <string name="tchap_dialog_user_consent_homeserver_name">Tchap</string>
+
+    <!-- Verification -->
+    <string name="tchap_verification_conclusion_not_secure">La vérification de votre nouvelle session a échoué.</string>
 </resources>

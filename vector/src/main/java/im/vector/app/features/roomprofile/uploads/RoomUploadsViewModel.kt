@@ -29,6 +29,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.contentscanner.ScanState
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
@@ -83,11 +84,21 @@ class RoomUploadsViewModel @AssistedInject constructor(
                                     it.contentWithAttachmentContent.msgType == MessageType.MSGTYPE_VIDEO
                         }
 
+                val mediaTrusted = groupedUploadEvents[true]?.filter {
+                    val url = it.contentWithAttachmentContent.encryptedFileInfo?.url ?: return@filter false
+                    session.contentScannerService().getCachedScanResultForFile(url)?.state == ScanState.TRUSTED
+                }
+
+                val filesTrusted = groupedUploadEvents[false]?.filter {
+                    val url = it.contentWithAttachmentContent.encryptedFileInfo?.url ?: return@filter false
+                    session.contentScannerService().getCachedScanResultForFile(url)?.state == ScanState.TRUSTED
+                }
+
                 setState {
                     copy(
                             asyncEventsRequest = Success(Unit),
-                            mediaEvents = this.mediaEvents + groupedUploadEvents[true].orEmpty(),
-                            fileEvents = this.fileEvents + groupedUploadEvents[false].orEmpty(),
+                            mediaEvents = this.mediaEvents + mediaTrusted.orEmpty(),
+                            fileEvents = this.fileEvents + filesTrusted.orEmpty(),
                             hasMore = result.hasMore
                     )
                 }

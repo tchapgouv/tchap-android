@@ -19,8 +19,11 @@ package im.vector.app.features.home.room.list
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -29,8 +32,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.OnModelBuildFinishedListener
-import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
+import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import fr.gouv.tchap.core.utils.TchapUtils
@@ -43,16 +46,20 @@ import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.databinding.FragmentRoomListBinding
+import im.vector.app.features.home.HomeActivitySharedAction
+import im.vector.app.features.home.HomeSharedActionViewModel
+import im.vector.app.features.home.HomeTab
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
-import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.home.room.list.widget.TchapRoomsFabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.orTrue
@@ -60,6 +67,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
+import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
 @Parcelize
@@ -81,8 +89,9 @@ class RoomListFragment @Inject constructor(
 
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
+    private lateinit var homeSharedActionViewModel: HomeSharedActionViewModel
     private val roomListParams: RoomListParams by args()
-    private val roomListViewModel: RoomListViewModel by activityViewModel()
+    private val roomListViewModel: RoomListViewModel by fragmentViewModel()
     private lateinit var stateRestorer: LayoutManagerStateRestorer
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomListBinding {
@@ -106,11 +115,14 @@ class RoomListFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // Tchap: true as we want to catch events coming from the home menu
+        setHasOptionsMenu(true)
         views.stateView.contentView = views.roomListView
         views.stateView.state = StateView.State.Loading
         setupCreateRoomButton()
         setupRecyclerView()
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
+        homeSharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         roomListViewModel.observeViewEvents {
             when (it) {
                 is RoomListViewEvents.Loading                   -> showLoading(it.message)
@@ -121,7 +133,6 @@ class RoomListFragment @Inject constructor(
                 RoomListViewEvents.CreateDirectChat             -> handleCreateDirectChat()
                 is RoomListViewEvents.CreateRoom                -> handleCreateRoom(it.initialName)
                 is RoomListViewEvents.OpenRoomDirectory         -> handleOpenRoomDirectory(it.filter)
-                RoomListViewEvents.CancelSearch                 -> Unit
             }.exhaustive
         }
 
@@ -139,6 +150,36 @@ class RoomListFragment @Inject constructor(
                     .onEach {
                         (it.contentEpoxyController as? RoomSummaryPagedController)?.roomChangeMembershipStates = ms
                     }
+        }
+
+        homeSharedActionViewModel
+                .stream()
+                .mapNotNull { it as? HomeActivitySharedAction.SelectTab }
+                .onEach { handleSelectTab(it.tab) }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        // Tchap: handle search action in the room list
+        val searchItem = menu.findItem(R.id.menu_home_search_action)
+        val searchView = searchItem?.actionView as? SearchView
+
+        if (searchView != null) {
+            // For initial filter
+            withState(roomListViewModel) { state ->
+                if (state.roomFilter.isNotEmpty()) {
+                    searchItem.expandActionView()
+                    searchView.setQuery(state.roomFilter, true)
+                    searchView.clearFocus()
+                }
+            }
+
+            searchView.queryTextChanges()
+                    .debounce(300)
+                    .onEach { filterRoomsWith(it.toString()) }
+                    .launchIn(viewLifecycleOwner.lifecycleScope)
         }
     }
 
@@ -186,22 +227,28 @@ class RoomListFragment @Inject constructor(
 
     private fun handleSelectRoom(event: RoomListViewEvents.SelectRoom) {
         navigator.openRoom(requireActivity(), event.roomSummary.roomId)
-        roomListViewModel.handle(RoomListAction.CancelSearch)
+        resetFilter()
     }
 
     private fun handleCreateDirectChat() {
         navigator.openCreateDirectRoom(requireActivity())
-        roomListViewModel.handle(RoomListAction.CancelSearch)
+        resetFilter()
     }
 
     private fun handleCreateRoom(name: String) {
         navigator.openCreateRoom(requireActivity(), name)
-        roomListViewModel.handle(RoomListAction.CancelSearch)
+        resetFilter()
     }
 
     private fun handleOpenRoomDirectory(filter: String) {
         navigator.openRoomDirectory(requireActivity(), filter)
-        roomListViewModel.handle(RoomListAction.CancelSearch)
+        resetFilter()
+    }
+
+    private fun handleSelectTab(tab: HomeTab) {
+        if ((tab as? HomeTab.RoomList)?.displayMode != roomListParams.displayMode) {
+            resetFilter()
+        }
     }
 
     private fun setupCreateRoomButton() {
@@ -251,6 +298,8 @@ class RoomListFragment @Inject constructor(
 
         roomListViewModel.handle(RoomListAction.FilterWith(filter))
     }
+
+    private fun resetFilter() = filterRoomsWith("")
 
     // FilteredRoomFooterItem.Listener
     override fun createRoom(initialName: String) {
@@ -504,7 +553,7 @@ class RoomListFragment @Inject constructor(
             footerController.setData(it)
         }
         RoomListQuickActionsBottomSheet
-                .newInstance(room.roomId, RoomListActionsArgs.Mode.FULL)
+                .newInstance(room.roomId)
                 .show(childFragmentManager, "ROOM_LIST_QUICK_ACTIONS")
         return true
     }

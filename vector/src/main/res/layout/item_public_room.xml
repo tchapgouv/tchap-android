@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,22 +9,19 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
-    android:minHeight="97dp">
+    android:minHeight="97dp"
+    tools:viewBindingIgnore="true">
 
-    <fr.gouv.tchap.core.ui.views.HexagonMaskView
+    <ImageView
         android:id="@+id/itemPublicRoomAvatar"
-        android:layout_width="@dimen/tchap_item_room_hexagon_avatar_size"
-        android:layout_height="@dimen/tchap_item_room_hexagon_avatar_size"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_marginStart="8dp"
-        android:adjustViewBounds="true"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/avatar"
-        android:scaleType="centerCrop"
         android:importantForAccessibility="no"
-        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
+        app:layout_constraintBottom_toTopOf="@id/itemPublicRoomBottomSeparator"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/room_round_avatars" />
 
     <TextView
         android:id="@+id/itemPublicRoomName"
@@ -38,8 +34,8 @@
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomTopic"
-        app:layout_constraintEnd_toStartOf="@+id/itemPublicRoomDomain"
+        app:layout_constraintBottom_toTopOf="@id/itemPublicRoomTopic"
+        app:layout_constraintEnd_toStartOf="@id/itemPublicRoomDomain"
         app:layout_constraintStart_toEndOf="@id/itemPublicRoomAvatar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
@@ -57,7 +53,7 @@
         android:text="@string/app_name"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/itemPublicRoomName"
+        app:layout_constraintBottom_toBottomOf="@id/itemPublicRoomName"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="Modernisation" />
 
@@ -68,14 +64,14 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:gravity="center_vertical"
-        android:minLines="2"
         android:maxLines="2"
+        android:minLines="2"
         android:textColor="?vctr_content_secondary"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
-        app:layout_constraintEnd_toStartOf="@+id/itemPublicRoomMembersCount"
-        app:layout_constraintStart_toStartOf="@+id/itemPublicRoomName"
-        app:layout_constraintTop_toBottomOf="@+id/itemPublicRoomName"
+        app:layout_constraintBottom_toTopOf="@id/itemPublicRoomBottomSeparator"
+        app:layout_constraintEnd_toStartOf="@id/itemPublicRoomMembersCount"
+        app:layout_constraintStart_toStartOf="@id/itemPublicRoomName"
+        app:layout_constraintTop_toBottomOf="@id/itemPublicRoomName"
         tools:text="@sample/rooms.json/data/topic" />
 
     <TextView
@@ -85,8 +81,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
         android:textColor="?vctr_content_secondary"
-        app:layout_constraintBottom_toBottomOf="@+id/itemPublicRoomTopic"
-        app:layout_constraintEnd_toStartOf="@+id/itemPublicRoomMembersCountIcon"
+        app:layout_constraintBottom_toBottomOf="@id/itemPublicRoomTopic"
+        app:layout_constraintEnd_toStartOf="@id/itemPublicRoomMembersCountIcon"
         tools:text="148" />
 
     <ImageView
@@ -96,9 +92,9 @@
         android:adjustViewBounds="true"
         android:importantForAccessibility="no"
         android:src="@drawable/ic_tchap_people"
-        app:layout_constraintBottom_toBottomOf="@+id/itemPublicRoomMembersCount"
-        app:layout_constraintEnd_toEndOf="@+id/itemPublicRoomDomain"
-        app:layout_constraintTop_toTopOf="@+id/itemPublicRoomMembersCount"
+        app:layout_constraintBottom_toBottomOf="@id/itemPublicRoomMembersCount"
+        app:layout_constraintEnd_toEndOf="@id/itemPublicRoomDomain"
+        app:layout_constraintTop_toTopOf="@id/itemPublicRoomMembersCount"
         app:tint="?vctr_content_secondary" />
 
     <TextView
@@ -114,9 +110,9 @@
         android:singleLine="true"
         android:textColor="?vctr_content_secondary"
         android:visibility="gone"
-        app:layout_constraintBaseline_toBaselineOf="@+id/itemPublicRoomMembersCount"
+        app:layout_constraintBaseline_toBaselineOf="@id/itemPublicRoomMembersCount"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/itemPublicRoomMembersCount"
+        app:layout_constraintStart_toEndOf="@id/itemPublicRoomMembersCount"
         tools:text="@sample/rooms.json/data/alias" />
 
     <im.vector.app.core.platform.ButtonStateView
