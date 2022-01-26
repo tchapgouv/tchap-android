@@ -43,7 +43,7 @@
         android:icon="@drawable/ic_settings_root_labs"
         android:title="@string/room_settings_labs_pref_title"
         app:fragment="im.vector.app.features.settings.VectorSettingsLabsFragment"
-        app:isPreferenceVisible="@bool/labs_menu_item_visible"/>
+        app:isPreferenceVisible="@bool/labs_menu_item_visible" />
 
     <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_advanced"
