@@ -33,5 +33,5 @@ sealed class HomeActivitySharedAction : VectorSharedAction {
     data class InviteByEmail(val email: String) : HomeActivitySharedAction()
     object OpenTermAndConditions : HomeActivitySharedAction()
     object OpenBugReport : HomeActivitySharedAction()
-    object CancelSearch : HomeActivitySharedAction()
+    data class SelectTab(val tab: HomeTab) : HomeActivitySharedAction()
 }

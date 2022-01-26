@@ -23,9 +23,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.children
-import androidx.core.view.doOnNextLayout
-import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -41,7 +40,6 @@ import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.toMvRxBundle
-import im.vector.app.core.extensions.withoutLeftMargin
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
@@ -70,13 +68,11 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
 class HomeDetailFragment @Inject constructor(
@@ -107,17 +103,13 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
-    override fun getMenuRes() = R.menu.tchap_menu_home
+    override fun getMenuRes() = R.menu.room_list
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_home_mark_all_as_read -> {
                 viewModel.handle(HomeDetailAction.MarkAllRoomsRead)
                 return true
-            }
-            R.id.menu_home_search_action    -> {
-                toggleSearchView()
-                true
             }
             else                            -> {
                 super.onOptionsItemSelected(item)
@@ -132,8 +124,8 @@ class HomeDetailFragment @Inject constructor(
 //            menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
 //        }
 
-        val isSearchMode = views.homeSearchView.isVisible
-        menu.findItem(R.id.menu_home_search_action)?.setIcon(if (isSearchMode) 0 else R.drawable.ic_search)
+        // Tchap: remove max width so it can take the whole available space in landscape
+        (menu.findItem(R.id.menu_home_search_action)?.actionView as? SearchView)?.maxWidth = Int.MAX_VALUE
 
         super.onPrepareOptionsMenu(menu)
     }
@@ -225,8 +217,7 @@ class HomeDetailFragment @Inject constructor(
                 .onEach { action ->
                     when (action) {
                         is HomeActivitySharedAction.InviteByEmail -> onInviteByEmail(action.email)
-                        // prevent glitch caused by search refresh during activity transition
-                        HomeActivitySharedAction.CancelSearch     -> cancelSearch()
+                        is HomeActivitySharedAction.SelectTab     -> viewModel.handle(HomeDetailAction.SwitchTab(action.tab))
                         else                                      -> Unit // no-op
                     }.exhaustive
                 }
@@ -292,37 +283,6 @@ class HomeDetailFragment @Inject constructor(
                 }
             }
         }
-    }
-
-    private fun toggleSearchView() {
-        val isSearchMode = views.homeSearchView.isVisible
-        if (!isSearchMode) {
-            openSearchView()
-        } else {
-            closeSearchView()
-        }
-    }
-
-    private fun openSearchView() {
-        views.groupToolbar.menu?.findItem(R.id.menu_home_search_action)?.setIcon(0)
-        views.homeToolbarContent.isVisible = false
-        views.groupToolbarAvatarImageView.isVisible = false
-        views.homeSearchView.apply {
-            isVisible = true
-            isIconified = false
-        }
-    }
-
-    private fun closeSearchView() {
-        views.groupToolbar.menu?.findItem(R.id.menu_home_search_action)?.setIcon(R.drawable.ic_search)
-        views.homeSearchView.isVisible = false
-        views.homeToolbarContent.isVisible = true
-        views.groupToolbarAvatarImageView.isVisible = true
-        views.homeSearchView.takeUnless { it.isEmpty() }?.setQuery("", false)
-    }
-
-    private fun cancelSearch() {
-        view?.doOnNextLayout { closeSearchView() }
     }
 
     private fun promptForNewUnknownDevices(uid: String, state: UnknownDevicesState, newest: DeviceInfo) {
@@ -445,13 +405,6 @@ class HomeDetailFragment @Inject constructor(
                 }
             }
         }
-
-        views.homeSearchView.withoutLeftMargin()
-        views.homeSearchView.queryTextChanges()
-                .skipInitialValue()
-                .map { it.trim().toString() }
-                .onEach { searchWith(it) }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun setupBottomNavigationView() {
@@ -463,8 +416,8 @@ class HomeDetailFragment @Inject constructor(
                 R.id.bottom_action_notification -> HomeTab.RoomList(RoomListDisplayMode.NOTIFICATIONS)
                 else                            -> HomeTab.DialPad
             }
-            closeSearchView()
-            viewModel.handle(HomeDetailAction.SwitchTab(tab))
+            // Tchap: Send event to shared VM to catch it in sub-fragments
+            sharedActionViewModel.post(HomeActivitySharedAction.SelectTab(tab))
             true
         }
 
@@ -513,18 +466,6 @@ class HomeDetailFragment @Inject constructor(
                     (fragmentToShow as? DialPadFragment)?.applyCallback()
                 }
                 attach(fragmentToShow)
-            }
-        }
-    }
-
-    private fun searchWith(value: String) {
-        withState(viewModel) {
-            val tab = it.currentTab
-            val fragmentTag = "$FRAGMENT_TAG_PREFIX$tab"
-            val fragment = childFragmentManager.findFragmentByTag(fragmentTag)
-            when (tab) {
-                is HomeTab.RoomList -> (fragment as? RoomListFragment)?.filterRoomsWith(value)
-                else                -> Unit // nothing to do
             }
         }
     }
@@ -632,7 +573,6 @@ class HomeDetailFragment @Inject constructor(
 
     private fun openRoom(roomId: String) {
         navigator.openRoom(requireActivity(), roomId)
-        cancelSearch()
     }
 
     private fun handleInviteByEmailResult(message: String) {
@@ -647,9 +587,5 @@ class HomeDetailFragment @Inject constructor(
                     createDirectRoomViewModel.handle(CreateDirectRoomAction.CreateDirectMessageByUserId(user.userId))
                 }
                 .show()
-    }
-
-    companion object {
-        private const val FRAGMENT_TAG_PREFIX = "FRAGMENT_TAG_"
     }
 }

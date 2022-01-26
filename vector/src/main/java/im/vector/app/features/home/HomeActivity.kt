@@ -234,7 +234,7 @@ class HomeActivity :
                             views.drawerLayout.closeDrawer(GravityCompat.START)
                             bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT, false)
                         }
-                        HomeActivitySharedAction.CancelSearch          -> Unit // do nothing, action is handled by the HomeDetailFragment
+                        is HomeActivitySharedAction.SelectTab          -> Unit // no-op
                     }.exhaustive
                 }
                 .launchIn(lifecycleScope)
@@ -491,8 +491,8 @@ class HomeActivity :
         configureToolbar(toolbar, false)
     }
 
-//    override fun getMenuRes() = R.menu.home
-//
+    override fun getMenuRes() = R.menu.tchap_home
+
 //    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
 //        menu.findItem(R.id.menu_home_init_sync_legacy).isVisible = vectorPreferences.developerMode()
 //        menu.findItem(R.id.menu_home_init_sync_optimized).isVisible = vectorPreferences.developerMode()

@@ -74,16 +74,6 @@
 
                 </RelativeLayout>
 
-                <androidx.appcompat.widget.SearchView
-                    android:id="@+id/homeSearchView"
-                    android:layout_width="0dp"
-                    android:layout_height="34dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_weight="1"
-                    android:visibility="gone"
-                    app:queryHint="@string/search"
-                    tools:visibility="visible" />
-
                 <LinearLayout
                     android:id="@+id/homeToolbarContent"
                     android:layout_width="0dp"
