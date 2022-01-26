@@ -118,11 +118,10 @@ class HomeDetailFragment @Inject constructor(
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        // Tchap: Hidden mark all as read item
-//        withState(viewModel) { state ->
-//            val isRoomList = state.currentTab is HomeTab.RoomList
-//            menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
-//        }
+        withState(viewModel) { state ->
+            val isRoomList = state.currentTab is HomeTab.RoomList
+            menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
+        }
 
         // Tchap: remove max width so it can take the whole available space in landscape
         (menu.findItem(R.id.menu_home_search_action)?.actionView as? SearchView)?.maxWidth = Int.MAX_VALUE
