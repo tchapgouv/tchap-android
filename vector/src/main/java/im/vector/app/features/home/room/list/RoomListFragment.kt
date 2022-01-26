@@ -162,22 +162,25 @@ class RoomListFragment @Inject constructor(
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
+        // Tchap: handle search action in the room list
         val searchItem = menu.findItem(R.id.menu_home_search_action)
-        val searchView = searchItem?.actionView as? SearchView ?: return
+        val searchView = searchItem?.actionView as? SearchView
 
-        // For initial filter
-        withState(roomListViewModel) { state ->
-            if (state.roomFilter.isNotEmpty()) {
-                searchItem.expandActionView()
-                searchView.setQuery(state.roomFilter, true)
-                searchView.clearFocus()
+        if (searchView != null) {
+            // For initial filter
+            withState(roomListViewModel) { state ->
+                if (state.roomFilter.isNotEmpty()) {
+                    searchItem.expandActionView()
+                    searchView.setQuery(state.roomFilter, true)
+                    searchView.clearFocus()
+                }
             }
-        }
 
-        searchView.queryTextChanges()
-                .debounce(300)
-                .onEach { filterRoomsWith(it.toString()) }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            searchView.queryTextChanges()
+                    .debounce(300)
+                    .onEach { filterRoomsWith(it.toString()) }
+                    .launchIn(viewLifecycleOwner.lifecycleScope)
+        }
     }
 
     private fun refreshCollapseStates() {

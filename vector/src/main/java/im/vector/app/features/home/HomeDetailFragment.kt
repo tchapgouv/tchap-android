@@ -124,8 +124,8 @@ class HomeDetailFragment @Inject constructor(
 //            menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
 //        }
 
-        val searchView = menu.findItem(R.id.menu_home_search_action)?.actionView as? SearchView
-        searchView?.maxWidth = Int.MAX_VALUE
+        // Tchap: remove max width so it can take the whole available space in landscape
+        (menu.findItem(R.id.menu_home_search_action)?.actionView as? SearchView)?.maxWidth = Int.MAX_VALUE
 
         super.onPrepareOptionsMenu(menu)
     }
