@@ -13,12 +13,13 @@
         android:id="@+id/itemEditableAvatarImageContainer"
         android:layout_width="90dp"
         android:layout_height="90dp"
+        android:background="@drawable/placeholder_round_background"
         android:contentDescription="@string/a11y_change_avatar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <fr.gouv.tchap.core.ui.views.HexagonMaskView
+        <ImageView
             android:id="@+id/itemEditableAvatarImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -26,8 +27,7 @@
             android:contentDescription="@string/avatar"
             android:importantForAccessibility="no"
             android:scaleType="centerInside"
-            app:borderColor="@color/palette_tchap_greyish_purple"
-            app:fillColor="@color/palette_tchap_light_grey" />
+            android:src="@drawable/rounded_rect_shape_8" />
 
         <ImageView
             android:id="@+id/addImageIcon"

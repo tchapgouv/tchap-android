@@ -25,18 +25,6 @@
             android:contentDescription="@string/avatar"
             tools:src="@tools:sample/avatars" />
 
-        <fr.gouv.tchap.core.ui.views.HexagonMaskView
-            android:id="@+id/roomInvitationAvatarHexagonImageView"
-            android:layout_width="@dimen/tchap_item_room_hexagon_avatar_size"
-            android:layout_height="@dimen/tchap_item_room_hexagon_avatar_size"
-            android:adjustViewBounds="true"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/avatar"
-            android:scaleType="centerCrop"
-            android:visibility="gone"
-            app:borderColor="@color/element_room_01"
-            tools:src="@tools:sample/avatars"
-            tools:visibility="visible" />
     </FrameLayout>
 
     <!-- Margin bottom does not work, so I use space -->

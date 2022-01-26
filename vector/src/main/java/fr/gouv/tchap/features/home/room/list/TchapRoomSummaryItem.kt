@@ -28,7 +28,6 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.amulyakhare.textdrawable.TextDrawable
-import fr.gouv.tchap.core.ui.views.HexagonMaskView
 import fr.gouv.tchap.core.utils.TchapRoomType
 import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
@@ -114,17 +113,9 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
     }
 
     private fun renderAvatar(holder: Holder) {
-        if (roomType == TchapRoomType.DIRECT) {
-            holder.avatarImageView.visibility = View.VISIBLE
-            holder.avatarHexagonImageView.visibility = View.GONE
+        holder.avatarImageView.visibility = View.VISIBLE
 
-            avatarRenderer.render(matrixItem, holder.avatarImageView)
-        } else {
-            holder.avatarImageView.visibility = View.GONE
-            holder.avatarHexagonImageView.visibility = View.VISIBLE
-
-            avatarRenderer.render(matrixItem, holder.avatarHexagonImageView)
-        }
+        avatarRenderer.render(matrixItem, holder.avatarImageView)
     }
 
     private fun renderRoomType(holder: Holder) {
@@ -187,7 +178,6 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
         val lastEventTimeView by bind<TextView>(R.id.roomLastEventTimeView)
         val avatarCheckedImageView by bind<ImageView>(R.id.roomAvatarCheckedImageView)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
-        val avatarHexagonImageView by bind<HexagonMaskView>(R.id.roomAvatarHexagonImageView)
         val avatarRoomTypeImageView by bind<ImageView>(R.id.roomAvatarEncryptedImageView)
         val disabledNotificationsBadge by bind<ImageView>(R.id.roomDisabledNotificationsBadge)
         val expectedActionBadgeView by bind<AppCompatTextView>(R.id.roomExpectedActionBadgeView)

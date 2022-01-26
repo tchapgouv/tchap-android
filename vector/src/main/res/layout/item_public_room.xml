@@ -12,20 +12,16 @@
     android:minHeight="97dp"
     tools:viewBindingIgnore="true">
 
-    <fr.gouv.tchap.core.ui.views.HexagonMaskView
+    <ImageView
         android:id="@+id/itemPublicRoomAvatar"
-        android:layout_width="@dimen/tchap_item_room_hexagon_avatar_size"
-        android:layout_height="@dimen/tchap_item_room_hexagon_avatar_size"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_marginStart="8dp"
-        android:adjustViewBounds="true"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/avatar"
         android:importantForAccessibility="no"
-        android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@id/itemPublicRoomBottomSeparator"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/room_round_avatars" />
 
     <TextView
         android:id="@+id/itemPublicRoomName"
