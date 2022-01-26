@@ -22,6 +22,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.Menu
 import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
@@ -45,6 +46,8 @@ import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.databinding.ActivityHomeBinding
+import im.vector.app.features.MainActivity
+import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
 import im.vector.app.features.disclaimer.shouldShowDisclaimerDialog
 import im.vector.app.features.disclaimer.showDisclaimerDialog
@@ -81,6 +84,8 @@ import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
+import org.matrix.android.sdk.internal.session.sync.initialSyncStrategy
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -492,43 +497,44 @@ class HomeActivity :
         configureToolbar(toolbar, false)
     }
 
-    override fun getMenuRes() = R.menu.tchap_home
+    override fun getMenuRes() = R.menu.home
 
-//    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-//        menu.findItem(R.id.menu_home_init_sync_legacy).isVisible = vectorPreferences.developerMode()
-//        menu.findItem(R.id.menu_home_init_sync_optimized).isVisible = vectorPreferences.developerMode()
-//        return super.onPrepareOptionsMenu(menu)
-//    }
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menu.findItem(R.id.menu_home_init_sync_legacy).isVisible = vectorPreferences.developerMode()
+        menu.findItem(R.id.menu_home_init_sync_optimized).isVisible = vectorPreferences.developerMode()
+        return super.onPrepareOptionsMenu(menu)
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-//            R.id.menu_home_suggestion          -> {
-//                bugReporter.openBugReportScreen(this, ReportType.SUGGESTION)
-//                return true
-//            }
-            R.id.menu_home_report_bug -> {
+            R.id.menu_home_suggestion          -> {
+                bugReporter.openBugReportScreen(this, ReportType.SUGGESTION)
+                return true
+            }
+            R.id.menu_home_report_bug          -> {
                 bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT)
                 return true
             }
-//            R.id.menu_home_init_sync_legacy    -> {
-//                // Configure the SDK
-//                initialSyncStrategy = InitialSyncStrategy.Legacy
-//                // And clear cache
-//                MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
-//                return true
-//            }
-//            R.id.menu_home_init_sync_optimized -> {
-//                // Configure the SDK
-//                initialSyncStrategy = InitialSyncStrategy.Optimized()
-//                // And clear cache
-//                MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
-//                return true
-//            }
+            R.id.menu_home_init_sync_legacy    -> {
+                // Configure the SDK
+                initialSyncStrategy = InitialSyncStrategy.Legacy
+                // And clear cache
+                MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
+                return true
+            }
+            R.id.menu_home_init_sync_optimized -> {
+                // Configure the SDK
+                initialSyncStrategy = InitialSyncStrategy.Optimized()
+                // And clear cache
+                MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
+                return true
+            }
+            // Tchap: search is handled in RoomListFragment
 //            R.id.menu_home_filter              -> {
 //                navigator.openRoomsFiltering(this)
 //                return true
 //            }
-            R.id.menu_home_setting    -> {
+            R.id.menu_home_setting             -> {
                 navigator.openSettings(this)
                 return true
             }
