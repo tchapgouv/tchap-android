@@ -8,7 +8,8 @@
     android:background="?android:colorBackground"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground">
+    android:foreground="?attr/selectableItemBackground"
+    tools:viewBindingIgnore="true">
 
     <View
         android:id="@+id/roomUnreadIndicator"
@@ -26,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -35,8 +36,8 @@
             android:layout_width="@dimen/tchap_item_room_circle_avatar_size"
             android:layout_height="@dimen/tchap_item_room_circle_avatar_size"
             android:layout_margin="3dp"
-            android:contentDescription="@string/avatar"
-            tools:src="@tools:sample/avatars" />
+            android:importantForAccessibility="no"
+            tools:src="@sample/room_round_avatars" />
 
         <ImageView
             android:id="@+id/roomAvatarCheckedImageView"
@@ -72,17 +73,20 @@
         app:layout_constraintCircleRadius="30dp"
         tools:ignore="MissingConstraints" />
 
-    <ImageView
-        android:id="@+id/roomAvatarStatusImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/room_status_online"
-        android:src="@drawable/ic_room_status_online"
+    <im.vector.app.core.ui.views.PresenceStateImageView
+        android:id="@+id/roomAvatarPresenceImageView"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:background="@drawable/background_circle"
+        android:importantForAccessibility="no"
+        android:padding="2dp"
         android:visibility="gone"
         app:layout_constraintCircle="@id/roomAvatarContainer"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="28dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:src="@drawable/ic_presence_offline"
+        tools:visibility="visible" />
 
     <!-- Margin bottom does not work, so I use space -->
     <Space
@@ -106,7 +110,7 @@
         app:layout_constraintStart_toEndOf="@id/roomAvatarContainer"
         app:layout_constraintTop_toTopOf="@id/roomAvatarContainer">
 
-<!--        todo fix color -->
+        <!--        todo fix color -->
         <TextView
             android:id="@+id/roomNameView"
             style="@style/Widget.Vector.TextView.Subtitle"
@@ -132,6 +136,7 @@
             android:layout_marginStart="4dp"
             android:contentDescription="@string/alert_push_are_disabled_title"
             android:src="@drawable/ic_disabled_notifications"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/roomNameView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/roomNameView"
@@ -197,18 +202,13 @@
             tools:text="4"
             tools:visibility="visible" />
 
-        <TextView
-            android:id="@+id/roomExpectedActionBadgeView"
-            style="@style/Widget.Vector.TextView.Micro"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/roomFailSendingImageView"
+            android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginEnd="4dp"
-            android:background="@drawable/bg_tchap_expected_action"
-            android:gravity="center"
-            android:minWidth="16dp"
-            android:text="@string/tchap_exclamation_mark"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
+            android:contentDescription="@string/a11y_error_some_message_not_sent"
+            android:src="@drawable/ic_warning_badge"
             app:layout_constraintEnd_toStartOf="@id/roomUnreadCounterBadgeView"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -264,13 +264,21 @@
         app:layout_constraintTop_toBottomOf="@id/roomLastEventView"
         tools:layout_marginStart="120dp" />
 
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/roomBottomBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="roomAvatarBottomSpace,roomLastEventBottomSpace" />
+
     <View
         android:id="@+id/roomDividerView"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="?vctr_list_separator"
+        android:background="?vctr_list_separator_system"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/roomLastEventView" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/roomBottomBarrier" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

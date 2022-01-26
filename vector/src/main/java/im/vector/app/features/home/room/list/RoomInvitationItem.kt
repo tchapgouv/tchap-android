@@ -44,7 +44,6 @@ abstract class RoomInvitationItem : VectorEpoxyModel<RoomInvitationItem.Holder>(
     @EpoxyAttribute lateinit var changeMembershipState: ChangeMembershipState
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var acceptListener: ClickListener? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var rejectListener: ClickListener? = null
-    @EpoxyAttribute @JvmField var isDirect: Boolean = false
 
     override fun bind(holder: Holder) {
         super.bind(holder)

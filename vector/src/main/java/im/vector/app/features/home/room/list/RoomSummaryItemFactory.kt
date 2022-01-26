@@ -19,15 +19,19 @@ package im.vector.app.features.home.room.list
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
+import fr.gouv.tchap.core.utils.RoomUtils
+import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.typing.TypingHelper
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -40,7 +44,8 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                                                  private val stringProvider: StringProvider,
                                                  private val typingHelper: TypingHelper,
                                                  private val avatarRenderer: AvatarRenderer,
-                                                 private val errorFormatter: ErrorFormatter) {
+                                                 private val errorFormatter: ErrorFormatter,
+                                                 private val session: Session) {
 
     fun create(roomSummary: RoomSummary,
                roomChangeMembershipStates: Map<String, ChangeMembershipState>,
@@ -82,12 +87,19 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
     private fun createInvitationItem(roomSummary: RoomSummary,
                                      changeMembershipState: ChangeMembershipState,
                                      listener: RoomListListener?): VectorEpoxyModel<*> {
-        val secondLine = if (roomSummary.isDirect) {
-            roomSummary.inviterId
-        } else {
-            roomSummary.inviterId?.let {
-                stringProvider.getString(R.string.invited_by, it)
-            }
+        // Tchap: userXXX invited you
+        val secondLine = roomSummary.inviterId?.let { userId ->
+            val displayName = session.getUser(userId)?.toMatrixItem()?.getBestName()
+                    ?.let { displayName ->
+                        if (roomSummary.isDirect) {
+                            // We remove the user domain in second line because it is already present in first line
+                            TchapUtils.getNameFromDisplayName(displayName)
+                        } else {
+                            displayName
+                        }
+                    }
+                    ?: TchapUtils.computeDisplayNameFromUserId(userId)
+            stringProvider.getString(R.string.tchap_room_invited_you, displayName)
         }
 
         return RoomInvitationItem_()
@@ -98,7 +110,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .changeMembershipState(changeMembershipState)
                 .acceptListener { listener?.onAcceptRoomInvitation(roomSummary) }
                 .rejectListener { listener?.onRejectRoomInvitation(roomSummary) }
-                .listener { listener?.onRoomClicked(roomSummary) }
+//                .listener { listener?.onRoomClicked(roomSummary) }
     }
 
     fun createRoomItem(
@@ -141,5 +153,9 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                     onLongClick?.invoke(roomSummary) ?: false
                 }
                 .itemClickListener { onClick?.invoke(roomSummary) }
+                // Tchap attributes
+                .isEncrypted(roomSummary.isEncrypted)
+                .isPinned(roomSummary.isFavorite)
+                .roomType(RoomUtils.getRoomType(roomSummary))
     }
 }
