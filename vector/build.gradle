@@ -327,6 +327,9 @@ android {
 
             applicationId "fr.gouv.rie.tchap"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_b"
+
+            // Tchap: Show labs menu item in btchap
+            resValue "bool", "labs_settings_visible", "true"
         }
 
         tchap {
@@ -336,6 +339,9 @@ android {
 
             applicationId "fr.gouv.tchap.a"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}"
+
+            // Tchap: Hide labs menu item in tchap
+            resValue "bool", "labs_settings_visible", "false"
         }
     }
 
