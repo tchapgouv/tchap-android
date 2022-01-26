@@ -12,6 +12,11 @@
         showcontent = true
 
     [[tool.towncrier.type]]
+        directory = "improvements"
+        name = "Improvements 🙌"
+        showcontent = true
+
+    [[tool.towncrier.type]]
         directory = "bugfix"
         name = "Bugfixes 🐛"
         showcontent = true
