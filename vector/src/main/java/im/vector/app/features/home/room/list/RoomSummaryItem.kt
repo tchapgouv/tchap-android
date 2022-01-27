@@ -83,7 +83,8 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
             it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             itemLongClickListener?.onLongClick(it) ?: false
         }
-        holder.titleView.text = matrixItem.getBestName()
+        // Tchap: remove domain from the display name
+        holder.titleView.text = TchapUtils.getNameFromDisplayName(matrixItem.getBestName())
         holder.lastEventTimeView.text = lastEventTime
         holder.lastEventView.text = lastFormattedEvent
 //        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
@@ -99,7 +100,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.roomAvatarPresenceImageView.render(showPresence, userPresence)
 
         // Tchap items
-        renderRoomType(holder)
+        renderTchapRoomType(holder)
         holder.unreadCounterBadgeView.apply {
             text = RoomSummaryFormatter.formatUnreadMessagesCounter(unreadNotificationCount)
             isVisible = unreadNotificationCount > 0
@@ -126,7 +127,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         }
     }
 
-    private fun renderRoomType(holder: Holder) {
+    private fun renderTchapRoomType(holder: Holder) {
         var resource: Int? = null
 
         holder.domainNameView.apply {
