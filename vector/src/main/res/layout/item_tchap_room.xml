@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -35,7 +35,6 @@
             android:id="@+id/roomAvatarImageView"
             android:layout_width="@dimen/tchap_item_room_circle_avatar_size"
             android:layout_height="@dimen/tchap_item_room_circle_avatar_size"
-            android:layout_margin="3dp"
             android:importantForAccessibility="no"
             tools:src="@sample/room_round_avatars" />
 
@@ -119,8 +118,8 @@
             android:duplicateParentState="true"
             android:ellipsize="end"
             android:includeFontPadding="false"
-            android:maxLines="1"
             android:padding="0dp"
+            android:maxLines="1"
             android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             app:layout_constrainedWidth="true"
@@ -216,11 +215,9 @@
     <TextView
         android:id="@+id/roomLastEventTimeView"
         style="@style/Widget.Vector.TextView.Micro"
-        android:layout_width="66dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:gravity="end"
-        android:includeFontPadding="false"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@id/roomAvatarContainer"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="@tools:sample/date/hhmm" />
@@ -230,26 +227,27 @@
         style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
-        android:includeFontPadding="false"
         android:maxLines="2"
-        android:minLines="2"
         android:textColor="?vctr_content_secondary"
-        app:layout_constraintBottom_toBottomOf="@id/roomAvatarContainer"
         app:layout_constraintEnd_toStartOf="@id/roomLastEventTimeView"
         app:layout_constraintStart_toStartOf="@id/roomNameContainer"
+        app:layout_constraintTop_toBottomOf="@id/roomNameContainer"
         tools:text="@sample/messages.json/data/message" />
 
     <TextView
         android:id="@+id/roomTypingView"
-        style="@style/Widget.Vector.TextView.Body.Medium"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="3dp"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="2"
+        android:textColor="?colorPrimary"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@id/roomLastEventTimeView"
         app:layout_constraintStart_toStartOf="@id/roomNameContainer"
         app:layout_constraintTop_toBottomOf="@id/roomNameContainer"
