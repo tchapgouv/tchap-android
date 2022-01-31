@@ -7,11 +7,6 @@ PARAM_KEYSTORE_PATH=$1
 PARAM_DIRECTORY=$2
 CHECKSUM_FILE="checksum.txt"
 
-if [[ $PARAM_KEYSTORE_PATH == ""  && $PARAM_DIRECTORY == "" ]]
-then
-  echo "Usage: ./sign_all_apks \$KEY \$FOLDER"
-  exit 1
-fi
 if [[ $PARAM_KEYSTORE_PATH == "" || $PARAM_DIRECTORY == "" ]]
 then
   echo "Usage: ./sign_all_apks \$KEY \$FOLDER"
