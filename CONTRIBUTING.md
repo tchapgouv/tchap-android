@@ -38,9 +38,15 @@ If an issue does not exist yet, it may be relevant to open a new issue and let u
 
 This project is full Kotlin. Please do not write Java classes.
 
-### TCHAP_CHANGES.md
+### Tchap changes
 
-Please add a line to the top of the file `TCHAP_CHANGES.md` describing your change.
+Please add a comment upon each Tchap specific change compared to the Element codebase.  The comment must be prefixed by `Tchap: ` to help developers
+identifying this kind of changes and simplifying conflict resolution during the rebase against Element.
+Also, add an explanation about why the changes are necessary for Tchap or why the behaviour is different from Element.
+
+Please consider staying aligned as much as possible with the Element codebase, if a change or an improvement can be relevant for Element, prefer to add a
+contribution in the Element repository.
+
 ### Changelog
 
 Please create at least one file under ./changelog.d containing details about your change. Towncrier will be used when preparing the release.
