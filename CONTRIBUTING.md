@@ -49,10 +49,11 @@ Towncrier says to use the PR number for the filename, but the issue number is al
 
 Supported filename extensions are:
 
-- ``.feature``: Signifying a new feature in Element Android or in the Matrix SDK.
+- ``.feature``: Signifying a new feature in Tchap Android.
+- ``.improvements``: Signifying a feature improvement in Tchap Android.
 - ``.bugfix``: Signifying a bug fix.
+- ``.wip``: Signifying a work in progress change, typically a component of a larger feature which will be enabled once all tasks are complete.
 - ``.doc``: Signifying a documentation improvement.
-- ``.removal``: Signifying a deprecation or removal of public API. Can be used to notifying about API change in the Matrix SDK
 - ``.misc``: Any other changes.
 
 See https://github.com/twisted/towncrier#news-fragments if you need more details.
