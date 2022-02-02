@@ -34,9 +34,6 @@ import im.vector.app.features.discovery.fetchIdentityServerWithTerms
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.identity.IdentityServiceError
-import org.matrix.android.sdk.api.session.identity.ThreePid
-import timber.log.Timber
 
 class ContactsBookViewModel @AssistedInject constructor(
         @Assisted initialState: ContactsBookViewState,
