@@ -91,8 +91,8 @@ For ktlint to fix some detected errors for you (you still have to check and comm
 #### lint
 
 <pre>
-./gradlew lintGplayBtchapWithoutvoipWithpinningRelease
-./gradlew lintFdroidBtchapWithoutvoipWithoutpinningRelease
+./gradlew lintGplayPreprodWithoutvoipWithoutpinningRelease
+./gradlew lintFdroidPreprodWithoutvoipWithoutpinningRelease
 </pre>
 
 ### Unit tests
@@ -100,7 +100,7 @@ For ktlint to fix some detected errors for you (you still have to check and comm
 Make sure the following commands execute without any error:
 
 <pre>
-./gradlew testGplayBtchapWithoutvoipWithpinningReleaseUnitTest
+./gradlew testGplayPreprodWithoutvoipWithoutpinningReleaseUnitTest
 </pre>
 
 ### Tests
