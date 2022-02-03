@@ -100,7 +100,6 @@ class ContactsBookViewModel @AssistedInject constructor(
         if (!session.identityService().getUserConsent()) {
             return
         }
-
         viewModelScope.launch {
             val threePids = contacts.flatMap { contact ->
                 contact.emails.map { ThreePid.Email(it.email) } +
