@@ -79,15 +79,6 @@ static def gitTag() {
     return cmd.execute().text.trim()
 }
 
-// For Tchap build, build on a not tagged commit will have a "-dev" suffix
-static def getTchapVersionSuffix() {
-    if (gitTag() == "") {
-        return "-dev"
-    } else {
-        return ""
-    }
-}
-
 project.android.buildTypes.all { buildType ->
     buildType.javaCompileOptions.annotationProcessorOptions.arguments =
             [
@@ -326,7 +317,7 @@ android {
             resValue "string", "app_name", "Btchap"
 
             applicationId "fr.gouv.rie.tchap"
-            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_b"
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}" + "_b"
 
             // Tchap: Show labs menu item in btchap
             resValue "bool", "labs_settings_visible", "true"
@@ -338,7 +329,7 @@ android {
             resValue "string", "app_name", "Tchap"
 
             applicationId "fr.gouv.tchap.a"
-            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}"
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}"
 
             // Tchap: Hide labs menu item in tchap
             resValue "bool", "labs_settings_visible", "false"
