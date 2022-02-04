@@ -336,6 +336,18 @@ android {
         }
     }
 
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+
+            def outputFileNameUpdated = outputFileName
+                    .replace("vector-", "")
+                    .replace("release", "v${versionName}")
+
+            outputFileName = outputFileNameUpdated
+        }
+
+    }
+
     lintOptions {
         lintConfig file("lint.xml")
 
