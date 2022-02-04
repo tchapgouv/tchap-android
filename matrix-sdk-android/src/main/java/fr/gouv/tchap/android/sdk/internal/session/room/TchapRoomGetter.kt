@@ -66,7 +66,7 @@ internal class TchapRoomGetter @Inject constructor(
                 directRoomMemberships.firstOrNull { it.first == Membership.INVITE && it.second == Membership.JOIN }?.roomId // invite - join
             directRoomMemberships.firstOrNull { it.first == Membership.JOIN && it.second == Membership.INVITE }?.roomId != null ->
                 directRoomMemberships.firstOrNull { it.first == Membership.JOIN && it.second == Membership.INVITE }?.roomId // join - invite
-            directRoomMemberships.firstOrNull{ it.first?.isActive() == true && it.second == Membership.LEAVE }?.roomId != null ->
+            directRoomMemberships.firstOrNull { it.first?.isActive() == true && it.second == Membership.LEAVE }?.roomId != null ->
                 null // join or invite - left. We want to create a new room if the other left the room.
             directRoomMemberships // otherUserId is an email
                             .takeIf { Patterns.EMAIL_ADDRESS.matcher(otherUserId).matches() }
