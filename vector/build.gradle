@@ -321,7 +321,7 @@ android {
             resValue "bool", "labs_settings_visible", "true"
         }
 
-        agent {
+        tchap {
             dimension "target"
 
             resValue "string", "app_name", "Tchap"
