@@ -55,14 +55,12 @@ internal class TchapRoomGetter @Inject constructor(
         // 1. join-join
         // 2. invite-join
         // 3. join-invite
-        // 4. join-left (or invite-left)
         // The case left-x isn't possible because we ignore for the moment the left rooms.
         // If other member user id is an email, we take the oldest room.
 
         return directRoomMemberships.firstOrNull { it.first == Membership.JOIN && it.second == Membership.JOIN }?.roomId // join - join
                 ?: directRoomMemberships.firstOrNull { it.first == Membership.INVITE && it.second == Membership.JOIN }?.roomId // invite - join
                 ?: directRoomMemberships.firstOrNull { it.first == Membership.JOIN && it.second == Membership.INVITE }?.roomId // join - invite
-                ?: directRoomMemberships.firstOrNull { it.first?.isActive() == true && it.second == Membership.LEAVE }?.roomId // join or invite - left
                 ?: directRoomMemberships // otherUserId is an email
                         .takeIf { Patterns.EMAIL_ADDRESS.matcher(otherUserId).matches() }
                         ?.firstOrNull { it.first == Membership.JOIN }
