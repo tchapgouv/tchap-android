@@ -309,7 +309,7 @@ android {
             dimension "pinning"
         }
 
-        preprod {
+        btchap {
             dimension "target"
 
             resValue "string", "app_name", "Btchap"
