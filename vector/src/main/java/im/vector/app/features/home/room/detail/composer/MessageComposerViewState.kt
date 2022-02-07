@@ -16,8 +16,10 @@
 
 package im.vector.app.features.home.room.detail.composer
 
+import androidx.annotation.StringRes
 import com.airbnb.mvrx.MavericksState
 import im.vector.app.BuildConfig
+import im.vector.app.R
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -44,9 +46,16 @@ sealed interface SendMode {
     data class Voice(val text: String) : SendMode
 }
 
+// Tchap: Add a enum state to disable the sending message when the room is empty.
+enum class SendMessageState(@StringRes val message: Int?) {
+    AUTHORIZED(null),
+    PERMISSION_DENIED(R.string.room_do_not_have_permission_to_post),
+    EMPTY_ROOM(R.string.tchap_empty_room_no_permission_to_post)
+}
+
 data class MessageComposerViewState(
         val roomId: String,
-        val canSendMessage: Boolean = true,
+        val canSendMessage: SendMessageState = SendMessageState.AUTHORIZED,
         val isSendButtonVisible: Boolean = false,
         val sendMode: SendMode = SendMode.Regular("", false),
         val voiceRecordingUiState: VoiceMessageRecorderView.RecordingUiState = VoiceMessageRecorderView.RecordingUiState.Idle
@@ -61,8 +70,8 @@ data class MessageComposerViewState(
 
     val isVoiceMessageIdle = !isVoiceRecording
 
-    val isComposerVisible = canSendMessage && !isVoiceRecording
-    val isVoiceMessageRecorderVisible = canSendMessage && !isSendButtonVisible && BuildConfig.SHOW_VOICE_RECORDER
+    val isComposerVisible = (canSendMessage == SendMessageState.AUTHORIZED) && !isVoiceRecording
+    val isVoiceMessageRecorderVisible = (canSendMessage == SendMessageState.AUTHORIZED) && !isSendButtonVisible && BuildConfig.SHOW_VOICE_RECORDER
 
     @Suppress("UNUSED") // needed by mavericks
     constructor(args: RoomDetailArgs) : this(roomId = args.roomId)

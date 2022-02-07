@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.composer
 
+import android.util.Log
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -38,6 +39,8 @@ import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voice.VoicePlayerHelper
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
@@ -47,6 +50,8 @@ import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
@@ -57,6 +62,7 @@ import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
 import org.matrix.android.sdk.api.session.space.CreateSpaceParams
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 class MessageComposerViewModel @AssistedInject constructor(
@@ -76,7 +82,8 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     init {
         loadDraftIfAny()
-        observePowerLevel()
+        handleCanSendMessage()
+
         subscribeToStateInternal()
     }
 
@@ -139,11 +146,29 @@ class MessageComposerViewModel @AssistedInject constructor(
         }
     }
 
-    private fun observePowerLevel() {
-        PowerLevelsFlowFactory(room).createFlow()
+    // Tchap: We disable sending messages when the room is empty
+    private fun handleCanSendMessage() {
+        val roomMemberQueryParams = roomMemberQueryParams {
+            displayName = QueryStringValue.IsNotEmpty
+            memberships = Membership.activeMemberships()
+        }
+
+        combine(
+                room.flow().liveRoomMembers(roomMemberQueryParams),
+                PowerLevelsFlowFactory(room).createFlow()
+        ) { activeRoomMembers, powerLevels ->
+            val isLastMember = activeRoomMembers.none { it.userId != session.myUserId }
+            isLastMember to powerLevels
+        }
+                .distinctUntilChanged()
                 .setOnEach {
-                    val canSendMessage = PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
-                    copy(canSendMessage = canSendMessage)
+                    val canSendMessageAuthorization = PowerLevelsHelper(it.second).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
+                    val sendMessageState = when {
+                        !canSendMessageAuthorization -> SendMessageState.PERMISSION_DENIED
+                        it.first                    -> SendMessageState.EMPTY_ROOM
+                        else                        -> SendMessageState.AUTHORIZED
+                    }
+                    copy(canSendMessage = sendMessageState)
                 }
     }
 
