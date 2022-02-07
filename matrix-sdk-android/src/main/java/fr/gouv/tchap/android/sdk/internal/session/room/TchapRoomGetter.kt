@@ -65,7 +65,6 @@ internal class TchapRoomGetter @Inject constructor(
                         .takeIf { Patterns.EMAIL_ADDRESS.matcher(otherUserId).matches() }
                         ?.firstOrNull { it.first == Membership.JOIN }
                         ?.roomId
-        }
     }
 
     /**
