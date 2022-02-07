@@ -972,7 +972,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     fun prefSpacesShowAllRoomInHome(): Boolean {
-        // Tchap: Show all in home until spaces are hidden
+        // Tchap: Show all rooms in the home while the spaces are hidden
         return defaultPrefs.getBoolean(SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME, BuildConfig.SPACES_SHOW_ALL_IN_HOME)
     }
 

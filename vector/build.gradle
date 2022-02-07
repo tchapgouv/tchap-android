@@ -157,7 +157,7 @@ android {
         buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
         resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
 
-        // Tchap: Spaces feature is hidden, show all rooms in home
+        // Tchap: The spaces feature is hidden, show all rooms in the home
         def showSpaces = false
         def showAllInHome = !showSpaces
         buildConfigField "Boolean", "SHOW_SPACES", "${showSpaces}"
