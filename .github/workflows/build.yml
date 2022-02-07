@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ GplayBtchapWithoutvoipWithpinning, FdroidBtchapWithoutvoipWithoutpinning ]
+        target: [ GplayPreprodWithoutvoipWithoutpinning, FdroidPreprodWithoutvoipWithoutpinning ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -46,7 +46,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ GplayBtchapWithoutvoipWithpinning, GplayAgentWithoutvoipWithpinning, FdroidBtchapWithoutvoipWithoutpinning, FdroidAgentWithoutvoipWithoutpinning ]
+        target: [ GplayPreprodWithoutvoipWithoutpinning, GplayAgentWithoutvoipWithpinning, FdroidPreprodWithoutvoipWithoutpinning, FdroidAgentWithoutvoipWithoutpinning ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
