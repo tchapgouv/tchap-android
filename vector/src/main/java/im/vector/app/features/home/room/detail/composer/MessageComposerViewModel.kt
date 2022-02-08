@@ -83,7 +83,7 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     init {
         loadDraftIfAny()
-        handleCanSendMessage()
+        observeCanSendMessage()
         subscribeToStateInternal()
     }
 
@@ -147,7 +147,7 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     // Tchap: We disable sending messages when the room is empty
-    private fun handleCanSendMessage() {
+    private fun observeCanSendMessage() {
         val roomMemberQueryParams = roomMemberQueryParams {
             displayName = QueryStringValue.IsNotEmpty
             memberships = Membership.activeMemberships()
