@@ -82,7 +82,6 @@ class MessageComposerViewModel @AssistedInject constructor(
     init {
         loadDraftIfAny()
         handleCanSendMessage()
-
         subscribeToStateInternal()
     }
 
