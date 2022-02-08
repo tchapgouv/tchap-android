@@ -55,7 +55,7 @@
     <string name="tchap_error_message_default">An error occurred, please try later</string>
     <string name="tchap_colon_append">:</string>
     <string name="tchap_exclamation_mark">!</string>
-    <string name="tchap_empty_room_no_permission_to_post">The room is empty, you can not send a message.</string>
+    <string name="tchap_empty_room_no_permission_to_post">Your recipient has left the room or refused your invite. You cannot send him a message.</string>
 
     <!-- tchap discussion -->
     <string name="tchap_cannot_invite_deactivated_account_user">The remote user left definitely this room</string>
