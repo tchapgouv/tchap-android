@@ -20,6 +20,8 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import fr.gouv.tchap.core.utils.RoomUtils
+import fr.gouv.tchap.core.utils.TchapRoomType
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
@@ -160,11 +162,14 @@ class MessageComposerViewModel @AssistedInject constructor(
         }
                 .distinctUntilChanged()
                 .setOnEach {
+                    val roomType = room.roomSummary()?.let { roomSummary ->
+                        RoomUtils.getRoomType(roomSummary)
+                    } ?: TchapRoomType.UNKNOWN
                     val canSendMessageAuthorization = PowerLevelsHelper(it.second).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
                     val sendMessageState = when {
-                        !canSendMessageAuthorization -> SendMessageState.PERMISSION_DENIED
-                        it.first                    -> SendMessageState.EMPTY_ROOM
-                        else                        -> SendMessageState.AUTHORIZED
+                        !canSendMessageAuthorization                 -> SendMessageState.PERMISSION_DENIED
+                        it.first && roomType == TchapRoomType.DIRECT -> SendMessageState.EMPTY_ROOM
+                        else                                         -> SendMessageState.AUTHORIZED
                     }
                     copy(canSendMessage = sendMessageState)
                 }
