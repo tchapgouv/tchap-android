@@ -167,9 +167,9 @@ class MessageComposerViewModel @AssistedInject constructor(
                     } ?: TchapRoomType.UNKNOWN
                     val canSendMessageAuthorization = PowerLevelsHelper(it.second).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
                     val sendMessageState = when {
-                        !canSendMessageAuthorization                 -> SendMessageState.PERMISSION_DENIED
-                        it.first && roomType == TchapRoomType.DIRECT -> SendMessageState.EMPTY_ROOM
-                        else                                         -> SendMessageState.AUTHORIZED
+                        !canSendMessageAuthorization                 -> TchapSendMessageState.PERMISSION_DENIED
+                        it.first && roomType == TchapRoomType.DIRECT -> TchapSendMessageState.EMPTY_ROOM
+                        else                                         -> TchapSendMessageState.AUTHORIZED
                     }
                     copy(canSendMessage = sendMessageState)
                 }
