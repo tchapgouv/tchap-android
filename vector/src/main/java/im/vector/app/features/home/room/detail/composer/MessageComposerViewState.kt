@@ -16,10 +16,8 @@
 
 package im.vector.app.features.home.room.detail.composer
 
-import androidx.annotation.StringRes
 import com.airbnb.mvrx.MavericksState
 import im.vector.app.BuildConfig
-import im.vector.app.R
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
