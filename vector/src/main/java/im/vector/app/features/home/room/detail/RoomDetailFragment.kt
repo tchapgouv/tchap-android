@@ -140,6 +140,7 @@ import im.vector.app.features.home.room.detail.composer.MessageComposerViewEvent
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewModel
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewState
 import im.vector.app.features.home.room.detail.composer.SendMode
+import im.vector.app.features.home.room.detail.composer.TchapCanSendMessageState
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingUiState
 import im.vector.app.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
@@ -391,7 +392,7 @@ class RoomDetailFragment @Inject constructor(
         }
 
         messageComposerViewModel.onEach(MessageComposerViewState::sendMode, MessageComposerViewState::canSendMessage) { mode, canSend ->
-            if (!canSend) {
+            if (canSend != TchapCanSendMessageState.AUTHORIZED) {
                 return@onEach
             }
             when (mode) {
@@ -1277,7 +1278,7 @@ class RoomDetailFragment @Inject constructor(
                     val canSendMessage = withState(messageComposerViewModel) {
                         it.canSendMessage
                     }
-                    if (!canSendMessage) {
+                    if (canSendMessage != TchapCanSendMessageState.AUTHORIZED) {
                         return false
                     }
                     return when (model) {
@@ -1459,10 +1460,13 @@ class RoomDetailFragment @Inject constructor(
                 views.voiceMessageRecorderView.render(messageComposerState.voiceRecordingUiState)
                 views.composerLayout.setRoomEncrypted(summary.isEncrypted)
                 // views.composerLayout.alwaysShowSendButton = false
-                if (messageComposerState.canSendMessage) {
-                    views.notificationAreaView.render(NotificationAreaView.State.Hidden)
-                } else {
-                    views.notificationAreaView.render(NotificationAreaView.State.NoPermissionToPost)
+                when (messageComposerState.canSendMessage) {
+                    TchapCanSendMessageState.AUTHORIZED        ->
+                        views.notificationAreaView.render(NotificationAreaView.State.Hidden)
+                    TchapCanSendMessageState.EMPTY_DM        ->
+                        views.notificationAreaView.render(NotificationAreaView.State.NoPermissionToPost(R.string.tchap_empty_room_no_permission_to_post))
+                    TchapCanSendMessageState.PERMISSION_DENIED ->
+                        views.notificationAreaView.render(NotificationAreaView.State.NoPermissionToPost(R.string.room_do_not_have_permission_to_post))
                 }
             } else {
                 views.hideComposerViews()

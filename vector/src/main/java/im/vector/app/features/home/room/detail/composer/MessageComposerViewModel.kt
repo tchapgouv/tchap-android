@@ -20,6 +20,8 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import fr.gouv.tchap.core.utils.RoomUtils
+import fr.gouv.tchap.core.utils.TchapRoomType
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
@@ -38,6 +40,8 @@ import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voice.VoicePlayerHelper
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
@@ -47,6 +51,8 @@ import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
@@ -57,6 +63,7 @@ import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
 import org.matrix.android.sdk.api.session.space.CreateSpaceParams
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 class MessageComposerViewModel @AssistedInject constructor(
@@ -76,7 +83,7 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     init {
         loadDraftIfAny()
-        observePowerLevel()
+        observeCanSendMessage()
         subscribeToStateInternal()
     }
 
@@ -139,11 +146,32 @@ class MessageComposerViewModel @AssistedInject constructor(
         }
     }
 
-    private fun observePowerLevel() {
-        PowerLevelsFlowFactory(room).createFlow()
-                .setOnEach {
-                    val canSendMessage = PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
-                    copy(canSendMessage = canSendMessage)
+    // Tchap: We disable sending messages when the DM is empty or if powerLevel doesn't authorize the sending message action.
+    private fun observeCanSendMessage() {
+        val roomMemberQueryParams = roomMemberQueryParams {
+            displayName = QueryStringValue.IsNotEmpty
+            memberships = Membership.activeMemberships()
+        }
+
+        combine(
+                room.flow().liveRoomMembers(roomMemberQueryParams),
+                PowerLevelsFlowFactory(room).createFlow()
+        ) { activeRoomMembers, powerLevels ->
+            val isLastMember = activeRoomMembers.none { it.userId != session.myUserId }
+            isLastMember to powerLevels
+        }
+                .distinctUntilChanged()
+                .setOnEach { (isLastMember, powerLevels) ->
+                    val roomType = room.roomSummary()?.let { roomSummary ->
+                        RoomUtils.getRoomType(roomSummary)
+                    } ?: TchapRoomType.UNKNOWN
+                    val hasEnoughPowerLevel = PowerLevelsHelper(powerLevels).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
+                    val canSendMessageState = when {
+                        !hasEnoughPowerLevel                 -> TchapCanSendMessageState.PERMISSION_DENIED
+                        isLastMember && roomType == TchapRoomType.DIRECT -> TchapCanSendMessageState.EMPTY_DM
+                        else                                         -> TchapCanSendMessageState.AUTHORIZED
+                    }
+                    copy(canSendMessage = canSendMessageState)
                 }
     }
 

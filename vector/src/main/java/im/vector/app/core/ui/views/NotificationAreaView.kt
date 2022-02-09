@@ -22,6 +22,7 @@ import android.text.method.LinkMovementMethod
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.text.italic
 import im.vector.app.R
@@ -72,7 +73,7 @@ class NotificationAreaView @JvmOverloads constructor(
             State.Initial                       -> Unit
             is State.Default                    -> renderDefault()
             is State.Hidden                     -> renderHidden()
-            is State.NoPermissionToPost         -> renderNoPermissionToPost()
+            is State.NoPermissionToPost         -> renderNoPermissionToPost(newState.message)
             is State.Tombstone                  -> renderTombstone()
             is State.ResourceLimitExceededError -> renderResourceLimitExceededError(newState)
         }.exhaustive
@@ -94,12 +95,12 @@ class NotificationAreaView @JvmOverloads constructor(
         views.roomNotificationIcon.setImageResource(0)
     }
 
-    private fun renderNoPermissionToPost() {
+    private fun renderNoPermissionToPost(@StringRes messageId: Int) {
         visibility = View.VISIBLE
         views.roomNotificationIcon.setImageDrawable(null)
         val message = span {
             italic {
-                +resources.getString(R.string.room_do_not_have_permission_to_post)
+                +resources.getString(messageId)
             }
         }
         views.roomNotificationMessage.text = message
@@ -161,8 +162,8 @@ class NotificationAreaView @JvmOverloads constructor(
         // View will be Invisible
         object Default : State()
 
-        // User can't post messages to room because his power level doesn't allow it.
-        object NoPermissionToPost : State()
+        // Tchap: User can't post messages to room because his power level doesn't allow it or he is alone in the DM.
+        data class NoPermissionToPost(@StringRes val message: Int) : State()
 
         // View will be Gone
         object Hidden : State()
