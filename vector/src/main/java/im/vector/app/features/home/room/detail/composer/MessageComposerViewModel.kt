@@ -146,7 +146,7 @@ class MessageComposerViewModel @AssistedInject constructor(
         }
     }
 
-    // Tchap: We disable sending messages when the room is empty or if powerLevel doesn't authorize the sending message action.
+    // Tchap: We disable sending messages when the DM is empty or if powerLevel doesn't authorize the sending message action.
     private fun observeCanSendMessage() {
         val roomMemberQueryParams = roomMemberQueryParams {
             displayName = QueryStringValue.IsNotEmpty
@@ -156,22 +156,22 @@ class MessageComposerViewModel @AssistedInject constructor(
         combine(
                 room.flow().liveRoomMembers(roomMemberQueryParams),
                 PowerLevelsFlowFactory(room).createFlow()
-        ) { activeRoomMembers, powerLevels ->
+        ) { activeRoomMembers, hasEnoughPowerLevel ->
             val isLastMember = activeRoomMembers.none { it.userId != session.myUserId }
-            isLastMember to powerLevels
+            isLastMember to hasEnoughPowerLevel
         }
                 .distinctUntilChanged()
                 .setOnEach {
                     val roomType = room.roomSummary()?.let { roomSummary ->
                         RoomUtils.getRoomType(roomSummary)
                     } ?: TchapRoomType.UNKNOWN
-                    val canSendMessageAuthorization = PowerLevelsHelper(it.second).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
-                    val sendMessageState = when {
-                        !canSendMessageAuthorization                 -> TchapSendMessageState.PERMISSION_DENIED
-                        it.first && roomType == TchapRoomType.DIRECT -> TchapSendMessageState.EMPTY_ROOM
-                        else                                         -> TchapSendMessageState.AUTHORIZED
+                    val hasEnoughPowerLevel = PowerLevelsHelper(it.second).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
+                    val canSendMessageState = when {
+                        !hasEnoughPowerLevel                 -> TchapCanSendMessageState.PERMISSION_DENIED
+                        it.first && roomType == TchapRoomType.DIRECT -> TchapCanSendMessageState.EMPTY_DM
+                        else                                         -> TchapCanSendMessageState.AUTHORIZED
                     }
-                    copy(canSendMessage = sendMessageState)
+                    copy(canSendMessage = canSendMessageState)
                 }
     }
 
