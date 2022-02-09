@@ -85,6 +85,11 @@ class UserListViewModel @AssistedInject constructor(
     }
 
     init {
+        // Tchap: Force user consent to true, we don't want to display the consent banner
+        if (!session.identityService().getUserConsent()) {
+            session.identityService().setUserConsent(true)
+        }
+
         observeUsers()
         setState {
             copy(

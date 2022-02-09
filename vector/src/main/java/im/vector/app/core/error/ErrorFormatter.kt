@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.failure.isInvalidPassword
+import org.matrix.android.sdk.api.failure.isLimitExceededError
 import org.matrix.android.sdk.api.session.contentscanner.ScanFailure
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import java.net.HttpURLConnection
@@ -78,7 +79,7 @@ class DefaultErrorFormatter @Inject constructor(
                     throwable.error.code == MatrixError.M_THREEPID_DENIED         -> {
                         stringProvider.getString(R.string.login_error_threepid_denied)
                     }
-                    throwable.error.code == MatrixError.M_LIMIT_EXCEEDED          -> {
+                    throwable.isLimitExceededError()                              -> {
                         limitExceededError(throwable.error)
                     }
                     throwable.error.code == MatrixError.M_TOO_LARGE               -> {
@@ -101,19 +102,19 @@ class DefaultErrorFormatter @Inject constructor(
                     throwable.error.code == MatrixError.M_THREEPID_AUTH_FAILED    -> {
                         stringProvider.getString(R.string.error_threepid_auth_failed)
                     }
-                    throwable.error.code == MatrixError.M_PASSWORD_TOO_SHORT -> {
+                    throwable.error.code == MatrixError.M_PASSWORD_TOO_SHORT      -> {
                         stringProvider.getString(R.string.tchap_register_pwd_too_short)
                     }
-                    throwable.error.code == MatrixError.M_PASSWORD_NO_UPPERCASE -> {
+                    throwable.error.code == MatrixError.M_PASSWORD_NO_UPPERCASE   -> {
                         stringProvider.getString(R.string.tchap_register_pwd_no_uppercase)
                     }
-                    throwable.error.code == MatrixError.M_PASSWORD_NO_DIGIT -> {
+                    throwable.error.code == MatrixError.M_PASSWORD_NO_DIGIT       -> {
                         stringProvider.getString(R.string.tchap_register_pwd_no_digit)
                     }
-                    throwable.error.code == MatrixError.M_PASSWORD_NO_LOWERCASE -> {
+                    throwable.error.code == MatrixError.M_PASSWORD_NO_LOWERCASE   -> {
                         stringProvider.getString(R.string.tchap_register_pwd_no_lowercase)
                     }
-                    throwable.error.code == MatrixError.M_PASSWORD_NO_SYMBOL -> {
+                    throwable.error.code == MatrixError.M_PASSWORD_NO_SYMBOL      -> {
                         stringProvider.getString(R.string.tchap_register_pwd_no_symbol)
                     }
                     else                                                          -> {

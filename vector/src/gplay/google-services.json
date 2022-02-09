@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "1092909174787",
+    "firebase_url": "https://tchap-beta.firebaseio.com",
+    "project_id": "tchap-beta",
+    "storage_bucket": "tchap-beta.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1092909174787:android:f382f0e7c238b32f",
+        "android_client_info": {
+          "package_name": "fr.gouv.rie.tchap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1092909174787-ol99625ft1r3anmj13giqho21132ujm3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQPFvzDFuRiv4M3dVT3rjnMV6yXQGNLi8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1092909174787-ol99625ft1r3anmj13giqho21132ujm3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1092909174787:android:011b06d12770dc34",
+        "android_client_info": {
+          "package_name": "fr.gouv.tchap.a"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1092909174787-ol99625ft1r3anmj13giqho21132ujm3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQPFvzDFuRiv4M3dVT3rjnMV6yXQGNLi8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1092909174787-ol99625ft1r3anmj13giqho21132ujm3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

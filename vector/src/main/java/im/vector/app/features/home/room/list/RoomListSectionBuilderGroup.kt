@@ -154,7 +154,8 @@ class RoomListSectionBuilderGroup(
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ALL
-            it.roomTagQueryFilter = RoomTagQueryFilter(false, false, false)
+            // Tchap: Show low priorities in room list
+            it.roomTagQueryFilter = RoomTagQueryFilter(false, null, false)
             it.activeGroupId = actualGroupId
         }
 
