@@ -146,7 +146,7 @@ class MessageComposerViewModel @AssistedInject constructor(
         }
     }
 
-    // Tchap: We disable sending messages when the room is empty
+    // Tchap: We disable sending messages when the room is empty or if powerLevel doesn't authorize the sending message action.
     private fun observeCanSendMessage() {
         val roomMemberQueryParams = roomMemberQueryParams {
             displayName = QueryStringValue.IsNotEmpty
