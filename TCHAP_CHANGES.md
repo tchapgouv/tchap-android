@@ -1,3 +1,19 @@
+Changes in Tchap 1.99.5 (2022-02-09)
+====================================
+
+Improvements 🙌
+--------------
+ - [Login] Handle correctly M_LIMIT_EXCEEDED error code ([#322](https://github.com/tchapgouv/tchap-android-v2/issues/322))
+ - [Workaround] Hide the text input in a DM left by the other member ([#405](https://github.com/tchapgouv/tchap-android-v2/issues/405))
+
+Bugfixes 🐛
+----------
+ - Fix potential missing rooms caused by the use of Spaces or low priority tags ([#389](https://github.com/tchapgouv/tchap-android-v2/issues/389))
+ - [Invitation by email] Handle correctly Id server consent ([#392](https://github.com/tchapgouv/tchap-android-v2/issues/392))
+ - [Workaround] Do not select a DM left by the other user ([#401](https://github.com/tchapgouv/tchap-android-v2/issues/401))
+ - Fix the push notifications which were not working for some devices ([#402](https://github.com/tchapgouv/tchap-android-v2/issues/402))
+
+
 Changes in Tchap 1.99.4 (2022-01-26)
 ====================================
 
