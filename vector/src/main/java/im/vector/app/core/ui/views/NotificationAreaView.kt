@@ -162,7 +162,7 @@ class NotificationAreaView @JvmOverloads constructor(
         // View will be Invisible
         object Default : State()
 
-        // Tchap: User can't post messages to room because his power level doesn't allow it or he is alone in the room.
+        // Tchap: User can't post messages to room because his power level doesn't allow it or he is alone in the DM.
         data class NoPermissionToPost(@StringRes val message: Int) : State()
 
         // View will be Gone
