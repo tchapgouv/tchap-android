@@ -50,7 +50,7 @@ sealed interface SendMode {
 enum class TchapSendMessageState {
     AUTHORIZED,
     PERMISSION_DENIED,
-    EMPTY_ROOM
+    EMPTY_DM
 }
 
 data class MessageComposerViewState(
