@@ -156,19 +156,19 @@ class MessageComposerViewModel @AssistedInject constructor(
         combine(
                 room.flow().liveRoomMembers(roomMemberQueryParams),
                 PowerLevelsFlowFactory(room).createFlow()
-        ) { activeRoomMembers, hasEnoughPowerLevel ->
+        ) { activeRoomMembers, powerLevels ->
             val isLastMember = activeRoomMembers.none { it.userId != session.myUserId }
-            isLastMember to hasEnoughPowerLevel
+            isLastMember to powerLevels
         }
                 .distinctUntilChanged()
-                .setOnEach {
+                .setOnEach { (isLastMember, powerLevels) ->
                     val roomType = room.roomSummary()?.let { roomSummary ->
                         RoomUtils.getRoomType(roomSummary)
                     } ?: TchapRoomType.UNKNOWN
-                    val hasEnoughPowerLevel = PowerLevelsHelper(it.second).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
+                    val hasEnoughPowerLevel = PowerLevelsHelper(powerLevels).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
                     val canSendMessageState = when {
                         !hasEnoughPowerLevel                 -> TchapCanSendMessageState.PERMISSION_DENIED
-                        it.first && roomType == TchapRoomType.DIRECT -> TchapCanSendMessageState.EMPTY_DM
+                        isLastMember && roomType == TchapRoomType.DIRECT -> TchapCanSendMessageState.EMPTY_DM
                         else                                         -> TchapCanSendMessageState.AUTHORIZED
                     }
                     copy(canSendMessage = canSendMessageState)
