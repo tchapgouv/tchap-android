@@ -76,3 +76,6 @@
 -keep class org.bouncycastle.** { *; }
 -keepnames class org.bouncycastle.** { *; }
 -dontwarn org.bouncycastle.**
+
+# Tchap: Firebase
+-keep class com.google.firebase.** { *; }
