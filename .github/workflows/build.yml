@@ -42,11 +42,10 @@ jobs:
   release:
     name: Build unsigned ${{ matrix.target }} APKs
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     strategy:
       fail-fast: false
       matrix:
-        target: [ GplayBtchapWithoutvoipWithpinning, GplayTchapWithoutvoipWithpinning, FdroidBtchapWithoutvoipWithoutpinning, FdroidTchapWithoutvoipWithoutpinning ]
+        target: [ GplayTchapWithoutvoipWithpinning ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
