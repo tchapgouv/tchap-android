@@ -154,6 +154,9 @@ class VectorApplication :
 
         notificationUtils.createNotificationChannels()
 
+        // Tchap: Configure programmatically Firebase to prevent errors with the auto-config
+        FcmHelper.initialize(this)
+
         // It can takes time, but do we care?
         val sessionImported = legacySessionImporter.process()
         if (!sessionImported) {

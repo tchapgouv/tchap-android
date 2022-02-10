@@ -57,6 +57,13 @@
     <!-- Note: pusher_app_id cannot exceed 64 chars -->
     <string name="pusher_app_id" translatable="false">fr.gouv.tchap.a.android</string>
 
+    <!-- Tchap: Firebase config -->
+    <string name="firebase_mobilesdk_app_id">1:1092909174787:android:011b06d12770dc34</string>
+    <string name="firebase_api_key">AIzaSyDQPFvzDFuRiv4M3dVT3rjnMV6yXQGNLi8</string>
+    <string name="firebase_project_id">tchap-beta</string>
+    <string name="firebase_url">https://tchap-beta.firebaseio.com</string>
+    <string name="firebase_storage_bucket">tchap-beta.appspot.com</string>
+
     <!-- Permalink config -->
     <string name="permalink_prefix" translatable="false">https://tchap.gouv.fr/#/</string>
     <string-array name="permalink_supported_hosts" translatable="false">

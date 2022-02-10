@@ -30,6 +30,11 @@ import im.vector.app.features.settings.VectorPreferences
  */
 object FcmHelper {
 
+    // Tchap: Add function to configure firebase programmatically
+    fun initialize(context: Context) {
+        // no-op
+    }
+
     fun isPushSupported(): Boolean = false
 
     /**

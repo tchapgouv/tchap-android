@@ -21,6 +21,8 @@ import android.widget.Toast
 import androidx.core.content.edit
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.firebase.FirebaseApp
+import com.google.firebase.FirebaseOptions
 import com.google.firebase.messaging.FirebaseMessaging
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
@@ -35,6 +37,21 @@ import timber.log.Timber
  */
 object FcmHelper {
     private val PREFS_KEY_FCM_TOKEN = "FCM_TOKEN"
+
+    // Tchap: Add function to configure firebase programmatically
+    fun initialize(context: Context) {
+        // 'app should always check the device for a compatible Google Play services APK before accessing Google Play services features'
+        if (checkPlayServices(context)) {
+            val options = FirebaseOptions.Builder()
+                    .setApplicationId(context.getString(R.string.firebase_mobilesdk_app_id))
+                    .setProjectId(context.getString(R.string.firebase_project_id))
+                    .setApiKey(context.getString(R.string.firebase_api_key))
+                    .setDatabaseUrl(context.getString(R.string.firebase_url))
+                    .setStorageBucket(context.getString(R.string.firebase_storage_bucket))
+                    .build()
+            FirebaseApp.initializeApp(context, options)
+        }
+    }
 
     fun isPushSupported(): Boolean = true
 
@@ -95,9 +112,9 @@ object FcmHelper {
      * it doesn't, display a dialog that allows users to download the APK from
      * the Google Play Store or enable it in the device's system settings.
      */
-    private fun checkPlayServices(activity: Activity): Boolean {
+    private fun checkPlayServices(context: Context): Boolean {
         val apiAvailability = GoogleApiAvailability.getInstance()
-        val resultCode = apiAvailability.isGooglePlayServicesAvailable(activity)
+        val resultCode = apiAvailability.isGooglePlayServicesAvailable(context)
         return resultCode == ConnectionResult.SUCCESS
     }
 

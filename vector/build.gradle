@@ -269,7 +269,8 @@ android {
 
     productFlavors {
         gplay {
-            apply plugin: 'com.google.gms.google-services'
+            // Tchap: Firebase is configured programmatically, no need this plugin
+//            apply plugin: 'com.google.gms.google-services'
             afterEvaluate {
                 tasks.matching { it.name.contains("GoogleServices") && !it.name.contains("Gplay") }*.enabled = false
             }
