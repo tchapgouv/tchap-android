@@ -6,14 +6,14 @@
   <path
       android:pathData="M2.8594,13.6216C2.8594,13.9917 3.1594,14.2918 3.5295,14.2918H11.8554C12.2255,14.2918 12.5255,13.9917 12.5255,13.6216V7.342C12.5255,6.9719 12.2255,6.6718 11.8554,6.6718H3.5295C3.1594,6.6718 2.8594,6.9719 2.8594,7.342V13.6216Z"
       android:strokeWidth="0.735605"
-      android:fillColor="@color/tchap_room_forum""
+      android:fillColor="#2CCE70"
       android:fillType="evenOdd"
       android:strokeColor="#ffffff"/>
   <path
       android:pathData="M5.2637,7.5989V4.8223C5.2637,3.4706 6.3511,2.375 7.6926,2.375C9.0338,2.375 10.1212,3.4706 10.1212,4.8223V7.5989"
       android:strokeWidth="1.47121"
       android:fillColor="#00000000"
-      android:strokeColor="@color/tchap_room_forum"/>
+      android:strokeColor="#2CCE70"/>
   <path
       android:pathData="M1.4935,14.0988L13.8685,4.4738"
       android:strokeWidth="1.65"
@@ -23,7 +23,7 @@
       android:pathData="M1.5779,15.5823L13.9529,5.9573"
       android:strokeWidth="1.375"
       android:fillColor="#00000000"
-      android:strokeColor="@color/tchap_room_forum"/>
+      android:strokeColor="#2CCE70"/>
   <path
       android:pathData="M2,1h11v13.75h-11z"
       android:strokeWidth="2"
