@@ -124,12 +124,10 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
         holder.domainNameView.apply {
             when (roomType) {
                 TchapRoomType.DIRECT   -> {
-                    text = TchapUtils.getDomainFromDisplayName(matrixItem.getBestName())
                     setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary))
                     visibility = View.VISIBLE
                 }
                 TchapRoomType.PRIVATE  -> {
-                    text = holder.view.context.getString(R.string.tchap_room_private_room_type)
                     setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_room_private))
                     visibility = View.VISIBLE
                 }
