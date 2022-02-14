@@ -250,14 +250,14 @@ android {
             // Tchap: Show developer mode only in debug
             resValue "bool", "developer_mode_visible", "false"
 
-            postprocessing {
-                removeUnusedCode true
-                removeUnusedResources true
+//            postprocessing {
+//                removeUnusedCode true
+//                removeUnusedResources true
                 // We do not activate obfuscation as it makes it hard then to read crash reports, and it's a bit useless on an open source project :)
-                obfuscate false
-                optimizeCode true
-                proguardFiles 'proguard-rules.pro'
-            }
+//                obfuscate false
+//                optimizeCode true
+//                proguardFiles 'proguard-rules.pro'
+//            }
         }
     }
 
