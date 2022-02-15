@@ -70,8 +70,7 @@
         app:layout_constraintCircle="@id/roomAvatarContainer"
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="30dp"
-        app:layout_constraintEnd_toEndOf="@id/roomAvatarContainer"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:ignore="MissingConstraints"/>
 
     <ImageView
         android:id="@+id/roomAvatarStatusImageView"
