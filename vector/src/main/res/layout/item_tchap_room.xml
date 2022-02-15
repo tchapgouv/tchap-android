@@ -70,7 +70,7 @@
         app:layout_constraintCircle="@id/roomAvatarContainer"
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="30dp"
-        tools:ignore="MissingConstraints"/>
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/roomAvatarStatusImageView"
