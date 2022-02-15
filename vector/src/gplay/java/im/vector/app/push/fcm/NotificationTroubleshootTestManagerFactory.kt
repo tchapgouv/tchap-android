@@ -49,7 +49,7 @@ class NotificationTroubleshootTestManagerFactory @Inject constructor(
         mgr.addTest(testPlayServices)
         mgr.addTest(testFirebaseToken)
         mgr.addTest(testTokenRegistration)
-        mgr.addTest(testPushFromPushGateway)
+//        mgr.addTest(testPushFromPushGateway)
         mgr.addTest(testNotification)
         return mgr
     }
