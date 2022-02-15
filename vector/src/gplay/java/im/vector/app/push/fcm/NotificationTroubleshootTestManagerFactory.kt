@@ -49,6 +49,7 @@ class NotificationTroubleshootTestManagerFactory @Inject constructor(
         mgr.addTest(testPlayServices)
         mgr.addTest(testFirebaseToken)
         mgr.addTest(testTokenRegistration)
+      // Tchap:  Hide this verification, we can't call tchap server.
 //        mgr.addTest(testPushFromPushGateway)
         mgr.addTest(testNotification)
         return mgr
