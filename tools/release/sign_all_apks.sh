@@ -11,7 +11,7 @@ fi
 # Get the command line parameters
 PARAM_KEYSTORE_PATH=$1
 PARAM_DIRECTORY=$2
-CHECKSUM_FILE="checksum.txt"
+CHECKSUM_FILE="checksums.txt"
 
 apkFiles=$(ls "$PARAM_DIRECTORY"/*.apk)
 if [ "${#apkFiles[@]}" -eq 0 ]
