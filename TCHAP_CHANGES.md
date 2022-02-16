@@ -1,3 +1,18 @@
+Changes in Tchap 2.0.0 (2022-02-16)
+===================================
+
+Improvements 🙌
+--------------
+ - Change string "Tchap ne supporte pas encore les appels" to "Tchap ne supporte pas les appels" ([#410](https://github.com/tchapgouv/tchap-android-v2/issues/410))
+ - [Room list] Update the font of the sender message ([#412](https://github.com/tchapgouv/tchap-android-v2/issues/412))
+ - Simplify the main Conversations page ([#417](https://github.com/tchapgouv/tchap-android-v2/issues/417))
+
+Bugfixes 🐛
+----------
+ - Fix the FCM token error breaking the push notifications ([#402](https://github.com/tchapgouv/tchap-android-v2/issues/402))
+ - Wrong display of the forum icon in Dark theme ([#429](https://github.com/tchapgouv/tchap-android-v2/issues/429))
+
+
 Changes in Tchap 1.99.5 (2022-02-09)
 ====================================
 
