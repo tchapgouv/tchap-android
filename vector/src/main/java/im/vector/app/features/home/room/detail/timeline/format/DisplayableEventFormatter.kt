@@ -144,7 +144,6 @@ class DisplayableEventFormatter @Inject constructor(
             span {
                 text = senderName
                 textColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_primary)
-                textStyle = "bold"
             }
                     .append(stringProvider.getString(R.string.tchap_colon_append))
                     .append(" ")

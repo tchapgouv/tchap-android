@@ -41,7 +41,7 @@ do
   # Save hash in file: Checksum.txt
   resultSplit=(${result})
   newName="$(echo ${resultSplit[1]} | sed 's/.*\///')"
-  echo "SHA256(${newName})=${resultSplit[0]}" > ${PARAM_DIRECTORY}/${CHECKSUM_FILE}
+  echo "SHA256(${newName})=${resultSplit[0]}" >> ${PARAM_DIRECTORY}/${CHECKSUM_FILE}
 done
 
 echo "done !! :)"

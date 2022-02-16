@@ -6,7 +6,7 @@
             <!-- Do not allow system and user certificates -->
 
             <!-- Allow only Tchap intermediate certificate authority -->
-            <certificates src="@raw/certignaservicesrootca"/>
+            <certificates src="@raw/certignaservicesrootca" />
         </trust-anchors>
     </base-config>
 </network-security-config>
