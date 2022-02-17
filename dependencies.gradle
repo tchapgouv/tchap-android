@@ -71,6 +71,7 @@ ext.libs = [
                 'espressoIntents'         : "androidx.test.espresso:espresso-intents:$espresso"
         ],
         google      : [
+                // TODO There is 1.6.0?
                 'material'                : "com.google.android.material:material:1.4.0"
         ],
         dagger      : [
@@ -95,6 +96,8 @@ ext.libs = [
         ],
         markwon     : [
                 'core'                   : "io.noties.markwon:core:$markwon",
+                'extLatex'               : "io.noties.markwon:ext-latex:$markwon",
+                'inlineParser'           : "io.noties.markwon:inline-parser:$markwon",
                 'html'                   : "io.noties.markwon:html:$markwon"
         ],
         airbnb      : [

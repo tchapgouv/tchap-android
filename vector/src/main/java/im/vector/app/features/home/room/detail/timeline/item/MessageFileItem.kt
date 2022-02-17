@@ -40,7 +40,7 @@ import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
 
     @EpoxyAttribute
-    var filename: CharSequence = ""
+    var filename: String = ""
 
     @EpoxyAttribute
     var mxcUrl: String = ""

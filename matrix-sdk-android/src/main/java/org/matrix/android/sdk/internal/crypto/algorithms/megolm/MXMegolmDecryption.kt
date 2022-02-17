@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
+import dagger.Lazy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
@@ -45,6 +46,7 @@ import org.matrix.android.sdk.internal.crypto.model.rest.ForwardedRoomKeyContent
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
+import org.matrix.android.sdk.internal.session.StreamEventsManager
 import timber.log.Timber
 
 private val loggerTag = LoggerTag("MXMegolmDecryption", LoggerTag.CRYPTO)
@@ -58,8 +60,9 @@ internal class MXMegolmDecryption(private val userId: String,
                                   private val cryptoStore: IMXCryptoStore,
                                   private val sendToDeviceTask: SendToDeviceTask,
                                   private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                  private val cryptoConfig: MXCryptoConfig,
-                                  private val cryptoCoroutineScope: CoroutineScope
+                                  private val cryptoCoroutineScope: CoroutineScope,
+                                  private val liveEventManager: Lazy<StreamEventsManager>,
+                                  private val cryptoConfig: MXCryptoConfig
 ) : IMXDecrypting, IMXWithHeldExtension {
 
     var newSessionListener: NewSessionListener? = null
@@ -111,12 +114,15 @@ internal class MXMegolmDecryption(private val userId: String,
                                         claimedEd25519Key = olmDecryptionResult.keysClaimed?.get("ed25519"),
                                         forwardingCurve25519KeyChain = olmDecryptionResult.forwardingCurve25519KeyChain
                                                 .orEmpty()
-                                )
+                                ).also {
+                                    liveEventManager.get().dispatchLiveEventDecrypted(event, it)
+                                }
                             } else {
                                 throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
                             }
                         },
                         { throwable ->
+                            liveEventManager.get().dispatchLiveEventDecryptionFailed(event, throwable)
                             if (throwable is MXCryptoError.OlmError) {
                                 // TODO Check the value of .message
                                 if (throwable.olmException.message == "UNKNOWN_MESSAGE_INDEX") {
@@ -136,6 +142,11 @@ internal class MXMegolmDecryption(private val userId: String,
                                     if (requestKeysOnFail) {
                                         requestKeysForEvent(event, false)
                                     }
+
+                                    throw MXCryptoError.Base(
+                                            MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX,
+                                            "UNKNOWN_MESSAGE_INDEX",
+                                            null)
                                 }
 
                                 val reason = String.format(MXCryptoError.OLM_REASON, throwable.olmException.message)

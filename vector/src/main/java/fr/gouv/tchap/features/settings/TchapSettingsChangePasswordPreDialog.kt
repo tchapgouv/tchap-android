@@ -57,7 +57,7 @@ class TchapSettingsChangePasswordPreDialog(
                 .setMessage(R.string.tchap_settings_change_pwd_caution)
                 .setPositiveButton(R.string.settings_change_password) { _, _ -> listener?.changePassword() }
                 .setNeutralButton(R.string.encryption_export_e2e_room_keys, null)
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .create()
 
         dialog.setOnShowListener {

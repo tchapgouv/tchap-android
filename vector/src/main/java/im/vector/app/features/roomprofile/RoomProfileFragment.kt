@@ -120,6 +120,7 @@ class RoomProfileFragment @Inject constructor(
                 is RoomProfileViewEvents.Failure          -> showFailure(it.throwable)
                 is RoomProfileViewEvents.ShareRoomProfile -> onShareRoomProfile(it.permalink)
                 is RoomProfileViewEvents.OnShortcutReady  -> addShortcut(it)
+                RoomProfileViewEvents.DismissLoading      -> dismissLoadingDialog()
             }.exhaustive
         }
         roomListQuickActionsSharedActionViewModel
@@ -234,7 +235,7 @@ class RoomProfileFragment @Inject constructor(
         MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.room_settings_enable_encryption_dialog_title)
                 .setMessage(R.string.room_settings_enable_encryption_dialog_content)
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .setPositiveButton(R.string.room_settings_enable_encryption_dialog_submit) { _, _ ->
                     roomProfileViewModel.handle(RoomProfileAction.EnableEncryption)
                 }
@@ -289,10 +290,10 @@ class RoomProfileFragment @Inject constructor(
         MaterialAlertDialogBuilder(requireContext(), if (isPublicRoom) 0 else R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                 .setTitle(R.string.room_participants_leave_prompt_title)
                 .setMessage(message)
-                .setPositiveButton(R.string.leave) { _, _ ->
+                .setPositiveButton(R.string.action_leave) { _, _ ->
                     roomProfileViewModel.handle(RoomProfileAction.LeaveRoom)
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 
@@ -302,6 +303,10 @@ class RoomProfileFragment @Inject constructor(
 
     override fun onRoomPermissionsClicked() {
         roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomPermissionsSettings)
+    }
+
+    override fun restoreEncryptionState() {
+        roomProfileViewModel.handle(RoomProfileAction.RestoreEncryptionState)
     }
 
     override fun onRoomIdClicked() {

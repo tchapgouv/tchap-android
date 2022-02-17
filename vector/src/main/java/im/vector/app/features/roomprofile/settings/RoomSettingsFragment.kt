@@ -199,7 +199,7 @@ class RoomSettingsFragment @Inject constructor(
                 .setPositiveButton(R.string.yes) { _, _ ->
                     viewModel.handle(RoomSettingsAction.RemoveFromRoomsDirectory)
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 
@@ -242,7 +242,7 @@ class RoomSettingsFragment @Inject constructor(
                 .setPositiveButton(R.string.yes) { _, _ ->
                     viewModel.handle(RoomSettingsAction.AllowExternalUsersToJoin)
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 
@@ -259,7 +259,7 @@ class RoomSettingsFragment @Inject constructor(
                         .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->
                             viewModel.handle(RoomSettingsAction.Cancel)
                         }
-                        .setNegativeButton(R.string.cancel, null)
+                        .setNegativeButton(R.string.action_cancel, null)
                         .show()
                 true
             } else {

@@ -23,8 +23,6 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.DialogSslFingerprintBinding
 import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 import timber.log.Timber
-import java.util.HashMap
-import java.util.HashSet
 import javax.inject.Inject
 
 /**
@@ -151,8 +149,9 @@ class UnrecognizedCertificateDialog @Inject constructor(
 //            }
 //            builder.setNeutralButton(R.string.ssl_logout_account) { _, _ -> callback.onReject() }
 //        } else {
-//            builder.setNegativeButton(R.string.cancel) { _, _ -> callback.onReject() }
+//            builder.setNegativeButton(R.string.action_cancel) { _, _ -> callback.onReject() }
 //        }
+
         // Tchap: user can only ignore unknown certificate
         builder.setPositiveButton(R.string.ok) { _, _ ->
             callback.onIgnore()

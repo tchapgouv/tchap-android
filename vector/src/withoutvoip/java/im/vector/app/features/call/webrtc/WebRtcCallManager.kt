@@ -33,6 +33,7 @@ import org.matrix.android.sdk.api.session.room.model.call.CallNegotiateContent
 import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
 import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerContent
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -69,6 +70,8 @@ class WebRtcCallManager @Inject constructor(
     fun removeListener(listener: Listener) = Unit
 
     val audioManager = CallAudioManager(context, null)
+
+    var currentCall: AtomicReference<WebRtcCall?> = AtomicReference(null)
 
     fun getCallById(callId: String): WebRtcCall? = null
 
