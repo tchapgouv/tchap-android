@@ -99,7 +99,6 @@ class RoomMemberProfileController @Inject constructor(
         // Security
         val host = this
 
-
         if (state.isRoomEncrypted) {
             // Tchap: Hide the security part, we keep the footer.
             genericFooterItem {

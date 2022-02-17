@@ -48,8 +48,9 @@ sealed interface CanSendStatus {
     object Allowed : CanSendStatus
     object NoPermission : CanSendStatus
     data class UnSupportedE2eAlgorithm(val algorithm: String?) : CanSendStatus
+
     // Tchap: Disable the sending message in a direct room if the recipient has left the room.
-    object EmptyDM: CanSendStatus
+    object EmptyDM : CanSendStatus
 }
 
 fun CanSendStatus.boolean(): Boolean {
@@ -57,7 +58,7 @@ fun CanSendStatus.boolean(): Boolean {
         CanSendStatus.Allowed                    -> true
         CanSendStatus.NoPermission               -> false
         is CanSendStatus.UnSupportedE2eAlgorithm -> false
-        CanSendStatus.EmptyDM -> false
+        CanSendStatus.EmptyDM                    -> false
     }
 }
 
@@ -70,7 +71,7 @@ data class MessageComposerViewState(
 ) : MavericksState {
 
     val isVoiceRecording = when (voiceRecordingUiState) {
-        VoiceMessageRecorderView.RecordingUiState.Idle      -> false
+        VoiceMessageRecorderView.RecordingUiState.Idle         -> false
         is VoiceMessageRecorderView.RecordingUiState.Locked,
         VoiceMessageRecorderView.RecordingUiState.Draft,
         is VoiceMessageRecorderView.RecordingUiState.Recording -> true

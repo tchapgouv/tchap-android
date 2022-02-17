@@ -29,7 +29,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.isEmail
-import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginResetPasswordBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
@@ -58,9 +57,9 @@ class FtueAuthResetPasswordFragment @Inject constructor() : AbstractFtueAuthFrag
         setupSubmitButton()
     }
 
-    private fun setupUi(state: OnboardingViewState) {
-        views.resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrlFromUser.toReducedUrl())
-    }
+//    private fun setupUi(state: OnboardingViewState) {
+//        views.resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrlFromUser.toReducedUrl())
+//    }
 
     private fun setupSubmitButton() {
         views.resetPasswordSubmit.setOnClickListener { submit() }
@@ -115,7 +114,7 @@ class FtueAuthResetPasswordFragment @Inject constructor() : AbstractFtueAuthFrag
     }
 
     override fun updateWithState(state: OnboardingViewState) {
-        setupUi(state)
+//        setupUi(state)
 
         when (state.asyncResetPassword) {
             is Loading -> {
