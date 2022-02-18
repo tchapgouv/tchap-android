@@ -53,37 +53,38 @@ jobs:
             echo "::set-output name=add_comment::true"
             echo "::set-output name=body::$body"
           fi
-      - name: Find Comment
-        if: always()
-        uses: peter-evans/find-comment@v1
-        id: fc
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: Ktlint Results
-      - name: Add comment if needed
-        if: always() && steps.ktlint-results.outputs.add_comment == 'true'
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            ### Ktlint Results
+  # Tchap: Configure peter-evans github action and restore the following blocs
+  #      - name: Find Comment
+  #        if: always()
+  #        uses: peter-evans/find-comment@v1
+  #        id: fc
+  #        with:
+  #          issue-number: ${{ github.event.pull_request.number }}
+  #          comment-author: 'github-actions[bot]'
+  #          body-includes: Ktlint Results
+  #      - name: Add comment if needed
+  #        if: always() && steps.ktlint-results.outputs.add_comment == 'true'
+  #        uses: peter-evans/create-or-update-comment@v1
+  #        with:
+  #          comment-id: ${{ steps.fc.outputs.comment-id }}
+  #          issue-number: ${{ github.event.pull_request.number }}
+  #          body: |
+  #            ### Ktlint Results
+  #
+  #            ${{ steps.ktlint-results.outputs.body }}
+  #          edit-mode: replace
+  #      - name: Delete comment if needed
+  #        if: always() && steps.fc.outputs.comment-id != '' && steps.ktlint-results.outputs.add_comment == 'false'
+  #        uses: actions/github-script@v3
+  #        with:
+  #          script: |
+  #            github.issues.deleteComment({
+  #              owner: context.repo.owner,
+  #              repo: context.repo.repo,
+  #              comment_id: ${{ steps.fc.outputs.comment-id }}
+  #            })
 
-            ${{ steps.ktlint-results.outputs.body }}
-          edit-mode: replace
-      - name: Delete comment if needed
-        if: always() && steps.fc.outputs.comment-id != '' && steps.ktlint-results.outputs.add_comment == 'false'
-        uses: actions/github-script@v3
-        with:
-          script: |
-            github.issues.deleteComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              comment_id: ${{ steps.fc.outputs.comment-id }}
-            })
-
-# Lint for main module
+  # Lint for main module
   android-lint:
     name: Android Linter
     runs-on: ubuntu-latest
