@@ -24,6 +24,7 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.epoxy.bottomSheetDividerItem
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.colorizeMatchingText
@@ -58,7 +59,7 @@ class VerificationRequestController @Inject constructor(
             if (state.hasAnyOtherSession) {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
-                    notice(host.stringProvider.getString(R.string.verification_open_other_to_verify))
+                    notice(host.stringProvider.getString(R.string.verification_open_other_to_verify).toEpoxyCharSequence())
                 }
 
                 bottomSheetSelfWaitItem {
@@ -93,7 +94,7 @@ class VerificationRequestController @Inject constructor(
 
             bottomSheetVerificationActionItem {
                 id("skip")
-                title(host.stringProvider.getString(R.string.skip))
+                title(host.stringProvider.getString(R.string.action_skip))
                 titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
                 iconRes(R.drawable.ic_arrow_right)
                 iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
@@ -113,7 +114,7 @@ class VerificationRequestController @Inject constructor(
 
             bottomSheetVerificationNoticeItem {
                 id("notice")
-                notice(styledText)
+                notice(styledText.toEpoxyCharSequence())
             }
 
             bottomSheetDividerItem {

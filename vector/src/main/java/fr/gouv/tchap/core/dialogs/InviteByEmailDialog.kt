@@ -41,7 +41,7 @@ class InviteByEmailDialog(
         val inviteDialog = MaterialAlertDialogBuilder(activity)
                 .setTitle(R.string.people_search_invite_by_id_dialog_title)
                 .setView(dialogLayout)
-                .setPositiveButton(R.string.invite) { _, _ ->
+                .setPositiveButton(R.string.action_invite) { _, _ ->
                     val text = views.inviteByIdEditText.text.toString().lowercase(VectorLocale.applicationLocale).trim()
 
                     if (text.isEmail()) {
@@ -49,7 +49,7 @@ class InviteByEmailDialog(
                         listener.inviteByEmail(text)
                     }
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
 
         val inviteButton = inviteDialog.getButton(DialogInterface.BUTTON_POSITIVE)

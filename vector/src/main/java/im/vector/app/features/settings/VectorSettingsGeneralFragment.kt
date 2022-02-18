@@ -416,7 +416,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                     .setView(view)
                     .setCancelable(false)
                     .setPositiveButton(R.string.settings_change_password, null)
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .setOnDismissListener {
                         view.hideKeyboard()
                     }
@@ -527,10 +527,10 @@ class VectorSettingsGeneralFragment @Inject constructor(
         if (!hidden && TchapUtils.isExternalTchapUser(session.myUserId)) {
             MaterialAlertDialogBuilder(requireActivity())
                     .setMessage(R.string.tchap_settings_show_external_user_in_users_directory_prompt)
-                    .setPositiveButton(R.string.accept) { _, _ ->
+                    .setPositiveButton(R.string.action_accept) { _, _ ->
                         hideUserFromUsersDirectory(false)
                     }
-                    .setNegativeButton(R.string.cancel) { _, _ ->
+                    .setNegativeButton(R.string.action_cancel) { _, _ ->
                         hideFromUsersDirectoryPreference.isChecked = true
                     }
                     .setOnCancelListener { _ ->

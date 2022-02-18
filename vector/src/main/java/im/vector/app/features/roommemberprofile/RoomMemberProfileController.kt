@@ -20,6 +20,7 @@ package im.vector.app.features.roommemberprofile
 import com.airbnb.epoxy.TypedEpoxyController
 import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.resources.StringProvider
@@ -43,6 +44,7 @@ class RoomMemberProfileController @Inject constructor(
         fun onShowDeviceList()
         fun onShowDeviceListNoCrossSigning()
         fun onOpenDmClicked()
+        fun onOverrideColorClicked()
         fun onJumpToReadReceiptClicked()
         fun onMentionClicked()
         fun onEditPowerLevel(currentRole: Role)
@@ -95,12 +97,21 @@ class RoomMemberProfileController @Inject constructor(
 
     private fun buildSecuritySection(state: RoomMemberProfileViewState) {
         // Security
-        buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
         val host = this
 
         if (state.isRoomEncrypted) {
             // Tchap: Hide the security part, we keep the footer.
-//            if (state.userMXCrossSigningInfo != null) {
+            genericFooterItem {
+                id("verify_footer")
+                text(host.stringProvider.getString(R.string.room_profile_encrypted_subtitle).toEpoxyCharSequence())
+                centered(false)
+            }
+
+//            if (!state.isAlgorithmSupported) {
+//                // TODO find sensible message to display here
+//                // For now we just remove the verify actions as well as the Security status
+//            } else if (state.userMXCrossSigningInfo != null) {
+//                buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
 //                // Cross signing is enabled for this user
 //                if (state.userMXCrossSigningInfo.isTrusted()) {
 //                    // User is trusted
@@ -148,11 +159,13 @@ class RoomMemberProfileController @Inject constructor(
 //
 //                    genericFooterItem {
 //                        id("verify_footer")
-//                        text(host.stringProvider.getString(R.string.room_profile_encrypted_subtitle))
+//                        text(host.stringProvider.getString(R.string.room_profile_encrypted_subtitle).toEpoxyCharSequence())
 //                        centered(false)
 //                    }
 //                }
 //            } else {
+//                buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
+//
 //                buildProfileAction(
 //                        id = "learn_more",
 //                        title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
@@ -162,15 +175,12 @@ class RoomMemberProfileController @Inject constructor(
 //                        action = { callback?.onShowDeviceListNoCrossSigning() }
 //                )
 //            }
-            genericFooterItem {
-                id("verify_footer")
-                text(host.stringProvider.getString(R.string.room_profile_encrypted_subtitle))
-                centered(false)
-            }
         } else {
+//            buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
+
             genericFooterItem {
                 id("verify_footer_not_encrypted")
-                text(host.stringProvider.getString(R.string.room_profile_not_encrypted_subtitle))
+                text(host.stringProvider.getString(R.string.room_profile_not_encrypted_subtitle).toEpoxyCharSequence())
                 centered(false)
             }
         }
@@ -178,10 +188,20 @@ class RoomMemberProfileController @Inject constructor(
 
     private fun buildMoreSection(state: RoomMemberProfileViewState) {
         // More
+        buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
+
+        // Tchap: Hidden in Tchap
+//        buildProfileAction(
+//                id = "overrideColor",
+//                editable = false,
+//                title = stringProvider.getString(R.string.room_member_override_nick_color),
+//                subtitle = state.userColorOverride,
+//                divider = !state.isMine,
+//                action = { callback?.onOverrideColorClicked() }
+//        )
+
         if (!state.isMine) {
             val membership = state.asyncMembership() ?: return
-
-            buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
 
             // Both myUserId and otherUserId are not external
             if (!TchapUtils.isExternalTchapUser(session.myUserId) || !TchapUtils.isExternalTchapUser(state.userId)) {
@@ -312,7 +332,7 @@ class RoomMemberProfileController @Inject constructor(
         return if (isIgnored) {
             stringProvider.getString(R.string.unignore)
         } else {
-            stringProvider.getString(R.string.ignore)
+            stringProvider.getString(R.string.action_ignore)
         }
     }
 }

@@ -41,10 +41,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voice.VoicePlayerHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import org.commonmark.parser.Parser
-import org.commonmark.renderer.html.HtmlRenderer
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
@@ -55,6 +52,7 @@ import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
+import org.matrix.android.sdk.api.session.room.model.RoomEncryptionAlgorithm
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
@@ -64,6 +62,7 @@ import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
 import org.matrix.android.sdk.api.session.space.CreateSpaceParams
 import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 
 class MessageComposerViewModel @AssistedInject constructor(
@@ -83,7 +82,7 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     init {
         loadDraftIfAny()
-        observeCanSendMessage()
+        observeCanSendMessageAndEncryption()
         subscribeToStateInternal()
     }
 
@@ -146,33 +145,42 @@ class MessageComposerViewModel @AssistedInject constructor(
         }
     }
 
-    // Tchap: We disable sending messages when the DM is empty or if powerLevel doesn't authorize the sending message action.
-    private fun observeCanSendMessage() {
+    private fun observeCanSendMessageAndEncryption() {
         val roomMemberQueryParams = roomMemberQueryParams {
             displayName = QueryStringValue.IsNotEmpty
             memberships = Membership.activeMemberships()
         }
 
         combine(
-                room.flow().liveRoomMembers(roomMemberQueryParams),
-                PowerLevelsFlowFactory(room).createFlow()
-        ) { activeRoomMembers, powerLevels ->
-            val isLastMember = activeRoomMembers.none { it.userId != session.myUserId }
-            isLastMember to powerLevels
-        }
-                .distinctUntilChanged()
-                .setOnEach { (isLastMember, powerLevels) ->
-                    val roomType = room.roomSummary()?.let { roomSummary ->
-                        RoomUtils.getRoomType(roomSummary)
-                    } ?: TchapRoomType.UNKNOWN
-                    val hasEnoughPowerLevel = PowerLevelsHelper(powerLevels).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
-                    val canSendMessageState = when {
-                        !hasEnoughPowerLevel                 -> TchapCanSendMessageState.PERMISSION_DENIED
-                        isLastMember && roomType == TchapRoomType.DIRECT -> TchapCanSendMessageState.EMPTY_DM
-                        else                                         -> TchapCanSendMessageState.AUTHORIZED
+                PowerLevelsFlowFactory(room).createFlow(),
+                room.flow().liveRoomSummary().unwrap(),
+                room.flow().liveRoomMembers(roomMemberQueryParams)
+        ) { pl, sum, members ->
+            // Tchap: We disable sending messages when the DM is empty or if powerLevel doesn't authorize the sending message action.
+            val isLastMember = members.none { it.userId != session.myUserId }
+            val roomType = room.roomSummary()?.let { RoomUtils.getRoomType(it) } ?: TchapRoomType.UNKNOWN
+            val isLastMemberInDm = isLastMember && roomType == TchapRoomType.DIRECT
+            val canSendMessage = PowerLevelsHelper(pl).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE) && !isLastMemberInDm
+            when {
+                canSendMessage   -> {
+                    val isE2E = sum.isEncrypted
+                    if (isE2E) {
+                        val roomEncryptionAlgorithm = sum.roomEncryptionAlgorithm
+                        if (roomEncryptionAlgorithm is RoomEncryptionAlgorithm.UnsupportedAlgorithm) {
+                            CanSendStatus.UnSupportedE2eAlgorithm(roomEncryptionAlgorithm.name)
+                        } else {
+                            CanSendStatus.Allowed
+                        }
+                    } else {
+                        CanSendStatus.Allowed
                     }
-                    copy(canSendMessage = canSendMessageState)
                 }
+                isLastMemberInDm -> CanSendStatus.EmptyDM
+                else             -> CanSendStatus.NoPermission
+            }
+        }.setOnEach {
+            copy(canSendMessage = it)
+        }
     }
 
     private fun handleEnterQuoteMode(action: MessageComposerAction.EnterQuoteMode) {
@@ -436,23 +444,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                     popDraft()
                 }
                 is SendMode.Quote   -> {
-                    val messageContent = state.sendMode.timelineEvent.getLastMessageContent()
-                    val textMsg = messageContent?.body
-
-                    val finalText = legacyRiotQuoteText(textMsg, action.text.toString())
-
-                    // TODO check for pills?
-
-                    // TODO Refactor this, just temporary for quotes
-                    val parser = Parser.builder().build()
-                    val document = parser.parse(finalText)
-                    val renderer = HtmlRenderer.builder().build()
-                    val htmlText = renderer.render(document)
-                    if (finalText == htmlText) {
-                        room.sendTextMessage(finalText)
-                    } else {
-                        room.sendFormattedTextMessage(finalText, htmlText)
-                    }
+                    room.sendQuotedTextMessage(state.sendMode.timelineEvent, action.text.toString(), action.autoMarkdown)
                     _viewEvents.post(MessageComposerViewEvents.MessageSent)
                     popDraft()
                 }

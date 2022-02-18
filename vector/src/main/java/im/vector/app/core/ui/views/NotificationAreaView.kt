@@ -26,6 +26,7 @@ import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.text.italic
 import im.vector.app.R
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.error.ResourceLimitErrorFormatter
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.utils.DimensionConverter
@@ -74,6 +75,7 @@ class NotificationAreaView @JvmOverloads constructor(
             is State.Default                    -> renderDefault()
             is State.Hidden                     -> renderHidden()
             is State.NoPermissionToPost         -> renderNoPermissionToPost(newState.message)
+            is State.UnsupportedAlgorithm       -> renderUnsupportedAlgorithm(newState)
             is State.Tombstone                  -> renderTombstone()
             is State.ResourceLimitExceededError -> renderResourceLimitExceededError(newState)
         }.exhaustive
@@ -102,6 +104,24 @@ class NotificationAreaView @JvmOverloads constructor(
             italic {
                 +resources.getString(messageId)
             }
+        }
+        views.roomNotificationMessage.text = message
+        views.roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_secondary))
+    }
+
+    private fun renderUnsupportedAlgorithm(e2eState: State.UnsupportedAlgorithm) {
+        visibility = View.VISIBLE
+        views.roomNotificationIcon.setImageResource(R.drawable.ic_warning_badge)
+        val text = if (e2eState.canRestore) {
+            R.string.room_unsupported_e2e_algorithm_as_admin
+        } else R.string.room_unsupported_e2e_algorithm
+        val message = span {
+            italic {
+                +resources.getString(text)
+            }
+        }
+        views.roomNotificationMessage.onClick {
+            delegate?.onMisconfiguredEncryptionClicked()
         }
         views.roomNotificationMessage.text = message
         views.roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_secondary))
@@ -164,6 +184,7 @@ class NotificationAreaView @JvmOverloads constructor(
 
         // Tchap: User can't post messages to room because his power level doesn't allow it or he is alone in the DM.
         data class NoPermissionToPost(@StringRes val message: Int) : State()
+        data class UnsupportedAlgorithm(val canRestore: Boolean) : State()
 
         // View will be Gone
         object Hidden : State()
@@ -180,5 +201,6 @@ class NotificationAreaView @JvmOverloads constructor(
      */
     interface Delegate {
         fun onTombstoneEventClicked()
+        fun onMisconfiguredEncryptionClicked()
     }
 }

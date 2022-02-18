@@ -24,4 +24,4 @@ If you would like to receive releases more quickly (bearing in mind that they ma
 
 ## Contributing
 
-Please refer to [CONTRIBUTING.md](https://github.com/dinsic-pim/tchap-android-v2/blob/develop/CONTRIBUTING.md) if you want to contribute on the project!
+Please refer to [CONTRIBUTING.md](https://github.com/tchapgouv/tchap-android-v2/blob/develop/CONTRIBUTING.md) if you want to contribute on the Tchap Android project!

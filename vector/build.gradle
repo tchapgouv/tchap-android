@@ -15,6 +15,9 @@ kapt {
 // Note: 2 digits max for each value
 ext.versionMajor = 2
 ext.versionMinor = 0
+// Note: even values are reserved for regular release, odd values for hotfix release.
+// When creating a hotfix, you should decrease the value, since the current value
+// is the value for the next regular release.
 ext.versionPatch = 1
 
 static def getGitTimestamp() {
@@ -79,6 +82,17 @@ static def gitTag() {
     return cmd.execute().text.trim()
 }
 
+// For F-Droid build, build on a not tagged commit will have a "-dev" suffix
+// Tchap: unused
+@SuppressWarnings('unused')
+static def getFdroidVersionSuffix() {
+    if (gitTag() == "") {
+        return "-dev"
+    } else {
+        return ""
+    }
+}
+
 project.android.buildTypes.all { buildType ->
     buildType.javaCompileOptions.annotationProcessorOptions.arguments =
             [
@@ -130,7 +144,7 @@ android {
         buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
         resValue "string", "build_number", "\"${buildNumber}\""
 
-        buildConfigField "im.vector.app.features.VectorFeatures.LoginVersion", "LOGIN_VERSION", "im.vector.app.features.VectorFeatures.LoginVersion.V1"
+        buildConfigField "im.vector.app.features.VectorFeatures.OnboardingVariant", "ONBOARDING_VARIANT", "im.vector.app.features.VectorFeatures.OnboardingVariant.LEGACY"
 
         buildConfigField "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy", "outboundSessionKeySharingStrategy", "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy.WhenTyping"
 
@@ -339,16 +353,13 @@ android {
         }
     }
 
+    // Tchap: Rename unsigned apk
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-
-            def outputFileNameUpdated = outputFileName
+            outputFileName = outputFileName
                     .replace("vector-", "")
                     .replace("release", "v${versionName}")
-
-            outputFileName = outputFileNameUpdated
         }
-
     }
 
     lintOptions {
@@ -398,6 +409,7 @@ dependencies {
     implementation project(":diff-match-patch")
     implementation project(":multipicker")
     implementation project(":attachment-viewer")
+    implementation project(":library:jsonviewer")
     implementation project(":library:ui-styles")
     implementation 'androidx.multidex:multidex:2.0.1'
 
@@ -434,7 +446,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.39'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.40'
 
     // FlowBinding
     implementation libs.github.flowBinding
@@ -464,6 +476,8 @@ dependencies {
     implementation libs.google.material
     implementation 'me.gujun.android:span:1.7'
     implementation libs.markwon.core
+    implementation libs.markwon.extLatex
+    implementation libs.markwon.inlineParser
     implementation libs.markwon.html
     implementation 'com.googlecode.htmlcompressor:htmlcompressor:1.5.2'
     implementation 'me.saket:better-link-movement-method:2.2.0'
@@ -527,8 +541,7 @@ dependencies {
     // OSS License, gplay flavor only
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
-    implementation "androidx.emoji2:emoji2:1.0.0"
-    implementation('com.github.BillCarsonFr:JsonViewer:0.7')
+    implementation "androidx.emoji2:emoji2:1.0.1"
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only

@@ -69,7 +69,7 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
                 .matrixItem(spaceChildInfo.toMatrixItem())
                 .avatarRenderer(avatarRenderer)
                 .topic(spaceChildInfo.topic)
-                .buttonLabel(stringProvider.getString(R.string.join))
+                .buttonLabel(stringProvider.getString(R.string.action_join))
                 .loading(suggestedRoomJoiningStates[spaceChildInfo.childRoomId] is Loading)
                 .memberCount(spaceChildInfo.activeMemberCount ?: 0)
                 .buttonClickListener { listener?.onJoinSuggestedRoom(spaceChildInfo) }

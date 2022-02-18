@@ -140,7 +140,7 @@ class TchapRegisterFragment @Inject constructor() : AbstractLoginFragment<Fragme
                     .setPositiveButton(R.string.tchap_register_warning_for_external_proceed) { _, _ ->
                         loginViewModel.handle(LoginAction.UpdateHomeServer(getString(R.string.server_url_prefix) + hs))
                     }
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .show()
         } else {
             loginViewModel.handle(LoginAction.UpdateHomeServer(getString(R.string.server_url_prefix) + hs))

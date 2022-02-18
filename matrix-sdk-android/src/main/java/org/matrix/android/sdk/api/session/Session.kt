@@ -86,7 +86,9 @@ interface Session :
         SyncStatusService,
         HomeServerCapabilitiesService,
         SecureStorageService,
-        AccountService {
+        AccountService,
+        ToDeviceService,
+        EventStreamService {
 
     val coroutineDispatchers: MatrixCoroutineDispatchers
 

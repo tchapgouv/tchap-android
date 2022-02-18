@@ -110,6 +110,8 @@ class HomeActivity :
 
     @Suppress("UNUSED")
     private val analyticsAccountDataViewModel: AnalyticsAccountDataViewModel by viewModel()
+    @Suppress("UNUSED")
+    private val userColorAccountDataViewModel: UserColorAccountDataViewModel by viewModel()
 
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by viewModel()
     private val promoteRestrictedViewModel: PromoteRestrictedViewModel by viewModel()
@@ -416,7 +418,7 @@ class HomeActivity :
                     dismissedAction = Runnable {
                         homeActivityViewModel.handle(HomeActivityViewActions.PushPromptHasBeenReviewed)
                     }
-                    addButton(getString(R.string.dismiss), {
+                    addButton(getString(R.string.action_dismiss), {
                         homeActivityViewModel.handle(HomeActivityViewActions.PushPromptHasBeenReviewed)
                     }, true)
                     addButton(getString(R.string.settings), {

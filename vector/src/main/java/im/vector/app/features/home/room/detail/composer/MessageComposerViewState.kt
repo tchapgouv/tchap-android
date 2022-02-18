@@ -44,25 +44,34 @@ sealed interface SendMode {
     data class Voice(val text: String) : SendMode
 }
 
-// Tchap: Add an enum state to disable the sending message:
-// - In a direct room if the recipient left the room.
-// - If the powerLevel doesn't authorize the sending message action.
-enum class TchapCanSendMessageState {
-    AUTHORIZED,
-    PERMISSION_DENIED,
-    EMPTY_DM
+sealed interface CanSendStatus {
+    object Allowed : CanSendStatus
+    object NoPermission : CanSendStatus
+    data class UnSupportedE2eAlgorithm(val algorithm: String?) : CanSendStatus
+
+    // Tchap: Disable the sending message in a direct room if the recipient has left the room.
+    object EmptyDM : CanSendStatus
+}
+
+fun CanSendStatus.boolean(): Boolean {
+    return when (this) {
+        CanSendStatus.Allowed                    -> true
+        CanSendStatus.NoPermission               -> false
+        is CanSendStatus.UnSupportedE2eAlgorithm -> false
+        CanSendStatus.EmptyDM                    -> false
+    }
 }
 
 data class MessageComposerViewState(
         val roomId: String,
-        val canSendMessage: TchapCanSendMessageState = TchapCanSendMessageState.AUTHORIZED,
+        val canSendMessage: CanSendStatus = CanSendStatus.Allowed,
         val isSendButtonVisible: Boolean = false,
         val sendMode: SendMode = SendMode.Regular("", false),
         val voiceRecordingUiState: VoiceMessageRecorderView.RecordingUiState = VoiceMessageRecorderView.RecordingUiState.Idle
 ) : MavericksState {
 
     val isVoiceRecording = when (voiceRecordingUiState) {
-        VoiceMessageRecorderView.RecordingUiState.Idle      -> false
+        VoiceMessageRecorderView.RecordingUiState.Idle         -> false
         is VoiceMessageRecorderView.RecordingUiState.Locked,
         VoiceMessageRecorderView.RecordingUiState.Draft,
         is VoiceMessageRecorderView.RecordingUiState.Recording -> true
@@ -70,8 +79,8 @@ data class MessageComposerViewState(
 
     val isVoiceMessageIdle = !isVoiceRecording
 
-    val isComposerVisible = (canSendMessage == TchapCanSendMessageState.AUTHORIZED) && !isVoiceRecording
-    val isVoiceMessageRecorderVisible = (canSendMessage == TchapCanSendMessageState.AUTHORIZED) && !isSendButtonVisible && BuildConfig.SHOW_VOICE_RECORDER
+    val isComposerVisible = canSendMessage.boolean() && !isVoiceRecording
+    val isVoiceMessageRecorderVisible = canSendMessage.boolean() && !isSendButtonVisible && BuildConfig.SHOW_VOICE_RECORDER
 
     @Suppress("UNUSED") // needed by mavericks
     constructor(args: RoomDetailArgs) : this(roomId = args.roomId)
