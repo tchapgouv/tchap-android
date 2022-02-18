@@ -190,14 +190,15 @@ class RoomMemberProfileController @Inject constructor(
         // More
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
 
-        buildProfileAction(
-                id = "overrideColor",
-                editable = false,
-                title = stringProvider.getString(R.string.room_member_override_nick_color),
-                subtitle = state.userColorOverride,
-                divider = !state.isMine,
-                action = { callback?.onOverrideColorClicked() }
-        )
+        // Tchap: Hidden in Tchap
+//        buildProfileAction(
+//                id = "overrideColor",
+//                editable = false,
+//                title = stringProvider.getString(R.string.room_member_override_nick_color),
+//                subtitle = state.userColorOverride,
+//                divider = !state.isMine,
+//                action = { callback?.onOverrideColorClicked() }
+//        )
 
         if (!state.isMine) {
             val membership = state.asyncMembership() ?: return
