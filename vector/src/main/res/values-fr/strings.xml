@@ -386,7 +386,7 @@
     <string name="yes">OUI</string>
     <string name="no">NON</string>
     <string name="_continue">Continuer</string>
-    <string name="action_remove">Supprimer</string>
+    <string name="action_remove">Retirer</string>
     <string name="action_join">Rejoindre</string>
     <string name="action_preview">Aperçu</string>
     <string name="action_reject">Rejeter</string>
