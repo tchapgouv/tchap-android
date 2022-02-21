@@ -90,7 +90,8 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         avatarRenderer.render(matrixItem, holder.avatarImageView)
 //        holder.roomAvatarDecorationImageView.render(encryptionTrustLevel)
 //        holder.roomAvatarPublicDecorationImageView.isVisible = izPublic
-        holder.roomFailSendingImageView.isVisible = hasFailedSending
+        // Tchap: Set invisible instead of gone to keep view size
+        holder.roomFailSendingImageView.isInvisible = !hasFailedSending
         renderSelection(holder, showSelected)
         holder.typingView.setTextOrHide(typingMessage)
         holder.lastEventView.isInvisible = holder.typingView.isVisible

@@ -110,6 +110,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .changeMembershipState(changeMembershipState)
                 .acceptListener { listener?.onAcceptRoomInvitation(roomSummary) }
                 .rejectListener { listener?.onRejectRoomInvitation(roomSummary) }
+        // Tchap: There is no preview for invites
 //                .listener { listener?.onRoomClicked(roomSummary) }
     }
 
