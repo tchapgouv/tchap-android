@@ -167,24 +167,26 @@ fun Fragment.getAllChildFragments(): List<Fragment> {
 // Define a missing constant
 const val POP_BACK_STACK_EXCLUSIVE = 0
 
-fun Fragment.queryExportKeys(userId: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
+fun Fragment.queryExportKeys(activityResultLauncher: ActivityResultLauncher<Intent>) {
     val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+    val appName = getString(R.string.app_name)
 
     selectTxtFileToWrite(
             activity = requireActivity(),
             activityResultLauncher = activityResultLauncher,
-            defaultFileName = "element-megolm-export-$userId-$timestamp.txt",
+            defaultFileName = "$appName-keys-export-$timestamp.txt",
             chooserHint = getString(R.string.keys_backup_setup_step1_manual_export)
     )
 }
 
-fun Activity.queryExportKeys(userId: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
+fun Activity.queryExportKeys(activityResultLauncher: ActivityResultLauncher<Intent>) {
     val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+    val appName = getString(R.string.app_name)
 
     selectTxtFileToWrite(
             activity = this,
             activityResultLauncher = activityResultLauncher,
-            defaultFileName = "element-megolm-export-$userId-$timestamp.txt",
+            defaultFileName = "$appName-keys-export-$timestamp.txt",
             chooserHint = getString(R.string.keys_backup_setup_step1_manual_export)
     )
 }

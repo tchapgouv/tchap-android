@@ -90,9 +90,7 @@ class SignOutBottomSheetDialogFragment :
         }
 
         views.exportManuallyButton.action = {
-            withState(viewModel) { state ->
-                queryExportKeys(state.userId, manualExportKeysActivityResultLauncher)
-            }
+            queryExportKeys(manualExportKeysActivityResultLauncher)
         }
 
         views.setupMegolmBackupButton.action = {
