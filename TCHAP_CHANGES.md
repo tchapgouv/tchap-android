@@ -1,3 +1,34 @@
+Changes in Tchap 2.0.0 (2022-02-16)
+===================================
+
+Improvements 🙌
+--------------
+ - Change string "Tchap ne supporte pas encore les appels" to "Tchap ne supporte pas les appels" ([#410](https://github.com/tchapgouv/tchap-android-v2/issues/410))
+ - [Room list] Update the font of the sender message ([#412](https://github.com/tchapgouv/tchap-android-v2/issues/412))
+ - Simplify the main Conversations page ([#417](https://github.com/tchapgouv/tchap-android-v2/issues/417))
+
+Bugfixes 🐛
+----------
+ - Fix the FCM token error breaking the push notifications ([#402](https://github.com/tchapgouv/tchap-android-v2/issues/402))
+ - Wrong display of the forum icon in Dark theme ([#429](https://github.com/tchapgouv/tchap-android-v2/issues/429))
+
+
+Changes in Tchap 1.99.5 (2022-02-09)
+====================================
+
+Improvements 🙌
+--------------
+ - [Login] Handle correctly M_LIMIT_EXCEEDED error code ([#322](https://github.com/tchapgouv/tchap-android-v2/issues/322))
+ - [Workaround] Hide the text input in a DM left by the other member ([#405](https://github.com/tchapgouv/tchap-android-v2/issues/405))
+
+Bugfixes 🐛
+----------
+ - Fix potential missing rooms caused by the use of Spaces or low priority tags ([#389](https://github.com/tchapgouv/tchap-android-v2/issues/389))
+ - [Invitation by email] Handle correctly Id server consent ([#392](https://github.com/tchapgouv/tchap-android-v2/issues/392))
+ - [Workaround] Do not select a DM left by the other user ([#401](https://github.com/tchapgouv/tchap-android-v2/issues/401))
+ - Fix the push notifications which were not working for some devices ([#402](https://github.com/tchapgouv/tchap-android-v2/issues/402))
+
+
 Changes in Tchap 1.99.4 (2022-01-26)
 ====================================
 
