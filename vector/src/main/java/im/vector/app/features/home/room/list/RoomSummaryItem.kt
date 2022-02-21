@@ -21,7 +21,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -60,7 +59,6 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     @EpoxyAttribute var encryptionTrustLevel: RoomEncryptionTrustLevel? = null
     @EpoxyAttribute var userPresence: UserPresence? = null
     @EpoxyAttribute var showPresence: Boolean = false
-
     @EpoxyAttribute var izPublic: Boolean = false
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var hasUnreadMessage: Boolean = false
@@ -72,8 +70,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     @EpoxyAttribute var showSelected: Boolean = false
 
     // Tchap items
-    @EpoxyAttribute @JvmField var isEncrypted: Boolean = false
-    @EpoxyAttribute @JvmField var isPinned: Boolean = false
+    @EpoxyAttribute var izPinned: Boolean = false
     @EpoxyAttribute lateinit var roomType: TchapRoomType
 
     override fun bind(holder: Holder) {
@@ -87,7 +84,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.titleView.text = TchapUtils.getNameFromDisplayName(matrixItem.getBestName())
         holder.lastEventTimeView.text = lastEventTime
         holder.lastEventView.text = lastFormattedEvent
-//        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
+        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         holder.draftView.isVisible = hasDraft
         avatarRenderer.render(matrixItem, holder.avatarImageView)
@@ -101,11 +98,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
         // Tchap items
         renderTchapRoomType(holder)
-        holder.unreadCounterBadgeView.apply {
-            text = RoomSummaryFormatter.formatUnreadMessagesCounter(unreadNotificationCount)
-            isVisible = unreadNotificationCount > 0
-        }
-        holder.pinView.isVisible = isPinned
+        holder.pinView.isVisible = izPinned
     }
 
     override fun unbind(holder: Holder) {
@@ -128,37 +121,29 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     }
 
     private fun renderTchapRoomType(holder: Holder) {
-        var resource: Int? = null
-
-        holder.domainNameView.apply {
+        with(holder) {
             when (roomType) {
                 TchapRoomType.EXTERNAL -> {
-                    text = holder.view.context.getString(R.string.tchap_room_extern_room_type)
-                    setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_room_external))
-                    visibility = View.VISIBLE
+                    domainNameView.text = view.context.getString(R.string.tchap_room_extern_room_type)
+                    domainNameView.setTextColor(ContextCompat.getColor(view.context, R.color.tchap_room_external))
                 }
                 TchapRoomType.FORUM    -> {
-                    text = holder.view.context.getString(R.string.tchap_room_forum_type)
-                    setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_room_forum))
-                    resource = R.drawable.ic_tchap_forum
-                    visibility = View.VISIBLE
+                    domainNameView.text = view.context.getString(R.string.tchap_room_forum_type)
+                    domainNameView.setTextColor(ContextCompat.getColor(view.context, R.color.tchap_room_forum))
                 }
                 else                   -> {
-                    visibility = View.GONE
+                    domainNameView.text = ""
                 }
             }
-        }
 
-        holder.avatarRoomTypeImageView.apply {
-            resource?.let { setImageDrawable(ContextCompat.getDrawable(holder.view.context, it)) }
-            visibility = if (resource != null) View.VISIBLE else View.INVISIBLE
+            val drawable = if (roomType == TchapRoomType.FORUM) ContextCompat.getDrawable(view.context, R.drawable.ic_tchap_forum) else null
+            avatarRoomTypeImageView.setImageDrawable(drawable)
         }
     }
 
     class Holder : VectorEpoxyHolder() {
         val titleView by bind<TextView>(R.id.roomNameView)
-
-        //        val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomUnreadCounterBadgeView)
+        val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomUnreadCounterBadgeView)
         val unreadIndentIndicator by bind<View>(R.id.roomUnreadIndicator)
         val lastEventView by bind<TextView>(R.id.roomLastEventView)
         val typingView by bind<TextView>(R.id.roomTypingView)
@@ -167,16 +152,15 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         val avatarCheckedImageView by bind<ImageView>(R.id.roomAvatarCheckedImageView)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
 
-        //        val roomAvatarDecorationImageView by bind<ShieldImageView>(R.id.roomAvatarDecorationImageView)
-//        val roomAvatarPublicDecorationImageView by bind<ImageView>(R.id.roomAvatarPublicDecorationImageView)
+        // val roomAvatarDecorationImageView by bind<ShieldImageView>(R.id.roomAvatarDecorationImageView)
+        // val roomAvatarPublicDecorationImageView by bind<ImageView>(R.id.roomAvatarPublicDecorationImageView)
         val roomFailSendingImageView by bind<ImageView>(R.id.roomFailSendingImageView)
         val roomAvatarPresenceImageView by bind<PresenceStateImageView>(R.id.roomAvatarPresenceImageView)
         val rootView by bind<ViewGroup>(R.id.itemRoomLayout)
 
         // Tchap items
-        val domainNameView by bind<TextView>(R.id.roomDomainNameView)
-        val unreadCounterBadgeView by bind<AppCompatTextView>(R.id.roomUnreadCounterBadgeView)
-        val avatarRoomTypeImageView by bind<ImageView>(R.id.roomAvatarEncryptedImageView)
-        val pinView by bind<ImageView>(R.id.roomPin)
+        val domainNameView by bind<TextView>(R.id.tchapRoomDomainNameView)
+        val avatarRoomTypeImageView by bind<ImageView>(R.id.tchapRoomAvatarEncryptedImageView)
+        val pinView by bind<ImageView>(R.id.tchapRoomPin)
     }
 }
