@@ -48,7 +48,8 @@ abstract class DisplayReadReceiptItem : EpoxyModelWithHolder<DisplayReadReceiptI
         } ?: run {
             holder.timestampView.isVisible = false
         }
-        holder.view.onClick(userClicked)
+        // Tchap: Disable click on avatar
+//        holder.view.onClick(userClicked)
     }
 
     class Holder : VectorEpoxyHolder() {

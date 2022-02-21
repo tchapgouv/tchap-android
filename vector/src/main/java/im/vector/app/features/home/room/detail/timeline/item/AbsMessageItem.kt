@@ -69,7 +69,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 width = attributes.avatarSize
             }
             holder.avatarImageView.visibility = View.VISIBLE
-            holder.avatarImageView.onClick(_avatarClickListener)
+            // Tchap: Disable click on avatar
+//            holder.avatarImageView.onClick(_avatarClickListener)
             holder.memberNameView.visibility = View.VISIBLE
             holder.memberNameView.onClick(_memberNameClickListener)
             holder.timeView.visibility = View.VISIBLE
