@@ -165,10 +165,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="8dp"
         android:textColor="?vctr_content_secondary"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/roomBottomBarrier"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/roomFailSendingImageView"
         tools:text="@tools:sample/date/hhmm" />
 
     <TextView
@@ -241,9 +242,10 @@
         android:gravity="end"
         android:includeFontPadding="false"
         android:textColor="?vctr_content_primary"
-        app:layout_constraintBottom_toBottomOf="@id/roomNameView"
+        app:layout_constraintBottom_toTopOf="@id/roomFailSendingImageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/roomNameView"
+        app:layout_constraintVertical_chainStyle="spread_inside"
         tools:text="@tools:sample/lorem" />
 
     <ImageView
@@ -255,8 +257,8 @@
         app:layout_constraintCircle="@id/roomAvatarContainer"
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="34dp"
-        tools:src="@drawable/ic_tchap_forum"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:src="@drawable/ic_tchap_forum" />
 
     <ImageView
         android:id="@+id/tchapRoomPin"
