@@ -22,7 +22,6 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.IdRes
-import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
@@ -77,7 +76,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             holder.timeView.text = attributes.informationData.time
             holder.memberNameView.text = attributes.informationData.memberName
             // Tchap: Use primary color for text color. The color is set in the xml file.
-            //holder.memberNameView.setTextColor(ContextCompat.getColor(holder.view.context, R.color.palette_tchap_dark_blue))
+//            holder.memberNameView.setTextColor(ContextCompat.getColor(holder.view.context, R.color.palette_tchap_dark_blue))
             attributes.avatarRenderer.render(attributes.informationData.matrixItem, holder.avatarImageView)
             holder.avatarImageView.setOnLongClickListener(attributes.itemLongClickListener)
             holder.memberNameView.setOnLongClickListener(attributes.itemLongClickListener)
