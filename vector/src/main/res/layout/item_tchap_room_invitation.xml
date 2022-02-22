@@ -6,26 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:colorBackground"
-    android:focusable="true">
+    android:focusable="true"
+    tools:viewBindingIgnore="true">
 
-    <FrameLayout
-        android:id="@+id/roomInvitationAvatarContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/roomInvitationAvatarImageView"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
+        android:importantForAccessibility="no"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/roomInvitationAvatarImageView"
-            android:layout_width="@dimen/tchap_item_room_circle_avatar_size"
-            android:layout_height="@dimen/tchap_item_room_circle_avatar_size"
-            android:layout_gravity="center"
-            android:contentDescription="@string/avatar"
-            tools:src="@tools:sample/avatars" />
-
-    </FrameLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@sample/room_round_avatars" />
 
     <!-- Margin bottom does not work, so I use space -->
     <Space
@@ -33,7 +26,7 @@
         android:layout_width="0dp"
         android:layout_height="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/roomInvitationAvatarContainer"
+        app:layout_constraintTop_toBottomOf="@id/roomInvitationAvatarImageView"
         tools:layout_marginStart="20dp" />
 
     <TextView
@@ -52,7 +45,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@id/roomInvitationAvatarContainer"
+        app:layout_constraintStart_toEndOf="@id/roomInvitationAvatarImageView"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@sample/users.json/data/displayName" />
 

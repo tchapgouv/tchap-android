@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Room summary item -->
-    <dimen name="tchap_item_room_circle_avatar_size">50dp</dimen>
-
     <!-- Create room -->
     <dimen name="tchap_room_item_stroke_width">3dp</dimen>
 </resources>
