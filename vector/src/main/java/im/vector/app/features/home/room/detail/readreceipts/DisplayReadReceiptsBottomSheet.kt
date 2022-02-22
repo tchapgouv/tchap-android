@@ -36,7 +36,8 @@ import javax.inject.Inject
 
 @Parcelize
 data class DisplayReadReceiptArgs(
-        val readReceipts: List<ReadReceiptData>
+        val readReceipts: List<ReadReceiptData>,
+        val isDirect: Boolean
 ) : Parcelable
 
 /**
@@ -73,15 +74,18 @@ class DisplayReadReceiptsBottomSheet :
     }
 
     override fun didSelectUser(userId: String) {
-        sharedActionViewModel.post(EventSharedAction.OpenUserProfile(userId))
+        // Tchap: Disable click on avatar in DM
+        if (!displayReadReceiptArgs.isDirect) {
+            sharedActionViewModel.post(EventSharedAction.OpenUserProfile(userId))
+        }
     }
 
     // we are not using state for this one as it's static, so no need to override invalidate()
 
     companion object {
-        fun newInstance(readReceipts: List<ReadReceiptData>): DisplayReadReceiptsBottomSheet {
+        fun newInstance(readReceipts: List<ReadReceiptData>, isDirect: Boolean): DisplayReadReceiptsBottomSheet {
             return DisplayReadReceiptsBottomSheet().apply {
-                setArguments(DisplayReadReceiptArgs(readReceipts = readReceipts))
+                setArguments(DisplayReadReceiptArgs(readReceipts = readReceipts, isDirect = isDirect))
             }
         }
     }

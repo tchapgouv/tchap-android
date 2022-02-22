@@ -25,6 +25,7 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -47,8 +48,7 @@ abstract class DisplayReadReceiptItem : EpoxyModelWithHolder<DisplayReadReceiptI
         } ?: run {
             holder.timestampView.isVisible = false
         }
-        // Tchap: Disable click on avatar
-//        holder.view.onClick(userClicked)
+        holder.view.onClick(userClicked)
     }
 
     class Holder : VectorEpoxyHolder() {

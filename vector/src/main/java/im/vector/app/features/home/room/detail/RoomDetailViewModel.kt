@@ -608,6 +608,10 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
+    fun isDirect(): Boolean {
+        return room.roomSummary()?.isDirect ?: false
+    }
+
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleSendReaction(action: RoomDetailAction.SendReaction) {

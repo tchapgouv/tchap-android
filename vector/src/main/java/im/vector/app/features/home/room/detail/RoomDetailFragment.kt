@@ -53,6 +53,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -212,6 +213,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
+import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -1838,7 +1840,10 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onAvatarClicked(informationData: MessageInformationData) {
         // roomDetailViewModel.handle(RoomDetailAction.RequestVerification(informationData.userId))
-        openRoomMemberProfile(informationData.senderId)
+        // Tchap: Disable click on avatar in DM
+        if (!roomDetailViewModel.isDirect()) {
+            openRoomMemberProfile(informationData.senderId)
+        }
     }
 
     private fun openRoomMemberProfile(userId: String) {
@@ -1890,7 +1895,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onReadReceiptsClicked(readReceipts: List<ReadReceiptData>) {
-        DisplayReadReceiptsBottomSheet.newInstance(readReceipts)
+        DisplayReadReceiptsBottomSheet.newInstance(readReceipts, roomDetailViewModel.isDirect())
                 .show(requireActivity().supportFragmentManager, "DISPLAY_READ_RECEIPTS")
     }
 
