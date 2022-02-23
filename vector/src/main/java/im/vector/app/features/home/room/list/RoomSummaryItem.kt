@@ -88,6 +88,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         holder.draftView.isVisible = hasDraft
         avatarRenderer.render(matrixItem, holder.avatarImageView)
+        // Tchap: deleted in Tchap layout
 //        holder.roomAvatarDecorationImageView.render(encryptionTrustLevel)
 //        holder.roomAvatarPublicDecorationImageView.isVisible = izPublic
         // Tchap: Set invisible instead of gone to keep view size
@@ -153,6 +154,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         val avatarCheckedImageView by bind<ImageView>(R.id.roomAvatarCheckedImageView)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
 
+        // Tchap: deleted in Tchap layout
         // val roomAvatarDecorationImageView by bind<ShieldImageView>(R.id.roomAvatarDecorationImageView)
         // val roomAvatarPublicDecorationImageView by bind<ImageView>(R.id.roomAvatarPublicDecorationImageView)
         val roomFailSendingImageView by bind<ImageView>(R.id.roomFailSendingImageView)
