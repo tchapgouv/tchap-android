@@ -20,7 +20,7 @@
     <attr name="vctr_content_quaternary" format="color" />
     <attr name="vctr_content_quinary" format="color" />
 
-    <color name="element_content_primary_light">@color/palette_tchap_dark_blue</color>
+    <color name="element_content_primary_light">@color/palette_black_900</color>
     <color name="element_content_secondary_light">@color/palette_tchap_warm_grey</color>
     <color name="element_content_tertiary_light">@color/palette_gray_150</color>
     <color name="element_content_quaternary_light">@color/palette_gray_100</color>
