@@ -30,9 +30,11 @@ class MessageColorProvider @Inject constructor(
         private val matrixItemColorProvider: MatrixItemColorProvider,
         private val vectorPreferences: VectorPreferences) {
 
+    @Suppress("UNUSED_PARAMETER")
     @ColorInt
     fun getMemberNameTextColor(matrixItem: MatrixItem): Int {
-        return matrixItemColorProvider.getColor(matrixItem)
+        // Tchap: Use primary color for member name.
+        return colorProvider.getColorFromAttribute(R.attr.colorPrimary)
     }
 
     @ColorInt
