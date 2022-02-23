@@ -18,6 +18,7 @@ package im.vector.app.core.extensions
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Parcelable
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -28,6 +29,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import timber.log.Timber
 
 fun ComponentActivity.registerStartForActivityResult(onResult: (ActivityResult) -> Unit): ActivityResultLauncher<Intent> {
     return registerForActivityResult(ActivityResultContracts.StartActivityForResult(), onResult)
@@ -107,6 +109,19 @@ fun AppCompatActivity.resetBackstack() {
 
 fun AppCompatActivity.hideKeyboard() {
     currentFocus?.hideKeyboard()
+}
+
+fun AppCompatActivity.validateBackPressed(onBackPressed: () -> Unit) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && supportFragmentManager.backStackEntryCount == 0) {
+        if (isTaskRoot) {
+            onBackPressed()
+        } else {
+            Timber.e("Application is potentially corrupted by an unknown activity")
+            finishAffinity()
+        }
+    } else {
+        onBackPressed()
+    }
 }
 
 fun Activity.restart() {

@@ -19,7 +19,6 @@ package im.vector.app.features.login2
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
@@ -38,6 +37,7 @@ import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.resetBackstack
+import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
@@ -56,7 +56,6 @@ import im.vector.app.features.pin.UnlockedActivity
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import timber.log.Timber
 
 /**
  * The LoginActivity manages the fragment navigation and also display the loading View
@@ -310,16 +309,7 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
     }
 
     override fun onBackPressed() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && supportFragmentManager.backStackEntryCount == 0) {
-            if (isTaskRoot) {
-                super.onBackPressed()
-            } else {
-                Timber.e("Application is potentially corrupted by an unknown activity")
-                finishAffinity()
-            }
-        } else {
-            super.onBackPressed()
-        }
+        validateBackPressed { super.onBackPressed() }
     }
 
     private fun onRegistrationStageNotSupported() {
