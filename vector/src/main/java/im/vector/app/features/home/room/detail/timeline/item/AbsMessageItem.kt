@@ -32,7 +32,6 @@ import im.vector.app.core.ui.views.SendStateImageView
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.app.features.themes.ThemeUtils
 
 /**
  * Base timeline item that adds an optional information bar with the sender avatar, name, time, send state
