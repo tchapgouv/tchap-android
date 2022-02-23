@@ -16,11 +16,10 @@
 
 package im.vector.app.features.home.room.list
 
-import fr.gouv.tchap.features.home.room.list.TchapRoomSummaryItemFactory
 import javax.inject.Inject
 
 class RoomSummaryPagedControllerFactory @Inject constructor(
-        private val roomSummaryItemFactory: TchapRoomSummaryItemFactory
+        private val roomSummaryItemFactory: RoomSummaryItemFactory
 ) {
 
     fun createRoomSummaryPagedController(): RoomSummaryPagedController {
