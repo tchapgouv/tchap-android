@@ -76,8 +76,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             holder.timeView.visibility = View.VISIBLE
             holder.timeView.text = attributes.informationData.time
             holder.memberNameView.text = attributes.informationData.memberName
-            // Tchap: Use primary color for text color. The color is set in the xml file.
-            holder.memberNameView.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.colorPrimary))
+            holder.memberNameView.setTextColor(attributes.getMemberNameColor())
             attributes.avatarRenderer.render(attributes.informationData.matrixItem, holder.avatarImageView)
             holder.avatarImageView.setOnLongClickListener(attributes.itemLongClickListener)
             holder.memberNameView.setOnLongClickListener(attributes.itemLongClickListener)
