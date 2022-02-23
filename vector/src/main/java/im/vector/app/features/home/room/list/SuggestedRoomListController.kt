@@ -16,10 +16,8 @@
 
 package im.vector.app.features.home.room.list
 
-import fr.gouv.tchap.features.home.room.list.TchapRoomSummaryItemFactory
-
 class SuggestedRoomListController(
-        private val roomSummaryItemFactory: TchapRoomSummaryItemFactory
+        private val roomSummaryItemFactory: RoomSummaryItemFactory
 ) : CollapsableTypedEpoxyController<SuggestedRoomInfo>() {
 
     var listener: RoomListListener? = null

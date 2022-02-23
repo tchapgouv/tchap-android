@@ -7,5 +7,5 @@
     android:layout_gravity="center_horizontal"
     android:layout_marginTop="32dp"
     android:importantForAccessibility="no"
-    android:src="@drawable/element_logo_green"
+    android:src="@drawable/ic_tchap_logo"
     tools:viewBindingIgnore="true" />

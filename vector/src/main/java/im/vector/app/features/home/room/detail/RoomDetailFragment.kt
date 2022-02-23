@@ -1846,7 +1846,10 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onAvatarClicked(informationData: MessageInformationData) {
         // roomDetailViewModel.handle(RoomDetailAction.RequestVerification(informationData.userId))
-        openRoomMemberProfile(informationData.senderId)
+        // Tchap: Disable click on avatar in DM
+        if (!roomDetailViewModel.isDirect()) {
+            openRoomMemberProfile(informationData.senderId)
+        }
     }
 
     private fun openRoomMemberProfile(userId: String) {
@@ -1898,7 +1901,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onReadReceiptsClicked(readReceipts: List<ReadReceiptData>) {
-        DisplayReadReceiptsBottomSheet.newInstance(readReceipts)
+        DisplayReadReceiptsBottomSheet.newInstance(readReceipts, roomDetailViewModel.isDirect())
                 .show(requireActivity().supportFragmentManager, "DISPLAY_READ_RECEIPTS")
     }
 

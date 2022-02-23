@@ -1,33 +1,57 @@
+Changes in Tchap 2.0.1 (2022-02-23)
+===================================
+
+Improvements 🙌
+--------------
+
+- Update Texts Color in a conversation ([#435](https://github.com/tchapgouv/tchap-android-v2/issues/435))
+- Disable click on avatar in the DM timeline ([#436](https://github.com/tchapgouv/tchap-android-v2/issues/436))
+- [Export e2ee keys] Update the default file name ([#442](https://github.com/tchapgouv/tchap-android-v2/issues/442))
+
+Bugfixes 🐛
+----------
+
+- Update application logo in the soft logout screen ([#440](https://github.com/tchapgouv/tchap-android-v2/issues/440))
+
+Other changes
+-------------
+
+- [Room list] Use the items from Element instead of the duplicated Tchap ones ([#386](https://github.com/tchapgouv/tchap-android-v2/issues/386))
+- Change sygnal server url ([#437](https://github.com/tchapgouv/tchap-android-v2/issues/437))
+
 Changes in Tchap 2.0.0 (2022-02-16)
 ===================================
 
 Improvements 🙌
 --------------
- - Change string "Tchap ne supporte pas encore les appels" to "Tchap ne supporte pas les appels" ([#410](https://github.com/tchapgouv/tchap-android-v2/issues/410))
- - [Room list] Update the font of the sender message ([#412](https://github.com/tchapgouv/tchap-android-v2/issues/412))
- - Simplify the main Conversations page ([#417](https://github.com/tchapgouv/tchap-android-v2/issues/417))
+
+- Change string "Tchap ne supporte pas encore les appels" to "Tchap ne supporte pas les
+  appels" ([#410](https://github.com/tchapgouv/tchap-android-v2/issues/410))
+- [Room list] Update the font of the sender message ([#412](https://github.com/tchapgouv/tchap-android-v2/issues/412))
+- Simplify the main Conversations page ([#417](https://github.com/tchapgouv/tchap-android-v2/issues/417))
 
 Bugfixes 🐛
 ----------
- - Fix the FCM token error breaking the push notifications ([#402](https://github.com/tchapgouv/tchap-android-v2/issues/402))
- - Wrong display of the forum icon in Dark theme ([#429](https://github.com/tchapgouv/tchap-android-v2/issues/429))
 
+- Fix the FCM token error breaking the push notifications ([#402](https://github.com/tchapgouv/tchap-android-v2/issues/402))
+- Wrong display of the forum icon in Dark theme ([#429](https://github.com/tchapgouv/tchap-android-v2/issues/429))
 
 Changes in Tchap 1.99.5 (2022-02-09)
 ====================================
 
 Improvements 🙌
 --------------
- - [Login] Handle correctly M_LIMIT_EXCEEDED error code ([#322](https://github.com/tchapgouv/tchap-android-v2/issues/322))
- - [Workaround] Hide the text input in a DM left by the other member ([#405](https://github.com/tchapgouv/tchap-android-v2/issues/405))
+
+- [Login] Handle correctly M_LIMIT_EXCEEDED error code ([#322](https://github.com/tchapgouv/tchap-android-v2/issues/322))
+- [Workaround] Hide the text input in a DM left by the other member ([#405](https://github.com/tchapgouv/tchap-android-v2/issues/405))
 
 Bugfixes 🐛
 ----------
- - Fix potential missing rooms caused by the use of Spaces or low priority tags ([#389](https://github.com/tchapgouv/tchap-android-v2/issues/389))
- - [Invitation by email] Handle correctly Id server consent ([#392](https://github.com/tchapgouv/tchap-android-v2/issues/392))
- - [Workaround] Do not select a DM left by the other user ([#401](https://github.com/tchapgouv/tchap-android-v2/issues/401))
- - Fix the push notifications which were not working for some devices ([#402](https://github.com/tchapgouv/tchap-android-v2/issues/402))
 
+- Fix potential missing rooms caused by the use of Spaces or low priority tags ([#389](https://github.com/tchapgouv/tchap-android-v2/issues/389))
+- [Invitation by email] Handle correctly Id server consent ([#392](https://github.com/tchapgouv/tchap-android-v2/issues/392))
+- [Workaround] Do not select a DM left by the other user ([#401](https://github.com/tchapgouv/tchap-android-v2/issues/401))
+- Fix the push notifications which were not working for some devices ([#402](https://github.com/tchapgouv/tchap-android-v2/issues/402))
 
 Changes in Tchap 1.99.4 (2022-01-26)
 ====================================
@@ -54,8 +78,7 @@ Improvements 🙌
 - [Room Avatar] Remove the hexagonal shape on the room avatar ([#372](https://github.com/tchapgouv/tchap-android-v2/issues/372))
 - Add a flag to disable message edition ([#373](https://github.com/tchapgouv/tchap-android-v2/issues/373))
 - Add a flag to disable message reaction ([#374](https://github.com/tchapgouv/tchap-android-v2/issues/374))
-- Updated search in the home screen, filtering is now kept after a rotation. The search widget in the toolbar now use the default android
-  design. ([#378](https://github.com/tchapgouv/tchap-android-v2/issues/378))
+- Updated search in the home screen, filtering is now kept after a rotation. The search widget in the toolbar now use the default android design. ([#378](https://github.com/tchapgouv/tchap-android-v2/issues/378))
 - Hide Labs menu item in Tchap ([#380](https://github.com/tchapgouv/tchap-android-v2/issues/380))
 - [Home] Restore the options menu from Element ([#384](https://github.com/tchapgouv/tchap-android-v2/issues/384))
 - Remove the optional screenshot from Security&Privacy ([#386](https://github.com/tchapgouv/tchap-android-v2/issues/386))
