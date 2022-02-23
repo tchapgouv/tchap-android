@@ -167,7 +167,8 @@ fun Fragment.getAllChildFragments(): List<Fragment> {
 // Define a missing constant
 const val POP_BACK_STACK_EXCLUSIVE = 0
 
-fun Fragment.queryExportKeys(activityResultLauncher: ActivityResultLauncher<Intent>) {
+@Suppress("UNUSED")
+fun Fragment.queryExportKeys(userId: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
     val appName = getString(R.string.app_name)
 
@@ -179,7 +180,8 @@ fun Fragment.queryExportKeys(activityResultLauncher: ActivityResultLauncher<Inte
     )
 }
 
-fun Activity.queryExportKeys(activityResultLauncher: ActivityResultLauncher<Intent>) {
+@Suppress("UNUSED")
+fun Activity.queryExportKeys(userId: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
     val appName = getString(R.string.app_name)
 

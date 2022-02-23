@@ -63,7 +63,7 @@ class TchapSettingsChangePasswordPreDialog(
         dialog.setOnShowListener {
             val exportKeysButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
             exportKeysButton.setOnClickListener {
-                queryExportKeys(manualExportKeysActivityResultLauncher)
+                queryExportKeys(session.myUserId, manualExportKeysActivityResultLauncher)
             }
         }
 

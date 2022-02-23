@@ -409,7 +409,8 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         }
 
         exportPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            queryExportKeys(saveMegolmStartForActivityResult)
+            queryExportKeys(activeSessionHolder.getSafeActiveSession()?.myUserId ?: "",
+                    saveMegolmStartForActivityResult)
             true
         }
 

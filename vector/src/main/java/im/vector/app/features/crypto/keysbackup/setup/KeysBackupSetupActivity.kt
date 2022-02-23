@@ -106,7 +106,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                             .show()
                 }
                 KeysBackupSetupSharedViewModel.NAVIGATE_MANUAL_EXPORT  -> {
-                    queryExportKeys(saveStartForActivityResult)
+                    queryExportKeys(session.myUserId, saveStartForActivityResult)
                 }
             }
         }
