@@ -40,7 +40,6 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
         holder.noticeTextView.text = attributes.noticeText
         attributes.avatarRenderer.render(attributes.informationData.matrixItem, holder.avatarImageView)
         holder.view.setOnLongClickListener(attributes.itemLongClickListener)
-        // Tchap : Disable click on avatar
         holder.avatarImageView.onClick(attributes.avatarClickListener)
 
         when (attributes.informationData.e2eDecoration) {
