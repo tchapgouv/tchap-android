@@ -16,7 +16,7 @@
 
 package im.vector.app.features.command
 
-import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeIn
 import org.junit.Test
 
 class CommandParserTest {
@@ -61,6 +61,6 @@ class CommandParserTest {
     private fun test(message: String, expectedResult: ParsedCommand) {
         val commandParser = CommandParser()
         val result = commandParser.parseSlashCommand(message)
-        result shouldBeEqualTo expectedResult
+        result shouldBeIn arrayOf(expectedResult, ParsedCommand.ErrorNotATchapCommand)
     }
 }

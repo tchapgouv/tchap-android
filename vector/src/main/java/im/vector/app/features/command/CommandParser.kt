@@ -63,7 +63,7 @@ class CommandParser @Inject constructor() {
             // Tchap: Handle tchap commands only
             val command = Command.values().find { it.command == messageParts.first() }
             if (command?.isTchapCommand == false) {
-                return ParsedCommand.ErrorNotACommand
+                return ParsedCommand.ErrorNotATchapCommand
             }
 
             val slashCommand = messageParts.first()
