@@ -46,10 +46,10 @@ import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.databinding.FragmentRoomListBinding
+import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.home.HomeActivitySharedAction
 import im.vector.app.features.home.HomeSharedActionViewModel
 import im.vector.app.features.home.HomeTab
-import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
