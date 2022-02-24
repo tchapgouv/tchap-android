@@ -1670,7 +1670,7 @@
 \n
 \nVoulez-vous vous inscrire en utilisant un client web \?</string>
     <string name="login_login_with_email_error">Cet e\u2011mail n’est associé à aucun compte.</string>
-    <string name="login_reset_password_on">Réinitialiser le mot de passe</string>
+    <string name="login_reset_password_on">Réinitialiser le mot de passe sur %1$s</string>
     <string name="login_reset_password_notice">Pour réinitialiser votre mot de passe, saisissez l’adresse e\u2011mail associée à votre compte :</string>
     <string name="login_reset_password_submit">Suivant</string>
     <string name="login_reset_password_email_hint">E\u2011mail</string>
@@ -2928,7 +2928,7 @@
     <string name="you_will_leave_all_in">Vous allez quitter tous les salons et espaces de %s.</string>
     <string name="leave_all_rooms_and_spaces">Quitter tous les salons et espaces</string>
     <string name="space_leave_prompt_msg_with_name">Voulez-vous vraiment quitter %s \?</string>
-    <string name="discovery_section">Utilisateur trouvé</string>
+    <string name="discovery_section">Découverte (%s)</string>
     <string name="finish_setup">Terminer le réglage</string>
     <string name="discovery_invite">Inviter par courriel, trouver des contacts et plus…</string>
     <string name="finish_setting_up_discovery">Terminer le réglage de la découverte.</string>

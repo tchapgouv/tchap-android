@@ -98,7 +98,7 @@ class UserListController @Inject constructor(private val session: Session,
                 matchingEmail()?.let { threePidUser ->
                     userListHeaderItem {
                         id("identity_server_result_header")
-                        header(host.stringProvider.getString(R.string.discovery_section))
+                        header(host.stringProvider.getString(R.string.tchap_discovery_section))
                     }
                     val isSelected = currentState.pendingSelections.any { pendingSelection ->
                         when (pendingSelection) {
@@ -195,7 +195,7 @@ class UserListController @Inject constructor(private val session: Session,
             is Loading -> {
                 userListHeaderItem {
                     id("identity_server_result_header_loading")
-                    header(host.stringProvider.getString(R.string.discovery_section))
+                    header(host.stringProvider.getString(R.string.tchap_discovery_section))
                 }
                 loadingItem {
                     id("is_loading")

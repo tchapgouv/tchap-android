@@ -56,6 +56,8 @@
     <string name="tchap_colon_append">:</string>
     <string name="tchap_exclamation_mark">!</string>
     <string name="tchap_empty_room_no_permission_to_post">Your recipient has left the room or has refused your invite. You cannot send him a message.</string>
+    <string name="tchap_discovery_section">Discovered user</string>
+    <string name="login_reset_password_on">Reset password</string>
 
     <!-- tchap discussion -->
     <string name="tchap_cannot_invite_deactivated_account_user">The remote user left definitely this room</string>

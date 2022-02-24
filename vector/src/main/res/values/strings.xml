@@ -2579,7 +2579,7 @@
     <string name="login_login_with_email_error">This email is not associated to any account.</string>
 
     <!-- Replaced string is the homeserver url -->
-    <string name="login_reset_password_on">Reset password</string>
+    <string name="login_reset_password_on">Reset password on %1$s</string>
     <string name="login_reset_password_notice">A verification email will be sent to your inbox to confirm setting your new password.</string>
     <string name="login_reset_password_submit">Next</string>
     <string name="login_reset_password_email_hint">Email</string>
@@ -3539,7 +3539,7 @@
     <string name="discovery_invite">Invite by email, find contacts and more…</string>
     <string name="finish_setup">Finish setup</string>
     <!-- %s will be replaced by the user identity server domain, e.g vector.im -->
-    <string name="discovery_section">Discovered user</string>
+    <string name="discovery_section">Discovery (%s)</string>
 
 
     <string name="suggested_rooms_pills_on_empty_text">You’re not in any rooms yet. Below are some suggested rooms, but you can see more with the green button bottom right.</string>
