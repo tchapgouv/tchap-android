@@ -126,7 +126,7 @@ class RoomListSectionBuilderSpace(
             }
         }
 
-        appStateHandler.selectedRoomGroupingObservable
+        appStateHandler.selectedRoomGroupingFlow
                 .distinctUntilChanged()
                 .onEach { groupingMethod ->
                     val selectedSpace = groupingMethod.orNull()?.space()
@@ -182,7 +182,6 @@ class RoomListSectionBuilderSpace(
             // Tchap: Show low priorities in room list
             it.roomTagQueryFilter = RoomTagQueryFilter(false, null, false)
         }
-
 //        addSection(
 //                sections = sections,
 //                activeSpaceUpdaters = activeSpaceAwareQueries,
@@ -217,7 +216,7 @@ class RoomListSectionBuilderSpace(
 //
 //        // add suggested rooms
 //        val suggestedRoomsFlow = // MutableLiveData<List<SpaceChildInfo>>()
-//                appStateHandler.selectedRoomGroupingObservable
+//                appStateHandler.selectedRoomGroupingFlow
 //                        .distinctUntilChanged()
 //                        .flatMapLatest { groupingMethod ->
 //                            val selectedSpace = groupingMethod.orNull()?.space()

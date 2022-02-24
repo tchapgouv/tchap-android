@@ -313,7 +313,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
             try {
                 room.sendStateEvent(
                         eventType = TchapEventType.STATE_ROOM_ACCESS_RULES,
-                        stateKey = null,
+                        stateKey = "",
                         body = RoomAccessRulesContent(RoomAccessRules.UNRESTRICTED.value).toContent()
                 )
             } catch (failure: Throwable) {

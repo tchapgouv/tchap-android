@@ -49,6 +49,7 @@ import im.vector.app.databinding.FragmentRoomListBinding
 import im.vector.app.features.home.HomeActivitySharedAction
 import im.vector.app.features.home.HomeSharedActionViewModel
 import im.vector.app.features.home.HomeTab
+import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
@@ -112,6 +113,15 @@ class RoomListFragment @Inject constructor(
 
     private val adapterInfosList = mutableListOf<SectionAdapterInfo>()
     private var concatAdapter: ConcatAdapter? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = when (roomListParams.displayMode) {
+            RoomListDisplayMode.PEOPLE -> Screen.ScreenName.MobilePeople
+            RoomListDisplayMode.ROOMS  -> Screen.ScreenName.MobileRooms
+            else                       -> null
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

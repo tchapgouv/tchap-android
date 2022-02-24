@@ -60,6 +60,7 @@ Supported filename extensions are:
 - ``.bugfix``: Signifying a bug fix.
 - ``.wip``: Signifying a work in progress change, typically a component of a larger feature which will be enabled once all tasks are complete.
 - ``.doc``: Signifying a documentation improvement.
+- ``.sdk``: Signifying a change to the Matrix SDK, this could be an addition, deprecation or removal of a public API.
 - ``.misc``: Any other changes.
 
 See https://github.com/twisted/towncrier#news-fragments if you need more details.

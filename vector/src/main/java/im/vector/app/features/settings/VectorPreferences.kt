@@ -189,6 +189,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
         const val TCHAP_SETTINGS_HIDE_FROM_USERS_DIRECTORY_PREFERENCE_KEY = "TCHAP_SETTINGS_HIDE_FROM_USERS_DIRECTORY_PREFERENCE_KEY"
 
+        // Location Sharing
+        const val SETTINGS_PREF_ENABLE_LOCATION_SHARING = "SETTINGS_PREF_ENABLE_LOCATION_SHARING"
+
         private const val MEDIA_SAVING_3_DAYS = 0
         private const val MEDIA_SAVING_1_WEEK = 1
         private const val MEDIA_SAVING_1_MONTH = 2
@@ -198,7 +201,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
         private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
 
-        private const val SETTINGS_LABS_ENABLE_POLLS = "SETTINGS_LABS_ENABLE_POLLS"
+        private const val SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE = "SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE"
 
         // Possible values for TAKE_PHOTO_VIDEO_MODE
         const val TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK = 0
@@ -993,7 +996,11 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         }
     }
 
-    fun labsEnablePolls(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_POLLS, false)
+    fun isLocationSharingEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_PREF_ENABLE_LOCATION_SHARING, false) && BuildConfig.enableLocationSharing
+    }
+
+    fun labsRenderLocationsInTimeline(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE, true)
     }
 }
