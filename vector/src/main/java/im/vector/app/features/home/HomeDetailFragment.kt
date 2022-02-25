@@ -69,6 +69,7 @@ import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.matrix.android.sdk.api.extensions.appendNl
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.user.model.User
@@ -237,7 +238,7 @@ class HomeDetailFragment @Inject constructor(
                         CreateDirectRoomViewEvents.InviteSent                 -> {
                             handleInviteByEmailResult(buildString {
                                 appendLine(getString(R.string.tchap_invite_sending_succeeded))
-                                append(getString(R.string.tchap_send_invite_confirmation))
+                                appendLine(getString(R.string.tchap_send_invite_confirmation))
                             })
                         }
                         is CreateDirectRoomViewEvents.Failure                 -> showFailure(viewEvent.throwable)

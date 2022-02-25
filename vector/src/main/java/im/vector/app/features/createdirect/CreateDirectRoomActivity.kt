@@ -46,6 +46,7 @@ import im.vector.app.features.userdirectory.UserListSharedAction
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.matrix.android.sdk.api.extensions.appendNl
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.user.model.User
@@ -103,7 +104,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                         CreateDirectRoomViewEvents.InviteSent                 -> {
                             handleInviteByEmailResult(buildString {
                                 appendLine(getString(R.string.tchap_invite_sending_succeeded))
-                                append(getString(R.string.tchap_send_invite_confirmation))
+                                appendLine(getString(R.string.tchap_send_invite_confirmation))
                             })
                         }
                         is CreateDirectRoomViewEvents.Failure                 -> renderCreationFailure(viewEvent.throwable)
