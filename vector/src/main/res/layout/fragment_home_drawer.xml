@@ -170,7 +170,7 @@
         app:tint="?vctr_content_secondary"
         tools:ignore="MissingPrefix" />
 
-    <!--    Tchap: Hide the button in Tchap-->
+    <!-- Tchap: Hide logout button -->
     <TextView
         android:id="@+id/homeDrawerHeaderSignoutView"
         style="@style/Widget.Vector.TextView.Body"
