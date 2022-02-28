@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail.composer
 
-import android.util.Log
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
