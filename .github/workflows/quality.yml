@@ -1,3 +1,4 @@
+
 name: Code Quality Checks
 
 on:
@@ -14,7 +15,7 @@ jobs:
       - name: Run code quality check suite
         run: ./tools/check/check_code_quality.sh
 
-# ktlint for all the modules
+  # ktlint for all the modules
   ktlint:
     name: Kotlin Linter
     runs-on: ubuntu-latest
@@ -54,7 +55,7 @@ jobs:
             echo "::set-output name=body::$body"
           fi
       - name: Find Comment
-        if: always()
+        if: always() && github.event_name == 'pull_request'
         uses: peter-evans/find-comment@v1
         id: fc
         with:
@@ -62,18 +63,17 @@ jobs:
           comment-author: 'github-actions[bot]'
           body-includes: Ktlint Results
       - name: Add comment if needed
-        if: always() && steps.ktlint-results.outputs.add_comment == 'true'
+        if: always() && github.event_name == 'pull_request' && steps.ktlint-results.outputs.add_comment == 'true'
         uses: peter-evans/create-or-update-comment@v1
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-             ### Ktlint Results
-
+            ### Ktlint Results
             ${{ steps.ktlint-results.outputs.body }}
           edit-mode: replace
       - name: Delete comment if needed
-        if: always() && steps.fc.outputs.comment-id != '' && steps.ktlint-results.outputs.add_comment == 'false'
+        if: always() && github.event_name == 'pull_request' && steps.fc.outputs.comment-id != '' && steps.ktlint-results.outputs.add_comment == 'false'
         uses: actions/github-script@v3
         with:
           script: |
@@ -82,7 +82,6 @@ jobs:
               repo: context.repo.repo,
               comment_id: ${{ steps.fc.outputs.comment-id }}
             })
-
   # Lint for main module
   android-lint:
     name: Android Linter
@@ -106,8 +105,7 @@ jobs:
           name: lint-report
           path: |
             vector/build/reports/*.*
-
-# Lint for Gplay and Fdroid release APK
+    # Lint for Gplay and Fdroid release APK
   apk-lint:
     name: Lint APK (${{ matrix.target }})
     runs-on: ubuntu-latest
