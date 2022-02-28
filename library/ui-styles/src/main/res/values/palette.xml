@@ -41,7 +41,10 @@
     <color name="palette_tchap_light_blue">#2F80ED</color>
 
     <!-- For all themes Tchap -->
-    <color name="palette_tchap_dark_blue">#000091</color>
+    <color name="palette_tchap_official_blue">#000091</color>
+    <color name="palette_tchap_official_white">#FFFFFF</color>
+    <color name="palette_tchap_official_red">#E1000F</color>
+    <color name="palette_tchap_official_black">#232323</color>
     <color name="palette_tchap_light_navy">#124A9D</color>
     <color name="palette_tchap_greyish_purple">#8B8999</color>
     <color name="palette_tchap_warm_grey">#858585</color>
