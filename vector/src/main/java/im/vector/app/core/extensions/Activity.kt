@@ -128,8 +128,8 @@ fun AppCompatActivity.validateBackPressed(onBackPressed: () -> Unit) {
 }
 
 fun Activity.restart() {
-    startActivity(intent)
     finish()
+    startActivity(intent)
 }
 
 fun Activity.keepScreenOn() {
