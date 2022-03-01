@@ -2,7 +2,7 @@
 <resources>
 
     <string name="antivirus_clean">Trusted</string>
-    <string name="antivirus_infected">Infected File</string>
+    <string name="antivirus_infected">Infected</string>
     <string name="antivirus_in_progress">Scanning…</string>
 
 </resources>

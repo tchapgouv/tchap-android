@@ -2,7 +2,7 @@
 <resources>
 
     <string name="antivirus_clean">Vérifié</string>
-    <string name="antivirus_infected">Fichier Bloqué</string>
+    <string name="antivirus_infected">Bloqué</string>
     <string name="antivirus_in_progress">Scan en cours…</string>
 
 </resources>
