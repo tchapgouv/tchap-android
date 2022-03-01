@@ -81,7 +81,7 @@
     <!-- tchap scan media -->
     <string name="tchap_scan_media_unavailable">Scan Unavailable</string>
     <string name="tchap_scan_media_in_progress">Antivirus Scanning</string>
-    <string name="tchap_scan_media_untrusted_content">Infected File</string>
+    <string name="tchap_scan_media_untrusted_content">Infected</string>
     <string name="tchap_scan_media_untrusted_content_message">The file (%s) has been blocked</string>
     <string name="tchap_scan_media_error_file_is_infected">We have detected that this file is infected, so it cannot be downloaded.</string>
 
