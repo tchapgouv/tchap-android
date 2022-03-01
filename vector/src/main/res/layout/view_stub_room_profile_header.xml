@@ -42,7 +42,7 @@
         android:background="@drawable/background_circle"
         android:contentDescription="@string/a11y_public_room"
         android:padding="2dp"
-        android:src="@drawable/ic_public_room"
+        android:src="@drawable/ic_tchap_public_room"
         android:visibility="gone"
         app:layout_constraintCircle="@id/roomProfileAvatarView"
         app:layout_constraintCircleAngle="135"

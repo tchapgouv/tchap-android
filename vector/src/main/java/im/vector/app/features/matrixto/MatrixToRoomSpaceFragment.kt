@@ -73,7 +73,7 @@ class MatrixToRoomSpaceFragment @Inject constructor(
                             views.matrixToAccessImage.isVisible = true
                             if (peek.isPublic) {
                                 views.matrixToAccessText.setTextOrHide(context?.getString(R.string.public_space))
-                                views.matrixToAccessImage.setImageResource(R.drawable.ic_public_room)
+                                views.matrixToAccessImage.setImageResource(R.drawable.ic_tchap_public_room)
                             } else {
                                 views.matrixToAccessText.setTextOrHide(context?.getString(R.string.private_space))
                                 views.matrixToAccessImage.setImageResource(R.drawable.ic_room_private)
