@@ -1,31 +1,18 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="107dp"
     android:height="107dp"
     android:viewportWidth="107"
     android:viewportHeight="107">
-  <path
-      android:pathData="M82.381,0.489H24.003C10.858,0.489 0.197,11.15 0.197,24.295V82.673C0.197,95.818 10.858,106.479 24.003,106.479H82.381C95.526,106.479 106.187,95.818 106.187,82.673V24.295C106.187,11.15 95.526,0.489 82.381,0.489Z">
-    <aapt:attr name="android:fillColor">
-      <gradient 
-          android:gradientRadius="117.526"
-          android:centerX="-8.53037"
-          android:centerY="-3.60755"
-          android:type="radial">
-        <item android:offset="0" android:color="#FF132D78"/>
-        <item android:offset="0.3487" android:color="#FF12296E"/>
-        <item android:offset="0.932" android:color="#FF0E1F54"/>
-        <item android:offset="1" android:color="#FF0D1E51"/>
-      </gradient>
-    </aapt:attr>
-  </path>
-  <path
-      android:pathData="M84.675,70.627L53.192,88.777L21.709,70.627V34.326L53.192,16.176L84.675,34.326V70.627Z"
-      android:fillColor="#ffffff"/>
-  <path
-      android:pathData="M50.748,40.861H56.171V72.419H50.748V40.861Z"
-      android:fillColor="#E5434F"/>
-  <path
-      android:pathData="M40.872,51.333H35.449V38.146H72.767V43.577H40.872V51.333Z"
-      android:fillColor="#E5434F"/>
+    <path
+        android:fillColor="@color/palette_tchap_official_blue"
+        android:pathData="M82.996,0.281H24.619C11.474,0.281 0.813,10.942 0.813,24.087V82.465C0.813,95.61 11.474,106.271 24.619,106.271H82.996C96.141,106.271 106.802,95.61 106.802,82.465V24.087C106.802,10.942 96.141,0.281 82.996,0.281Z" />
+    <path
+        android:fillColor="@color/palette_tchap_official_white"
+        android:pathData="M85.291,70.419L53.808,88.569L22.325,70.419V34.118L53.808,15.967L85.291,34.118V70.419Z" />
+    <path
+        android:fillColor="@color/palette_tchap_official_red"
+        android:pathData="M51.363,40.654H56.786V72.212H51.363V40.654Z" />
+    <path
+        android:fillColor="@color/palette_tchap_official_red"
+        android:pathData="M41.488,51.124H36.065V37.937H73.384V43.369H41.488V51.124Z" />
 </vector>
