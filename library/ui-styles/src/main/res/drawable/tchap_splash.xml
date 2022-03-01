@@ -5,7 +5,7 @@
 
     <!-- Background image -->
     <item>
-        <bitmap android:src="@drawable/bg_tchap_splashscreen" />
+        <bitmap android:src="@drawable/bg_tchap_splash" />
     </item>
 
     <!-- Centered logo -->
@@ -17,19 +17,19 @@
     <!-- Centered title -->
     <item
         android:bottom="120dp"
-        android:drawable="@drawable/ic_tchap_title"
+        android:drawable="@drawable/ic_tchap_splash_title"
         android:gravity="center" />
 
     <!-- Centered description -->
     <item
         android:bottom="40dp"
-        android:drawable="@drawable/ic_tchap_splashscreen_desc"
+        android:drawable="@drawable/ic_tchap_splash_desc"
         android:gravity="center" />
 
     <!-- Bottom icon -->
     <item
         android:bottom="90dp"
-        android:drawable="@drawable/ic_tchap_rf"
+        android:drawable="@drawable/ic_tchap_splash_rf"
         android:gravity="bottom|center" />
 
 </layer-list>
