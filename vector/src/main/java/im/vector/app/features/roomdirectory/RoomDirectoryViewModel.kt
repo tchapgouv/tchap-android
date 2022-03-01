@@ -48,8 +48,8 @@ class RoomDirectoryViewModel @AssistedInject constructor(
         @Assisted initialState: PublicRoomsViewState,
         vectorPreferences: VectorPreferences,
         private val session: Session,
-        private val explicitTermFilter: ExplicitTermFilter,
-        private val roomDirectoryListCreator: RoomDirectoryListCreator
+        private val roomDirectoryListCreator: RoomDirectoryListCreator,
+        private val explicitTermFilter: ExplicitTermFilter
 ) : VectorViewModel<PublicRoomsViewState, RoomDirectoryAction, RoomDirectoryViewEvents>(initialState) {
 
     @AssistedFactory
@@ -231,7 +231,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
     }
 
 //    private fun joinRoom(action: RoomDirectoryAction.JoinRoom) = withState { state ->
-//        val roomMembershipChange = state.changeMembershipStates[action.roomId]
+//        val roomMembershipChange = state.changeMembershipStates[action.publicRoom.roomId]
 //        if (roomMembershipChange?.isInProgress().orFalse()) {
 //            // Request already sent, should not happen
 //            Timber.w("Try to join an already joining room. Should not happen")
@@ -240,7 +240,8 @@ class RoomDirectoryViewModel @AssistedInject constructor(
 //        val viaServers = listOfNotNull(state.roomDirectoryData.homeServer)
 //        viewModelScope.launch {
 //            try {
-//                session.joinRoom(action.roomId, viaServers = viaServers)
+//                session.joinRoom(action.publicRoom.roomId, viaServers = viaServers)
+//                analyticsTracker.capture(action.publicRoom.toAnalyticsJoinedRoom())
 //                // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
 //                // Instead, we wait for the room to be joined
 //            } catch (failure: Throwable) {

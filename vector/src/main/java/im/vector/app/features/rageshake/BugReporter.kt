@@ -267,13 +267,13 @@ class BugReporter @Inject constructor(
                         ReportType.SUGGESTION          -> "[Element] [Suggestion] $bugDescription"
                         ReportType.SPACE_BETA_FEEDBACK -> "[Element] [spaces-feedback] $bugDescription"
                         ReportType.AUTO_UISI_SENDER,
-                        ReportType.AUTO_UISI           -> "[AutoUISI] $bugDescription"
+                        ReportType.AUTO_UISI           -> bugDescription
                     }
 
                     // build the multi part request
                     val builder = BugReporterMultipartBody.Builder()
                             .addFormDataPart("text", text)
-                            .addFormDataPart("app", "tchap-android")
+                            .addFormDataPart("app", rageShakeAppNameForReport(context, reportType))
                             .addFormDataPart("user_agent", Matrix.getInstance(context).getUserAgent())
                             .addFormDataPart("user_id", userId)
                             .addFormDataPart("can_contact", canContact.toString())
@@ -348,9 +348,15 @@ class BugReporter @Inject constructor(
                         }
                         ReportType.SUGGESTION          -> builder.addFormDataPart("label", "[Suggestion]")
                         ReportType.SPACE_BETA_FEEDBACK -> builder.addFormDataPart("label", "spaces-feedback")
-                        ReportType.AUTO_UISI,
+                        ReportType.AUTO_UISI           -> {
+                            builder.addFormDataPart("label", "Z-UISI")
+                            builder.addFormDataPart("label", "android")
+                            builder.addFormDataPart("label", "uisi-recipient")
+                        }
                         ReportType.AUTO_UISI_SENDER    -> {
                             builder.addFormDataPart("label", "Z-UISI")
+                            builder.addFormDataPart("label", "android")
+                            builder.addFormDataPart("label", "uisi-sender")
                         }
                     }
 
@@ -489,6 +495,23 @@ class BugReporter @Inject constructor(
         activity.startActivity(BugReportActivity.intent(activity, reportType, withScreenshot))
     }
 
+    @Suppress("UNUSED_PARAMETER")
+    private fun rageShakeAppNameForReport(context: Context, reportType: ReportType): String {
+        // As per https://github.com/matrix-org/rageshake
+        // app: Identifier for the application (eg 'riot-web').
+        // Should correspond to a mapping configured in the configuration file for github issue reporting to work.
+        // (see R.string.bug_report_url for configured RS server)
+//        return when (reportType) {
+//            ReportType.AUTO_UISI_SENDER,
+//            ReportType.AUTO_UISI -> {
+//                context.getString(R.string.bug_report_auto_uisi_app_name)
+//            }
+//            else                 -> {
+//               context.getString(R.string.bug_report_app_name)
+//            }
+//        }
+        return "tchap-android"
+    }
 // ==============================================================================================================
 // crash report management
 // ==============================================================================================================

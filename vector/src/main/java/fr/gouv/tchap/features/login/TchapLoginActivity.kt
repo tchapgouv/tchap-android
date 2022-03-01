@@ -27,7 +27,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.airbnb.mvrx.viewModel
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import fr.gouv.tchap.features.login.registration.TchapRegisterFragment
@@ -38,7 +37,6 @@ import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.home.HomeActivity
@@ -62,7 +60,7 @@ import org.matrix.android.sdk.api.auth.registration.Stage
  * The LoginActivity manages the fragment navigation and also display the loading View
  */
 @AndroidEntryPoint
-open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarConfigurable, UnlockedActivity {
+open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedActivity {
 
     private val loginViewModel: LoginViewModel by viewModel()
 
@@ -246,10 +244,6 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
             is Stage.Terms     -> Unit // Should not happen in Tchap
             else               -> Unit // Should not happen in Tchap
         }
-    }
-
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar)
     }
 
     companion object {

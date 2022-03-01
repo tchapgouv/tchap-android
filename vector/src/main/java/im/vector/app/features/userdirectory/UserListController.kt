@@ -22,7 +22,6 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
-import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
@@ -32,6 +31,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericPillItem
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
@@ -98,7 +98,7 @@ class UserListController @Inject constructor(private val session: Session,
                 matchingEmail()?.let { threePidUser ->
                     userListHeaderItem {
                         id("identity_server_result_header")
-                        header(host.stringProvider.getString(R.string.discovery_section))
+                        header(host.stringProvider.getString(R.string.tchap_discovery_section))
                     }
                     val isSelected = currentState.pendingSelections.any { pendingSelection ->
                         when (pendingSelection) {
@@ -195,7 +195,7 @@ class UserListController @Inject constructor(private val session: Session,
             is Loading -> {
                 userListHeaderItem {
                     id("identity_server_result_header_loading")
-                    header(host.stringProvider.getString(R.string.discovery_section))
+                    header(host.stringProvider.getString(R.string.tchap_discovery_section))
                 }
                 loadingItem {
                     id("is_loading")

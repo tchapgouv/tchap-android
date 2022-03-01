@@ -285,9 +285,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         }
         add(EventSharedAction.Remove(eventId))
         // Tchap: Disable editing messages
-        if (canEdit(timelineEvent, session.myUserId, actionPermissions) &&
-                BuildConfig.SHOW_EDIT_MESSAGE) {
-            add(EventSharedAction.Edit(eventId))
+        if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
+            add(EventSharedAction.Edit(eventId, timelineEvent.root.getClearType()))
         }
         if (canCopy(msgType)) {
             // TODO copy images? html? see ClipBoard
@@ -330,11 +329,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             if (canEndPoll(timelineEvent, actionPermissions)) {
                 add(EventSharedAction.EndPoll(timelineEvent.eventId))
             }
-
             // Tchap: Disable editing messages
-            if (canEdit(timelineEvent, session.myUserId, actionPermissions) &&
-                    BuildConfig.SHOW_EDIT_MESSAGE) {
-                add(EventSharedAction.Edit(eventId))
+            if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
+                add(EventSharedAction.Edit(eventId, timelineEvent.root.getClearType()))
             }
 
             if (canRedact(timelineEvent, actionPermissions)) {
@@ -431,8 +428,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             MessageType.MSGTYPE_VIDEO,
             MessageType.MSGTYPE_AUDIO,
             MessageType.MSGTYPE_FILE,
-            MessageType.MSGTYPE_POLL_START -> true
-            else                           -> false
+            MessageType.MSGTYPE_POLL_START,
+            MessageType.MSGTYPE_LOCATION -> true
+            else                         -> false
         }
     }
 
@@ -473,14 +471,15 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canEdit(event: TimelineEvent, myUserId: String, actionPermissions: ActionPermissions): Boolean {
-        // Only event of type EventType.MESSAGE are supported for the moment
-        if (event.root.getClearType() != EventType.MESSAGE) return false
+        // Only event of type EventType.MESSAGE and EventType.POLL_START are supported for the moment
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.POLL_START)) return false
         if (!actionPermissions.canSendMessage) return false
         // TODO if user is admin or moderator
         val messageContent = event.root.getClearContent().toModel<MessageContent>()
         return event.root.senderId == myUserId && (
                 messageContent?.msgType == MessageType.MSGTYPE_TEXT ||
-                        messageContent?.msgType == MessageType.MSGTYPE_EMOTE
+                        messageContent?.msgType == MessageType.MSGTYPE_EMOTE ||
+                        canEditPoll(event)
                 )
     }
 
@@ -522,5 +521,11 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         return event.root.getClearType() == EventType.POLL_START &&
                 canRedact(event, actionPermissions) &&
                 event.annotations?.pollResponseSummary?.closedTime == null
+    }
+
+    private fun canEditPoll(event: TimelineEvent): Boolean {
+        return event.root.getClearType() == EventType.POLL_START &&
+                event.annotations?.pollResponseSummary?.closedTime == null &&
+                event.annotations?.pollResponseSummary?.aggregatedContent?.totalVotes ?: 0 == 0
     }
 }
