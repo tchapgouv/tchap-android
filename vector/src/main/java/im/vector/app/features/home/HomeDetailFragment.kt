@@ -237,7 +237,7 @@ class HomeDetailFragment @Inject constructor(
                         CreateDirectRoomViewEvents.InviteSent                 -> {
                             handleInviteByEmailResult(buildString {
                                 appendLine(getString(R.string.tchap_invite_sending_succeeded))
-                                append(getString(R.string.tchap_send_invite_confirmation))
+                                appendLine(getString(R.string.tchap_send_invite_confirmation))
                             })
                         }
                         is CreateDirectRoomViewEvents.Failure                 -> showFailure(viewEvent.throwable)

@@ -170,6 +170,7 @@
         app:tint="?vctr_content_secondary"
         tools:ignore="MissingPrefix" />
 
+    <!-- Tchap: Hide logout button -->
     <TextView
         android:id="@+id/homeDrawerHeaderSignoutView"
         style="@style/Widget.Vector.TextView.Body"
@@ -182,6 +183,7 @@
         android:minHeight="52dp"
         android:padding="16dp"
         android:text="@string/logout"
+        android:visibility="gone"
         app:drawableStartCompat="@drawable/ic_signout_18dp"
         app:drawableTint="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"

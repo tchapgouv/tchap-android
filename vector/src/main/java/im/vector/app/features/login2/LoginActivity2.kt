@@ -37,6 +37,7 @@ import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.resetBackstack
+import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
@@ -305,6 +306,10 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
         intent?.data
                 ?.let { tryOrNull { it.getQueryParameter("loginToken") } }
                 ?.let { loginViewModel.handle(LoginAction2.LoginWithToken(it)) }
+    }
+
+    override fun onBackPressed() {
+        validateBackPressed { super.onBackPressed() }
     }
 
     private fun onRegistrationStageNotSupported() {

@@ -32,6 +32,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    // Tchap: Add tchap flavors
+    // The 'target' dimension permits to specify which platform are used
+    flavorDimensions "target"
+
+    productFlavors {
+        preprod { dimension "target" }
+        agent { dimension "target" }
+    }
+
     compileOptions {
         sourceCompatibility versions.sourceCompat
         targetCompatibility versions.targetCompat
