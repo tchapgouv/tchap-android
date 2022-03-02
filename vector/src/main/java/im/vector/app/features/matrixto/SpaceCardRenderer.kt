@@ -55,7 +55,7 @@ class SpaceCardRenderer @Inject constructor(
             if (spaceSummary.isPublic) {
                 inCard.matrixToAccessText.setTextOrHide(stringProvider.getString(R.string.public_space))
                 inCard.matrixToAccessImage.isVisible = true
-                inCard.matrixToAccessImage.setImageResource(R.drawable.ic_tchap_public_room)
+                inCard.matrixToAccessImage.setImageResource(R.drawable.ic_tchap_room_link_access)
             } else {
                 inCard.matrixToAccessText.setTextOrHide(stringProvider.getString(R.string.private_space))
                 inCard.matrixToAccessImage.isVisible = true
@@ -101,7 +101,7 @@ class SpaceCardRenderer @Inject constructor(
             if (spaceChildInfo.worldReadable) {
                 inCard.matrixToAccessText.setTextOrHide(stringProvider.getString(R.string.public_space))
                 inCard.matrixToAccessImage.isVisible = true
-                inCard.matrixToAccessImage.setImageResource(R.drawable.ic_tchap_public_room)
+                inCard.matrixToAccessImage.setImageResource(R.drawable.ic_tchap_room_link_access)
             } else {
                 inCard.matrixToAccessText.setTextOrHide(stringProvider.getString(R.string.private_space))
                 inCard.matrixToAccessImage.isVisible = true
