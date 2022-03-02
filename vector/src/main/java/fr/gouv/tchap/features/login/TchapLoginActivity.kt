@@ -37,6 +37,7 @@ import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.home.HomeActivity
@@ -206,6 +207,10 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Unlo
                     option = commonOption)
             SignMode.SignInWithMatrixId -> Unit // Unsupported on Tchap
         }.exhaustive
+    }
+
+    override fun onBackPressed() {
+        validateBackPressed { super.onBackPressed() }
     }
 
     private fun onRegistrationStageNotSupported() {
