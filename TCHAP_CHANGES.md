@@ -112,11 +112,13 @@ Bugfixes 🐛
 Changes in Tchap 1.99.3 (2021-12-10)
 ===================================================
 
-Bugfix 🐛:
+Bugfixes 🐛
+----------
 
 - [Login Screen] An unexpected error on the password field #276
 
-Improvements 🙌:
+Improvements 🙌
+--------------
 
 - Rebase/element android v1.3.8 PR #286
 - Antivirus: Add MediaScan in the attachments handling #204
@@ -138,21 +140,24 @@ Improvements 🙌:
 Changes in Tchap 1.99.2 (2021-11-08)
 ===================================================
 
-Bugfix 🐛:
+Bugfixes 🐛
+----------
 
 - Remove unsupported filltype attribute in vector drawable
 
 Changes in Tchap 1.99.1 (2021-11-05)
 ===================================================
 
-Improvements 🙌:
+Improvements 🙌
+--------------
 
 - Prepare the Tchap release/pre-release #253
 
 Changes in Tchap 1.99.0 (2021-11-05)
 ===================================================
 
-Features ✨:
+Features ✨
+--------------
 
 - Set up the sign in process #3
 - Set up the account creation #6
@@ -165,7 +170,8 @@ Features ✨:
 - [Expired Account] Support expired account by prompting the user to renew it #125
 - [Room Settings] Support the access by link in the private room #229
 
-Improvements 🙌:
+Improvements 🙌
+--------------
 
 - Replace Element references with the actual Tchap information #1
 - Set up Tchap RestClient in element-android-sdk #15
