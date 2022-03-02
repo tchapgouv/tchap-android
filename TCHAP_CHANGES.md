@@ -1,3 +1,16 @@
+Changes in Tchap 2.0.2 (2022-03-02)
+===================================
+
+Improvements 🙌
+--------------
+ - Replace the icon displayed on the avatar when the room is accessible by link ([#450](https://github.com/tchapgouv/tchap-android-v2/issues/450))
+ - Hide logout button in left menu ([#453](https://github.com/tchapgouv/tchap-android-v2/issues/453))
+ - Update colors and icons ([#449](https://github.com/tchapgouv/tchap-android-v2/issues/449))
+
+Bugfixes 🐛
+----------
+ - [Invite by Email] Toast is not displayed correctly ([#393](https://github.com/tchapgouv/tchap-android-v2/issues/393))
+
 Changes in Tchap 2.0.1 (2022-02-23)
 ===================================
 
