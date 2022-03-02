@@ -3,7 +3,7 @@
 
     <!-- Launcher Theme, only used for VectorLauncherActivity (will be use even before the Activity is started) -->
     <style name="Theme.Tchap.Launcher" parent="Theme.Vector.Launcher">
-        <item name="android:windowBackground">@drawable/splash_tchap</item>
+        <item name="android:windowBackground">@drawable/tchap_splash</item>
     </style>
 
 </resources>

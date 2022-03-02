@@ -1,0 +1,18 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="107dp"
+    android:height="107dp"
+    android:viewportWidth="107"
+    android:viewportHeight="107">
+    <path
+        android:fillColor="@color/palette_tchap_official_blue"
+        android:pathData="M82.996,0.281H24.619C11.474,0.281 0.813,10.942 0.813,24.087V82.465C0.813,95.61 11.474,106.271 24.619,106.271H82.996C96.141,106.271 106.802,95.61 106.802,82.465V24.087C106.802,10.942 96.141,0.281 82.996,0.281Z" />
+    <path
+        android:fillColor="@color/palette_tchap_official_white"
+        android:pathData="M85.291,70.419L53.808,88.569L22.325,70.419V34.118L53.808,15.967L85.291,34.118V70.419Z" />
+    <path
+        android:fillColor="@color/palette_tchap_official_red"
+        android:pathData="M51.363,40.654H56.786V72.212H51.363V40.654Z" />
+    <path
+        android:fillColor="@color/palette_tchap_official_red"
+        android:pathData="M41.488,51.124H36.065V37.937H73.384V43.369H41.488V51.124Z" />
+</vector>
