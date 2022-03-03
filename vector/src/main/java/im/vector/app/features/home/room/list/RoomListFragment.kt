@@ -46,7 +46,7 @@ import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.databinding.FragmentRoomListBinding
-import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.HomeActivitySharedAction
 import im.vector.app.features.home.HomeSharedActionViewModel
 import im.vector.app.features.home.HomeTab
@@ -117,8 +117,8 @@ class RoomListFragment @Inject constructor(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         analyticsScreenName = when (roomListParams.displayMode) {
-            RoomListDisplayMode.PEOPLE -> Screen.ScreenName.MobilePeople
-            RoomListDisplayMode.ROOMS  -> Screen.ScreenName.MobileRooms
+            RoomListDisplayMode.PEOPLE -> MobileScreen.ScreenName.People
+            RoomListDisplayMode.ROOMS  -> MobileScreen.ScreenName.Rooms
             else                       -> null
         }
     }
@@ -137,7 +137,7 @@ class RoomListFragment @Inject constructor(
             when (it) {
                 is RoomListViewEvents.Loading                   -> showLoading(it.message)
                 is RoomListViewEvents.Failure                   -> showFailure(it.throwable)
-                is RoomListViewEvents.SelectRoom                -> handleSelectRoom(it)
+                is RoomListViewEvents.SelectRoom                -> handleSelectRoom(it, it.isInviteAlreadyAccepted)
                 is RoomListViewEvents.Done                      -> Unit
                 is RoomListViewEvents.NavigateToMxToBottomSheet -> handleShowMxToLink(it.link)
                 RoomListViewEvents.CreateDirectChat             -> handleCreateDirectChat()
@@ -173,7 +173,7 @@ class RoomListFragment @Inject constructor(
         super.onCreateOptionsMenu(menu, inflater)
 
         // Tchap: handle search action in the room list
-        val searchItem = menu.findItem(R.id.menu_home_search_action)
+        val searchItem = menu.findItem(R.id.menu_home_filter)
         val searchView = searchItem?.actionView as? SearchView
 
         if (searchView != null) {
@@ -235,8 +235,8 @@ class RoomListFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    private fun handleSelectRoom(event: RoomListViewEvents.SelectRoom) {
-        navigator.openRoom(requireActivity(), event.roomSummary.roomId)
+    private fun handleSelectRoom(event: RoomListViewEvents.SelectRoom, isInviteAlreadyAccepted: Boolean) {
+        navigator.openRoom(context = requireActivity(), roomId = event.roomSummary.roomId, isInviteAlreadyAccepted = isInviteAlreadyAccepted)
         resetFilter()
     }
 

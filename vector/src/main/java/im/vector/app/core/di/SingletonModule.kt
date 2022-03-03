@@ -26,13 +26,17 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import im.vector.app.BuildConfig
 import im.vector.app.EmojiCompatWrapper
 import im.vector.app.EmojiSpanify
+import im.vector.app.R
+import im.vector.app.config.analyticsConfig
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.time.Clock
 import im.vector.app.core.time.DefaultClock
+import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.impl.DefaultVectorAnalytics
@@ -42,12 +46,15 @@ import im.vector.app.features.navigation.DefaultNavigator
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.SharedPrefPinCodeStore
+import im.vector.app.features.room.VectorRoomDisplayNameFallbackProvider
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.SupervisorJob
 import org.matrix.android.sdk.api.Matrix
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
@@ -107,8 +114,19 @@ object VectorStaticModule {
     }
 
     @Provides
-    fun providesMatrix(context: Context): Matrix {
-        return Matrix.getInstance(context)
+    fun providesMatrixConfiguration(vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider, context: Context): MatrixConfiguration {
+        return MatrixConfiguration(
+                applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
+                roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
+                // Tchap: Use custom permalink prefix
+                clientPermalinkBaseUrl = context.getString(R.string.permalink_prefix)
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun providesMatrix(context: Context, configuration: MatrixConfiguration): Matrix {
+        return Matrix.createInstance(context, configuration)
     }
 
     @Provides
@@ -146,5 +164,17 @@ object VectorStaticModule {
     @Provides
     fun providesCoroutineDispatchers(): CoroutineDispatchers {
         return CoroutineDispatchers(io = Dispatchers.IO, computation = Dispatchers.Default)
+    }
+
+    @Suppress("EXPERIMENTAL_API_USAGE")
+    @Provides
+    @NamedGlobalScope
+    fun providesGlobalScope(): CoroutineScope {
+        return GlobalScope
+    }
+
+    @Provides
+    fun providesAnalyticsConfig(): AnalyticsConfig {
+        return analyticsConfig
     }
 }

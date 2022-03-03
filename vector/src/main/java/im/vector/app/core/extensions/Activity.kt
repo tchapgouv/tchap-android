@@ -29,6 +29,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import im.vector.app.R
 import timber.log.Timber
 
 fun ComponentActivity.registerStartForActivityResult(onResult: (ActivityResult) -> Unit): ActivityResultLauncher<Intent> {
@@ -68,8 +69,12 @@ fun <T : Fragment> AppCompatActivity.replaceFragment(
         fragmentClass: Class<T>,
         params: Parcelable? = null,
         tag: String? = null,
-        allowStateLoss: Boolean = false) {
+        allowStateLoss: Boolean = false,
+        useCustomAnimation: Boolean = false) {
     supportFragmentManager.commitTransaction(allowStateLoss) {
+        if (useCustomAnimation) {
+            setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
+        }
         replace(container.id, fragmentClass, params.toMvRxBundle(), tag)
     }
 }

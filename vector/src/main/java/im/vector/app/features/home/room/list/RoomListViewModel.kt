@@ -35,7 +35,6 @@ import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.analytics.AnalyticsTracker
-import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
@@ -187,7 +186,7 @@ class RoomListViewModel @AssistedInject constructor(
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleSelectRoom(action: RoomListAction.SelectRoom) = withState {
-        _viewEvents.post(RoomListViewEvents.SelectRoom(action.roomSummary))
+        _viewEvents.post(RoomListViewEvents.SelectRoom(action.roomSummary, false))
     }
 
     private fun handleToggleSection(roomSection: RoomsSection) {
@@ -225,6 +224,7 @@ class RoomListViewModel @AssistedInject constructor(
             Timber.w("Try to join an already joining room. Should not happen")
             return@withState
         }
+        _viewEvents.post(RoomListViewEvents.SelectRoom(action.roomSummary, true))
 
         // quick echo
         setState {
@@ -238,19 +238,6 @@ class RoomListViewModel @AssistedInject constructor(
                     }
             )
         }
-
-        val room = session.getRoom(roomId) ?: return@withState
-        viewModelScope.launch {
-            try {
-                room.join()
-                analyticsTracker.capture(action.roomSummary.toAnalyticsJoinedRoom())
-                // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
-                // Instead, we wait for the room to be joined
-            } catch (failure: Throwable) {
-                // Notify the user
-                _viewEvents.post(RoomListViewEvents.Failure(failure))
-            }
-        }
     }
 
     private fun handleRejectInvitation(action: RoomListAction.RejectInvitation) = withState { state ->
@@ -262,10 +249,9 @@ class RoomListViewModel @AssistedInject constructor(
             return@withState
         }
 
-        val room = session.getRoom(roomId) ?: return@withState
         viewModelScope.launch {
             try {
-                room.leave(null)
+                session.leaveRoom(roomId)
                 // We do not update the rejectingRoomsIds here, because, the room is not rejected yet regarding the sync data.
                 // Instead, we wait for the room to be rejected
                 // Known bug: if the user is invited again (after rejecting the first invitation), the loading will be displayed instead of the buttons.
@@ -350,9 +336,8 @@ class RoomListViewModel @AssistedInject constructor(
 
     private fun handleLeaveRoom(action: RoomListAction.LeaveRoom) {
         _viewEvents.post(RoomListViewEvents.Loading(null))
-        val room = session.getRoom(action.roomId) ?: return
         viewModelScope.launch {
-            val value = runCatching { room.leave(null) }
+            val value = runCatching { session.leaveRoom(action.roomId) }
                     .fold({ RoomListViewEvents.Done }, { RoomListViewEvents.Failure(it) })
             _viewEvents.post(value)
         }

@@ -154,6 +154,9 @@ android {
         //  This *must* only be set in trusted environments.
         buildConfigField "Boolean", "handleCallAssertedIdentityEvents", "false"
 
+        // Indicates whether or not threading support is enabled
+        buildConfigField "Boolean", "THREADING_ENABLED", "${isThreadingEnabled}"
+
         buildConfigField "Boolean", "enableLocationSharing", "true"
         buildConfigField "String", "mapTilerKey", "\"fU3vlMsMn4Jb6dnEIFsx\""
 
@@ -463,7 +466,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.42'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.43'
 
     // FlowBinding
     implementation libs.github.flowBinding
@@ -533,7 +536,7 @@ dependencies {
 
     implementation libs.github.glide
     kapt libs.github.glideCompiler
-    implementation 'com.github.yalantis:ucrop:2.2.7'
+    implementation 'com.github.yalantis:ucrop:2.2.8'
 
     // Badge for compatibility
     implementation 'me.leolin:ShortcutBadger:1.1.22@aar'

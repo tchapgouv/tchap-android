@@ -123,7 +123,7 @@ class HomeDetailFragment @Inject constructor(
         }
 
         // Tchap: remove max width so it can take the whole available space in landscape
-        (menu.findItem(R.id.menu_home_search_action)?.actionView as? SearchView)?.maxWidth = Int.MAX_VALUE
+        (menu.findItem(R.id.menu_home_filter)?.actionView as? SearchView)?.maxWidth = Int.MAX_VALUE
 
         super.onPrepareOptionsMenu(menu)
     }
@@ -229,28 +229,31 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
-        createDirectRoomViewModel.viewEvents
-                .stream()
-                .onEach { viewEvent ->
-                    when (viewEvent) {
-                        CreateDirectRoomViewEvents.InviteSent                 -> {
-                            handleInviteByEmailResult(buildString {
-                                appendLine(getString(R.string.tchap_invite_sending_succeeded))
-                                appendLine(getString(R.string.tchap_send_invite_confirmation))
-                            })
-                        }
-                        is CreateDirectRoomViewEvents.Failure                 -> showFailure(viewEvent.throwable)
-                        is CreateDirectRoomViewEvents.UserDiscovered          -> handleExistingUser(viewEvent.user)
-                        is CreateDirectRoomViewEvents.InviteAlreadySent       -> {
-                            handleInviteByEmailResult(getString(R.string.tchap_invite_already_send_message, viewEvent.email))
-                        }
-                        is CreateDirectRoomViewEvents.InviteUnauthorizedEmail -> {
-                            handleInviteByEmailResult(getString(R.string.tchap_invite_unauthorized_message, viewEvent.email))
-                        }
-                        is CreateDirectRoomViewEvents.OpenDirectChat          -> openRoom(viewEvent.roomId)
-                    }.exhaustive
+        createDirectRoomViewModel.observeViewEvents { viewEvent ->
+            when (viewEvent) {
+                CreateDirectRoomViewEvents.InviteSent                 -> {
+                    handleInviteByEmailResult(buildString {
+                        appendLine(getString(R.string.tchap_invite_sending_succeeded))
+                        appendLine(getString(R.string.tchap_send_invite_confirmation))
+                    })
                 }
-                .launchIn(lifecycleScope)
+                is CreateDirectRoomViewEvents.Failure                 -> showFailure(viewEvent.throwable)
+                is CreateDirectRoomViewEvents.UserDiscovered          -> handleExistingUser(viewEvent.user)
+                is CreateDirectRoomViewEvents.InviteAlreadySent       -> {
+                    handleInviteByEmailResult(getString(R.string.tchap_invite_already_send_message, viewEvent.email))
+                }
+                is CreateDirectRoomViewEvents.InviteUnauthorizedEmail -> {
+                    handleInviteByEmailResult(getString(R.string.tchap_invite_unauthorized_message, viewEvent.email))
+                }
+                is CreateDirectRoomViewEvents.OpenDirectChat          -> openRoom(viewEvent.roomId)
+                CreateDirectRoomViewEvents.DmSelf                     -> {
+                    Toast.makeText(requireContext(), R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
+                }
+                CreateDirectRoomViewEvents.InvalidCode                -> {
+                    Toast.makeText(requireContext(), R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
+                }
+            }.exhaustive
+        }
     }
 
     private fun handleCallStarted() {
@@ -528,7 +531,7 @@ class HomeDetailFragment @Inject constructor(
         backgroundColor = if (highlight) {
             ThemeUtils.getColor(requireContext(), R.attr.colorError)
         } else {
-            ThemeUtils.getColor(requireContext(), R.attr.vctr_unread_room_badge)
+            ThemeUtils.getColor(requireContext(), R.attr.vctr_content_secondary)
         }
     }
 
