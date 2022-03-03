@@ -16,8 +16,6 @@
 
 package org.matrix.android.sdk.internal.database
 
-import fr.gouv.tchap.android.sdk.api.session.events.model.TchapEventType
-import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRulesContent
 import fr.gouv.tchap.android.sdk.internal.database.migration.TchapMigrateSessionTo013
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
