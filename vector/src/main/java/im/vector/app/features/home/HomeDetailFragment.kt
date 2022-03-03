@@ -22,6 +22,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.children
@@ -122,8 +123,14 @@ class HomeDetailFragment @Inject constructor(
             menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
         }
 
-        // Tchap: remove max width so it can take the whole available space in landscape
-        (menu.findItem(R.id.menu_home_filter)?.actionView as? SearchView)?.maxWidth = Int.MAX_VALUE
+        // Tchap: Update SearchView
+        // - remove max width so it can take the whole available space in landscape
+        // - show same icon as menu item
+        val searchItem = menu.findItem(R.id.menu_home_filter)
+        (searchItem?.actionView as? SearchView)?.run {
+            maxWidth = Int.MAX_VALUE
+            findViewById<ImageView>(androidx.appcompat.R.id.search_mag_icon)?.setImageDrawable(searchItem.icon)
+        }
 
         super.onPrepareOptionsMenu(menu)
     }
