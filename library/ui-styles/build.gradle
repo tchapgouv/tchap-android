@@ -43,7 +43,7 @@ android {
 
     productFlavors {
         btchap { dimension "target" }
-        agent { dimension "target" }
+        tchap { dimension "target" }
     }
 
     compileOptions {
