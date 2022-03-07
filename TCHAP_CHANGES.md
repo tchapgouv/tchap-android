@@ -1,3 +1,11 @@
+Changes in Tchap 2.0.3 (2022-03-07)
+===================================
+
+Other changes
+-------------
+ - Disable Android Auto supports, see https://github.com/tchapgouv/tchap-android-v2/issues/471 ([#471](https://github.com/tchapgouv/tchap-android-v2/issues/471))
+
+
 Changes in Tchap 2.0.2 (2022-03-02)
 ===================================
 
@@ -10,6 +18,7 @@ Improvements 🙌
 Bugfixes 🐛
 ----------
  - [Invite by Email] Toast is not displayed correctly ([#393](https://github.com/tchapgouv/tchap-android-v2/issues/393))
+
 
 Changes in Tchap 2.0.1 (2022-02-23)
 ===================================
@@ -32,6 +41,7 @@ Other changes
 - [Room list] Use the items from Element instead of the duplicated Tchap ones ([#386](https://github.com/tchapgouv/tchap-android-v2/issues/386))
 - Change sygnal server url ([#437](https://github.com/tchapgouv/tchap-android-v2/issues/437))
 
+
 Changes in Tchap 2.0.0 (2022-02-16)
 ===================================
 
@@ -49,6 +59,7 @@ Bugfixes 🐛
 - Fix the FCM token error breaking the push notifications ([#402](https://github.com/tchapgouv/tchap-android-v2/issues/402))
 - Wrong display of the forum icon in Dark theme ([#429](https://github.com/tchapgouv/tchap-android-v2/issues/429))
 
+
 Changes in Tchap 1.99.5 (2022-02-09)
 ====================================
 
@@ -65,6 +76,7 @@ Bugfixes 🐛
 - [Invitation by email] Handle correctly Id server consent ([#392](https://github.com/tchapgouv/tchap-android-v2/issues/392))
 - [Workaround] Do not select a DM left by the other user ([#401](https://github.com/tchapgouv/tchap-android-v2/issues/401))
 - Fix the push notifications which were not working for some devices ([#402](https://github.com/tchapgouv/tchap-android-v2/issues/402))
+
 
 Changes in Tchap 1.99.4 (2022-01-26)
 ====================================
@@ -109,6 +121,7 @@ Bugfixes 🐛
 - Unexpected white area in the verification bottom sheet ([#348](https://github.com/tchapgouv/tchap-android-v2/issues/348))
 - Fix crash on screen rotation ([#370](https://github.com/tchapgouv/tchap-android-v2/issues/370))
 
+
 Changes in Tchap 1.99.3 (2021-12-10)
 ===================================================
 
@@ -137,6 +150,7 @@ Improvements 🙌
 - [Settings] Hide General/Discovery settings #251
 - [Settings] adjust Help & About section #308
 
+
 Changes in Tchap 1.99.2 (2021-11-08)
 ===================================================
 
@@ -145,6 +159,7 @@ Bugfixes 🐛
 
 - Remove unsupported filltype attribute in vector drawable
 
+
 Changes in Tchap 1.99.1 (2021-11-05)
 ===================================================
 
@@ -152,6 +167,7 @@ Improvements 🙌
 --------------
 
 - Prepare the Tchap release/pre-release #253
+
 
 Changes in Tchap 1.99.0 (2021-11-05)
 ===================================================
