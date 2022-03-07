@@ -94,9 +94,10 @@
             android:name="android.max_aspect"
             android:value="9.9" />
 
-        <meta-data
-            android:name="com.google.android.gms.car.application"
-            android:resource="@xml/automotive_app_desc" />
+        <!-- Tchap: Temporary disable android auto (https://github.com/tchapgouv/tchap-android/issues/703) -->
+<!--        <meta-data-->
+<!--            android:name="com.google.android.gms.car.application"-->
+<!--            android:resource="@xml/automotive_app_desc" />-->
 
         <activity
             android:name=".features.MainActivity"
