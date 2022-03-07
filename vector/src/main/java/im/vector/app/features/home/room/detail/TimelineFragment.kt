@@ -1475,8 +1475,10 @@ class TimelineFragment @Inject constructor(
                     attachmentTypeSelector.setAttachmentVisibility(
                             AttachmentTypeSelectorView.Type.LOCATION,
                             vectorPreferences.isLocationSharingEnabled())
-                    attachmentTypeSelector.setAttachmentVisibility(
-                            AttachmentTypeSelectorView.Type.POLL, !isThreadTimeLine())
+
+                    // Tchap: Disable Poll
+//                    attachmentTypeSelector.setAttachmentVisibility(
+//                            AttachmentTypeSelectorView.Type.POLL, !isThreadTimeLine())
                 }
                 attachmentTypeSelector.show(views.composerLayout.views.attachmentButton)
             }
