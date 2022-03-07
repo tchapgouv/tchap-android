@@ -38,6 +38,7 @@ android {
     flavorDimensions "target"
 
     productFlavors {
+        devTchap { dimension "target"}
         btchap { dimension "target" }
         tchap { dimension "target" }
     }

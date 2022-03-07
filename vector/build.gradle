@@ -347,6 +347,18 @@ android {
             dimension "pinning"
         }
 
+        devTchap {
+            dimension "target"
+
+            resValue "string", "app_name", "DevTchap"
+
+            applicationId "fr.gouv.tchap.dev"
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}" + "_dev"
+
+            // Tchap: Show labs menu item in devTchap
+            resValue "bool", "labs_settings_visible", "true"
+        }
+
         btchap {
             dimension "target"
 
