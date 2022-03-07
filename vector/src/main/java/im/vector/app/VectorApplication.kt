@@ -55,14 +55,12 @@ import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.rageshake.VectorFileLogger
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
-import im.vector.app.features.room.VectorRoomDisplayNameFallbackProvider
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
 import im.vector.app.push.fcm.FcmHelper
 import org.matrix.android.sdk.api.Matrix
-import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import timber.log.Timber
@@ -76,7 +74,6 @@ import androidx.work.Configuration as WorkConfiguration
 @HiltAndroidApp
 class VectorApplication :
         Application(),
-        MatrixConfiguration.Provider,
         WorkConfiguration.Provider {
 
     lateinit var appContext: Context
@@ -99,6 +96,7 @@ class VectorApplication :
     @Inject lateinit var autoRageShaker: AutoRageShaker
     @Inject lateinit var vectorFileLogger: VectorFileLogger
     @Inject lateinit var vectorAnalytics: VectorAnalytics
+    @Inject lateinit var matrix: Matrix
 
     // font thread handler
     private var fontThreadHandler: Handler? = null
@@ -119,7 +117,7 @@ class VectorApplication :
         vectorAnalytics.init()
         invitesAcceptor.initialize()
         autoRageShaker.initialize()
-        vectorUncaughtExceptionHandler.activate(this)
+        vectorUncaughtExceptionHandler.activate()
 
         // Remove Log handler statically added by Jitsi
         if (BuildConfig.IS_VOIP_SUPPORTED) {
@@ -221,17 +219,9 @@ class VectorApplication :
         }
     }
 
-    override fun providesMatrixConfiguration(): MatrixConfiguration {
-        return MatrixConfiguration(
-                applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
-                roomDisplayNameFallbackProvider = VectorRoomDisplayNameFallbackProvider(this),
-                clientPermalinkBaseUrl = getString(R.string.permalink_prefix)
-        )
-    }
-
     override fun getWorkManagerConfiguration(): WorkConfiguration {
         return WorkConfiguration.Builder()
-                .setWorkerFactory(Matrix.getInstance(this.appContext).workerFactory())
+                .setWorkerFactory(matrix.workerFactory())
                 .setExecutor(Executors.newCachedThreadPool())
                 .build()
     }

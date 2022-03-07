@@ -23,8 +23,6 @@
     https://matrix.org/docs/spec/client_server/r0.4.0#id128
     -->
 
-    <!-- Note: pusher_http_url should have path '/_matrix/push/v1/notify' -->
-    <string name="pusher_http_url" translatable="false">https://sygnal.tchap.gouv.fr/_matrix/push/v1/notify</string>
     <!-- Note: pusher_app_id cannot exceed 64 chars -->
     <string name="pusher_app_id" translatable="false">fr.gouv.rie.tchap.android</string>
 
@@ -36,21 +34,5 @@
         <!-- Regular Tchap Web instance -->
         <item>www.beta.tchap.gouv.fr</item>
     </string-array>
-
-    <!-- server urls -->
-    <string name="default_stun_server" translatable="false">turn.matrix.org</string>
-
-    <!-- Widget urls
-    <string name="integrations_ui_url" translatable="false">"https://scalar.vector.im/"</string>
-    <string name="integrations_rest_url" translatable="false">"https://scalar.vector.im/api"</string>
-    <string name="integrations_jitsi_widget_url" translatable="false">"https://scalar.vector.im/api/widgets/jitsi.html"</string>
-
-    <string-array name="integrations_widgets_urls" translatable="false">
-        <item>https://scalar.vector.im/_matrix/integrations/v1</item>
-        <item>https://scalar.vector.im/api</item>
-        <item>https://scalar-staging.vector.im/_matrix/integrations/v1</item>
-        <item>https://scalar-staging.vector.im/api</item>
-        <item>https://scalar-staging.riot.im/scalar/api</item>
-    </string-array> -->
 
 </resources>

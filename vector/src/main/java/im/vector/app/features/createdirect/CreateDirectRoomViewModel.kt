@@ -35,6 +35,8 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.session.permalinks.PermalinkData
+import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.user.model.User
 import timber.log.Timber
@@ -55,21 +57,39 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
 
     override fun handle(action: CreateDirectRoomAction) {
         when (action) {
-            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onSubmitInvitees(action)
+            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onSubmitInvitees(action.selections)
+            is CreateDirectRoomAction.QrScannedAction                  -> onCodeParsed(action)
             is CreateDirectRoomAction.InviteByEmail                    -> handleIndividualInviteByEmail(action.email)
             is CreateDirectRoomAction.CreateDirectMessageByUserId      -> handleCreateDirectMessageByUserId(action.userId)
         }.exhaustive
     }
 
+    private fun onCodeParsed(action: CreateDirectRoomAction.QrScannedAction) {
+        val mxid = (PermalinkParser.parse(action.result) as? PermalinkData.UserLink)?.userId
+
+        if (mxid === null) {
+            _viewEvents.post(CreateDirectRoomViewEvents.InvalidCode)
+        } else {
+            // The following assumes MXIDs are case insensitive
+            if (mxid.equals(other = session.myUserId, ignoreCase = true)) {
+                _viewEvents.post(CreateDirectRoomViewEvents.DmSelf)
+            } else {
+                // Try to get user from known users and fall back to creating a User object from MXID
+                val qrInvitee = if (session.getUser(mxid) != null) session.getUser(mxid)!! else User(mxid, null, null)
+                onSubmitInvitees(setOf(PendingSelection.UserPendingSelection(qrInvitee)))
+            }
+        }
+    }
+
     /**
      * If users already have a DM room then navigate to it instead of creating a new room.
      */
-    private fun onSubmitInvitees(action: CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers) {
+    private fun onSubmitInvitees(selections: Set<PendingSelection>) {
         // Tchap: All the user invite and DM creation process has been reworked
         // Tchap: - multi-selection is forbidden, DM are restricted to 1:1
         // Tchap: - invites by email might expire for external accounts so we have to cancel pending invites to send a new ones
         // Tchap: - invites by msisdn are not supported yet
-        val selection = action.selections.singleOrNull() ?: return
+        val selection = selections.singleOrNull() ?: return
         setState { copy(isLoading = true) }
         when (selection) {
             // User already exists, so we can create or retrieve the DM with him
@@ -196,7 +216,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                     Timber.d("unable to revoke invite (no pending invite)")
                 }
 
-                room.leave()
+                session.leaveRoom(roomId)
             } catch (failure: Throwable) {
                 setState { copy(isLoading = false) }
                 _viewEvents.post(CreateDirectRoomViewEvents.Failure(failure))
