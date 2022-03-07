@@ -67,6 +67,7 @@
     <im.vector.app.core.preference.VectorSwitchPreference
         android:defaultValue="true"
         android:key="SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE"
-        android:title="@string/labs_render_locations_in_timeline" />
+        android:title="@string/labs_render_locations_in_timeline"
+        app:isPreferenceVisible="@bool/false_tchap_hidden"/>
 
 </androidx.preference.PreferenceScreen>

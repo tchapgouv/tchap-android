@@ -185,6 +185,9 @@ android {
         // Tchap: Disable editing messages
         buildConfigField "Boolean", "SHOW_EDIT_MESSAGE", "false"
 
+        // Tchap: Disable location sharing
+        buildConfigField "Boolean", "SHOW_LOCATION_SHARING", "false"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // Tchap: Disable universalApk

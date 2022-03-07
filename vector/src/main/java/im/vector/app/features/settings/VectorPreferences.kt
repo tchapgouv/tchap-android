@@ -1001,7 +1001,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     fun labsRenderLocationsInTimeline(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE, true)
+        // Tchap: Hide Location sharing
+//        return defaultPrefs.getBoolean(SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE, true)
+        return BuildConfig.SHOW_LOCATION_SHARING
     }
 
     fun areThreadMessagesEnabled(): Boolean {
