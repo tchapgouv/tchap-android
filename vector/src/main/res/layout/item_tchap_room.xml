@@ -262,17 +262,6 @@
         tools:ignore="MissingConstraints"
         tools:src="@drawable/ic_tchap_forum" />
 
-    <ImageView
-        android:id="@+id/tchapRoomPin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_tchap_pin_room"
-        android:scaleType="center"
-        app:layout_constraintStart_toEndOf="@id/roomUnreadIndicator"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription"
-        tools:visibility="visible" />
-
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/tchapRightBarrier"
         android:layout_width="wrap_content"

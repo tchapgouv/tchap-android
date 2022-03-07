@@ -67,7 +67,6 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     @EpoxyAttribute var showSelected: Boolean = false
 
     // Tchap items
-    @EpoxyAttribute var izPinned: Boolean = false
     @EpoxyAttribute lateinit var roomType: TchapRoomType
 
     override fun bind(holder: Holder) {
@@ -97,7 +96,6 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
         // Tchap items
         renderTchapRoomType(holder)
-        holder.pinView.isVisible = izPinned
     }
 
     override fun unbind(holder: Holder) {
@@ -161,6 +159,5 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         // Tchap items
         val domainNameView by bind<TextView>(R.id.tchapRoomDomainNameView)
         val avatarRoomTypeImageView by bind<ImageView>(R.id.tchapRoomAvatarEncryptedImageView)
-        val pinView by bind<ImageView>(R.id.tchapRoomPin)
     }
 }
