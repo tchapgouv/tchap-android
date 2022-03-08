@@ -16,86 +16,76 @@
 
 package im.vector.app.features.location
 
-import android.content.Context
-import android.util.AttributeSet
-import com.mapbox.mapboxsdk.camera.CameraPosition
-import com.mapbox.mapboxsdk.geometry.LatLng
-import com.mapbox.mapboxsdk.maps.MapView
-import com.mapbox.mapboxsdk.maps.MapboxMap
-import com.mapbox.mapboxsdk.maps.Style
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
-import com.mapbox.mapboxsdk.style.layers.Property
-import timber.log.Timber
-
-class MapTilerMapView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
-) : MapView(context, attrs, defStyleAttr) {
-
-    private var pendingState: MapState? = null
-
-    data class MapRefs(
-            val map: MapboxMap,
-            val symbolManager: SymbolManager,
-            val style: Style
-    )
-
-    private var mapRefs: MapRefs? = null
-    private var initZoomDone = false
-
-    /**
-     * For location fragments
-     */
-    fun initialize(url: String) {
-        Timber.d("## Location: initialize")
-        getMapAsync { map ->
-            map.setStyle(url) { style ->
-                mapRefs = MapRefs(
-                        map,
-                        SymbolManager(this, map, style),
-                        style
-                )
-                pendingState?.let { render(it) }
-                pendingState = null
-            }
-        }
-    }
-
-    fun render(state: MapState) {
-        val safeMapRefs = mapRefs ?: return Unit.also {
-            pendingState = state
-        }
-
-        state.pinDrawable?.let { pinDrawable ->
-            if (!safeMapRefs.style.isFullyLoaded ||
-                    safeMapRefs.style.getImage(state.pinId) == null) {
-                safeMapRefs.style.addImage(state.pinId, pinDrawable)
-            }
-        }
-
-        state.pinLocationData?.let { locationData ->
-            if (!initZoomDone || !state.zoomOnlyOnce) {
-                zoomToLocation(locationData.latitude, locationData.longitude)
-                initZoomDone = true
-            }
-
-            safeMapRefs.symbolManager.deleteAll()
-            safeMapRefs.symbolManager.create(
-                    SymbolOptions()
-                            .withLatLng(LatLng(locationData.latitude, locationData.longitude))
-                            .withIconImage(state.pinId)
-                            .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
-            )
-        }
-    }
-
-    private fun zoomToLocation(latitude: Double, longitude: Double) {
-        Timber.d("## Location: zoomToLocation")
-        mapRefs?.map?.cameraPosition = CameraPosition.Builder()
-                .target(LatLng(latitude, longitude))
-                .zoom(INITIAL_MAP_ZOOM_IN_PREVIEW)
-                .build()
-    }
+// Tchap: Disable MapTiler
+class MapTilerMapView {
+// @JvmOverloads constructor(
+//        context: Context,
+//        attrs: AttributeSet? = null,
+//        defStyleAttr: Int = 0
+// )
+// {
+//    private var pendingState: MapState? = null
+//
+//    data class MapRefs(
+//            val map: MapboxMap,
+//            val symbolManager: SymbolManager,
+//            val style: Style
+//    )
+//
+//    private var mapRefs: MapRefs? = null
+//    private var initZoomDone = false
+//
+//    /**
+//     * For location fragments
+//     */
+//    fun initialize(url: String) {
+//        Timber.d("## Location: initialize")
+//        getMapAsync { map ->
+//            map.setStyle(url) { style ->
+//                mapRefs = MapRefs(
+//                        map,
+//                        SymbolManager(this, map, style),
+//                        style
+//                )
+//                pendingState?.let { render(it) }
+//                pendingState = null
+//            }
+//        }
+//    }
+//
+//    fun render(state: MapState) {
+//        val safeMapRefs = mapRefs ?: return Unit.also {
+//            pendingState = state
+//        }
+//
+//        state.pinDrawable?.let { pinDrawable ->
+//            if (!safeMapRefs.style.isFullyLoaded ||
+//                    safeMapRefs.style.getImage(state.pinId) == null) {
+//                safeMapRefs.style.addImage(state.pinId, pinDrawable)
+//            }
+//        }
+//
+//        state.pinLocationData?.let { locationData ->
+//            if (!initZoomDone || !state.zoomOnlyOnce) {
+//                zoomToLocation(locationData.latitude, locationData.longitude)
+//                initZoomDone = true
+//            }
+//
+//            safeMapRefs.symbolManager.deleteAll()
+//            safeMapRefs.symbolManager.create(
+//                    SymbolOptions()
+//                            .withLatLng(LatLng(locationData.latitude, locationData.longitude))
+//                            .withIconImage(state.pinId)
+//                            .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
+//            )
+//        }
+//    }
+//
+//    private fun zoomToLocation(latitude: Double, longitude: Double) {
+//        Timber.d("## Location: zoomToLocation")
+//        mapRefs?.map?.cameraPosition = CameraPosition.Builder()
+//                .target(LatLng(latitude, longitude))
+//                .zoom(INITIAL_MAP_ZOOM_IN_PREVIEW)
+//                .build()
+//    }
 }

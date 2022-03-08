@@ -5,14 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <im.vector.app.features.location.MapTilerMapView
+<!-- Tchap: Disable MapTiler -->
+<!--    <im.vector.app.features.location.MapTilerMapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/shareLocationContainer"
         app:layout_constraintTop_toTopOf="parent"
         app:mapbox_renderTextureMode="true"
-        tools:background="#4F00" />
+        tools:background="#4F00" />-->
 
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/shareLocationContainer"

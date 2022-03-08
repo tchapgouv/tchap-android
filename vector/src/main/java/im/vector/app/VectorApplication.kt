@@ -36,7 +36,6 @@ import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Mavericks
 import com.facebook.stetho.Stetho
 import com.gabrielittner.threetenbp.LazyThreeTen
-import com.mapbox.mapboxsdk.Mapbox
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.google.GoogleEmojiProvider
 import dagger.hilt.android.HiltAndroidApp
@@ -198,8 +197,9 @@ class VectorApplication :
 
         EmojiManager.install(GoogleEmojiProvider())
 
-        // Initialize Mapbox before inflating mapViews
-        Mapbox.getInstance(this)
+        // Tchap: Disable MapTiler
+     // Initialize Mapbox before inflating mapViews
+//        Mapbox.getInstance(this)
     }
 
     private val startSyncOnFirstStart = object : DefaultLifecycleObserver {

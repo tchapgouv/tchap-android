@@ -158,7 +158,8 @@ android {
         buildConfigField "Boolean", "THREADING_ENABLED", "${isThreadingEnabled}"
 
         buildConfigField "Boolean", "enableLocationSharing", "true"
-        buildConfigField "String", "mapTilerKey", "\"fU3vlMsMn4Jb6dnEIFsx\""
+        // Tchap: Disable MapTiler
+//        buildConfigField "String", "xmapTilerKey", "\"fU3vlMsMn4Jb6dnEIFsx\""
 
         // Tchap: Key Backup is not supported
         buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
@@ -597,9 +598,10 @@ dependencies {
     }
     implementation 'commons-codec:commons-codec:1.15'
 
+    // Tchap: Disable MapTiler
     // MapTiler
-    implementation 'org.maplibre.gl:android-sdk:9.5.2'
-    implementation 'org.maplibre.gl:android-plugin-annotation-v9:1.0.0'
+//    implementation 'org.maplibre.gl:android-sdk:9.5.2'
+//    implementation 'org.maplibre.gl:android-plugin-annotation-v9:1.0.0'
 
 
     // TESTS
