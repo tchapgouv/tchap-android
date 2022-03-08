@@ -38,8 +38,9 @@ android {
     flavorDimensions "target"
 
     productFlavors {
-        preprod { dimension "target" }
-        agent { dimension "target" }
+        devTchap { dimension "target"}
+        btchap { dimension "target" }
+        tchap { dimension "target" }
     }
 
     compileOptions {

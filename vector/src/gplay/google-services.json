@@ -63,6 +63,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1092909174787:android:0b76c597172eddd62a7e36",
+        "android_client_info": {
+          "package_name": "fr.gouv.tchap.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1092909174787-ol99625ft1r3anmj13giqho21132ujm3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQPFvzDFuRiv4M3dVT3rjnMV6yXQGNLi8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1092909174787-ol99625ft1r3anmj13giqho21132ujm3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
