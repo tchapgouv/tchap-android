@@ -72,7 +72,7 @@
                 android:contentDescription="@string/attachment_type_poll"
                 android:src="@drawable/ic_attachment_poll"
                 app:tint="?colorPrimary"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <ImageButton
                 android:id="@+id/attachmentLocationButton"
