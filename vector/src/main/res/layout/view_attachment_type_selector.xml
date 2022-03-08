@@ -62,7 +62,7 @@
                 android:src="@drawable/ic_attachment_file"
                 app:tint="?colorPrimary" />
 
-            <!--            Tchap: Disable poll-->
+            <!-- Tchap: Disable polls -->
             <ImageButton
                 android:id="@+id/attachmentPollButton"
                 android:layout_width="@dimen/layout_touch_size"
