@@ -155,7 +155,6 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 }
                 .itemClickListener { onClick?.invoke(roomSummary) }
                 // Tchap attributes
-                .izPinned(roomSummary.isFavorite)
                 .roomType(RoomUtils.getRoomType(roomSummary))
     }
 }
