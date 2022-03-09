@@ -21,11 +21,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.mapbox.mapboxsdk.maps.MapView
+import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentLocationSharingBinding
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 /**
@@ -37,9 +42,8 @@ class LocationSharingFragment @Inject constructor(
 
     private val viewModel: LocationSharingViewModel by fragmentViewModel()
 
-    // Tchap: Disable MapTiler
     // Keep a ref to handle properly the onDestroy callback
-//    private var mapView: WeakReference<MapView>? = null
+    private var mapView: WeakReference<MapView>? = null
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLocationSharingBinding {
         return FragmentLocationSharingBinding.inflate(inflater, container, false)
@@ -48,13 +52,12 @@ class LocationSharingFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Tchap: Disable MapTiler
-//        mapView = WeakReference(views.mapView)
-//        views.mapView.onCreate(savedInstanceState)
-//
-//        lifecycleScope.launchWhenCreated {
-//            views.mapView.initialize(urlMapProvider.getMapUrl())
-//        }
+        mapView = WeakReference(views.mapView)
+        views.mapView.onCreate(savedInstanceState)
+
+        lifecycleScope.launchWhenCreated {
+            views.mapView.initialize(urlMapProvider.getMapUrl())
+        }
 
         views.shareLocationContainer.debouncedClicks {
             viewModel.handle(LocationSharingAction.OnShareLocation)
@@ -68,58 +71,55 @@ class LocationSharingFragment @Inject constructor(
         }
     }
 
-    // Tchap: Disable MapTiler
-//    override fun onResume() {
-//        super.onResume()
-//        views.mapView.onResume()
-//    }
-//
-//    override fun onPause() {
-//        views.mapView.onPause()
-//        super.onPause()
-//    }
-//
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        views.mapView.onSaveInstanceState(outState)
-//    }
-//
-//    override fun onStart() {
-//        super.onStart()
-//        views.mapView.onStart()
-//    }
-//
-//    override fun onStop() {
-//        views.mapView.onStop()
-//        super.onStop()
-//    }
-//
-//    override fun onLowMemory() {
-//        super.onLowMemory()
-//        views.mapView.onLowMemory()
-//    }
-//
-//    override fun onDestroy() {
-//        mapView?.get()?.onDestroy()
-//        mapView?.clear()
-//        super.onDestroy()
-//    }
+    override fun onResume() {
+        super.onResume()
+        views.mapView.onResume()
+    }
+
+    override fun onPause() {
+        views.mapView.onPause()
+        super.onPause()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        views.mapView.onSaveInstanceState(outState)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        views.mapView.onStart()
+    }
+
+    override fun onStop() {
+        views.mapView.onStop()
+        super.onStop()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        views.mapView.onLowMemory()
+    }
+
+    override fun onDestroy() {
+        mapView?.get()?.onDestroy()
+        mapView?.clear()
+        super.onDestroy()
+    }
 
     private fun handleLocationNotAvailableError() {
-        // Tchap: Disable MapTiler
-//        MaterialAlertDialogBuilder(requireActivity())
-//                .setTitle(R.string.location_not_available_dialog_title)
-//                .setMessage(R.string.location_not_available_dialog_content)
-//                .setPositiveButton(R.string.ok) { _, _ ->
-//                    activity?.finish()
-//                }
-//                .setCancelable(false)
-//                .show()
+        MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.location_not_available_dialog_title)
+                .setMessage(R.string.location_not_available_dialog_content)
+                .setPositiveButton(R.string.ok) { _, _ ->
+                    activity?.finish()
+                }
+                .setCancelable(false)
+                .show()
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        // Tchap: Disable MapTiler
-//        views.mapView.render(state.toMapState())
+        views.mapView.render(state.toMapState())
         views.shareLocationGpsLoading.isGone = state.lastKnownLocation != null
     }
 }

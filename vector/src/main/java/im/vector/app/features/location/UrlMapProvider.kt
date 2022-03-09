@@ -16,6 +16,7 @@
 
 package im.vector.app.features.location
 
+import im.vector.app.BuildConfig
 import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.isRTL
 import im.vector.app.features.raw.wellknown.getElementWellknown
@@ -29,12 +30,11 @@ class UrlMapProvider @Inject constructor(
         private val session: Session,
         private val rawService: RawService
 ) {
-    // Tchap: Disable MapTiler
-//    private val keyParam = "?key=${BuildConfig.mapTilerKey}"
+    private val keyParam = "?key=${BuildConfig.mapTilerKey}"
 
     private val fallbackMapUrl = buildString {
         append(MAP_BASE_URL)
-//        append(keyParam)
+        append(keyParam)
     }
 
     suspend fun getMapUrl(): String {
@@ -60,7 +60,7 @@ class UrlMapProvider @Inject constructor(
             append("x")
             append(height)
             append(".png")
-//            append(keyParam)
+            append(keyParam)
             if (!localeProvider.isRTL()) {
                 // On LTR languages we want the legal mentions to be displayed on the bottom left of the image
                 append("&attribution=bottomleft")
