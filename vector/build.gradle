@@ -157,8 +157,8 @@ android {
         // Indicates whether or not threading support is enabled
         buildConfigField "Boolean", "THREADING_ENABLED", "${isThreadingEnabled}"
 
-        buildConfigField "Boolean", "enableLocationSharing", "true"
-        buildConfigField "String", "mapTilerKey", "\"fU3vlMsMn4Jb6dnEIFsx\""
+        buildConfigField "Boolean", "enableLocationSharing", "false"
+        buildConfigField "String", "mapTilerKey", "\"\""
 
         // Tchap: Key Backup is not supported
         buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
