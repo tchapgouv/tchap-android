@@ -65,7 +65,7 @@
         android:title="@string/labs_auto_report_uisi" />
 
     <im.vector.app.core.preference.VectorSwitchPreference
-        android:defaultValue="true"
+        android:defaultValue="@bool/enable_location_sharing"
         android:key="SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE"
         android:title="@string/labs_render_locations_in_timeline" />
 
