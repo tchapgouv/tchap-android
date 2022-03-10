@@ -309,7 +309,9 @@ class RoomListFragment @Inject constructor(
         roomListViewModel.handle(RoomListAction.FilterWith(filter))
     }
 
-    private fun resetFilter() = filterRoomsWith("")
+    private fun resetFilter() {
+        roomListViewModel.handle(RoomListAction.FilterWith(filter = ""))
+    }
 
     // FilteredRoomFooterItem.Listener
     override fun createRoom(initialName: String) {
