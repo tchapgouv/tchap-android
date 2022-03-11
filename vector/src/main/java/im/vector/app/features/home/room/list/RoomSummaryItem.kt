@@ -77,7 +77,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
             itemLongClickListener?.onLongClick(it) ?: false
         }
         // Tchap: remove domain from the display name
-        holder.titleView.text = TchapUtils.getNameFromDisplayName(matrixItem.getBestName())
+        holder.titleView.text = TchapUtils.getRoomNameFromDisplayName(matrixItem.getBestName(), roomType)
         holder.lastEventTimeView.text = lastEventTime
         holder.lastEventView.text = lastFormattedEvent.charSequence
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))

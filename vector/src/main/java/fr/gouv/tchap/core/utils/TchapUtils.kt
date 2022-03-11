@@ -90,6 +90,25 @@ object TchapUtils {
     }
 
     /**
+     * Get the room name from a display name according to the given room type.
+     * In the case of a direct message, it will remove the domain part of the display name.
+     * For example in case of "Jean Martin `[Modernisation]`", this will return "Jean Martin".
+     *
+     * Otherwise, it will keep the initial name.
+     *
+     * @param displayName the display name to compute.
+     * @param roomType the room type associated with the given display name.
+     *
+     * @return displayName without domain (or the display name itself if the room is not a DM).
+     */
+    fun getRoomNameFromDisplayName(displayName: String, roomType: TchapRoomType): String {
+        return when (roomType) {
+            TchapRoomType.DIRECT -> getNameFromDisplayName(displayName)
+            else                 -> displayName
+        }
+    }
+
+    /**
      * Get the potential domain name from a display name.
      * For example in case of "Jean Martin `[Modernisation]`", this will return "Modernisation".
      *
