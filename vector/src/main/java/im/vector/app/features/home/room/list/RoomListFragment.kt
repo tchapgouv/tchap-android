@@ -309,8 +309,8 @@ class RoomListFragment @Inject constructor(
 
         roomListViewModel.handle(RoomListAction.FilterWith(filter))
     }
-    
-    private fun resetFilter() =  withState(roomListViewModel) { state ->
+
+    private fun resetFilter() = withState(roomListViewModel) { state ->
         if (state.roomFilter.isNotEmpty()) {
             filterRoomsWith("")
         }
