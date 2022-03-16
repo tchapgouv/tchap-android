@@ -309,16 +309,11 @@ class RoomListFragment @Inject constructor(
 
         roomListViewModel.handle(RoomListAction.FilterWith(filter))
     }
-
-<<<<<<< Updated upstream
-    private fun resetFilter() {
-        roomListViewModel.handle(RoomListAction.FilterWith(filter = ""))
-=======
+    
     private fun resetFilter() =  withState(roomListViewModel) { state ->
         if (state.roomFilter.isNotEmpty()) {
             filterRoomsWith("")
         }
->>>>>>> Stashed changes
     }
 
     // FilteredRoomFooterItem.Listener
