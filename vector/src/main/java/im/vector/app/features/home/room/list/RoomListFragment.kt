@@ -187,6 +187,7 @@ class RoomListFragment @Inject constructor(
             }
 
             searchView.queryTextChanges()
+                    .skipInitialValue()
                     .debounce(300)
                     .onEach { filterRoomsWith(it.toString()) }
                     .launchIn(viewLifecycleOwner.lifecycleScope)
@@ -309,7 +310,11 @@ class RoomListFragment @Inject constructor(
         roomListViewModel.handle(RoomListAction.FilterWith(filter))
     }
 
-    private fun resetFilter() = filterRoomsWith("")
+    private fun resetFilter() = withState(roomListViewModel) { state ->
+        if (state.roomFilter.isNotEmpty()) {
+            filterRoomsWith("")
+        }
+    }
 
     // FilteredRoomFooterItem.Listener
     override fun createRoom(initialName: String) {
