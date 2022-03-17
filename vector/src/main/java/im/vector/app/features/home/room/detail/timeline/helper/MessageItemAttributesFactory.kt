@@ -38,7 +38,8 @@ class MessageItemAttributesFactory @Inject constructor(
     fun create(messageContent: Any?,
                informationData: MessageInformationData,
                callback: TimelineEventController.Callback?,
-               threadDetails: ThreadDetails? = null): AbsMessageItem.Attributes {
+               threadDetails: ThreadDetails? = null,
+               isDirect: Boolean): AbsMessageItem.Attributes {
         return AbsMessageItem.Attributes(
                 avatarSize = avatarSizeProvider.avatarSize,
                 informationData = informationData,
@@ -60,7 +61,8 @@ class MessageItemAttributesFactory @Inject constructor(
                 emojiTypeFace = emojiCompatFontProvider.typeface,
                 decryptionErrorMessage = stringProvider.getString(R.string.encrypted_message),
                 threadDetails = threadDetails,
-                areThreadMessagesEnabled = preferencesProvider.areThreadMessagesEnabled()
+                areThreadMessagesEnabled = preferencesProvider.areThreadMessagesEnabled(),
+                isDirect = isDirect
         )
     }
 }

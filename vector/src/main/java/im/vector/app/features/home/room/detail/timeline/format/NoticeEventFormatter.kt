@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.format
 
+import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
@@ -656,8 +657,19 @@ class NoticeEventFormatter @Inject constructor(
                                       eventContent: RoomMemberContent?,
                                       prevEventContent: RoomMemberContent?,
                                       isDm: Boolean): String? {
-        val senderDisplayName = senderName ?: event.senderId ?: ""
-        val targetDisplayName = eventContent?.displayName ?: prevEventContent?.displayName ?: event.stateKey ?: ""
+
+        // Tchap: Remove domain name in case of DM.
+        val senderDisplayName: String
+        val targetDisplayName: String
+
+        if (isDm) {
+            senderDisplayName = TchapUtils.getNameFromDisplayName(senderName ?: event.senderId ?: "")
+            targetDisplayName = TchapUtils.getNameFromDisplayName(eventContent?.displayName ?: prevEventContent?.displayName ?: event.stateKey ?: "")
+        } else {
+            senderDisplayName = senderName ?: event.senderId ?: ""
+            targetDisplayName = eventContent?.displayName ?: prevEventContent?.displayName ?: event.stateKey ?: ""
+        }
+
         return when (eventContent?.membership) {
             Membership.INVITE -> {
                 when {
