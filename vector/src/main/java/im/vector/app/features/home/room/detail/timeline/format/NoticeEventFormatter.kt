@@ -657,7 +657,6 @@ class NoticeEventFormatter @Inject constructor(
                                       eventContent: RoomMemberContent?,
                                       prevEventContent: RoomMemberContent?,
                                       isDm: Boolean): String? {
-
         // Tchap: Remove domain name in case of DM.
         val senderDisplayName: String
         val targetDisplayName: String
