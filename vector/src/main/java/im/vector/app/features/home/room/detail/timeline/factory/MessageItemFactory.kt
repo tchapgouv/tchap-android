@@ -182,7 +182,7 @@ class MessageItemFactory @Inject constructor(
         val attributes = messageItemAttributesFactory.create(
                 messageContent,
                 informationData,
-                callback, 
+                callback,
                 threadDetails,
                 params.partialState.roomSummary?.isDirect
         )
