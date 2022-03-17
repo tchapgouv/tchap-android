@@ -30,6 +30,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
@@ -71,7 +72,8 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
                 }
             } else {
                 if (data?.isDirectRoom == true) {
-                    holder.expandView.resources.getString(R.string.direct_room_created_summary_item, data.memberName)
+                    // Tchap: Hide the domain if we are in DM.
+                    holder.expandView.resources.getString(R.string.direct_room_created_summary_item, TchapUtils.getNameFromDisplayName(data.memberName))
                 } else {
                     holder.expandView.resources.getString(R.string.room_created_summary_item, data?.memberName ?: data?.userId ?: "")
                 }
@@ -127,13 +129,21 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
 
     private fun bindCreationSummaryTile(holder: Holder) {
         val roomSummary = attributes.roomSummary
-        val roomDisplayName = roomSummary?.displayName
-        holder.roomNameText.setTextOrHide(roomDisplayName)
         val isDirect = roomSummary?.isDirect == true
+
+        val roomDisplayName = roomSummary?.displayName
+        // Tchap: Hide the domain if we are in DM.
+        if (isDirect && roomDisplayName != null) holder.roomNameText.setTextOrHide(TchapUtils.getNameFromDisplayName(roomDisplayName))
+        else holder.roomNameText.setTextOrHide(roomDisplayName)
+
         val membersCount = roomSummary?.otherMemberIds?.size ?: 0
 
         if (isDirect) {
-            holder.roomDescriptionText.text = holder.view.resources.getString(R.string.this_is_the_beginning_of_dm, roomSummary?.displayName ?: "")
+            // Tchap: Hide the domain if we are in DM.
+            holder.roomDescriptionText.text = holder.view.resources.getString(
+                    R.string.this_is_the_beginning_of_dm,
+                    TchapUtils.getNameFromDisplayName(roomSummary?.displayName ?: "")
+            )
         } else if (roomDisplayName.isNullOrBlank() || roomSummary.name.isBlank()) {
             holder.roomDescriptionText.text = holder.view.resources.getString(R.string.this_is_the_beginning_of_room_no_name)
         } else {

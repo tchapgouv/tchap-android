@@ -71,10 +71,10 @@ class VerificationItemFactory @Inject constructor(
         // If it's not a request ignore this event
         // if (refEvent.root.getClearContent().toModel<MessageVerificationRequestContent>() == null) return ignoredConclusion(event, highlight, callback)
 
-        val referenceInformationData = messageInformationDataFactory.create(TimelineItemFactoryParams(refEvent, isDirect = params.isDirect))
+        val referenceInformationData = messageInformationDataFactory.create(TimelineItemFactoryParams(refEvent))
 
         val informationData = messageInformationDataFactory.create(params)
-        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback, isDirect = params.isDirect)
+        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback, isDirect = params.partialState.roomSummary?.isDirect)
 
         when (event.root.getClearType()) {
             EventType.KEY_VERIFICATION_CANCEL -> {

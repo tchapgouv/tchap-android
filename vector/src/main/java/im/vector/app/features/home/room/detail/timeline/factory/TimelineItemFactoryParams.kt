@@ -30,7 +30,6 @@ data class TimelineItemFactoryParams(
         val lastSentEventIdWithoutReadReceipts: String? = null,
         val callback: TimelineEventController.Callback? = null,
         val eventsGroup: TimelineEventsGroup? = null,
-        val isDirect: Boolean
 ) {
 
     val highlightedEventId: String?

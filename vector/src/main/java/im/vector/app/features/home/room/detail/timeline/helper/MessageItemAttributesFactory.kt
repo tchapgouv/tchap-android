@@ -39,7 +39,7 @@ class MessageItemAttributesFactory @Inject constructor(
                informationData: MessageInformationData,
                callback: TimelineEventController.Callback?,
                threadDetails: ThreadDetails? = null,
-               isDirect: Boolean): AbsMessageItem.Attributes {
+               isDirect: Boolean?): AbsMessageItem.Attributes {
         return AbsMessageItem.Attributes(
                 avatarSize = avatarSizeProvider.avatarSize,
                 informationData = informationData,
