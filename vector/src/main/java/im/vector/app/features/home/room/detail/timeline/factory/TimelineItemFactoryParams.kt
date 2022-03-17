@@ -29,7 +29,7 @@ data class TimelineItemFactoryParams(
         val partialState: TimelineEventController.PartialState = TimelineEventController.PartialState(),
         val lastSentEventIdWithoutReadReceipts: String? = null,
         val callback: TimelineEventController.Callback? = null,
-        val eventsGroup: TimelineEventsGroup? = null,
+        val eventsGroup: TimelineEventsGroup? = null
 ) {
 
     val highlightedEventId: String?

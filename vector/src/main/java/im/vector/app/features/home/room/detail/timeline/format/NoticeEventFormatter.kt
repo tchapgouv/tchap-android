@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail.timeline.format
 
-import android.util.Log
 import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.R
@@ -204,8 +203,8 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatDebug(event: Event): CharSequence {
-            val threadPrefix = if (event.isThread()) "thread" else ""
-            return "Debug: $threadPrefix event type \"${event.getClearType()}\""
+        val threadPrefix = if (event.isThread()) "thread" else ""
+        return "Debug: $threadPrefix event type \"${event.getClearType()}\""
     }
 
     private fun formatRoomCreateEvent(event: Event, isDm: Boolean): CharSequence? {
@@ -672,10 +671,6 @@ class NoticeEventFormatter @Inject constructor(
         } else {
             eventContent?.displayName ?: prevEventContent?.displayName ?: event.stateKey ?: ""
         }
-
-        Log.v(">>>", targetDisplayName)
-        Log.v(">>>1", senderDisplayName)
-
 
         return when (eventContent?.membership) {
             Membership.INVITE -> {

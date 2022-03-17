@@ -418,7 +418,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                         partialState = partialState,
                         lastSentEventIdWithoutReadReceipts = lastSentEventWithoutReadReceipts,
                         callback = callback,
-                        eventsGroup = timelineEventsGroup,
+                        eventsGroup = timelineEventsGroup
                 )
                 modelCache[position] = buildCacheItem(params)
                 numberOfEventsToBuild++
