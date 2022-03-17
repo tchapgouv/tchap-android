@@ -45,7 +45,7 @@
     <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_category_composer">
 
         <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="SETTINGS_ENABLE_MARKDOWN_KEY"
             android:summary="@string/settings_send_markdown_summary"
             android:title="@string/settings_send_markdown" />
