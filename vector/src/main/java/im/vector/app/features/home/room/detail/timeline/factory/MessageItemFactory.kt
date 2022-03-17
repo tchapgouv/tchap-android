@@ -179,7 +179,13 @@ class MessageItemFactory @Inject constructor(
         }
 
         // always hide summary when we are on thread timeline
-        val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback, threadDetails, params.partialState.roomSummary?.isDirect)
+        val attributes = messageItemAttributesFactory.create(
+                messageContent,
+                informationData,
+                callback, 
+                threadDetails,
+                params.partialState.roomSummary?.isDirect
+        )
 
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
