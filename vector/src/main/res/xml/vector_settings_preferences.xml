@@ -44,6 +44,7 @@
 
     <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_category_composer">
 
+        <!-- Tchap: Enable markdown by default -->
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_ENABLE_MARKDOWN_KEY"
@@ -84,6 +85,7 @@
 
     <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_category_timeline">
 
+        <!-- Tchap: Enable message bubble by default -->
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_INTERFACE_BUBBLE_KEY"
