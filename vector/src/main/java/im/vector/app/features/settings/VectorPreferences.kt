@@ -695,7 +695,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * @return true if the markdown is enabled
      */
     fun isMarkdownEnabled(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_ENABLE_MARKDOWN_KEY, false)
+        // Tchap: Enable markdown by default
+        return defaultPrefs.getBoolean(SETTINGS_ENABLE_MARKDOWN_KEY, true)
     }
 
     /**
@@ -858,7 +859,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * @return true to show timeline message in bubble.
      */
     fun useMessageBubblesLayout(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_INTERFACE_BUBBLE_KEY, false)
+        // Tchap: Enable message bubbles by default
+        return defaultPrefs.getBoolean(SETTINGS_INTERFACE_BUBBLE_KEY, true)
     }
 
     /**
