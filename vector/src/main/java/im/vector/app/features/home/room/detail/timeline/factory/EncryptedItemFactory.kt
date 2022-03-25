@@ -30,6 +30,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.image
 import me.gujun.android.span.span
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -112,7 +113,7 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                         informationData = informationData,
                         callback = params.callback,
                         threadDetails = threadDetails,
-                        isDirect = params.partialState.roomSummary?.isDirect ?: false)
+                        isDirect = params.partialState.roomSummary?.isDirect.orFalse())
                 return MessageTextItem_()
                         .layout(informationData.messageLayout.layoutRes)
                         .leftGuideline(avatarSizeProvider.leftGuideline)

@@ -191,7 +191,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             val decryptionErrorMessage: String? = null,
             val threadDetails: ThreadDetails? = null,
             val areThreadMessagesEnabled: Boolean = false,
-            val isDirect: Boolean? = null
+            val isDirect: Boolean = false
     ) : AbsBaseMessageItem.Attributes {
 
         // Have to override as it's used to diff epoxy items

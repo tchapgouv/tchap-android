@@ -26,6 +26,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttrib
 import im.vector.app.features.home.room.detail.timeline.item.StatusTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.StatusTileTimelineItem_
 import org.matrix.android.sdk.api.crypto.VerificationState
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
@@ -74,7 +75,7 @@ class VerificationItemFactory @Inject constructor(
         val referenceInformationData = messageInformationDataFactory.create(TimelineItemFactoryParams(refEvent))
 
         val informationData = messageInformationDataFactory.create(params)
-        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback, isDirect = params.partialState.roomSummary?.isDirect)
+        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback, isDirect = params.partialState.roomSummary?.isDirect.orFalse())
 
         when (event.root.getClearType()) {
             EventType.KEY_VERIFICATION_CANCEL -> {
