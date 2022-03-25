@@ -92,7 +92,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         if (attributes.informationData.messageLayout.showDisplayName) {
             holder.memberNameView.isVisible = true
             // Tchap: Remove domain name in case of DM.
-            holder.memberNameView.text = if (attributes.isDirect != null && attributes.isDirect == true) {
+            holder.memberNameView.text = if (attributes.isDirect == true) {
                 TchapUtils.getNameFromDisplayName(attributes.informationData.memberName.toString())
             } else {
                 attributes.informationData.memberName

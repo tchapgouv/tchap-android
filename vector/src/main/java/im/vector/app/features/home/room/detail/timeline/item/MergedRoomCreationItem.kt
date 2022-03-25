@@ -131,10 +131,11 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
         val roomSummary = attributes.roomSummary
         val isDirect = roomSummary?.isDirect == true
 
-        val roomDisplayName = roomSummary?.displayName
         // Tchap: Hide the domain if we are in DM.
-        if (isDirect && roomDisplayName != null) holder.roomNameText.setTextOrHide(TchapUtils.getNameFromDisplayName(roomDisplayName))
-        else holder.roomNameText.setTextOrHide(roomDisplayName)
+        val roomDisplayName = roomSummary?.displayName?.let {
+            if (isDirect) TchapUtils.getNameFromDisplayName(it) else it
+        }
+        holder.roomNameText.setTextOrHide(roomDisplayName)
 
         val membersCount = roomSummary?.otherMemberIds?.size ?: 0
 
@@ -142,7 +143,7 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
             // Tchap: Hide the domain if we are in DM.
             holder.roomDescriptionText.text = holder.view.resources.getString(
                     R.string.this_is_the_beginning_of_dm,
-                    TchapUtils.getNameFromDisplayName(roomSummary?.displayName ?: "")
+                    roomDisplayName
             )
         } else if (roomDisplayName.isNullOrBlank() || roomSummary.name.isBlank()) {
             holder.roomDescriptionText.text = holder.view.resources.getString(R.string.this_is_the_beginning_of_room_no_name)
