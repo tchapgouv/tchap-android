@@ -26,7 +26,6 @@ import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttrib
 import im.vector.app.features.home.room.detail.timeline.item.StatusTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.StatusTileTimelineItem_
 import org.matrix.android.sdk.api.crypto.VerificationState
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
