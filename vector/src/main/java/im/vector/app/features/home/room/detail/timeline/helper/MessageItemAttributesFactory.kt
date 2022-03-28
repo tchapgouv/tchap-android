@@ -60,8 +60,7 @@ class MessageItemAttributesFactory @Inject constructor(
                 emojiTypeFace = emojiCompatFontProvider.typeface,
                 decryptionErrorMessage = stringProvider.getString(R.string.encrypted_message),
                 threadDetails = threadDetails,
-                areThreadMessagesEnabled = preferencesProvider.areThreadMessagesEnabled(),
-                isDirect = informationData.isDirect
+                areThreadMessagesEnabled = preferencesProvider.areThreadMessagesEnabled()
         )
     }
 }
