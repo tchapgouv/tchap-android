@@ -203,8 +203,8 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatDebug(event: Event): CharSequence {
-        val threadPrefix = if (event.isThread()) "thread" else ""
-        return "Debug: $threadPrefix event type \"${event.getClearType()}\""
+            val threadPrefix = if (event.isThread()) "thread" else ""
+            return "Debug: $threadPrefix event type \"${event.getClearType()}\""
     }
 
     private fun formatRoomCreateEvent(event: Event, isDm: Boolean): CharSequence? {
