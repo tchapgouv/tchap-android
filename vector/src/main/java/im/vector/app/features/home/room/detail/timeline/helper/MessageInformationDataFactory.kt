@@ -119,7 +119,8 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 isFirstFromThisSender = isFirstFromThisSender,
                 isLastFromThisSender = isLastFromThisSender,
                 e2eDecoration = e2eDecoration,
-                sendStateDecoration = sendStateDecoration
+                sendStateDecoration = sendStateDecoration,
+                isDirect = roomSummary?.isDirect.orFalse()
         )
     }
 

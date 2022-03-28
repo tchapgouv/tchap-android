@@ -46,7 +46,7 @@ class EncryptionItemFactory @Inject constructor(
         }
         val algorithm = event.root.content.toModel<EncryptionEventContent>()?.algorithm
         val informationData = informationDataFactory.create(params)
-        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback, isDirect = params.partialState.roomSummary?.isDirect.orFalse())
+        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback)
 
         val isSafeAlgorithm = algorithm == MXCRYPTO_ALGORITHM_MEGOLM
         val title: String

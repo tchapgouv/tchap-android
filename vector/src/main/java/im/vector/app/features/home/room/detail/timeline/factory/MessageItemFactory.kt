@@ -157,7 +157,7 @@ class MessageItemFactory @Inject constructor(
 
         if (event.root.isRedacted()) {
             // message is redacted
-            val attributes = messageItemAttributesFactory.create(null, informationData, callback, threadDetails, params.partialState.roomSummary?.isDirect.orFalse())
+            val attributes = messageItemAttributesFactory.create(null, informationData, callback, threadDetails)
             return buildRedactedItem(attributes, highlight)
         }
 
@@ -183,8 +183,7 @@ class MessageItemFactory @Inject constructor(
                 messageContent,
                 informationData,
                 callback,
-                threadDetails,
-                params.partialState.roomSummary?.isDirect.orFalse()
+                threadDetails
         )
 
 //        val all = event.root.toContent()
