@@ -42,6 +42,7 @@
 
     <!-- For all themes Tchap -->
     <color name="palette_tchap_official_blue">#000091</color>
+    <color name="palette_tchap_official_light_blue">#E4E4F3</color>
     <color name="palette_tchap_official_white">#FFFFFF</color>
     <color name="palette_tchap_official_red">#E1000F</color>
     <color name="palette_tchap_official_black">#232323</color>

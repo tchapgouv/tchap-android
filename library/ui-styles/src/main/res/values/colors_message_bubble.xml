@@ -6,6 +6,7 @@
     <color name="vctr_message_bubble_inbound_light">#E8EDF4</color>
     <color name="vctr_message_bubble_inbound_dark">#21262C</color>
     <attr name="vctr_message_bubble_outbound" format="color" />
-    <color name="vctr_message_bubble_outbound_light">#E7F8F3</color>
-    <color name="vctr_message_bubble_outbound_dark">#133A34</color>
+    <!-- Tchap: Update bubble outbound colors -->
+    <color name="vctr_message_bubble_outbound_light">@color/tchap_message_bubble_outbound_light</color>
+    <color name="vctr_message_bubble_outbound_dark">@color/tchap_message_bubble_outbound_dark</color>
 </resources>
