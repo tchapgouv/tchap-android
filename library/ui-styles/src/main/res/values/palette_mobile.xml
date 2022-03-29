@@ -64,5 +64,6 @@
     <!-- Tchap bubble background color -->
     <color name="tchap_message_bubble_outbound_dark">@color/palette_tchap_official_blue</color>
     <color name="tchap_message_bubble_outbound_light">@color/palette_tchap_official_light_blue</color>
+    <color name="tchap_message_bubble_inbound_light">@color/palette_tchap_light_grey</color>
 
 </resources>
