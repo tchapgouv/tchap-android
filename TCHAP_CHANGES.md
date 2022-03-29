@@ -1,9 +1,34 @@
+Changes in Tchap 2.1.0 (2022-03-29)
+===================================
+
+Improvements 🙌
+--------------
+ - [Rooms list] Remove the pinned room marker ([#465](https://github.com/tchapgouv/tchap-android-v2/issues/465))
+
+Bugfixes 🐛
+----------
+ - [Room details] Wrong display on file infected ([#398](https://github.com/tchapgouv/tchap-android-v2/issues/398))
+ - [Room list] Fix cropped room names containing brackets "[]" ([#479](https://github.com/tchapgouv/tchap-android-v2/issues/479))
+ - Room list is automatically scrolled to the top after opening a room ([#481](https://github.com/tchapgouv/tchap-android-v2/issues/481))
+ - Hide "Dev Tools" if developer mode is hidden ([#512](https://github.com/tchapgouv/tchap-android-v2/issues/512))
+ - Fix SSL errors on some devices using fdroid version ([#517](https://github.com/tchapgouv/tchap-android-v2/issues/517))
+
+Other changes
+-------------
+ - Rebase against Element-Android v1.4.2
+ - Hide/Disable unwanted features: polls, location sharing, analytics(PostHog) ([#404](https://github.com/tchapgouv/tchap-android-v2/issues/404))
+ - Restore Android auto ([#491](https://github.com/tchapgouv/tchap-android-v2/issues/491))
+ - Turn on by default the Markdown and the Bubbles ([#494](https://github.com/tchapgouv/tchap-android-v2/issues/494))
+ - DM : hide the user domain from their display name in the room timeline ([#498](https://github.com/tchapgouv/tchap-android-v2/issues/498))
+ - Update the Bubbles background color ([#510](https://github.com/tchapgouv/tchap-android-v2/issues/510))
+
+
 Changes in Tchap 2.0.3 (2022-03-07)
 ===================================
 
 Other changes
 -------------
- - Disable Android Auto supports, see https://github.com/tchapgouv/tchap-android-v2/issues/471 ([#471](https://github.com/tchapgouv/tchap-android-v2/issues/471))
+ - Disable Android Auto supports ([#471](https://github.com/tchapgouv/tchap-android-v2/issues/471))
 
 
 Changes in Tchap 2.0.2 (2022-03-02)
