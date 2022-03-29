@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.format
 
+import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
@@ -66,30 +67,36 @@ class NoticeEventFormatter @Inject constructor(
     private fun Event.isSentByCurrentUser() = senderId != null && senderId == currentUserId
 
     fun format(timelineEvent: TimelineEvent, isDm: Boolean): CharSequence? {
+        // Tchap: Hide the domain if we are in DM.
+        val senderName = if (isDm) {
+            TchapUtils.getNameFromDisplayName(timelineEvent.senderInfo.disambiguatedDisplayName)
+        } else {
+            timelineEvent.senderInfo.disambiguatedDisplayName
+        }
         return when (val type = timelineEvent.root.getClearType()) {
-            EventType.STATE_ROOM_JOIN_RULES         -> formatJoinRulesEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, isDm)
+            EventType.STATE_ROOM_JOIN_RULES         -> formatJoinRulesEvent(timelineEvent.root, senderName, isDm)
             EventType.STATE_ROOM_CREATE             -> formatRoomCreateEvent(timelineEvent.root, isDm)
-            EventType.STATE_ROOM_NAME               -> formatRoomNameEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
-            EventType.STATE_ROOM_TOPIC              -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
-            EventType.STATE_ROOM_AVATAR             -> formatRoomAvatarEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
-            EventType.STATE_ROOM_MEMBER             -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, isDm)
-            EventType.STATE_ROOM_THIRD_PARTY_INVITE -> formatRoomThirdPartyInvite(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, isDm)
-            EventType.STATE_ROOM_ALIASES            -> formatRoomAliasesEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
-            EventType.STATE_ROOM_CANONICAL_ALIAS    -> formatRoomCanonicalAliasEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_NAME               -> formatRoomNameEvent(timelineEvent.root, senderName)
+            EventType.STATE_ROOM_TOPIC              -> formatRoomTopicEvent(timelineEvent.root, senderName)
+            EventType.STATE_ROOM_AVATAR             -> formatRoomAvatarEvent(timelineEvent.root, senderName)
+            EventType.STATE_ROOM_MEMBER             -> formatRoomMemberEvent(timelineEvent.root, senderName, isDm)
+            EventType.STATE_ROOM_THIRD_PARTY_INVITE -> formatRoomThirdPartyInvite(timelineEvent.root, senderName, isDm)
+            EventType.STATE_ROOM_ALIASES            -> formatRoomAliasesEvent(timelineEvent.root, senderName)
+            EventType.STATE_ROOM_CANONICAL_ALIAS    -> formatRoomCanonicalAliasEvent(timelineEvent.root, senderName)
             EventType.STATE_ROOM_HISTORY_VISIBILITY ->
-                formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, isDm)
-            EventType.STATE_ROOM_SERVER_ACL         -> formatRoomServerAclEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
-            EventType.STATE_ROOM_GUEST_ACCESS       -> formatRoomGuestAccessEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, isDm)
-            EventType.STATE_ROOM_ENCRYPTION         -> formatRoomEncryptionEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+                formatRoomHistoryVisibilityEvent(timelineEvent.root, senderName, isDm)
+            EventType.STATE_ROOM_SERVER_ACL         -> formatRoomServerAclEvent(timelineEvent.root, senderName)
+            EventType.STATE_ROOM_GUEST_ACCESS       -> formatRoomGuestAccessEvent(timelineEvent.root, senderName, isDm)
+            EventType.STATE_ROOM_ENCRYPTION         -> formatRoomEncryptionEvent(timelineEvent.root, senderName)
             EventType.STATE_ROOM_WIDGET,
-            EventType.STATE_ROOM_WIDGET_LEGACY      -> formatWidgetEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
-            EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, isDm)
-            EventType.STATE_ROOM_POWER_LEVELS       -> formatRoomPowerLevels(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_WIDGET_LEGACY      -> formatWidgetEvent(timelineEvent.root, senderName)
+            EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(timelineEvent.root, senderName, isDm)
+            EventType.STATE_ROOM_POWER_LEVELS       -> formatRoomPowerLevels(timelineEvent.root, senderName)
             EventType.CALL_INVITE,
             EventType.CALL_CANDIDATES,
             EventType.CALL_HANGUP,
             EventType.CALL_REJECT,
-            EventType.CALL_ANSWER                   -> formatCallEvent(type, timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.CALL_ANSWER                   -> formatCallEvent(type, timelineEvent.root, senderName)
             EventType.CALL_NEGOTIATE,
             EventType.CALL_SELECT_ANSWER,
             EventType.CALL_REPLACES,
@@ -656,8 +663,15 @@ class NoticeEventFormatter @Inject constructor(
                                       eventContent: RoomMemberContent?,
                                       prevEventContent: RoomMemberContent?,
                                       isDm: Boolean): String? {
+        // Tchap: Remove domain name in case of DM.
         val senderDisplayName = senderName ?: event.senderId ?: ""
-        val targetDisplayName = eventContent?.displayName ?: prevEventContent?.displayName ?: event.stateKey ?: ""
+
+        val targetDisplayName: String = if (isDm) {
+            TchapUtils.getNameFromDisplayName(eventContent?.displayName ?: prevEventContent?.displayName ?: event.stateKey ?: "")
+        } else {
+            eventContent?.displayName ?: prevEventContent?.displayName ?: event.stateKey ?: ""
+        }
+
         return when (eventContent?.membership) {
             Membership.INVITE -> {
                 when {
