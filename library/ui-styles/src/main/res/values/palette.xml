@@ -42,13 +42,14 @@
 
     <!-- For all themes Tchap -->
     <color name="palette_tchap_official_blue">#000091</color>
+    <color name="palette_tchap_secondary_blue">#E4E4F3</color>
     <color name="palette_tchap_official_white">#FFFFFF</color>
     <color name="palette_tchap_official_red">#E1000F</color>
     <color name="palette_tchap_official_black">#232323</color>
     <color name="palette_tchap_light_navy">#124A9D</color>
     <color name="palette_tchap_greyish_purple">#8B8999</color>
     <color name="palette_tchap_warm_grey">#858585</color>
-    <color name="palette_tchap_light_grey">#F0F0F0</color>
+    <color name="palette_tchap_light_grey">#F4F4F4</color>
     <color name="palette_tchap_coral">#EB5757</color>
     <color name="palette_tchap_pumpkin_orange">#EF8425</color>
     <color name="palette_tchap_jade_green">#2CCE70</color>
