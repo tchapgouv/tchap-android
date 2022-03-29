@@ -45,7 +45,7 @@ identifying this kind of changes and simplifying conflict resolution during the 
 Also, add an explanation about why the changes are necessary for Tchap or why the behaviour is different from Element.
 
 Please consider staying aligned as much as possible with the Element codebase, if a change or an improvement can be relevant for Element, prefer to add a
-contribution in the Element repository.
+contribution in the [Element repository](https://github.com/vector-im/element-android).
 
 ### Changelog
 
