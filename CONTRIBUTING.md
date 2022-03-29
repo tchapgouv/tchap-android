@@ -45,7 +45,7 @@ identifying this kind of changes and simplifying conflict resolution during the 
 Also, add an explanation about why the changes are necessary for Tchap or why the behaviour is different from Element.
 
 Please consider staying aligned as much as possible with the Element codebase, if a change or an improvement can be relevant for Element, prefer to add a
-contribution in the Element repository.
+contribution in the [Element repository](https://github.com/vector-im/element-android).
 
 ### Changelog
 
@@ -60,6 +60,7 @@ Supported filename extensions are:
 - ``.bugfix``: Signifying a bug fix.
 - ``.wip``: Signifying a work in progress change, typically a component of a larger feature which will be enabled once all tasks are complete.
 - ``.doc``: Signifying a documentation improvement.
+- ``.sdk``: Signifying a change to the Matrix SDK, this could be an addition, deprecation or removal of a public API.
 - ``.misc``: Any other changes.
 
 See https://github.com/twisted/towncrier#news-fragments if you need more details.
@@ -91,8 +92,8 @@ For ktlint to fix some detected errors for you (you still have to check and comm
 #### lint
 
 <pre>
-./gradlew lintGplayPreprodWithoutvoipWithoutpinningRelease
-./gradlew lintFdroidPreprodWithoutvoipWithoutpinningRelease
+./gradlew lintGplayBtchapWithoutvoipWithpinningRelease
+./gradlew lintFdroidBtchapWithoutvoipWithoutpinningRelease
 </pre>
 
 ### Unit tests
@@ -100,7 +101,7 @@ For ktlint to fix some detected errors for you (you still have to check and comm
 Make sure the following commands execute without any error:
 
 <pre>
-./gradlew testGplayPreprodWithoutvoipWithoutpinningReleaseUnitTest
+./gradlew testGplayBtchapWithoutvoipWithpinningReleaseUnitTest
 </pre>
 
 ### Tests

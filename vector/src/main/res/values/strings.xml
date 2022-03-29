@@ -25,8 +25,8 @@
     <string name="notice_direct_room_leave_by_you">You left the room</string>
     <string name="notice_room_reject">%1$s rejected the invitation</string>
     <string name="notice_room_reject_by_you">You rejected the invitation</string>
-    <string name="notice_room_kick">%1$s kicked %2$s</string>
-    <string name="notice_room_kick_by_you">You kicked %1$s</string>
+    <string name="notice_room_remove">%1$s removed %2$s</string>
+    <string name="notice_room_remove_by_you">You removed %1$s</string>
     <string name="notice_room_unban">%1$s unbanned %2$s</string>
     <string name="notice_room_unban_by_you">You unbanned %1$s</string>
     <string name="notice_room_ban">%1$s banned %2$s</string>
@@ -81,6 +81,10 @@
 
     <string name="notice_room_server_acl_updated_title">%s changed the server ACLs for this room.</string>
     <string name="notice_room_server_acl_updated_title_by_you">You changed the server ACLs for this room.</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d server ACLs change</item>
+        <item quantity="other">%d server ACLs changes</item>
+    </plurals>
     <string name="notice_room_server_acl_updated_banned">• Servers matching %s are now banned.</string>
     <string name="notice_room_server_acl_updated_was_banned">• Servers matching %s were removed from the ban list.</string>
     <string name="notice_room_server_acl_updated_allowed">• Servers matching %s are now allowed.</string>
@@ -147,7 +151,7 @@
     <string name="notice_power_level_diff">%1$s from %2$s to %3$s</string>
 
     <string name="notice_crypto_unable_to_decrypt">** Unable to decrypt: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">The sender\'s device has not sent us the keys for this message.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">The sender\'s device has not sent us the keys for this message.</string>
 
     <!-- Messages -->
 
@@ -169,6 +173,7 @@
 
     <!-- room error messages -->
     <string name="room_error_join_failed_empty_room">It is not currently possible to re-join an empty room.</string>
+    <string name="room_error_access_unauthorized">You are not allowed to join this room</string>
 
     <!-- medium friendly name -->
     <string name="medium_email">Email address</string>
@@ -228,8 +233,8 @@
     <string name="notice_direct_room_leave_with_reason_by_you">You left. Reason: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s rejected the invitation. Reason: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">You rejected the invitation. Reason: %1$s</string>
-    <string name="notice_room_kick_with_reason">%1$s kicked %2$s. Reason: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">You kicked %1$s. Reason: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s removed %2$s. Reason: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">You removed %1$s. Reason: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s unbanned %2$s. Reason: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">You unbanned %1$s. Reason: %2$s</string>
     <string name="notice_room_ban_with_reason">%1$s banned %2$s. Reason: %3$s</string>
@@ -357,34 +362,13 @@
 
     <!-- button names -->
     <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
-    <string name="save">Save</string>
-    <string name="leave">Leave</string>
-    <string name="stay">Stay</string>
-    <string name="send">Send</string>
-    <string name="resend">Resend</string>
-    <string name="redact">Remove</string>
-    <string name="quote">Quote</string>
-    <string name="download">Download</string>
-    <string name="share">Share</string>
-    <string name="speak">Speak</string>
-    <string name="clear">Clear</string>
     <string name="later">Later</string>
-    <string name="forward">Forward</string>
     <string name="permalink">Permalink</string>
     <string name="view_source">View Source</string>
     <string name="view_decrypted_source">View Decrypted Source</string>
-    <string name="delete">Delete</string>
-    <string name="rename">Rename</string>
     <string name="none">None</string>
-    <string name="revoke">Revoke</string>
-    <string name="disconnect">Disconnect</string>
     <string name="report_content">Report Content</string>
     <string name="active_call">Active call</string>
-    <string name="play_video">Play</string>
-    <string name="pause_video">Pause</string>
-    <string name="dismiss">Dismiss</string>
-    <string name="reset">Reset</string>
     <string name="start_chatting">Start Chatting</string>
     <string name="learn_more">Learn More</string>
     <string name="spaces">Spaces</string>
@@ -421,27 +405,21 @@
     <string name="call_anyway">Call Anyway</string>
     <string name="send_anyway">Send Anyway</string>
     <string name="or">or</string>
-    <string name="invite">Invite</string>
     <string name="offline">Offline</string>
-    <string name="accept">Accept</string>
-    <string name="skip">Skip</string>
     <string name="done">Done</string>
-    <string name="abort">Abort</string>
-    <string name="ignore">Ignore</string>
-    <string name="review">Review</string>
-    <string name="decline">Decline</string>
 
     <string name="call_notification_answer">Accept</string>
     <string name="call_notification_reject">Decline</string>
     <string name="call_notification_hangup">Hang Up</string>
 
     <!-- actions -->
-    <string name="action_exit">Exit</string>
     <string name="actions">Actions</string>
+    <string name="action_exit">Exit</string>
     <string name="action_sign_out">Sign out</string>
     <string name="action_sign_out_confirmation_simple">Are you sure you want to sign out?</string>
     <string name="action_voice_call">Voice Call</string>
     <string name="action_video_call">Video Call</string>
+    <string name="action_view_threads">View Threads</string>
     <string name="action_global_search">Global search</string>
     <string name="action_mark_all_as_read">Mark all as read</string>
     <string name="action_historical">Historical</string>
@@ -453,11 +431,51 @@
     <string name="action_add">Add</string>
     <string name="action_switch">Switch</string>
     <string name="action_unpublish">Unpublish</string>
-    <string name="copied_to_clipboard">Copied to clipboard</string>
-    <string name="disable">Disable</string>
     <string name="action_return">Return</string>
     <string name="action_enable">Enable</string>
     <string name="action_not_now">Not now</string>
+    <string name="action_agree">Agree</string>
+    <string name="action_like">Like</string>
+    <string name="action_change">"Change"</string>
+    <string name="action_remove">Remove</string>
+    <string name="action_join">Join</string>
+    <string name="action_preview">Preview</string>
+    <string name="action_reject">Reject</string>
+    <string name="action_disable">Disable</string>
+    <string name="action_accept">Accept</string>
+    <string name="action_skip">Skip</string>
+    <string name="action_abort">Abort</string>
+    <string name="action_ignore">Ignore</string>
+    <string name="action_review">Review</string>
+    <string name="action_decline">Decline</string>
+    <string name="action_invite">Invite</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_save">Save</string>
+    <string name="action_leave">Leave</string>
+    <string name="action_stay">Stay</string>
+    <string name="action_send">Send</string>
+    <string name="action_resend">Resend</string>
+    <string name="action_redact">Remove</string>
+    <string name="action_quote">Quote</string>
+    <string name="action_download">Download</string>
+    <string name="action_share">Share</string>
+    <string name="action_speak">Speak</string>
+    <string name="action_clear">Clear</string>
+    <string name="action_forward">Forward</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_rename">Rename</string>
+    <string name="action_revoke">Revoke</string>
+    <string name="action_disconnect">Disconnect</string>
+    <string name="action_play">Play</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_dismiss">Dismiss</string>
+    <string name="action_reset">Reset</string>
+
+    <string name="copied_to_clipboard">Copied to clipboard</string>
+
+    <!-- actions threads -->
+    <string name="action_thread_view_in_room">View in room</string>
+    <string name="action_thread_copy_link_to_thread">Copy link to thread</string>
 
     <!-- dialog titles -->
     <string name="dialog_title_confirmation">Confirmation</string>
@@ -802,12 +820,6 @@
     <string name="_continue">Continue</string>
     <string name="continue_anyway">Continue Anyway</string>
 
-    <!-- Actions -->
-    <string name="remove">Remove</string>
-    <string name="join">Join</string>
-    <string name="preview">Preview</string>
-    <string name="reject">Reject</string>
-
     <!-- Room -->
     <string name="list_members">List members</string>
     <string name="open_chat_header">Open header</string>
@@ -856,7 +868,6 @@
     <string name="room_participants_leave_prompt_title">Leave room</string>
     <string name="room_participants_leave_prompt_msg">Are you sure you want to leave the room?</string>
     <string name="room_participants_leave_private_warning">This room is not public. You will not be able to rejoin without an invite.</string>
-    <string name="room_participants_remove_prompt_msg">Are you sure you want to remove %s from this chat?</string>
     <string name="room_participants_create">Create</string>
 
     <string name="room_participants_online">Online</string>
@@ -878,10 +889,9 @@
     <string name="room_participants_action_invite">Invite</string>
     <string name="room_participants_action_cancel_invite">Cancel invite</string>
     <string name="room_participants_action_leave">Leave this room</string>
-    <string name="room_participants_action_remove">Remove from this room</string>
     <string name="room_participants_action_ban">Ban</string>
     <string name="room_participants_action_unban">Unban</string>
-    <string name="room_participants_action_kick">Kick</string>
+    <string name="room_participants_action_remove">Remove from chat</string>
     <string name="room_participants_action_set_default_power_level">Reset to normal user</string>
     <string name="room_participants_action_set_moderator">Make moderator</string>
     <string name="room_participants_action_set_admin">Make admin</string>
@@ -905,15 +915,15 @@
 
     <string name="room_participants_action_cancel_invite_title">Cancel invite</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Are you sure you want to cancel the invite for this user?</string>
-    <string name="room_participants_kick_title">Kick user</string>
-    <string name="room_participants_kick_reason">Reason to kick</string>
-    <string name="room_participants_kick_prompt_msg">kicking user will remove them from this room.\n\nTo prevent them from joining again, you should ban them instead.</string>
-    <string name="space_participants_kick_prompt_msg">kicking user will remove them from this space.\n\nTo prevent them from joining again, you should ban them instead.</string>
+    <string name="room_participants_remove_title">Remove user</string>
+    <string name="room_participants_remove_reason">Reason to remove</string>
+    <string name="room_participants_remove_prompt_msg">The user will be removed from this room.\n\nTo prevent them from joining again, you should ban them instead.</string>
+    <string name="space_participants_remove_prompt_msg">The user will be removed from this space.\n\nTo prevent them from joining again, you should ban them instead.</string>
     <string name="room_participants_ban_title">Ban user</string>
     <string name="room_participants_ban_reason">Reason to ban</string>
     <string name="room_participants_unban_title">Unban user</string>
-    <string name="room_participants_ban_prompt_msg">Banning user will kick them from this room and prevent them from joining again.</string>
-    <string name="space_participants_ban_prompt_msg">Banning user will kick them from this space and prevent them from joining again.</string>
+    <string name="room_participants_ban_prompt_msg">Banning user will remove them from this room and prevent them from joining again.</string>
+    <string name="space_participants_ban_prompt_msg">Banning user will remove them from this space and prevent them from joining again.</string>
     <string name="room_participants_unban_prompt_msg">Unbanning user will allow them to join the room again.</string>
     <string name="space_participants_unban_prompt_msg">Unbanning user will allow them to join the space again.</string>
 
@@ -959,6 +969,8 @@
     <string name="room_delete_unsent_messages">Delete unsent messages</string>
     <string name="room_message_file_not_found">File not found</string>
     <string name="room_do_not_have_permission_to_post">You do not have permission to post to this room.</string>
+    <string name="room_unsupported_e2e_algorithm">Encryption has been misconfigured so you can\'t send messages. Please contact an admin to restore encryption to a valid state.</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">Encryption has been misconfigured so you can\'t send messages. Click to open settings.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d new message</item>
         <item quantity="other">%d new messages</item>
@@ -993,7 +1005,7 @@
     <string name="room_permissions_send_messages">Send messages</string>
     <string name="room_permissions_invite_users">Invite users</string>
     <string name="room_permissions_change_settings">Change settings</string>
-    <string name="room_permissions_kick_users">Kick users</string>
+    <string name="room_permissions_remove_users">Remove users</string>
     <string name="room_permissions_ban_users">Ban users</string>
     <string name="room_permissions_remove_messages_sent_by_others">Remove messages sent by others</string>
     <string name="room_permissions_notify_everyone">Notify everyone</string>
@@ -1026,6 +1038,21 @@
     <string name="room_details_people_invited_group_name">INVITED</string>
     <string name="room_details_people_present_group_name">JOINED</string>
 
+    <!-- Threads -->
+    <string name="room_threads_filter">Filter Threads in room</string>
+    <string name="thread_timeline_title">Thread</string>
+    <string name="thread_list_title">Threads</string>
+    <string name="thread_list_modal_title">Filter</string>
+    <string name="thread_list_modal_all_threads_title">All Threads</string>
+    <string name="thread_list_modal_all_threads_subtitle">Shows all threads from current room</string>
+    <string name="thread_list_modal_my_threads_title">My Threads</string>
+    <string name="thread_list_modal_my_threads_subtitle">Shows all threads you’ve participated in</string>
+    <string name="thread_list_empty_title">Keep discussions organised with threads</string>
+    <string name="thread_list_empty_subtitle">Threads help keep your conversations on-topic and easy to track.</string>
+    <!-- Parameter %s will be replaced by the value of string reply_in_thread -->
+    <string name="thread_list_empty_notice">Tip: Long tap a message and use “%s”.</string>
+    <string name="search_thread_from_a_thread">From a Thread</string>
+
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>
     <string name="room_event_action_report_prompt_ignore_user">Do you want to hide all messages from this user?\n\nNote that this action will restart the app and it may take some time.</string>
@@ -1041,20 +1068,7 @@
     <string name="tab_title_search_messages">MESSAGES</string>
     <string name="tab_title_search_people">PEOPLE</string>
     <string name="tab_title_search_files">FILES</string>
-    <string name="search_is_not_supported_in_e2e_room">Searching in encrypted rooms is not supported yet.</string>
 
-    <!-- Room recents -->
-    <string name="room_recents_join">JOIN</string>
-    <string name="room_recents_directory">DIRECTORY</string>
-    <string name="room_recents_favourites">FAVORITES</string>
-    <string name="room_recents_conversations">ROOMS</string>
-    <string name="room_recents_low_priority">LOW PRIORITY</string>
-    <string name="room_recents_invites">Invites</string>
-    <string name="room_recents_start_chat">Start chat</string>
-    <string name="room_recents_create_room">Create room</string>
-    <string name="room_recents_join_room">Join room</string>
-    <string name="room_recents_join_room_title">Join a room</string>
-    <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Browse directory</string>
@@ -1197,11 +1211,6 @@
     <string name="settings_troubleshoot_test_notification_notice">Please click on the notification. If you do not see the notification, please check the system settings.</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">The notification has been clicked!</string>
 
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Notifications Service</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Notifications Service is running.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Notifications Service is not running.\nTry to restart the application.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Start Service</string>
-
     <string name="settings_troubleshoot_test_service_restart_title">Notifications Service Auto-Restart</string>
     <string name="settings_troubleshoot_test_service_restart_success">Service was killed and restarted automatically.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Service failed to restart</string>
@@ -1333,9 +1342,9 @@
     <string name="settings_show_room_member_state_events">Show room member state events</string>
     <string name="settings_chat_effects_title">Show chat effects</string>
     <string name="settings_chat_effects_description">Use /confetti command or send a message containing ❄️ or 🎉</string>
-    <string name="settings_show_room_member_state_events_summary">Includes invite/join/left/kick/ban events and avatar/display name changes.</string>
+    <string name="settings_show_room_member_state_events_summary">Includes invite/join/left/remove/ban events and avatar/display name changes.</string>
     <string name="settings_show_join_leave_messages">Show join and leave events</string>
-    <string name="settings_show_join_leave_messages_summary">Invites, kicks, and bans are unaffected.</string>
+    <string name="settings_show_join_leave_messages_summary">Invites, removes, and bans are unaffected.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Show account events</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Includes avatar and display name changes.</string>
     <string name="settings_vibrate_on_mention">Vibrate when mentioning a user</string>
@@ -1378,10 +1387,9 @@
     <string name="template_settings_opt_in_of_analytics_prompt">Please enable analytics to help us improve ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Yes, I want to help!</string>
 
-    <!-- analytics v2 -->
-    <string name="analytics_opt_in_title">Help improve Element</string>
+    <string name="template_analytics_opt_in_title">Help improve ${app_name}</string>
     <!-- The template will be replaced by the value of the resource analytics_opt_in_content_link -->
-    <string name="analytics_opt_in_content">Help us identify issues and improve Element by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.\n\nYou can read all our terms %s.</string>
+    <string name="template_analytics_opt_in_content">Help us identify issues and improve ${app_name} by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.\n\nYou can read all our terms %s.</string>
     <string name="analytics_opt_in_content_link">here</string>
     <string name="analytics_opt_in_list_item_1">We <b>don\'t</b> record or profile any account data</string>
     <string name="analytics_opt_in_list_item_2">We <b>don\'t</b> share information with third parties</string>
@@ -1851,6 +1859,7 @@
     <string name="command_error">Command error</string>
     <string name="unrecognized_command">Unrecognized command: %s</string>
     <string name="command_problem_with_parameters">The command \"%s\" needs more parameters, or some parameters are incorrect.</string>
+    <string name="command_not_supported_in_threads">The command \"%s\" is recognized but not supported in threads.</string>
     <string name="command_description_emote">Displays action</string>
     <string name="command_description_ban_user">Bans user with given id</string>
     <string name="command_description_unban_user">Unbans user with given id</string>
@@ -1863,7 +1872,7 @@
     <string name="command_description_join_room">Joins room with given address</string>
     <string name="command_description_part_room">Leave room</string>
     <string name="command_description_topic">Set the room topic</string>
-    <string name="command_description_kick_user">Kicks user with given id</string>
+    <string name="command_description_remove_user">Removes user with given id from this room</string>
     <string name="command_description_nick">Changes your display nickname</string>
     <string name="command_description_nick_for_room">Changes your display nickname in the current room only</string>
     <string name="command_description_room_avatar">Changes the avatar of the current room</string>
@@ -1913,7 +1922,7 @@
     </plurals>
     <string name="group_no_long_description">The community admin has not provided a long description for this community.</string>
 
-    <string name="has_been_kicked">You have been kicked from %1$s by %2$s</string>
+    <string name="has_been_removed">You have been removed from %1$s by %2$s</string>
     <string name="has_been_banned">You have been banned from %1$s by %2$s</string>
     <string name="reason_colon">Reason: %1$s</string>
     <string name="rejoin">Rejoin</string>
@@ -2196,6 +2205,8 @@
 
     <string name="edit">Edit</string>
     <string name="reply">Reply</string>
+    <string name="reply_in_thread">Reply In Thread</string>
+    <string name="view_in_room">View In Room</string>
 
     <string name="global_retry">Retry</string>
     <string name="room_list_empty">"Join a room to start using the app."</string>
@@ -2212,10 +2223,6 @@
     <string name="room_list_rooms_empty_body">Your rooms will be displayed here. Tap the + bottom right to find existing ones or start some of your own.</string>
 
     <string name="title_activity_emoji_reaction_picker">Reactions</string>
-    <!-- TODO weblate sync: rename to "action_agree"-->
-    <string name="reactions_agree">Agree</string>
-    <!-- TODO weblate sync: rename to "action_like"-->
-    <string name="reactions_like">Like</string>
     <string name="message_add_reaction">Add Reaction</string>
     <string name="message_view_reaction">View Reactions</string>
     <string name="reactions">Reactions</string>
@@ -2232,7 +2239,6 @@
     <string name="create_new_room">Create New Room</string>
     <string name="create_new_space">Create New Space</string>
     <string name="error_no_network">No network. Please check your Internet connection.</string>
-    <string name="action_change">"Change"</string>
     <string name="change_room_directory_network">"Change network"</string>
     <string name="please_wait">"Please wait…"</string>
     <string name="group_all_communities">"All Communities"</string>
@@ -2267,6 +2273,7 @@
     <string name="settings_sdk_version">Matrix SDK Version</string>
     <string name="settings_other_third_party_notices">Other third party notices</string>
     <string name="navigate_to_room_when_already_in_the_room">You are already viewing this room!</string>
+    <string name="navigate_to_thread_when_already_in_the_thread">You are already viewing this thread!</string>
 
     <string name="quick_reactions">Quick Reactions</string>
 
@@ -2292,7 +2299,7 @@
 
     <string name="preference_help">Help</string>
     <string name="preference_help_title">Help and support</string>
-    <string name="preference_help_summary">Get help with using Element</string>
+    <string name="template_preference_help_summary">Get help with using ${app_name}</string>
     <string name="preference_versions">Versions</string>
     <string name="preference_system_settings">System settings</string>
 
@@ -2468,6 +2475,7 @@
     <string name="attachment_type_gallery">"Gallery"</string>
     <string name="attachment_type_sticker">"Sticker"</string>
     <string name="attachment_type_poll">Poll</string>
+    <string name="attachment_type_location">Location</string>
     <string name="rotate_and_crop_screen_title">Rotate and crop</string>
     <string name="error_handling_incoming_share">Couldn\'t handle share data</string>
 
@@ -2533,11 +2541,36 @@
     <string name="direct_room_join_rules_invite_by_you">You made this invite only.</string>
     <string name="timeline_unread_messages">Unread messages</string>
 
+    <!--  Onboarding -->
+    <string name="ftue_auth_carousel_secure_title">Own your conversations.</string>
+    <string name="ftue_auth_carousel_control_title">You\'re in control.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Secure messaging.</string>
+    <string name="ftue_auth_carousel_workplace_title">Messaging for your team.</string>
+
+    <string name="ftue_auth_carousel_secure_body">Secure and independent communication that gives you the same level of privacy as a face-to-face conversation in your own home.</string>
+    <string name="ftue_auth_carousel_control_body">Choose where your conversations are kept, giving you control and independence. Connected via Matrix.</string>
+    <string name="ftue_auth_carousel_encrypted_body">End-to-end encrypted and no phone number required. No ads or datamining.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_ftue_auth_carousel_workplace_body" translatable="false">${app_name} is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
+
+    <string name="ftue_auth_use_case_title">Who will you chat to the most?</string>
+    <string name="ftue_auth_use_case_subtitle">We\'ll help you get connected.</string>
+    <string name="ftue_auth_use_case_option_one">Friends and family</string>
+    <string name="ftue_auth_use_case_option_two">Teams</string>
+    <string name="ftue_auth_use_case_option_three">Communities</string>
+    <!-- Note to translators: the %s is replaced by the content of ftue_auth_use_case_skip_partial -->
+    <string name="ftue_auth_use_case_skip">Not sure yet? You can %s</string>
+    <string name="ftue_auth_use_case_skip_partial">skip this question</string>
+    <string name="ftue_auth_use_case_join_existing_server">Looking to join an existing server?</string>
+    <string name="ftue_auth_use_case_connect_to_server">Connect to server</string>
+
     <string name="login_splash_title">It\'s your conversation. Own it.</string>
     <string name="login_splash_text1">Chat with people directly or in groups</string>
     <string name="login_splash_text2">Keep conversations private with encryption</string>
     <string name="login_splash_text3">Extend &amp; customise your experience</string>
     <string name="login_splash_submit">Get started</string>
+    <string name="login_splash_create_account">Create account</string>
+    <string name="login_splash_already_have_account">I already have an account</string>
 
     <string name="login_server_title">Select a server</string>
     <string name="login_server_text">Just like email, accounts have one home, although you can talk to anyone</string>
@@ -2580,7 +2613,7 @@
     <string name="login_login_with_email_error">This email is not associated to any account.</string>
 
     <!-- Replaced string is the homeserver url -->
-    <string name="login_reset_password_on">Reset password</string>
+    <string name="login_reset_password_on">Reset password on %1$s</string>
     <string name="login_reset_password_notice">A verification email will be sent to your inbox to confirm setting your new password.</string>
     <string name="login_reset_password_submit">Next</string>
     <string name="login_reset_password_email_hint">Email</string>
@@ -2758,9 +2791,9 @@
     <string name="sent_a_file">File</string>
     <string name="send_a_sticker">Sticker</string>
     <string name="sent_a_poll">Poll</string>
-    <string name="sent_a_bot_buttons">Bot Buttons</string>
     <string name="sent_a_reaction">Reacted with: %s</string>
     <string name="sent_verification_conclusion">Verification Conclusion</string>
+    <string name="sent_location">Shared their location</string>
 
     <string name="verification_request_waiting">Waiting…</string>
     <string name="verification_request_other_cancelled">%s cancelled</string>
@@ -2797,8 +2830,11 @@
     <string name="room_profile_not_encrypted_subtitle">Messages in this room are not end-to-end encrypted.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Messages here are not end-to-end encrypted.</string>
     <string name="room_profile_encrypted_subtitle">Messages in this room are end-to-end encrypted.\n\nYour messages are secured with locks and only you and the recipient have the unique keys to unlock them.</string>
+    <string name="encryption_has_been_misconfigured">Encryption has been misconfigured.</string>
+    <string name="contact_admin_to_restore_encryption">Please contact an admin to restore encryption to a valid state.</string>
     <string name="direct_room_profile_encrypted_subtitle">Messages here are end-to-end encrypted.\n\nYour messages are secured with locks and only you and the recipient have the unique keys to unlock them.</string>
     <string name="room_profile_section_security">Security</string>
+    <string name="room_profile_section_restore_security">Restore Encryption</string>
     <string name="room_profile_section_security_learn_more">Learn more</string>
     <string name="room_profile_section_more">More</string>
     <string name="room_profile_section_admin">Admin Actions</string>
@@ -2813,6 +2849,8 @@
     <string name="room_profile_section_more_leave">Leave Room</string>
     <string name="direct_room_profile_section_more_leave">Leave</string>
     <string name="room_profile_leaving_room">"Leaving the room…"</string>
+
+    <string name="room_member_override_nick_color">Override nick color</string>
 
     <string name="room_member_power_level_admins">Admins</string>
     <string name="room_member_power_level_moderators">Moderators</string>
@@ -2938,15 +2976,6 @@
     <string name="settings_account_data">Account Data</string>
     <string name="delete_account_data_warning">Delete the account data of type %1$s?\n\nUse with caution, it may lead to unexpected behavior.</string>
 
-    <plurals name="poll_info">
-        <item quantity="zero">%d vote</item>
-        <item quantity="other">%d votes</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="zero">%d vote - Final results</item>
-        <item quantity="other">%d votes - Final results</item>
-    </plurals>
-    <string name="poll_item_selected_aria">Selected Option</string>
     <string name="command_description_poll">Creates a simple poll</string>
     <string name="verification_cannot_access_other_session">Use a Recovery Passphrase or Key</string>
     <string name="verification_use_passphrase">If you can’t access an existing session</string>
@@ -3066,6 +3095,7 @@
     <string name="encryption_enabled_tile_description">Messages in this room are end-to-end encrypted. Learn more &amp; verify users in their profile.</string>
     <string name="direct_room_encryption_enabled_tile_description">Messages in this room are end-to-end encrypted.</string>
     <string name="encryption_not_enabled">Encryption not enabled</string>
+    <string name="encryption_misconfigured">Encryption is misconfigured</string>
     <string name="encryption_unknown_algorithm_tile_description">The encryption used by this room is not supported</string>
 
     <string name="room_created_summary_item">%s created and configured the room.</string>
@@ -3142,7 +3172,7 @@
     <string name="template_app_desktop_web">${app_name} Web\n${app_name} Desktop</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="template_app_ios_android">${app_name} iOS\n${app_name} Android</string>
-    <string name="or_other_mx_capabale_client">or another cross-signing capable Matrix client</string>
+    <string name="or_other_mx_capable_client">or another cross-signing capable Matrix client</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="template_use_latest_app">Use the latest ${app_name} on your other devices:</string>
     <string name="command_description_discard_session">Forces the current outbound group session in an encrypted room to be discarded</string>
@@ -3434,6 +3464,7 @@
     <string name="a11y_trust_level_default">Default trust level</string>
     <string name="a11y_trust_level_warning">Warning trust level</string>
     <string name="a11y_trust_level_trusted">Trusted trust level</string>
+    <string name="a11y_trust_level_misconfigured">Misconfigured trust level</string>
     <string name="a11y_open_emoji_picker">Open Emoji picker</string>
     <string name="a11y_close_emoji_picker">Close Emoji picker</string>
     <string name="a11y_checked">Checked</string>
@@ -3486,12 +3517,11 @@
     <string name="add_space">Add Space</string>
     <string name="your_public_space">Your public space</string>
     <string name="your_private_space">Your private space</string>
-    <string name="create_spaces_type_header">Spaces are a new way to group rooms and people</string>
     <string name="create_spaces_choose_type_label">What type of space do you want to create?</string>
     <string name="create_spaces_you_can_change_later">You can change this later</string>
     <string name="create_spaces_join_info_help">To join an existing space, you need an invite.</string>
     <string name="create_spaces_who_are_you_working_with">Who are you working with?</string>
-    <string name="create_spaces_make_sure_access">Make sure the right people have access to %s. You can change this later.</string>
+    <string name="create_spaces_make_sure_access">Make sure the right people have access to %s.</string>
     <string name="create_spaces_just_me">Just me</string>
     <string name="create_spaces_organise_rooms">A private space to organise your rooms</string>
     <string name="create_spaces_me_and_teammates">Me and teammates</string>
@@ -3519,8 +3549,8 @@
     <string name="invite_to_space">Invite to %s</string>
     <string name="invite_people_to_your_space_desc">It’s just you at the moment.  %s will be even better with others.</string>
     <string name="invite_by_email">Invite by email</string>
-    <string name="invite_by_mxid">Invite by username</string>
-    <string name="invite_by_mxid_or_mail">Invite by username or mail</string>
+    <string name="invite_by_username">Invite by username</string>
+    <string name="invite_by_username_or_mail">Invite by username or mail</string>
     <string name="invite_by_link">Share link</string>
     <string name="invite_to_space_with_name">Invite to %s</string>
     <string name="invite_to_space_with_name_desc">"They’ll be able to explore %s"</string>
@@ -3542,7 +3572,7 @@
     <string name="discovery_invite">Invite by email, find contacts and more…</string>
     <string name="finish_setup">Finish setup</string>
     <!-- %s will be replaced by the user identity server domain, e.g vector.im -->
-    <string name="discovery_section">Discovered user</string>
+    <string name="discovery_section">Discovery (%s)</string>
 
 
     <string name="suggested_rooms_pills_on_empty_text">You’re not in any rooms yet. Below are some suggested rooms, but you can see more with the green button bottom right.</string>
@@ -3576,9 +3606,11 @@
     <string name="spaces_beta_welcome_to_spaces_desc">Spaces are a new way to group rooms and people.</string>
     <string name="you_are_invited">You are invited</string>
 
+    <string name="labs_auto_report_uisi">Auto Report Decryption Errors.</string>
+    <string name="labs_auto_report_uisi_desc">Your system will automatically send logs when an unable to decrypt error occurs</string>
+    <string name="labs_enable_thread_messages">Enable Thread Messages</string>
+    <string name="labs_enable_thread_messages_desc">Note: app will be restarted</string>
 
-    <string name="labs_use_restricted_join_rule">Experimental Space - Restricted Room.</string>
-    <string name="labs_use_restricted_join_rule_desc">Warning requires server support and experimental room version</string>
     <string name="user_invites_you">%s invites you</string>
 
     <string name="looking_for_someone_not_in_space">Looking for someone not in %s?</string>
@@ -3648,12 +3680,6 @@
 
     <string name="upgrade_room_for_restricted_note">Please note upgrading will make a new version of the room. All current messages will stay in this archived room.</string>
 
-    <string name="new_let_people_in_spaces_find_and_join">New: Let people in spaces find and join private rooms</string>
-    <string name="help_people_in_spaces_find_and_join">Help people in spaces to find and join private rooms themselves, no need to manually invite everyone.</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">This makes it easy for rooms to stay private to a space, while letting people in the space find and join them. All new rooms in a space will have this option available.</string>
-    <string name="help_space_members">Help space members find private rooms</string>
-    <string name="to_help_space_members_find_and_join">To help space members find and join a private room, go to that room’s settings by tapping on the avatar.</string>
-
     <!-- %s will be replaced by an email at runtime -->
     <string name="this_invite_to_this_room_was_sent">This invite to this room was sent to %s which is not associated with your account</string>
     <!-- %s will be replaced by an email at runtime -->
@@ -3661,7 +3687,10 @@
 
     <string name="link_this_email_settings_link">Link this email with your account</string>
     <!-- %s will be replaced by the value of link_this_email_settings_link and styled as a link -->
-    <string name="link_this_email_with_your_account">%s in Settings to receive invites directly in Element.</string>
+    <string name="template_link_this_email_with_your_account">%s in Settings to receive invites directly in ${app_name}.</string>
+
+    <string name="labs_enable_latex_maths">Enable LaTeX mathematics</string>
+    <string name="restart_the_application_to_apply_changes">Restart the application for the change to take effect.</string>
 
     <!-- Poll -->
     <string name="create_poll_title">Create Poll</string>
@@ -3684,8 +3713,8 @@
         <item quantity="one">Based on %1$d vote</item>
         <item quantity="other">Based on %1$d votes</item>
     </plurals>
+    <string name="poll_no_votes_cast">No votes cast</string>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
-        <item quantity="zero">No votes cast</item>
         <item quantity="one">%1$d vote cast. Vote to the see the results</item>
         <item quantity="other">%1$d votes cast. Vote to the see the results</item>
     </plurals>
@@ -3698,9 +3727,49 @@
     <string name="end_poll_confirmation_title">End this poll?</string>
     <string name="end_poll_confirmation_description">This will stop people from being able to vote and will display the final results of the poll.</string>
     <string name="end_poll_confirmation_approve_button">End poll</string>
-    <string name="labs_enable_polls">Enable Polls</string>
-    <string name="poll_response_room_list_preview">Vote casted</string>
+    <string name="poll_response_room_list_preview">Vote cast</string>
     <string name="poll_end_room_list_preview">Poll ended</string>
     <string name="delete_poll_dialog_title">Remove poll</string>
     <string name="delete_poll_dialog_content">Are you sure you want to remove this poll? You won\'t be able to recover it once removed.</string>
+    <string name="edit_poll_title">Edit poll</string>
+    <string name="edit_poll_button">EDIT POLL</string>
+    <string name="poll_type_title">Poll type</string>
+    <string name="open_poll_option_title">Open poll</string>
+    <string name="open_poll_option_description">Voters see results as soon as they have voted</string>
+    <string name="closed_poll_option_title">Closed poll</string>
+    <string name="closed_poll_option_description">Results are only revealed when you end the poll</string>
+
+    <!-- Location -->
+    <string name="location_activity_title_static_sharing">Share location</string>
+    <string name="location_activity_title_preview">Location</string>
+    <string name="a11y_location_share_icon">Share location</string>
+    <string name="a11y_static_map_image">Map</string>
+    <string name="location_share">Share location</string>
+    <string name="template_location_not_available_dialog_title">${app_name} could not access your location</string>
+    <string name="template_location_not_available_dialog_content">${app_name} could not access your location. Please try again later.</string>
+    <string name="location_share_external">Open with</string>
+    <string name="settings_enable_location_sharing">Enable location sharing</string>
+    <string name="settings_enable_location_sharing_summary">Once enabled you will be able to send your location to any room</string>
+    <string name="labs_render_locations_in_timeline">Render user locations in the timeline</string>
+    <string name="location_timeline_failed_to_load_map">Failed to load map</string>
+
+    <string name="message_bubbles">Show Message bubbles</string>
+
+    <string name="tooltip_attachment_photo">Open camera</string>
+    <string name="tooltip_attachment_gallery">Send images and videos</string>
+    <string name="tooltip_attachment_file">Upload file</string>
+    <string name="tooltip_attachment_sticker">Send sticker</string>
+    <string name="tooltip_attachment_contact">Open contacts</string>
+    <string name="tooltip_attachment_poll">Create poll</string>
+    <string name="tooltip_attachment_location">Share location</string>
+
+    <string name="message_reaction_show_less">Show less</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="one">"%1$d more"</item>
+        <item quantity="other">"%1$d more"</item>
+    </plurals>
+
+    <string name="room_message_notify_everyone">Notify the whole room</string>
+    <string name="room_message_autocomplete_users">Users</string>
+    <string name="room_message_autocomplete_notification">Room notification</string>
 </resources>

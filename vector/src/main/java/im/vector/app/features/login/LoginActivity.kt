@@ -29,7 +29,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
@@ -38,9 +37,9 @@ import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.validateBackPressed
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.login.terms.LoginTermsFragment
 import im.vector.app.features.login.terms.LoginTermsFragmentArgument
@@ -54,7 +53,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
  * The LoginActivity manages the fragment navigation and also display the loading View
  */
 @AndroidEntryPoint
-open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarConfigurable, UnlockedActivity {
+open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedActivity {
 
     private val loginViewModel: LoginViewModel by viewModel()
 
@@ -83,6 +82,8 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarCo
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun initUiAndData() {
+        analyticsScreenName = MobileScreen.ScreenName.Login
+
         if (isFirstCreation()) {
             addFirstFragment()
         }
@@ -202,6 +203,10 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarCo
 
     private fun updateWithState(loginViewState: LoginViewState) {
         if (loginViewState.isUserLogged()) {
+            if (loginViewState.signMode == SignMode.SignUp) {
+                // change the screen name
+                analyticsScreenName = MobileScreen.ScreenName.Register
+            }
             val intent = HomeActivity.newIntent(
                     this,
                     accountCreation = loginViewState.signMode == SignMode.SignUp
@@ -352,18 +357,11 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarCo
         }
     }
 
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar)
-    }
-
     companion object {
         private const val FRAGMENT_REGISTRATION_STAGE_TAG = "FRAGMENT_REGISTRATION_STAGE_TAG"
         private const val FRAGMENT_LOGIN_TAG = "FRAGMENT_LOGIN_TAG"
 
         private const val EXTRA_CONFIG = "EXTRA_CONFIG"
-
-        // Note that the domain can be displayed to the user for confirmation that he trusts it. So use a human readable string
-        const val VECTOR_REDIRECT_URL = "element://connect"
 
         fun newIntent(context: Context, loginConfig: LoginConfig?): Intent {
             return Intent(context, LoginActivity::class.java).apply {

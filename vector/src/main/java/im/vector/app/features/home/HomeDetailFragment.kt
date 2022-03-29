@@ -22,6 +22,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.children
@@ -40,7 +41,6 @@ import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.toMvRxBundle
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
@@ -123,8 +123,14 @@ class HomeDetailFragment @Inject constructor(
             menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
         }
 
-        // Tchap: remove max width so it can take the whole available space in landscape
-        (menu.findItem(R.id.menu_home_search_action)?.actionView as? SearchView)?.maxWidth = Int.MAX_VALUE
+        // Tchap: Update SearchView
+        // - remove max width so it can take the whole available space in landscape
+        // - show same icon as menu item
+        val searchItem = menu.findItem(R.id.menu_home_filter)
+        (searchItem?.actionView as? SearchView)?.run {
+            maxWidth = Int.MAX_VALUE
+            findViewById<ImageView>(androidx.appcompat.R.id.search_mag_icon)?.setImageDrawable(searchItem.icon)
+        }
 
         super.onPrepareOptionsMenu(menu)
     }
@@ -230,28 +236,31 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
-        createDirectRoomViewModel.viewEvents
-                .stream()
-                .onEach { viewEvent ->
-                    when (viewEvent) {
-                        CreateDirectRoomViewEvents.InviteSent                 -> {
-                            handleInviteByEmailResult(buildString {
-                                appendLine(getString(R.string.tchap_invite_sending_succeeded))
-                                appendLine(getString(R.string.tchap_send_invite_confirmation))
-                            })
-                        }
-                        is CreateDirectRoomViewEvents.Failure                 -> showFailure(viewEvent.throwable)
-                        is CreateDirectRoomViewEvents.UserDiscovered          -> handleExistingUser(viewEvent.user)
-                        is CreateDirectRoomViewEvents.InviteAlreadySent       -> {
-                            handleInviteByEmailResult(getString(R.string.tchap_invite_already_send_message, viewEvent.email))
-                        }
-                        is CreateDirectRoomViewEvents.InviteUnauthorizedEmail -> {
-                            handleInviteByEmailResult(getString(R.string.tchap_invite_unauthorized_message, viewEvent.email))
-                        }
-                        is CreateDirectRoomViewEvents.OpenDirectChat          -> openRoom(viewEvent.roomId)
-                    }.exhaustive
+        createDirectRoomViewModel.observeViewEvents { viewEvent ->
+            when (viewEvent) {
+                CreateDirectRoomViewEvents.InviteSent                 -> {
+                    handleInviteByEmailResult(buildString {
+                        appendLine(getString(R.string.tchap_invite_sending_succeeded))
+                        appendLine(getString(R.string.tchap_send_invite_confirmation))
+                    })
                 }
-                .launchIn(lifecycleScope)
+                is CreateDirectRoomViewEvents.Failure                 -> showFailure(viewEvent.throwable)
+                is CreateDirectRoomViewEvents.UserDiscovered          -> handleExistingUser(viewEvent.user)
+                is CreateDirectRoomViewEvents.InviteAlreadySent       -> {
+                    handleInviteByEmailResult(getString(R.string.tchap_invite_already_send_message, viewEvent.email))
+                }
+                is CreateDirectRoomViewEvents.InviteUnauthorizedEmail -> {
+                    handleInviteByEmailResult(getString(R.string.tchap_invite_unauthorized_message, viewEvent.email))
+                }
+                is CreateDirectRoomViewEvents.OpenDirectChat          -> openRoom(viewEvent.roomId)
+                CreateDirectRoomViewEvents.DmSelf                     -> {
+                    Toast.makeText(requireContext(), R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
+                }
+                CreateDirectRoomViewEvents.InvalidCode                -> {
+                    Toast.makeText(requireContext(), R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
+                }
+            }.exhaustive
+        }
     }
 
     private fun handleCallStarted() {
@@ -381,11 +390,9 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun setupToolbar() {
-        val parentActivity = vectorBaseActivity
-        if (parentActivity is ToolbarConfigurable) {
-            parentActivity.configure(views.groupToolbar)
-        }
-        views.groupToolbar.title = ""
+        setupToolbar(views.groupToolbar)
+                .setTitle(null)
+
         views.groupToolbarAvatarImageView.debouncedClicks {
             sharedActionViewModel.post(HomeActivitySharedAction.OpenDrawer)
         }
@@ -531,7 +538,7 @@ class HomeDetailFragment @Inject constructor(
         backgroundColor = if (highlight) {
             ThemeUtils.getColor(requireContext(), R.attr.colorError)
         } else {
-            ThemeUtils.getColor(requireContext(), R.attr.vctr_unread_room_badge)
+            ThemeUtils.getColor(requireContext(), R.attr.vctr_content_secondary)
         }
     }
 

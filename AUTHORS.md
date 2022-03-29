@@ -12,9 +12,14 @@ Even if we try to be able to work on all the functionalities, we have more knowl
 - Reviewing and polishing developed features, code quality manager, PRs reviewer, GitHub community manager.
 - Release manager on the Play Store
 
-## [Onuray](https://github.com/onurays): Android developer
+## [Claire](https://github.com/Claire1817): Android developer
 
-[@onurays:matrix.org](https://matrix.to/#/@onurays:matrix.org)
+[@claire.1817:matrix.org](https://matrix.to/#/@claire.1817:matrix.org)
+- Android developer
+
+## [Florian](https://github.com/Florian14): Android developer
+
+[@frenaud14:matrix.org](https://matrix.to/#/@frenaud14:matrix.org)
 - Android developer
 
 ## [Yostyle](https://github.com/yostyle): Android developer

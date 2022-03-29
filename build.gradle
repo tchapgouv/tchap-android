@@ -29,19 +29,17 @@ buildscript {
 
 // ktlint Plugin
 plugins {
-    id "org.jlleitschuh.gradle.ktlint" version "10.2.0"
+    id "org.jlleitschuh.gradle.ktlint" version "10.2.1"
 }
 
 allprojects {
     apply plugin: "org.jlleitschuh.gradle.ktlint"
 
     repositories {
-        // For olm library.
-        maven {
-            url 'https://gitlab.matrix.org/api/v4/projects/27/packages/maven'
+        mavenCentral {
             content {
-                groups.olm.regex.each { includeGroupByRegex it }
-                groups.olm.group.each { includeGroup it }
+                groups.mavenCentral.regex.each { includeGroupByRegex it }
+                groups.mavenCentral.group.each { includeGroup it }
             }
         }
         maven {
@@ -65,12 +63,6 @@ allprojects {
             content {
                 groups.google.regex.each { includeGroupByRegex it }
                 groups.google.group.each { includeGroup it }
-            }
-        }
-        mavenCentral {
-            content {
-                groups.mavenCentral.regex.each { includeGroupByRegex it }
-                groups.mavenCentral.group.each { includeGroup it }
             }
         }
         //noinspection JcenterRepositoryObsolete
@@ -152,20 +144,15 @@ project(":diff-match-patch") {
     }
 }
 
+// Global configurations across all modules
+ext {
+    isThreadingEnabled = true
+}
+
 //project(":matrix-sdk-android") {
 //    sonarqube {
 //        properties {
 //            property "sonar.sources", project(":matrix-sdk-android").android.sourceSets.main.java.srcDirs
-//            // exclude source code from analyses separated by a colon (:)
-//            // property "sonar.exclusions", "**/*.*"
-//        }
-//    }
-//}
-//
-//project(":matrix-sdk-android-rx") {
-//    sonarqube {
-//        properties {
-//            property "sonar.sources", project(":matrix-sdk-android-rx").android.sourceSets.main.java.srcDirs
 //            // exclude source code from analyses separated by a colon (:)
 //            // property "sonar.exclusions", "**/*.*"
 //        }

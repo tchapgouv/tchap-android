@@ -30,6 +30,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
@@ -51,7 +52,7 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var movementMethod: MovementMethod? = null
 
-    override fun getViewType() = STUB_ID
+    override fun getViewStubId() = STUB_ID
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -71,7 +72,8 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
                 }
             } else {
                 if (data?.isDirectRoom == true) {
-                    holder.expandView.resources.getString(R.string.direct_room_created_summary_item, data.memberName)
+                    // Tchap: Hide the domain if we are in DM.
+                    holder.expandView.resources.getString(R.string.direct_room_created_summary_item, TchapUtils.getNameFromDisplayName(data.memberName))
                 } else {
                     holder.expandView.resources.getString(R.string.room_created_summary_item, data?.memberName ?: data?.userId ?: "")
                 }
@@ -127,13 +129,22 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
 
     private fun bindCreationSummaryTile(holder: Holder) {
         val roomSummary = attributes.roomSummary
-        val roomDisplayName = roomSummary?.displayName
-        holder.roomNameText.setTextOrHide(roomDisplayName)
         val isDirect = roomSummary?.isDirect == true
+
+        // Tchap: Hide the domain if we are in DM.
+        val roomDisplayName = roomSummary?.displayName?.let {
+            if (isDirect) TchapUtils.getNameFromDisplayName(it) else it
+        }
+        holder.roomNameText.setTextOrHide(roomDisplayName)
+
         val membersCount = roomSummary?.otherMemberIds?.size ?: 0
 
         if (isDirect) {
-            holder.roomDescriptionText.text = holder.view.resources.getString(R.string.this_is_the_beginning_of_dm, roomSummary?.displayName ?: "")
+            // Tchap: Hide the domain if we are in DM.
+            holder.roomDescriptionText.text = holder.view.resources.getString(
+                    R.string.this_is_the_beginning_of_dm,
+                    roomDisplayName
+            )
         } else if (roomDisplayName.isNullOrBlank() || roomSummary.name.isBlank()) {
             holder.roomDescriptionText.text = holder.view.resources.getString(R.string.this_is_the_beginning_of_room_no_name)
         } else {

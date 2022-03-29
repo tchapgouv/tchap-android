@@ -25,6 +25,7 @@ import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericLoaderItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 /**
@@ -48,7 +49,7 @@ class ViewReactionsEpoxyController @Inject constructor(
             is Fail       -> {
                 genericFooterItem {
                     id("failure")
-                    text(host.stringProvider.getString(R.string.unknown_error))
+                    text(host.stringProvider.getString(R.string.unknown_error).toEpoxyCharSequence())
                 }
             }
             is Success    -> {
@@ -56,7 +57,7 @@ class ViewReactionsEpoxyController @Inject constructor(
                     reactionInfoSimpleItem {
                         id(reactionInfo.eventId)
                         timeStamp(reactionInfo.timestamp)
-                        reactionKey(host.emojiSpanify.spanify(reactionInfo.reactionKey))
+                        reactionKey(host.emojiSpanify.spanify(reactionInfo.reactionKey).toEpoxyCharSequence())
                         authorDisplayName(reactionInfo.authorName ?: reactionInfo.authorId)
                         userClicked { host.listener?.didSelectUser(reactionInfo.authorId) }
                     }

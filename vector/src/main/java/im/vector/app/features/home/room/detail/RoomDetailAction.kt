@@ -42,6 +42,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     object MarkAllAsRead : RoomDetailAction()
     data class DownloadOrOpen(val eventId: String, val senderId: String?, val messageFileContent: MessageWithAttachmentContent) : RoomDetailAction()
     object JoinAndOpenReplacementRoom : RoomDetailAction()
+    object OnClickMisconfiguredEncryption : RoomDetailAction()
     object AcceptInvite : RoomDetailAction()
     object RejectInvite : RoomDetailAction()
 
@@ -88,6 +89,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class EnsureNativeWidgetAllowed(val widget: Widget,
                                          val userJustAccepted: Boolean,
                                          val grantedEvents: RoomDetailViewEvents) : RoomDetailAction()
+
     data class UpdateJoinJitsiCallStatus(val conferenceEvent: ConferenceEvent) : RoomDetailAction()
 
     data class OpenOrCreateDm(val userId: String) : RoomDetailAction()

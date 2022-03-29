@@ -26,4 +26,6 @@ sealed class CreateDirectRoomViewEvents : VectorViewEvents {
     object InviteSent : CreateDirectRoomViewEvents()
     data class OpenDirectChat(val roomId: String) : CreateDirectRoomViewEvents()
     data class Failure(val throwable: Throwable) : CreateDirectRoomViewEvents()
+    object InvalidCode : CreateDirectRoomViewEvents()
+    object DmSelf : CreateDirectRoomViewEvents()
 }

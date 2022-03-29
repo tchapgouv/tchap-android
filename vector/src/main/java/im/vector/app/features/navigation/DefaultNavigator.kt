@@ -40,6 +40,7 @@ import im.vector.app.core.error.fatalError
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.features.VectorFeatures
+import im.vector.app.features.VectorFeatures.OnboardingVariant
 import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
 import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.conference.VectorJitsiActivity
@@ -54,22 +55,30 @@ import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.debug.DebugMenuActivity
 import im.vector.app.features.devtools.RoomDevToolActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
-import im.vector.app.features.home.room.detail.RoomDetailArgs
+import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.detail.search.SearchActivity
 import im.vector.app.features.home.room.detail.search.SearchArgs
 import im.vector.app.features.home.room.filtered.FilteredRoomsActivity
+import im.vector.app.features.home.room.threads.ThreadsActivity
+import im.vector.app.features.home.room.threads.arguments.ThreadListArgs
+import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.invite.InviteUsersToRoomActivity
+import im.vector.app.features.location.LocationData
+import im.vector.app.features.location.LocationSharingActivity
+import im.vector.app.features.location.LocationSharingArgs
+import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.login.LoginConfig
-import im.vector.app.features.login2.LoginActivity2
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.media.BigImageViewerActivity
 import im.vector.app.features.media.VectorAttachmentViewerActivity
+import im.vector.app.features.onboarding.OnboardingActivity
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.pin.PinArgs
 import im.vector.app.features.pin.PinMode
 import im.vector.app.features.poll.create.CreatePollActivity
 import im.vector.app.features.poll.create.CreatePollArgs
+import im.vector.app.features.poll.create.PollMode
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 import im.vector.app.features.roomdirectory.RoomDirectoryData
 import im.vector.app.features.roomdirectory.createroom.CreateRoomActivity
@@ -82,7 +91,6 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
 import im.vector.app.features.signout.soft.SoftLogoutActivity
-import im.vector.app.features.signout.soft.SoftLogoutActivity2
 import im.vector.app.features.spaces.InviteRoomSpaceChooserBottomSheet
 import im.vector.app.features.spaces.SpaceExploreActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
@@ -115,36 +123,41 @@ class DefaultNavigator @Inject constructor(
 ) : Navigator {
 
     override fun openLogin(context: Context, loginConfig: LoginConfig?, flags: Int) {
-        val intent = when (features.loginVersion()) {
-            VectorFeatures.LoginVersion.V1 -> TchapLoginActivity.newIntent(context, loginConfig)
-            VectorFeatures.LoginVersion.V2 -> LoginActivity2.newIntent(context, loginConfig)
+        val intent = when (features.onboardingVariant()) {
+            OnboardingVariant.LEGACY    -> TchapLoginActivity.newIntent(context, loginConfig)
+            OnboardingVariant.LOGIN_2,
+            OnboardingVariant.FTUE_AUTH -> OnboardingActivity.newIntent(context, loginConfig)
         }
         intent.addFlags(flags)
         context.startActivity(intent)
     }
 
     override fun loginSSORedirect(context: Context, data: Uri?) {
-        val intent = when (features.loginVersion()) {
-            VectorFeatures.LoginVersion.V1 -> TchapLoginActivity.redirectIntent(context, data)
-            VectorFeatures.LoginVersion.V2 -> LoginActivity2.redirectIntent(context, data)
+        val intent = when (features.onboardingVariant()) {
+            OnboardingVariant.LEGACY    -> TchapLoginActivity.redirectIntent(context, data)
+            OnboardingVariant.LOGIN_2,
+            OnboardingVariant.FTUE_AUTH -> OnboardingActivity.redirectIntent(context, data)
         }
         context.startActivity(intent)
     }
 
     override fun softLogout(context: Context) {
-        val intent = when (features.loginVersion()) {
-            VectorFeatures.LoginVersion.V1 -> SoftLogoutActivity.newIntent(context)
-            VectorFeatures.LoginVersion.V2 -> SoftLogoutActivity2.newIntent(context)
-        }
+        val intent = SoftLogoutActivity.newIntent(context)
         context.startActivity(intent)
     }
 
-    override fun openRoom(context: Context, roomId: String, eventId: String?, buildTask: Boolean) {
+    override fun openRoom(
+            context: Context,
+            roomId: String,
+            eventId: String?,
+            buildTask: Boolean,
+            isInviteAlreadyAccepted: Boolean
+    ) {
         if (sessionHolder.getSafeActiveSession()?.getRoom(roomId) == null) {
             fatalError("Trying to open an unknown room $roomId", vectorPreferences.failFast())
             return
         }
-        val args = RoomDetailArgs(roomId, eventId)
+        val args = TimelineArgs(roomId = roomId, eventId = eventId, isInviteAlreadyAccepted = isInviteAlreadyAccepted)
         val intent = RoomDetailActivity.newIntent(context, args)
         startActivity(context, intent, buildTask)
     }
@@ -171,7 +184,7 @@ class DefaultNavigator @Inject constructor(
                 startActivity(context, SpaceManageActivity.newIntent(context, spaceId, ManageType.AddRooms), false)
             }
             is Navigator.PostSwitchSpaceAction.OpenDefaultRoom   -> {
-                val args = RoomDetailArgs(
+                val args = TimelineArgs(
                         postSwitchSpaceAction.roomId,
                         eventId = null,
                         openShareSpaceForId = spaceId.takeIf { postSwitchSpaceAction.showShareSheet }
@@ -277,7 +290,7 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openRoomForSharingAndFinish(activity: Activity, roomId: String, sharedData: SharedData) {
-        val args = RoomDetailArgs(roomId, null, sharedData)
+        val args = TimelineArgs(roomId, null, sharedData)
         val intent = RoomDetailActivity.newIntent(activity, args)
         activity.startActivity(intent)
         activity.finish()
@@ -325,8 +338,8 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openCreateRoom(context: Context, initialName: String) {
-        val intent = CreateRoomActivity.getIntent(context, initialName)
+    override fun openCreateRoom(context: Context, initialName: String, openAfterCreate: Boolean) {
+        val intent = CreateRoomActivity.getIntent(context = context, initialName = initialName, openAfterCreate = openAfterCreate)
         context.startActivity(intent)
     }
 
@@ -526,8 +539,11 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openSearch(context: Context, roomId: String) {
-        val intent = SearchActivity.newIntent(context, SearchArgs(roomId))
+    override fun openSearch(context: Context,
+                            roomId: String,
+                            roomDisplayName: String?,
+                            roomAvatarUrl: String?) {
+        val intent = SearchActivity.newIntent(context, SearchArgs(roomId, roomDisplayName, roomAvatarUrl))
         context.startActivity(intent)
     }
 
@@ -535,15 +551,31 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(RoomDevToolActivity.intent(context, roomId))
     }
 
-    override fun openCallTransfer(context: Context, callId: String) {
+    override fun openCallTransfer(
+            context: Context,
+            activityResultLauncher: ActivityResultLauncher<Intent>,
+            callId: String
+    ) {
         val intent = CallTransferActivity.newIntent(context, callId)
+        activityResultLauncher.launch(intent)
+    }
+
+    override fun openCreatePoll(context: Context, roomId: String, editedEventId: String?, mode: PollMode) {
+        val intent = CreatePollActivity.getIntent(
+                context,
+                CreatePollArgs(roomId = roomId, editedEventId = editedEventId, mode = mode)
+        )
         context.startActivity(intent)
     }
 
-    override fun openCreatePoll(context: Context, roomId: String) {
-        val intent = CreatePollActivity.getIntent(
+    override fun openLocationSharing(context: Context,
+                                     roomId: String,
+                                     mode: LocationSharingMode,
+                                     initialLocationData: LocationData?,
+                                     locationOwnerId: String?) {
+        val intent = LocationSharingActivity.getIntent(
                 context,
-                CreatePollArgs(roomId = roomId)
+                LocationSharingArgs(roomId = roomId, mode = mode, initialLocationData = initialLocationData, locationOwnerId = locationOwnerId)
         )
         context.startActivity(intent)
     }
@@ -556,5 +588,26 @@ class DefaultNavigator @Inject constructor(
         } else {
             context.startActivity(intent)
         }
+    }
+
+    override fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs, eventIdToNavigate: String?) {
+        context.startActivity(ThreadsActivity.newIntent(
+                context = context,
+                threadTimelineArgs = threadTimelineArgs,
+                threadListArgs = null,
+                eventIdToNavigate = eventIdToNavigate
+        ))
+    }
+
+    override fun openThreadList(context: Context, threadTimelineArgs: ThreadTimelineArgs) {
+        context.startActivity(ThreadsActivity.newIntent(
+                context = context,
+                threadTimelineArgs = null,
+                threadListArgs = ThreadListArgs(
+                        roomId = threadTimelineArgs.roomId,
+                        displayName = threadTimelineArgs.displayName,
+                        avatarUrl = threadTimelineArgs.avatarUrl,
+                        roomEncryptionTrustLevel = threadTimelineArgs.roomEncryptionTrustLevel
+                )))
     }
 }

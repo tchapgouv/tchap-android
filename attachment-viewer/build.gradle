@@ -38,8 +38,9 @@ android {
     flavorDimensions "target"
 
     productFlavors {
-        preprod { dimension "target" }
-        agent { dimension "target" }
+        devTchap { dimension "target"}
+        btchap { dimension "target" }
+        tchap { dimension "target" }
     }
 
     compileOptions {
@@ -57,11 +58,9 @@ android {
 
 dependencies {
     implementation project(":library:ui-styles")
+    implementation project(":library:core-utils")
 
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
-
-    implementation libs.rx.rxKotlin
-    implementation libs.rx.rxAndroid
 
     implementation libs.androidx.core
     implementation libs.androidx.appCompat

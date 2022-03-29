@@ -123,7 +123,7 @@ class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2
                         showWarning = false
                         doSubmit()
                     }
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .show()
         } else {
             doSubmit()

@@ -16,6 +16,7 @@
 
 package im.vector.app.features.call
 
+import android.app.Activity
 import android.app.KeyguardManager
 import android.app.PictureInPictureParams
 import android.content.Context
@@ -43,6 +44,7 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
@@ -52,13 +54,14 @@ import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.ActivityCallBinding
 import im.vector.app.features.call.dialpad.CallDialPadBottomSheet
 import im.vector.app.features.call.dialpad.DialPadFragment
+import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
-import im.vector.app.features.home.room.detail.RoomDetailArgs
+import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import io.github.hyuwah.draggableviewlib.DraggableView
 import io.github.hyuwah.draggableviewlib.setupDraggable
 import kotlinx.parcelize.Parcelize
@@ -126,7 +129,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         if (savedInstanceState != null) {
             (supportFragmentManager.findFragmentByTag(FRAGMENT_DIAL_PAD_TAG) as? CallDialPadBottomSheet)?.callback = dialPadCallback
         }
-        setSupportActionBar(views.callToolbar)
+        setupToolbar(views.callToolbar)
         configureCallViews()
 
         callViewModel.onEach {
@@ -163,6 +166,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 ?.let {
                     callViewModel.handle(VectorCallViewActions.SwitchCall(it))
                 }
+        this.intent = intent
     }
 
     override fun getMenuRes() = R.menu.vector_call
@@ -257,18 +261,18 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isVisible = true
-                views.callToolbar.setSubtitle(R.string.call_ringing)
+                toolbar?.setSubtitle(R.string.call_ringing)
                 configureCallInfo(state)
             }
             is CallState.Answering -> {
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isVisible = true
-                views.callToolbar.setSubtitle(R.string.call_connecting)
+                toolbar?.setSubtitle(R.string.call_connecting)
                 configureCallInfo(state)
             }
             is CallState.Connected -> {
-                views.callToolbar.subtitle = state.formattedDuration
+                toolbar?.subtitle = state.formattedDuration
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
                     if (state.isLocalOnHold || state.isRemoteOnHold) {
                         views.smallIsHeldIcon.isVisible = true
@@ -280,11 +284,11 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                             views.callActionText.setText(R.string.call_resume_action)
                             views.callActionText.isVisible = true
                             views.callActionText.setOnClickListener { callViewModel.handle(VectorCallViewActions.ToggleHoldResume) }
-                            views.callToolbar.setSubtitle(R.string.call_held_by_you)
+                            toolbar?.setSubtitle(R.string.call_held_by_you)
                         } else {
                             views.callActionText.isInvisible = true
                             state.callInfo?.opponentUserItem?.let {
-                                views.callToolbar.subtitle = getString(R.string.call_held_by_user, it.getBestName())
+                                toolbar?.subtitle = getString(R.string.call_held_by_user, it.getBestName())
                             }
                         }
                     } else if (state.transferee !is VectorCallViewState.TransfereeState.NoTransferee) {
@@ -316,14 +320,14 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     views.pipRendererWrapper.isVisible = false
                     views.callInfoGroup.isVisible = true
                     configureCallInfo(state)
-                    views.callToolbar.setSubtitle(R.string.call_connecting)
+                    toolbar?.setSubtitle(R.string.call_connecting)
                 }
             }
             is CallState.Ended     -> {
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isVisible = true
-                views.callToolbar.setSubtitle(R.string.call_ended)
+                toolbar?.setSubtitle(R.string.call_ended)
                 configureCallInfo(state)
             }
             else                   -> {
@@ -410,7 +414,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             avatarRenderer.renderBlur(it, views.bgCallView, sampling = 20, rounded = false, colorFilter = colorFilter, addPlaceholder = false)
             if (state.transferee is VectorCallViewState.TransfereeState.NoTransferee) {
                 views.participantNameText.setTextOrHide(null)
-                views.callToolbar.title = if (state.isVideoCall) {
+                toolbar?.title = if (state.isVideoCall) {
                     getString(R.string.video_call_with_participant, it.getBestName())
                 } else {
                     getString(R.string.audio_call_with_participant, it.getBestName())
@@ -518,9 +522,22 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             }
             is VectorCallViewEvents.ShowCallTransferScreen -> {
                 val callId = withState(callViewModel) { it.callId }
-                navigator.openCallTransfer(this, callId)
+                navigator.openCallTransfer(this, callTransferActivityResultLauncher, callId)
             }
+            is VectorCallViewEvents.FailToTransfer         -> showSnackbar(getString(R.string.call_transfer_failure))
             null                                           -> {
+            }
+        }
+    }
+
+    private val callTransferActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        when (activityResult.resultCode) {
+            Activity.RESULT_CANCELED -> {
+                callViewModel.handle(VectorCallViewActions.CallTransferSelectionCancelled)
+            }
+            Activity.RESULT_OK       -> {
+                CallTransferActivity.getCallTransferResult(activityResult.data)
+                        ?.let { callViewModel.handle(VectorCallViewActions.CallTransferSelectionResult(it)) }
             }
         }
     }
@@ -563,7 +580,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     private fun returnToChat() {
         val roomId = withState(callViewModel) { it.roomId }
-        val args = RoomDetailArgs(roomId)
+        val args = TimelineArgs(roomId)
         val intent = RoomDetailActivity.newIntent(this, args).apply {
             flags = FLAG_ACTIVITY_CLEAR_TOP
         }

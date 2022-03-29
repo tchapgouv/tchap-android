@@ -30,6 +30,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.members.RoomMemberListCategories
 import im.vector.app.features.roomprofile.members.RoomMemberListViewState
 import im.vector.app.features.roomprofile.members.RoomMemberSummaryFilter
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -128,7 +129,7 @@ class SpacePeopleListController @Inject constructor(
                         span {
                             +"\n"
                             +host.stringProvider.getString(R.string.no_result_placeholder)
-                        }
+                        }.toEpoxyCharSequence()
                 )
                 description(
                         span {
@@ -138,7 +139,7 @@ class SpacePeopleListController @Inject constructor(
                                 textColor = host.colorProvider.getColorFromAttribute(R.attr.colorPrimary)
                                 textStyle = "bold"
                             }
-                        }
+                        }.toEpoxyCharSequence()
                 )
                 itemClickAction {
                     host.listener?.onInviteToSpaceSelected()

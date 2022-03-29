@@ -34,14 +34,22 @@ import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.format.EventDetailsFormatter
+import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.home.room.detail.timeline.image.buildImageContentRendererData
 import im.vector.app.features.home.room.detail.timeline.item.E2EDecoration
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
 import im.vector.app.features.html.SpanUtils
+import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
+import im.vector.app.features.location.UrlMapProvider
+import im.vector.app.features.location.toLocationData
 import im.vector.app.features.media.ImageContentRenderer
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import javax.inject.Inject
 
@@ -57,7 +65,9 @@ class MessageActionsEpoxyController @Inject constructor(
         private val errorFormatter: ErrorFormatter,
         private val spanUtils: SpanUtils,
         private val eventDetailsFormatter: EventDetailsFormatter,
-        private val dateFormatter: VectorDateFormatter
+        private val dateFormatter: VectorDateFormatter,
+        private val urlMapProvider: UrlMapProvider,
+        private val locationPinProvider: LocationPinProvider
 ) : TypedEpoxyController<MessageActionState>() {
 
     var listener: MessageActionsEpoxyControllerListener? = null
@@ -69,6 +79,13 @@ class MessageActionsEpoxyController @Inject constructor(
         val formattedDate = dateFormatter.format(date, DateFormatKind.MESSAGE_DETAIL)
         val body = state.messageBody.linkify(host.listener)
         val bindingOptions = spanUtils.getBindingOptions(body)
+
+        val locationContent = state.timelineEvent()?.root?.getClearContent()
+                ?.toModel<MessageLocationContent>(catchError = true)
+        val locationUrl = locationContent?.toLocationData()
+                ?.let { urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, 1200, 800) }
+        val locationOwnerId = if (locationContent?.isSelfLocation().orTrue()) state.informationData.matrixItem.id else null
+
         bottomSheetMessagePreviewItem {
             id("preview")
             avatarRenderer(host.avatarRenderer)
@@ -78,9 +95,12 @@ class MessageActionsEpoxyController @Inject constructor(
             data(state.timelineEvent()?.buildImageContentRendererData(host.dimensionConverter.dpToPx(66)))
             userClicked { host.listener?.didSelectMenuAction(EventSharedAction.OpenUserProfile(state.informationData.senderId)) }
             bindingOptions(bindingOptions)
-            body(body)
-            bodyDetails(host.eventDetailsFormatter.format(state.timelineEvent()?.root))
+            body(body.toEpoxyCharSequence())
+            bodyDetails(host.eventDetailsFormatter.format(state.timelineEvent()?.root)?.toEpoxyCharSequence())
             time(formattedDate)
+            locationUrl(locationUrl)
+            locationPinProvider(host.locationPinProvider)
+            locationOwnerId(locationOwnerId)
         }
 
         // Send state

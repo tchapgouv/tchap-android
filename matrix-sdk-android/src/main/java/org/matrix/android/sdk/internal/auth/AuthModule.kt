@@ -50,7 +50,9 @@ internal abstract class AuthModule {
         @JvmStatic
         @Provides
         @AuthDatabase
-        fun providesRealmConfiguration(context: Context, realmKeysUtils: RealmKeysUtils): RealmConfiguration {
+        fun providesRealmConfiguration(context: Context,
+                                       realmKeysUtils: RealmKeysUtils,
+                                       authRealmMigration: AuthRealmMigration): RealmConfiguration {
             val old = File(context.filesDir, "matrix-sdk-auth")
             if (old.exists()) {
                 old.renameTo(File(context.filesDir, "matrix-sdk-auth.realm"))
@@ -62,8 +64,8 @@ internal abstract class AuthModule {
                     }
                     .name("matrix-sdk-auth.realm")
                     .modules(AuthRealmModule())
-                    .schemaVersion(AuthRealmMigration.SCHEMA_VERSION)
-                    .migration(AuthRealmMigration)
+                    .schemaVersion(authRealmMigration.schemaVersion)
+                    .migration(authRealmMigration)
                     .build()
         }
     }

@@ -61,4 +61,9 @@
     <color name="tchap_room_external">@color/palette_tchap_pumpkin_orange</color>
     <color name="tchap_room_forum">@color/palette_tchap_jade_green</color>
 
+    <!-- Tchap bubble background color -->
+    <color name="tchap_message_bubble_outbound_dark">@color/palette_tchap_official_blue</color>
+    <color name="tchap_message_bubble_outbound_light">@color/palette_tchap_secondary_blue</color>
+    <color name="tchap_message_bubble_inbound_light">@color/palette_tchap_light_grey</color>
+
 </resources>

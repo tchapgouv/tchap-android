@@ -29,8 +29,10 @@ import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.federation.FederationService
 import org.matrix.android.sdk.api.pushrules.PushRuleService
+import org.matrix.android.sdk.api.session.EventStreamService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.SessionLifecycleObserver
+import org.matrix.android.sdk.api.session.ToDeviceService
 import org.matrix.android.sdk.api.session.account.AccountService
 import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.cache.CacheService
@@ -135,6 +137,8 @@ internal class DefaultSession @Inject constructor(
         private val spaceService: Lazy<SpaceService>,
         private val openIdService: Lazy<OpenIdService>,
         private val presenceService: Lazy<PresenceService>,
+        private val toDeviceService: Lazy<ToDeviceService>,
+        private val eventStreamService: Lazy<EventStreamService>,
         private val usersInfoService: Lazy<UsersInfoService>,
         private val accountValidityService: Lazy<AccountValidityService>,
         @UnauthenticatedWithCertificate
@@ -156,7 +160,9 @@ internal class DefaultSession @Inject constructor(
         HomeServerCapabilitiesService by homeServerCapabilitiesService.get(),
         ProfileService by profileService.get(),
         PresenceService by presenceService.get(),
-        AccountService by accountService.get() {
+        AccountService by accountService.get(),
+        ToDeviceService by toDeviceService.get(),
+        EventStreamService by eventStreamService.get() {
 
     override val sharedSecretStorageService: SharedSecretStorageService
         get() = _sharedSecretStorageService.get()

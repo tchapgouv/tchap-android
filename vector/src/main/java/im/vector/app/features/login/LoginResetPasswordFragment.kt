@@ -32,6 +32,7 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.databinding.FragmentLoginResetPasswordBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -46,6 +47,11 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
 
     // Show warning only once
     private var showWarning = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        analyticsScreenName = MobileScreen.ScreenName.ForgotPassword
+        super.onCreate(savedInstanceState)
+    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginResetPasswordBinding {
         return FragmentLoginResetPasswordBinding.inflate(inflater, container, false)
@@ -104,7 +110,7 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
                     .setPositiveButton(R.string.login_reset_password_warning_submit) { _, _ ->
                         doSubmit()
                     }
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .show()
         } else {
             doSubmit()

@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.format
 
+import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
@@ -25,6 +26,7 @@ import org.matrix.android.sdk.api.extensions.appendNl
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -65,30 +67,36 @@ class NoticeEventFormatter @Inject constructor(
     private fun Event.isSentByCurrentUser() = senderId != null && senderId == currentUserId
 
     fun format(timelineEvent: TimelineEvent, isDm: Boolean): CharSequence? {
+        // Tchap: Hide the domain if we are in DM.
+        val senderName = if (isDm) {
+            TchapUtils.getNameFromDisplayName(timelineEvent.senderInfo.disambiguatedDisplayName)
+        } else {
+            timelineEvent.senderInfo.disambiguatedDisplayName
+        }
         return when (val type = timelineEvent.root.getClearType()) {
-            EventType.STATE_ROOM_JOIN_RULES         -> formatJoinRulesEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, isDm)
+            EventType.STATE_ROOM_JOIN_RULES         -> formatJoinRulesEvent(timelineEvent.root, senderName, isDm)
             EventType.STATE_ROOM_CREATE             -> formatRoomCreateEvent(timelineEvent.root, isDm)
-            EventType.STATE_ROOM_NAME               -> formatRoomNameEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
-            EventType.STATE_ROOM_TOPIC              -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
-            EventType.STATE_ROOM_AVATAR             -> formatRoomAvatarEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
-            EventType.STATE_ROOM_MEMBER             -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, isDm)
-            EventType.STATE_ROOM_THIRD_PARTY_INVITE -> formatRoomThirdPartyInvite(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, isDm)
-            EventType.STATE_ROOM_ALIASES            -> formatRoomAliasesEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
-            EventType.STATE_ROOM_CANONICAL_ALIAS    -> formatRoomCanonicalAliasEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_NAME               -> formatRoomNameEvent(timelineEvent.root, senderName)
+            EventType.STATE_ROOM_TOPIC              -> formatRoomTopicEvent(timelineEvent.root, senderName)
+            EventType.STATE_ROOM_AVATAR             -> formatRoomAvatarEvent(timelineEvent.root, senderName)
+            EventType.STATE_ROOM_MEMBER             -> formatRoomMemberEvent(timelineEvent.root, senderName, isDm)
+            EventType.STATE_ROOM_THIRD_PARTY_INVITE -> formatRoomThirdPartyInvite(timelineEvent.root, senderName, isDm)
+            EventType.STATE_ROOM_ALIASES            -> formatRoomAliasesEvent(timelineEvent.root, senderName)
+            EventType.STATE_ROOM_CANONICAL_ALIAS    -> formatRoomCanonicalAliasEvent(timelineEvent.root, senderName)
             EventType.STATE_ROOM_HISTORY_VISIBILITY ->
-                formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, isDm)
-            EventType.STATE_ROOM_SERVER_ACL         -> formatRoomServerAclEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
-            EventType.STATE_ROOM_GUEST_ACCESS       -> formatRoomGuestAccessEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, isDm)
-            EventType.STATE_ROOM_ENCRYPTION         -> formatRoomEncryptionEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+                formatRoomHistoryVisibilityEvent(timelineEvent.root, senderName, isDm)
+            EventType.STATE_ROOM_SERVER_ACL         -> formatRoomServerAclEvent(timelineEvent.root, senderName)
+            EventType.STATE_ROOM_GUEST_ACCESS       -> formatRoomGuestAccessEvent(timelineEvent.root, senderName, isDm)
+            EventType.STATE_ROOM_ENCRYPTION         -> formatRoomEncryptionEvent(timelineEvent.root, senderName)
             EventType.STATE_ROOM_WIDGET,
-            EventType.STATE_ROOM_WIDGET_LEGACY      -> formatWidgetEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
-            EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, isDm)
-            EventType.STATE_ROOM_POWER_LEVELS       -> formatRoomPowerLevels(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_WIDGET_LEGACY      -> formatWidgetEvent(timelineEvent.root, senderName)
+            EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(timelineEvent.root, senderName, isDm)
+            EventType.STATE_ROOM_POWER_LEVELS       -> formatRoomPowerLevels(timelineEvent.root, senderName)
             EventType.CALL_INVITE,
             EventType.CALL_CANDIDATES,
             EventType.CALL_HANGUP,
             EventType.CALL_REJECT,
-            EventType.CALL_ANSWER                   -> formatCallEvent(type, timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.CALL_ANSWER                   -> formatCallEvent(type, timelineEvent.root, senderName)
             EventType.CALL_NEGOTIATE,
             EventType.CALL_SELECT_ANSWER,
             EventType.CALL_REPLACES,
@@ -104,6 +112,7 @@ class NoticeEventFormatter @Inject constructor(
             EventType.STATE_SPACE_CHILD,
             EventType.STATE_SPACE_PARENT,
             EventType.REDACTION,
+            EventType.STICKER,
             EventType.POLL_RESPONSE,
             EventType.POLL_END                      -> formatDebug(timelineEvent.root)
             else                                    -> {
@@ -114,7 +123,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomPowerLevels(event: Event, disambiguatedDisplayName: String): CharSequence? {
-        val powerLevelsContent: PowerLevelsContent = event.getClearContent().toModel() ?: return null
+        val powerLevelsContent: PowerLevelsContent = event.content.toModel() ?: return null
         val previousPowerLevelsContent: PowerLevelsContent = event.resolvedPrevContent().toModel() ?: return null
         val userIds = HashSet<String>()
         userIds.addAll(powerLevelsContent.users.orEmpty().keys)
@@ -142,7 +151,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatWidgetEvent(event: Event, disambiguatedDisplayName: String): CharSequence? {
-        val widgetContent: WidgetContent = event.getClearContent().toModel() ?: return null
+        val widgetContent: WidgetContent = event.content.toModel() ?: return null
         val previousWidgetContent: WidgetContent? = event.resolvedPrevContent().toModel()
         return if (widgetContent.isActive()) {
             val widgetName = widgetContent.getHumanName()
@@ -194,11 +203,12 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatDebug(event: Event): CharSequence {
-        return "Debug: event type \"${event.getClearType()}\""
+            val threadPrefix = if (event.isThread()) "thread" else ""
+            return "Debug: $threadPrefix event type \"${event.getClearType()}\""
     }
 
     private fun formatRoomCreateEvent(event: Event, isDm: Boolean): CharSequence? {
-        return event.getClearContent().toModel<RoomCreateContent>()
+        return event.content.toModel<RoomCreateContent>()
                 ?.takeIf { it.creator.isNullOrBlank().not() }
                 ?.let {
                     if (event.isSentByCurrentUser()) {
@@ -210,7 +220,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomNameEvent(event: Event, senderName: String?): CharSequence? {
-        val content = event.getClearContent().toModel<RoomNameContent>() ?: return null
+        val content = event.content.toModel<RoomNameContent>() ?: return null
         return if (content.name.isNullOrBlank()) {
             if (event.isSentByCurrentUser()) {
                 sp.getString(R.string.notice_room_name_removed_by_you)
@@ -235,7 +245,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomTopicEvent(event: Event, senderName: String?): CharSequence? {
-        val content = event.getClearContent().toModel<RoomTopicContent>() ?: return null
+        val content = event.content.toModel<RoomTopicContent>() ?: return null
         return if (content.topic.isNullOrEmpty()) {
             if (event.isSentByCurrentUser()) {
                 sp.getString(R.string.notice_room_topic_removed_by_you)
@@ -252,7 +262,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomAvatarEvent(event: Event, senderName: String?): CharSequence? {
-        val content = event.getClearContent().toModel<RoomAvatarContent>() ?: return null
+        val content = event.content.toModel<RoomAvatarContent>() ?: return null
         return if (content.avatarUrl.isNullOrEmpty()) {
             if (event.isSentByCurrentUser()) {
                 sp.getString(R.string.notice_room_avatar_removed_by_you)
@@ -269,7 +279,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomHistoryVisibilityEvent(event: Event, senderName: String?, isDm: Boolean): CharSequence? {
-        val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility ?: return null
+        val historyVisibility = event.content.toModel<RoomHistoryVisibilityContent>()?.historyVisibility ?: return null
 
         val historyVisibilitySuffix = roomHistoryVisibilityFormatter.getNoticeSuffix(historyVisibility)
         return if (event.isSentByCurrentUser()) {
@@ -282,7 +292,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomThirdPartyInvite(event: Event, senderName: String?, isDm: Boolean): CharSequence? {
-        val content = event.getClearContent().toModel<RoomThirdPartyInviteContent>()
+        val content = event.content.toModel<RoomThirdPartyInviteContent>()
         val prevContent = event.resolvedPrevContent()?.toModel<RoomThirdPartyInviteContent>()
 
         return when {
@@ -363,7 +373,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomMemberEvent(event: Event, senderName: String?, isDm: Boolean): String? {
-        val eventContent: RoomMemberContent? = event.getClearContent().toModel()
+        val eventContent: RoomMemberContent? = event.content.toModel()
         val prevEventContent: RoomMemberContent? = event.resolvedPrevContent().toModel()
         val isMembershipEvent = prevEventContent?.membership != eventContent?.membership ||
                 eventContent?.membership == Membership.LEAVE
@@ -375,7 +385,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomAliasesEvent(event: Event, senderName: String?): String? {
-        val eventContent: RoomAliasesContent? = event.getClearContent().toModel()
+        val eventContent: RoomAliasesContent? = event.content.toModel()
         val prevEventContent: RoomAliasesContent? = event.resolvedPrevContent()?.toModel()
 
         val addedAliases = eventContent?.aliases.orEmpty() - prevEventContent?.aliases.orEmpty()
@@ -408,7 +418,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomServerAclEvent(event: Event, senderName: String?): String? {
-        val eventContent = event.getClearContent().toModel<RoomServerAclContent>() ?: return null
+        val eventContent = event.content.toModel<RoomServerAclContent>() ?: return null
         val prevEventContent = event.resolvedPrevContent()?.toModel<RoomServerAclContent>()
 
         return buildString {
@@ -481,7 +491,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomCanonicalAliasEvent(event: Event, senderName: String?): String? {
-        val eventContent: RoomCanonicalAliasContent? = event.getClearContent().toModel()
+        val eventContent: RoomCanonicalAliasContent? = event.content.toModel()
         val prevContent: RoomCanonicalAliasContent? = event.resolvedPrevContent().toModel()
         val canonicalAlias = eventContent?.canonicalAlias?.takeIf { it.isNotEmpty() }
         val prevCanonicalAlias = prevContent?.canonicalAlias?.takeIf { it.isNotEmpty() }
@@ -551,7 +561,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomGuestAccessEvent(event: Event, senderName: String?, isDm: Boolean): String? {
-        val eventContent: RoomGuestAccessContent? = event.getClearContent().toModel()
+        val eventContent: RoomGuestAccessContent? = event.content.toModel()
         return when (eventContent?.guestAccess) {
             GuestAccess.CanJoin   ->
                 if (event.isSentByCurrentUser()) {
@@ -653,8 +663,15 @@ class NoticeEventFormatter @Inject constructor(
                                       eventContent: RoomMemberContent?,
                                       prevEventContent: RoomMemberContent?,
                                       isDm: Boolean): String? {
+        // Tchap: Remove domain name in case of DM.
         val senderDisplayName = senderName ?: event.senderId ?: ""
-        val targetDisplayName = eventContent?.displayName ?: prevEventContent?.displayName ?: event.stateKey ?: ""
+
+        val targetDisplayName: String = if (isDm) {
+            TchapUtils.getNameFromDisplayName(eventContent?.displayName ?: prevEventContent?.displayName ?: event.stateKey ?: "")
+        } else {
+            eventContent?.displayName ?: prevEventContent?.displayName ?: event.stateKey ?: ""
+        }
+
         return when (eventContent?.membership) {
             Membership.INVITE -> {
                 when {
@@ -770,12 +787,12 @@ class NoticeEventFormatter @Inject constructor(
                         Membership.JOIN   ->
                             if (event.isSentByCurrentUser()) {
                                 eventContent.safeReason?.let { reason ->
-                                    sp.getString(R.string.notice_room_kick_with_reason_by_you, targetDisplayName, reason)
-                                } ?: sp.getString(R.string.notice_room_kick_by_you, targetDisplayName)
+                                    sp.getString(R.string.notice_room_remove_with_reason_by_you, targetDisplayName, reason)
+                                } ?: sp.getString(R.string.notice_room_remove_by_you, targetDisplayName)
                             } else {
                                 eventContent.safeReason?.let { reason ->
-                                    sp.getString(R.string.notice_room_kick_with_reason, senderDisplayName, targetDisplayName, reason)
-                                } ?: sp.getString(R.string.notice_room_kick, senderDisplayName, targetDisplayName)
+                                    sp.getString(R.string.notice_room_remove_with_reason, senderDisplayName, targetDisplayName, reason)
+                                } ?: sp.getString(R.string.notice_room_remove, senderDisplayName, targetDisplayName)
                             }
                         Membership.BAN    ->
                             if (event.isSentByCurrentUser()) {
@@ -803,19 +820,19 @@ class NoticeEventFormatter @Inject constructor(
             Membership.KNOCK  ->
                 if (event.isSentByCurrentUser()) {
                     eventContent.safeReason?.let { reason ->
-                        sp.getString(R.string.notice_room_kick_with_reason_by_you, targetDisplayName, reason)
-                    } ?: sp.getString(R.string.notice_room_kick_by_you, targetDisplayName)
+                        sp.getString(R.string.notice_room_remove_with_reason_by_you, targetDisplayName, reason)
+                    } ?: sp.getString(R.string.notice_room_remove_by_you, targetDisplayName)
                 } else {
                     eventContent.safeReason?.let { reason ->
-                        sp.getString(R.string.notice_room_kick_with_reason, senderDisplayName, targetDisplayName, reason)
-                    } ?: sp.getString(R.string.notice_room_kick, senderDisplayName, targetDisplayName)
+                        sp.getString(R.string.notice_room_remove_with_reason, senderDisplayName, targetDisplayName, reason)
+                    } ?: sp.getString(R.string.notice_room_remove, senderDisplayName, targetDisplayName)
                 }
             else              -> null
         }
     }
 
     private fun formatJoinRulesEvent(event: Event, senderName: String?, isDm: Boolean): CharSequence? {
-        val content = event.getClearContent().toModel<RoomJoinRulesContent>() ?: return null
+        val content = event.content.toModel<RoomJoinRulesContent>() ?: return null
         return when (content.joinRules) {
             RoomJoinRules.INVITE ->
                 if (event.isSentByCurrentUser()) {

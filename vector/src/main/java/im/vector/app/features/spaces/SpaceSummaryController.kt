@@ -29,6 +29,8 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.group
 import im.vector.app.space
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -65,7 +67,7 @@ class SpaceSummaryController @Inject constructor(
         if (!nonNullViewState.legacyGroups.isNullOrEmpty()) {
             genericFooterItem {
                 id("legacy_space")
-                text(" ")
+                text(" ".toEpoxyCharSequence())
             }
 
             genericHeaderItem {
@@ -140,7 +142,7 @@ class SpaceSummaryController @Inject constructor(
                     val isSelected = selected is RoomGroupingMethod.BySpace && groupSummary.roomId == selected.space()?.roomId
                     // does it have children?
                     val subSpaces = groupSummary.spaceChildren?.filter { childInfo ->
-                        summaries?.indexOfFirst { it.roomId == childInfo.childRoomId } != -1
+                        summaries?.any { it.roomId == childInfo.childRoomId }.orFalse()
                     }?.sortedWith(subSpaceComparator)
                     val hasChildren = (subSpaces?.size ?: 0) > 0
                     val expanded = expandedStates[groupSummary.roomId] == true
@@ -191,7 +193,7 @@ class SpaceSummaryController @Inject constructor(
         val childSummary = summaries?.firstOrNull { it.roomId == info.childRoomId } ?: return
         // does it have children?
         val subSpaces = childSummary.spaceChildren?.filter { childInfo ->
-            summaries.indexOfFirst { it.roomId == childInfo.childRoomId } != -1
+            summaries.any { it.roomId == childInfo.childRoomId }
         }?.sortedWith(subSpaceComparator)
         val expanded = expandedStates[childSummary.roomId] == true
         val isSelected = selected is RoomGroupingMethod.BySpace && childSummary.roomId == selected.space()?.roomId

@@ -39,6 +39,7 @@ import im.vector.app.core.ui.views.PresenceStateImageView
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.presence.model.UserPresence
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -46,16 +47,12 @@ import org.matrix.android.sdk.api.util.MatrixItem
 @EpoxyModelClass(layout = R.layout.item_tchap_room)
 abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
-    @EpoxyAttribute lateinit var typingMessage: CharSequence
+    @EpoxyAttribute lateinit var typingMessage: String
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
 
-    // Used only for diff calculation
-    @EpoxyAttribute lateinit var lastEvent: String
-
-    // We use DoNotHash here as Spans are not implementing equals/hashcode
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) lateinit var lastFormattedEvent: CharSequence
-    @EpoxyAttribute lateinit var lastEventTime: CharSequence
+    @EpoxyAttribute lateinit var lastFormattedEvent: EpoxyCharSequence
+    @EpoxyAttribute lateinit var lastEventTime: String
     @EpoxyAttribute var encryptionTrustLevel: RoomEncryptionTrustLevel? = null
     @EpoxyAttribute var userPresence: UserPresence? = null
     @EpoxyAttribute var showPresence: Boolean = false
@@ -70,7 +67,6 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     @EpoxyAttribute var showSelected: Boolean = false
 
     // Tchap items
-    @EpoxyAttribute var izPinned: Boolean = false
     @EpoxyAttribute lateinit var roomType: TchapRoomType
 
     override fun bind(holder: Holder) {
@@ -81,9 +77,9 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
             itemLongClickListener?.onLongClick(it) ?: false
         }
         // Tchap: remove domain from the display name
-        holder.titleView.text = TchapUtils.getNameFromDisplayName(matrixItem.getBestName())
+        holder.titleView.text = TchapUtils.getRoomNameFromDisplayName(matrixItem.getBestName(), roomType)
         holder.lastEventTimeView.text = lastEventTime
-        holder.lastEventView.text = lastFormattedEvent
+        holder.lastEventView.text = lastFormattedEvent.charSequence
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         holder.draftView.isVisible = hasDraft
@@ -100,7 +96,6 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
         // Tchap items
         renderTchapRoomType(holder)
-        holder.pinView.isVisible = izPinned
     }
 
     override fun unbind(holder: Holder) {
@@ -164,6 +159,5 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         // Tchap items
         val domainNameView by bind<TextView>(R.id.tchapRoomDomainNameView)
         val avatarRoomTypeImageView by bind<ImageView>(R.id.tchapRoomAvatarEncryptedImageView)
-        val pinView by bind<ImageView>(R.id.tchapRoomPin)
     }
 }
