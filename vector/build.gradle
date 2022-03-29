@@ -14,7 +14,7 @@ kapt {
 
 // Note: 2 digits max for each value
 ext.versionMajor = 2
-ext.versionMinor = 1
+ext.versionMinor = 2
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
