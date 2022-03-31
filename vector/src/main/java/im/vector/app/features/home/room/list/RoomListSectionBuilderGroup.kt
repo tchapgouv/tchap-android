@@ -251,7 +251,6 @@ class RoomListSectionBuilderGroup(
                            @StringRes nameRes: Int,
                            notifyOfLocalEcho: Boolean = false,
                            query: (RoomSummaryQueryParams.Builder) -> Unit) {
-
         withQueryParams(query) { roomQueryParams ->
             val name = stringProvider.getString(nameRes)
             session.getFilteredPagedRoomSummariesLive(roomQueryParams)

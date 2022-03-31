@@ -437,7 +437,7 @@
     <string name="send_bug_report_include_key_share_history">Send key share requests history</string>
     <string name="send_bug_report_include_screenshot">Send screenshot</string>
     <string name="send_bug_report">Report bug</string>
-    <string name="template_send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?</string>
+    <string name="send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?</string>
     <string name="send_bug_report_description_in_english">If possible, please write the description in English.</string>
     <string name="send_bug_report_placeholder">Describe your problem here</string>
     <string name="send_bug_report_logs_description">In order to diagnose problems, logs from this client will be sent with this bug report. This bug report, including the logs and the screenshot, will not be publicly visible. If you would prefer to only send the text above, please untick:</string>
@@ -1931,7 +1931,7 @@
 
     <string name="login_reset_password_mail_confirmation_title">Check your inbox</string>
     <!-- Replaced string is an email -->
-    <string name="template_login_reset_password_mail_confirmation_notice">If a ${app_name} account exists, an e\u2011mail was sent to : %1$s.</string>
+    <string name="login_reset_password_mail_confirmation_notice">If a ${app_name} account exists, an e\u2011mail was sent to : %1$s.</string>
     <string name="login_reset_password_mail_confirmation_notice_2">Tap on the link to confirm your new password. Once you\'ve followed the link it contains, click below.</string>
     <string name="login_reset_password_mail_confirmation_submit">I have verified my email address</string>
 

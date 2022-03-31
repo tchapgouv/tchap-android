@@ -350,109 +350,109 @@ class RoomListSectionBuilderSpace(
                            spaceFilterStrategy: RoomListViewModel.SpaceFilterStrategy = RoomListViewModel.SpaceFilterStrategy.NONE,
                            countRoomAsNotif: Boolean = false,
                            query: (RoomSummaryQueryParams.Builder) -> Unit) {
-                                withQueryParams(query) { roomQueryParams ->
-                                    val updatedQueryParams = roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId())
-                                    val liveQueryParams = MutableStateFlow(updatedQueryParams)
-                                    val itemCountFlow = liveQueryParams
-                                            .flatMapLatest {
-                                                session.getRoomCountLive(it).asFlow()
-                                            }
-                                            .flowOn(Dispatchers.Main)
-                                            .distinctUntilChanged()
-                                    val name = stringProvider.getString(nameRes)
-                                    val filteredPagedRoomSummariesLive = session.getFilteredPagedRoomSummariesLive(
-                                            roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId()),
-                                            pagedListConfig
-                                    )
-                                    when (spaceFilterStrategy) {
-                                        RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL -> {
-                                            activeSpaceUpdaters.add(object : RoomListViewModel.ActiveSpaceQueryUpdater {
-                                                override fun updateForSpaceId(roomId: String?) {
-                                                    filteredPagedRoomSummariesLive.queryParams = roomQueryParams.copy(
-                                                            activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
-                                                    )
-                                                    liveQueryParams.update { filteredPagedRoomSummariesLive.queryParams }
-                                                }
-                                            })
-                                        }
-                                        RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL     -> {
-                                            activeSpaceUpdaters.add(object : RoomListViewModel.ActiveSpaceQueryUpdater {
-                                                override fun updateForSpaceId(roomId: String?) {
-                                                    if (roomId != null) {
-                                                        filteredPagedRoomSummariesLive.queryParams = roomQueryParams.copy(
-                                                                activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
-                                                        )
-                                                    } else {
-                                                        filteredPagedRoomSummariesLive.queryParams = roomQueryParams.copy(
-                                                                activeSpaceFilter = ActiveSpaceFilter.None
-                                                        )
-                                                    }
-                                                    liveQueryParams.update { filteredPagedRoomSummariesLive.queryParams }
-                                                }
-                                            })
-                                        }
-                                        RoomListViewModel.SpaceFilterStrategy.NONE                  -> {
-                                            // we ignore current space for this one
-                                        }
-                                    }
-
-                                    val livePagedList = filteredPagedRoomSummariesLive.livePagedList
-                                    // use it also as a source to update count
-                                    livePagedList.asFlow()
-                                            .onEach {
-                                                Timber.v("Thread space list: ${Thread.currentThread()}")
-                                                sections.find { it.sectionName == name }
-                                                        ?.notificationCount
-                                                        ?.postValue(
-                                                                if (countRoomAsNotif) {
-                                                                    RoomAggregateNotificationCount(it.size, it.size)
-                                                                } else {
-                                                                    session.getNotificationCountForRooms(
-                                                                            roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId())
-                                                                    )
-                                                                }
-                                                        )
-                                            }
-                                            .flowOn(Dispatchers.Default)
-                                            .launchIn(viewModelScope)
-
-                                    sections.add(
-                                            RoomsSection(
-                                                    sectionName = name,
-                                                    livePages = livePagedList,
-                                                    notifyOfLocalEcho = notifyOfLocalEcho,
-                                                    itemCount = itemCountFlow
-                                            )
-                                    )
-                                }
-                            }
-
-                    private fun withQueryParams(builder: (RoomSummaryQueryParams.Builder) -> Unit, block: (RoomSummaryQueryParams) -> Unit) {
-                        RoomSummaryQueryParams.Builder()
-                                .apply { builder.invoke(this) }
-                                .build()
-                                .let { block(it) }
+        withQueryParams(query) { roomQueryParams ->
+            val updatedQueryParams = roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId())
+            val liveQueryParams = MutableStateFlow(updatedQueryParams)
+            val itemCountFlow = liveQueryParams
+                    .flatMapLatest {
+                        session.getRoomCountLive(it).asFlow()
                     }
-
-                    internal fun RoomSummaryQueryParams.process(spaceFilter: RoomListViewModel.SpaceFilterStrategy, currentSpace: String?): RoomSummaryQueryParams {
-                        return when (spaceFilter) {
-                            RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL -> {
-                                copy(
-                                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(currentSpace)
+                    .flowOn(Dispatchers.Main)
+                    .distinctUntilChanged()
+            val name = stringProvider.getString(nameRes)
+            val filteredPagedRoomSummariesLive = session.getFilteredPagedRoomSummariesLive(
+                    roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId()),
+                    pagedListConfig
+            )
+            when (spaceFilterStrategy) {
+                RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL -> {
+                    activeSpaceUpdaters.add(object : RoomListViewModel.ActiveSpaceQueryUpdater {
+                        override fun updateForSpaceId(roomId: String?) {
+                            filteredPagedRoomSummariesLive.queryParams = roomQueryParams.copy(
+                                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
+                            )
+                            liveQueryParams.update { filteredPagedRoomSummariesLive.queryParams }
+                        }
+                    })
+                }
+                RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL     -> {
+                    activeSpaceUpdaters.add(object : RoomListViewModel.ActiveSpaceQueryUpdater {
+                        override fun updateForSpaceId(roomId: String?) {
+                            if (roomId != null) {
+                                filteredPagedRoomSummariesLive.queryParams = roomQueryParams.copy(
+                                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
+                                )
+                            } else {
+                                filteredPagedRoomSummariesLive.queryParams = roomQueryParams.copy(
+                                        activeSpaceFilter = ActiveSpaceFilter.None
                                 )
                             }
-                            RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL     -> {
-                                if (currentSpace == null) {
-                                    copy(
-                                            activeSpaceFilter = ActiveSpaceFilter.None
-                                    )
-                                } else {
-                                    copy(
-                                            activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(currentSpace)
-                                    )
-                                }
-                            }
-                            RoomListViewModel.SpaceFilterStrategy.NONE                  -> this
+                            liveQueryParams.update { filteredPagedRoomSummariesLive.queryParams }
                         }
-                    }
+                    })
                 }
+                RoomListViewModel.SpaceFilterStrategy.NONE                  -> {
+                    // we ignore current space for this one
+                }
+            }
+
+            val livePagedList = filteredPagedRoomSummariesLive.livePagedList
+            // use it also as a source to update count
+            livePagedList.asFlow()
+                    .onEach {
+                        Timber.v("Thread space list: ${Thread.currentThread()}")
+                        sections.find { it.sectionName == name }
+                                ?.notificationCount
+                                ?.postValue(
+                                        if (countRoomAsNotif) {
+                                            RoomAggregateNotificationCount(it.size, it.size)
+                                        } else {
+                                            session.getNotificationCountForRooms(
+                                                    roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId())
+                                            )
+                                        }
+                                )
+                    }
+                    .flowOn(Dispatchers.Default)
+                    .launchIn(viewModelScope)
+
+            sections.add(
+                    RoomsSection(
+                            sectionName = name,
+                            livePages = livePagedList,
+                            notifyOfLocalEcho = notifyOfLocalEcho,
+                            itemCount = itemCountFlow
+                    )
+            )
+        }
+    }
+
+    private fun withQueryParams(builder: (RoomSummaryQueryParams.Builder) -> Unit, block: (RoomSummaryQueryParams) -> Unit) {
+        RoomSummaryQueryParams.Builder()
+                .apply { builder.invoke(this) }
+                .build()
+                .let { block(it) }
+    }
+
+    internal fun RoomSummaryQueryParams.process(spaceFilter: RoomListViewModel.SpaceFilterStrategy, currentSpace: String?): RoomSummaryQueryParams {
+        return when (spaceFilter) {
+            RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL -> {
+                copy(
+                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(currentSpace)
+                )
+            }
+            RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL     -> {
+                if (currentSpace == null) {
+                    copy(
+                            activeSpaceFilter = ActiveSpaceFilter.None
+                    )
+                } else {
+                    copy(
+                            activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(currentSpace)
+                    )
+                }
+            }
+            RoomListViewModel.SpaceFilterStrategy.NONE                  -> this
+        }
+    }
+}

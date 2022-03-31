@@ -4,7 +4,16 @@
     <!-- should the same value as the file name -->
 
     <!-- tchap Authentication -->
-    <string name="template_start_message">Bienvenue dans ${app_name}</string>
+    <string name="start_message">Bienvenue dans ${app_name}</string>
+    <string name="tchap_auth_repeat_new_password_placeholder">Confirmez votre nouveau mot de passe</string>
+
+    <!-- Register -->
+    <string name="tchap_auth_password_dont_match">Les mots de passe ne correspondent pas</string>
+
+    <!-- Invitation -->
+    <string name="tchap_people_search_invite_by_id_dialog_title">Inviter par e\u2011mail</string>
+    <string name="tchap_people_search_invite_by_id_dialog_description">Veuillez saisir l’adresse e\u2011mail de la personne à inviter</string>
+    <string name="tchap_people_search_invite_by_id_dialog_hint">E\u2011mail</string>
 
     <!-- tchap room creation -->
     <string name="tchap_action_next">Suivant</string>
@@ -33,21 +42,21 @@
 
     <!-- tchap new strings -->
     <string name="tchap_room_last_admin_leave_prompt_msg">Ce salon ne sera plus administré, et vous risquez de ne plus pouvoir le joindre de nouveau.</string>
-    <string name="template_tchap_invite_contacts_to_tchap">Inviter à rejoindre ${app_name}</string>
+    <string name="tchap_invite_contacts_to_tchap">Inviter à rejoindre ${app_name}</string>
     <string name="tchap_invite_contacts_by_email">Inviter par e\u2011mail</string>
     <string name="tchap_invite_contacts_by_link">Inviter par lien</string>
     <string name="tchap_invite_contacts_to_room">Inviter au salon</string>
     <string name="tchap_room_invite_member_direct_chat">Nouvelle discussion</string>
     <string name="tchap_invite_already_send_message">Vous avez déjà envoyé une invitation à %s</string>
-    <string name="template_tchap_invite_not_sent_for_discovered_user">Ce contact utilise déjà ${app_name}, vous pouvez dès à présent lui envoyer un message.</string>
-    <string name="template_tchap_start_discussion_with_discovered_user">%s utilise déjà ${app_name}, une discussion vient d’être crée avec ce contact</string>
-    <string name="template_tchap_invite_unreachable_message">%s n’est pas joignable pour l’instant par ${app_name}</string>
+    <string name="tchap_invite_not_sent_for_discovered_user">Ce contact utilise déjà ${app_name}, vous pouvez dès à présent lui envoyer un message.</string>
+    <string name="tchap_start_discussion_with_discovered_user">%s utilise déjà ${app_name}, une discussion vient d’être crée avec ce contact</string>
+    <string name="tchap_invite_unreachable_message">%s n’est pas joignable pour l’instant par ${app_name}</string>
     <string name="tchap_invite_unauthorized_title_restricted_room">Les externes ne sont pas autorisés à rejoindre ce salon</string>
     <string name="tchap_invite_unauthorized_title_unfederated_room">Seuls les membres du domaine \"%s\" sont autorisés</string>
     <string name="tchap_invite_unauthorized_message">Il n\'est pas possible d\'inviter : %s</string>
     <string name="tchap_send_invite_failed">Echec de l’envoi de l’invitation à %s</string>
     <string name="tchap_send_invite_network_error">Impossible d’envoyer une invitation : erreur réseau</string>
-    <string name="template_tchap_send_invite_confirmation">Vous recevrez une notification lorsque \n votre invité rejoindra la communauté ${app_name}</string>
+    <string name="tchap_send_invite_confirmation">Vous recevrez une notification lorsque \n votre invité rejoindra la communauté ${app_name}</string>
     <string name="tchap_invite_sending_succeeded">L’invitation a bien été envoyée.</string>
     <string name="tchap_burger_menu_contacts">Contacts</string>
     <string name="tchap_burger_menu_public_rooms">Salons forums</string>
@@ -123,25 +132,25 @@
     <string name="tchap_renew_account_validity_invalid_token_msg">Le jeton de renouvellement est invalide</string>
 
     <!-- tchap android version limitation -->
-    <string name="template_tchap_unsupported_android_version_title">Pour des raisons de sécurité, ${app_name} n’est plus disponible sur les versions d’Android 4.4.4 et inférieures</string>
+    <string name="tchap_unsupported_android_version_title">Pour des raisons de sécurité, ${app_name} n’est plus disponible sur les versions d’Android 4.4.4 et inférieures</string>
     <string name="tchap_unsupported_android_version_message">Merci de bien vouloir vous déconnecter de cet appareil.\nNous vous invitons à exporter vos clés de chiffrement avant la déconnexion, afin de pouvoir déchiffrer l’historique de vos conversations sur un nouvel appareil. Vous pourrez alors les importer dans vos nouveaux appareils, lorsque vous vous reconnecterez.</string>
     <string name="tchap_unsupported_android_version_export_keys">Exporter les clés</string>
     <string name="tchap_unsupported_android_version_default_msg">Merci de votre compréhension.</string>
 
     <!-- Login/Register Tchap -->
-    <string name="template_tchap_register_title">Inscription ${app_name}</string>
-    <string name="template_tchap_connection_title">Connexion ${app_name}</string>
+    <string name="tchap_register_title">Inscription ${app_name}</string>
+    <string name="tchap_connection_title">Connexion ${app_name}</string>
     <string name="tchap_has_account_no">Je n’ai pas\nde compte</string>
     <string name="tchap_has_account_yes">J’ai un compte</string>
     <string name="tchap_connection_email">Adresse email</string>
     <string name="tchap_connection_email_help">Utilisez votre adresse professionnelle</string>
-    <string name="template_tchap_connection_password">Mot de passe ${app_name}</string>
+    <string name="tchap_connection_password">Mot de passe ${app_name}</string>
     <string name="tchap_connection_password_help">Votre mot de passe doit contenir au moins 8 caractères, avec au moins un caractère de chaque type : majuscule, minuscule, chiffre, caractère spécial.</string>
     <string name="tchap_connection_password_confirm">Confirmer le mot de passe</string>
     <string name="tchap_register_warning_for_external_title">Information concernant votre inscription</string>
-    <string name="template_tchap_register_warning_for_external">Le domaine de votre adresse e\u2011mail n’est pas déclaré dans ${app_name}. Si vous avez reçu une invitation, vous allez pouvoir créer un compte ${app_name} « invité », permettant uniquement de participer aux échanges privés auxquels vous êtes convié.</string>
+    <string name="tchap_register_warning_for_external">Le domaine de votre adresse e\u2011mail n’est pas déclaré dans ${app_name}. Si vous avez reçu une invitation, vous allez pouvoir créer un compte ${app_name} « invité », permettant uniquement de participer aux échanges privés auxquels vous êtes convié.</string>
     <string name="tchap_register_warning_for_external_proceed">Poursuivre</string>
-    <string name="template_tchap_register_wait_for_email_title">Un e\u2011mail vous a été envoyé à l’adresse suivante, sauf si un compte ${app_name} lui a déjà été associé :</string>
+    <string name="tchap_register_wait_for_email_title">Un e\u2011mail vous a été envoyé à l’adresse suivante, sauf si un compte ${app_name} lui a déjà été associé :</string>
     <string name="tchap_register_wait_for_email_subtitle">Merci de cliquer sur le lien proposé dans cet e\u2011mail afin de terminer la création de votre compte. Vous pourrez alors vous connecter en allant sur l’écran de connexion.</string>
     <string name="tchap_register_wait_for_email_login_button">Aller à l’écran de connexion</string>
     <string name="tchap_register_wait_for_email_no_email">Je n’ai pas reçu l’email!</string>
@@ -158,15 +167,16 @@
     <string name="tchap_register_pwd_no_digit">Ce mot de passe doit contenir au moins un chiffre</string>
     <string name="tchap_register_pwd_no_lowercase">Ce mot de passe doit contenir au moins une minuscule</string>
     <string name="tchap_register_pwd_no_symbol">Ce mot de passe doit contenir au moins un caractère spécial</string>
+    <string name="tchap_login_error_unable_register">Impossible de s’inscrire</string>
 
     <!-- Logout Tchap -->
     <string name="tchap_action_sign_out_confirmation">Pour des raisons de sécurité, la déconnexion supprimera toutes les clés de chiffrement de bout en bout, rendant l’historique des conversations chiffrées inaccessible lorsque vous vous reconnecterez. Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
 
     <!-- Call -->
-    <string name="template_tchap_call_not_supported">${app_name} ne supporte pas les appels</string>
+    <string name="tchap_call_not_supported">${app_name} ne supporte pas les appels</string>
 
     <!-- Home drawer -->
-    <string name="template_tchap_invite_to">Inviter à rejoindre ${app_name}</string>
+    <string name="tchap_invite_to">Inviter à rejoindre ${app_name}</string>
 
     <!-- Settings -->
     <string name="tchap_settings_change_pwd_caution">Changer le mot de passe réinitialise les clés de chiffrement sur tous les appareils, rendant l’historique des discussions illisible : pensez d’abord à sauvegarder vos clés sur l’ensemble de vos sessions pour pouvoir les récupérer après le changement de mot de passe.</string>

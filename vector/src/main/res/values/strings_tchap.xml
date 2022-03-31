@@ -4,7 +4,16 @@
     <!-- should the same value as the file name -->
 
     <!-- tchap Authentication -->
-    <string name="template_start_message">Welcome to ${app_name}</string>
+    <string name="start_message">Welcome to ${app_name}</string>
+    <string name="tchap_auth_repeat_new_password_placeholder">Confirm your new password</string>
+
+    <!-- Register -->
+    <string name="tchap_auth_password_dont_match">Passwords don’t match</string>
+
+    <!-- Invitation -->
+    <string name="tchap_people_search_invite_by_id_dialog_title">Send an invitation</string>
+    <string name="tchap_people_search_invite_by_id_dialog_description">Please enter email address of the person to invite</string>
+    <string name="tchap_people_search_invite_by_id_dialog_hint">Email</string>
 
     <!-- tchap room creation -->
     <string name="tchap_action_next">Next</string>
@@ -33,21 +42,21 @@
 
     <!-- tchap new strings -->
     <string name="tchap_room_last_admin_leave_prompt_msg">The room will no longer be administered, and you may not be able to join it again</string>
-    <string name="template_tchap_invite_contacts_to_tchap">Invite contacts in ${app_name}</string>
+    <string name="tchap_invite_contacts_to_tchap">Invite contacts in ${app_name}</string>
     <string name="tchap_invite_contacts_by_email">Invite by email</string>
     <string name="tchap_invite_contacts_by_link">Invite by link</string>
     <string name="tchap_invite_contacts_to_room">Invite contacts in Room</string>
     <string name="tchap_room_invite_member_direct_chat">New discussion</string>
     <string name="tchap_invite_already_send_message">You have already sent an invitation to %s</string>
-    <string name="template_tchap_invite_not_sent_for_discovered_user">This contact already uses ${app_name}, you can send him a message now.</string>
-    <string name="template_tchap_start_discussion_with_discovered_user">%s already uses ${app_name}, a discussion has been created with this contact</string>
-    <string name="template_tchap_invite_unreachable_message">%s cannot be reached for the moment by ${app_name}</string>
+    <string name="tchap_invite_not_sent_for_discovered_user">This contact already uses ${app_name}, you can send him a message now.</string>
+    <string name="tchap_start_discussion_with_discovered_user">%s already uses ${app_name}, a discussion has been created with this contact</string>
+    <string name="tchap_invite_unreachable_message">%s cannot be reached for the moment by ${app_name}</string>
     <string name="tchap_invite_unauthorized_title_restricted_room">The externals are not allowed to join this room</string>
     <string name="tchap_invite_unauthorized_title_unfederated_room">Only the members of the domain \"%s\" are allowed</string>
     <string name="tchap_invite_unauthorized_message">Unable to send invite to %s</string>
     <string name="tchap_send_invite_failed">Failed to send invitation to %s</string>
     <string name="tchap_send_invite_network_error">Unable to send invite: Network error</string>
-    <string name="template_tchap_send_invite_confirmation">You will receive a notification when \n your guest joins the ${app_name} community</string>
+    <string name="tchap_send_invite_confirmation">You will receive a notification when \n your guest joins the ${app_name} community</string>
     <string name="tchap_invite_sending_succeeded">The invitation has been sent.</string>
     <string name="tchap_burger_menu_contacts">Contacts</string>
     <string name="tchap_burger_menu_public_rooms">Forums</string>
@@ -124,25 +133,25 @@
     <string name="tchap_renew_account_validity_invalid_token_msg">The token is invalid</string>
 
     <!-- tchap android version limitation -->
-    <string name="template_tchap_unsupported_android_version_title">For security reasons, ${app_name} is not supported anymore on Android 4.4.4 and lower</string>
+    <string name="tchap_unsupported_android_version_title">For security reasons, ${app_name} is not supported anymore on Android 4.4.4 and lower</string>
     <string name="tchap_unsupported_android_version_message">Please log out your account from this device.\nIn order to be able to decrypt your chat history when you will log in from another device, we invite you to export your encryption keys before signing out.</string>
     <string name="tchap_unsupported_android_version_export_keys">Export keys</string>
     <string name="tchap_unsupported_android_version_default_msg">You may uninstall the application.</string>
 
     <!-- Login/Register Tchap -->
-    <string name="template_tchap_register_title">Sign up to ${app_name}</string>
-    <string name="template_tchap_connection_title">Login to ${app_name}</string>
+    <string name="tchap_register_title">Sign up to ${app_name}</string>
+    <string name="tchap_connection_title">Login to ${app_name}</string>
     <string name="tchap_has_account_no">I do not have\nan account</string>
     <string name="tchap_has_account_yes">I already have\nan account</string>
     <string name="tchap_connection_email">Email</string>
     <string name="tchap_connection_email_help">Use your business address</string>
-    <string name="template_tchap_connection_password">${app_name} password</string>
+    <string name="tchap_connection_password">${app_name} password</string>
     <string name="tchap_connection_password_help">Your password must include a lower-case letter, an upper-case letter, a number and a symbol and be at a minimum 8 characters in length.</string>
     <string name="tchap_connection_password_confirm">Password confirmation</string>
     <string name="tchap_register_warning_for_external_title">Information about your registration</string>
-    <string name="template_tchap_register_warning_for_external">Your email domain is not registered on ${app_name}. If you have received an invite, you will be able to create a ${app_name} account, which will allow you to join only the private discussions in which you are invited.</string>
+    <string name="tchap_register_warning_for_external">Your email domain is not registered on ${app_name}. If you have received an invite, you will be able to create a ${app_name} account, which will allow you to join only the private discussions in which you are invited.</string>
     <string name="tchap_register_warning_for_external_proceed">Proceed</string>
-    <string name="template_tchap_register_wait_for_email_title">An e-mail has been sent, except if a ${app_name} account already exists:</string>
+    <string name="tchap_register_wait_for_email_title">An e-mail has been sent, except if a ${app_name} account already exists:</string>
     <string name="tchap_register_wait_for_email_subtitle">Please open it and click in the link it contains to create your account</string>
     <string name="tchap_register_wait_for_email_login_button">Go to login screen</string>
     <string name="tchap_register_wait_for_email_no_email">I have not received any e-mail!</string>
@@ -159,15 +168,16 @@
     <string name="tchap_register_pwd_no_digit">The password must include at least one digit</string>
     <string name="tchap_register_pwd_no_lowercase">The password must include at least one lowercase</string>
     <string name="tchap_register_pwd_no_symbol">The password must include at least one special character</string>
+    <string name="tchap_login_error_unable_register">Unable to register</string>
 
     <!-- Logout Tchap -->
     <string name="tchap_action_sign_out_confirmation">For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.</string>
 
     <!-- Call -->
-    <string name="template_tchap_call_not_supported">${app_name} does not support calls</string>
+    <string name="tchap_call_not_supported">${app_name} does not support calls</string>
 
     <!-- Home drawer -->
-    <string name="template_tchap_invite_to">Invite to join ${app_name}</string>
+    <string name="tchap_invite_to">Invite to join ${app_name}</string>
 
     <!-- Settings -->
     <string name="tchap_settings_change_pwd_caution">Changing the password resets the encryption keys on all devices, making the chat history unreadable: first, backup your keys from all your sessions so you can use them after you change the password.</string>
