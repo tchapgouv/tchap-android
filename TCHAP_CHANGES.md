@@ -1,9 +1,17 @@
+Changes in Tchap 2.0.4 (2022-03-31)
+===================================
+
+Bugfixes 🐛
+----------
+ - Fix SSL errors on some devices using fdroid version ([#517](https://github.com/tchapgouv/tchap-android-v2/issues/517))
+
+
 Changes in Tchap 2.0.3 (2022-03-07)
 ===================================
 
 Other changes
 -------------
- - Disable Android Auto supports, see https://github.com/tchapgouv/tchap-android-v2/issues/471 ([#471](https://github.com/tchapgouv/tchap-android-v2/issues/471))
+ - Disable Android Auto supports ([#471](https://github.com/tchapgouv/tchap-android-v2/issues/471))
 
 
 Changes in Tchap 2.0.2 (2022-03-02)
