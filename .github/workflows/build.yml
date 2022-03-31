@@ -42,7 +42,8 @@ jobs:
   release:
     name: Build unsigned ${{ matrix.target }} APKs
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    # Tchap: Generate apks on new tchap release
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/tchap_v')
     strategy:
       fail-fast: false
       matrix:
