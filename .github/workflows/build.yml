@@ -4,6 +4,7 @@ on:
   pull_request: { }
   push:
     branches: [ main, develop ]
+    tags: [tchap_v*]
 
 # Enrich gradle.properties for CI/CD
 env:
