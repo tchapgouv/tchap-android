@@ -32,11 +32,8 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
-<<<<<<< HEAD
 import org.matrix.android.sdk.api.session.Session
-=======
 import org.matrix.android.sdk.api.MatrixConfiguration
->>>>>>> v1.4.8
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -50,11 +47,8 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                                                  private val typingHelper: TypingHelper,
                                                  private val avatarRenderer: AvatarRenderer,
                                                  private val errorFormatter: ErrorFormatter,
-<<<<<<< HEAD
-                                                 private val session: Session) {
-=======
+                                                 private val session: Session,
                                                  private val matrixConfiguration: MatrixConfiguration) {
->>>>>>> v1.4.8
 
     fun create(roomSummary: RoomSummary,
                roomChangeMembershipStates: Map<String, ChangeMembershipState>,

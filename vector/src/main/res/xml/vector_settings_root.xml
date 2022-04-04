@@ -30,11 +30,7 @@
         android:icon="@drawable/ic_settings_root_call"
         android:title="@string/preference_voice_and_video"
         app:fragment="im.vector.app.features.settings.VectorSettingsVoiceVideoFragment"
-<<<<<<< HEAD
         app:isPreferenceVisible="@bool/is_voip_supported" />
-=======
-        app:isPreferenceVisible="@bool/settings_root_voice_video_visible" />
->>>>>>> v1.4.8
 
     <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_ignored_users"
@@ -52,11 +48,7 @@
         android:icon="@drawable/ic_settings_root_labs"
         android:title="@string/room_settings_labs_pref_title"
         app:fragment="im.vector.app.features.settings.VectorSettingsLabsFragment"
-<<<<<<< HEAD
         app:isPreferenceVisible="@bool/labs_settings_visible" />
-=======
-        app:isPreferenceVisible="@bool/settings_root_labs_visible" />
->>>>>>> v1.4.8
 
     <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_advanced"

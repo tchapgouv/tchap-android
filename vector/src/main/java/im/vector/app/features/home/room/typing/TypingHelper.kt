@@ -51,9 +51,8 @@ class TypingHelper @Inject constructor(private val stringProvider: StringProvide
         }
     }
 
-<<<<<<< HEAD
     private fun getDisplayName(name: String) = TchapUtils.getNameFromDisplayName(name)
-=======
+
     fun getNotificationTypingMessage(typingUsers: List<SenderInfo>): String {
         return when {
             typingUsers.isEmpty() -> ""
@@ -64,5 +63,4 @@ class TypingHelper @Inject constructor(private val stringProvider: StringProvide
                     typingUsers[0].disambiguatedDisplayName, typingUsers[1].disambiguatedDisplayName)
         }
     }
->>>>>>> v1.4.8
 }

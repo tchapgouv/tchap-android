@@ -251,31 +251,12 @@ class RoomListSectionBuilderGroup(
                            @StringRes nameRes: Int,
                            notifyOfLocalEcho: Boolean = false,
                            query: (RoomSummaryQueryParams.Builder) -> Unit) {
-<<<<<<< HEAD
-        withQueryParams(
-                { query.invoke(it) },
-                { roomQueryParams ->
-                    val name = stringProvider.getString(nameRes)
-                    session.getFilteredPagedRoomSummariesLive(roomQueryParams)
-                            .also {
-                                onUpdatable(it)
-                                activeSpaceUpdaters.add(it)
-                            }.livePagedList
-                            .let { livePagedList ->
-                                // use it also as a source to update count
-                                livePagedList.asFlow()
-                                        .onEach {
-                                            sections.find { it.sectionName == name }
-                                                    ?.notificationCount
-                                                    ?.postValue(session.getNotificationCountForRooms(roomQueryParams))
-                                        }
-                                        .flowOn(Dispatchers.Default)
-                                        .launchIn(coroutineScope)
-=======
         withQueryParams(query) { roomQueryParams ->
             val name = stringProvider.getString(nameRes)
             session.getFilteredPagedRoomSummariesLive(roomQueryParams)
                     .also {
+                        // Tchap: Refresh RoomList
+                        onUpdatable(it)
                         activeSpaceUpdaters.add(it)
                     }.livePagedList
                     .let { livePagedList ->
@@ -288,7 +269,6 @@ class RoomListSectionBuilderGroup(
                                 }
                                 .flowOn(Dispatchers.Default)
                                 .launchIn(coroutineScope)
->>>>>>> v1.4.8
 
                         sections.add(
                                 RoomsSection(

@@ -87,11 +87,7 @@
 
         <!-- Tchap: Enable message bubble by default -->
         <im.vector.app.core.preference.VectorSwitchPreference
-<<<<<<< HEAD
-            android:defaultValue="true"
-=======
             android:defaultValue="@bool/settings_interface_bubble_default"
->>>>>>> v1.4.8
             android:key="SETTINGS_INTERFACE_BUBBLE_KEY"
             android:title="@string/message_bubbles"
             app:isPreferenceVisible="@bool/settings_interface_bubble_visible" />

@@ -1624,16 +1624,10 @@ class TimelineFragment @Inject constructor(
                 views.includeRoomToolbar.roomToolbarContentView.isClickable = roomSummary.membership == Membership.JOIN
                 views.includeRoomToolbar.roomToolbarTitleView.text = roomSummary.displayName
                 avatarRenderer.render(roomSummary.toMatrixItem(), views.includeRoomToolbar.roomToolbarAvatarImageView)
-<<<<<<< HEAD
-                renderSubTitle(typingMessage, roomSummary.topic)
-                views.includeRoomToolbar.roomToolbarDecorationImageView.render(null) // Tchap does not display encryption trust level
-                views.includeRoomToolbar.roomToolbarPresenceImageView.render(roomSummary.isDirect, roomSummary.directUserPresence)
-=======
                 val showPresence = roomSummary.isDirect && matrixConfiguration.presenceSyncEnabled
                 views.includeRoomToolbar.roomToolbarPresenceImageView.render(showPresence, roomSummary.directUserPresence)
                 val shieldView = if (showPresence) views.includeRoomToolbar.roomToolbarTitleShield else views.includeRoomToolbar.roomToolbarAvatarShield
-                shieldView.render(roomSummary.roomEncryptionTrustLevel)
->>>>>>> v1.4.8
+                shieldView.render(null) // Tchap does not display encryption trust level
                 views.includeRoomToolbar.roomToolbarPublicImageView.isVisible = roomSummary.isPublic && !roomSummary.isDirect
             }
         } else {

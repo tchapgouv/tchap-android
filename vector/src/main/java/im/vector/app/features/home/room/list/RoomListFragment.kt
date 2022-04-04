@@ -60,12 +60,9 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.home.room.list.widget.TchapRoomsFabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
-<<<<<<< HEAD
 import kotlinx.coroutines.flow.debounce
-=======
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
->>>>>>> v1.4.8
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach

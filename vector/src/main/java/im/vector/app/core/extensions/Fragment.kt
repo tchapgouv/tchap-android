@@ -170,20 +170,12 @@ const val POP_BACK_STACK_EXCLUSIVE = 0
 @Suppress("UNUSED_PARAMETER")
 fun Fragment.queryExportKeys(userId: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-<<<<<<< HEAD
-    val appName = getString(R.string.app_name)
-=======
     val appName = getString(R.string.app_name).replace(" ", "-")
->>>>>>> v1.4.8
 
     selectTxtFileToWrite(
             activity = requireActivity(),
             activityResultLauncher = activityResultLauncher,
-<<<<<<< HEAD
             defaultFileName = "$appName-keys-export-$timestamp.txt",
-=======
-            defaultFileName = "$appName-megolm-export-$userId-$timestamp.txt",
->>>>>>> v1.4.8
             chooserHint = getString(R.string.keys_backup_setup_step1_manual_export)
     )
 }
@@ -191,20 +183,12 @@ fun Fragment.queryExportKeys(userId: String, activityResultLauncher: ActivityRes
 @Suppress("UNUSED_PARAMETER")
 fun Activity.queryExportKeys(userId: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-<<<<<<< HEAD
-    val appName = getString(R.string.app_name)
-=======
     val appName = getString(R.string.app_name).replace(" ", "-")
->>>>>>> v1.4.8
 
     selectTxtFileToWrite(
             activity = this,
             activityResultLauncher = activityResultLauncher,
-<<<<<<< HEAD
             defaultFileName = "$appName-keys-export-$timestamp.txt",
-=======
-            defaultFileName = "$appName-megolm-export-$userId-$timestamp.txt",
->>>>>>> v1.4.8
             chooserHint = getString(R.string.keys_backup_setup_step1_manual_export)
     )
 }

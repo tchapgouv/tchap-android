@@ -510,7 +510,6 @@ class VectorSettingsGeneralFragment @Inject constructor(
                                 dialog.show()
                             }
 
-<<<<<<< HEAD
                             override fun exportKeys(passphrase: String, uri: Uri) {
                                 showLoadingView(true)
                                 lifecycleScope.launch {
@@ -523,21 +522,6 @@ class VectorSettingsGeneralFragment @Inject constructor(
                                     showLoadingView(false)
                                 }
                             }
-=======
-            lifecycleScope.launch {
-                val result = runCatching { session.setDisplayName(session.myUserId, value) }
-                if (!isAdded) return@launch
-                result.fold(
-                        onSuccess = {
-                            // refresh the settings value
-                            mDisplayNamePreference.summary = value
-                            mDisplayNamePreference.text = value
-                            hideLoadingView()
-                        },
-                        onFailure = {
-                            hideLoadingView()
-                            displayErrorDialog(it)
->>>>>>> v1.4.8
                         }
                     }
                     .show(activity.supportFragmentManager, "changePasswordPreDialog")
@@ -595,15 +579,16 @@ class VectorSettingsGeneralFragment @Inject constructor(
 //                val result = runCatching { session.setDisplayName(session.myUserId, value) }
 //                if (!isAdded) return@launch
 //                result.fold(
-//                        {
-//                            // refresh the settings value
-//                            mDisplayNamePreference.summary = value
-//                            mDisplayNamePreference.text = value
-//                            onCommonDone(null)
-//                        },
-//                        {
-//                            onCommonDone(it.localizedMessage)
-//                        }
+//                         onSuccess = {
+//                    // refresh the settings value
+//                    mDisplayNamePreference.summary = value
+//                    mDisplayNamePreference.text = value
+//                    hideLoadingView()
+//                },
+//                onFailure = {
+//                    hideLoadingView()
+//                    displayErrorDialog(it)
+//                }
 //                )
 //            }
 //        }

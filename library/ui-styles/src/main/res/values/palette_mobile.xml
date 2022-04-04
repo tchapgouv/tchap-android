@@ -53,14 +53,10 @@
     <color name="element_room_01">@color/palette_tchap_greyish_purple</color>
     <color name="element_room_02">@color/palette_azure</color>
     <color name="element_room_03">@color/palette_grape</color>
-<<<<<<< HEAD
 
     <!-- Tchap room type color -->
     <color name="tchap_room_encrypted">@color/palette_tchap_greyish_brown</color>
     <color name="tchap_room_private">@color/palette_tchap_coral</color>
     <color name="tchap_room_external">@color/palette_tchap_pumpkin_orange</color>
     <color name="tchap_room_forum">@color/palette_tchap_jade_green</color>
-
-=======
->>>>>>> v1.4.8
 </resources>

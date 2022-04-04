@@ -205,21 +205,14 @@ class RoomListViewModel @AssistedInject constructor(
                     roomFilter = action.filter
             )
         }
-<<<<<<< HEAD
 
         // filter query for each section
         updatableQueries.forEach { updatableQuery ->
-            updatableQuery.updateQuery {
-                it.copy(
+            updatableQuery.apply {
+                queryParams = queryParams.copy(
                         displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.NORMALIZED)
                 )
             }
-=======
-        updatableQuery?.apply {
-            queryParams = queryParams.copy(
-                    displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.NORMALIZED)
-            )
->>>>>>> v1.4.8
         }
     }
 

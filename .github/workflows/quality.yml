@@ -121,15 +121,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-<<<<<<< HEAD
         target: [ GplayBtchapWithoutvoipWithpinning, FdroidBtchapWithoutvoipWithoutpinning ]
-=======
-        target: [ Gplay, Fdroid ]
     # Allow all jobs on develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/develop' && format('apk-lint-develop-{0}-{1}', matrix.target, github.sha) || format('apk-lint-{0}-{1}', matrix.target, github.ref) }}
       cancel-in-progress: true
->>>>>>> v1.4.8
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v2

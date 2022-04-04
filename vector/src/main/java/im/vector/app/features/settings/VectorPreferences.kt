@@ -868,12 +868,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * @return true to show timeline message in bubble.
      */
     fun useMessageBubblesLayout(): Boolean {
-<<<<<<< HEAD
-        // Tchap: Enable message bubbles by default
-        return defaultPrefs.getBoolean(SETTINGS_INTERFACE_BUBBLE_KEY, true)
-=======
         return defaultPrefs.getBoolean(SETTINGS_INTERFACE_BUBBLE_KEY, getDefault(R.bool.settings_interface_bubble_default))
->>>>>>> v1.4.8
     }
 
     /**

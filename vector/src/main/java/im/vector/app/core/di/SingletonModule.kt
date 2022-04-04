@@ -115,23 +115,18 @@ object VectorStaticModule {
     }
 
     @Provides
-<<<<<<< HEAD
-    fun providesMatrixConfiguration(vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider, context: Context): MatrixConfiguration {
-        return MatrixConfiguration(
-                applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
-                roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
-                // Tchap: Use custom permalink prefix
-                clientPermalinkBaseUrl = context.getString(R.string.permalink_prefix)
-=======
     fun providesMatrixConfiguration(
             vectorPreferences: VectorPreferences,
-            vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider): MatrixConfiguration {
+            vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider,
+            context: Context
+    ): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
                 roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
                 threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
-                presenceSyncEnabled = BuildConfig.PRESENCE_SYNC_ENABLED
->>>>>>> v1.4.8
+                presenceSyncEnabled = BuildConfig.PRESENCE_SYNC_ENABLED,
+                // Tchap: Use custom permalink prefix
+                clientPermalinkBaseUrl = context.getString(R.string.permalink_prefix)
         )
     }
 
