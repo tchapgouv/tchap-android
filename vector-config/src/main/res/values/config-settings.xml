@@ -12,10 +12,12 @@
     <bool name="settings_root_general_visible">true</bool>
     <bool name="settings_root_notification_visible">true</bool>
     <bool name="settings_root_preferences_visible">true</bool>
-    <bool name="settings_root_voice_video_visible">true</bool>
+    <!-- Tchap: use gradle config -->
+    <!--    <bool name="settings_root_voice_video_visible">true</bool>-->
     <bool name="settings_root_ignored_users_visible">true</bool>
     <bool name="settings_root_security_privacy_visible">true</bool>
-    <bool name="settings_root_labs_visible">true</bool>
+    <!-- Tchap: use gradle config -->
+    <!--    <bool name="settings_root_labs_visible">true</bool>-->
     <bool name="settings_root_advanced_visible">true</bool>
     <bool name="settings_root_help_about_visible">true</bool>
     <bool name="settings_root_legals_visible">true</bool>
@@ -27,7 +29,7 @@
     <!-- Level 1: Preferences -->
 
     <bool name="settings_interface_bubble_visible">true</bool>
-    <bool name="settings_interface_bubble_default">false</bool>
+    <bool name="settings_interface_bubble_default">true</bool>
 
     <!-- Level 1: Voice and video -->
 

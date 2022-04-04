@@ -23,6 +23,12 @@
     <issue id="UnusedResources" severity="error">
         <!-- Ignore unused resource in debug build type -->
         <ignore path="**/src/debug/**" />
+        <!-- Tchap: Use custom lint rules -->
+        <ignore path="**/main/res/values/strings.xml"/>
+        <ignore path="**/main/res/drawable/ic_call_back_to_chat.xml"/>
+        <ignore path="**/main/res/menu/vector_call.xml"/>
+        <ignore path="**/main/res/layout/item_room_invitation.xml"/>
+        <ignore path="**/withpinning/res/raw/certignaservicesrootca.cer"/>
 
         <!-- Following resources are for F-Droid variant only, so ignore for GPlay -->
         <ignore regexp="settings_troubleshoot_test_service_boot_*" />
