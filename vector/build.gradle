@@ -261,15 +261,13 @@ android {
 
     buildTypes {
         debug {
-            resValue "bool", "debug_mode", "true"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             // Set to true if you want to enable strict mode in debug
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
 
-            signingConfig signingConfigs.debug
-
-            applicationIdSuffix ".debug"
             buildConfigField "Boolean", "ENABLE_LIVE_LOCATION_SHARING", "true"
+
+            signingConfig signingConfigs.debug
 
             // Tchap: Disable the location sharing
             buildConfigField "Boolean", "ENABLE_LIVE_LOCATION_SHARING", "false"
