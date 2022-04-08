@@ -47,6 +47,7 @@ import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.SharedPrefPinCodeStore
 import im.vector.app.features.room.VectorRoomDisplayNameFallbackProvider
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.CoroutineScope
@@ -114,10 +115,16 @@ object VectorStaticModule {
     }
 
     @Provides
-    fun providesMatrixConfiguration(vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider, context: Context): MatrixConfiguration {
+    fun providesMatrixConfiguration(
+            vectorPreferences: VectorPreferences,
+            vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider,
+            context: Context
+    ): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
                 roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
+                threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
+                presenceSyncEnabled = BuildConfig.PRESENCE_SYNC_ENABLED,
                 // Tchap: Use custom permalink prefix
                 clientPermalinkBaseUrl = context.getString(R.string.permalink_prefix)
         )

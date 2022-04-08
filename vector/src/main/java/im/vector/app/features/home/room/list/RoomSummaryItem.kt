@@ -158,6 +158,6 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
         // Tchap items
         val domainNameView by bind<TextView>(R.id.tchapRoomDomainNameView)
-        val avatarRoomTypeImageView by bind<ImageView>(R.id.tchapRoomAvatarEncryptedImageView)
+        val avatarRoomTypeImageView by bind<ImageView>(R.id.tchapRoomTypeImageView)
     }
 }

@@ -35,7 +35,6 @@
     <attr name="vctr_system" format="color" />
     <color name="element_system_light">@color/palette_gray_25</color>
     <color name="element_system_dark">@color/palette_black_950</color>
-    <color name="element_system_black">@color/palette_black_950</color>
 
     <color name="element_background_light">@color/palette_white</color>
     <color name="element_background_dark">@color/palette_black_800</color>
@@ -56,7 +55,6 @@
     <color name="element_room_03">@color/palette_grape</color>
 
     <!-- Tchap room type color -->
-    <color name="tchap_room_encrypted">@color/palette_tchap_greyish_brown</color>
     <color name="tchap_room_private">@color/palette_tchap_coral</color>
     <color name="tchap_room_external">@color/palette_tchap_pumpkin_orange</color>
     <color name="tchap_room_forum">@color/palette_tchap_jade_green</color>
@@ -65,5 +63,4 @@
     <color name="tchap_message_bubble_outbound_dark">@color/palette_tchap_official_blue</color>
     <color name="tchap_message_bubble_outbound_light">@color/palette_tchap_secondary_blue</color>
     <color name="tchap_message_bubble_inbound_light">@color/palette_tchap_light_grey</color>
-
 </resources>
