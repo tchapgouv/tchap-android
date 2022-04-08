@@ -23,6 +23,14 @@ Other changes
  - Update the Bubbles background color ([#510](https://github.com/tchapgouv/tchap-android-v2/issues/510))
 
 
+Changes in Tchap 2.0.4 (2022-03-31)
+===================================
+
+Bugfixes 🐛
+----------
+ - Fix SSL errors on some devices using fdroid version ([#517](https://github.com/tchapgouv/tchap-android-v2/issues/517))
+
+
 Changes in Tchap 2.0.3 (2022-03-07)
 ===================================
 
