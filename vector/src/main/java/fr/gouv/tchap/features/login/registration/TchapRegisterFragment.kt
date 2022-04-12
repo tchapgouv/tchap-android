@@ -73,7 +73,7 @@ class TchapRegisterFragment @Inject constructor() : AbstractLoginFragment<Fragme
                     } else {
                         MaterialAlertDialogBuilder(requireActivity())
                                 .setTitle(R.string.dialog_title_error)
-                                .setMessage(R.string.login_error_unable_register)
+                                .setMessage(R.string.tchap_login_error_unable_register)
                                 .setPositiveButton(R.string.ok, null)
                                 .show()
                         Unit
@@ -116,7 +116,7 @@ class TchapRegisterFragment @Inject constructor() : AbstractLoginFragment<Fragme
         }
 
         if (password != views.tchapRegisterPasswordConfirm.text.toString()) {
-            views.tchapRegisterPasswordConfirm.error = getString(R.string.auth_password_dont_match)
+            views.tchapRegisterPasswordConfirm.error = getString(R.string.tchap_auth_password_dont_match)
             error++
         }
 

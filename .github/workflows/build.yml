@@ -21,8 +21,12 @@ jobs:
       fail-fast: false
       matrix:
         target: [ GplayBtchapWithoutvoipWithpinning, FdroidBtchapWithoutvoipWithoutpinning ]
+    # Allow all jobs on develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/develop' && format('integration-tests-develop-{0}-{1}', matrix.target, github.sha) || format('build-debug-{0}-{1}', matrix.target, github.ref)  }}
+      cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/cache@v2
         with:
           path: |
@@ -49,8 +53,9 @@ jobs:
       fail-fast: false
       matrix:
         target: [ GplayBtchapWithoutvoipWithpinning, GplayTchapWithoutvoipWithpinning, FdroidBtchapWithoutvoipWithoutpinning, FdroidTchapWithoutvoipWithoutpinning ]
+    # Only runs on main, no concurrency.
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/cache@v2
         with:
           path: |

@@ -40,8 +40,10 @@
                 android:layout_height="@dimen/layout_touch_size"
                 android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@string/attachment_type_gallery"
-                android:src="@drawable/ic_attachment_gallery" />
+                android:src="@drawable/ic_attachment_gallery"
+                app:tint="?colorPrimary" />
 
+            <!-- Tchap: Hide the stickers -->
             <ImageButton
                 android:id="@+id/attachmentStickersButton"
                 android:layout_width="@dimen/layout_touch_size"
@@ -50,7 +52,8 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@string/attachment_type_sticker"
                 android:src="@drawable/ic_attachment_sticker"
-                app:tint="?colorPrimary" />
+                app:tint="?colorPrimary"
+                android:visibility="gone" />
 
             <ImageButton
                 android:id="@+id/attachmentFileButton"

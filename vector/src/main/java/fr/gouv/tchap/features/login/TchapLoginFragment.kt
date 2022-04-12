@@ -144,7 +144,7 @@ class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentT
                         error.error.code == MatrixError.M_FORBIDDEN &&
                         error.error.message.isEmpty()) {
                     // Login with email, but email unknown
-                    views.tchapLoginFieldTil.error = getString(R.string.login_error_forbidden)
+                    views.tchapLoginFieldTil.error = getString(R.string.auth_invalid_login_param)
                 } else {
                     if (error.isInvalidPassword() && spaceInPassword()) {
                         views.tchapPasswordFieldTil.error = getString(R.string.auth_invalid_login_param_space_in_password)

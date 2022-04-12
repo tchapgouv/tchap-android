@@ -296,7 +296,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                     Glide.get(requireContext()).clearMemory()
                     session.fileService().clearCache()
 
-                    var newSize: Int
+                    var newSize: Long
 
                     withContext(Dispatchers.IO) {
                         // On BG thread
@@ -306,7 +306,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                         newSize += session.fileService().getCacheSize()
                     }
 
-                    it.summary = TextUtils.formatFileSize(requireContext(), newSize.toLong())
+                    it.summary = TextUtils.formatFileSize(requireContext(), newSize)
 
                     hideLoadingView()
                 }
@@ -374,7 +374,14 @@ class VectorSettingsGeneralFragment @Inject constructor(
                 session.updateAvatar(session.myUserId, uri, getFilenameFromUri(context, uri) ?: UUID.randomUUID().toString())
             }
             if (!isAdded) return@launch
-            onCommonDone(result.fold({ null }, { it.localizedMessage }))
+
+            result.fold(
+                    onSuccess = { hideLoadingView() },
+                    onFailure = {
+                        hideLoadingView()
+                        displayErrorDialog(it)
+                    }
+            )
         }
     }
 
@@ -572,15 +579,16 @@ class VectorSettingsGeneralFragment @Inject constructor(
 //                val result = runCatching { session.setDisplayName(session.myUserId, value) }
 //                if (!isAdded) return@launch
 //                result.fold(
-//                        {
-//                            // refresh the settings value
-//                            mDisplayNamePreference.summary = value
-//                            mDisplayNamePreference.text = value
-//                            onCommonDone(null)
-//                        },
-//                        {
-//                            onCommonDone(it.localizedMessage)
-//                        }
+//                         onSuccess = {
+//                    // refresh the settings value
+//                    mDisplayNamePreference.summary = value
+//                    mDisplayNamePreference.text = value
+//                    hideLoadingView()
+//                },
+//                onFailure = {
+//                    hideLoadingView()
+//                    displayErrorDialog(it)
+//                }
 //                )
 //            }
 //        }

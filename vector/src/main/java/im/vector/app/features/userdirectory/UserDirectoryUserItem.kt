@@ -20,7 +20,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.amulyakhare.textdrawable.TextDrawable
@@ -55,7 +54,6 @@ abstract class UserDirectoryUserItem : VectorEpoxyModel<UserDirectoryUserItem.Ho
             holder.domainView.text = TchapUtils.getDomainFromDisplayName(displayName)
             holder.domainView.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary))
         }
-        holder.statusImageView.isVisible = false // Todo: Handle user status
         renderSelection(holder, selected)
     }
 
@@ -76,6 +74,5 @@ abstract class UserDirectoryUserItem : VectorEpoxyModel<UserDirectoryUserItem.Ho
         val domainView by bind<TextView>(R.id.knownUserDomain)
         val avatarImageView by bind<ImageView>(R.id.knownUserAvatar)
         val avatarCheckedImageView by bind<ImageView>(R.id.knownUserAvatarChecked)
-        val statusImageView by bind<ImageView>(R.id.knownUserStatus)
     }
 }

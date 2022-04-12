@@ -1,3 +1,21 @@
+Changes in Tchap 2.2.0 (2022-04-12)
+===================================
+
+Improvements 🙌
+--------------
+ - [Settings] Add a link to the help page from Help&About screen ([#342](https://github.com/tchapgouv/tchap-android-v2/issues/342))
+
+Bugfixes 🐛
+----------
+ - Hide sticker button ([#520](https://github.com/tchapgouv/tchap-android-v2/issues/520))
+ - Fix wrong application name in release build ([#521](https://github.com/tchapgouv/tchap-android-v2/issues/521))
+
+Other changes
+-------------
+ - Rebase against version v1.4.8 ([#497](https://github.com/tchapgouv/tchap-android-v2/issues/497))
+ - Hide/Disable unwanted features from Element: polls, location sharing, analytics(PostHog) ([#404](https://github.com/tchapgouv/tchap-android-v2/issues/404))
+
+
 Changes in Tchap 2.1.0 (2022-03-29)
 ===================================
 

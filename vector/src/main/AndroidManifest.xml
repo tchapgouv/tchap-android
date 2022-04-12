@@ -45,6 +45,8 @@
     <!-- Location Sharing -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!--  Debug only whilst live location sharing is WIP -->
+    <!--<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />-->
 
     <!-- Jitsi SDK is now API23+ -->
     <uses-sdk tools:overrideLibrary="org.jitsi.meet.sdk,com.oney.WebRTCModule,com.learnium.RNDeviceInfo,com.reactnativecommunity.asyncstorage,com.ocetnik.timer,com.calendarevents,com.reactnativecommunity.netinfo,com.kevinresol.react_native_default_preference,com.rnimmersive,com.corbt.keepawake,com.BV.LinearGradient,com.horcrux.svg,com.oblador.performance,com.reactnativecommunity.slider,com.brentvatne.react" />
@@ -84,6 +86,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Vector.Light"
+        android:taskAffinity="${applicationId}.${appTaskAffinitySuffix}"
         tools:replace="android:allowBackup">
 
         <!-- No limit for screen ratio: avoid black strips -->
@@ -297,7 +300,7 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:supportsPictureInPicture="true"
-            android:taskAffinity=".features.call.VectorCallActivity" />
+            android:taskAffinity=".features.call.VectorCallActivity.${appTaskAffinitySuffix}" />
         <!-- PIP Support https://developer.android.com/guide/topics/ui/picture-in-picture -->
         <activity
             android:name=".features.call.conference.VectorJitsiActivity"
