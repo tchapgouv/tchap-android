@@ -22,6 +22,8 @@ jobs:
       fail-fast: false
       matrix:
         api-level: [ 28 ]
+    # Tchap: Disabled for now
+    if: github.repository == 'vector-im/element-android'
     # No concurrency required, runs every time on a schedule.
     steps:
       - uses: actions/checkout@v3
@@ -214,6 +216,8 @@ jobs:
       fail-fast: false
       matrix:
         api-level: [ 28 ]
+    # Tchap: Disabled for now
+    if: github.repository == 'vector-im/element-android'
     # No concurrency required, runs every time on a schedule.
     steps:
       - uses: actions/checkout@v3
@@ -267,6 +271,8 @@ jobs:
   codecov-units:
     name: Unit tests with code coverage
     runs-on: macos-latest
+    # Tchap: Disabled for now
+    if: github.repository == 'vector-im/element-android'
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-java@v2
@@ -293,7 +299,8 @@ jobs:
   sonarqube:
     name: Sonarqube upload
     runs-on: macos-latest
-    if: always()
+    # Tchap: Disabled for now
+    if: github.repository == 'vector-im/element-android'
     needs:
       - codecov-units
     steps:
@@ -327,7 +334,8 @@ jobs:
       - integration-tests
       - ui-tests
       - sonarqube
-    if: always() && github.event_name != 'workflow_dispatch'
+    # Tchap: Disabled for now
+    if: github.repository == 'vector-im/element-android'
     # No concurrency required, runs every time on a schedule.
     steps:
       - uses: michaelkaye/matrix-hookshot-action@v0.3.0
