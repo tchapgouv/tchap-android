@@ -290,7 +290,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         }
         add(EventSharedAction.Remove(eventId))
         // Tchap: Disable editing messages
-        if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
+        if (canEdit(timelineEvent, session.myUserId, actionPermissions) && BuildConfig.SHOW_EDIT_MESSAGE) {
             add(EventSharedAction.Edit(eventId, timelineEvent.root.getClearType()))
         }
         if (canCopy(msgType)) {
@@ -343,7 +343,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.EndPoll(timelineEvent.eventId))
             }
             // Tchap: Disable editing messages
-            if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
+            if (canEdit(timelineEvent, session.myUserId, actionPermissions) && BuildConfig.SHOW_EDIT_MESSAGE) {
                 add(EventSharedAction.Edit(eventId, timelineEvent.root.getClearType()))
             }
 
