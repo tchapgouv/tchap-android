@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="@string/people_search_invite_by_id_dialog_description"
+        android:text="@string/tchap_people_search_invite_by_id_dialog_description"
         android:textColor="?vctr_content_primary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,7 +32,7 @@
             android:id="@+id/invite_by_id_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/people_search_invite_by_id_dialog_hint"
+            android:hint="@string/tchap_people_search_invite_by_id_dialog_hint"
             android:inputType="textEmailAddress"
             android:textColor="?android:textColorPrimary" />
 

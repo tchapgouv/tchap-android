@@ -251,15 +251,14 @@
         tools:text="@tools:sample/lorem" />
 
     <ImageView
-        android:id="@+id/tchapRoomAvatarEncryptedImageView"
+        android:id="@+id/tchapRoomTypeImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/room_encrypted"
         android:paddingTop="6dp"
         app:layout_constraintCircle="@id/roomAvatarContainer"
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="34dp"
-        tools:ignore="MissingConstraints"
+        tools:ignore="ContentDescription,MissingConstraints"
         tools:src="@drawable/ic_tchap_forum" />
 
     <androidx.constraintlayout.widget.Barrier
