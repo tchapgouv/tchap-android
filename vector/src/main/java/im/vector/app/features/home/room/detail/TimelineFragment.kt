@@ -1470,6 +1470,10 @@ class TimelineFragment @Inject constructor(
                     // Tchap: Disable Polls
                     attachmentTypeSelector.setAttachmentVisibility(
                             AttachmentTypeSelectorView.Type.POLL, isVisible = false)
+
+                    // Tchap: Disable Stickers
+                    attachmentTypeSelector.setAttachmentVisibility(
+                            AttachmentTypeSelectorView.Type.STICKER, isVisible = false)
                 }
                 attachmentTypeSelector.show(views.composerLayout.views.attachmentButton)
             }
