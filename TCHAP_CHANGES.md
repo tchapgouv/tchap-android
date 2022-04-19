@@ -1,3 +1,11 @@
+Changes in Tchap 2.2.1 (2022-04-19)
+===================================
+
+Bugfixes 🐛
+----------
+ - Disable messages edition ([#548](https://github.com/tchapgouv/tchap-android-v2/issues/548))
+
+
 Changes in Tchap 2.2.0 (2022-04-12)
 ===================================
 
