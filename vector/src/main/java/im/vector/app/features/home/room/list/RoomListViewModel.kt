@@ -122,15 +122,7 @@ class RoomListViewModel @AssistedInject constructor(
                 }
     }
 
-    companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> by hiltMavericksViewModelFactory() {
-
-        override fun initialState(viewModelContext: ViewModelContext): RoomListViewState {
-            val uiStateRepository = viewModelContext.activity.singletonEntryPoint().uiStateRepository()
-            return RoomListViewState(
-                    displayMode = uiStateRepository.getDisplayMode()
-            )
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> by hiltMavericksViewModelFactory()
 
     private val roomListSectionBuilder = if (appStateHandler.getCurrentRoomGroupingMethod() is RoomGroupingMethod.BySpace) {
         RoomListSectionBuilderSpace(

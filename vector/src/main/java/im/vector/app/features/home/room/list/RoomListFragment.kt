@@ -130,8 +130,6 @@ class RoomListFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Tchap: true as we want to catch events coming from the home menu
-        setHasOptionsMenu(true)
         views.stateView.contentView = views.roomListView
         views.stateView.state = StateView.State.Loading
         setupCreateRoomButton()
@@ -165,37 +163,6 @@ class RoomListFragment @Inject constructor(
                     .onEach {
                         (it.contentEpoxyController as? RoomSummaryPagedController)?.roomChangeMembershipStates = ms
                     }
-        }
-
-        homeSharedActionViewModel
-                .stream()
-                .mapNotNull { it as? HomeActivitySharedAction.SelectTab }
-                .onEach { handleSelectTab(it.tab) }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-
-        // Tchap: handle search action in the room list
-        val searchItem = menu.findItem(R.id.menu_home_filter)
-        val searchView = searchItem?.actionView as? SearchView
-
-        if (searchView != null) {
-            // For initial filter
-            withState(roomListViewModel) { state ->
-                if (state.roomFilter.isNotEmpty()) {
-                    searchItem.expandActionView()
-                    searchView.setQuery(state.roomFilter, true)
-                    searchView.clearFocus()
-                }
-            }
-
-            searchView.queryTextChanges()
-                    .skipInitialValue()
-                    .debounce(300)
-                    .onEach { filterRoomsWith(it.toString()) }
-                    .launchIn(viewLifecycleOwner.lifecycleScope)
         }
     }
 
@@ -251,28 +218,18 @@ class RoomListFragment @Inject constructor(
 
     private fun handleSelectRoom(event: RoomListViewEvents.SelectRoom, isInviteAlreadyAccepted: Boolean) {
         navigator.openRoom(context = requireActivity(), roomId = event.roomSummary.roomId, isInviteAlreadyAccepted = isInviteAlreadyAccepted)
-        resetFilter()
     }
 
     private fun handleCreateDirectChat() {
         navigator.openCreateDirectRoom(requireActivity())
-        resetFilter()
     }
 
     private fun handleCreateRoom(name: String) {
         navigator.openCreateRoom(requireActivity(), name)
-        resetFilter()
     }
 
     private fun handleOpenRoomDirectory(filter: String) {
         navigator.openRoomDirectory(requireActivity(), filter)
-        resetFilter()
-    }
-
-    private fun handleSelectTab(tab: HomeTab) {
-        if ((tab as? HomeTab.RoomList)?.displayMode != roomListParams.displayMode) {
-            resetFilter()
-        }
     }
 
     private fun setupCreateRoomButton() {
@@ -321,12 +278,6 @@ class RoomListFragment @Inject constructor(
         views.roomListView.scrollToPosition(0)
 
         roomListViewModel.handle(RoomListAction.FilterWith(filter))
-    }
-
-    private fun resetFilter() = withState(roomListViewModel) { state ->
-        if (state.roomFilter.isNotEmpty()) {
-            filterRoomsWith("")
-        }
     }
 
     // FilteredRoomFooterItem.Listener

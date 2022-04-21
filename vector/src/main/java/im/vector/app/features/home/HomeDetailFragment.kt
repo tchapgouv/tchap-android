@@ -117,24 +117,6 @@ class HomeDetailFragment @Inject constructor(
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        withState(viewModel) { state ->
-            val isRoomList = state.currentTab is HomeTab.RoomList
-            menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
-        }
-
-        // Tchap: Update SearchView
-        // - remove max width so it can take the whole available space in landscape
-        // - show same icon as menu item
-        val searchItem = menu.findItem(R.id.menu_home_filter)
-        (searchItem?.actionView as? SearchView)?.run {
-            maxWidth = Int.MAX_VALUE
-            findViewById<ImageView>(androidx.appcompat.R.id.search_mag_icon)?.setImageDrawable(searchItem.icon)
-        }
-
-        super.onPrepareOptionsMenu(menu)
-    }
-
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeDetailBinding {
         return FragmentHomeDetailBinding.inflate(inflater, container, false)
     }
