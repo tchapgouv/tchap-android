@@ -25,7 +25,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -422,8 +421,7 @@ class HomeDetailFragment @Inject constructor(
                 R.id.bottom_action_notification -> HomeTab.RoomList(RoomListDisplayMode.NOTIFICATIONS)
                 else                            -> HomeTab.DialPad
             }
-            // Tchap: Send event to shared VM to catch it in sub-fragments
-            sharedActionViewModel.post(HomeActivitySharedAction.SelectTab(tab))
+            viewModel.handle(HomeDetailAction.SwitchTab(tab))
             true
         }
 
@@ -491,14 +489,11 @@ class HomeDetailFragment @Inject constructor(
     private fun updateTabVisibilitySafely(tabId: Int, isVisible: Boolean) {
         val wasVisible = views.bottomNavigationView.menu.findItem(tabId).isVisible
         views.bottomNavigationView.menu.findItem(tabId).isVisible = isVisible
-        // Tchap: Show navigation menu if there is at least two visible items
-        val showNavigationMenu = views.bottomNavigationView.menu.children.count { it.isVisible } > 1
-        views.bottomNavigationView.isVisible = showNavigationMenu
         if (wasVisible && !isVisible) {
             // As we hide it check if it's not the current item!
             withState(viewModel) {
                 if (it.currentTab.toMenuId() == tabId) {
-                    viewModel.handle(HomeDetailAction.SwitchTab(HomeTab.RoomList(RoomListDisplayMode.ROOMS)))
+                    viewModel.handle(HomeDetailAction.SwitchTab(HomeTab.RoomList(RoomListDisplayMode.PEOPLE)))
                 }
             }
         }

@@ -167,29 +167,29 @@ class RoomListSectionBuilderGroup(
             it.activeGroupId = actualGroupId
         }
 
-//        addSection(
-//                sections,
-//                activeSpaceAwareQueries,
-//                R.string.low_priority_header,
-//                false
-//        ) {
-//            it.memberships = listOf(Membership.JOIN)
-//            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-//            it.roomTagQueryFilter = RoomTagQueryFilter(null, true, null)
-//            it.activeGroupId = actualGroupId
-//        }
-//
-//        addSection(
-//                sections,
-//                activeSpaceAwareQueries,
-//                R.string.system_alerts_header,
-//                false
-//        ) {
-//            it.memberships = listOf(Membership.JOIN)
-//            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-//            it.roomTagQueryFilter = RoomTagQueryFilter(null, null, true)
-//            it.activeGroupId = actualGroupId
-//        }
+        addSection(
+                sections,
+                activeSpaceAwareQueries,
+                R.string.low_priority_header,
+                false
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+            it.roomTagQueryFilter = RoomTagQueryFilter(null, true, null)
+            it.activeGroupId = actualGroupId
+        }
+
+        addSection(
+                sections,
+                activeSpaceAwareQueries,
+                R.string.system_alerts_header,
+                false
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+            it.roomTagQueryFilter = RoomTagQueryFilter(null, null, true)
+            it.activeGroupId = actualGroupId
+        }
     }
 
     private fun buildPeopleSections(
