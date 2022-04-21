@@ -19,11 +19,8 @@ package im.vector.app.features.home.room.list
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
@@ -49,9 +46,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.databinding.FragmentRoomListBinding
 import im.vector.app.features.analytics.plan.MobileScreen
-import im.vector.app.features.home.HomeActivitySharedAction
 import im.vector.app.features.home.HomeSharedActionViewModel
-import im.vector.app.features.home.HomeTab
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
@@ -61,10 +56,8 @@ import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.home.room.list.widget.TchapRoomsFabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -73,7 +66,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
-import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
 @Parcelize
