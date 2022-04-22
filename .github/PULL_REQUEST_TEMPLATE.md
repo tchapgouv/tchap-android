@@ -1,4 +1,4 @@
-<!-- Please read [CONTRIBUTING.md](https://github.com/tchapgouv/tchap-android-v2/blob/develop/CONTRIBUTING.md) before submitting your pull request -->
+<!-- Please read [CONTRIBUTING.md](https://github.com/tchapgouv/tchap-android/blob/develop/CONTRIBUTING.md) before submitting your pull request -->
  
 ## Type of change
 
