@@ -20,9 +20,10 @@
             android:id="@+id/messageFileImageView"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
             <include layout="@layout/view_file_icon" />
 
         </FrameLayout>
@@ -36,14 +37,13 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:autoLink="none"
-            android:maxLines="1"
             android:ellipsize="end"
             android:gravity="center_vertical"
             app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/messageFileImageView"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             tools:text="A filename here" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
