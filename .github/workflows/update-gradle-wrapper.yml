@@ -12,6 +12,8 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Update Gradle Wrapper
+        # Tchap: Disabled for no
+        if: github.repository == 'vector-im/element-android'
         uses: gradle-update/update-gradle-wrapper-action@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
