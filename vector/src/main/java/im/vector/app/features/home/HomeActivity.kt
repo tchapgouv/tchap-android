@@ -560,11 +560,10 @@ class HomeActivity :
                 MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
                 return true
             }
-            // Tchap: search is handled in RoomListFragment
-//            R.id.menu_home_filter              -> {
-//                navigator.openRoomsFiltering(this)
-//                return true
-//            }
+            R.id.menu_home_filter              -> {
+                navigator.openRoomsFiltering(this)
+                return true
+            }
             R.id.menu_home_setting             -> {
                 navigator.openSettings(this)
                 return true

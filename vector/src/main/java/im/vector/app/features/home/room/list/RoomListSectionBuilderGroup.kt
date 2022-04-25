@@ -255,8 +255,6 @@ class RoomListSectionBuilderGroup(
             val name = stringProvider.getString(nameRes)
             session.getFilteredPagedRoomSummariesLive(roomQueryParams)
                     .also {
-                        // Tchap: Refresh RoomList
-                        onUpdatable(it)
                         activeSpaceUpdaters.add(it)
                     }.livePagedList
                     .let { livePagedList ->

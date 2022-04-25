@@ -363,8 +363,7 @@ class RoomListSectionBuilderSpace(
             val filteredPagedRoomSummariesLive = session.getFilteredPagedRoomSummariesLive(
                     roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId()),
                     pagedListConfig
-            // Tchap: Refresh room list
-            ).also(onUpdatable)
+            )
             when (spaceFilterStrategy) {
                 RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL -> {
                     activeSpaceUpdaters.add(object : RoomListViewModel.ActiveSpaceQueryUpdater {
