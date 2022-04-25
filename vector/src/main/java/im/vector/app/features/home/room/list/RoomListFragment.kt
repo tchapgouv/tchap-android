@@ -166,12 +166,6 @@ class RoomListFragment @Inject constructor(
                         (it.contentEpoxyController as? RoomSummaryPagedController)?.roomChangeMembershipStates = ms
                     }
         }
-
-        homeSharedActionViewModel
-                .stream()
-                .mapNotNull { it as? HomeActivitySharedAction.SelectTab }
-                .onEach { handleSelectTab(it.tab) }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

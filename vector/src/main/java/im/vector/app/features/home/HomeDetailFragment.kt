@@ -221,7 +221,6 @@ class HomeDetailFragment @Inject constructor(
                 .onEach { action ->
                     when (action) {
                         is HomeActivitySharedAction.InviteByEmail -> onInviteByEmail(action.email)
-                        is HomeActivitySharedAction.SelectTab     -> viewModel.handle(HomeDetailAction.SwitchTab(action.tab))
                         else                                      -> Unit // no-op
                     }.exhaustive
                 }

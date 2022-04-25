@@ -137,7 +137,7 @@ class RoomListSectionBuilderGroup(
                     true
             ) {
                 it.memberships = listOf(Membership.INVITE)
-                it.roomCategoryFilter = RoomCategoryFilter.ALL
+                it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
                 it.activeGroupId = actualGroupId
             }
         }
@@ -149,7 +149,7 @@ class RoomListSectionBuilderGroup(
                 false
         ) {
             it.memberships = listOf(Membership.JOIN)
-            it.roomCategoryFilter = RoomCategoryFilter.ALL
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
             it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
             it.activeGroupId = actualGroupId
         }
@@ -161,7 +161,7 @@ class RoomListSectionBuilderGroup(
                 false
         ) {
             it.memberships = listOf(Membership.JOIN)
-            it.roomCategoryFilter = RoomCategoryFilter.ALL
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
             // Tchap: Show low priorities in room list
             it.roomTagQueryFilter = RoomTagQueryFilter(false, null, false)
             it.activeGroupId = actualGroupId
