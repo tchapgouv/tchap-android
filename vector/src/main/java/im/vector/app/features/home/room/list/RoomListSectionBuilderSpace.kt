@@ -116,7 +116,7 @@ class RoomListSectionBuilderSpace(
                     countRoomAsNotif = true
             ) {
                 it.memberships = listOf(Membership.INVITE)
-                it.roomCategoryFilter = RoomCategoryFilter.ALL
+                it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
             }
         }
 
@@ -128,7 +128,7 @@ class RoomListSectionBuilderSpace(
                 RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
         ) {
             it.memberships = listOf(Membership.JOIN)
-            it.roomCategoryFilter = RoomCategoryFilter.ALL
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
             it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
         }
 
@@ -144,7 +144,7 @@ class RoomListSectionBuilderSpace(
                 }
         ) {
             it.memberships = listOf(Membership.JOIN)
-            it.roomCategoryFilter = RoomCategoryFilter.ALL
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
             // Tchap: Show low priorities in room list
             it.roomTagQueryFilter = RoomTagQueryFilter(false, null, false)
         }
