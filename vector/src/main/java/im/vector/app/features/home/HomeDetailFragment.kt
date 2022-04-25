@@ -18,6 +18,7 @@ package im.vector.app.features.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -111,6 +112,13 @@ class HomeDetailFragment @Inject constructor(
             else                            -> {
                 super.onOptionsItemSelected(item)
             }
+        }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        withState(viewModel) { state ->
+            val isRoomList = state.currentTab is HomeTab.RoomList
+            menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
         }
     }
 
