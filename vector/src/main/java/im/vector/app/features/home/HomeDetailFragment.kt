@@ -120,6 +120,7 @@ class HomeDetailFragment @Inject constructor(
             val isRoomList = state.currentTab is HomeTab.RoomList
             menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
         }
+        super.onPrepareOptionsMenu(menu)
     }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeDetailBinding {
