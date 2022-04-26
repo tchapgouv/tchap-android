@@ -18,7 +18,9 @@ package im.vector.app.features.home.room.list
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
+import androidx.lifecycle.liveData
 import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
 import im.vector.app.AppStateHandler
@@ -31,12 +33,16 @@ import im.vector.app.space
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
@@ -110,7 +116,7 @@ class RoomListSectionBuilderSpace(
                     countRoomAsNotif = true
             ) {
                 it.memberships = listOf(Membership.INVITE)
-                it.roomCategoryFilter = RoomCategoryFilter.ALL
+                it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
             }
         }
 
@@ -122,7 +128,7 @@ class RoomListSectionBuilderSpace(
                 RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
         ) {
             it.memberships = listOf(Membership.JOIN)
-            it.roomCategoryFilter = RoomCategoryFilter.ALL
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
             it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
         }
 
@@ -138,87 +144,87 @@ class RoomListSectionBuilderSpace(
                 }
         ) {
             it.memberships = listOf(Membership.JOIN)
-            it.roomCategoryFilter = RoomCategoryFilter.ALL
-            // Tchap: Show low priorities in room list
-            it.roomTagQueryFilter = RoomTagQueryFilter(false, null, false)
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+            it.roomTagQueryFilter = RoomTagQueryFilter(false, false, false)
         }
-//        addSection(
-//                sections = sections,
-//                activeSpaceUpdaters = activeSpaceAwareQueries,
-//                nameRes = R.string.low_priority_header,
-//                notifyOfLocalEcho = false,
-//                spaceFilterStrategy = if (onlyOrphansInHome) {
-//                    RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
-//                } else {
-//                    RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
-//                }
-//        ) {
-//            it.memberships = listOf(Membership.JOIN)
-//            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-//            it.roomTagQueryFilter = RoomTagQueryFilter(null, true, null)
-//        }
-//
-//        addSection(
-//                sections = sections,
-//                activeSpaceUpdaters = activeSpaceAwareQueries,
-//                nameRes = R.string.system_alerts_header,
-//                notifyOfLocalEcho = false,
-//                spaceFilterStrategy = if (onlyOrphansInHome) {
-//                    RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
-//                } else {
-//                    RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
-//                }
-//        ) {
-//            it.memberships = listOf(Membership.JOIN)
-//            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-//            it.roomTagQueryFilter = RoomTagQueryFilter(null, null, true)
-//        }
-//
-//        // add suggested rooms
-//        val suggestedRoomsFlow = // MutableLiveData<List<SpaceChildInfo>>()
-//                appStateHandler.selectedRoomGroupingFlow
-//                        .distinctUntilChanged()
-//                        .flatMapLatest { groupingMethod ->
-//                            val selectedSpace = groupingMethod.orNull()?.space()
-//                            if (selectedSpace == null) {
-//                                flowOf(emptyList())
-//                            } else {
-//                                liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
-//                                    val spaceSum = tryOrNull {
-//                                        session.spaceService()
-//                                                .querySpaceChildren(selectedSpace.roomId, suggestedOnly = true, null, null)
-//                                    }
-//                                    val value = spaceSum?.children.orEmpty().distinctBy { it.childRoomId }
-//                                    // i need to check if it's already joined.
-//                                    val filtered = value.filter {
-//                                        session.getRoomSummary(it.childRoomId)?.membership?.isActive() != true
-//                                    }
-//                                    emit(filtered)
-//                                }.asFlow()
-//                            }
-//                        }
-//
-//        val liveSuggestedRooms = MutableLiveData<SuggestedRoomInfo>()
-//        combine(
-//                suggestedRoomsFlow,
-//                suggestedRoomJoiningState.asFlow()
-//        ) { rooms, joinStates ->
-//            SuggestedRoomInfo(
-//                    rooms,
-//                    joinStates
-//            )
-//        }.onEach {
-//            liveSuggestedRooms.postValue(it)
-//        }.launchIn(viewModelScope)
-//
-//        sections.add(
-//                RoomsSection(
-//                        sectionName = stringProvider.getString(R.string.suggested_header),
-//                        liveSuggested = liveSuggestedRooms,
-//                        notifyOfLocalEcho = false,
-//                        itemCount = suggestedRoomsFlow.map { suggestions -> suggestions.size }
-//                )
-//        )
+
+        addSection(
+                sections = sections,
+                activeSpaceUpdaters = activeSpaceAwareQueries,
+                nameRes = R.string.low_priority_header,
+                notifyOfLocalEcho = false,
+                spaceFilterStrategy = if (onlyOrphansInHome) {
+                    RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
+                } else {
+                    RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+                }
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+            it.roomTagQueryFilter = RoomTagQueryFilter(null, true, null)
+        }
+
+        addSection(
+                sections = sections,
+                activeSpaceUpdaters = activeSpaceAwareQueries,
+                nameRes = R.string.system_alerts_header,
+                notifyOfLocalEcho = false,
+                spaceFilterStrategy = if (onlyOrphansInHome) {
+                    RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
+                } else {
+                    RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+                }
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+            it.roomTagQueryFilter = RoomTagQueryFilter(null, null, true)
+        }
+
+        // add suggested rooms
+        val suggestedRoomsFlow = // MutableLiveData<List<SpaceChildInfo>>()
+                appStateHandler.selectedRoomGroupingFlow
+                        .distinctUntilChanged()
+                        .flatMapLatest { groupingMethod ->
+                            val selectedSpace = groupingMethod.orNull()?.space()
+                            if (selectedSpace == null) {
+                                flowOf(emptyList())
+                            } else {
+                                liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
+                                    val spaceSum = tryOrNull {
+                                        session.spaceService()
+                                                .querySpaceChildren(selectedSpace.roomId, suggestedOnly = true, null, null)
+                                    }
+                                    val value = spaceSum?.children.orEmpty().distinctBy { it.childRoomId }
+                                    // i need to check if it's already joined.
+                                    val filtered = value.filter {
+                                        session.getRoomSummary(it.childRoomId)?.membership?.isActive() != true
+                                    }
+                                    emit(filtered)
+                                }.asFlow()
+                            }
+                        }
+
+        val liveSuggestedRooms = MutableLiveData<SuggestedRoomInfo>()
+        combine(
+                suggestedRoomsFlow,
+                suggestedRoomJoiningState.asFlow()
+        ) { rooms, joinStates ->
+            SuggestedRoomInfo(
+                    rooms,
+                    joinStates
+            )
+        }.onEach {
+            liveSuggestedRooms.postValue(it)
+        }.launchIn(viewModelScope)
+
+        sections.add(
+                RoomsSection(
+                        sectionName = stringProvider.getString(R.string.suggested_header),
+                        liveSuggested = liveSuggestedRooms,
+                        notifyOfLocalEcho = false,
+                        itemCount = suggestedRoomsFlow.map { suggestions -> suggestions.size }
+                )
+        )
     }
 
     private fun buildDmSections(sections: MutableList<RoomsSection>,

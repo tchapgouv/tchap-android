@@ -7,7 +7,7 @@
         <item name="itemIconSize">20dp</item>
         <item name="itemIconTint">@color/bottom_navigation_icon_tint_selector</item>
         <item name="itemTextColor">@color/bottom_navigation_icon_tint_selector</item>
-        <item name="labelVisibilityMode">labeled</item>
+        <item name="labelVisibilityMode">unlabeled</item>
     </style>
 
 </resources>
