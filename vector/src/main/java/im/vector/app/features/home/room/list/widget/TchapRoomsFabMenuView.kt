@@ -96,7 +96,6 @@ class TchapRoomsFabMenuView @JvmOverloads constructor(context: Context, attrs: A
 
     interface Listener {
         fun fabCreateRoom()
-        fun fabCreateDirectChat()
         fun fabOpenRoomDirectory()
     }
 }
