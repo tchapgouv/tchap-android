@@ -36,7 +36,6 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
@@ -168,7 +167,7 @@ class HomeDetailFragment @Inject constructor(
                 is HomeDetailViewEvents.FailToCall -> showFailure(viewEvent.failure)
                 HomeDetailViewEvents.Loading       -> showLoadingDialog()
             }
-        }.exhaustive
+        }
 
         unknownDeviceDetectorSharedViewModel.onEach { state ->
             state.unknownSessions.invoke()?.let { unknownDevices ->
@@ -210,7 +209,7 @@ class HomeDetailFragment @Inject constructor(
                     when (action) {
                         is HomeActivitySharedAction.InviteByEmail -> onInviteByEmail(action.email)
                         else                                      -> Unit // no-op
-                    }.exhaustive
+                    }
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -245,7 +244,7 @@ class HomeDetailFragment @Inject constructor(
                 CreateDirectRoomViewEvents.InvalidCode                -> {
                     Toast.makeText(requireContext(), R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
                 }
-            }.exhaustive
+            }
         }
     }
 

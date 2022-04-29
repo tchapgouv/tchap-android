@@ -37,12 +37,12 @@ import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.copyOnLongClick
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomProfileHeaderBinding
+import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailPendingAction
@@ -90,7 +90,7 @@ class RoomProfileFragment @Inject constructor(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        analyticsScreenName = MobileScreen.ScreenName.RoomSettings
+        analyticsScreenName = MobileScreen.ScreenName.RoomDetails
         setFragmentResultListener(MigrateRoomBottomSheet.REQUEST_KEY) { _, bundle ->
             bundle.getString(MigrateRoomBottomSheet.BUNDLE_KEY_REPLACEMENT_ROOM)?.let { replacementRoomId ->
                 roomDetailPendingActionStore.data = RoomDetailPendingAction.OpenRoom(replacementRoomId, closeCurrentRoom = true)
@@ -126,7 +126,7 @@ class RoomProfileFragment @Inject constructor(
                 is RoomProfileViewEvents.ShareRoomProfile -> onShareRoomProfile(it.permalink)
                 is RoomProfileViewEvents.OnShortcutReady  -> addShortcut(it)
                 RoomProfileViewEvents.DismissLoading      -> dismissLoadingDialog()
-            }.exhaustive
+            }
         }
         roomListQuickActionsSharedActionViewModel
                 .stream()
@@ -270,6 +270,11 @@ class RoomProfileFragment @Inject constructor(
     override fun createShortcut() {
         // Ask the view model to prepare it...
         roomProfileViewModel.handle(RoomProfileAction.CreateShortcut)
+        analyticsTracker.capture(Interaction(
+                index = null,
+                interactionType = null,
+                name = Interaction.Name.MobileRoomAddHome
+        ))
     }
 
     private fun addShortcut(onShortcutReady: RoomProfileViewEvents.OnShortcutReady) {

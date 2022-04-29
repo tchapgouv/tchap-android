@@ -26,7 +26,6 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.databinding.FragmentTchapLoginBinding
 import im.vector.app.features.login.AbstractLoginFragment
@@ -70,7 +69,7 @@ class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentT
                 else                                 ->
                     // This is handled by the Activity
                     Unit
-            }.exhaustive
+            }
         }
     }
 
@@ -155,6 +154,9 @@ class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentT
             }
             // Success is handled by the LoginActivity
             is Success -> Unit
+            else -> {
+                // Do Nothing
+            }
         }
     }
 

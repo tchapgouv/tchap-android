@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.util
+package im.vector.app.features.poll
 
-// Trick to ensure that when block is exhaustive
-internal val <T> T.exhaustive: T get() = this
+enum class PollMode {
+    CREATE,
+    EDIT
+}

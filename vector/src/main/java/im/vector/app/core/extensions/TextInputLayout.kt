@@ -14,9 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.poll.create
+package im.vector.app.core.extensions
 
-enum class PollMode {
-    CREATE,
-    EDIT
-}
+import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.flow.map
+import reactivecircus.flowbinding.android.widget.textChanges
+
+fun TextInputLayout.editText() = this.editText!!
+
+/**
+ * Detect if a field starts or ends with spaces
+ */
+fun TextInputLayout.hasSurroundingSpaces() = editText().text.toString().let { it.trim() != it }
+
+fun TextInputLayout.hasContentFlow(mapper: (CharSequence) -> CharSequence = { it }) = editText().textChanges().map { mapper(it).isNotEmpty() }
+
+fun TextInputLayout.content() = editText().text.toString()

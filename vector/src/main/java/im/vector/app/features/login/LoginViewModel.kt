@@ -34,7 +34,6 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.configureAndStart
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureTrailingSlash
@@ -138,7 +137,7 @@ class LoginViewModel @AssistedInject constructor(
             is LoginAction.CheckPasswordPolicy        -> handleCheckPasswordPolicy(action)
             is LoginAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
             is LoginAction.RetrieveHomeServer         -> handleRetrieveHomeServer(action)
-        }.exhaustive
+        }
     }
 
     private fun handleOnGetStarted(action: LoginAction.OnGetStarted) {
@@ -180,6 +179,7 @@ class LoginViewModel @AssistedInject constructor(
                                 .withAllowedFingerPrints(listOf(action.fingerprint))
                                 .build()
                 )
+            else                            -> Unit
         }
     }
 
@@ -280,7 +280,7 @@ class LoginViewModel @AssistedInject constructor(
                            code = MatrixError.FORBIDDEN,
                            message = "Registration is disabled"
                    ), 403))
-                */
+                 */
             } catch (failure: Throwable) {
                 if (failure !is CancellationException) {
                     _viewEvents.post(LoginViewEvents.Failure(failure))
@@ -457,7 +457,7 @@ class LoginViewModel @AssistedInject constructor(
                 handle(LoginAction.UpdateHomeServer(matrixOrgUrl))
             ServerType.EMS,
             ServerType.Other     -> _viewEvents.post(LoginViewEvents.OnServerSelectionDone(action.serverType))
-        }.exhaustive
+        }
     }
 
     private fun handleInitWith(action: LoginAction.InitWith) {
@@ -592,7 +592,7 @@ class LoginViewModel @AssistedInject constructor(
             SignMode.SignIn             -> handleLogin(action)
             SignMode.SignUp             -> handleRegisterWith(action)
             SignMode.SignInWithMatrixId -> handleDirectLogin(action, null)
-        }.exhaustive
+        }
     }
 
     private fun handleDirectLogin(action: LoginAction.LoginOrRegister, homeServerConnectionConfig: HomeServerConnectionConfig?) {
@@ -622,7 +622,7 @@ class LoginViewModel @AssistedInject constructor(
                 else                          -> {
                     onWellKnownError()
                 }
-            }.exhaustive
+            }
         }
     }
 

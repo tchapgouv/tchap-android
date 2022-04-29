@@ -31,7 +31,6 @@ import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
@@ -81,7 +80,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                         is UserListSharedAction.OnMenuItemSelected -> onMenuItemSelected(action)
                         UserListSharedAction.OpenPhoneBook         -> openPhoneBook()
                         UserListSharedAction.AddByQrCode           -> openAddByQrCode()
-                    }.exhaustive
+                    }
                 }
                 .launchIn(lifecycleScope)
         if (isFirstCreation()) {
@@ -97,6 +96,11 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     )
             )
         }
+        // Tchap: Not used in Tchap
+//        viewModel.onEach(CreateDirectRoomViewState::createAndInviteState) {
+//            renderCreateAndInviteState(it)
+//        }
+
         viewModel.onEach(CreateDirectRoomViewState::isLoading) { isLoading ->
             if (isLoading) {
                 renderCreationLoading()
@@ -132,7 +136,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                 is CreateDirectRoomViewEvents.OpenDirectChat          -> {
                     renderCreationSuccess(it.roomId)
                 }
-            }.exhaustive
+            }
         }
 
         qrViewModel.observeViewEvents {
@@ -145,7 +149,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     finish()
                 }
                 else                               -> Unit
-            }.exhaustive
+            }
         }
     }
 
@@ -185,6 +189,16 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
             viewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(action.selections))
         }
     }
+
+    // Tchap: Not used in Tchap
+//    private fun renderCreateAndInviteState(state: Async<String>) {
+//        when (state) {
+//            is Loading -> renderCreationLoading()
+//            is Success -> renderCreationSuccess(state())
+//            is Fail    -> renderCreationFailure(state.error)
+//            else       -> Unit
+//        }
+//    }
 
     private fun renderCreationLoading() {
         updateWaitingView(WaitingViewData(getString(R.string.creating_direct_room)))

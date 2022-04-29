@@ -26,8 +26,8 @@ import fr.gouv.tchap.features.platform.Params
 import fr.gouv.tchap.features.platform.TchapGetPlatformTask
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.userdirectory.PendingSelection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,11 +41,14 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.user.model.User
 import timber.log.Timber
 
-class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
-                                                            initialState: CreateDirectRoomViewState,
-                                                            val session: Session,
-                                                            private val directRoomHelper: DirectRoomHelper,
-                                                            private val getPlatformTask: TchapGetPlatformTask) :
+class CreateDirectRoomViewModel @AssistedInject constructor(
+        @Assisted initialState: CreateDirectRoomViewState,
+//        private val rawService: RawService,
+        private val directRoomHelper: DirectRoomHelper,
+        private val getPlatformTask: TchapGetPlatformTask,
+        val session: Session,
+        val analyticsTracker: AnalyticsTracker
+) :
         VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
 
     @AssistedFactory
@@ -61,7 +64,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
             is CreateDirectRoomAction.QrScannedAction                  -> onCodeParsed(action)
             is CreateDirectRoomAction.InviteByEmail                    -> handleIndividualInviteByEmail(action.email)
             is CreateDirectRoomAction.CreateDirectMessageByUserId      -> handleCreateDirectMessageByUserId(action.userId)
-        }.exhaustive
+        }
     }
 
     private fun onCodeParsed(action: CreateDirectRoomAction.QrScannedAction) {
@@ -106,6 +109,40 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
         }
     }
 
+    // Tchap: Method not used
+//    private fun createRoomAndInviteSelectedUsers(selections: Set<PendingSelection>) {
+//        setState { copy(createAndInviteState = Loading()) }
+//
+//        viewModelScope.launch(Dispatchers.IO) {
+//            val adminE2EByDefault = rawService.getElementWellknown(session.sessionParams)
+//                    ?.isE2EByDefault()
+//                    ?: true
+//
+//            val roomParams = CreateRoomParams()
+//                    .apply {
+//                        selections.forEach {
+//                            when (it) {
+//                                is PendingSelection.UserPendingSelection     -> invitedUserIds.add(it.user.userId)
+//                                is PendingSelection.ThreePidPendingSelection -> invite3pids.add(it.threePid)
+//                            }
+//                        }
+//                        setDirectMessage()
+//                        enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
+//                    }
+//
+//            val result = runCatchingToAsync {
+//                session.roomService().createRoom(roomParams)
+//            }
+//            analyticsTracker.capture(CreatedRoom(isDM = roomParams.isDirect.orFalse()))
+//
+//            setState {
+//                copy(
+//                        createAndInviteState = result
+//                )
+//            }
+//        }
+//    }
+
     private fun handleCreateDirectMessageByUserId(userId: String) {
         setState { copy(isLoading = true) }
         viewModelScope.launch(Dispatchers.IO) {
@@ -118,8 +155,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                     {
                         setState { copy(isLoading = false) }
                         _viewEvents.post(CreateDirectRoomViewEvents.Failure(it))
-                    }
-            )
+                    })
         }
     }
 

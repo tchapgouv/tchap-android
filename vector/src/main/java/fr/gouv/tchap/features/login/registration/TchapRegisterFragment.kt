@@ -24,7 +24,6 @@ import android.view.ViewGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.databinding.FragmentTchapRegisterBinding
 import im.vector.app.features.login.AbstractLoginFragment
@@ -81,7 +80,7 @@ class TchapRegisterFragment @Inject constructor() : AbstractLoginFragment<Fragme
                 }
                 is LoginViewEvents.OnHomeServerRetrieved  -> updateHomeServer(loginViewEvents.hs)
                 else                                      -> Unit // This is handled by the Activity
-            }.exhaustive
+            }
         }
     }
 

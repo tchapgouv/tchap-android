@@ -36,7 +36,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
@@ -175,7 +174,7 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Unlo
             is LoginViewEvents.Failure,
             is LoginViewEvents.Loading                                    -> Unit // This is handled by the Fragments
             else                                                          -> Unit
-        }.exhaustive
+        }
     }
 
     private fun updateWithState(loginViewState: LoginViewState) {
@@ -206,7 +205,7 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Unlo
                     tag = FRAGMENT_LOGIN_TAG,
                     option = commonOption)
             SignMode.SignInWithMatrixId -> Unit // Unsupported on Tchap
-        }.exhaustive
+        }
     }
 
     override fun onBackPressed() {

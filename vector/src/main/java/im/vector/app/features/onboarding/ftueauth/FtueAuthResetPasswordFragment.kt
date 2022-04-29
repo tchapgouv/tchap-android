@@ -21,14 +21,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.isEmail
+import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginResetPasswordBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
@@ -53,13 +51,16 @@ class FtueAuthResetPasswordFragment @Inject constructor() : AbstractFtueAuthFrag
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupSubmitButton()
     }
 
-//    private fun setupUi(state: OnboardingViewState) {
-//        views.resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrlFromUser.toReducedUrl())
-//    }
+    override fun onError(throwable: Throwable) {
+        views.resetPasswordEmailTil.error = errorFormatter.toHumanReadable(throwable)
+    }
+
+    private fun setupUi(state: OnboardingViewState) {
+        views.resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrlFromUser.toReducedUrl())
+    }
 
     private fun setupSubmitButton() {
         views.resetPasswordSubmit.setOnClickListener { submit() }
@@ -114,17 +115,10 @@ class FtueAuthResetPasswordFragment @Inject constructor() : AbstractFtueAuthFrag
     }
 
     override fun updateWithState(state: OnboardingViewState) {
-//        setupUi(state)
-
-        when (state.asyncResetPassword) {
-            is Loading -> {
-                // Ensure new password is hidden
-                views.passwordField.hidePassword()
-            }
-            is Fail    -> {
-                views.resetPasswordEmailTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)
-            }
-            is Success -> Unit
+        setupUi(state)
+        if (state.isLoading) {
+            // Ensure new password is hidden
+            views.passwordField.hidePassword()
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.extensions
+package im.vector.app.test.fakes
 
-// Trick to ensure that when block is exhaustive
-val <T> T.exhaustive: T get() = this
+import im.vector.app.features.onboarding.UriFactory
+import io.mockk.every
+import io.mockk.mockk
+
+class FakeUriFactory {
+
+    val instance = mockk<UriFactory>().also {
+        every { it.parse(any()) } answers {
+            val input = it.invocation.args.first() as String
+            FakeUri().also { it.givenEquals(input) }.instance
+        }
+    }
+}

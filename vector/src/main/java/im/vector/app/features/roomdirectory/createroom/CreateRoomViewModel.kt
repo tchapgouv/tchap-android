@@ -33,7 +33,6 @@ import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.AppStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.CreatedRoom
@@ -150,7 +149,7 @@ class CreateRoomViewModel @AssistedInject constructor(
             CreateRoomAction.Reset                    -> doReset()
             CreateRoomAction.ToggleShowAdvanced       -> toggleShowAdvanced()
             is CreateRoomAction.DisableFederation     -> disableFederation(action)
-        }.exhaustive
+        }
     }
 
     private fun disableFederation(action: CreateRoomAction.DisableFederation) {
@@ -219,6 +218,7 @@ class CreateRoomViewModel @AssistedInject constructor(
                 )
             }
         }
+//        analyticsTracker.capture(CreatedRoom(isDM = roomParams.isDirect.orFalse()))
     }
 
     private fun setTchapRoomType(action: CreateRoomAction.SetTchapRoomType) = setState {
@@ -275,7 +275,6 @@ class CreateRoomViewModel @AssistedInject constructor(
                                 eventsDefault = 100
                         )
                     }
-
                     if (state.roomType == TchapRoomType.FORUM) {
                         // Directory visibility
                         visibility = RoomDirectoryVisibility.PUBLIC
@@ -293,6 +292,46 @@ class CreateRoomViewModel @AssistedInject constructor(
                         // Hide the encrypted messages sent before the member is invited.
                         historyVisibility = RoomHistoryVisibility.INVITED
                         // Encryption
+                        enableEncryption()
+                    }
+//                    when (state.roomJoinRules) {
+//                        RoomJoinRules.PUBLIC     -> {
+//                            // Directory visibility
+//                            visibility = RoomDirectoryVisibility.PUBLIC
+//                            // Preset
+//                            preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
+//                            roomAliasName = state.aliasLocalPart
+//                        }
+//                        RoomJoinRules.RESTRICTED -> {
+//                            state.parentSpaceId?.let {
+//                                featurePreset = RestrictedRoomPreset(
+//                                        session.getHomeServerCapabilities(),
+//                                        listOf(RoomJoinRulesAllowEntry.restrictedToRoom(state.parentSpaceId))
+//                                )
+//                            }
+//                        }
+//                        RoomJoinRules.KNOCK      ->
+//                        RoomJoinRules.PRIVATE    ->
+//                        RoomJoinRules.INVITE
+//                        else                     -> {
+//                            // by default create invite only
+//                            // Directory visibility
+//                            visibility = RoomDirectoryVisibility.PRIVATE
+//                            // Preset
+//                            preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
+//                        }
+//                    }
+                    // Disabling federation
+                    disableFederation = state.disableFederation
+
+                    // Tchap: Use custom encrypt rules for Tchap, depends on which type of room is chosen
+                    // Encryption
+                    val shouldEncrypt = when (state.roomJoinRules) {
+                        // we ignore the isEncrypted for public room as the switch is hidden in this case
+                        RoomJoinRules.PUBLIC -> false
+                        else                 -> state.isEncrypted ?: state.defaultEncrypted[state.roomJoinRules].orFalse()
+                    }
+                    if (shouldEncrypt) {
                         enableEncryption()
                     }
 
