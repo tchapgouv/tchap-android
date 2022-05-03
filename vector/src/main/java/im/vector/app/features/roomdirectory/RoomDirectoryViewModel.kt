@@ -116,6 +116,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
             is RoomDirectoryAction.SetRoomDirectoryData -> Unit
             is RoomDirectoryAction.FilterWith           -> filterWith(action)
             is RoomDirectoryAction.JoinRoom             -> Unit
+            else                                        -> Unit
         }
     }
 

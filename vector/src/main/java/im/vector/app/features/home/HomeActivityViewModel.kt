@@ -26,7 +26,6 @@ import im.vector.app.config.analyticsConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.analytics.store.AnalyticsStore
 import im.vector.app.features.login.ReAuthHelper
@@ -338,6 +337,6 @@ class HomeActivityViewModel @AssistedInject constructor(
                 // Tchap: in case of migration, there is no initial sync, so force the update of the identity server url
                 updateIdentityServer()
             }
-        }.exhaustive
+        }
     }
 }

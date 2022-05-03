@@ -23,7 +23,6 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
@@ -54,7 +53,7 @@ class ExpiredAccountViewModel @AssistedInject constructor(
     override fun handle(action: ExpiredAccountAction) {
         when (action) {
             ExpiredAccountAction.RequestSendingRenewalEmail -> onRequestRenewalEmail()
-        }.exhaustive
+        }
     }
 
     private fun onRequestRenewalEmail() {

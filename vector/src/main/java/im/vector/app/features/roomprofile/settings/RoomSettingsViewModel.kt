@@ -31,7 +31,6 @@ import fr.gouv.tchap.core.utils.RoomUtils
 import fr.gouv.tchap.core.utils.TchapRoomType
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
@@ -252,7 +251,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
             RoomSettingsAction.AllowExternalUsersToJoin    -> handleAllowExternalUsersToJoin()
             is RoomSettingsAction.Save                     -> saveSettings()
             is RoomSettingsAction.Cancel                   -> cancel()
-        }.exhaustive
+        }
     }
 
     private fun handleSetRoomJoinRule(action: RoomSettingsAction.SetRoomJoinRule) = withState { state ->

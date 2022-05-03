@@ -23,7 +23,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import fr.gouv.tchap.core.utils.TchapUtils
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.flow.launchIn
@@ -87,7 +86,7 @@ class TchapRoomLinkAccessViewModel @AssistedInject constructor(
     override fun handle(action: TchapRoomLinkAccessAction) {
         when (action) {
             is TchapRoomLinkAccessAction.SetIsEnabled -> handleSetIsEnabled(action)
-        }.exhaustive
+        }
     }
 
     private fun observeRoomSummary() {

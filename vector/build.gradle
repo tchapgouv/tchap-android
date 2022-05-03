@@ -478,7 +478,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.45'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.46'
 
     // FlowBinding
     implementation libs.github.flowBinding
@@ -518,7 +518,6 @@ dependencies {
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'com.github.vector-im:PFLockScreen-Android:1.0.0-beta12'
     implementation 'com.github.hyuwah:DraggableView:1.0.0'
-    implementation 'com.github.Armen101:AudioRecordView:1.0.5'
 
     // Custom Tab
     implementation 'androidx.browser:browser:1.4.0'
@@ -578,10 +577,10 @@ dependencies {
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
     // implementation 'org.webrtc:google-webrtc:1.0.+'
-    withvoipImplementation('com.facebook.react:react-native-webrtc:1.92.1-jitsi-9093212@aar')
+    withvoipImplementation('com.facebook.react:react-native-webrtc:1.94.2-jitsi-10227332@aar')
 
     // Jitsi
-    withvoipImplementation('org.jitsi.react:jitsi-meet-sdk:3.10.0') {
+    withvoipImplementation('org.jitsi.react:jitsi-meet-sdk:5.0.2') {
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'

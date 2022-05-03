@@ -69,6 +69,9 @@ class ContentScannerStateTracker @Inject constructor(private val activeSessionHo
                             ScanState.IN_PROGRESS -> {
                                 holder.mediaScanInProgress()
                             }
+                            else                 -> {
+                                // Do nothing
+                            }
                         }
                     })
             trackedStatus[eventId] = ld
@@ -86,6 +89,9 @@ class ContentScannerStateTracker @Inject constructor(private val activeSessionHo
             ScanState.UNKNOWN,
             ScanState.IN_PROGRESS -> {
                 holder.mediaScanInProgress()
+            }
+            else                  -> {
+                // Do Nothing
             }
         }
     }
