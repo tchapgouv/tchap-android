@@ -439,7 +439,7 @@
     <string name="send_bug_report_include_key_share_history">Send key share requests history</string>
     <string name="send_bug_report_include_screenshot">Send screenshot</string>
     <string name="send_bug_report">Report bug</string>
-    <string name="send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?\nThere will be no direct response but your report will help us improve ${app_name}.</string>
+    <string name="send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?\nThere will be no direct response but your report will help us improve ${app_name}.</string> <!-- Tchap: Custom string -->
     <string name="send_bug_report_description_in_english"> </string> <!-- Tchap: Custom string -->
     <string name="send_bug_report_placeholder">Describe your problem here</string>
     <string name="send_bug_report_logs_description">In order to diagnose problems, logs from this client will be sent with this bug report. This bug report, including the logs and the screenshot, will not be publicly visible. If you would prefer to only send the text above, please untick:</string>
