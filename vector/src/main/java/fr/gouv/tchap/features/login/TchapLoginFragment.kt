@@ -44,7 +44,6 @@ import javax.inject.Inject
  */
 class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentTchapLoginBinding>() {
 
-    private lateinit var login: String
     private lateinit var password: String
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTchapLoginBinding {
@@ -61,7 +60,7 @@ class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentT
         loginViewModel.observeViewEvents {
             when (it) {
                 LoginViewEvents.OnLoginFlowRetrieved ->
-                    loginViewModel.handle(LoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
+                    loginViewModel.handle(LoginAction.LoginOrRegister(null, password, getString(R.string.login_default_session_public_name)))
                 is LoginViewEvents.OnHomeServerRetrieved -> {
                     val homeServerUrl = resources.getString(R.string.server_url_prefix) + it.hs
                     loginViewModel.handle(LoginAction.UpdateHomeServer(homeServerUrl))
@@ -93,7 +92,7 @@ class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentT
     private fun submit() {
         cleanupUi()
 
-        login = views.tchapLoginField.text.toString()
+        val login = views.tchapLoginField.text.toString()
         password = views.tchapPasswordField.text.toString()
 
         // This can be called by the IME action, so deal with empty cases
