@@ -120,7 +120,7 @@ class TchapRegisterFragment @Inject constructor() : AbstractLoginFragment<Fragme
         }
 
         if (error == 0) {
-            loginViewModel.handle(LoginAction.RetrieveHomeServer(login))
+            loginViewModel.handle(LoginAction.RetrieveHomeServer(login, password))
         }
     }
 

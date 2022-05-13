@@ -44,8 +44,6 @@ import javax.inject.Inject
  */
 class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentTchapLoginBinding>() {
 
-    private lateinit var password: String
-
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTchapLoginBinding {
         return FragmentTchapLoginBinding.inflate(inflater, container, false)
     }
@@ -60,7 +58,7 @@ class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentT
         loginViewModel.observeViewEvents {
             when (it) {
                 LoginViewEvents.OnLoginFlowRetrieved ->
-                    loginViewModel.handle(LoginAction.LoginOrRegister(null, password, getString(R.string.login_default_session_public_name)))
+                    loginViewModel.handle(LoginAction.LoginOrRegister(null, null, getString(R.string.login_default_session_public_name)))
                 is LoginViewEvents.OnHomeServerRetrieved -> {
                     val homeServerUrl = resources.getString(R.string.server_url_prefix) + it.hs
                     loginViewModel.handle(LoginAction.UpdateHomeServer(homeServerUrl))
@@ -93,7 +91,7 @@ class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentT
         cleanupUi()
 
         val login = views.tchapLoginField.text.toString()
-        password = views.tchapPasswordField.text.toString()
+        val password = views.tchapPasswordField.text.toString()
 
         // This can be called by the IME action, so deal with empty cases
         var error = 0
@@ -107,7 +105,7 @@ class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentT
         }
 
         if (error == 0) {
-            loginViewModel.handle(LoginAction.RetrieveHomeServer(login))
+            loginViewModel.handle(LoginAction.RetrieveHomeServer(login, password))
         }
     }
 

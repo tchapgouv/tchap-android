@@ -119,6 +119,7 @@ class LoginViewModel @AssistedInject constructor(
 
     // Tchap: Use in TchapLoginFragment
     private var login: String? = null
+    private var password: String? = null
 
     override fun handle(action: LoginAction) {
         when (action) {
@@ -644,15 +645,15 @@ class LoginViewModel @AssistedInject constructor(
     private suspend fun onWellknownSuccess(action: LoginAction.LoginOrRegister,
                                            wellKnownPrompt: WellknownResult.Prompt,
                                            homeServerConnectionConfig: HomeServerConnectionConfig?) {
-        // Tchap: Use login saved in viewModel instead of action.username
-        login?.let { username ->
+        // Tchap: Use login and password saved in viewModel instead of action.username
+        if (login != null && password != null) {
             val alteredHomeServerConnectionConfig = homeServerConnectionConfig
                     ?.copy(
                             homeServerUriBase = Uri.parse(wellKnownPrompt.homeServerUrl),
                             identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
                     )
                     ?: HomeServerConnectionConfig(
-                            homeServerUri = Uri.parse("https://${username.getDomain()}"),
+                            homeServerUri = Uri.parse("https://${login?.getDomain()}"),
                             homeServerUriBase = Uri.parse(wellKnownPrompt.homeServerUrl),
                             identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
                     )
@@ -660,8 +661,8 @@ class LoginViewModel @AssistedInject constructor(
             val data = try {
                 authenticationService.directAuthentication(
                         alteredHomeServerConnectionConfig,
-                        username,
-                        action.password,
+                        login!!,
+                        password!!,
                         action.initialDeviceName)
             } catch (failure: Throwable) {
                 onDirectLoginError(failure)
@@ -711,11 +712,11 @@ class LoginViewModel @AssistedInject constructor(
 
             currentJob = viewModelScope.launch {
                 try {
-                    // Tchap: Use login saved in viewModel instead of action.username
-                    login?.let { username ->
+                    // Tchap: Use login and password saved in viewModel instead of action.username
+                    (login != null && password != null).let {
                         safeLoginWizard.login(
-                                username,
-                                action.password,
+                                login!!,
+                                password!!,
                                 action.initialDeviceName
                         )
                     }
@@ -884,6 +885,8 @@ class LoginViewModel @AssistedInject constructor(
     private fun handleRetrieveHomeServer(action: LoginAction.RetrieveHomeServer) {
         // Tchap: Set Login
         login = action.email
+        password = action.password
+
         setState {
             copy(
                     asyncLoginAction = Uninitialized,
