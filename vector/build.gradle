@@ -177,11 +177,11 @@ android {
         // Tchap: Hide voice message recorder button
         buildConfigField "Boolean", "SHOW_VOICE_RECORDER", "false"
 
-        // Tchap: Disable add messages reaction
-        buildConfigField "Boolean", "SHOW_ADD_MESSAGE_REACTION", "false"
+        // Tchap: Enable add messages reaction
+        buildConfigField "Boolean", "SHOW_ADD_MESSAGE_REACTION", "true"
 
-        // Tchap: Disable editing messages
-        buildConfigField "Boolean", "SHOW_EDIT_MESSAGE", "false"
+        // Tchap: Enable editing messages
+        buildConfigField "Boolean", "SHOW_EDIT_MESSAGE", "true"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
