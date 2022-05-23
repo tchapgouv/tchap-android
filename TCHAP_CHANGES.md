@@ -16,6 +16,10 @@ Bugfixes 🐛
  - Fix Crash: Exception: kotlin.UninitializedPropertyAccessException: lateinit property login has not been initialized ([#557](https://github.com/tchapgouv/tchap-android-v2/issues/557))
  - Replace the "app_name" wording in the rageshake dialog ([#579](https://github.com/tchapgouv/tchap-android-v2/issues/579))
 
+Other changes
+-------------
+- Rebase against Element-Android v1.4.11 ([#541](https://github.com/tchapgouv/tchap-android/issues/541))
+
 
 Changes in Tchap 2.2.1 (2022-04-19)
 ===================================
@@ -39,7 +43,7 @@ Bugfixes 🐛
 
 Other changes
 -------------
- - Rebase against version v1.4.8 ([#497](https://github.com/tchapgouv/tchap-android/issues/497))
+ - Rebase against Element-Android v1.4.8 ([#497](https://github.com/tchapgouv/tchap-android/issues/497))
  - Hide/Disable unwanted features from Element: polls, location sharing, analytics(PostHog) ([#404](https://github.com/tchapgouv/tchap-android/issues/404))
 
 
