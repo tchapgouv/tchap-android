@@ -35,7 +35,7 @@ sealed class LoginAction : VectorViewModelAction {
     object ResetPasswordMailConfirmed : LoginAction()
 
     // Login or Register, depending on the signMode
-    data class LoginOrRegister(val username: String?, val password: String?, val initialDeviceName: String) : LoginAction()
+    data class LoginOrRegister(val username: String, val password: String, val initialDeviceName: String) : LoginAction()
 
     // Register actions
     open class RegisterAction : LoginAction()
@@ -76,6 +76,5 @@ sealed class LoginAction : VectorViewModelAction {
 
     data class CheckPasswordPolicy(val newPassword: String) : LoginAction()
 
-    // Tchap: Add password to save it in the viewModel
-    data class RetrieveHomeServer(val email: String, val password: String?) : LoginAction()
+    data class RetrieveHomeServer(val email: String) : LoginAction()
 }

@@ -57,13 +57,17 @@ class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentT
 
         loginViewModel.observeViewEvents {
             when (it) {
-                LoginViewEvents.OnLoginFlowRetrieved ->
-                    loginViewModel.handle(LoginAction.LoginOrRegister(null, null, getString(R.string.login_default_session_public_name)))
+                LoginViewEvents.OnLoginFlowRetrieved     ->
+                    loginViewModel.handle(LoginAction.LoginOrRegister(
+                            views.tchapLoginField.text.toString(),
+                            views.tchapPasswordField.text.toString(),
+                            getString(R.string.login_default_session_public_name)
+                    ))
                 is LoginViewEvents.OnHomeServerRetrieved -> {
                     val homeServerUrl = resources.getString(R.string.server_url_prefix) + it.hs
                     loginViewModel.handle(LoginAction.UpdateHomeServer(homeServerUrl))
                 }
-                else                                 ->
+                else                                     ->
                     // This is handled by the Activity
                     Unit
             }
@@ -105,7 +109,7 @@ class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentT
         }
 
         if (error == 0) {
-            loginViewModel.handle(LoginAction.RetrieveHomeServer(login, password))
+            loginViewModel.handle(LoginAction.RetrieveHomeServer(login))
         }
     }
 
@@ -151,7 +155,7 @@ class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentT
             }
             // Success is handled by the LoginActivity
             is Success -> Unit
-            else -> {
+            else       -> {
                 // Do Nothing
             }
         }

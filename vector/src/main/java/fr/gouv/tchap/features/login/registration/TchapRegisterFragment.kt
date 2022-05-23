@@ -46,9 +46,6 @@ import javax.inject.Inject
  */
 class TchapRegisterFragment @Inject constructor() : AbstractLoginFragment<FragmentTchapRegisterBinding>() {
 
-    private lateinit var login: String
-    private lateinit var password: String
-
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTchapRegisterBinding {
         return FragmentTchapRegisterBinding.inflate(inflater, container, false)
     }
@@ -61,14 +58,18 @@ class TchapRegisterFragment @Inject constructor() : AbstractLoginFragment<Fragme
         loginViewModel.observeViewEvents { loginViewEvents ->
             when (loginViewEvents) {
                 LoginViewEvents.OnLoginFlowRetrieved      ->
-                    loginViewModel.handle(LoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
+                    loginViewModel.handle(LoginAction.LoginOrRegister(
+                            username = views.tchapRegisterEmail.text.toString(),
+                            password = views.tchapRegisterPassword.text.toString(),
+                            initialDeviceName = getString(R.string.login_default_session_public_name)
+                    ))
                 is LoginViewEvents.RegistrationFlowResult -> {
                     // Result from registration request when the account password is set.
                     // Email stage is mandatory at this time and another stage should not happen.
                     val emailStage = loginViewEvents.flowResult.missingStages.firstOrNull { it.mandatory && it is Stage.Email }
 
                     if (emailStage != null) {
-                        loginViewModel.handle(LoginAction.AddThreePid(RegisterThreePid.Email(login)))
+                        loginViewModel.handle(LoginAction.AddThreePid(RegisterThreePid.Email(views.tchapRegisterEmail.text.toString())))
                     } else {
                         MaterialAlertDialogBuilder(requireActivity())
                                 .setTitle(R.string.dialog_title_error)
@@ -100,8 +101,8 @@ class TchapRegisterFragment @Inject constructor() : AbstractLoginFragment<Fragme
     private fun submit() {
         cleanupUi()
 
-        login = views.tchapRegisterEmail.text.toString()
-        password = views.tchapRegisterPassword.text.toString()
+        val login = views.tchapRegisterEmail.text.toString()
+        val password = views.tchapRegisterPassword.text.toString()
 
         // This can be called by the IME action, so deal with empty cases
         var error = 0
@@ -120,7 +121,7 @@ class TchapRegisterFragment @Inject constructor() : AbstractLoginFragment<Fragme
         }
 
         if (error == 0) {
-            loginViewModel.handle(LoginAction.RetrieveHomeServer(login, password))
+            loginViewModel.handle(LoginAction.RetrieveHomeServer(login))
         }
     }
 
