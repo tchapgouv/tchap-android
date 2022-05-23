@@ -31,6 +31,8 @@ For now, the Matrix SDK and the Tchap application are in the same project. So th
 
 ## I want to submit a PR to fix an issue
 
+Please have a look in the [dedicated documentation](./docs/pull_request.md) about pull request.
+
 Please check if a corresponding issue exists. If yes, please let us know in a comment that you're working on it.
 If an issue does not exist yet, it may be relevant to open a new issue and let us know that you're implementing it.
 

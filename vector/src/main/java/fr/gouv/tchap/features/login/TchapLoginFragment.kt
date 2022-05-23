@@ -26,7 +26,6 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.databinding.FragmentTchapLoginBinding
 import im.vector.app.features.login.AbstractLoginFragment
@@ -45,9 +44,6 @@ import javax.inject.Inject
  */
 class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentTchapLoginBinding>() {
 
-    private lateinit var login: String
-    private lateinit var password: String
-
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTchapLoginBinding {
         return FragmentTchapLoginBinding.inflate(inflater, container, false)
     }
@@ -61,16 +57,20 @@ class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentT
 
         loginViewModel.observeViewEvents {
             when (it) {
-                LoginViewEvents.OnLoginFlowRetrieved ->
-                    loginViewModel.handle(LoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
+                LoginViewEvents.OnLoginFlowRetrieved     ->
+                    loginViewModel.handle(LoginAction.LoginOrRegister(
+                            views.tchapLoginField.text.toString(),
+                            views.tchapPasswordField.text.toString(),
+                            getString(R.string.login_default_session_public_name)
+                    ))
                 is LoginViewEvents.OnHomeServerRetrieved -> {
                     val homeServerUrl = resources.getString(R.string.server_url_prefix) + it.hs
                     loginViewModel.handle(LoginAction.UpdateHomeServer(homeServerUrl))
                 }
-                else                                 ->
+                else                                     ->
                     // This is handled by the Activity
                     Unit
-            }.exhaustive
+            }
         }
     }
 
@@ -94,8 +94,8 @@ class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentT
     private fun submit() {
         cleanupUi()
 
-        login = views.tchapLoginField.text.toString()
-        password = views.tchapPasswordField.text.toString()
+        val login = views.tchapLoginField.text.toString()
+        val password = views.tchapPasswordField.text.toString()
 
         // This can be called by the IME action, so deal with empty cases
         var error = 0
@@ -155,6 +155,9 @@ class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentT
             }
             // Success is handled by the LoginActivity
             is Success -> Unit
+            else       -> {
+                // Do Nothing
+            }
         }
     }
 

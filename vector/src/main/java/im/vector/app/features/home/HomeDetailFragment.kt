@@ -22,10 +22,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
-import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -39,7 +36,6 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
@@ -122,16 +118,6 @@ class HomeDetailFragment @Inject constructor(
             val isRoomList = state.currentTab is HomeTab.RoomList
             menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
         }
-
-        // Tchap: Update SearchView
-        // - remove max width so it can take the whole available space in landscape
-        // - show same icon as menu item
-        val searchItem = menu.findItem(R.id.menu_home_filter)
-        (searchItem?.actionView as? SearchView)?.run {
-            maxWidth = Int.MAX_VALUE
-            findViewById<ImageView>(androidx.appcompat.R.id.search_mag_icon)?.setImageDrawable(searchItem.icon)
-        }
-
         super.onPrepareOptionsMenu(menu)
     }
 
@@ -181,7 +167,7 @@ class HomeDetailFragment @Inject constructor(
                 is HomeDetailViewEvents.FailToCall -> showFailure(viewEvent.failure)
                 HomeDetailViewEvents.Loading       -> showLoadingDialog()
             }
-        }.exhaustive
+        }
 
         unknownDeviceDetectorSharedViewModel.onEach { state ->
             state.unknownSessions.invoke()?.let { unknownDevices ->
@@ -222,9 +208,8 @@ class HomeDetailFragment @Inject constructor(
                 .onEach { action ->
                     when (action) {
                         is HomeActivitySharedAction.InviteByEmail -> onInviteByEmail(action.email)
-                        is HomeActivitySharedAction.SelectTab     -> viewModel.handle(HomeDetailAction.SwitchTab(action.tab))
                         else                                      -> Unit // no-op
-                    }.exhaustive
+                    }
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -259,7 +244,7 @@ class HomeDetailFragment @Inject constructor(
                 CreateDirectRoomViewEvents.InvalidCode                -> {
                     Toast.makeText(requireContext(), R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
                 }
-            }.exhaustive
+            }
         }
     }
 
@@ -422,8 +407,7 @@ class HomeDetailFragment @Inject constructor(
                 R.id.bottom_action_notification -> HomeTab.RoomList(RoomListDisplayMode.NOTIFICATIONS)
                 else                            -> HomeTab.DialPad
             }
-            // Tchap: Send event to shared VM to catch it in sub-fragments
-            sharedActionViewModel.post(HomeActivitySharedAction.SelectTab(tab))
+            viewModel.handle(HomeDetailAction.SwitchTab(tab))
             true
         }
 
@@ -491,14 +475,11 @@ class HomeDetailFragment @Inject constructor(
     private fun updateTabVisibilitySafely(tabId: Int, isVisible: Boolean) {
         val wasVisible = views.bottomNavigationView.menu.findItem(tabId).isVisible
         views.bottomNavigationView.menu.findItem(tabId).isVisible = isVisible
-        // Tchap: Show navigation menu if there is at least two visible items
-        val showNavigationMenu = views.bottomNavigationView.menu.children.count { it.isVisible } > 1
-        views.bottomNavigationView.isVisible = showNavigationMenu
         if (wasVisible && !isVisible) {
             // As we hide it check if it's not the current item!
             withState(viewModel) {
                 if (it.currentTab.toMenuId() == tabId) {
-                    viewModel.handle(HomeDetailAction.SwitchTab(HomeTab.RoomList(RoomListDisplayMode.ROOMS)))
+                    viewModel.handle(HomeDetailAction.SwitchTab(HomeTab.RoomList(RoomListDisplayMode.PEOPLE)))
                 }
             }
         }

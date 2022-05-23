@@ -18,7 +18,7 @@ There is some delay between when a release is created and when it appears in the
 If you would like to receive releases more quickly (bearing in mind that they may not be stable) you have a number of options:
 
 1. [Sign up to receive beta releases](https://play.google.com/apps/testing/fr.gouv.tchap.a) via the Google Play Store.
-2. Install a [release APK](https://github.com/tchapgouv/tchap-android-v2/releases) directly - download the relevant .apk file. Note: These are not the store versions, so you may have to uninstall the previous Tchap version before. Take care to properly logout and export your encrypted keys before.
+2. Install a [release APK](https://github.com/tchapgouv/tchap-android/releases) directly - download the relevant .apk file. Note: These are not the store versions, so you may have to uninstall the previous Tchap version before. Take care to properly logout and export your encrypted keys before.
 
 ## Contributing
 

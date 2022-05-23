@@ -22,7 +22,6 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -30,8 +29,6 @@ import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.analytics.AnalyticsTracker
@@ -122,15 +119,7 @@ class RoomListViewModel @AssistedInject constructor(
                 }
     }
 
-    companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> by hiltMavericksViewModelFactory() {
-
-        override fun initialState(viewModelContext: ViewModelContext): RoomListViewState {
-            val uiStateRepository = viewModelContext.activity.singletonEntryPoint().uiStateRepository()
-            return RoomListViewState(
-                    displayMode = uiStateRepository.getDisplayMode()
-            )
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> by hiltMavericksViewModelFactory()
 
     private val roomListSectionBuilder = if (appStateHandler.getCurrentRoomGroupingMethod() is RoomGroupingMethod.BySpace) {
         RoomListSectionBuilderSpace(
@@ -176,7 +165,7 @@ class RoomListViewModel @AssistedInject constructor(
             RoomListAction.CreateDirectChat               -> handleCreateDirectChat()
             is RoomListAction.CreateRoom                  -> handleCreateRoom(action)
             is RoomListAction.OpenRoomDirectory           -> handleOpenRoomDirectory(action)
-        }.exhaustive
+        }
     }
 
     fun isPublicRoom(roomId: String): Boolean {

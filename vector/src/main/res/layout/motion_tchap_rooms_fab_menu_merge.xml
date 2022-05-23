@@ -18,29 +18,6 @@
         android:contentDescription="@string/a11y_create_menu_close"
         android:focusable="true" />
 
-    <!-- Sub menu item 3 -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/createRoomItemChat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:accessibilityTraversalBefore="@id/createRoomItemGroup"
-        android:contentDescription="@string/a11y_create_direct_message"
-        android:src="@drawable/ic_tchap_new_discussion"
-        app:fabCustomSize="48dp"
-        app:maxImageSize="29dp"
-        app:tint="@android:color/white" />
-
-    <TextView
-        android:id="@+id/createRoomItemChatLabel"
-        style="@style/VectorLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:ellipsize="end"
-        android:importantForAccessibility="no"
-        android:text="@string/fab_menu_create_chat" />
-
     <!-- Sub menu item 2 -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/createRoomItemGroup"
@@ -94,7 +71,7 @@
         android:layout_height="wrap_content"
         android:accessibilityTraversalBefore="@id/createRoomItemChat"
         android:contentDescription="@string/a11y_create_menu_open"
-        android:src="@drawable/ic_fab_add"
-        app:maxImageSize="14dp" />
+        android:src="@drawable/ic_fab_add_room"
+        app:maxImageSize="26dp" />
 
 </merge>

@@ -1,4 +1,4 @@
-A full developer contributors list can be found [here](https://github.com/dinsic-pim/tchap-android-v2/graphs/contributors).
+A full developer contributors list can be found [here](https://github.com/dinsic-pim/tchap-android/graphs/contributors).
 
 # Tchap team:
 

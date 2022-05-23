@@ -18,7 +18,6 @@ package im.vector.app.features.command
 
 import androidx.annotation.StringRes
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 
 /**
  * Defines the command line operations
@@ -105,7 +104,7 @@ enum class Command(val command: String,
             ADD_TO_SPACE,
             JOIN_SPACE,
             LEAVE_ROOM   -> false
-        }.exhaustive
+        }
 
     val allAliases = arrayOf(command, *aliases.orEmpty())
 

@@ -35,13 +35,6 @@ class TchapRoomsFabMenuView @JvmOverloads constructor(context: Context, attrs: A
     override fun onFinishInflate() {
         super.onFinishInflate()
 
-        listOf(views.createRoomItemChat, views.createRoomItemChatLabel)
-                .forEach {
-                    it.setOnClickListener {
-                        closeFabMenu()
-                        listener?.fabCreateDirectChat()
-                    }
-                }
         listOf(views.createRoomItemGroup, views.createRoomItemGroupLabel)
                 .forEach {
                     it.setOnClickListener {
@@ -103,7 +96,6 @@ class TchapRoomsFabMenuView @JvmOverloads constructor(context: Context, attrs: A
 
     interface Listener {
         fun fabCreateRoom()
-        fun fabCreateDirectChat()
         fun fabOpenRoomDirectory()
     }
 }

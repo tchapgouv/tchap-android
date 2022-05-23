@@ -137,7 +137,7 @@ class RoomListSectionBuilderGroup(
                     true
             ) {
                 it.memberships = listOf(Membership.INVITE)
-                it.roomCategoryFilter = RoomCategoryFilter.ALL
+                it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
                 it.activeGroupId = actualGroupId
             }
         }
@@ -149,7 +149,7 @@ class RoomListSectionBuilderGroup(
                 false
         ) {
             it.memberships = listOf(Membership.JOIN)
-            it.roomCategoryFilter = RoomCategoryFilter.ALL
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
             it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
             it.activeGroupId = actualGroupId
         }
@@ -161,35 +161,34 @@ class RoomListSectionBuilderGroup(
                 false
         ) {
             it.memberships = listOf(Membership.JOIN)
-            it.roomCategoryFilter = RoomCategoryFilter.ALL
-            // Tchap: Show low priorities in room list
-            it.roomTagQueryFilter = RoomTagQueryFilter(false, null, false)
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+            it.roomTagQueryFilter = RoomTagQueryFilter(false, false, false)
             it.activeGroupId = actualGroupId
         }
 
-//        addSection(
-//                sections,
-//                activeSpaceAwareQueries,
-//                R.string.low_priority_header,
-//                false
-//        ) {
-//            it.memberships = listOf(Membership.JOIN)
-//            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-//            it.roomTagQueryFilter = RoomTagQueryFilter(null, true, null)
-//            it.activeGroupId = actualGroupId
-//        }
-//
-//        addSection(
-//                sections,
-//                activeSpaceAwareQueries,
-//                R.string.system_alerts_header,
-//                false
-//        ) {
-//            it.memberships = listOf(Membership.JOIN)
-//            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-//            it.roomTagQueryFilter = RoomTagQueryFilter(null, null, true)
-//            it.activeGroupId = actualGroupId
-//        }
+        addSection(
+                sections,
+                activeSpaceAwareQueries,
+                R.string.low_priority_header,
+                false
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+            it.roomTagQueryFilter = RoomTagQueryFilter(null, true, null)
+            it.activeGroupId = actualGroupId
+        }
+
+        addSection(
+                sections,
+                activeSpaceAwareQueries,
+                R.string.system_alerts_header,
+                false
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+            it.roomTagQueryFilter = RoomTagQueryFilter(null, null, true)
+            it.activeGroupId = actualGroupId
+        }
     }
 
     private fun buildPeopleSections(
@@ -255,8 +254,6 @@ class RoomListSectionBuilderGroup(
             val name = stringProvider.getString(nameRes)
             session.getFilteredPagedRoomSummariesLive(roomQueryParams)
                     .also {
-                        // Tchap: Refresh RoomList
-                        onUpdatable(it)
                         activeSpaceUpdaters.add(it)
                     }.livePagedList
                     .let { livePagedList ->
