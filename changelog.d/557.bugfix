@@ -1,1 +1,0 @@
-Fix Crash - Exception: kotlin.UninitializedPropertyAccessException: lateinit property login has not been initialized 

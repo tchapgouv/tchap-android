@@ -722,7 +722,7 @@ class TimelineViewModel @AssistedInject constructor(
                 R.id.open_matrix_apps          -> false // Tchap: there are no matrix apps
                 R.id.voice_call                -> BuildConfig.IS_VOIP_SUPPORTED && state.isCallOptionAvailable() // Tchap: check if voip is enabled
                 R.id.video_call                -> BuildConfig.IS_VOIP_SUPPORTED && // Tchap: check if voip is enabled
-                        state.isCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
+                        (state.isCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined)
                 // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
                 R.id.join_conference           -> !state.isCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
                 R.id.search                    -> state.isSearchAvailable()

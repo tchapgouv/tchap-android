@@ -1,3 +1,22 @@
+Changes in Tchap 2.3.0 (2022-05-23)
+===================================
+
+Features ✨
+--------------
+ - Enable edition and reactions on messages ([#592](https://github.com/tchapgouv/tchap-android-v2/issues/592))
+
+Improvements 🙌
+--------------
+ - Restore the rooms search of Element ([#542](https://github.com/tchapgouv/tchap-android-v2/issues/542))
+ - Restore the Direct Chat tab ([#543](https://github.com/tchapgouv/tchap-android-v2/issues/543))
+
+Bugfixes 🐛
+----------
+ - File description cropped for infected files ([#398](https://github.com/tchapgouv/tchap-android-v2/issues/398))
+ - Fix Crash: Exception: kotlin.UninitializedPropertyAccessException: lateinit property login has not been initialized ([#557](https://github.com/tchapgouv/tchap-android-v2/issues/557))
+ - Replace the "app_name" wording in the rageshake dialog ([#579](https://github.com/tchapgouv/tchap-android-v2/issues/579))
+
+
 Changes in Tchap 2.2.1 (2022-04-19)
 ===================================
 
