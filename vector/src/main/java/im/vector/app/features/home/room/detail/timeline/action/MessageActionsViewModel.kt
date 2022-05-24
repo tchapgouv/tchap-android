@@ -28,6 +28,7 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.canReact
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.resources.BooleanProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.app.features.html.EventHtmlRenderer
@@ -79,7 +80,8 @@ class MessageActionsViewModel @AssistedInject constructor(
         private val errorFormatter: ErrorFormatter,
         private val stringProvider: StringProvider,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
-        private val vectorPreferences: VectorPreferences
+        private val vectorPreferences: VectorPreferences,
+        private val booleanProvider: BooleanProvider
 ) : VectorViewModel<MessageActionState, MessageActionsAction, EmptyViewEvents>(initialState) {
 
     private val informationData = initialState.informationData
@@ -331,7 +333,7 @@ class MessageActionsViewModel @AssistedInject constructor(
                 add(EventSharedAction.Reply(eventId))
             }
 
-            if (canReplyInThread(timelineEvent, messageContent, actionPermissions)) {
+            if (canReplyInThread(timelineEvent, messageContent, actionPermissions) && booleanProvider.getBoolean(R.bool.feature_reply_in_threads_quick_action_enabled)) {
                 add(EventSharedAction.ReplyInThread(eventId, !timelineEvent.isRootThread()))
             }
 

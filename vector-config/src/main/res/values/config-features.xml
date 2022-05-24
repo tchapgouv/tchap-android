@@ -8,4 +8,6 @@
 
     <bool name="feature_threads_beta_feedback_enabled">true</bool>
 
+    <bool name="feature_reply_in_threads_quick_action_enabled">false</bool>
+
 </resources>
