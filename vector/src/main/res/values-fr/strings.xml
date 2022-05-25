@@ -230,14 +230,14 @@
     <string name="dialog_title_warning">Attention</string>
     <string name="bottom_action_favourites">Favoris</string>
     <string name="bottom_action_people">Personnes</string> <!-- Tchap: Custom string -->
-    <string name="bottom_action_rooms">Conversations</string> <!-- Tchap: Custom string -->
+    <string name="bottom_action_rooms">Salons</string> <!-- Tchap: Custom string -->
     <string name="home_filter_placeholder_home">Rechercher des conversations</string> <!-- Tchap: Custom string -->
     <string name="invitations_header">Invitations</string>
     <string name="low_priority_header">Priorité basse</string>
     <string name="direct_chats_header">Discussions</string>
     <string name="matrix_only_filter">Contacts Matrix uniquement</string>
     <string name="no_result_placeholder">Aucun résultat</string>
-    <string name="rooms_header">Conversations</string> <!-- Tchap: Custom string -->
+    <string name="rooms_header">Conversations</string>
     <string name="send_bug_report_include_logs">Envoyer les journaux</string>
     <string name="send_bug_report_include_crash_logs">Envoyer les journaux d’erreur</string>
     <string name="send_bug_report_include_screenshot">Envoyer une capture d’écran</string>
@@ -892,7 +892,7 @@
     <string name="send_suggestion_sent">Merci, la suggestion a bien été envoyée</string>
     <string name="send_suggestion_failed">Échec d’envoi de la suggestion (%s)</string>
     <string name="settings_labs_show_hidden_events_in_timeline">Afficher les évènements cachés dans l’historique</string> <!-- Tchap: Custom string -->
-    <string name="bottom_action_people_x">Messages directs</string> <!-- Tchap: Custom string -->
+    <string name="bottom_action_people_x">Messages Directs</string> <!-- Tchap: Custom string -->
     <string name="send_file_step_idle">Attente…</string>
     <string name="send_file_step_encrypting_thumbnail">Chiffrement de la miniature…</string>
     <string name="send_file_step_sending_thumbnail">Envoi de la miniature (%1$s / %2$s)</string>
