@@ -333,9 +333,7 @@ class MessageActionsViewModel @AssistedInject constructor(
                 add(EventSharedAction.Reply(eventId))
             }
 
-            // Tchap: Disable can reply in thread
-            if (canReplyInThread(timelineEvent, messageContent, actionPermissions) &&
-                    booleanProvider.getBoolean(R.bool.feature_reply_in_threads_quick_action_enabled)) {
+            if (canReplyInThread(timelineEvent, messageContent, actionPermissions)) {
                 add(EventSharedAction.ReplyInThread(eventId, !timelineEvent.isRootThread()))
             }
 
@@ -459,7 +457,8 @@ class MessageActionsViewModel @AssistedInject constructor(
                                  messageContent: MessageContent?,
                                  actionPermissions: ActionPermissions): Boolean {
         // We let reply in thread visible even if threads are not enabled, with an enhanced flow to attract users
-//        if (!vectorPreferences.areThreadMessagesEnabled()) return false
+        // Tchap: don't show the canReplyInThread quick action if it's not enable in the labs
+        if (!vectorPreferences.areThreadMessagesEnabled()) return false
         if (initialState.isFromThreadTimeline) return false
         if (event.root.isThread()) return false
         if (event.root.getClearType() != EventType.MESSAGE &&
