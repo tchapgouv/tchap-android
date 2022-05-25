@@ -333,6 +333,7 @@ class MessageActionsViewModel @AssistedInject constructor(
                 add(EventSharedAction.Reply(eventId))
             }
 
+            // Tchap: Disable can reply in thread
             if (canReplyInThread(timelineEvent, messageContent, actionPermissions) &&
                     booleanProvider.getBoolean(R.bool.feature_reply_in_threads_quick_action_enabled)) {
                 add(EventSharedAction.ReplyInThread(eventId, !timelineEvent.isRootThread()))
