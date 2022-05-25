@@ -892,7 +892,7 @@
     <string name="send_suggestion_sent">Merci, la suggestion a bien été envoyée</string>
     <string name="send_suggestion_failed">Échec d’envoi de la suggestion (%s)</string>
     <string name="settings_labs_show_hidden_events_in_timeline">Afficher les évènements cachés dans l’historique</string> <!-- Tchap: Custom string -->
-    <string name="bottom_action_people_x">Message directs</string> <!-- Tchap: Custom string -->
+    <string name="bottom_action_people_x">Messages directs</string> <!-- Tchap: Custom string -->
     <string name="send_file_step_idle">Attente…</string>
     <string name="send_file_step_encrypting_thumbnail">Chiffrement de la miniature…</string>
     <string name="send_file_step_sending_thumbnail">Envoi de la miniature (%1$s / %2$s)</string>
