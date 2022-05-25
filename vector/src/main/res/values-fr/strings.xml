@@ -230,7 +230,7 @@
     <string name="dialog_title_warning">Attention</string>
     <string name="bottom_action_favourites">Favoris</string>
     <string name="bottom_action_people">Personnes</string> <!-- Tchap: Custom string -->
-    <string name="bottom_action_rooms">Salons</string> <!-- Tchap: Custom string -->
+    <string name="bottom_action_rooms">Salons</string>
     <string name="home_filter_placeholder_home">Rechercher des conversations</string> <!-- Tchap: Custom string -->
     <string name="invitations_header">Invitations</string>
     <string name="low_priority_header">Priorité basse</string>
@@ -891,7 +891,7 @@
     <string name="send_suggestion_report_placeholder">Décrivez votre suggestion ici</string>
     <string name="send_suggestion_sent">Merci, la suggestion a bien été envoyée</string>
     <string name="send_suggestion_failed">Échec d’envoi de la suggestion (%s)</string>
-    <string name="settings_labs_show_hidden_events_in_timeline">Afficher les évènements cachés dans l’historique</string> <!-- Tchap: Custom string -->
+    <string name="settings_labs_show_hidden_events_in_timeline">Afficher les événements cachés dans l’historique</string> <!-- Tchap: Custom string -->
     <string name="bottom_action_people_x">Messages Directs</string> <!-- Tchap: Custom string -->
     <string name="send_file_step_idle">Attente…</string>
     <string name="send_file_step_encrypting_thumbnail">Chiffrement de la miniature…</string>
