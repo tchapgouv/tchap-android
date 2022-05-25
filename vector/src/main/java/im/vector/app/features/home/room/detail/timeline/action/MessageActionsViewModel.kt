@@ -455,7 +455,8 @@ class MessageActionsViewModel @AssistedInject constructor(
                                  messageContent: MessageContent?,
                                  actionPermissions: ActionPermissions): Boolean {
         // We let reply in thread visible even if threads are not enabled, with an enhanced flow to attract users
-//        if (!vectorPreferences.areThreadMessagesEnabled()) return false
+        // Tchap: don't show the canReplyInThread quick action if it's not enable in the labs
+        if (!vectorPreferences.areThreadMessagesEnabled()) return false
         if (initialState.isFromThreadTimeline) return false
         if (event.root.isThread()) return false
         if (event.root.getClearType() != EventType.MESSAGE &&
