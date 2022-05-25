@@ -237,7 +237,7 @@
     <string name="direct_chats_header">Discussions</string>
     <string name="matrix_only_filter">Contacts Matrix uniquement</string>
     <string name="no_result_placeholder">Aucun résultat</string>
-    <string name="rooms_header">Conversations</string>
+    <string name="rooms_header">Conversations</string> <!-- Tchap: Custom string -->
     <string name="send_bug_report_include_logs">Envoyer les journaux</string>
     <string name="send_bug_report_include_crash_logs">Envoyer les journaux d’erreur</string>
     <string name="send_bug_report_include_screenshot">Envoyer une capture d’écran</string>
