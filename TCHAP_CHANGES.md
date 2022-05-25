@@ -1,3 +1,15 @@
+Changes in Tchap 2.3.1 (2022-05-25)
+===================================
+
+Bugfixes 🐛
+----------
+ - Remove "answer in a thread" from the message's quick actions ([#599](https://github.com/tchapgouv/tchap-android-v2/issues/599))
+
+Other changes
+-------------
+ - Rename home tab titles ([#601](https://github.com/tchapgouv/tchap-android-v2/issues/601))
+
+
 Changes in Tchap 2.3.0 (2022-05-23)
 ===================================
 
