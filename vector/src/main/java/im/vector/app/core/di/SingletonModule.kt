@@ -61,6 +61,7 @@ import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -124,7 +125,6 @@ object VectorStaticModule {
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
                 roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
                 threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
-                presenceSyncEnabled = BuildConfig.PRESENCE_SYNC_ENABLED,
                 // Tchap: Use custom permalink prefix
                 clientPermalinkBaseUrl = context.getString(R.string.permalink_prefix)
         )
@@ -155,6 +155,11 @@ object VectorStaticModule {
     @Provides
     fun providesRawService(matrix: Matrix): RawService {
         return matrix.rawService()
+    }
+
+    @Provides
+    fun providesLightweightSettingsStorage(matrix: Matrix): LightweightSettingsStorage {
+        return matrix.lightweightSettingsStorage()
     }
 
     @Provides

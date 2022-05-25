@@ -25,7 +25,7 @@ import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class TchapMigrateSessionTo013(realm: DynamicRealm) : RealmMigrator(realm, 13) {
+internal class TchapMigrateSessionTo013(realm: DynamicRealm) : RealmMigrator(realm, 13) {
 
     override fun doMigrate(realm: DynamicRealm) {
         val accessRulesContentAdapter = MoshiProvider.providesMoshi().adapter(RoomAccessRulesContent::class.java)

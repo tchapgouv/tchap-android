@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.api.network.ApiInterceptorListener
 import org.matrix.android.sdk.api.network.ApiPath
 import org.matrix.android.sdk.api.raw.RawService
+import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.di.DaggerMatrixComponent
 import org.matrix.android.sdk.internal.network.ApiInterceptor
@@ -58,6 +59,7 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     @Inject internal lateinit var homeServerHistoryService: HomeServerHistoryService
     @Inject internal lateinit var apiInterceptor: ApiInterceptor
     @Inject internal lateinit var matrixWorkerFactory: MatrixWorkerFactory
+    @Inject internal lateinit var lightweightSettingsStorage: LightweightSettingsStorage
 
     init {
         Monarchy.init(context)
@@ -81,6 +83,8 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     fun threePidPlatformDiscoverService() = threePidPlatformDiscoverService
 
     fun rawService() = rawService
+
+    fun lightweightSettingsStorage() = lightweightSettingsStorage
 
     fun homeServerHistoryService() = homeServerHistoryService
 

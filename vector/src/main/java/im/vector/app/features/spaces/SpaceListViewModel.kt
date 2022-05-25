@@ -40,7 +40,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
@@ -55,6 +54,7 @@ import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.api.session.room.spaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.api.session.space.SpaceOrderUtils
 import org.matrix.android.sdk.api.session.space.model.SpaceOrderContent
@@ -211,7 +211,8 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
         }
         session.coroutineScope.launch {
             orderCommands.forEach {
-                session.getRoom(it.spaceId)?.updateAccountData(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER,
+                session.getRoom(it.spaceId)?.updateAccountData(
+                        RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER,
                         SpaceOrderContent(order = it.order).toContent()
                 )
             }
@@ -272,38 +273,28 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
     }
 
     private fun observeSpaceSummaries() {
-        val spaceSummaryQueryParams = roomSummaryQueryParams {
+        val params = spaceSummaryQueryParams {
             memberships = listOf(Membership.JOIN, Membership.INVITE)
             displayName = QueryStringValue.IsNotEmpty
-            excludeType = listOf(/**RoomType.MESSAGING,$*/
-                    null)
         }
-
-        val flowSession = session.flow()
 
         combine(
-                flowSession
-                        .liveUser(session.myUserId)
-                        .map {
-                            it.getOrNull()
-                        },
-                flowSession
-                        .liveSpaceSummaries(spaceSummaryQueryParams),
-                session
-                        .accountDataService()
+                session.flow()
+                        .liveSpaceSummaries(params),
+                session.accountDataService()
                         .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
                         .asFlow()
-        ) { _, communityGroups, _ ->
-            communityGroups
+        ) { spaces, _ ->
+            spaces
         }
                 .execute { async ->
-                    val rootSpaces = session.spaceService().getRootSpaceSummaries()
-                    val orders = rootSpaces.map {
+                    val rootSpaces = async.invoke().orEmpty().filter { it.flattenParentIds.isEmpty() }
+                    val orders = rootSpaces.associate {
                         it.roomId to session.getRoom(it.roomId)
                                 ?.getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER)
                                 ?.content.toModel<SpaceOrderContent>()
                                 ?.safeOrder()
-                    }.toMap()
+                    }
                     copy(
                             asyncSpaces = async,
                             rootSpacesOrdered = rootSpaces.sortedWith(TopLevelSpaceComparator(orders)),

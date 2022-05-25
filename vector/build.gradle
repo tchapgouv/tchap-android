@@ -150,8 +150,6 @@ android {
         //  This *must* only be set in trusted environments.
         buildConfigField "Boolean", "handleCallAssertedIdentityEvents", "false"
 
-        buildConfigField "Boolean", "PRESENCE_SYNC_ENABLED", "true"
-
         // Tchap: Disable Location Sharing
         def enableLocationSharing = false
         buildConfigField "Boolean", "enableLocationSharing", "${enableLocationSharing}"
@@ -276,7 +274,6 @@ android {
         release {
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
-            buildConfigField "Boolean", "ENABLE_LIVE_LOCATION_SHARING", "false"
 
             // Tchap: Show developer mode only in debug
             resValue "bool", "developer_mode_visible", "false"
@@ -553,7 +550,8 @@ dependencies {
     implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
 
     // Chat effects
-    implementation 'nl.dionsegijn:konfetti:1.3.2'
+    implementation 'nl.dionsegijn:konfetti-xml:2.0.2'
+
     implementation 'com.github.jetradarmobile:android-snowfall:1.2.1'
     // DI
     implementation libs.dagger.hilt
