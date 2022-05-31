@@ -90,7 +90,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                                      listener: RoomListListener?): VectorEpoxyModel<*> {
         // Tchap: userXXX invited you
         val secondLine = roomSummary.inviterId?.let { userId ->
-            val displayName = session.getUser(userId)?.toMatrixItem()?.getBestName()
+            val displayName = session.userService().getUser(userId)?.toMatrixItem()?.getBestName()
                     ?.let { displayName ->
                         if (roomSummary.isDirect) {
                             // We remove the user domain in second line because it is already present in first line

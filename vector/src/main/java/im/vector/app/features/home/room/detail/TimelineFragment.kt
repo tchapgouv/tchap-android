@@ -121,8 +121,6 @@ import im.vector.app.core.utils.startInstallFromSourceIntent
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogReportContentBinding
 import im.vector.app.databinding.FragmentTimelineBinding
-import im.vector.app.features.MainActivity
-import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.extensions.toAnalyticsInteraction
 import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.analytics.plan.MobileScreen
@@ -300,7 +298,7 @@ class TimelineFragment @Inject constructor(
         private const val ircPattern = " (IRC)"
     }
 
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
 
     private val timelineArgs: TimelineArgs by args()
     private val glideRequests by lazy {
@@ -1447,7 +1445,7 @@ class TimelineFragment @Inject constructor(
                     }
                 }
             }
-            val swipeCallback = RoomMessageTouchHelperCallback(requireContext(), R.drawable.ic_reply, quickReplyHandler)
+            val swipeCallback = RoomMessageTouchHelperCallback(requireContext(), R.drawable.ic_reply, quickReplyHandler, clock)
             val touchHelper = ItemTouchHelper(swipeCallback)
             touchHelper.attachToRecyclerView(views.timelineRecyclerView)
         }
@@ -1745,14 +1743,10 @@ class TimelineFragment @Inject constructor(
         dismissLoadingDialog()
         views.composerLayout.setTextIfDifferent("")
         when (parsedCommand) {
-            is ParsedCommand.SetMarkdown  -> {
+            is ParsedCommand.SetMarkdown -> {
                 showSnackWithMessage(getString(if (parsedCommand.enable) R.string.markdown_has_been_enabled else R.string.markdown_has_been_disabled))
             }
-            is ParsedCommand.UnignoreUser -> {
-                // A user has been un-ignored, perform a initial sync
-                MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = true))
-            }
-            else                          -> Unit
+            else                         -> Unit
         }
     }
 
@@ -2210,7 +2204,8 @@ class TimelineFragment @Inject constructor(
                         file = it,
                         title = action.messageContent.body,
                         mediaMimeType = action.messageContent.mimeType ?: getMimeTypeFromUri(requireContext(), it.toUri()),
-                        notificationUtils = notificationUtils
+                        notificationUtils = notificationUtils,
+                        currentTimeMillis = clock.epochMillis()
                 )
             }
                     .onFailure {

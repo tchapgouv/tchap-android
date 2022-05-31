@@ -49,6 +49,7 @@ import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
@@ -461,7 +462,8 @@ class MessageActionsViewModel @AssistedInject constructor(
 
         // Disable beta prompt if the homeserver do not support threads
         if (!vectorPreferences.areThreadMessagesEnabled() &&
-                !session.getHomeServerCapabilities().canUseThreading) return false
+                !session.homeServerCapabilitiesService().getHomeServerCapabilities().canUseThreading) return false
+
         if (initialState.isFromThreadTimeline) return false
         if (event.root.isThread()) return false
         if (event.root.getClearType() != EventType.MESSAGE &&

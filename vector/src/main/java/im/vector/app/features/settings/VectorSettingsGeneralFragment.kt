@@ -48,6 +48,7 @@ import im.vector.app.core.preference.UserAvatarPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.core.utils.getSizeOfFiles
 import im.vector.app.core.utils.toast
@@ -82,7 +83,8 @@ import javax.inject.Inject
 
 class VectorSettingsGeneralFragment @Inject constructor(
         private val keysExporter: KeysExporter,
-        colorProvider: ColorProvider
+        colorProvider: ColorProvider,
+        clock: Clock,
 ) :
         VectorSettingsBaseFragment(),
         GalleryOrCameraDialogHelper.Listener {
@@ -90,7 +92,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
     override var titleRes = R.string.settings_general_title
     override val preferenceXmlRes = R.xml.vector_settings_general
 
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
 
     private val mUserSettingsCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_USER_SETTINGS_PREFERENCE_KEY)!!
@@ -214,7 +216,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
 
         // Password
         // Hide the preference if password can not be updated
-        if (session.getHomeServerCapabilities().canChangePassword) {
+        if (session.homeServerCapabilitiesService().getHomeServerCapabilities().canChangePassword) {
             mPasswordPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 onPasswordUpdateClick()
                 false
@@ -377,7 +379,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
 
         lifecycleScope.launch {
             val result = runCatching {
-                session.updateAvatar(session.myUserId, uri, getFilenameFromUri(context, uri) ?: UUID.randomUUID().toString())
+                session.profileService().updateAvatar(session.myUserId, uri, getFilenameFromUri(context, uri) ?: UUID.randomUUID().toString())
             }
             if (!isAdded) return@launch
 
@@ -489,7 +491,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                     showPasswordLoadingView(true)
                     lifecycleScope.launch {
                         val result = runCatching {
-                            session.changePassword(oldPwd, newPwd)
+                            session.accountService().changePassword(oldPwd, newPwd)
                         }
                         if (!isAdded) {
                             return@launch
@@ -529,8 +531,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                                 }
                             }
                         }
-                    }
-                    .show(activity.supportFragmentManager, "changePasswordPreDialog")
+                    }.show(activity.supportFragmentManager, "changePasswordPreDialog")
         }
     }
 
@@ -582,19 +583,19 @@ class VectorSettingsGeneralFragment @Inject constructor(
 //            displayLoadingView()
 //
 //            lifecycleScope.launch {
-//                val result = runCatching { session.setDisplayName(session.myUserId, value) }
+//                val result = runCatching { session.profileService().setDisplayName(session.myUserId, value) }
 //                if (!isAdded) return@launch
 //                result.fold(
-//                         onSuccess = {
-//                    // refresh the settings value
-//                    mDisplayNamePreference.summary = value
-//                    mDisplayNamePreference.text = value
-//                    hideLoadingView()
-//                },
-//                onFailure = {
-//                    hideLoadingView()
-//                    displayErrorDialog(it)
-//                }
+//                        onSuccess = {
+//                            // refresh the settings value
+//                            mDisplayNamePreference.summary = value
+//                            mDisplayNamePreference.text = value
+//                            hideLoadingView()
+//                        },
+//                        onFailure = {
+//                            hideLoadingView()
+//                            displayErrorDialog(it)
+//                        }
 //                )
 //            }
 //        }
