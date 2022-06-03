@@ -43,12 +43,14 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersionResult
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
+import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
+import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
-import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
-import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
-import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
-import org.matrix.android.sdk.internal.util.awaitCallback
+import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
+import org.matrix.android.sdk.api.util.awaitCallback
+import org.matrix.android.sdk.api.util.fromBase64
 import java.io.OutputStream
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -103,9 +105,9 @@ class BootstrapSharedViewModel @AssistedInject constructor(
 
                 // We need to check if there is an existing backup
                 viewModelScope.launch(Dispatchers.IO) {
-                    val version = awaitCallback<KeysVersionResult?> {
+                    val version = awaitCallback<KeysBackupLastVersionResult> {
                         session.cryptoService().keysBackupService().getCurrentVersion(it)
-                    }
+                    }.toKeysVersionResult()
                     if (version == null) {
                         // we just resume plain bootstrap
                         doesKeyBackupExist = false
@@ -244,7 +246,8 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 uiaContinuation?.resume(DefaultBaseAuth(session = pendingAuth?.session ?: ""))
             }
             is BootstrapActions.PasswordAuthDone                 -> {
-                val decryptedPass = session.loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
+                val decryptedPass = session.secureStorageService()
+                        .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
                         UserPasswordAuth(
                                 session = pendingAuth?.session,

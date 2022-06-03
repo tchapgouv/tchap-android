@@ -107,6 +107,7 @@ import im.vector.app.features.onboarding.ftueauth.FtueAuthCaptchaFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthChooseDisplayNameFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthChooseProfilePictureFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthGenericTextInputFormFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthLegacyStyleCaptchaFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthLoginFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthPersonalizationCompleteFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordFragment
@@ -119,6 +120,7 @@ import im.vector.app.features.onboarding.ftueauth.FtueAuthSplashFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthUseCaseFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthWaitForEmailFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthWebFragment
+import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthLegacyStyleTermsFragment
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragment
 import im.vector.app.features.pin.PinFragment
 import im.vector.app.features.poll.create.CreatePollFragment
@@ -414,6 +416,11 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(FtueAuthLegacyStyleCaptchaFragment::class)
+    fun bindFtueAuthLegacyStyleCaptchaFragment(fragment: FtueAuthLegacyStyleCaptchaFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(FtueAuthCaptchaFragment::class)
     fun bindFtueAuthCaptchaFragment(fragment: FtueAuthCaptchaFragment): Fragment
 
@@ -476,6 +483,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(FtueAuthWebFragment::class)
     fun bindFtueAuthWebFragment(fragment: FtueAuthWebFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthLegacyStyleTermsFragment::class)
+    fun bindFtueAuthLegacyStyleTermsFragment(fragment: FtueAuthLegacyStyleTermsFragment): Fragment
 
     @Binds
     @IntoMap

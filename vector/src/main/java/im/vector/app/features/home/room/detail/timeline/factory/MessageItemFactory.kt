@@ -31,9 +31,11 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.containsOnlyEmojis
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentScannerStateTracker
@@ -42,8 +44,9 @@ import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvid
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
-import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
+import im.vector.app.features.home.room.detail.timeline.item.MessageAudioItem
+import im.vector.app.features.home.room.detail.timeline.item.MessageAudioItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoItem
@@ -92,10 +95,13 @@ import me.gujun.android.span.span
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.api.session.events.model.RelationType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
 import org.matrix.android.sdk.api.session.room.model.message.MessageEmoteContent
@@ -110,14 +116,11 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVerification
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.PollAnswer
 import org.matrix.android.sdk.api.session.room.model.message.PollType
-import org.matrix.android.sdk.api.session.room.model.message.getFileName
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
+import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.api.util.MimeTypes
-import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
-import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import javax.inject.Inject
 
 class MessageItemFactory @Inject constructor(
@@ -142,10 +145,12 @@ class MessageItemFactory @Inject constructor(
         private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val spanUtils: SpanUtils,
         private val session: Session,
-        private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker,
+        private val clock: Clock,
+        private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
         private val locationPinProvider: LocationPinProvider,
         private val vectorPreferences: VectorPreferences,
         private val urlMapProvider: UrlMapProvider,
+        private val liveLocationMessageItemFactory: LiveLocationMessageItemFactory,
 ) {
 
     // TODO inject this properly?
@@ -203,13 +208,7 @@ class MessageItemFactory @Inject constructor(
             is MessageNoticeContent              -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageVideoContent               -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageFileContent                -> buildFileMessageItem(messageContent, highlight, attributes)
-            is MessageAudioContent               -> {
-                if (messageContent.voiceMessageIndicator != null) {
-                    buildVoiceMessageItem(params, messageContent, informationData, highlight, attributes)
-                } else {
-                    buildAudioMessageItem(messageContent, informationData, highlight, attributes)
-                }
-            }
+            is MessageAudioContent               -> buildAudioContent(params, messageContent, informationData, highlight, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessagePollContent                -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
             is MessageLocationContent            -> {
@@ -219,6 +218,7 @@ class MessageItemFactory @Inject constructor(
                     buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
                 }
             }
+            is MessageBeaconInfoContent          -> liveLocationMessageItemFactory.create(messageContent, highlight, attributes)
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
         return messageItem?.apply {
@@ -233,7 +233,7 @@ class MessageItemFactory @Inject constructor(
             attributes: AbsMessageItem.Attributes,
     ): MessageLocationItem? {
         val width = timelineMediaSizeProvider.getMaxSize().first
-        val height = dimensionConverter.dpToPx(200)
+        val height = dimensionConverter.dpToPx(MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP)
 
         val locationUrl = locationContent.toLocationData()?.let {
             urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, width, height)
@@ -340,60 +340,62 @@ class MessageItemFactory @Inject constructor(
     }
 
     private fun buildAudioMessageItem(
+            params: TimelineItemFactoryParams,
             messageContent: MessageAudioContent,
-            @Suppress("UNUSED_PARAMETER")
             informationData: MessageInformationData,
             highlight: Boolean,
-            attributes: AbsMessageItem.Attributes,
-    ): MessageFileItem? {
-        val fileUrl = messageContent.getFileUrl()?.let {
-            if (informationData.sentByMe && !informationData.sendState.isSent()) {
-                it
-            } else {
-                it.takeIf { it.isMxcUrl() }
-            }
-        } ?: ""
-        return MessageFileItem_()
+            attributes: AbsMessageItem.Attributes
+    ): MessageAudioItem {
+        val fileUrl = getAudioFileUrl(messageContent, informationData)
+        val playbackControlButtonClickListener = createOnPlaybackButtonClickListener(messageContent, informationData, params)
+        val duration = messageContent.audioInfo?.duration ?: 0
+
+        return MessageAudioItem_()
                 .attributes(attributes)
-                .izLocalFile(localFilesHelper.isLocalFile(fileUrl))
-                .izDownloaded(session.fileService().isFileInCache(
-                        fileUrl,
-                        messageContent.getFileName(),
-                        messageContent.mimeType,
-                        messageContent.encryptedFileInfo?.toElementToDecrypt())
-                )
+                .filename(messageContent.body)
+                .duration(messageContent.audioInfo?.duration ?: 0)
+                .playbackControlButtonClickListener(playbackControlButtonClickListener)
+                .audioMessagePlaybackTracker(audioMessagePlaybackTracker)
+                .isLocalFile(localFilesHelper.isLocalFile(fileUrl))
+                .fileSize(messageContent.audioInfo?.size ?: 0L)
+                .onSeek { params.callback?.onAudioSeekBarMovedTo(informationData.eventId, duration, it) }
                 .mxcUrl(fileUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
-                .contentScannerStateTracker(contentScannerStateTracker)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
-                .filename(messageContent.body)
-                .iconRes(R.drawable.ic_headphones)
-                .encryptedFileInfo(messageContent.encryptedFileInfo?.toElementToDecrypt())
+    }
+
+    private fun getAudioFileUrl(
+            messageContent: MessageAudioContent,
+            informationData: MessageInformationData,
+    ) = messageContent.getFileUrl()?.let {
+        if (informationData.sentByMe && !informationData.sendState.isSent()) {
+            it
+        } else {
+            it.takeIf { it.isMxcUrl() }
+        }
+    } ?: ""
+
+    private fun createOnPlaybackButtonClickListener(
+            messageContent: MessageAudioContent,
+            informationData: MessageInformationData,
+            params: TimelineItemFactoryParams,
+    ) = object : ClickListener {
+        override fun invoke(view: View) {
+            params.callback?.onVoiceControlButtonClicked(informationData.eventId, messageContent)
+        }
     }
 
     private fun buildVoiceMessageItem(
             params: TimelineItemFactoryParams,
             messageContent: MessageAudioContent,
-            @Suppress("UNUSED_PARAMETER")
             informationData: MessageInformationData,
             highlight: Boolean,
-            attributes: AbsMessageItem.Attributes,
-    ): MessageVoiceItem? {
-        val fileUrl = messageContent.getFileUrl()?.let {
-            if (informationData.sentByMe && !informationData.sendState.isSent()) {
-                it
-            } else {
-                it.takeIf { it.isMxcUrl() }
-            }
-        } ?: ""
-
-        val playbackControlButtonClickListener: ClickListener = object : ClickListener {
-            override fun invoke(view: View) {
-                params.callback?.onVoiceControlButtonClicked(informationData.eventId, messageContent)
-            }
-        }
+            attributes: AbsMessageItem.Attributes
+    ): MessageVoiceItem {
+        val fileUrl = getAudioFileUrl(messageContent, informationData)
+        val playbackControlButtonClickListener = createOnPlaybackButtonClickListener(messageContent, informationData, params)
 
         val waveformTouchListener: MessageVoiceItem.WaveformTouchListener = object : MessageVoiceItem.WaveformTouchListener {
             override fun onWaveformTouchedUp(percentage: Float) {
@@ -413,14 +415,8 @@ class MessageItemFactory @Inject constructor(
                 .waveform(messageContent.audioWaveformInfo?.waveform?.toFft().orEmpty())
                 .playbackControlButtonClickListener(playbackControlButtonClickListener)
                 .waveformTouchListener(waveformTouchListener)
-                .voiceMessagePlaybackTracker(voiceMessagePlaybackTracker)
-                .izLocalFile(localFilesHelper.isLocalFile(fileUrl))
-                .izDownloaded(session.fileService().isFileInCache(
-                        fileUrl,
-                        messageContent.getFileName(),
-                        messageContent.mimeType,
-                        messageContent.encryptedFileInfo?.toElementToDecrypt())
-                )
+                .audioMessagePlaybackTracker(audioMessagePlaybackTracker)
+                .isLocalFile(localFilesHelper.isLocalFile(fileUrl))
                 .mxcUrl(fileUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
@@ -444,7 +440,7 @@ class MessageItemFactory @Inject constructor(
 
         val otherUserId = if (informationData.sentByMe) messageContent.toUserId else informationData.senderId
         val otherUserName = if (informationData.sentByMe) {
-            session.getRoomMember(messageContent.toUserId, roomId)?.displayName
+            session.roomService().getRoomMember(messageContent.toUserId, roomId)?.displayName
         } else {
             informationData.memberName
         }
@@ -465,6 +461,7 @@ class MessageItemFactory @Inject constructor(
                                 reactionsSummaryEvents = attributes.reactionsSummaryEvents,
                         )
                 )
+                .clock(clock)
                 .callback(callback)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
@@ -474,21 +471,34 @@ class MessageItemFactory @Inject constructor(
             messageContent: MessageFileContent,
             highlight: Boolean,
             attributes: AbsMessageItem.Attributes,
-    ): MessageFileItem? {
+    ): MessageFileItem {
         val mxcUrl = messageContent.getFileUrl() ?: ""
         return MessageFileItem_()
                 .attributes(attributes)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
-                .izLocalFile(localFilesHelper.isLocalFile(messageContent.getFileUrl()))
-                .izDownloaded(session.fileService().isFileInCache(messageContent))
+                .isLocalFile(localFilesHelper.isLocalFile(messageContent.getFileUrl()))
+                .isDownloaded(session.fileService().isFileInCache(messageContent))
                 .mxcUrl(mxcUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
-                .contentScannerStateTracker(contentScannerStateTracker)
                 .highlighted(highlight)
                 .filename(messageContent.body)
                 .iconRes(R.drawable.ic_paperclip)
+                // Tchap: Use for the Antivirus
+                .contentScannerStateTracker(contentScannerStateTracker)
                 .encryptedFileInfo(messageContent.encryptedFileInfo?.toElementToDecrypt())
+    }
+
+    private fun buildAudioContent(
+            params: TimelineItemFactoryParams,
+            messageContent: MessageAudioContent,
+            informationData: MessageInformationData,
+            highlight: Boolean,
+            attributes: AbsMessageItem.Attributes,
+    ) = if (messageContent.voiceMessageIndicator != null) {
+        buildVoiceMessageItem(params, messageContent, informationData, highlight, attributes)
+    } else {
+        buildAudioMessageItem(params, messageContent, informationData, highlight, attributes)
     }
 
     private fun buildNotHandledMessageItem(
@@ -496,8 +506,7 @@ class MessageItemFactory @Inject constructor(
             informationData: MessageInformationData,
             highlight: Boolean,
             callback: TimelineEventController.Callback?,
-            attributes: AbsMessageItem.Attributes,
-    ): MessageTextItem? {
+            attributes: AbsMessageItem.Attributes): MessageTextItem? {
         // For compatibility reason we should display the body
         return buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
     }
@@ -528,8 +537,9 @@ class MessageItemFactory @Inject constructor(
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
-                .contentScannerStateTracker(contentScannerStateTracker)
                 .playable(messageContent.mimeType == MimeTypes.Gif)
+                // Tchap: Use for the Antivirus
+                .contentScannerStateTracker(contentScannerStateTracker)
                 .highlighted(highlight)
                 .mediaData(data)
                 .apply {
@@ -664,27 +674,31 @@ class MessageItemFactory @Inject constructor(
                 ForegroundColorSpan(color),
                 editStart,
                 editEnd,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
 
         // Note: text size is set to 14sp
         spannable.setSpan(
                 AbsoluteSizeSpan(dimensionConverter.spToPx(13)),
                 editStart,
                 editEnd,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
 
-        spannable.setSpan(object : ClickableSpan() {
-            override fun onClick(widget: View) {
-                callback?.onEditedDecorationClicked(informationData)
-            }
+        spannable.setSpan(
+                object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        callback?.onEditedDecorationClicked(informationData)
+                    }
 
-            override fun updateDrawState(ds: TextPaint) {
-                // nop
-            }
-        },
+                    override fun updateDrawState(ds: TextPaint) {
+                        // nop
+                    }
+                },
                 editStart,
                 editEnd,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
         return spannable
     }
 
@@ -778,5 +792,6 @@ class MessageItemFactory @Inject constructor(
 
     companion object {
         private const val MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT = 5
+        const val MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP = 200
     }
 }

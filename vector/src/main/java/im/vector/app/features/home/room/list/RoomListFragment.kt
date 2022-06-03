@@ -45,6 +45,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.databinding.FragmentRoomListBinding
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.HomeSharedActionViewModel
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
@@ -53,8 +54,8 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.home.room.list.widget.TchapRoomsFabMenuView
+import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.notifications.NotificationDrawerManager
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -190,7 +191,7 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun handleShowMxToLink(link: String) {
-        navigator.openMatrixToBottomSheet(requireContext(), link)
+        navigator.openMatrixToBottomSheet(requireContext(), link, OriginOfMatrixTo.ROOM_LIST)
     }
 
     override fun onDestroyView() {
@@ -208,7 +209,12 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun handleSelectRoom(event: RoomListViewEvents.SelectRoom, isInviteAlreadyAccepted: Boolean) {
-        navigator.openRoom(context = requireActivity(), roomId = event.roomSummary.roomId, isInviteAlreadyAccepted = isInviteAlreadyAccepted)
+        navigator.openRoom(
+                context = requireActivity(),
+                roomId = event.roomSummary.roomId,
+                isInviteAlreadyAccepted = isInviteAlreadyAccepted,
+                trigger = ViewRoom.Trigger.RoomList
+        )
     }
 
     private fun handleCreateDirectChat() {
@@ -505,7 +511,8 @@ class RoomListFragment @Inject constructor(
                     StateView.State.Empty(
                             title = getString(R.string.room_list_catchup_empty_title),
                             image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_noun_party_popper),
-                            message = getString(R.string.room_list_catchup_empty_body))
+                            message = getString(R.string.room_list_catchup_empty_body)
+                    )
                 }
                 RoomListDisplayMode.PEOPLE        ->
                     StateView.State.Empty(

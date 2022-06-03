@@ -26,14 +26,15 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
+import org.matrix.android.sdk.internal.util.time.Clock
 
 internal class DefaultTimelineService @AssistedInject constructor(
         @Assisted private val roomId: String,
@@ -50,8 +51,9 @@ internal class DefaultTimelineService @AssistedInject constructor(
         private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val readReceiptHandler: ReadReceiptHandler,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val timelineEventDataSource: TimelineEventDataSource
-) : TimelineService {
+        private val timelineEventDataSource: TimelineEventDataSource,
+        private val clock: Clock,
+        ) : TimelineService {
 
     @AssistedFactory
     interface Factory {
@@ -75,7 +77,8 @@ internal class DefaultTimelineService @AssistedInject constructor(
                 readReceiptHandler = readReceiptHandler,
                 getEventTask = contextOfEventTask,
                 threadsAwarenessHandler = threadsAwarenessHandler,
-                lightweightSettingsStorage = lightweightSettingsStorage
+                lightweightSettingsStorage = lightweightSettingsStorage,
+                clock = clock
         )
     }
 

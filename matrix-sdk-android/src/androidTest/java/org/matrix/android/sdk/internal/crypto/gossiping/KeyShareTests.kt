@@ -35,27 +35,29 @@ import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.GossipingRequestState
+import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.api.session.crypto.model.OutgoingGossipingRequestState
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
-import org.matrix.android.sdk.internal.crypto.GossipingRequestState
-import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestState
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
@@ -73,7 +75,7 @@ class KeyShareTests : InstrumentedTest {
 
         // Create an encrypted room and add a message
         val roomId = commonTestHelper.runBlockingTest {
-            aliceSession.createRoom(
+            aliceSession.roomService().createRoom(
                     CreateRoomParams().apply {
                         visibility = RoomDirectoryVisibility.PRIVATE
                         enableEncryption()
@@ -83,7 +85,7 @@ class KeyShareTests : InstrumentedTest {
         val room = aliceSession.getRoom(roomId)
         assertNotNull(room)
         Thread.sleep(4_000)
-        assertTrue(room?.isEncrypted() == true)
+        assertTrue(room?.roomCryptoService()?.isEncrypted() == true)
         val sentEventId = commonTestHelper.sendTextMessage(room!!, "My Message", 1).first().eventId
 
         // Open a new sessionx
@@ -112,7 +114,7 @@ class KeyShareTests : InstrumentedTest {
 
         var outGoingRequestId: String? = null
 
-        commonTestHelper.waitWithLatch {  latch ->
+        commonTestHelper.waitWithLatch { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
                 aliceSession2.cryptoService().getOutgoingRoomKeyRequests()
                         .filter { req ->
@@ -340,7 +342,7 @@ class KeyShareTests : InstrumentedTest {
 
         // Create an encrypted room and send a couple of messages
         val roomId = commonTestHelper.runBlockingTest {
-            aliceSession.createRoom(
+            aliceSession.roomService().createRoom(
                     CreateRoomParams().apply {
                         visibility = RoomDirectoryVisibility.PRIVATE
                         enableEncryption()
@@ -350,7 +352,7 @@ class KeyShareTests : InstrumentedTest {
         val roomAlicePov = aliceSession.getRoom(roomId)
         assertNotNull(roomAlicePov)
         Thread.sleep(1_000)
-        assertTrue(roomAlicePov?.isEncrypted() == true)
+        assertTrue(roomAlicePov?.roomCryptoService()?.isEncrypted() == true)
         val secondEventId = commonTestHelper.sendTextMessage(roomAlicePov!!, "Message", 3)[1].eventId
 
         // Create bob session
@@ -374,11 +376,11 @@ class KeyShareTests : InstrumentedTest {
 
         // Let alice invite bob
         commonTestHelper.runBlockingTest {
-            roomAlicePov.invite(bobSession.myUserId, null)
+            roomAlicePov.membershipService().invite(bobSession.myUserId, null)
         }
 
         commonTestHelper.runBlockingTest {
-            bobSession.joinRoom(roomAlicePov.roomId, null, emptyList())
+            bobSession.roomService().joinRoom(roomAlicePov.roomId, null, emptyList())
         }
 
         // we want to discard alice outbound session

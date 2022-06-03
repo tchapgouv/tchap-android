@@ -43,16 +43,17 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.pushrules.RuleIds
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
+import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
+import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
-import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -182,24 +183,24 @@ class HomeActivityViewModel @AssistedInject constructor(
     private fun observeInitialSync() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
-        session.getSyncStatusLive()
+        session.syncStatusService().getSyncStatusLive()
                 .asFlow()
                 .onEach { status ->
                     when (status) {
-                        is SyncStatusService.Status.Progressing -> {
-                            if (BuildConfig.ENABLE_CROSS_SIGNING) {
-                                // Schedule a check of the bootstrap when the init sync will be finished
-                                checkBootstrap = true
-                            }
+                        is SyncStatusService.Status.InitialSyncProgressing -> {
+                                // Tchap: Disable cross-signing
+                                if (BuildConfig.ENABLE_CROSS_SIGNING) {
+                                    // Schedule a check of the bootstrap when the init sync will be finished
+                                    checkBootstrap = true
+                                }
                         }
-                        is SyncStatusService.Status.Idle        -> {
-                            updateIdentityServer()
+                        is SyncStatusService.Status.Idle                   -> {
                             if (checkBootstrap) {
                                 checkBootstrap = false
                                 maybeBootstrapCrossSigningAfterInitialSync()
                             }
                         }
-                        else                                    -> Unit
+                        else                                               -> Unit
                     }
 
                     setState {
@@ -225,13 +226,16 @@ class HomeActivityViewModel @AssistedInject constructor(
             if (!vectorPreferences.areNotificationEnabledForDevice()) {
                 // Check if set at account level
                 val mRuleMaster = activeSessionHolder.getSafeActiveSession()
+                        ?.pushRuleService()
                         ?.getPushRules()
                         ?.getAllRules()
                         ?.find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
                 if (mRuleMaster?.enabled == false) {
                     // So push are enabled at account level but not for this session
                     // Let's check that there are some rooms?
-                    val knownRooms = activeSessionHolder.getSafeActiveSession()?.getRoomSummaries(roomSummaryQueryParams {
+                    val knownRooms = activeSessionHolder.getSafeActiveSession()
+                            ?.roomService()
+                            ?.getRoomSummaries(roomSummaryQueryParams {
                         memberships = Membership.activeMemberships()
                     })?.size ?: 0
 

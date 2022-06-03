@@ -21,19 +21,22 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_OLM
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
+import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.OlmEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.internal.crypto.model.event.OlmEventContent
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -45,6 +48,7 @@ private val loggerTag = LoggerTag("CryptoSyncHandler", LoggerTag.CRYPTO)
 internal class EventDecryptor @Inject constructor(
         private val cryptoCoroutineScope: CoroutineScope,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val clock: Clock,
         private val roomDecryptorProvider: RoomDecryptorProvider,
         private val messageEncrypter: MessageEncrypter,
         private val sendToDeviceTask: SendToDeviceTask,
@@ -151,7 +155,7 @@ internal class EventDecryptor @Inject constructor(
         // we should force start a new session for those
         Timber.tag(loggerTag.value).v("Unwedging:  ${wedgedDevices.size} are wedged")
         // get the one that should be retried according to rate limit
-        val now = System.currentTimeMillis()
+        val now = clock.epochMillis()
         val toUnwedge = wedgedDevices.filter {
             val lastForcedDate = lastNewSessionForcedDates[it] ?: 0
             if (now - lastForcedDate < DefaultCryptoService.CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS) {

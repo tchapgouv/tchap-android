@@ -38,7 +38,7 @@ jobs:
       - name: Assemble ${{ matrix.target }} debug apk
         run: ./gradlew assemble${{ matrix.target }}Debug $CI_GRADLE_ARG_PROPERTIES --stacktrace
       - name: Upload ${{ matrix.target }} debug APKs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.target }}-debug
           path: |
@@ -67,7 +67,7 @@ jobs:
       - name: Assemble ${{ matrix.target }} unsigned apk
         run: ./gradlew clean assemble${{ matrix.target }}Release $CI_GRADLE_ARG_PROPERTIES  --stacktrace
       - name: Upload ${{ matrix.target }} unsigned APKs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.target }}-release-unsigned
           path: |

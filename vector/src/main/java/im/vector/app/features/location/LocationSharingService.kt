@@ -29,10 +29,10 @@ import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.EventType.generateBeaconInfoStateEventType
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
-import org.matrix.android.sdk.api.session.room.model.livelocation.BeaconInfo
-import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask
@@ -87,7 +87,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                     .getSafeActiveSession()
                     ?.let { session ->
                         session.coroutineScope.launch(session.coroutineDispatchers.io) {
-                            sendBeaconInfo(session, roomArgs)
+                            sendLiveBeaconInfo(session, roomArgs)
                         }
                     }
         }
@@ -95,21 +95,19 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         return START_STICKY
     }
 
-    private suspend fun sendBeaconInfo(session: Session, roomArgs: RoomArgs) {
-        val beaconContent = LiveLocationBeaconContent(
-                unstableBeaconInfo = BeaconInfo(
-                        timeout = roomArgs.durationMillis,
-                        isLive = true
-                ),
-                unstableTimestampAsMilliseconds = clock.epochMillis()
+    private suspend fun sendLiveBeaconInfo(session: Session, roomArgs: RoomArgs) {
+        val beaconContent = MessageBeaconInfoContent(
+                timeout = roomArgs.durationMillis,
+                isLive = true,
+                unstableTimestampMillis = clock.epochMillis()
         ).toContent()
 
-        val eventType = generateBeaconInfoStateEventType(session.myUserId)
         val stateKey = session.myUserId
         session
                 .getRoom(roomArgs.roomId)
+                ?.stateService()
                 ?.sendStateEvent(
-                        eventType = eventType,
+                        eventType = EventType.STATE_ROOM_BEACON_INFO.first(),
                         stateKey = stateKey,
                         body = beaconContent
                 )
@@ -130,8 +128,12 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                 }
     }
 
-    private fun stopSharingLocation(roomId: String) {
+    fun stopSharingLocation(roomId: String) {
         Timber.i("### LocationSharingService.stopSharingLocation for $roomId")
+
+        // Send a new beacon info state by setting live field as false
+        sendStoppedBeaconInfo(roomId)
+
         synchronized(roomArgsList) {
             roomArgsList.removeAll { it.roomId == roomId }
             if (roomArgsList.isEmpty()) {
@@ -141,8 +143,49 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         }
     }
 
+    private fun sendStoppedBeaconInfo(roomId: String) {
+        activeSessionHolder
+                .getSafeActiveSession()
+                ?.let { session ->
+                    session.coroutineScope.launch(session.coroutineDispatchers.io) {
+                        session.getRoom(roomId)?.stateService()?.stopLiveLocation(session.myUserId)
+                    }
+                }
+    }
+
     override fun onLocationUpdate(locationData: LocationData) {
         Timber.i("### LocationSharingService.onLocationUpdate. Uncertainty: ${locationData.uncertainty}")
+
+        val session = activeSessionHolder.getSafeActiveSession()
+        // Emit location update to all rooms in which live location sharing is active
+        session?.coroutineScope?.launch(session.coroutineDispatchers.io) {
+            roomArgsList.toList().forEach { roomArg ->
+                sendLiveLocation(roomArg.roomId, locationData)
+            }
+        }
+    }
+
+    private suspend fun sendLiveLocation(roomId: String, locationData: LocationData) {
+        val session = activeSessionHolder.getSafeActiveSession()
+        val room = session?.getRoom(roomId)
+        val userId = session?.myUserId
+
+        if (room == null || userId == null) {
+            return
+        }
+
+        room
+                .stateService()
+                .getLiveLocationBeaconInfo(userId, true)
+                ?.eventId
+                ?.let {
+                    room.sendService().sendLiveLocation(
+                            beaconInfoEventId = it,
+                            latitude = locationData.latitude,
+                            longitude = locationData.longitude,
+                            uncertainty = locationData.uncertainty
+                    )
+                }
     }
 
     override fun onLocationProviderIsNotAvailable() {

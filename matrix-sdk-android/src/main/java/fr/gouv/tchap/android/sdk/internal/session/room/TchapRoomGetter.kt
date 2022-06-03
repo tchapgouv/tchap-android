@@ -45,9 +45,9 @@ internal class TchapRoomGetter @Inject constructor(
                 // convert to Room objects
                 .map { roomFactory.create(it.roomId) }
                 // sort from the oldest to the most recent
-                .sortedBy { it.getStateEvent(STATE_ROOM_CREATE)?.originServerTs }
+                .sortedBy { it.stateService().getStateEvent(STATE_ROOM_CREATE)?.originServerTs }
                 // convert to DirectRoomMemberships objects
-                .map { DirectRoomMemberships(it.roomId, it.roomSummary()?.membership, it.getRoomMember(otherUserId)?.membership) }
+                .map { DirectRoomMemberships(it.roomId, it.roomSummary()?.membership, it.membershipService().getRoomMember(otherUserId)?.membership) }
         }
 
         // In the description of the memberships, we display first the current user status and the other member in second.

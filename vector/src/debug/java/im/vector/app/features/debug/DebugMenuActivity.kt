@@ -29,6 +29,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
@@ -49,7 +50,6 @@ import im.vector.lib.ui.styles.debug.DebugVectorButtonStylesDarkActivity
 import im.vector.lib.ui.styles.debug.DebugVectorButtonStylesLightActivity
 import im.vector.lib.ui.styles.debug.DebugVectorTextViewDarkActivity
 import im.vector.lib.ui.styles.debug.DebugVectorTextViewLightActivity
-import org.matrix.android.sdk.internal.crypto.verification.qrcode.toQrCodeData
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -60,6 +60,8 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
 
     @Inject
     lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject
+    lateinit var clock: Clock
 
     private lateinit var buffer: ByteArray
 
@@ -166,7 +168,7 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
         }
 
         val builder = NotificationCompat.Builder(this, "CHAN")
-                .setWhen(System.currentTimeMillis())
+                .setWhen(clock.epochMillis())
                 .setContentTitle("Title")
                 .setContentText("Content")
                 // No effect because it's a group summary notif
@@ -181,16 +183,16 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
                         .setName("User name")
                         .build()
         )
-                .addMessage("Message 1 - 1", System.currentTimeMillis(), Person.Builder().setName("user 1-1").build())
-                .addMessage("Message 1 - 2", System.currentTimeMillis(), Person.Builder().setName("user 1-2").build())
+                .addMessage("Message 1 - 1", clock.epochMillis(), Person.Builder().setName("user 1-1").build())
+                .addMessage("Message 1 - 2", clock.epochMillis(), Person.Builder().setName("user 1-2").build())
 
         val messagingStyle2 = NotificationCompat.MessagingStyle(
                 Person.Builder()
                         .setName("User name 2")
                         .build()
         )
-                .addMessage("Message 2 - 1", System.currentTimeMillis(), Person.Builder().setName("user 1-1").build())
-                .addMessage("Message 2 - 2", System.currentTimeMillis(), Person.Builder().setName("user 1-2").build())
+                .addMessage("Message 2 - 1", clock.epochMillis(), Person.Builder().setName("user 1-1").build())
+                .addMessage("Message 2 - 2", clock.epochMillis(), Person.Builder().setName("user 1-2").build())
 
         notificationManager.notify(10, builder.build())
 
@@ -198,7 +200,7 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
                 11,
                 NotificationCompat.Builder(this, "CHAN")
                         .setChannelId("CHAN")
-                        .setWhen(System.currentTimeMillis())
+                        .setWhen(clock.epochMillis())
                         .setContentTitle("Title 1")
                         .setContentText("Content 1")
                         // For shortcut on long press on launcher icon
@@ -212,7 +214,7 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
         notificationManager.notify(
                 12,
                 NotificationCompat.Builder(this, "CHAN2")
-                        .setWhen(System.currentTimeMillis())
+                        .setWhen(clock.epochMillis())
                         .setContentTitle("Title 2")
                         .setContentText("Content 2")
                         .setStyle(messagingStyle2)
@@ -251,7 +253,7 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
             // renderQrCode(QrCodeScannerActivity.getResultText(data) ?: "")
             val result = QrCodeScannerActivity.getResultText(activityResult.data)!!
 
-            val qrCodeData = result.toQrCodeData()
+            val qrCodeData = null // This is now internal: result.toQrCodeData()
             Timber.e("qrCodeData: $qrCodeData")
 
             if (result.length != buffer.size) {
@@ -265,6 +267,8 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
                     }
                 }
             }
+            // Ensure developer will see that this cannot work anymore
+            error("toQrCodeData() is now internal")
         }
     }
 }

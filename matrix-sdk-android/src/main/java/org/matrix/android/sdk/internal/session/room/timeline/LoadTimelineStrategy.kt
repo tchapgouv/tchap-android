@@ -24,12 +24,14 @@ import io.realm.RealmResults
 import io.realm.kotlin.createObject
 import kotlinx.coroutines.CompletableDeferred
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
-import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
@@ -40,6 +42,7 @@ import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfThre
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicReference
 
@@ -51,11 +54,13 @@ import java.util.concurrent.atomic.AtomicReference
  * Once we got a ChunkEntity we wrap it with TimelineChunk class so we dispatch any methods for loading data.
  */
 
-internal class LoadTimelineStrategy(
+internal class LoadTimelineStrategy constructor(
         private val roomId: String,
         private val timelineId: String,
         private val mode: Mode,
-        private val dependencies: Dependencies) {
+        private val dependencies: Dependencies,
+        clock: Clock,
+) {
 
     sealed interface Mode {
         object Live : Mode
@@ -93,6 +98,7 @@ internal class LoadTimelineStrategy(
             val threadsAwarenessHandler: ThreadsAwarenessHandler,
             val lightweightSettingsStorage: LightweightSettingsStorage,
             val onEventsUpdated: (Boolean) -> Unit,
+            val onEventsDeleted: () -> Unit,
             val onLimitedTimeline: () -> Unit,
             val onNewTimelineEvents: (List<String>) -> Unit
     )
@@ -150,7 +156,7 @@ internal class LoadTimelineStrategy(
         }
     }
 
-    private val uiEchoManager = UIEchoManager(uiEchoManagerListener)
+    private val uiEchoManager = UIEchoManager(uiEchoManagerListener, clock)
     private val sendingEventsDataSource: SendingEventsDataSource = RealmSendingEventsDataSource(
             roomId = roomId,
             realm = dependencies.realm,
@@ -194,6 +200,10 @@ internal class LoadTimelineStrategy(
                 getContextLatch?.await()
                 getContextLatch = null
             } catch (failure: Throwable) {
+                if (failure is Failure.ServerError && failure.error.code in listOf(MatrixError.M_NOT_FOUND, MatrixError.M_FORBIDDEN)) {
+                    // This failure is likely permanent, so handle in DefaultTimeline to restart without eventId
+                    throw failure
+                }
                 return LoadMoreResult.FAILURE
             }
         }
@@ -296,7 +306,8 @@ internal class LoadTimelineStrategy(
                     threadsAwarenessHandler = dependencies.threadsAwarenessHandler,
                     lightweightSettingsStorage = dependencies.lightweightSettingsStorage,
                     initialEventId = mode.originEventId(),
-                    onBuiltEvents = dependencies.onEventsUpdated
+                    onBuiltEvents = dependencies.onEventsUpdated,
+                    onEventsDeleted = dependencies.onEventsDeleted,
             )
         }
     }

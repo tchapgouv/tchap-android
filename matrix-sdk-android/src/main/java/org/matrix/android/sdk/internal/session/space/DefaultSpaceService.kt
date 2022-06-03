@@ -18,12 +18,15 @@ package org.matrix.android.sdk.internal.session.space
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
+import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
@@ -43,6 +46,7 @@ import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
 import org.matrix.android.sdk.api.session.space.model.SpaceParentContent
+import org.matrix.android.sdk.api.session.space.peeking.SpacePeekResult
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.RoomGetter
 import org.matrix.android.sdk.internal.session.room.SpaceGetter
@@ -51,7 +55,6 @@ import org.matrix.android.sdk.internal.session.room.membership.leaving.LeaveRoom
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.session.space.peeking.PeekSpaceTask
-import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
 import javax.inject.Inject
 
 internal class DefaultSpaceService @Inject constructor(
@@ -64,7 +67,8 @@ internal class DefaultSpaceService @Inject constructor(
         private val stateEventDataSource: StateEventDataSource,
         private val peekSpaceTask: PeekSpaceTask,
         private val resolveSpaceInfoTask: ResolveSpaceInfoTask,
-        private val leaveRoomTask: LeaveRoomTask
+        private val leaveRoomTask: LeaveRoomTask,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
 ) : SpaceService {
 
     override suspend fun createSpace(params: CreateSpaceParams): String {
@@ -105,8 +109,10 @@ internal class DefaultSpaceService @Inject constructor(
         return roomSummaryDataSource.getSpaceSummaries(spaceSummaryQueryParams, sortOrder)
     }
 
-    override fun getRootSpaceSummaries(): List<RoomSummary> {
-        return roomSummaryDataSource.getRootSpaceSummaries()
+    override suspend fun getRootSpaceSummaries(): List<RoomSummary> {
+        return withContext(coroutineDispatchers.io) {
+            roomSummaryDataSource.getRootSpaceSummaries()
+        }
     }
 
     override suspend fun peekSpace(spaceId: String): SpacePeekResult {
@@ -253,7 +259,7 @@ internal class DefaultSpaceService @Inject constructor(
         val room = roomGetter.getRoom(childRoomId)
                 ?: throw IllegalArgumentException("Unknown Room $childRoomId")
 
-        room.sendStateEvent(
+        room.stateService().sendStateEvent(
                 eventType = EventType.STATE_SPACE_PARENT,
                 stateKey = parentSpaceId,
                 body = SpaceParentContent(
@@ -271,7 +277,7 @@ internal class DefaultSpaceService @Inject constructor(
         if (existingEvent != null) {
             // Should i check if it was sent by me?
             // we don't check power level, it will throw if you cannot do that
-            room.sendStateEvent(
+            room.stateService().sendStateEvent(
                     eventType = EventType.STATE_SPACE_PARENT,
                     stateKey = parentSpaceId,
                     body = SpaceParentContent(

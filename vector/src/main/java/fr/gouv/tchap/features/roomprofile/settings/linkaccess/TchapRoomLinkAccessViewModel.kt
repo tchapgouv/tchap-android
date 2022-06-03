@@ -62,7 +62,7 @@ class TchapRoomLinkAccessViewModel @AssistedInject constructor(
         }
     }
 
-    private val room = session.getRoom(initialState.roomId)!!
+    private val room = session.roomService().getRoom(initialState.roomId)!!
 
     init {
         observeRoomSummary()
@@ -137,8 +137,8 @@ class TchapRoomLinkAccessViewModel @AssistedInject constructor(
                     if (state.canonicalAlias.isNullOrEmpty()) {
                         Timber.d("## updateCanonicalAlias")
                         val newCanonicalAlias = TchapUtils.createRoomAlias(session, state.roomSummary()?.name.orEmpty())
-                        room.addAlias(TchapUtils.extractRoomAliasName(newCanonicalAlias))
-                        room.updateCanonicalAlias(
+                        room.aliasService().addAlias(TchapUtils.extractRoomAliasName(newCanonicalAlias))
+                        room.stateService().updateCanonicalAlias(
                                 newCanonicalAlias,
                                 state.alternativeAliases + newCanonicalAlias
                         )
@@ -146,7 +146,7 @@ class TchapRoomLinkAccessViewModel @AssistedInject constructor(
 
                     // Update room join rules
                     Timber.d("## enableRoomAccessByLink")
-                    room.updateJoinRule(RoomJoinRules.PUBLIC, GuestAccess.Forbidden)
+                    room.stateService().updateJoinRule(RoomJoinRules.PUBLIC, GuestAccess.Forbidden)
                     postLoading(false)
                 } catch (failure: Throwable) {
                     Timber.e("## enableRoomAccessByLink: $failure")
@@ -163,7 +163,7 @@ class TchapRoomLinkAccessViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                room.updateJoinRule(RoomJoinRules.INVITE, null)
+                room.stateService().updateJoinRule(RoomJoinRules.INVITE, null)
                 postLoading(false)
             } catch (failure: Throwable) {
                 Timber.e("## disableRoomAccessByLink: $failure")

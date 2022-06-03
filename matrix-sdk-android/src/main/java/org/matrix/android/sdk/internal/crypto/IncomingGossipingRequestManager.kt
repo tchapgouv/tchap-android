@@ -20,25 +20,31 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.Credentials
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keyshare.GossipingRequestListener
+import org.matrix.android.sdk.api.session.crypto.model.GossipingRequestState
+import org.matrix.android.sdk.api.session.crypto.model.GossipingToDeviceObject
+import org.matrix.android.sdk.api.session.crypto.model.IncomingRequestCancellation
+import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
+import org.matrix.android.sdk.api.session.crypto.model.IncomingSecretShareRequest
+import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXGroupEncryption
-import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
-import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.internal.crypto.model.rest.GossipingDefaultContent
-import org.matrix.android.sdk.internal.crypto.model.rest.GossipingToDeviceObject
-import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.createUniqueTxnId
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.util.time.Clock
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import timber.log.Timber
 import java.util.concurrent.Executors
@@ -54,7 +60,9 @@ internal class IncomingGossipingRequestManager @Inject constructor(
         private val roomEncryptorsStore: RoomEncryptorsStore,
         private val roomDecryptorProvider: RoomDecryptorProvider,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val cryptoCoroutineScope: CoroutineScope) {
+        private val cryptoCoroutineScope: CoroutineScope,
+        private val clock: Clock,
+) {
 
     private val executor = Executors.newSingleThreadExecutor()
 
@@ -84,7 +92,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
     fun onVerificationCompleteForDevice(deviceId: String) {
         // For now we just keep an in memory cache
         synchronized(recentlyVerifiedDevices) {
-            recentlyVerifiedDevices[deviceId] = System.currentTimeMillis()
+            recentlyVerifiedDevices[deviceId] = clock.epochMillis()
         }
     }
 
@@ -95,7 +103,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
         }
         if (verifTimestamp == null) return false
 
-        val age = System.currentTimeMillis() - verifTimestamp
+        val age = clock.epochMillis() - verifTimestamp
 
         return age < FIVE_MINUTES_IN_MILLIS
     }
@@ -109,11 +117,11 @@ internal class IncomingGossipingRequestManager @Inject constructor(
     fun onGossipingRequestEvent(event: Event) {
         val roomKeyShare = event.getClearContent().toModel<GossipingDefaultContent>()
         Timber.i("## CRYPTO | GOSSIP onGossipingRequestEvent received type ${event.type} from user:${event.senderId}, content:$roomKeyShare")
-        // val ageLocalTs = event.unsignedData?.age?.let { System.currentTimeMillis() - it }
+        // val ageLocalTs = event.unsignedData?.age?.let { clock.epochMillis() - it }
         when (roomKeyShare?.action) {
-            GossipingToDeviceObject.ACTION_SHARE_REQUEST -> {
+            GossipingToDeviceObject.ACTION_SHARE_REQUEST      -> {
                 if (event.getClearType() == EventType.REQUEST_SECRET) {
-                    IncomingSecretShareRequest.fromEvent(event)?.let {
+                    IncomingSecretShareRequest.fromEvent(event, clock.epochMillis())?.let {
                         if (event.senderId == credentials.userId && it.deviceId == credentials.deviceId) {
                             // ignore, it was sent by me as *
                             Timber.v("## GOSSIP onGossipingRequestEvent type ${event.type} ignore remote echo")
@@ -124,7 +132,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
                         }
                     }
                 } else if (event.getClearType() == EventType.ROOM_KEY_REQUEST) {
-                    IncomingRoomKeyRequest.fromEvent(event)?.let {
+                    IncomingRoomKeyRequest.fromEvent(event, clock.epochMillis())?.let {
                         if (event.senderId == credentials.userId && it.deviceId == credentials.deviceId) {
                             // ignore, it was sent by me as *
                             Timber.v("## GOSSIP onGossipingRequestEvent type ${event.type} ignore remote echo")
@@ -136,7 +144,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
                 }
             }
             GossipingToDeviceObject.ACTION_SHARE_CANCELLATION -> {
-                IncomingRequestCancellation.fromEvent(event)?.let {
+                IncomingRequestCancellation.fromEvent(event, clock.epochMillis())?.let {
                     receivedRequestCancellations.add(it)
                 }
             }
@@ -341,7 +349,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
         val isDeviceLocallyVerified = cryptoStore.getUserDevice(userId, deviceId)?.trustLevel?.isLocallyVerified()
 
         when (secretName) {
-            MASTER_KEY_SSSS_NAME -> cryptoStore.getCrossSigningPrivateKeys()?.master
+            MASTER_KEY_SSSS_NAME       -> cryptoStore.getCrossSigningPrivateKeys()?.master
             SELF_SIGNING_KEY_SSSS_NAME -> cryptoStore.getCrossSigningPrivateKeys()?.selfSigned
             USER_SIGNING_KEY_SSSS_NAME -> cryptoStore.getCrossSigningPrivateKeys()?.user
             KEYBACKUP_SECRET_SSSS_NAME -> cryptoStore.getKeyBackupRecoveryKeyInfo()?.recoveryKey
