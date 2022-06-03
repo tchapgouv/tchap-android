@@ -73,8 +73,9 @@ class BootstrapSetupRecoveryKeyFragment @Inject constructor() :
                 // Choose between create a passphrase or use a recovery key
                 views.bootstrapSetupSecureSubmit.isVisible = false
                 views.bootstrapSetupSecureUseSecurityKey.isVisible = true
-                views.bootstrapSetupSecureUseSecurityPassphrase.isVisible = true
-                views.bootstrapSetupSecureUseSecurityPassphraseSeparator.isVisible = true
+                // Tchap: Hide Security Passphrase
+                // views.bootstrapSetupSecureUseSecurityPassphrase.isVisible = true
+                // views.bootstrapSetupSecureUseSecurityPassphraseSeparator.isVisible = true
             }
         }
     }

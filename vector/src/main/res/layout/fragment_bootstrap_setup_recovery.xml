@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="2dp"
         android:layout_marginEnd="16dp"
         android:text="@string/bottom_sheet_setup_secure_backup_subtitle"
         android:textColor="?vctr_content_primary" />
@@ -46,14 +46,16 @@
         app:tint="?vctr_content_primary"
         tools:visibility="visible" />
 
+    <!-- Tchap: Hide Security Passphrase  -->
     <View
         android:id="@+id/bootstrapSetupSecureUseSecurityPassphraseSeparator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?vctr_list_separator_on_surface"
         android:visibility="gone"
-        tools:visibility="visible" />
+        tools:visibility="gone" />
 
+    <!-- Tchap: Hide Security Passphrase  -->
     <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/bootstrapSetupSecureUseSecurityPassphrase"
         android:layout_width="match_parent"
@@ -65,12 +67,13 @@
         app:leftIcon="@drawable/ic_security_phrase_24dp"
         app:rightIcon="@drawable/ic_arrow_right"
         app:tint="?vctr_content_primary"
-        tools:visibility="visible" />
+        tools:visibility="gone" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?vctr_list_separator_on_surface" />
+        android:background="?vctr_list_separator_on_surface"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/bootstrapSetupWarningTextView"

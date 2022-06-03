@@ -159,7 +159,7 @@ android {
         buildConfigField "String", "mapTilerKey", "\"\""
 
         // Tchap: Key Backup is not supported
-        buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
+        buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "true"
 
         // Tchap: The spaces feature is hidden, show all rooms in the home
         def showSpaces = false
