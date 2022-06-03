@@ -63,6 +63,8 @@ class RoomDirectoryViewModel @AssistedInject constructor(
 
     private val showAllRooms = vectorPreferences.showAllPublicRooms()
 
+    private var since: String? = null
+
     private var currentJob: Job? = null
 
     init {
@@ -148,6 +150,9 @@ class RoomDirectoryViewModel @AssistedInject constructor(
     }
 
     private fun reset(newFilter: String) {
+        // Reset since token
+        since = null
+
         setState {
             copy(
                     publicRooms = emptyMap(),
@@ -187,10 +192,13 @@ class RoomDirectoryViewModel @AssistedInject constructor(
                 val roomDirectoryData = roomDirectoryServer.protocols.first()
                 async {
                     val data = try {
-                        session.getPublicRooms(roomDirectoryData.homeServer,
+                        session.roomDirectoryService().getPublicRooms(
+                                roomDirectoryData.homeServer,
                                 PublicRoomsParams(
+                                        limit = PUBLIC_ROOMS_LIMIT,
                                         filter = PublicRoomsFilter(searchTerm = filter),
                                         includeAllNetworks = roomDirectoryData.includeAllNetworks,
+                                        since = since,
                                         thirdPartyInstanceId = roomDirectoryData.thirdPartyInstanceId
                                 )
                         )
@@ -210,27 +218,30 @@ class RoomDirectoryViewModel @AssistedInject constructor(
 
                     data ?: return@async
 
+                    currentJob = null
+
+                    since = data.nextBatch
+
                     // Filter
                     mutex.withLock {
                         newPublicRooms.putAll(data.chunk.orEmpty()
                                 .filter {
                                     showAllRooms || explicitTermFilter.isValid("${it.name.orEmpty()} ${it.topic.orEmpty()}")
-                                }.map { it to roomDirectoryData }.toMap())
+                                }.map { it to roomDirectoryData }.toMap()
+                        )
+                    }
+
+                    setState {
+                        copy(
+                                asyncPublicRoomsRequest = Success(Unit),
+                                publicRooms = newPublicRooms,
+                                hasMore = since != null
+                        )
                     }
                 }
             }.joinAll()
-
-            currentJob = null
-
-            setState {
-                copy(
-                        asyncPublicRoomsRequest = Success(Unit),
-                        publicRooms = newPublicRooms
-                )
-            }
         }
     }
-
 //    private fun joinRoom(action: RoomDirectoryAction.JoinRoom) = withState { state ->
 //        val roomMembershipChange = state.changeMembershipStates[action.publicRoom.roomId]
 //        if (roomMembershipChange?.isInProgress().orFalse()) {
@@ -241,8 +252,8 @@ class RoomDirectoryViewModel @AssistedInject constructor(
 //        val viaServers = listOfNotNull(state.roomDirectoryData.homeServer)
 //        viewModelScope.launch {
 //            try {
-//                session.joinRoom(action.publicRoom.roomId, viaServers = viaServers)
-//                analyticsTracker.capture(action.publicRoom.toAnalyticsJoinedRoom())
+//                session.roomService().joinRoom(action.publicRoom.roomId, viaServers = viaServers)
+//                analyticsTracker.capture(action.publicRoom.toAnalyticsJoinedRoom(JoinedRoom.Trigger.RoomDirectory))
 //                // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
 //                // Instead, we wait for the room to be joined
 //            } catch (failure: Throwable) {

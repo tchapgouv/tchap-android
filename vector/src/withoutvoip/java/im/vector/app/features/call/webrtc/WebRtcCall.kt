@@ -114,4 +114,8 @@ class WebRtcCall(
     // MxCall.StateListener
 
     override fun onStateUpdate(call: MxCall) = Unit
+
+    fun startSharingScreen() = Unit
+
+    fun stopSharingScreen() = Unit
 }
