@@ -156,14 +156,6 @@ android {
         resValue "bool", "enable_location_sharing", "${enableLocationSharing}"
         buildConfigField "String", "mapTilerKey", "\"\""
 
-        // Tchap: Key Backup is not supported
-        buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
-
-        // Tchap: CrossSigning initialization is disabled
-        def enableCrossSigning = false
-        buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
-        resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
-
         // Tchap: The spaces feature is hidden, show all rooms in the home
         def showSpaces = false
         def showAllInHome = !showSpaces
@@ -353,6 +345,14 @@ android {
 
             // Tchap: Show labs menu item in devTchap
             resValue "bool", "labs_settings_visible", "true"
+
+            // Tchap: CrossSigning initialization is disabled
+            def enableCrossSigning = true
+            buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
+            resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
+
+            // Tchap: Key Backup is not supported
+            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "true"
         }
 
         btchap {
@@ -365,6 +365,14 @@ android {
 
             // Tchap: Show labs menu item in btchap
             resValue "bool", "labs_settings_visible", "true"
+
+            // Tchap: CrossSigning initialization is disabled
+            def enableCrossSigning = true
+            buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
+            resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
+
+            // Tchap: Key Backup is not supported
+            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
         }
 
         tchap {
@@ -377,6 +385,14 @@ android {
 
             // Tchap: Hide labs menu item in tchap
             resValue "bool", "labs_settings_visible", "false"
+
+            // Tchap: CrossSigning initialization is disabled
+            def enableCrossSigning = false
+            buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
+            resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
+
+            // Tchap: Key Backup is not supported
+            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
         }
     }
 
