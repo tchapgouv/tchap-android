@@ -188,6 +188,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
         val mutex = Mutex()
 
         currentJob = viewModelScope.launch {
+            // Tchap: Add forums list from all instances
             roomDirectories.map { roomDirectoryServer ->
                 val roomDirectoryData = roomDirectoryServer.protocols.first()
                 async {

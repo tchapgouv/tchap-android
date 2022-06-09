@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.room.model.call.CallAssertedIdentityContent
 import org.matrix.android.sdk.api.session.room.model.call.EndCallReason
 import org.threeten.bp.Duration
+import org.webrtc.VideoCapturer
 
 private const val STREAM_ID = "userMedia"
 
@@ -115,7 +116,9 @@ class WebRtcCall(
 
     override fun onStateUpdate(call: MxCall) = Unit
 
-    fun startSharingScreen() = Unit
+    fun startSharingScreen(videoCapturer: VideoCapturer) = Unit
 
     fun stopSharingScreen() = Unit
+
+    fun isSharingScreen(): Boolean =  false
 }

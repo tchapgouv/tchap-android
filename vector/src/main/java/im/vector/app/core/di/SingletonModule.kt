@@ -51,6 +51,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.SupervisorJob
@@ -133,12 +134,12 @@ object VectorStaticModule {
     @Provides
     @Singleton
     fun providesMatrix(context: Context, configuration: MatrixConfiguration): Matrix {
-        return Matrix.createInstance(context, configuration)
+        return Matrix(context, configuration)
     }
 
     @Provides
     fun providesCurrentSession(activeSessionHolder: ActiveSessionHolder): Session {
-        // TODO: handle session injection better
+        // TODO handle session injection better
         return activeSessionHolder.getActiveSession()
     }
 
@@ -178,7 +179,7 @@ object VectorStaticModule {
         return CoroutineDispatchers(io = Dispatchers.IO, computation = Dispatchers.Default)
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
+    @OptIn(DelicateCoroutinesApi::class)
     @Provides
     @NamedGlobalScope
     fun providesGlobalScope(): CoroutineScope {

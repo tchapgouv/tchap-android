@@ -22,7 +22,7 @@ import org.junit.Test
 class TchapUtilsTest {
 
     /**
-     * Test getting full name without domain
+     * Test getting full name without domain.
      */
 
     @Test
@@ -50,7 +50,7 @@ class TchapUtilsTest {
     }
 
     /**
-     * Test getting domain only
+     * Test getting domain only.
      */
 
     @Test

@@ -99,7 +99,7 @@ class TimelineEventController @Inject constructor(
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener, EpoxyController.Interceptor {
 
     /**
-     * This is a partial state of the RoomDetailViewState
+     * This is a partial state of the RoomDetailViewState.
      */
     data class PartialState(
             val unreadState: UnreadState = UnreadState.Unknown,
@@ -612,7 +612,7 @@ class TimelineEventController @Inject constructor(
     }
 
     /**
-     * Return true if added
+     * Return true if added.
      */
     private fun LoadingItem_.addWhenLoading(direction: Timeline.Direction): Boolean {
         val host = this@TimelineEventController

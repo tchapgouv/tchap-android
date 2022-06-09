@@ -130,12 +130,13 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 RoomSettingsViewState::newTopic,
                 RoomSettingsViewState::newHistoryVisibility,
                 RoomSettingsViewState::newRoomJoinRules,
-                RoomSettingsViewState::roomSummary) { avatarAction,
-                                                      newName,
-                                                      newTopic,
-                                                      newHistoryVisibility,
-                                                      newJoinRule,
-                                                      asyncSummary ->
+                RoomSettingsViewState::roomSummary
+        ) { avatarAction,
+            newName,
+            newTopic,
+            newHistoryVisibility,
+            newJoinRule,
+            asyncSummary ->
             val summary = asyncSummary()
             setState {
                 copy(
@@ -173,20 +174,30 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_AVATAR),
                             canChangeName = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_NAME),
                             canChangeTopic = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_TOPIC),
-                            canChangeHistoryVisibility = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                    EventType.STATE_ROOM_HISTORY_VISIBILITY),
-                            canChangeJoinRule = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                    EventType.STATE_ROOM_JOIN_RULES) &&
-                                    powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                            EventType.STATE_ROOM_GUEST_ACCESS),
-                            canChangeCanonicalAlias = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_CANONICAL_ALIAS),
-                            canAddChildren = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                    EventType.STATE_SPACE_CHILD),
-                            canRemoveFromRoomsDirectory = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_JOIN_RULES) &&
-                                    powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_CANONICAL_ALIAS) &&
-                                    powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION) &&
-                                    powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_HISTORY_VISIBILITY),
-                            canChangeRoomAccessRules = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, TchapEventType.STATE_ROOM_ACCESS_RULES)
+                            canChangeHistoryVisibility = powerLevelsHelper.isUserAllowedToSend(
+                                    session.myUserId, true,
+                                    EventType.STATE_ROOM_HISTORY_VISIBILITY
+                            ),
+                            canChangeJoinRule = powerLevelsHelper.isUserAllowedToSend(
+                                    session.myUserId, true,
+                                    EventType.STATE_ROOM_JOIN_RULES
+                            ) &&
+                                    powerLevelsHelper.isUserAllowedToSend(
+                                            session.myUserId, true,
+                                            EventType.STATE_ROOM_GUEST_ACCESS
+                                    ),
+                            canAddChildren = powerLevelsHelper.isUserAllowedToSend(
+                                    session.myUserId, true,
+                                    EventType.STATE_SPACE_CHILD
+                            ),
+                            canChangeCanonicalAlias = powerLevelsHelper.isUserAllowedToSend(
+                                    session.myUserId, true,
+                                    EventType.STATE_ROOM_CANONICAL_ALIAS
+                            ),
+                            canChangeRoomAccessRules = powerLevelsHelper.isUserAllowedToSend(
+                                    session.myUserId, true,
+                                    TchapEventType.STATE_ROOM_ACCESS_RULES
+                            )
                     )
                     setState {
                         copy(actionPermissions = permissions)
@@ -282,10 +293,10 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
     /**
      * Several changes are required:
-     * The new members can access only on invite
-     * The encryption has to be enabled by default
-     * The room will become private
-     * The history visibility value is replaced with invited
+     * The new members can access only on invite.
+     * The encryption has to be enabled by default.
+     * The room will become private.
+     * The history visibility value is replaced with invited.
      */
     private fun handleRemoveFromRoomsDirectory() {
         session.coroutineScope.launch {

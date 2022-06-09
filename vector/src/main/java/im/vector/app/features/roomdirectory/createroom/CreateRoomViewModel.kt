@@ -349,7 +349,7 @@ class CreateRoomViewModel @AssistedInject constructor(
                     disableFederation = state.disableFederation
                 }
 
-        // TODO: Should this be non-cancellable?
+        // TODO Should this be non-cancellable?
         viewModelScope.launch {
             runCatching { session.roomService().createRoom(createRoomParams) }.fold(
                     { roomId ->

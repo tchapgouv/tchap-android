@@ -20,7 +20,7 @@ import fr.gouv.tchap.android.sdk.api.session.userinfo.model.UserInfo
 
 interface UsersInfoService {
     /**
-     * Get users information
+     * Get users information.
      *
      * @param userIds user Matrix Ids
      */

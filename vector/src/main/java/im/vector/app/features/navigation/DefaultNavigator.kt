@@ -269,7 +269,8 @@ class DefaultNavigator @Inject constructor(
                 val pr = session.cryptoService().verificationService().requestKeyVerification(
                         supportedVerificationMethodsProvider.provide(),
                         session.myUserId,
-                        otherSessions)
+                        otherSessions
+                )
                 VerificationBottomSheet.forSelfVerification(session, pr.transactionId ?: pr.localId)
                         .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
             } else {
@@ -540,12 +541,14 @@ class DefaultNavigator @Inject constructor(
                                  view: View,
                                  inMemory: List<AttachmentData>,
                                  options: ((MutableList<Pair<View, String>>) -> Unit)?) {
-        VectorAttachmentViewerActivity.newIntent(activity,
+        VectorAttachmentViewerActivity.newIntent(
+                activity,
                 mediaData,
                 roomId,
                 mediaData.eventId,
                 inMemory,
-                ViewCompat.getTransitionName(view)).let { intent ->
+                ViewCompat.getTransitionName(view)
+        ).let { intent ->
             val pairs = ArrayList<Pair<View, String>>()
             activity.window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
                 pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
@@ -614,24 +617,29 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs, eventIdToNavigate: String?) {
-        context.startActivity(ThreadsActivity.newIntent(
-                context = context,
-                threadTimelineArgs = threadTimelineArgs,
-                threadListArgs = null,
-                eventIdToNavigate = eventIdToNavigate
-        ))
+        context.startActivity(
+                ThreadsActivity.newIntent(
+                        context = context,
+                        threadTimelineArgs = threadTimelineArgs,
+                        threadListArgs = null,
+                        eventIdToNavigate = eventIdToNavigate
+                )
+        )
     }
 
     override fun openThreadList(context: Context, threadTimelineArgs: ThreadTimelineArgs) {
-        context.startActivity(ThreadsActivity.newIntent(
-                context = context,
-                threadTimelineArgs = null,
-                threadListArgs = ThreadListArgs(
-                        roomId = threadTimelineArgs.roomId,
-                        displayName = threadTimelineArgs.displayName,
-                        avatarUrl = threadTimelineArgs.avatarUrl,
-                        roomEncryptionTrustLevel = threadTimelineArgs.roomEncryptionTrustLevel
-                )))
+        context.startActivity(
+                ThreadsActivity.newIntent(
+                        context = context,
+                        threadTimelineArgs = null,
+                        threadListArgs = ThreadListArgs(
+                                roomId = threadTimelineArgs.roomId,
+                                displayName = threadTimelineArgs.displayName,
+                                avatarUrl = threadTimelineArgs.avatarUrl,
+                                roomEncryptionTrustLevel = threadTimelineArgs.roomEncryptionTrustLevel
+                        )
+                )
+        )
     }
 
     override fun openScreenSharingPermissionDialog(screenCaptureIntent: Intent,

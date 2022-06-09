@@ -20,6 +20,6 @@ import im.vector.app.core.platform.VectorSharedActionViewModel
 import javax.inject.Inject
 
 /**
- * Activity shared view model to handle room link access quick actions
+ * Activity shared view model to handle room link access quick actions.
  */
 class TchapRoomLinkAccessBottomSheetSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<TchapRoomLinkAccessBottomSheetSharedAction>()
