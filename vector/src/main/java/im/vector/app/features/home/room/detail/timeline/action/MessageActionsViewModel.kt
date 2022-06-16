@@ -381,19 +381,23 @@ class MessageActionsViewModel @AssistedInject constructor(
 
             if (canRedact(timelineEvent, actionPermissions)) {
                 if (timelineEvent.root.getClearType() in EventType.POLL_START) {
-                    add(EventSharedAction.Redact(
-                            eventId,
-                            askForReason = informationData.senderId != session.myUserId,
-                            dialogTitleRes = R.string.delete_poll_dialog_title,
-                            dialogDescriptionRes = R.string.delete_poll_dialog_content
-                    ))
+                    add(
+                            EventSharedAction.Redact(
+                                    eventId,
+                                    askForReason = informationData.senderId != session.myUserId,
+                                    dialogTitleRes = R.string.delete_poll_dialog_title,
+                                    dialogDescriptionRes = R.string.delete_poll_dialog_content
+                            )
+                    )
                 } else {
-                    add(EventSharedAction.Redact(
-                            eventId,
-                            askForReason = informationData.senderId != session.myUserId,
-                            dialogTitleRes = R.string.delete_event_dialog_title,
-                            dialogDescriptionRes = R.string.delete_event_dialog_content
-                    ))
+                    add(
+                            EventSharedAction.Redact(
+                                    eventId,
+                                    askForReason = informationData.senderId != session.myUserId,
+                                    dialogTitleRes = R.string.delete_event_dialog_title,
+                                    dialogDescriptionRes = R.string.delete_event_dialog_content
+                            )
+                    )
                 }
             }
         }
@@ -450,7 +454,7 @@ class MessageActionsViewModel @AssistedInject constructor(
 
     /**
      * Determine whether or not the Reply In Thread bottom sheet action will be visible
-     * to the user
+     * to the user.
      */
     private fun canReplyInThread(event: TimelineEvent,
                                  messageContent: MessageContent?,
@@ -484,7 +488,7 @@ class MessageActionsViewModel @AssistedInject constructor(
     }
 
     /**
-     * Determine whether or not the view in room action will be available for the current event
+     * Determine whether or not the view in room action will be available for the current event.
      */
     private fun canViewInRoom(event: TimelineEvent,
                               messageContent: MessageContent?,

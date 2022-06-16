@@ -20,7 +20,7 @@ import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.mode
 import org.matrix.android.sdk.api.session.identity.ThreePid
 
 /**
- * Provides access to services identity server can provide
+ * Provides access to services identity server can provide.
  */
 interface ThreePidPlatformDiscoverService {
 

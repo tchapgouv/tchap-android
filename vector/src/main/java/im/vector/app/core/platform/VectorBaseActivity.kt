@@ -260,29 +260,30 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     private fun handleGlobalError(globalError: GlobalError) {
         when (globalError) {
-            is GlobalError.InvalidToken         ->
-                handleInvalidToken(globalError)
-            is GlobalError.ConsentNotGivenError ->
-                consentNotGivenHelper.displayDialog(globalError.consentUri,
-                        activeSessionHolder.getActiveSession().sessionParams.homeServerHost ?: "")
-            is GlobalError.CertificateError     ->
-                handleCertificateError(globalError)
+            is GlobalError.InvalidToken         -> handleInvalidToken(globalError)
+            is GlobalError.ConsentNotGivenError -> displayConsentNotGivenDialog(globalError)
+            is GlobalError.CertificateError     -> handleCertificateError(globalError)
             // Tchap: Custom expired account
             GlobalError.ExpiredAccount            -> handleExpiredAccount()
-            //    GlobalError.ExpiredAccount          -> Unit // TODO Handle account expiration
             is GlobalError.InitialSyncRequest   -> handleInitialSyncRequest(globalError)
         }
+    }
+
+    private fun displayConsentNotGivenDialog(globalError: GlobalError.ConsentNotGivenError) {
+        consentNotGivenHelper.displayDialog(globalError.consentUri, activeSessionHolder.getActiveSession().sessionParams.homeServerHost ?: "")
     }
 
     private fun handleInitialSyncRequest(initialSyncRequest: GlobalError.InitialSyncRequest) {
         MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.initial_sync_request_title)
                 .setMessage(
-                        getString(R.string.initial_sync_request_content, getString(
+                        getString(
+                                R.string.initial_sync_request_content, getString(
                                 when (initialSyncRequest.reason) {
                                     InitialSyncRequestReason.IGNORED_USERS_LIST_CHANGE -> R.string.initial_sync_request_reason_unignored_users
                                 }
-                        ))
+                        )
+                        )
                 )
                 .setPositiveButton(R.string.ok) { _, _ ->
                     MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
@@ -320,7 +321,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
         mainActivityStarted = true
 
-        MainActivity.restartApp(this,
+        MainActivity.restartApp(
+                this,
                 MainActivityArgs(
                         clearCredentials = !globalError.softLogout,
                         isUserLoggedOut = true,
@@ -387,8 +389,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     private val postResumeScheduledActions = mutableListOf<() -> Unit>()
 
     /**
-     * Schedule action to be done in the next call of onPostResume()
-     * It fixes bug observed on Android 6 (API 23)
+     * Schedule action to be done in the next call of onPostResume().
+     * It fixes bug observed on Android 6 (API 23).
      */
     protected fun doOnPostResume(action: () -> Unit) {
         synchronized(postResumeScheduledActions) {
@@ -444,7 +446,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
      * ========================================================================================== */
 
     /**
-     * Force to render the activity in fullscreen
+     * Force to render the activity in fullscreen.
      */
     @Suppress("DEPRECATION")
     private fun setFullScreen() {
@@ -536,7 +538,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     }
 
     /**
-     * Is first creation
+     * Is first creation.
      *
      * @return true if Activity is created for the first time (and not restored by the system)
      */
@@ -555,7 +557,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         }
 
     /**
-     * Tells if the waiting view is currently displayed
+     * Tells if the waiting view is currently displayed.
      *
      * @return true if the waiting view is displayed
      */
@@ -572,7 +574,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     }
 
     /**
-     * Hide the waiting view
+     * Hide the waiting view.
      */
     open fun hideWaitingView() {
         waitingView?.isVisible = false
@@ -600,7 +602,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     open fun getMenuRes() = -1
 
     /**
-     * Return a object containing other themes for this activity
+     * Return a object containing other themes for this activity.
      */
     open fun getOtherThemes(): ActivityOtherThemes = ActivityOtherThemes.Default
 
@@ -653,7 +655,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     }
 
     /**
-     * Sets toolbar as actionBar
+     * Sets toolbar as actionBar.
      *
      * @return Instance of [ToolbarConfig] with set of helper methods to configure toolbar
      * */

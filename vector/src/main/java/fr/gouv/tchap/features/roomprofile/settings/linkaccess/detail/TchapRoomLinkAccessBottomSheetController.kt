@@ -23,7 +23,7 @@ import im.vector.app.core.ui.bottomsheet.bottomSheetTitleItem
 import javax.inject.Inject
 
 /**
- * Epoxy controller for room link access actions
+ * Epoxy controller for room link access actions.
  */
 class TchapRoomLinkAccessBottomSheetController @Inject constructor() : TypedEpoxyController<TchapRoomLinkAccessBottomSheetState>() {
 

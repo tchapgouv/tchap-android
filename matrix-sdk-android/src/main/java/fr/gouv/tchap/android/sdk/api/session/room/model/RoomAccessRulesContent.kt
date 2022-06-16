@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
 import timber.log.Timber
 
 /**
- * Class representing the TchapEventType.STATE_ROOM_ACCESS_RULES state event content
+ * Class representing the TchapEventType.STATE_ROOM_ACCESS_RULES state event content.
  */
 @JsonClass(generateAdapter = true)
 data class RoomAccessRulesContent(

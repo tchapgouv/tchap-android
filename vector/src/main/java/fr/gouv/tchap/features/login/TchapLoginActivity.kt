@@ -57,7 +57,7 @@ import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 
 /**
- * The LoginActivity manages the fragment navigation and also display the loading View
+ * The LoginActivity manages the fragment navigation and also display the loading View.
  */
 @AndroidEntryPoint
 open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedActivity {

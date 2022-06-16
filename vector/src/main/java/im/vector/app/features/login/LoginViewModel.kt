@@ -654,7 +654,8 @@ class LoginViewModel @AssistedInject constructor(
                     alteredHomeServerConnectionConfig,
                     action.username,
                     action.password,
-                    action.initialDeviceName)
+                    action.initialDeviceName
+            )
         } catch (failure: Throwable) {
             onDirectLoginError(failure)
             return

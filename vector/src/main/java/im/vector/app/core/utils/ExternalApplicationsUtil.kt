@@ -63,7 +63,7 @@ import java.util.Date
 import java.util.Locale
 
 /**
- * Open a url in the internet browser of the system
+ * Open a url in the internet browser of the system.
  */
 fun openUrlInExternalBrowser(context: Context, url: String?) {
     url?.let {
@@ -72,7 +72,7 @@ fun openUrlInExternalBrowser(context: Context, url: String?) {
 }
 
 /**
- * Open a uri in the internet browser of the system
+ * Open a uri in the internet browser of the system.
  */
 fun openUrlInExternalBrowser(context: Context, uri: Uri?) {
     uri?.let {
@@ -86,9 +86,9 @@ fun openUrlInExternalBrowser(context: Context, uri: Uri?) {
 }
 
 /**
- * Open url in custom tab or, if not available, in the default browser
+ * Open url in custom tab or, if not available, in the default browser.
  * If several compatible browsers are installed, the user will be proposed to choose one.
- * Ref: https://developer.chrome.com/multidevice/android/customtabs
+ * Ref: https://developer.chrome.com/multidevice/android/customtabs.
  */
 fun openUrlInChromeCustomTab(context: Context,
                              session: CustomTabsSession?,
@@ -121,7 +121,7 @@ fun openUrlInChromeCustomTab(context: Context,
 }
 
 /**
- * Open file selection activity
+ * Open file selection activity.
  */
 fun openFileSelection(activity: Activity,
                       activityResultLauncher: ActivityResultLauncher<Intent>?,
@@ -145,7 +145,7 @@ fun openFileSelection(activity: Activity,
 }
 
 /**
- * Send an email to address with optional subject and message
+ * Send an email to address with optional subject and message.
  */
 fun sendMailTo(address: String, subject: String? = null, message: String? = null, activity: Activity) {
     val intent = Intent(
@@ -160,7 +160,7 @@ fun sendMailTo(address: String, subject: String? = null, message: String? = null
 }
 
 /**
- * Open an arbitrary uri
+ * Open an arbitrary uri.
  */
 fun openUri(activity: Activity, uri: String) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
@@ -188,7 +188,7 @@ fun openMedia(activity: Activity, savedMediaPath: String, mimeType: String) {
 }
 
 /**
- * Open external location
+ * Open external location.
  * @param activity the activity
  * @param latitude latitude of the location
  * @param longitude longitude of the location
@@ -376,7 +376,7 @@ private fun addToGallery(savedFile: File, mediaMimeType: String?, context: Conte
 }
 
 /**
- * Open the play store to the provided application Id, default to this app
+ * Open the play store to the provided application Id, default to this app.
  */
 fun openPlayStore(activity: Activity, appId: String = BuildConfig.APPLICATION_ID) {
     try {
@@ -397,7 +397,7 @@ fun openAppSettingsPage(activity: Activity) {
 }
 
 /**
- * Ask the user to select a location and a file name to write in
+ * Ask the user to select a location and a file name to write in.
  */
 fun selectTxtFileToWrite(
         activity: Activity,

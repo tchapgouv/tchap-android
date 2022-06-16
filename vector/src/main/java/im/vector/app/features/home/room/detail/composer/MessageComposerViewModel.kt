@@ -222,7 +222,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                             isInThreadTimeline = state.isInThreadTimeline()
                     )) {
                         is ParsedCommand.ErrorNotACommand,
-                        ParsedCommand.ErrorNotATchapCommand                -> {
+                            ParsedCommand.ErrorNotATchapCommand -> {
                             // Send the text message to the room
                             if (state.rootThreadEventId != null) {
                                 room.relationService().replyInThread(
@@ -835,7 +835,7 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     /**
-     * Convert a send mode to a draft and save the draft
+     * Convert a send mode to a draft and save the draft.
      */
     private fun handleSaveTextDraft(draft: String) = withState {
         session.coroutineScope.launch {
