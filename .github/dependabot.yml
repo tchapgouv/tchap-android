@@ -7,6 +7,8 @@ version: 2
 updates:
   # Updates for Github Actions used in the repo
   - package-ecosystem: "github-actions"
+    # Skip in forks
+    if: github.repository == 'vector-im/element-android'
     directory: "/"
     schedule:
       interval: "weekly"
@@ -16,6 +18,8 @@ updates:
       - dependency-name: "*github-script*"
   # Updates for Gradle dependencies used in the app
   - package-ecosystem: gradle
+    # Skip in forks
+    if: github.repository == 'vector-im/element-android'
     directory: "/"
     schedule:
       interval: "daily"
