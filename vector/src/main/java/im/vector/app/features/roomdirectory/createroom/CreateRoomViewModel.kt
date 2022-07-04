@@ -262,6 +262,7 @@ class CreateRoomViewModel @AssistedInject constructor(
         }
 
         val createRoomParams = CreateRoomParams()
+                .setTchapParams()
                 .apply {
                     name = state.roomName.takeIf { it.isNotBlank() }
                     topic = state.roomTopic.takeIf { it.isNotBlank() }
@@ -277,25 +278,8 @@ class CreateRoomViewModel @AssistedInject constructor(
                                 eventsDefault = 100
                         )
                     }
-                    if (state.roomType == TchapRoomType.FORUM) {
-                        // Directory visibility
-                        visibility = RoomDirectoryVisibility.PUBLIC
-                        // Preset
-                        preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
-                        // In case of a public room, the room alias is mandatory.
-                        // That's why, we deduce the room alias from the room name.
-                        roomAliasName = TchapUtils.createRoomAliasName(state.roomName)
-                        historyVisibility = RoomHistoryVisibility.WORLD_READABLE
-                    } else {
-                        // Directory visibility
-                        visibility = RoomDirectoryVisibility.PRIVATE
-                        // Preset
-                        preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
-                        // Hide the encrypted messages sent before the member is invited.
-                        historyVisibility = RoomHistoryVisibility.INVITED
-                        // Encryption
-                        enableEncryption()
-                    }
+
+                    // Tchap: We use a custom configuration
 //                    when (state.roomJoinRules) {
 //                        RoomJoinRules.PUBLIC     -> {
 //                            // Directory visibility
@@ -323,30 +307,18 @@ class CreateRoomViewModel @AssistedInject constructor(
 //                            preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
 //                        }
 //                    }
-                    // Disabling federation
-                    disableFederation = state.disableFederation
-
-                    // Tchap: Use custom encrypt rules for Tchap, depends on which type of room is chosen
-                    // Encryption
-                    val shouldEncrypt = when (state.roomJoinRules) {
-                        // we ignore the isEncrypted for public room as the switch is hidden in this case
-                        RoomJoinRules.PUBLIC -> false
-                        else                 -> state.isEncrypted ?: state.defaultEncrypted[state.roomJoinRules].orFalse()
-                    }
-                    if (shouldEncrypt) {
-                        enableEncryption()
-                    }
-
-                    if (state.roomType == TchapRoomType.EXTERNAL) {
-                        // Room access rule
-                        setRoomAccessRulesInInitialStates(this, RoomAccessRules.UNRESTRICTED)
-                    } else {
-                        // Room access rule
-                        setRoomAccessRulesInInitialStates(this, RoomAccessRules.RESTRICTED)
-                    }
-
-                    // Disabling federation
-                    disableFederation = state.disableFederation
+//                    // Disabling federation
+//                    disableFederation = state.disableFederation
+//
+//                    // Encryption
+//                    val shouldEncrypt = when (state.roomJoinRules) {
+//                        // we ignore the isEncrypted for public room as the switch is hidden in this case
+//                        RoomJoinRules.PUBLIC -> false
+//                        else                 -> state.isEncrypted ?: state.defaultEncrypted[state.roomJoinRules].orFalse()
+//                    }
+//                    if (shouldEncrypt) {
+//                        enableEncryption()
+//                    }
                 }
 
         // TODO Should this be non-cancellable?
@@ -376,6 +348,41 @@ class CreateRoomViewModel @AssistedInject constructor(
                         _viewEvents.post(CreateRoomViewEvents.Failure(failure))
                     }
             )
+        }
+    }
+
+    private fun CreateRoomParams.setTchapParams() = apply {
+        withState { state ->
+            if (state.roomType == TchapRoomType.FORUM) {
+                // Directory visibility
+                visibility = RoomDirectoryVisibility.PUBLIC
+                // Preset
+                preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
+                // In case of a public room, the room alias is mandatory.
+                // That's why, we deduce the room alias from the room name.
+                roomAliasName = TchapUtils.createRoomAliasName(state.roomName)
+                historyVisibility = RoomHistoryVisibility.WORLD_READABLE
+            } else {
+                // Directory visibility
+                visibility = RoomDirectoryVisibility.PRIVATE
+                // Preset
+                preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
+                // Hide the encrypted messages sent before the member is invited.
+                historyVisibility = RoomHistoryVisibility.INVITED
+                // Encryption
+                enableEncryption()
+            }
+
+            if (state.roomType == TchapRoomType.EXTERNAL) {
+                // Room access rule
+                setRoomAccessRulesInInitialStates(this, RoomAccessRules.UNRESTRICTED)
+            } else {
+                // Room access rule
+                setRoomAccessRulesInInitialStates(this, RoomAccessRules.RESTRICTED)
+            }
+
+            // Disabling federation
+            disableFederation = state.disableFederation
         }
     }
 

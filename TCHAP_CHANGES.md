@@ -1,3 +1,11 @@
+Changes in Tchap 2.3.2 (2022-07-04)
+===================================
+
+Bugfixes 🐛
+----------
+ - Fix encryption in the new created forum ([#661](https://github.com/tchapgouv/tchap-android-v2/issues/661))
+
+
 Changes in Tchap 2.3.1 (2022-05-25)
 ===================================
 
