@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomdirectory.createroom
 
+import android.util.Log
 import androidx.core.net.toFile
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -321,19 +322,15 @@ class CreateRoomViewModel @AssistedInject constructor(
 //                            preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
 //                        }
 //                    }
-                    // Disabling federation
-                    disableFederation = state.disableFederation
-
-                    // Tchap: Use custom encrypt rules for Tchap, depends on which type of room is chosen
-                    // Encryption
-                    val shouldEncrypt = when (state.roomJoinRules) {
-                        // we ignore the isEncrypted for public room as the switch is hidden in this case
-                        RoomJoinRules.PUBLIC -> false
-                        else                 -> state.isEncrypted ?: state.defaultEncrypted[state.roomJoinRules].orFalse()
-                    }
-                    if (shouldEncrypt) {
-                        enableEncryption()
-                    }
+//                    // Encryption
+//                    val shouldEncrypt = when (state.roomJoinRules) {
+//                        // we ignore the isEncrypted for public room as the switch is hidden in this case
+//                        RoomJoinRules.PUBLIC -> false
+//                        else                 -> state.isEncrypted ?: state.defaultEncrypted[state.roomJoinRules].orFalse()
+//                    }
+//                    if (shouldEncrypt) {
+//                        enableEncryption()
+//                    }
 
                     if (state.roomType == TchapRoomType.EXTERNAL) {
                         // Room access rule
