@@ -23,7 +23,8 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 200
+    # Tchap: Disable this script for Tchap
+    open-pull-requests-limit: 0
     reviewers:
       - "vector-im/element-android-reviewers"
     ignore:
