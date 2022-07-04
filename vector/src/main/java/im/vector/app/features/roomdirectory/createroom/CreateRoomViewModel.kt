@@ -16,7 +16,6 @@
 
 package im.vector.app.features.roomdirectory.createroom
 
-import android.util.Log
 import androidx.core.net.toFile
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
