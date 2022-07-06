@@ -10,6 +10,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    # Tchap: Disable this script for Tchap
+    open-pull-requests-limit: 0
     reviewers:
       - "vector-im/element-android-reviewers"
     ignore:
