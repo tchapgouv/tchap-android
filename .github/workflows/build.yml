@@ -52,7 +52,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ GplayBtchapWithoutvoipWithpinning, GplayTchapWithoutvoipWithpinning, FdroidBtchapWithoutvoipWithoutpinning, FdroidTchapWithoutvoipWithoutpinning, GplayDevTchapWithoutvoipWithpinning, FdroidDevTchapWithoutvoipWithoutpinning, GplayBtchapWithvoipWithpinning]
+        target: [ GplayBtchapWithoutvoipWithpinning, GplayTchapWithoutvoipWithpinning, FdroidBtchapWithoutvoipWithoutpinning, FdroidTchapWithoutvoipWithoutpinning, GplayDevTchapWithoutvoipWithpinning, FdroidDevTchapWithoutvoipWithoutpinning, GplayBtchapWithvoipWithpinning ]
     # Only runs on main, no concurrency.
     steps:
       - uses: actions/checkout@v3
