@@ -1,3 +1,11 @@
+Changes in Tchap 2.3.3 (2022-07-12)
+===================================
+
+Bugfixes 🐛
+----------
+ - Fix network security config for fdroid/gplay withpinning flavors ([#654](https://github.com/tchapgouv/tchap-android-v2/issues/654))
+
+
 Changes in Tchap 2.3.2 (2022-07-04)
 ===================================
 
