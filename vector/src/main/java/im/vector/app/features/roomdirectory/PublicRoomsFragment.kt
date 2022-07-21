@@ -63,6 +63,9 @@ class PublicRoomsFragment @Inject constructor(
         return FragmentPublicRoomsBinding.inflate(inflater, container, false)
     }
 
+    // Tchap: Not displayed in Tchap
+    // override fun getMenuRes() = R.menu.menu_room_directory
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -102,6 +105,18 @@ class PublicRoomsFragment @Inject constructor(
         super.onDestroyView()
     }
 
+    // Tchap: Not used in Tchap
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return when (item.itemId) {
+//            R.id.menu_room_directory_change_protocol -> {
+//                sharedActionViewModel.post(RoomDirectorySharedAction.ChangeProtocol)
+//                true
+//            }
+//            else ->
+//                super.onOptionsItemSelected(item)
+//        }
+//    }
+
     private fun setupRecyclerView() {
         views.publicRoomsList.trackItemsVisibilityChange()
         views.publicRoomsList.configureWith(publicRoomsController)
@@ -136,7 +151,7 @@ class PublicRoomsFragment @Inject constructor(
                             trigger = ViewRoom.Trigger.RoomDirectory
                     )
                 }
-                else             -> {
+                else -> {
                     // ROOM PREVIEW
                     navigator.openRoomPreview(requireActivity(), publicRoom, roomDirectoryData)
                 }

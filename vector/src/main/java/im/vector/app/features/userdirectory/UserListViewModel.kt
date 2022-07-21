@@ -109,14 +109,14 @@ class UserListViewModel @AssistedInject constructor(
 
     override fun handle(action: UserListAction) {
         when (action) {
-            is UserListAction.SearchUsers                -> handleSearchUsers(action.value)
-            is UserListAction.ClearSearchUsers           -> handleClearSearchUsers()
-            is UserListAction.AddPendingSelection        -> handleSelectUser(action)
-            is UserListAction.RemovePendingSelection     -> handleRemoveSelectedUser(action)
+            is UserListAction.SearchUsers -> handleSearchUsers(action.value)
+            is UserListAction.ClearSearchUsers -> handleClearSearchUsers()
+            is UserListAction.AddPendingSelection -> handleSelectUser(action)
+            is UserListAction.RemovePendingSelection -> handleRemoveSelectedUser(action)
             UserListAction.ComputeMatrixToLinkForSharing -> handleShareMyMatrixToLink()
-            UserListAction.UserConsentRequest            -> handleUserConsentRequest()
-            is UserListAction.UpdateUserConsent          -> handleISUpdateConsent(action)
-            UserListAction.Resumed                       -> handleResumed()
+            UserListAction.UserConsentRequest -> handleUserConsentRequest()
+            is UserListAction.UpdateUserConsent -> handleISUpdateConsent(action)
+            UserListAction.Resumed -> handleResumed()
         }
     }
 

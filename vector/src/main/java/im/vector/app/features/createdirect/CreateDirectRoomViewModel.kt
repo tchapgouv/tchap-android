@@ -32,6 +32,7 @@ import im.vector.app.features.userdirectory.PendingSelection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.getRoom
@@ -63,9 +64,9 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
     override fun handle(action: CreateDirectRoomAction) {
         when (action) {
             is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onSubmitInvitees(action.selections)
-            is CreateDirectRoomAction.QrScannedAction                  -> onCodeParsed(action)
             is CreateDirectRoomAction.InviteByEmail                    -> handleIndividualInviteByEmail(action.email)
             is CreateDirectRoomAction.CreateDirectMessageByUserId      -> handleCreateDirectMessageByUserId(action.userId)
+            is CreateDirectRoomAction.QrScannedAction -> onCodeParsed(action)
         }
     }
 
@@ -252,7 +253,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
 
     private suspend fun revokePendingInviteAndLeave(roomId: String) {
         session.getRoom(roomId)?.let { room ->
-            val token = room.stateService().getStateEvent(EventType.STATE_ROOM_THIRD_PARTY_INVITE)?.stateKey
+            val token = room.stateService().getStateEvent(EventType.STATE_ROOM_THIRD_PARTY_INVITE, QueryStringValue.IsNotNull)?.stateKey
 
             try {
                 if (!token.isNullOrEmpty()) {

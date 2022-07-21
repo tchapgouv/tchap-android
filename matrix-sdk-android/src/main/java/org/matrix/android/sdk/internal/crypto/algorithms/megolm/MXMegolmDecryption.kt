@@ -78,6 +78,7 @@ internal class MXMegolmDecryption(
                     encryptedEventContent.ciphertext,
                     event.roomId,
                     timeline,
+                    eventId = event.eventId.orEmpty(),
                     encryptedEventContent.sessionId,
                     encryptedEventContent.senderKey
             )
@@ -178,6 +179,7 @@ internal class MXMegolmDecryption(
      * Handle a key event.
      *
      * @param event the key event.
+     * @param defaultKeysBackupService the keys backup service
      */
     override fun onRoomKeyEvent(event: Event, defaultKeysBackupService: DefaultKeysBackupService) {
         Timber.tag(loggerTag.value).v("onRoomKeyEvent()")

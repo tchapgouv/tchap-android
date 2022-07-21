@@ -44,7 +44,8 @@ data class MessageInformationData(
         val isFirstFromThisSender: Boolean = false,
         val isLastFromThisSender: Boolean = false,
         // Tchap: Used to hide domain in DM.
-        val isDirect: Boolean = false
+        val isDirect: Boolean = false,
+        val messageType: String? = null
 ) : Parcelable {
 
     val matrixItem: MatrixItem
@@ -92,7 +93,10 @@ data class PollResponseData(
         val totalVotes: Int = 0,
         val winnerVoteCount: Int = 0,
         val isClosed: Boolean = false
-) : Parcelable
+) : Parcelable {
+
+    fun getVoteSummaryOfAnOption(optionId: String) = votes?.get(optionId)
+}
 
 @Parcelize
 data class PollVoteSummaryData(

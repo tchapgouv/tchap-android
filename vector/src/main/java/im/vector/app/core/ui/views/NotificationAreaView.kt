@@ -70,12 +70,13 @@ class NotificationAreaView @JvmOverloads constructor(
         cleanUp()
         state = newState
         when (newState) {
-            State.Initial                       -> Unit
-            is State.Default                    -> renderDefault()
-            is State.Hidden                     -> renderHidden()
-            is State.NoPermissionToPost         -> renderNoPermissionToPost(newState.message)
-            is State.UnsupportedAlgorithm       -> renderUnsupportedAlgorithm(newState)
-            is State.Tombstone                  -> renderTombstone()
+            State.Initial -> Unit
+            is State.Default -> renderDefault()
+            is State.Hidden -> renderHidden()
+            // Tchap: custom error message
+            is State.NoPermissionToPost -> renderNoPermissionToPost(newState.message)
+            is State.UnsupportedAlgorithm -> renderUnsupportedAlgorithm(newState)
+            is State.Tombstone -> renderTombstone()
             is State.ResourceLimitExceededError -> renderResourceLimitExceededError(newState)
         }
     }

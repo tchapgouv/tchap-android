@@ -72,7 +72,7 @@ class TchapRoomLinkAccessViewModel @AssistedInject constructor(
     }
 
     private fun observeRoomCanonicalAlias() {
-        room.flow().liveStateEvent(EventType.STATE_ROOM_CANONICAL_ALIAS, QueryStringValue.NoCondition)
+        room.flow().liveStateEvent(EventType.STATE_ROOM_CANONICAL_ALIAS, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<RoomCanonicalAliasContent>() }
                 .unwrap()
                 .setOnEach {
@@ -111,7 +111,7 @@ class TchapRoomLinkAccessViewModel @AssistedInject constructor(
 
     private fun observeJoinRule() {
         room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.NoCondition)
+                .liveStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<RoomJoinRulesContent>() }
                 .unwrap()
                 .mapNotNull { it.joinRules }

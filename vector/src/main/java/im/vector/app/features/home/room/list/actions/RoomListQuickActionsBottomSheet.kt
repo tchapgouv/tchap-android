@@ -106,8 +106,9 @@ class RoomListQuickActionsBottomSheet :
         sharedActionViewModel.post(quickAction)
         // Do not dismiss for all the actions
         when (quickAction) {
-            is RoomListQuickActionsSharedAction.Favorite    -> Unit
-            else                                            -> dismiss()
+            is RoomListQuickActionsSharedAction.LowPriority -> Unit
+            is RoomListQuickActionsSharedAction.Favorite -> Unit
+            else -> dismiss()
         }
     }
 
