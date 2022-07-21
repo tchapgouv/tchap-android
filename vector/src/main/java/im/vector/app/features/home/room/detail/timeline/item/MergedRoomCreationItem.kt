@@ -143,7 +143,11 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
             // Tchap: Hide the domain if we are in DM.
             holder.roomDescriptionText.text = holder.view.resources.getString(
                     R.string.this_is_the_beginning_of_dm,
+<<<<<<< HEAD
                     roomDisplayName
+=======
+                    roomSummary?.displayName ?: ""
+>>>>>>> v1.4.27-RC2
             )
         } else if (roomDisplayName.isNullOrBlank() || roomSummary.name.isBlank()) {
             holder.roomDescriptionText.text = holder.view.resources.getString(R.string.this_is_the_beginning_of_room_no_name)

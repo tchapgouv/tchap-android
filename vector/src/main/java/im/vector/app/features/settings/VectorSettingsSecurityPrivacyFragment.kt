@@ -338,6 +338,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()
             val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
 
+<<<<<<< HEAD
             when {
                 xSigningKeyCanSign        -> {
                     mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_trusted)
@@ -355,6 +356,24 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                     mCrossSigningStatePreference.setIcon(android.R.color.transparent)
                     mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_disabled)
                 }
+=======
+        when {
+            xSigningKeyCanSign -> {
+                mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_trusted)
+                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_complete)
+            }
+            xSigningKeysAreTrusted -> {
+                mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_custom)
+                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_trusted)
+            }
+            xSigningIsEnableInAccount -> {
+                mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_black)
+                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_not_trusted)
+            }
+            else -> {
+                mCrossSigningStatePreference.setIcon(android.R.color.transparent)
+                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_disabled)
+>>>>>>> v1.4.27-RC2
             }
 
             mCrossSigningStatePreference.isVisible = true
@@ -465,14 +484,14 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             val sharedDataItem = sharedDataItems[0]
 
             val uri = when (sharedDataItem) {
-                is ExternalIntentData.IntentDataUri      -> sharedDataItem.uri
+                is ExternalIntentData.IntentDataUri -> sharedDataItem.uri
                 is ExternalIntentData.IntentDataClipData -> sharedDataItem.clipDataItem.uri
-                else                                     -> null
+                else -> null
             }
 
             val mimetype = when (sharedDataItem) {
                 is ExternalIntentData.IntentDataClipData -> sharedDataItem.mimeType
-                else                                     -> null
+                else -> null
             }
 
             if (uri == null) {

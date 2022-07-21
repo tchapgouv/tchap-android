@@ -65,7 +65,7 @@ abstract class AbstractLoginFragment<VB : ViewBinding> : VectorBaseFragment<VB>(
     private fun handleLoginViewEvents(loginViewEvents: LoginViewEvents) {
         when (loginViewEvents) {
             is LoginViewEvents.Failure -> showFailure(loginViewEvents.throwable)
-            else                       ->
+            else ->
                 // This is handled by the Activity
                 Unit
         }
@@ -78,10 +78,10 @@ abstract class AbstractLoginFragment<VB : ViewBinding> : VectorBaseFragment<VB>(
         }
 
         when (throwable) {
-            is CancellationException                  ->
+            is CancellationException ->
                 /* Ignore this error, user has cancelled the action */
                 Unit
-            is Failure.ServerError                    ->
+            is Failure.ServerError ->
                 if (throwable.error.code == MatrixError.M_FORBIDDEN &&
                         throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
                     MaterialAlertDialogBuilder(requireActivity())
@@ -94,7 +94,7 @@ abstract class AbstractLoginFragment<VB : ViewBinding> : VectorBaseFragment<VB>(
                 }
             is Failure.UnrecognizedCertificateFailure ->
                 showUnrecognizedCertificateFailure(throwable)
-            else                                      ->
+            else ->
                 onError(throwable)
         }
     }
@@ -126,6 +126,7 @@ abstract class AbstractLoginFragment<VB : ViewBinding> : VectorBaseFragment<VB>(
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         return when {
+<<<<<<< HEAD
 //            displayCancelDialog && loginViewModel.isRegistrationStarted -> {
 //                // Ask for confirmation before cancelling the registration
 //                MaterialAlertDialogBuilder(requireActivity())
@@ -141,6 +142,23 @@ abstract class AbstractLoginFragment<VB : ViewBinding> : VectorBaseFragment<VB>(
 //                true
 //            }
             displayCancelDialog && isResetPasswordStarted               -> {
+=======
+            displayCancelDialog && loginViewModel.isRegistrationStarted -> {
+                // Ask for confirmation before cancelling the registration
+                MaterialAlertDialogBuilder(requireActivity())
+                        .setTitle(R.string.login_signup_cancel_confirmation_title)
+                        .setMessage(R.string.login_signup_cancel_confirmation_content)
+                        .setPositiveButton(R.string.yes) { _, _ ->
+                            displayCancelDialog = false
+                            vectorBaseActivity.onBackPressed()
+                        }
+                        .setNegativeButton(R.string.no, null)
+                        .show()
+
+                true
+            }
+            displayCancelDialog && isResetPasswordStarted -> {
+>>>>>>> v1.4.27-RC2
                 // Ask for confirmation before cancelling the reset password
                 MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.login_reset_password_cancel_confirmation_title)
@@ -154,7 +172,7 @@ abstract class AbstractLoginFragment<VB : ViewBinding> : VectorBaseFragment<VB>(
 
                 true
             }
-            else                                                        -> {
+            else -> {
                 resetViewModel()
                 // Do not consume the Back event
                 false

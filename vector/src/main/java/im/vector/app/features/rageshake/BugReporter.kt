@@ -158,25 +158,30 @@ class BugReporter @Inject constructor(
     /**
      * Send a bug report.
      *
-     * @param reportType        The report type (bug, suggestion, feedback)
-     * @param withDevicesLogs   true to include the device log
-     * @param withCrashLogs     true to include the crash logs
+     * @param reportType The report type (bug, suggestion, feedback)
+     * @param withDevicesLogs true to include the device log
+     * @param withCrashLogs true to include the crash logs
      * @param withKeyRequestHistory true to include the crash logs
-     * @param withScreenshot    true to include the screenshot
+     * @param withScreenshot true to include the screenshot
      * @param theBugDescription the bug description
-     * @param listener          the listener
+     * @param serverVersion version of the server
+     * @param canContact true if the user opt in to be contacted directly
+     * @param customFields fields which will be sent with the report
+     * @param listener the listener
      */
     @SuppressLint("StaticFieldLeak")
-    fun sendBugReport(reportType: ReportType,
-                      withDevicesLogs: Boolean,
-                      withCrashLogs: Boolean,
-                      withKeyRequestHistory: Boolean,
-                      withScreenshot: Boolean,
-                      theBugDescription: String,
-                      serverVersion: String,
-                      canContact: Boolean = false,
-                      customFields: Map<String, String>? = null,
-                      listener: IMXBugReportListener?) {
+    fun sendBugReport(
+            reportType: ReportType,
+            withDevicesLogs: Boolean,
+            withCrashLogs: Boolean,
+            withKeyRequestHistory: Boolean,
+            withScreenshot: Boolean,
+            theBugDescription: String,
+            serverVersion: String,
+            canContact: Boolean = false,
+            customFields: Map<String, String>? = null,
+            listener: IMXBugReportListener?
+    ) {
         // enumerate files to delete
         val mBugReportFiles: MutableList<File> = ArrayList()
 
@@ -264,12 +269,19 @@ class BugReporter @Inject constructor(
 
                 if (!mIsCancelled) {
                     val text = when (reportType) {
+<<<<<<< HEAD
                         ReportType.BUG_REPORT            -> "[${BuildConfig.FLAVOR_target}] $bugDescription"
                         ReportType.SUGGESTION            -> "[${BuildConfig.FLAVOR_target}] [Suggestion] $bugDescription"
                         ReportType.SPACE_BETA_FEEDBACK   -> "[${BuildConfig.FLAVOR_target}] [spaces-feedback] $bugDescription"
                         ReportType.THREADS_BETA_FEEDBACK -> "[${BuildConfig.FLAVOR_target}] [threads-feedback] $bugDescription"
+=======
+                        ReportType.BUG_REPORT -> "[Element] $bugDescription"
+                        ReportType.SUGGESTION -> "[Element] [Suggestion] $bugDescription"
+                        ReportType.SPACE_BETA_FEEDBACK -> "[Element] [spaces-feedback] $bugDescription"
+                        ReportType.THREADS_BETA_FEEDBACK -> "[Element] [threads-feedback] $bugDescription"
+>>>>>>> v1.4.27-RC2
                         ReportType.AUTO_UISI_SENDER,
-                        ReportType.AUTO_UISI             -> bugDescription
+                        ReportType.AUTO_UISI -> bugDescription
                     }
 
                     // build the multi part request
@@ -295,7 +307,8 @@ class BugReporter @Inject constructor(
                             .addFormDataPart("app_language", VectorLocale.applicationLocale.toString())
                             .addFormDataPart("default_app_language", systemLocaleProvider.getSystemLocale().toString())
                             .addFormDataPart("theme", ThemeUtils.getApplicationTheme(context))
-                            .addFormDataPart("server_version", serverVersion).apply {
+                            .addFormDataPart("server_version", serverVersion)
+                            .apply {
                                 customFields?.forEach { (name, value) ->
                                     addFormDataPart(name, value)
                                 }
@@ -349,18 +362,18 @@ class BugReporter @Inject constructor(
                     builder.addFormDataPart("label", "[${BuildConfig.FLAVOR_target}]")
 
                     when (reportType) {
-                        ReportType.BUG_REPORT            -> {
+                        ReportType.BUG_REPORT -> {
                             /* nop */
                         }
-                        ReportType.SUGGESTION            -> builder.addFormDataPart("label", "[Suggestion]")
-                        ReportType.SPACE_BETA_FEEDBACK   -> builder.addFormDataPart("label", "spaces-feedback")
+                        ReportType.SUGGESTION -> builder.addFormDataPart("label", "[Suggestion]")
+                        ReportType.SPACE_BETA_FEEDBACK -> builder.addFormDataPart("label", "spaces-feedback")
                         ReportType.THREADS_BETA_FEEDBACK -> builder.addFormDataPart("label", "threads-feedback")
-                        ReportType.AUTO_UISI             -> {
+                        ReportType.AUTO_UISI -> {
                             builder.addFormDataPart("label", "Z-UISI")
                             builder.addFormDataPart("label", "android")
                             builder.addFormDataPart("label", "uisi-recipient")
                         }
-                        ReportType.AUTO_UISI_SENDER      -> {
+                        ReportType.AUTO_UISI_SENDER -> {
                             builder.addFormDataPart("label", "Z-UISI")
                             builder.addFormDataPart("label", "android")
                             builder.addFormDataPart("label", "uisi-sender")
@@ -494,12 +507,17 @@ class BugReporter @Inject constructor(
      */
     fun openBugReportScreen(activity: FragmentActivity, reportType: ReportType = ReportType.BUG_REPORT, withScreenshot: Boolean = true) {
         screenshot = takeScreenshot(activity)
+<<<<<<< HEAD
         activeSessionHolder.getSafeActiveSession()?.let {
             it.logDbUsageInfo()
             it.cryptoService().logDbUsageInfo()
         }
 
         activity.startActivity(BugReportActivity.intent(activity, reportType, withScreenshot))
+=======
+        matrix.debugService().logDbUsageInfo()
+        activity.startActivity(BugReportActivity.intent(activity, reportType))
+>>>>>>> v1.4.27-RC2
     }
 
     private fun rageShakeAppNameForReport(reportType: ReportType): String {
@@ -511,7 +529,7 @@ class BugReporter @Inject constructor(
                 when (reportType) {
                     ReportType.AUTO_UISI_SENDER,
                     ReportType.AUTO_UISI -> R.string.bug_report_auto_uisi_app_name
-                    else                 -> R.string.bug_report_app_name
+                    else -> R.string.bug_report_app_name
                 }
         )
     }
@@ -686,7 +704,7 @@ class BugReporter @Inject constructor(
     /**
      * Retrieves the logs.
      *
-     * @param streamWriter  the stream writer
+     * @param streamWriter the stream writer
      * @param isErrorLogCat true to save the error logs
      */
     private fun getLogCatError(streamWriter: OutputStreamWriter, isErrorLogCat: Boolean) {

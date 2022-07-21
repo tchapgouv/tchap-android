@@ -13,6 +13,7 @@ env:
   CI_GRADLE_ARG_PROPERTIES: >
     -Porg.gradle.jvmargs=-Xmx4g
     -Porg.gradle.parallel=false
+    --no-daemon
 
 jobs:
 
@@ -29,6 +30,7 @@ jobs:
     steps:
       - run: echo "Run those tests!" # no-op success
         
+<<<<<<< HEAD
   # Run Android Tests
   integration-tests:
     name: Matrix SDK - Running Integration Tests
@@ -226,6 +228,8 @@ jobs:
             emulator-account.log
             emulator-session.log
 
+=======
+>>>>>>> v1.4.27-RC2
   ui-tests:
     name: UI Tests (Synapse)
     needs: should-i-run
@@ -240,7 +244,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.8
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: 3.8
       - uses: actions/cache@v3
@@ -287,6 +291,7 @@ jobs:
             emulator.log
             failure_screenshots/
 
+<<<<<<< HEAD
   codecov-units:
     name: Unit tests with code coverage
     # Tchap: Disabled for now
@@ -315,23 +320,28 @@ jobs:
           path: |
             build/reports/jacoco/allCodeCoverageReport/allCodeCoverageReport.xml
 
+=======
+>>>>>>> v1.4.27-RC2
 # Notify the channel about delayed failures
   notify:
     name: Notify matrix
     runs-on: ubuntu-latest
     needs:
       - should-i-run
-      - integration-tests
       - ui-tests
+<<<<<<< HEAD
       - sonarqube
       - codecov-units
     # Tchap: Disabled for now
     if: github.repository == 'vector-im/element-android' && (needs.should-i-run.result == 'success' ) && ((needs.codecov-units.result != 'success' ) || (needs.ui-tests.result != 'success') || (needs.integration-tests.result != 'success'))
+=======
+    if: always() && (needs.should-i-run.result == 'success' ) && ((needs.codecov-units.result != 'success' ) || (needs.ui-tests.result != 'success') || (needs.integration-tests.result != 'success'))
+>>>>>>> v1.4.27-RC2
     # No concurrency required, runs every time on a schedule.
     steps:
       - uses: michaelkaye/matrix-hookshot-action@v1.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           hookshot_url: ${{ secrets.ELEMENT_ANDROID_HOOKSHOT_URL }}
-          text_template: "Post-merge validation of ${{ github.head_ref }} into ${{ github.base_ref }} by ${{ github.event.pull_request.merged_by }} failed: {{#each job_statuses }}{{#with this }}{{#if completed }}  {{name}} {{conclusion}} at {{completed_at}}, {{/if}}{{/with}}{{/each}}"
-          html_template: "Post-merge validation of ${{ github.head_ref }} into ${{ github.base_ref }} by ${{ github.event.pull_request.merged_by }} failed: {{#each job_statuses }}{{#with this }}{{#if completed }}<br />{{icon conclusion}} {{name}} <font color='{{color conclusion}}'>{{conclusion}} at {{completed_at}} <a href=\"{{html_url}}\">[details]</a></font>{{/if}}{{/with}}{{/each}}"
+          text_template: "Post-merge validation of ${{ github.head_ref }} into ${{ github.base_ref }} by ${{ github.event.pull_request.merged_by.login }} failed: {{#each job_statuses }}{{#with this }}{{#if completed }}  {{name}} {{conclusion}} at {{completed_at}}, {{/if}}{{/with}}{{/each}}"
+          html_template: "Post-merge validation of ${{ github.head_ref }} into ${{ github.base_ref }} by ${{ github.event.pull_request.merged_by.login }} failed: {{#each job_statuses }}{{#with this }}{{#if completed }}<br />{{icon conclusion}} {{name}} <font color='{{color conclusion}}'>{{conclusion}} at {{completed_at}} <a href=\"{{html_url}}\">[details]</a></font>{{/if}}{{/with}}{{/each}}"

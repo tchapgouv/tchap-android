@@ -55,6 +55,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ActivityEntryPoint
 import im.vector.app.core.dialogs.DialogLocker
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
+import im.vector.app.core.error.fatalError
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.observeNotNull
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -260,12 +261,18 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     private fun handleGlobalError(globalError: GlobalError) {
         when (globalError) {
-            is GlobalError.InvalidToken         -> handleInvalidToken(globalError)
+            is GlobalError.InvalidToken -> handleInvalidToken(globalError)
             is GlobalError.ConsentNotGivenError -> displayConsentNotGivenDialog(globalError)
+<<<<<<< HEAD
             is GlobalError.CertificateError     -> handleCertificateError(globalError)
             // Tchap: Custom expired account
             GlobalError.ExpiredAccount            -> handleExpiredAccount()
             is GlobalError.InitialSyncRequest   -> handleInitialSyncRequest(globalError)
+=======
+            is GlobalError.CertificateError -> handleCertificateError(globalError)
+            GlobalError.ExpiredAccount -> Unit // TODO Handle account expiration
+            is GlobalError.InitialSyncRequest -> handleInitialSyncRequest(globalError)
+>>>>>>> v1.4.27-RC2
         }
     }
 
@@ -357,7 +364,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
                 // FIXME I cannot use this anymore :/
                 // finishActivity(PinActivity.PIN_REQUEST_CODE)
             }
-            else               -> {
+            else -> {
                 if (pinLocker.getLiveState().value != PinLocker.State.UNLOCKED) {
                     // Remove the task, to be sure that PIN code will be requested when resumed
                     finishAndRemoveTask()
@@ -623,11 +630,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
                 }
             }.show()
         } else {
-            if (vectorPreferences.failFast()) {
-                error("No CoordinatorLayout to display this snackbar!")
-            } else {
-                Timber.w("No CoordinatorLayout to display this snackbar!")
-            }
+            fatalError("No CoordinatorLayout to display this snackbar!", vectorPreferences.failFast())
         }
     }
 

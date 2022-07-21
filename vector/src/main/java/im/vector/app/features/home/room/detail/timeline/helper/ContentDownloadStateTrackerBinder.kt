@@ -32,8 +32,10 @@ class ContentDownloadStateTrackerBinder @Inject constructor(private val activeSe
 
     private val updateListeners = mutableMapOf<String, ContentDownloadUpdater>()
 
-    fun bind(mxcUrl: String,
-             holder: MessageFileItem.Holder) {
+    fun bind(
+            mxcUrl: String,
+            holder: MessageFileItem.Holder
+    ) {
         activeSessionHolder.getSafeActiveSession()?.also { session ->
             val downloadStateTracker = session.contentDownloadProgressTracker()
             val updateListener = ContentDownloadUpdater(holder)
@@ -63,11 +65,11 @@ private class ContentDownloadUpdater(private val holder: MessageFileItem.Holder)
 
     override fun onDownloadStateUpdate(state: ContentDownloadStateTracker.State) {
         when (state) {
-            ContentDownloadStateTracker.State.Idle           -> handleIdle()
+            ContentDownloadStateTracker.State.Idle -> handleIdle()
             is ContentDownloadStateTracker.State.Downloading -> handleProgress(state)
-            ContentDownloadStateTracker.State.Decrypting     -> handleDecrypting()
-            ContentDownloadStateTracker.State.Success        -> handleSuccess()
-            is ContentDownloadStateTracker.State.Failure     -> handleFailure()
+            ContentDownloadStateTracker.State.Decrypting -> handleDecrypting()
+            ContentDownloadStateTracker.State.Success -> handleSuccess()
+            is ContentDownloadStateTracker.State.Failure -> handleFailure()
         }
     }
 

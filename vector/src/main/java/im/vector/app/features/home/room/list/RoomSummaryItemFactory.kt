@@ -29,6 +29,7 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
@@ -40,6 +41,7 @@ import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
+<<<<<<< HEAD
 class RoomSummaryItemFactory @Inject constructor(private val displayableEventFormatter: DisplayableEventFormatter,
                                                  private val dateFormatter: VectorDateFormatter,
                                                  private val stringProvider: StringProvider,
@@ -47,23 +49,40 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                                                  private val avatarRenderer: AvatarRenderer,
                                                  private val session: Session,
                                                  private val errorFormatter: ErrorFormatter) {
+=======
+class RoomSummaryItemFactory @Inject constructor(
+        private val displayableEventFormatter: DisplayableEventFormatter,
+        private val dateFormatter: VectorDateFormatter,
+        private val stringProvider: StringProvider,
+        private val typingHelper: TypingHelper,
+        private val avatarRenderer: AvatarRenderer,
+        private val errorFormatter: ErrorFormatter
+) {
+>>>>>>> v1.4.27-RC2
 
-    fun create(roomSummary: RoomSummary,
-               roomChangeMembershipStates: Map<String, ChangeMembershipState>,
-               selectedRoomIds: Set<String>,
-               listener: RoomListListener?): VectorEpoxyModel<*> {
+    fun create(
+            roomSummary: RoomSummary,
+            roomChangeMembershipStates: Map<String, ChangeMembershipState>,
+            selectedRoomIds: Set<String>,
+            displayMode: RoomListDisplayMode,
+            listener: RoomListListener?
+    ): VectorEpoxyModel<*> {
         return when (roomSummary.membership) {
             Membership.INVITE -> {
                 val changeMembershipState = roomChangeMembershipStates[roomSummary.roomId] ?: ChangeMembershipState.Unknown
                 createInvitationItem(roomSummary, changeMembershipState, listener)
             }
-            else              -> createRoomItem(roomSummary, selectedRoomIds, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked })
+            else -> createRoomItem(
+                    roomSummary, selectedRoomIds, displayMode, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked }
+            )
         }
     }
 
-    fun createSuggestion(spaceChildInfo: SpaceChildInfo,
-                         suggestedRoomJoiningStates: Map<String, Async<Unit>>,
-                         listener: RoomListListener?): VectorEpoxyModel<*> {
+    fun createSuggestion(
+            spaceChildInfo: SpaceChildInfo,
+            suggestedRoomJoiningStates: Map<String, Async<Unit>>,
+            listener: RoomListListener?
+    ): VectorEpoxyModel<*> {
         val error = (suggestedRoomJoiningStates[spaceChildInfo.childRoomId] as? Fail)?.error
         return SpaceChildInfoItem_()
                 .id("sug_${spaceChildInfo.childRoomId}")
@@ -85,6 +104,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .itemClickListener { listener?.onSuggestedRoomClicked(spaceChildInfo) }
     }
 
+<<<<<<< HEAD
     private fun createInvitationItem(roomSummary: RoomSummary,
                                      changeMembershipState: ChangeMembershipState,
                                      listener: RoomListListener?): VectorEpoxyModel<*> {
@@ -101,6 +121,19 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                     }
                     ?: TchapUtils.computeDisplayNameFromUserId(userId)
             stringProvider.getString(R.string.tchap_room_invited_you, displayName)
+=======
+    private fun createInvitationItem(
+            roomSummary: RoomSummary,
+            changeMembershipState: ChangeMembershipState,
+            listener: RoomListListener?
+    ): VectorEpoxyModel<*> {
+        val secondLine = if (roomSummary.isDirect) {
+            roomSummary.inviterId
+        } else {
+            roomSummary.inviterId?.let {
+                stringProvider.getString(R.string.invited_by, it)
+            }
+>>>>>>> v1.4.27-RC2
         }
 
         return RoomInvitationItem_()
@@ -118,9 +151,11 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
     fun createRoomItem(
             roomSummary: RoomSummary,
             selectedRoomIds: Set<String>,
+            displayMode: RoomListDisplayMode,
             onClick: ((RoomSummary) -> Unit)?,
             onLongClick: ((RoomSummary) -> Boolean)?
     ): VectorEpoxyModel<*> {
+        val subtitle = getSearchResultSubtitle(roomSummary)
         val unreadCount = roomSummary.notificationCount
         val showHighlighted = roomSummary.highlightCount > 0
         val showSelected = selectedRoomIds.contains(roomSummary.roomId)
@@ -131,7 +166,9 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
             latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect, roomSummary.isDirect.not())
             latestEventTime = dateFormatter.format(latestEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
         }
+
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)
+<<<<<<< HEAD
         return RoomSummaryItem_()
                 .id(roomSummary.roomId)
                 .avatarRenderer(avatarRenderer)
@@ -156,5 +193,84 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .itemClickListener { onClick?.invoke(roomSummary) }
                 // Tchap attributes
                 .roomType(RoomUtils.getRoomType(roomSummary))
+=======
+
+        return if (subtitle.isBlank() && displayMode == RoomListDisplayMode.FILTERED) {
+            createCenteredRoomSummaryItem(roomSummary, displayMode, showSelected, unreadCount, onClick, onLongClick)
+        } else {
+            createRoomSummaryItem(
+                    roomSummary, displayMode, subtitle, latestEventTime, typingMessage,
+                    latestFormattedEvent, showHighlighted, showSelected, unreadCount, onClick, onLongClick
+            )
+        }
+    }
+
+    private fun createRoomSummaryItem(
+            roomSummary: RoomSummary,
+            displayMode: RoomListDisplayMode,
+            subtitle: String,
+            latestEventTime: String,
+            typingMessage: String,
+            latestFormattedEvent: CharSequence,
+            showHighlighted: Boolean,
+            showSelected: Boolean,
+            unreadCount: Int,
+            onClick: ((RoomSummary) -> Unit)?,
+            onLongClick: ((RoomSummary) -> Boolean)?
+    ) = RoomSummaryItem_()
+            .id(roomSummary.roomId)
+            .avatarRenderer(avatarRenderer)
+            // We do not display shield in the room list anymore
+            // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
+            .displayMode(displayMode)
+            .subtitle(subtitle)
+            .isPublic(roomSummary.isPublic)
+            .showPresence(roomSummary.isDirect)
+            .userPresence(roomSummary.directUserPresence)
+            .matrixItem(roomSummary.toMatrixItem())
+            .lastEventTime(latestEventTime)
+            .typingMessage(typingMessage)
+            .lastFormattedEvent(latestFormattedEvent.toEpoxyCharSequence())
+            .showHighlighted(showHighlighted)
+            .showSelected(showSelected)
+            .hasFailedSending(roomSummary.hasFailedSending)
+            .unreadNotificationCount(unreadCount)
+            .hasUnreadMessage(roomSummary.hasUnreadMessages)
+            .hasDraft(roomSummary.userDrafts.isNotEmpty())
+            .itemLongClickListener { _ -> onLongClick?.invoke(roomSummary) ?: false }
+            .itemClickListener { onClick?.invoke(roomSummary) }
+
+    private fun createCenteredRoomSummaryItem(
+            roomSummary: RoomSummary,
+            displayMode: RoomListDisplayMode,
+            showSelected: Boolean,
+            unreadCount: Int,
+            onClick: ((RoomSummary) -> Unit)?,
+            onLongClick: ((RoomSummary) -> Boolean)?
+    ) = RoomSummaryItemCentered_()
+            .id(roomSummary.roomId)
+            .avatarRenderer(avatarRenderer)
+            // We do not display shield in the room list anymore
+            // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
+            .displayMode(displayMode)
+            .isPublic(roomSummary.isPublic)
+            .showPresence(roomSummary.isDirect)
+            .userPresence(roomSummary.directUserPresence)
+            .matrixItem(roomSummary.toMatrixItem())
+            .showSelected(showSelected)
+            .hasFailedSending(roomSummary.hasFailedSending)
+            .unreadNotificationCount(unreadCount)
+            .hasUnreadMessage(roomSummary.hasUnreadMessages)
+            .hasDraft(roomSummary.userDrafts.isNotEmpty())
+            .itemLongClickListener { _ -> onLongClick?.invoke(roomSummary) ?: false }
+            .itemClickListener { onClick?.invoke(roomSummary) }
+
+    private fun getSearchResultSubtitle(roomSummary: RoomSummary): String {
+        val userId = roomSummary.directUserId
+        val spaceName = roomSummary.flattenParents.lastOrNull()?.name
+        val canonicalAlias = roomSummary.canonicalAlias
+
+        return (userId ?: spaceName ?: canonicalAlias).orEmpty()
+>>>>>>> v1.4.27-RC2
     }
 }

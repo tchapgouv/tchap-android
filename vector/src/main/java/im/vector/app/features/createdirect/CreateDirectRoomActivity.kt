@@ -76,11 +76,11 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                 .stream()
                 .onEach { action ->
                     when (action) {
-                        UserListSharedAction.Close                 -> finish()
-                        UserListSharedAction.GoBack                -> onBackPressed()
+                        UserListSharedAction.Close -> finish()
+                        UserListSharedAction.GoBack -> onBackPressed()
                         is UserListSharedAction.OnMenuItemSelected -> onMenuItemSelected(action)
-                        UserListSharedAction.OpenPhoneBook         -> openPhoneBook()
-                        UserListSharedAction.AddByQrCode           -> openAddByQrCode()
+                        UserListSharedAction.OpenPhoneBook -> openPhoneBook()
+                        UserListSharedAction.AddByQrCode -> openAddByQrCode()
                     }
                 }
                 .launchIn(lifecycleScope)
@@ -116,7 +116,11 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     Toast.makeText(this, R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
                     finish()
                 }
+<<<<<<< HEAD
                 CreateDirectRoomViewEvents.DmSelf                     -> {
+=======
+                CreateDirectRoomViewEvents.DmSelf -> {
+>>>>>>> v1.4.27-RC2
                     Toast.makeText(this, R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
                     finish()
                 }
@@ -142,14 +146,14 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
         qrViewModel.observeViewEvents {
             when (it) {
-                is QrCodeScannerEvents.CodeParsed  -> {
+                is QrCodeScannerEvents.CodeParsed -> {
                     viewModel.handle(CreateDirectRoomAction.QrScannedAction(it.result))
                 }
                 is QrCodeScannerEvents.ParseFailed -> {
                     Toast.makeText(this, R.string.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
                     finish()
                 }
-                else                               -> Unit
+                else -> Unit
             }
         }
     }
@@ -191,6 +195,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         }
     }
 
+<<<<<<< HEAD
     // Tchap: Not used in Tchap
 //    private fun renderCreateAndInviteState(state: Async<String>) {
 //        when (state) {
@@ -200,6 +205,16 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 //            else       -> Unit
 //        }
 //    }
+=======
+    private fun renderCreateAndInviteState(state: Async<String>) {
+        when (state) {
+            is Loading -> renderCreationLoading()
+            is Success -> renderCreationSuccess(state())
+            is Fail -> renderCreationFailure(state.error)
+            else -> Unit
+        }
+    }
+>>>>>>> v1.4.27-RC2
 
     private fun renderCreationLoading() {
         updateWaitingView(WaitingViewData(getString(R.string.creating_direct_room)))
@@ -208,7 +223,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     private fun renderCreationFailure(error: Throwable) {
         hideWaitingView()
         when (error) {
-            is CreateRoomFailure.CreatedWithTimeout           -> {
+            is CreateRoomFailure.CreatedWithTimeout -> {
                 finish()
             }
             is CreateRoomFailure.CreatedWithFederationFailure -> {
@@ -218,7 +233,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                         .setPositiveButton(R.string.ok) { _, _ -> finish() }
                         .show()
             }
-            else                                              -> {
+            else -> {
                 val message = if (error is Failure.ServerError && error.httpCode == HttpURLConnection.HTTP_INTERNAL_ERROR /*500*/) {
                     // This error happen if the invited userId does not exist.
                     getString(R.string.create_room_dm_failure)

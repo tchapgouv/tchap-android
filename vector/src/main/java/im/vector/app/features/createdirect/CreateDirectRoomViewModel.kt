@@ -63,9 +63,13 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
     override fun handle(action: CreateDirectRoomAction) {
         when (action) {
             is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onSubmitInvitees(action.selections)
+<<<<<<< HEAD
             is CreateDirectRoomAction.QrScannedAction                  -> onCodeParsed(action)
             is CreateDirectRoomAction.InviteByEmail                    -> handleIndividualInviteByEmail(action.email)
             is CreateDirectRoomAction.CreateDirectMessageByUserId      -> handleCreateDirectMessageByUserId(action.userId)
+=======
+            is CreateDirectRoomAction.QrScannedAction -> onCodeParsed(action)
+>>>>>>> v1.4.27-RC2
         }
     }
 
@@ -172,6 +176,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
         }
     }
 
+<<<<<<< HEAD
     private fun handleIndividualInviteByEmail(email: String) {
         setState { copy(isLoading = true) }
         val existingRoom = session.roomService().getExistingDirectRoomWithUser(email)
@@ -180,6 +185,19 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
             val userId = tryOrNull { session.identityService().lookUp(listOf(ThreePid.Email(email))) }
                     ?.find { it.threePid.value == email }
                     ?.matrixId
+=======
+            val roomParams = CreateRoomParams()
+                    .apply {
+                        selections.forEach {
+                            when (it) {
+                                is PendingSelection.UserPendingSelection -> invitedUserIds.add(it.user.userId)
+                                is PendingSelection.ThreePidPendingSelection -> invite3pids.add(it.threePid)
+                            }
+                        }
+                        setDirectMessage()
+                        enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
+                    }
+>>>>>>> v1.4.27-RC2
 
             // Email matches with an existing account, notify the UI with the resulting user
             if (userId != null) {

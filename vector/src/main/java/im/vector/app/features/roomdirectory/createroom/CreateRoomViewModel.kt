@@ -40,7 +40,7 @@ import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
@@ -105,7 +105,7 @@ class CreateRoomViewModel @AssistedInject constructor(
     private fun initHomeServerName() {
         setState {
             copy(
-                    homeServerName = session.myUserId.getDomain()
+                    homeServerName = session.myUserId.getServerName()
             )
         }
     }
@@ -140,17 +140,24 @@ class CreateRoomViewModel @AssistedInject constructor(
 
     override fun handle(action: CreateRoomAction) {
         when (action) {
+<<<<<<< HEAD
             is CreateRoomAction.SetAvatar             -> setAvatar(action)
             is CreateRoomAction.SetName               -> setName(action)
             is CreateRoomAction.SetTopic              -> setTopic(action)
             is CreateRoomAction.SetVisibility         -> setVisibility(action)
             is CreateRoomAction.SetTchapRoomType      -> setTchapRoomType(action)
+=======
+            is CreateRoomAction.SetAvatar -> setAvatar(action)
+            is CreateRoomAction.SetName -> setName(action)
+            is CreateRoomAction.SetTopic -> setTopic(action)
+            is CreateRoomAction.SetVisibility -> setVisibility(action)
+>>>>>>> v1.4.27-RC2
             is CreateRoomAction.SetRoomAliasLocalPart -> setRoomAliasLocalPart(action)
-            is CreateRoomAction.SetIsEncrypted        -> setIsEncrypted(action)
-            is CreateRoomAction.Create                -> doCreateRoom()
-            CreateRoomAction.Reset                    -> doReset()
-            CreateRoomAction.ToggleShowAdvanced       -> toggleShowAdvanced()
-            is CreateRoomAction.DisableFederation     -> disableFederation(action)
+            is CreateRoomAction.SetIsEncrypted -> setIsEncrypted(action)
+            is CreateRoomAction.Create -> doCreateRoom()
+            CreateRoomAction.Reset -> doReset()
+            CreateRoomAction.ToggleShowAdvanced -> toggleShowAdvanced()
+            is CreateRoomAction.DisableFederation -> disableFederation(action)
         }
     }
 
@@ -193,7 +200,7 @@ class CreateRoomViewModel @AssistedInject constructor(
 
     private fun setVisibility(action: CreateRoomAction.SetVisibility) = setState {
         when (action.rule) {
-            RoomJoinRules.PUBLIC     -> {
+            RoomJoinRules.PUBLIC -> {
                 copy(
                         roomJoinRules = RoomJoinRules.PUBLIC,
                         // Reset any error in the form about alias
@@ -212,7 +219,7 @@ class CreateRoomViewModel @AssistedInject constructor(
 //            RoomJoinRules.INVITE,
 //            RoomJoinRules.KNOCK,
 //            RoomJoinRules.PRIVATE,
-            else                     -> {
+            else -> {
                 // default to invite
                 copy(
                         roomJoinRules = RoomJoinRules.INVITE,
@@ -279,6 +286,7 @@ class CreateRoomViewModel @AssistedInject constructor(
                         )
                     }
 
+<<<<<<< HEAD
                     // Tchap: We use a custom configuration
 //                    when (state.roomJoinRules) {
 //                        RoomJoinRules.PUBLIC     -> {
@@ -319,6 +327,47 @@ class CreateRoomViewModel @AssistedInject constructor(
 //                    if (shouldEncrypt) {
 //                        enableEncryption()
 //                    }
+=======
+                    when (state.roomJoinRules) {
+                        RoomJoinRules.PUBLIC -> {
+                            // Directory visibility
+                            visibility = RoomDirectoryVisibility.PUBLIC
+                            // Preset
+                            preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
+                            roomAliasName = state.aliasLocalPart
+                        }
+                        RoomJoinRules.RESTRICTED -> {
+                            state.parentSpaceId?.let {
+                                featurePreset = RestrictedRoomPreset(
+                                        session.homeServerCapabilitiesService().getHomeServerCapabilities(),
+                                        listOf(RoomJoinRulesAllowEntry.restrictedToRoom(state.parentSpaceId))
+                                )
+                            }
+                        }
+//                        RoomJoinRules.KNOCK      ->
+//                        RoomJoinRules.PRIVATE    ->
+//                        RoomJoinRules.INVITE
+                        else -> {
+                            // by default create invite only
+                            // Directory visibility
+                            visibility = RoomDirectoryVisibility.PRIVATE
+                            // Preset
+                            preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
+                        }
+                    }
+                    // Disabling federation
+                    disableFederation = state.disableFederation
+
+                    // Encryption
+                    val shouldEncrypt = when (state.roomJoinRules) {
+                        // we ignore the isEncrypted for public room as the switch is hidden in this case
+                        RoomJoinRules.PUBLIC -> false
+                        else -> state.isEncrypted ?: state.defaultEncrypted[state.roomJoinRules].orFalse()
+                    }
+                    if (shouldEncrypt) {
+                        enableEncryption()
+                    }
+>>>>>>> v1.4.27-RC2
                 }
 
         // TODO Should this be non-cancellable?

@@ -63,8 +63,10 @@ sealed class BannerState {
     object BackingUp : BannerState()
 }
 
-class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialState: ServerBackupStatusViewState,
-                                                              private val session: Session) :
+class ServerBackupStatusViewModel @AssistedInject constructor(
+        @Assisted initialState: ServerBackupStatusViewState,
+        private val session: Session
+) :
         VectorViewModel<ServerBackupStatusViewState, EmptyAction, EmptyViewEvents>(initialState), KeysBackupStateListener {
 
     @AssistedFactory
@@ -89,7 +91,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
 
     fun init() {
         session.cryptoService().keysBackupService().addListener(this)
-        keysBackupState.value = session.cryptoService().keysBackupService().state
+        keysBackupState.value = session.cryptoService().keysBackupService().getState()
         val liveUserAccountData = session.flow().liveUserAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME))
         val liveCrossSigningInfo = session.flow().liveCrossSigningInfo(session.myUserId)
         val liveCrossSigningPrivateKeys = session.flow().liveCrossSigningPrivateKeys()
@@ -99,7 +101,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
                 // 4S is already setup sp we should not display anything
                 return@combine when (keyBackupState) {
                     KeysBackupState.BackingUp -> BannerState.BackingUp
-                    else                      -> BannerState.Hidden
+                    else -> BannerState.Hidden
                 }
             }
 
@@ -124,7 +126,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
                 }
 
         viewModelScope.launch {
-            keyBackupFlow.tryEmit(session.cryptoService().keysBackupService().state)
+            keyBackupFlow.tryEmit(session.cryptoService().keysBackupService().getState())
         }
     }
 
@@ -156,7 +158,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
 
     override fun onStateChange(newState: KeysBackupState) {
         viewModelScope.launch {
-            keyBackupFlow.tryEmit(session.cryptoService().keysBackupService().state)
+            keyBackupFlow.tryEmit(session.cryptoService().keysBackupService().getState())
         }
         keysBackupState.value = newState
     }

@@ -70,12 +70,21 @@ class NotificationAreaView @JvmOverloads constructor(
         cleanUp()
         state = newState
         when (newState) {
+<<<<<<< HEAD
             State.Initial                       -> Unit
             is State.Default                    -> renderDefault()
             is State.Hidden                     -> renderHidden()
             is State.NoPermissionToPost         -> renderNoPermissionToPost(newState.message)
             is State.UnsupportedAlgorithm       -> renderUnsupportedAlgorithm(newState)
             is State.Tombstone                  -> renderTombstone()
+=======
+            State.Initial -> Unit
+            is State.Default -> renderDefault()
+            is State.Hidden -> renderHidden()
+            is State.NoPermissionToPost -> renderNoPermissionToPost()
+            is State.UnsupportedAlgorithm -> renderUnsupportedAlgorithm(newState)
+            is State.Tombstone -> renderTombstone()
+>>>>>>> v1.4.27-RC2
             is State.ResourceLimitExceededError -> renderResourceLimitExceededError(newState)
         }
     }

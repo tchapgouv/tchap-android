@@ -102,6 +102,20 @@ class PublicRoomsFragment @Inject constructor(
         super.onDestroyView()
     }
 
+<<<<<<< HEAD
+=======
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_room_directory_change_protocol -> {
+                sharedActionViewModel.post(RoomDirectorySharedAction.ChangeProtocol)
+                true
+            }
+            else ->
+                super.onOptionsItemSelected(item)
+        }
+    }
+
+>>>>>>> v1.4.27-RC2
     private fun setupRecyclerView() {
         views.publicRoomsList.trackItemsVisibilityChange()
         views.publicRoomsList.configureWith(publicRoomsController)
@@ -136,7 +150,7 @@ class PublicRoomsFragment @Inject constructor(
                             trigger = ViewRoom.Trigger.RoomDirectory
                     )
                 }
-                else             -> {
+                else -> {
                     // ROOM PREVIEW
                     navigator.openRoomPreview(requireActivity(), publicRoom, roomDirectoryData)
                 }

@@ -97,7 +97,7 @@ class RoomProfileViewModel @AssistedInject constructor(
     }
 
     private fun observeRoomCreateContent(flowRoom: FlowRoom) {
-        flowRoom.liveStateEvent(EventType.STATE_ROOM_CREATE, QueryStringValue.NoCondition)
+        flowRoom.liveStateEvent(EventType.STATE_ROOM_CREATE, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<RoomCreateContent>() }
                 .unwrap()
                 .execute { async ->
@@ -107,7 +107,7 @@ class RoomProfileViewModel @AssistedInject constructor(
                             recommendedRoomVersion = room.roomVersionService().getRecommendedVersion(),
                             isUsingUnstableRoomVersion = room.roomVersionService().isUsingUnstableRoomVersion(),
                             canUpgradeRoom = room.roomVersionService().userMayUpgradeRoom(session.myUserId),
-                            isTombstoned = room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE) != null
+                            isTombstoned = room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE, QueryStringValue.IsEmpty) != null
                     )
                 }
     }
@@ -169,12 +169,12 @@ class RoomProfileViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomProfileAction) {
         when (action) {
-            is RoomProfileAction.EnableEncryption            -> handleEnableEncryption()
-            RoomProfileAction.LeaveRoom                      -> handleLeaveRoom()
+            is RoomProfileAction.EnableEncryption -> handleEnableEncryption()
+            RoomProfileAction.LeaveRoom -> handleLeaveRoom()
             is RoomProfileAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
-            is RoomProfileAction.ShareRoomProfile            -> handleShareRoomProfile()
-            RoomProfileAction.CreateShortcut                 -> handleCreateShortcut()
-            RoomProfileAction.RestoreEncryptionState         -> restoreEncryptionState()
+            is RoomProfileAction.ShareRoomProfile -> handleShareRoomProfile()
+            RoomProfileAction.CreateShortcut -> handleCreateShortcut()
+            RoomProfileAction.RestoreEncryptionState -> restoreEncryptionState()
         }
     }
 

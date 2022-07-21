@@ -40,7 +40,11 @@ class SharedPreferencesUiStateRepository @Inject constructor(
         return when (sharedPreferences.getInt(KEY_DISPLAY_MODE, VALUE_DISPLAY_MODE_CATCHUP)) {
             VALUE_DISPLAY_MODE_PEOPLE -> RoomListDisplayMode.PEOPLE
             VALUE_DISPLAY_MODE_ROOMS -> RoomListDisplayMode.ROOMS
+<<<<<<< HEAD
             else                      -> if (vectorPreferences.labAddNotificationTab()) {
+=======
+            else -> if (vectorPreferences.labAddNotificationTab()) {
+>>>>>>> v1.4.27-RC2
                 RoomListDisplayMode.NOTIFICATIONS
             } else {
                 RoomListDisplayMode.ROOMS
@@ -54,8 +58,8 @@ class SharedPreferencesUiStateRepository @Inject constructor(
                     KEY_DISPLAY_MODE,
                     when (displayMode) {
                         RoomListDisplayMode.PEOPLE -> VALUE_DISPLAY_MODE_PEOPLE
-                        RoomListDisplayMode.ROOMS  -> VALUE_DISPLAY_MODE_ROOMS
-                        else                       -> VALUE_DISPLAY_MODE_CATCHUP
+                        RoomListDisplayMode.ROOMS -> VALUE_DISPLAY_MODE_ROOMS
+                        else -> VALUE_DISPLAY_MODE_CATCHUP
                     }
             )
         }
