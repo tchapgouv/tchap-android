@@ -35,9 +35,11 @@ import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class PublicRoomsController @Inject constructor(private val stringProvider: StringProvider,
-                                                private val avatarRenderer: AvatarRenderer,
-                                                private val errorFormatter: ErrorFormatter) : TypedEpoxyController<PublicRoomsViewState>() {
+class PublicRoomsController @Inject constructor(
+        private val stringProvider: StringProvider,
+        private val avatarRenderer: AvatarRenderer,
+        private val errorFormatter: ErrorFormatter
+) : TypedEpoxyController<PublicRoomsViewState>() {
 
     var callback: Callback? = null
 
@@ -95,10 +97,10 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
             val roomChangeMembership = viewState.changeMembershipStates[publicRoom.roomId] ?: ChangeMembershipState.Unknown
             val isJoined = viewState.joinedRoomsIds.contains(publicRoom.roomId) || roomChangeMembership is ChangeMembershipState.Joined
             val joinState = when {
-                isJoined                                                    -> JoinState.JOINED
-                roomChangeMembership is ChangeMembershipState.Joining       -> JoinState.JOINING
+                isJoined -> JoinState.JOINED
+                roomChangeMembership is ChangeMembershipState.Joining -> JoinState.JOINING
                 roomChangeMembership is ChangeMembershipState.FailedJoining -> JoinState.JOINING_ERROR
-                else                                                        -> JoinState.NOT_JOINED
+                else -> JoinState.NOT_JOINED
             }
             joinState(joinState)
 
@@ -116,9 +118,9 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
         val isAlias = MatrixPatterns.isRoomAlias(roomIdOrAlias) && !publicRooms.any { it.key.canonicalAlias == roomIdOrAlias }
         val isRoomId = !isAlias && MatrixPatterns.isRoomId(roomIdOrAlias) && !publicRooms.any { it.key.roomId == roomIdOrAlias }
         val roomItem = when {
-            isAlias  -> MatrixItem.RoomAliasItem(roomIdOrAlias, roomIdOrAlias)
+            isAlias -> MatrixItem.RoomAliasItem(roomIdOrAlias, roomIdOrAlias)
             isRoomId -> MatrixItem.RoomItem(roomIdOrAlias)
-            else     -> null
+            else -> null
         }
         val host = this@PublicRoomsController
         return roomItem?.let {

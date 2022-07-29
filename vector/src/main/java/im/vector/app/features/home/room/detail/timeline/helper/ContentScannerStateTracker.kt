@@ -101,6 +101,8 @@ class ContentScannerStateTracker @Inject constructor(private val activeSessionHo
     }
 
     fun clear() {
-        lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
+        if (lifecycleRegistry.currentState.isAtLeast(Lifecycle.State.CREATED)) {
+            lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
+        }
     }
 }

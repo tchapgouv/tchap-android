@@ -43,6 +43,8 @@ object TimelineDisplayableEvents {
             EventType.CALL_REJECT,
             EventType.ENCRYPTED,
             EventType.STATE_ROOM_ENCRYPTION,
+            // Tchap: Unused in Tchap
+//            EventType.STATE_ROOM_GUEST_ACCESS,
             EventType.STATE_ROOM_THIRD_PARTY_INVITE,
             EventType.STICKER,
             EventType.STATE_ROOM_CREATE,
@@ -60,6 +62,8 @@ fun TimelineEvent.canBeMerged(): Boolean {
 
 fun TimelineEvent.isRoomConfiguration(roomCreatorUserId: String?): Boolean {
     return root.isStateEvent() && when (root.getClearType()) {
+        // Tchap: Unused in Tchap
+//        EventType.STATE_ROOM_GUEST_ACCESS,
         EventType.STATE_ROOM_HISTORY_VISIBILITY,
         EventType.STATE_ROOM_JOIN_RULES,
         EventType.STATE_ROOM_NAME,
@@ -69,11 +73,11 @@ fun TimelineEvent.isRoomConfiguration(roomCreatorUserId: String?): Boolean {
         EventType.STATE_ROOM_CANONICAL_ALIAS,
         EventType.STATE_ROOM_POWER_LEVELS,
         EventType.STATE_ROOM_ENCRYPTION -> true
-        EventType.STATE_ROOM_MEMBER     -> {
+        EventType.STATE_ROOM_MEMBER -> {
             // Keep only room member events regarding the room creator (when he joined the room),
             // but exclude events where the room creator invite others, or where others join
             roomCreatorUserId != null && root.stateKey == roomCreatorUserId
         }
-        else                            -> false
+        else -> false
     }
 }

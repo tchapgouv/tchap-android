@@ -67,6 +67,7 @@
     <im.vector.app.core.preference.VectorSwitchPreference
         android:defaultValue="@bool/enable_location_sharing"
         android:key="SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE"
-        android:title="@string/labs_render_locations_in_timeline" />
+        android:summary="@string/labs_enable_live_location_summary"
+        android:title="@string/labs_enable_live_location" />
 
 </androidx.preference.PreferenceScreen>
