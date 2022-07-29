@@ -35,5 +35,5 @@ object Config {
      * - Changing the value from `false` to `true` will let the user be able to select an external UnifiedPush distributor;
      * - Changing the value from `true` to `false` will force the app to return to the background sync / Firebase Push.
      */
-    const val ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS = true
+    const val ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS = false
 }
