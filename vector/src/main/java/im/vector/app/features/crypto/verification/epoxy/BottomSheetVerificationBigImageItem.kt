@@ -16,6 +16,7 @@
  */
 package im.vector.app.features.crypto.verification.epoxy
 
+import android.view.View
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
@@ -36,6 +37,7 @@ abstract class BottomSheetVerificationBigImageItem : VectorEpoxyModel<BottomShee
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.image.render(roomEncryptionTrustLevel, borderLess = true)
+        holder.image.visibility = View.VISIBLE
     }
 
     class Holder : VectorEpoxyHolder() {
