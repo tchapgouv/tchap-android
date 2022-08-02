@@ -22,9 +22,11 @@ import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
+import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationBigImageItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
 class VerificationConclusionController @Inject constructor(
@@ -59,11 +61,10 @@ class VerificationConclusionController @Inject constructor(
                     )
                 }
 
-                // Tchap: Hide shield
-//                bottomSheetVerificationBigImageItem {
-//                    id("image")
-//                    roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Trusted)
-//                }
+                bottomSheetVerificationBigImageItem {
+                    id("image")
+                    roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Trusted)
+                }
 
                 bottomDone()
             }
@@ -73,11 +74,10 @@ class VerificationConclusionController @Inject constructor(
                     notice(host.stringProvider.getString(R.string.tchap_verification_conclusion_not_secure).toEpoxyCharSequence())
                 }
 
-                // Tchap: Hide shield
-//                bottomSheetVerificationBigImageItem {
-//                    id("image")
-//                    roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Warning)
-//                }
+                bottomSheetVerificationBigImageItem {
+                    id("image")
+                    roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Warning)
+                }
 
                 bottomSheetVerificationNoticeItem {
                     id("warning_notice")
