@@ -1,3 +1,26 @@
+Changes in Tchap 2.4.0 (2022-08-03)
+===================================
+
+Improvements 🙌
+--------------
+ - Using a secondary button style in the case of binary actions ([#668](https://github.com/tchapgouv/tchap-android-v2/issues/668))
+
+Bugfixes 🐛
+----------
+ - [Rageshake report] Replace Element by Tchap ([#597](https://github.com/tchapgouv/tchap-android-v2/issues/597))
+ - Display shield at the end of device verification (with and without cross-signing) ([#674](https://github.com/tchapgouv/tchap-android-v2/issues/674))
+ - Remove this room from forum list is not displayed ([#692](https://github.com/tchapgouv/tchap-android-v2/issues/692))
+
+Other changes
+-------------
+ - Rebase against Element-Android v1.4.27-RC2 ([#666](https://github.com/tchapgouv/tchap-android-v2/issues/666))
+ - Rebase against Element-Android v1.4.16 ([#596](https://github.com/tchapgouv/tchap-android-v2/issues/596))
+ - Rebase against Element-Android v1.4.14 ([#584](https://github.com/tchapgouv/tchap-android-v2/issues/584))
+ - Rebase against Element-Android v1.4.13 ([#600](https://github.com/tchapgouv/tchap-android-v2/issues/600))
+ - Skip dependabot GH action ([#648](https://github.com/tchapgouv/tchap-android-v2/issues/648))
+ - Add New Targets to build ([#653](https://github.com/tchapgouv/tchap-android-v2/issues/653))
+
+
 Changes in Tchap 2.3.3 (2022-07-12)
 ===================================
 
