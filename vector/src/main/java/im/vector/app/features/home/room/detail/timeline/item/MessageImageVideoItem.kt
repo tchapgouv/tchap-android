@@ -40,6 +40,7 @@ import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.themes.ThemeUtils
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.room.model.message.MessageType
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Holder>() {
@@ -93,7 +94,17 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         ViewCompat.setTransitionName(holder.imageView, "imagePreview_${id()}")
         holder.mediaContentView.onClick(attributes.itemClickListener)
         holder.mediaContentView.setOnLongClickListener(attributes.itemLongClickListener)
-        holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
+
+        val isImageMessage = attributes.informationData.messageType == MessageType.MSGTYPE_IMAGE
+        val autoplayAnimatedImages = attributes.autoplayAnimatedImages
+
+        holder.playContentView.visibility = if (playable && isImageMessage && autoplayAnimatedImages) {
+            View.GONE
+        } else if (playable) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
     }
 
     override fun unbind(holder: Holder) {

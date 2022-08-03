@@ -42,7 +42,7 @@ class TypingHelper @Inject constructor(private val stringProvider: StringProvide
                         getDisplayName(typingUsers[0].disambiguatedDisplayName),
                         getDisplayName(typingUsers[1].disambiguatedDisplayName)
                 )
-            else                  ->
+            else ->
                 stringProvider.getString(
                         R.string.room_many_users_are_typing,
                         getDisplayName(typingUsers[0].disambiguatedDisplayName),
@@ -57,10 +57,14 @@ class TypingHelper @Inject constructor(private val stringProvider: StringProvide
         return when {
             typingUsers.isEmpty() -> ""
             typingUsers.size == 1 -> typingUsers[0].disambiguatedDisplayName
-            typingUsers.size == 2 -> stringProvider.getString(R.string.room_notification_two_users_are_typing,
-                    typingUsers[0].disambiguatedDisplayName, typingUsers[1].disambiguatedDisplayName)
-            else                  -> stringProvider.getString(R.string.room_notification_more_than_two_users_are_typing,
-                    typingUsers[0].disambiguatedDisplayName, typingUsers[1].disambiguatedDisplayName)
+            typingUsers.size == 2 -> stringProvider.getString(
+                    R.string.room_notification_two_users_are_typing,
+                    typingUsers[0].disambiguatedDisplayName, typingUsers[1].disambiguatedDisplayName
+            )
+            else -> stringProvider.getString(
+                    R.string.room_notification_more_than_two_users_are_typing,
+                    typingUsers[0].disambiguatedDisplayName, typingUsers[1].disambiguatedDisplayName
+            )
         }
     }
 }

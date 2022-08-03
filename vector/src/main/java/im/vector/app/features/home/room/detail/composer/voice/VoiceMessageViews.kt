@@ -35,7 +35,7 @@ import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewVoiceMessageRecorderBinding
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.DraggingState
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingUiState
-import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.voice.AudioWaveformView
 
@@ -65,7 +65,7 @@ class VoiceMessageViews(
                 MotionEvent.ACTION_DOWN -> {
                     actions.onWaveformClicked()
                 }
-                MotionEvent.ACTION_UP   -> {
+                MotionEvent.ACTION_UP -> {
                     val percentage = getTouchedPositionPercentage(motionEvent, view)
                     actions.onVoiceWaveformTouchedUp(percentage)
                 }
@@ -95,7 +95,7 @@ class VoiceMessageViews(
                     actions.onRequestRecording()
                     true
                 }
-                MotionEvent.ACTION_UP   -> {
+                MotionEvent.ACTION_UP -> {
                     actions.onMicButtonReleased()
                     true
                 }
@@ -103,7 +103,7 @@ class VoiceMessageViews(
                     actions.onMicButtonDrag { currentState -> draggableStateProcessor.process(event, currentState) }
                     true
                 }
-                else                    -> false
+                else -> false
             }
         }
     }
@@ -303,7 +303,7 @@ class VoiceMessageViews(
         views.voicePlaybackWaveform.post { views.voicePlaybackWaveform.clear() }
     }
 
-    fun renderPlaying(state: VoiceMessagePlaybackTracker.Listener.State.Playing) {
+    fun renderPlaying(state: AudioMessagePlaybackTracker.Listener.State.Playing) {
         views.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
         views.voicePlaybackControlButton.contentDescription = resources.getString(R.string.a11y_pause_voice_message)
         val formattedTimerText = DateUtils.formatElapsedTime((state.playbackTime / 1000).toLong())
@@ -345,10 +345,10 @@ class VoiceMessageViews(
         }
     }
 
-    fun renderRecordingWaveform(amplitudeList: Array<Int>) {
+    fun renderRecordingWaveform(amplitudeList: List<Int>) {
         views.voicePlaybackWaveform.doOnLayout { waveFormView ->
             val waveformColor = ThemeUtils.getColor(waveFormView.context, R.attr.vctr_content_quaternary)
-            amplitudeList.iterator().forEach {
+            amplitudeList.forEach {
                 (waveFormView as AudioWaveformView).add(AudioWaveformView.FFT(it.toFloat(), waveformColor))
             }
         }

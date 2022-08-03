@@ -25,8 +25,8 @@ internal interface ThreePidPlatformDiscoverAPI {
     /**
      * Get the Tchap platform configuration from a medium. This can be used both for registration & login.
      *
-     * @param address  the address.
-     * @param medium   the medium.
+     * @param address the address.
+     * @param medium the medium.
      */
     @GET("_matrix/identity/api/v1/info")
     suspend fun info(@Query("address") address: String, @Query("medium") medium: String): Platform

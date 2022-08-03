@@ -36,7 +36,7 @@ enum class ConclusionState {
 }
 
 class VerificationConclusionViewModel(initialState: VerificationConclusionViewState) :
-    VectorViewModel<VerificationConclusionViewState, EmptyAction, EmptyViewEvents>(initialState) {
+        VectorViewModel<VerificationConclusionViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     companion object : MavericksViewModelFactory<VerificationConclusionViewModel, VerificationConclusionViewState> {
 
@@ -51,7 +51,7 @@ class VerificationConclusionViewModel(initialState: VerificationConclusionViewSt
                 CancelCode.MismatchedKeys -> {
                     VerificationConclusionViewState(ConclusionState.WARNING, args.isMe)
                 }
-                else                      -> {
+                else -> {
                     VerificationConclusionViewState(
                             if (args.isSuccessFull) ConclusionState.SUCCESS else ConclusionState.CANCELLED,
                             args.isMe

@@ -22,9 +22,12 @@ import com.squareup.moshi.JsonClass
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.where
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
+import org.matrix.android.sdk.api.session.crypto.crosssigning.UserTrustResult
+import org.matrix.android.sdk.api.session.crypto.crosssigning.isCrossSignedVerified
+import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.CrossSigningKeysMapper
@@ -146,7 +149,7 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
             val trusts = otherInfos.mapValues { entry ->
                 when (entry.key) {
                     myUserId -> myTrustResult
-                    else     -> {
+                    else -> {
                         crossSigningService.checkOtherMSKTrusted(myCrossSigningInfo, entry.value).also {
                             Timber.v("## CrossSigning - user:${entry.key} result:$it")
                         }
@@ -273,10 +276,12 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                 }
     }
 
-    private fun computeRoomShield(myCrossSigningInfo: MXCrossSigningInfo?,
-                                  cryptoRealm: Realm,
-                                  activeMemberUserIds: List<String>,
-                                  roomSummaryEntity: RoomSummaryEntity): RoomEncryptionTrustLevel {
+    private fun computeRoomShield(
+            myCrossSigningInfo: MXCrossSigningInfo?,
+            cryptoRealm: Realm,
+            activeMemberUserIds: List<String>,
+            roomSummaryEntity: RoomSummaryEntity
+    ): RoomEncryptionTrustLevel {
         Timber.v("## CrossSigning - computeRoomShield ${roomSummaryEntity.roomId} -> ${activeMemberUserIds.logLimit()}")
         // The set of “all users” depends on the type of room:
         // For regular / topic rooms which have more than 2 members (including yourself) are considered when decorating a room

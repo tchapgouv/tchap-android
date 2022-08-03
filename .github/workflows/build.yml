@@ -9,8 +9,9 @@ on:
 # Enrich gradle.properties for CI/CD
 env:
   CI_GRADLE_ARG_PROPERTIES: >
-    -Porg.gradle.jvmargs=-Xmx2g
+    -Porg.gradle.jvmargs=-Xmx4g
     -Porg.gradle.parallel=false
+    --no-daemon
 
 jobs:
   debug:
@@ -20,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ GplayBtchapWithoutvoipWithpinning, FdroidBtchapWithoutvoipWithoutpinning ]
+        target: [ GplayDevTchapWithoutvoipWithoutpinning, FdroidDevTchapWithoutvoipWithoutpinning, GplayBtchapWithvoipWithpinning ]
     # Allow all jobs on develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/develop' && format('integration-tests-develop-{0}-{1}', matrix.target, github.sha) || format('build-debug-{0}-{1}', matrix.target, github.ref)  }}
@@ -38,7 +39,7 @@ jobs:
       - name: Assemble ${{ matrix.target }} debug apk
         run: ./gradlew assemble${{ matrix.target }}Debug $CI_GRADLE_ARG_PROPERTIES --stacktrace
       - name: Upload ${{ matrix.target }} debug APKs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.target }}-debug
           path: |
@@ -52,8 +53,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ GplayBtchapWithoutvoipWithpinning, GplayTchapWithoutvoipWithpinning, FdroidBtchapWithoutvoipWithoutpinning, FdroidTchapWithoutvoipWithoutpinning ]
+        target: [ GplayBtchapWithoutvoipWithpinning, GplayTchapWithoutvoipWithpinning, FdroidBtchapWithoutvoipWithoutpinning, FdroidTchapWithoutvoipWithoutpinning, GplayBtchapWithvoipWithpinning ]
     # Only runs on main, no concurrency.
+    concurrency:
+      group: ${{ github.ref == 'refs/head/main' && format('build-release-apk-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('build-release-apk-develop-{0}', github.sha) || format('build-debug-{0}', github.ref)  }}
+      cancel-in-progress: ${{ github.ref != 'refs/head/main' }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
@@ -67,10 +71,32 @@ jobs:
       - name: Assemble ${{ matrix.target }} unsigned apk
         run: ./gradlew clean assemble${{ matrix.target }}Release $CI_GRADLE_ARG_PROPERTIES  --stacktrace
       - name: Upload ${{ matrix.target }} unsigned APKs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.target }}-release-unsigned
           path: |
             vector/build/outputs/apk/*/release/*.apk
 
-# TODO: add exodus checks
+  exodus:
+    runs-on: ubuntu-latest
+    needs: release
+    steps:
+      - name: Obtain apk from artifact
+        id: download
+        uses: actions/download-artifact@v3
+        with:
+          name: vector-gplay-release-unsigned
+      - name: Show apks in artifact
+        run: ls -R ${{steps.download.outputs.download-path}}
+      - name: Execute exodus-standalone
+        uses: docker://exodusprivacy/exodus-standalone:latest
+        with:
+          args: /github/workspace/gplay/release/vector-gplay-universal-release-unsigned.apk -j -o /github/workspace/exodus.json
+      - name: Upload exodus json report
+        uses: actions/upload-artifact@v3
+        with:
+          name: exodus.json
+          path: |
+            exodus.json
+      - name: Check for trackers
+        run: "jq -e '.trackers == []' exodus.json > /dev/null || { echo '::error static analysis identified user tracking library' ; exit 1; }"

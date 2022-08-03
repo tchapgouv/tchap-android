@@ -21,7 +21,7 @@ import im.vector.app.features.login.LoginConfig
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
-import org.matrix.android.sdk.internal.network.ssl.Fingerprint
+import org.matrix.android.sdk.api.network.ssl.Fingerprint
 
 sealed class LoginAction2 : VectorViewModelAction {
     // First action
@@ -77,9 +77,11 @@ sealed class LoginAction2 : VectorViewModelAction {
     object ClearHomeServerHistory : LoginAction2()
 
     // For the soft logout case
-    data class SetupSsoForSessionRecovery(val homeServerUrl: String,
-                                          val deviceId: String,
-                                          val ssoIdentityProviders: List<SsoIdentityProvider>?) : LoginAction2()
+    data class SetupSsoForSessionRecovery(
+            val homeServerUrl: String,
+            val deviceId: String,
+            val ssoIdentityProviders: List<SsoIdentityProvider>?
+    ) : LoginAction2()
 
     data class PostViewEvent(val viewEvent: LoginViewEvents2) : LoginAction2()
 

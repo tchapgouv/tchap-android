@@ -63,7 +63,7 @@ import java.util.Date
 import java.util.Locale
 
 /**
- * Open a url in the internet browser of the system
+ * Open a url in the internet browser of the system.
  */
 fun openUrlInExternalBrowser(context: Context, url: String?) {
     url?.let {
@@ -72,7 +72,7 @@ fun openUrlInExternalBrowser(context: Context, url: String?) {
 }
 
 /**
- * Open a uri in the internet browser of the system
+ * Open a uri in the internet browser of the system.
  */
 fun openUrlInExternalBrowser(context: Context, uri: Uri?) {
     uri?.let {
@@ -86,13 +86,15 @@ fun openUrlInExternalBrowser(context: Context, uri: Uri?) {
 }
 
 /**
- * Open url in custom tab or, if not available, in the default browser
+ * Open url in custom tab or, if not available, in the default browser.
  * If several compatible browsers are installed, the user will be proposed to choose one.
- * Ref: https://developer.chrome.com/multidevice/android/customtabs
+ * Ref: https://developer.chrome.com/multidevice/android/customtabs.
  */
-fun openUrlInChromeCustomTab(context: Context,
-                             session: CustomTabsSession?,
-                             url: String) {
+fun openUrlInChromeCustomTab(
+        context: Context,
+        session: CustomTabsSession?,
+        url: String
+) {
     try {
         CustomTabsIntent.Builder()
                 .setDefaultColorSchemeParams(
@@ -104,8 +106,8 @@ fun openUrlInChromeCustomTab(context: Context,
                 .setColorScheme(
                         when {
                             ThemeUtils.isSystemTheme(context) -> CustomTabsIntent.COLOR_SCHEME_SYSTEM
-                            ThemeUtils.isLightTheme(context)  -> CustomTabsIntent.COLOR_SCHEME_LIGHT
-                            else                              -> CustomTabsIntent.COLOR_SCHEME_DARK
+                            ThemeUtils.isLightTheme(context) -> CustomTabsIntent.COLOR_SCHEME_LIGHT
+                            else -> CustomTabsIntent.COLOR_SCHEME_DARK
                         }
                 )
                 // Note: setting close button icon does not work
@@ -121,12 +123,14 @@ fun openUrlInChromeCustomTab(context: Context,
 }
 
 /**
- * Open file selection activity
+ * Open file selection activity.
  */
-fun openFileSelection(activity: Activity,
-                      activityResultLauncher: ActivityResultLauncher<Intent>?,
-                      allowMultipleSelection: Boolean,
-                      requestCode: Int) {
+fun openFileSelection(
+        activity: Activity,
+        activityResultLauncher: ActivityResultLauncher<Intent>?,
+        allowMultipleSelection: Boolean,
+        requestCode: Int
+) {
     val fileIntent = Intent(Intent.ACTION_GET_CONTENT)
     fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, allowMultipleSelection)
 
@@ -145,11 +149,14 @@ fun openFileSelection(activity: Activity,
 }
 
 /**
- * Send an email to address with optional subject and message
+ * Send an email to address with optional subject and message.
  */
 fun sendMailTo(address: String, subject: String? = null, message: String? = null, activity: Activity) {
-    val intent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-            "mailto", address, null))
+    val intent = Intent(
+            Intent.ACTION_SENDTO, Uri.fromParts(
+            "mailto", address, null
+    )
+    )
     intent.putExtra(Intent.EXTRA_SUBJECT, subject)
     intent.putExtra(Intent.EXTRA_TEXT, message)
 
@@ -157,7 +164,7 @@ fun sendMailTo(address: String, subject: String? = null, message: String? = null
 }
 
 /**
- * Open an arbitrary uri
+ * Open an arbitrary uri.
  */
 fun openUri(activity: Activity, uri: String) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
@@ -168,9 +175,9 @@ fun openUri(activity: Activity, uri: String) {
 /**
  * Send media to a third party application.
  *
- * @param activity       the activity
+ * @param activity the activity
  * @param savedMediaPath the media path
- * @param mimeType       the media mime type.
+ * @param mimeType the media mime type.
  */
 fun openMedia(activity: Activity, savedMediaPath: String, mimeType: String) {
     val file = File(savedMediaPath)
@@ -185,7 +192,7 @@ fun openMedia(activity: Activity, savedMediaPath: String, mimeType: String) {
 }
 
 /**
- * Open external location
+ * Open external location.
  * @param activity the activity
  * @param latitude latitude of the location
  * @param longitude longitude of the location
@@ -260,7 +267,14 @@ private fun appendTimeToFilename(name: String): String {
     return """${filename}_$dateExtension.$fileExtension"""
 }
 
-suspend fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String?, notificationUtils: NotificationUtils) {
+suspend fun saveMedia(
+        context: Context,
+        file: File,
+        title: String,
+        mediaMimeType: String?,
+        notificationUtils: NotificationUtils,
+        currentTimeMillis: Long
+) {
     withContext(Dispatchers.IO) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val filename = appendTimeToFilename(title)
@@ -269,14 +283,14 @@ suspend fun saveMedia(context: Context, file: File, title: String, mediaMimeType
                 put(MediaStore.Images.Media.TITLE, filename)
                 put(MediaStore.Images.Media.DISPLAY_NAME, filename)
                 put(MediaStore.Images.Media.MIME_TYPE, mediaMimeType)
-                put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis())
-                put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
+                put(MediaStore.Images.Media.DATE_ADDED, currentTimeMillis)
+                put(MediaStore.Images.Media.DATE_TAKEN, currentTimeMillis)
             }
             val externalContentUri = when {
                 mediaMimeType?.isMimeTypeImage() == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 mediaMimeType?.isMimeTypeVideo() == true -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
                 mediaMimeType?.isMimeTypeAudio() == true -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-                else                                     -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
+                else -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
             }
 
             val uri = context.contentResolver.insert(externalContentUri, values)
@@ -301,16 +315,19 @@ suspend fun saveMedia(context: Context, file: File, title: String, mediaMimeType
                 }
             }
         } else {
-            saveMediaLegacy(context, mediaMimeType, title, file)
+            saveMediaLegacy(context, mediaMimeType, title, file, currentTimeMillis)
         }
     }
 }
 
 @Suppress("DEPRECATION")
-private fun saveMediaLegacy(context: Context,
-                            mediaMimeType: String?,
-                            title: String,
-                            file: File) {
+private fun saveMediaLegacy(
+        context: Context,
+        mediaMimeType: String?,
+        title: String,
+        file: File,
+        currentTimeMillis: Long
+) {
     val state = Environment.getExternalStorageState()
     if (Environment.MEDIA_MOUNTED != state) {
         context.toast(context.getString(R.string.error_saving_media_file))
@@ -321,7 +338,7 @@ private fun saveMediaLegacy(context: Context,
         mediaMimeType?.isMimeTypeImage() == true -> Environment.DIRECTORY_PICTURES
         mediaMimeType?.isMimeTypeVideo() == true -> Environment.DIRECTORY_MOVIES
         mediaMimeType?.isMimeTypeAudio() == true -> Environment.DIRECTORY_MUSIC
-        else                                     -> Environment.DIRECTORY_DOWNLOADS
+        else -> Environment.DIRECTORY_DOWNLOADS
     }
     val downloadDir = Environment.getExternalStoragePublicDirectory(dest)
     try {
@@ -331,7 +348,7 @@ private fun saveMediaLegacy(context: Context,
         } else {
             title
         }
-        val savedFile = saveFileIntoLegacy(file, downloadDir, outputFilename)
+        val savedFile = saveFileIntoLegacy(file, downloadDir, outputFilename, currentTimeMillis)
         if (savedFile != null) {
             val downloadManager = context.getSystemService<DownloadManager>()
             downloadManager?.addCompletedDownload(
@@ -341,7 +358,8 @@ private fun saveMediaLegacy(context: Context,
                     mediaMimeType ?: MimeTypes.OctetStream,
                     savedFile.absolutePath,
                     savedFile.length(),
-                    true)
+                    true
+            )
             addToGallery(savedFile, mediaMimeType, context)
         }
     } catch (error: Throwable) {
@@ -366,7 +384,7 @@ private fun addToGallery(savedFile: File, mediaMimeType: String?, context: Conte
 }
 
 /**
- * Open the play store to the provided application Id, default to this app
+ * Open the play store to the provided application Id, default to this app.
  */
 fun openPlayStore(activity: Activity, appId: String = BuildConfig.APPLICATION_ID) {
     try {
@@ -387,7 +405,7 @@ fun openAppSettingsPage(activity: Activity) {
 }
 
 /**
- * Ask the user to select a location and a file name to write in
+ * Ask the user to select a location and a file name to write in.
  */
 fun selectTxtFileToWrite(
         activity: Activity,
@@ -417,13 +435,14 @@ fun selectTxtFileToWrite(
  *
  * ~~ This is copied from the old matrix sdk ~~
  *
- * @param sourceFile     the file source path
- * @param dstDirPath     the dst path
+ * @param sourceFile the file source path
+ * @param dstDirPath the dst path
  * @param outputFilename optional the output filename
+ * @param currentTimeMillis the current time in milliseconds
  * @return               the created file
  */
 @Suppress("DEPRECATION")
-fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: String?): File? {
+fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: String?, currentTimeMillis: Long): File? {
     // defines another name for the external media
     var dstFileName: String
 
@@ -435,7 +454,7 @@ fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: Strin
         if (dotPos > 0) {
             fileExt = sourceFile.name.substring(dotPos)
         }
-        dstFileName = "vector_" + System.currentTimeMillis() + fileExt
+        dstFileName = "vector_$currentTimeMillis$fileExt"
     } else {
         dstFileName = outputFilename
     }

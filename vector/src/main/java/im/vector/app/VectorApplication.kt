@@ -59,6 +59,7 @@ import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
+import im.vector.app.flipper.FlipperProxy
 import im.vector.app.push.fcm.FcmHelper
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -96,7 +97,9 @@ class VectorApplication :
     @Inject lateinit var autoRageShaker: AutoRageShaker
     @Inject lateinit var vectorFileLogger: VectorFileLogger
     @Inject lateinit var vectorAnalytics: VectorAnalytics
+    @Inject lateinit var flipperProxy: FlipperProxy
     @Inject lateinit var matrix: Matrix
+    @Inject lateinit var fcmHelper: FcmHelper
 
     // font thread handler
     private var fontThreadHandler: Handler? = null
@@ -114,6 +117,7 @@ class VectorApplication :
         enableStrictModeIfNeeded()
         super.onCreate()
         appContext = this
+        flipperProxy.init(matrix)
         vectorAnalytics.init()
         invitesAcceptor.initialize()
         autoRageShaker.initialize()
@@ -173,15 +177,15 @@ class VectorApplication :
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onResume(owner: LifecycleOwner) {
                 Timber.i("App entered foreground")
-                FcmHelper.onEnterForeground(appContext, activeSessionHolder)
+                fcmHelper.onEnterForeground(activeSessionHolder)
                 activeSessionHolder.getSafeActiveSession()?.also {
-                    it.stopAnyBackgroundSync()
+                    it.syncService().stopAnyBackgroundSync()
                 }
             }
 
             override fun onPause(owner: LifecycleOwner) {
                 Timber.i("App entered background")
-                FcmHelper.onEnterBackground(appContext, vectorPreferences, activeSessionHolder)
+                fcmHelper.onEnterBackground(activeSessionHolder)
             }
         })
         ProcessLifecycleOwner.get().lifecycle.addObserver(appStateHandler)
@@ -212,16 +216,18 @@ class VectorApplication :
 
     private fun enableStrictModeIfNeeded() {
         if (BuildConfig.ENABLE_STRICT_MODE_LOGS) {
-            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
-                    .detectAll()
-                    .penaltyLog()
-                    .build())
+            StrictMode.setThreadPolicy(
+                    StrictMode.ThreadPolicy.Builder()
+                            .detectAll()
+                            .penaltyLog()
+                            .build()
+            )
         }
     }
 
     override fun getWorkManagerConfiguration(): WorkConfiguration {
         return WorkConfiguration.Builder()
-                .setWorkerFactory(matrix.workerFactory())
+                .setWorkerFactory(matrix.getWorkerFactory())
                 .setExecutor(Executors.newCachedThreadPool())
                 .build()
     }
@@ -231,13 +237,13 @@ class VectorApplication :
         val sdkVersion = Matrix.getSdkVersion()
         val date = SimpleDateFormat("MM-dd HH:mm:ss.SSSZ", Locale.US).format(Date())
 
-        Timber.v("----------------------------------------------------------------")
-        Timber.v("----------------------------------------------------------------")
-        Timber.v(" Application version: $appVersion")
-        Timber.v(" SDK version: $sdkVersion")
-        Timber.v(" Local time: $date")
-        Timber.v("----------------------------------------------------------------")
-        Timber.v("----------------------------------------------------------------\n\n\n\n")
+        Timber.d("----------------------------------------------------------------")
+        Timber.d("----------------------------------------------------------------")
+        Timber.d(" Application version: $appVersion")
+        Timber.d(" SDK version: $sdkVersion")
+        Timber.d(" Local time: $date")
+        Timber.d("----------------------------------------------------------------")
+        Timber.d("----------------------------------------------------------------\n\n\n\n")
     }
 
     override fun attachBaseContext(base: Context) {

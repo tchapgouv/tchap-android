@@ -33,12 +33,15 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.threads.ThreadTimelineEvent
 import org.matrix.android.sdk.flow.flow
 
-class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState: ThreadListViewState,
-                                                      private val analyticsTracker: AnalyticsTracker,
-                                                      private val session: Session) :
+class ThreadListViewModel @AssistedInject constructor(
+        @Assisted val initialState: ThreadListViewState,
+        private val analyticsTracker: AnalyticsTracker,
+        private val session: Session
+) :
         VectorViewModel<ThreadListViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)
@@ -64,12 +67,11 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
     override fun handle(action: EmptyAction) {}
 
     /**
-     * Observing thread list with respect to homeserver
-     * capabilities
+     * Observing thread list with respect to homeserver capabilities.
      */
     private fun fetchAndObserveThreads() {
-        when (session.getHomeServerCapabilities().canUseThreading) {
-            true  -> {
+        when (session.homeServerCapabilitiesService().getHomeServerCapabilities().canUseThreading) {
+            true -> {
                 fetchThreadList()
                 observeThreadSummaries()
             }
@@ -78,13 +80,12 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
     }
 
     /**
-     * Observing thread summaries when homeserver support
-     * threading
+     * Observing thread summaries when homeserver support threading.
      */
     private fun observeThreadSummaries() {
         room?.flow()
                 ?.liveThreadSummaries()
-                ?.map { room.enhanceThreadWithEditions(it) }
+                ?.map { room.threadsService().enhanceThreadWithEditions(it) }
                 ?.flowOn(room.coroutineDispatchers.io)
                 ?.execute { asyncThreads ->
                     copy(threadSummaryList = asyncThreads)
@@ -92,16 +93,15 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
     }
 
     /**
-     * Observing thread list when homeserver do not support
-     * threading
+     * Observing thread list when homeserver do not support threading.
      */
     private fun observeThreadsList() {
         room?.flow()
                 ?.liveThreadList()
-                ?.map { room.mapEventsWithEdition(it) }
+                ?.map { room.threadsLocalService().mapEventsWithEdition(it) }
                 ?.map {
                     it.map { threadRootEvent ->
-                        val isParticipating = room.isUserParticipatingInThread(threadRootEvent.eventId)
+                        val isParticipating = room.threadsLocalService().isUserParticipatingInThread(threadRootEvent.eventId)
                         ThreadTimelineEvent(threadRootEvent, isParticipating)
                     }
                 }
@@ -114,7 +114,7 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
     private fun fetchThreadList() {
         viewModelScope.launch {
             setLoading(true)
-            room?.fetchThreadSummaries()
+            room?.threadsService()?.fetchThreadSummaries()
             setLoading(false)
         }
     }
@@ -125,7 +125,7 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
         }
     }
 
-    fun canHomeserverUseThreading() = session.getHomeServerCapabilities().canUseThreading
+    fun canHomeserverUseThreading() = session.homeServerCapabilitiesService().getHomeServerCapabilities().canUseThreading
 
     fun applyFiltering(shouldFilterThreads: Boolean) {
         analyticsTracker.capture(Interaction.Name.MobileThreadListFilterItem.toAnalyticsInteraction())

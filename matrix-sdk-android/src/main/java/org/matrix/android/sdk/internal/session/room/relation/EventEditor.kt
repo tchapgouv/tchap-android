@@ -27,18 +27,24 @@ import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class EventEditor @Inject constructor(private val eventSenderProcessor: EventSenderProcessor,
-                                               private val eventFactory: LocalEchoEventFactory,
-                                               private val localEchoRepository: LocalEchoRepository) {
+internal class EventEditor @Inject constructor(
+        private val eventSenderProcessor: EventSenderProcessor,
+        private val eventFactory: LocalEchoEventFactory,
+        private val localEchoRepository: LocalEchoRepository,
+        private val clock: Clock,
+) {
 
-    fun editTextMessage(targetEvent: TimelineEvent,
-                        msgType: String,
-                        newBodyText: CharSequence,
-                        newBodyAutoMarkdown: Boolean,
-                        compatibilityBodyText: String): Cancelable {
+    fun editTextMessage(
+            targetEvent: TimelineEvent,
+            msgType: String,
+            newBodyText: CharSequence,
+            newBodyAutoMarkdown: Boolean,
+            compatibilityBodyText: String
+    ): Cancelable {
         val roomId = targetEvent.roomId
         if (targetEvent.root.sendState.hasFailed()) {
             // We create a new in memory event for the EventSenderProcessor but we keep the eventId of the failed event.
@@ -57,10 +63,12 @@ internal class EventEditor @Inject constructor(private val eventSenderProcessor:
         }
     }
 
-    fun editPoll(targetEvent: TimelineEvent,
-                 pollType: PollType,
-                 question: String,
-                 options: List<String>): Cancelable {
+    fun editPoll(
+            targetEvent: TimelineEvent,
+            pollType: PollType,
+            question: String,
+            options: List<String>
+    ): Cancelable {
         val roomId = targetEvent.roomId
         if (targetEvent.root.sendState.hasFailed()) {
             val editedEvent = eventFactory.createPollEvent(roomId, pollType, question, options).copy(
@@ -88,10 +96,12 @@ internal class EventEditor @Inject constructor(private val eventSenderProcessor:
         return eventSenderProcessor.postEvent(editedEvent)
     }
 
-    fun editReply(replyToEdit: TimelineEvent,
-                  originalTimelineEvent: TimelineEvent,
-                  newBodyText: String,
-                  compatibilityBodyText: String): Cancelable {
+    fun editReply(
+            replyToEdit: TimelineEvent,
+            originalTimelineEvent: TimelineEvent,
+            newBodyText: String,
+            compatibilityBodyText: String
+    ): Cancelable {
         val roomId = replyToEdit.roomId
         if (replyToEdit.root.sendState.hasFailed()) {
             // We create a new in memory event for the EventSenderProcessor but we keep the eventId of the failed event.
@@ -126,7 +136,7 @@ internal class EventEditor @Inject constructor(private val eventSenderProcessor:
     }
 
     private fun updateFailedEchoWithEvent(roomId: String, failedEchoEventId: String, editedEvent: Event) {
-        val editedEventEntity = editedEvent.toEntity(roomId, SendState.UNSENT, System.currentTimeMillis())
+        val editedEventEntity = editedEvent.toEntity(roomId, SendState.UNSENT, clock.epochMillis())
         localEchoRepository.updateEchoAsync(failedEchoEventId) { _, entity ->
             entity.content = editedEventEntity.content
             entity.ageLocalTs = editedEventEntity.ageLocalTs

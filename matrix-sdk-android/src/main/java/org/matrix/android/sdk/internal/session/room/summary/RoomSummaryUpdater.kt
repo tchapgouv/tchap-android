@@ -24,6 +24,7 @@ import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -42,7 +43,6 @@ import org.matrix.android.sdk.api.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncUnreadNotifications
 import org.matrix.android.sdk.internal.crypto.EventDecryptor
 import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptionEventContent
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
@@ -87,13 +87,15 @@ internal class RoomSummaryUpdater @Inject constructor(
         }
     }
 
-    fun update(realm: Realm,
-               roomId: String,
-               membership: Membership? = null,
-               roomSummary: RoomSyncSummary? = null,
-               unreadNotifications: RoomSyncUnreadNotifications? = null,
-               updateMembers: Boolean = false,
-               inviterId: String? = null) {
+    fun update(
+            realm: Realm,
+            roomId: String,
+            membership: Membership? = null,
+            roomSummary: RoomSyncSummary? = null,
+            unreadNotifications: RoomSyncUnreadNotifications? = null,
+            updateMembers: Boolean = false,
+            inviterId: String? = null
+    ) {
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
         if (roomSummary != null) {
             if (roomSummary.heroes.isNotEmpty()) {
@@ -216,7 +218,7 @@ internal class RoomSummaryUpdater @Inject constructor(
     }
 
     /**
-     * Should be called at the end of the room sync, to check and validate all parent/child relations
+     * Should be called at the end of the room sync, to check and validate all parent/child relations.
      */
     fun validateSpaceRelationship(realm: Realm) {
         measureTimeMillis {

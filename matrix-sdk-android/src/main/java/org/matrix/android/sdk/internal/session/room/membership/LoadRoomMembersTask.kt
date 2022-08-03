@@ -42,6 +42,8 @@ import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
+import org.matrix.android.sdk.internal.util.time.Clock
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -61,14 +63,15 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
         private val roomMemberEventHandler: RoomMemberEventHandler,
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
         private val deviceListManager: DeviceListManager,
-        private val globalErrorReceiver: GlobalErrorReceiver
+        private val globalErrorReceiver: GlobalErrorReceiver,
+        private val clock: Clock,
 ) : LoadRoomMembersTask {
 
     override suspend fun execute(params: LoadRoomMembersTask.Params) {
         when (getRoomMembersLoadStatus(params.roomId)) {
-            RoomMembersLoadStatusType.NONE    -> doRequest(params)
+            RoomMembersLoadStatusType.NONE -> doRequest(params)
             RoomMembersLoadStatusType.LOADING -> waitPreviousRequestToFinish(params)
-            RoomMembersLoadStatusType.LOADED  -> Unit
+            RoomMembersLoadStatusType.LOADED -> Unit
         }
     }
 
@@ -103,32 +106,37 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
     }
 
     private suspend fun insertInDb(response: RoomMembersResponse, roomId: String) {
+        val chunks = response.roomMemberEvents.chunked(500)
+        chunks.forEach { roomMemberEvents ->
+            monarchy.awaitTransaction { realm ->
+                Timber.v("Insert ${roomMemberEvents.size} member events in room $roomId")
+                // We ignore all the already known members
+                val now = clock.epochMillis()
+                for (roomMemberEvent in roomMemberEvents) {
+                    if (roomMemberEvent.eventId == null || roomMemberEvent.stateKey == null || roomMemberEvent.type == null) {
+                        continue
+                    }
+                    val ageLocalTs = now - (roomMemberEvent.unsignedData?.age ?: 0)
+                    val eventEntity = roomMemberEvent.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
+                    CurrentStateEventEntity.getOrCreate(
+                            realm,
+                            roomId,
+                            roomMemberEvent.stateKey,
+                            roomMemberEvent.type
+                    ).apply {
+                        eventId = roomMemberEvent.eventId
+                        root = eventEntity
+                    }
+                    roomMemberEventHandler.handle(realm, roomId, roomMemberEvent, false)
+                }
+            }
+        }
         monarchy.awaitTransaction { realm ->
-            // We ignore all the already known members
             val roomEntity = RoomEntity.where(realm, roomId).findFirst()
                     ?: realm.createObject(roomId)
-            val now = System.currentTimeMillis()
-            for (roomMemberEvent in response.roomMemberEvents) {
-                if (roomMemberEvent.eventId == null || roomMemberEvent.stateKey == null || roomMemberEvent.type == null) {
-                    continue
-                }
-                val ageLocalTs = roomMemberEvent.unsignedData?.age?.let { now - it }
-                val eventEntity = roomMemberEvent.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
-                CurrentStateEventEntity.getOrCreate(
-                        realm,
-                        roomId,
-                        roomMemberEvent.stateKey,
-                        roomMemberEvent.type
-                ).apply {
-                    eventId = roomMemberEvent.eventId
-                    root = eventEntity
-                }
-                roomMemberEventHandler.handle(realm, roomId, roomMemberEvent)
-            }
             roomEntity.membersLoadStatus = RoomMembersLoadStatusType.LOADED
             roomSummaryUpdater.update(realm, roomId, updateMembers = true)
         }
-
         if (cryptoSessionInfoProvider.isRoomEncrypted(roomId)) {
             deviceListManager.onRoomMembersLoadedFor(roomId)
         }

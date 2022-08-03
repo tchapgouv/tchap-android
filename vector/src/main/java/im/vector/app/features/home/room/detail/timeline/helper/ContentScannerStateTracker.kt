@@ -27,8 +27,8 @@ import im.vector.app.features.home.room.detail.timeline.item.ScannableHolder
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.session.contentscanner.ScanState
 import org.matrix.android.sdk.api.session.contentscanner.ScanStatusInfo
+import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -101,6 +101,8 @@ class ContentScannerStateTracker @Inject constructor(private val activeSessionHo
     }
 
     fun clear() {
-        lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
+        if (lifecycleRegistry.currentState.isAtLeast(Lifecycle.State.CREATED)) {
+            lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
+        }
     }
 }

@@ -45,7 +45,6 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
         }
 
         fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>)
-        fun onAttachmentsProcessFailed()
     }
 
     // Capture path allows to handle camera image picking. It must be restored if the activity gets killed.
@@ -73,21 +72,21 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
     // Public Methods
 
     /**
-     * Starts the process for handling file picking
+     * Starts the process for handling file picking.
      */
     fun selectFile(activityResultLauncher: ActivityResultLauncher<Intent>) {
         MultiPicker.get(MultiPicker.FILE).startWith(activityResultLauncher)
     }
 
     /**
-     * Starts the process for handling image/video picking
+     * Starts the process for handling image/video picking.
      */
     fun selectGallery(activityResultLauncher: ActivityResultLauncher<Intent>) {
         MultiPicker.get(MultiPicker.MEDIA).startWith(activityResultLauncher)
     }
 
     /**
-     * Starts the process for handling audio picking
+     * Starts the process for handling audio picking.
      */
     fun selectAudio(activityResultLauncher: ActivityResultLauncher<Intent>) {
         MultiPicker.get(MultiPicker.AUDIO).startWith(activityResultLauncher)
@@ -96,10 +95,12 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
     /**
      * Starts the process for handling image/video capture. Can open a dialog
      */
-    fun openCamera(activity: Activity,
-                   vectorPreferences: VectorPreferences,
-                   cameraActivityResultLauncher: ActivityResultLauncher<Intent>,
-                   cameraVideoActivityResultLauncher: ActivityResultLauncher<Intent>) {
+    fun openCamera(
+            activity: Activity,
+            vectorPreferences: VectorPreferences,
+            cameraActivityResultLauncher: ActivityResultLauncher<Intent>,
+            cameraVideoActivityResultLauncher: ActivityResultLauncher<Intent>
+    ) {
         PhotoOrVideoDialog(activity, vectorPreferences).show(object : PhotoOrVideoDialog.PhotoOrVideoDialogListener {
             override fun takePhoto() {
                 captureUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(context, cameraActivityResultLauncher)
@@ -112,7 +113,7 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
     }
 
     /**
-     * Starts the process for handling contact picking
+     * Starts the process for handling contact picking.
      */
     fun selectContact(activityResultLauncher: ActivityResultLauncher<Intent>) {
         MultiPicker.get(MultiPicker.CONTACT).startWith(activityResultLauncher)
@@ -185,42 +186,5 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
                         .getSelectedFiles(context, data)
                         .map { it.toContentAttachmentData() }
         )
-    }
-
-    /**
-     * This methods aims to handle share intent.
-     *
-     * @return true if it can handle the intent data, false otherwise
-     */
-    fun handleShareIntent(context: Context, intent: Intent): Boolean {
-        val type = intent.resolveType(context) ?: return false
-        if (type.startsWith("image")) {
-            callback.onContentAttachmentsReady(
-                    MultiPicker.get(MultiPicker.IMAGE).getIncomingFiles(context, intent).map {
-                        it.toContentAttachmentData()
-                    }
-            )
-        } else if (type.startsWith("video")) {
-            callback.onContentAttachmentsReady(
-                    MultiPicker.get(MultiPicker.VIDEO).getIncomingFiles(context, intent).map {
-                        it.toContentAttachmentData()
-                    }
-            )
-        } else if (type.startsWith("audio")) {
-            callback.onContentAttachmentsReady(
-                    MultiPicker.get(MultiPicker.AUDIO).getIncomingFiles(context, intent).map {
-                        it.toContentAttachmentData()
-                    }
-            )
-        } else if (type.startsWith("application") || type.startsWith("file") || type.startsWith("*")) {
-            callback.onContentAttachmentsReady(
-                    MultiPicker.get(MultiPicker.FILE).getIncomingFiles(context, intent).map {
-                        it.toContentAttachmentData()
-                    }
-            )
-        } else {
-            return false
-        }
-        return true
     }
 }

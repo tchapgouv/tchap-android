@@ -22,11 +22,11 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationBadgeState
 import org.matrix.android.sdk.api.session.widgets.model.Widget
@@ -36,7 +36,7 @@ sealed class UnreadState {
     object Unknown : UnreadState()
     object HasNoUnread : UnreadState()
     data class ReadMarkerNotLoaded(val readMarkerId: String) : UnreadState()
-    data class HasUnread(val firstUnreadEventId: String) : UnreadState()
+    data class HasUnread(val firstUnreadEventId: String, val readMarkerId: String) : UnreadState()
 }
 
 data class JitsiState(
@@ -59,7 +59,7 @@ data class RoomDetailViewState(
         val tombstoneEvent: Event? = null,
         val joinUpgradedRoomAsync: Async<String> = Uninitialized,
         val syncState: SyncState = SyncState.Idle,
-        val incrementalSyncStatus: SyncStatusService.Status.IncrementalSyncStatus = SyncStatusService.Status.IncrementalSyncIdle,
+        val incrementalSyncRequestState: SyncRequestState.IncrementalSyncRequestState = SyncRequestState.IncrementalSyncIdle,
         val pushCounter: Int = 0,
         val highlightedEventId: String? = null,
         val unreadState: UnreadState = UnreadState.Unknown,
@@ -87,7 +87,12 @@ data class RoomDetailViewState(
             rootThreadEventId = args.threadTimelineArgs?.rootThreadEventId
     )
 
-    fun isCallOptionAvailable() = asyncRoomSummary.invoke()?.isDirect ?: true
+    fun isCallOptionAvailable(): Boolean {
+        return asyncRoomSummary.invoke()?.isDirect ?: true ||
+                // When there is only one member, a warning will be displayed when the user
+                // clicks on the menu item to start a call
+                asyncRoomSummary.invoke()?.joinedMembersCount == 1
+    }
 
     fun isSearchAvailable() = asyncRoomSummary()?.isEncrypted == false
 

@@ -18,7 +18,7 @@ package im.vector.app.features.settings
 
 object VectorSettingsUrls {
     // Tchap: Redirect to Tchap FAQ
-    const val HELP = "https://tchap.beta.gouv.fr/faq"
+    const val HELP = "https://www.tchap.gouv.fr/faq"
     const val COPYRIGHT = "https://element.io/copyright"
     const val TAC = "https://www.tchap.gouv.fr/tac.html"
     const val PRIVACY_POLICY = "https://element.io/privacy"

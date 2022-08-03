@@ -33,7 +33,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import timber.log.Timber
 
 /**
- * Form to send a bug report
+ * Form to send a bug report.
  */
 @AndroidEntryPoint
 class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
@@ -63,11 +63,11 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
 
         // Default screen is for bug report, so modify it for suggestion
         when (reportType) {
-            ReportType.BUG_REPORT          -> {
+            ReportType.BUG_REPORT -> {
                 supportActionBar?.setTitle(R.string.title_activity_bug_report)
                 views.bugReportButtonContactMe.isVisible = true
             }
-            ReportType.SUGGESTION          -> {
+            ReportType.SUGGESTION -> {
                 supportActionBar?.setTitle(R.string.send_suggestion)
 
                 views.bugReportFirstText.setText(R.string.send_suggestion_content)
@@ -94,7 +94,7 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
 
                 hideBugReportOptions()
             }
-            else                           -> {
+            else -> {
                 // other types not supported here
             }
         }
@@ -149,7 +149,7 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
     }
 
     /**
-     * Send the bug report
+     * Send the bug report.
      */
     private fun sendBugReport() = withState(viewModel) { state ->
         views.bugReportScrollview.alpha = 0.3f
@@ -178,19 +178,25 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
                         try {
                             if (!reason.isNullOrEmpty()) {
                                 when (reportType) {
-                                    ReportType.BUG_REPORT          -> {
-                                        Toast.makeText(this@BugReportActivity,
-                                                getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG).show()
+                                    ReportType.BUG_REPORT -> {
+                                        Toast.makeText(
+                                                this@BugReportActivity,
+                                                getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG
+                                        ).show()
                                     }
-                                    ReportType.SUGGESTION          -> {
-                                        Toast.makeText(this@BugReportActivity,
-                                                getString(R.string.send_suggestion_failed, reason), Toast.LENGTH_LONG).show()
+                                    ReportType.SUGGESTION -> {
+                                        Toast.makeText(
+                                                this@BugReportActivity,
+                                                getString(R.string.send_suggestion_failed, reason), Toast.LENGTH_LONG
+                                        ).show()
                                     }
                                     ReportType.SPACE_BETA_FEEDBACK -> {
-                                        Toast.makeText(this@BugReportActivity,
-                                                getString(R.string.feedback_failed, reason), Toast.LENGTH_LONG).show()
+                                        Toast.makeText(
+                                                this@BugReportActivity,
+                                                getString(R.string.feedback_failed, reason), Toast.LENGTH_LONG
+                                        ).show()
                                     }
-                                    else                           -> {
+                                    else -> {
                                         // nop
                                     }
                                 }
@@ -221,16 +227,16 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
                     override fun onUploadSucceed(reportUrl: String?) {
                         try {
                             when (reportType) {
-                                ReportType.BUG_REPORT          -> {
+                                ReportType.BUG_REPORT -> {
                                     Toast.makeText(this@BugReportActivity, R.string.send_bug_report_sent, Toast.LENGTH_LONG).show()
                                 }
-                                ReportType.SUGGESTION          -> {
+                                ReportType.SUGGESTION -> {
                                     Toast.makeText(this@BugReportActivity, R.string.send_suggestion_sent, Toast.LENGTH_LONG).show()
                                 }
                                 ReportType.SPACE_BETA_FEEDBACK -> {
                                     Toast.makeText(this@BugReportActivity, R.string.feedback_sent, Toast.LENGTH_LONG).show()
                                 }
-                                else                           -> {
+                                else -> {
                                     // nop
                                 }
                             }
@@ -256,7 +262,7 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
     }
 
     private fun onSendScreenshotChanged() {
-        views.bugReportScreenshotPreview.isVisible = views.bugReportButtonIncludeScreenshot.isChecked && bugReporter.screenshot != null
+        views.bugReportScreenshotPreview.isVisible = bugReporter.screenshot != null
     }
 
     override fun onBackPressed() {

@@ -25,6 +25,8 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.poll.PollMode
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
@@ -88,10 +90,10 @@ class CreatePollViewModel @AssistedInject constructor(
 
     override fun handle(action: CreatePollAction) {
         when (action) {
-            CreatePollAction.OnCreatePoll         -> handleOnCreatePoll()
-            CreatePollAction.OnAddOption          -> handleOnAddOption()
-            is CreatePollAction.OnDeleteOption    -> handleOnDeleteOption(action.index)
-            is CreatePollAction.OnOptionChanged   -> handleOnOptionChanged(action.index, action.option)
+            CreatePollAction.OnCreatePoll -> handleOnCreatePoll()
+            CreatePollAction.OnAddOption -> handleOnAddOption()
+            is CreatePollAction.OnDeleteOption -> handleOnDeleteOption(action.index)
+            is CreatePollAction.OnOptionChanged -> handleOnOptionChanged(action.index, action.option)
             is CreatePollAction.OnQuestionChanged -> handleOnQuestionChanged(action.question)
             is CreatePollAction.OnPollTypeChanged -> handleOnPollTypeChanged(action.pollType)
         }
@@ -100,16 +102,16 @@ class CreatePollViewModel @AssistedInject constructor(
     private fun handleOnCreatePoll() = withState { state ->
         val nonEmptyOptions = state.options.filter { it.isNotEmpty() }
         when {
-            state.question.isEmpty()                 -> {
+            state.question.isEmpty() -> {
                 _viewEvents.post(CreatePollViewEvents.EmptyQuestionError)
             }
             nonEmptyOptions.size < MIN_OPTIONS_COUNT -> {
                 _viewEvents.post(CreatePollViewEvents.NotEnoughOptionsError(requiredOptionsCount = MIN_OPTIONS_COUNT))
             }
-            else                                     -> {
+            else -> {
                 when (state.mode) {
-                    PollMode.CREATE -> room.sendPoll(state.pollType, state.question, nonEmptyOptions)
-                    PollMode.EDIT   -> sendEditedPoll(state.editedEventId!!, state.pollType, state.question, nonEmptyOptions)
+                    PollMode.CREATE -> room.sendService().sendPoll(state.pollType, state.question, nonEmptyOptions)
+                    PollMode.EDIT -> sendEditedPoll(state.editedEventId!!, state.pollType, state.question, nonEmptyOptions)
                 }
                 _viewEvents.post(CreatePollViewEvents.Success)
             }
@@ -118,7 +120,7 @@ class CreatePollViewModel @AssistedInject constructor(
 
     private fun sendEditedPoll(editedEventId: String, pollType: PollType, question: String, options: List<String>) {
         val editedEvent = room.getTimelineEvent(editedEventId) ?: return
-        room.editPoll(editedEvent, pollType, question, options)
+        room.relationService().editPoll(editedEvent, pollType, question, options)
     }
 
     private fun handleOnAddOption() {

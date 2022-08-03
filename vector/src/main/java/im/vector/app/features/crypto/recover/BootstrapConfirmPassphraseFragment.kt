@@ -37,7 +37,7 @@ import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class BootstrapConfirmPassphraseFragment @Inject constructor() :
-    VectorBaseFragment<FragmentBootstrapEnterPassphraseBinding>() {
+        VectorBaseFragment<FragmentBootstrapEnterPassphraseBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapEnterPassphraseBinding {
         return FragmentBootstrapEnterPassphraseBinding.inflate(inflater, container, false)
@@ -92,11 +92,11 @@ class BootstrapConfirmPassphraseFragment @Inject constructor() :
         }
         val passphrase = views.ssssPassphraseEnterEdittext.text?.toString()
         when {
-            passphrase.isNullOrBlank()     ->
+            passphrase.isNullOrBlank() ->
                 views.ssssPassphraseEnterTil.error = getString(R.string.passphrase_empty_error_message)
             passphrase != state.passphrase ->
                 views.ssssPassphraseEnterTil.error = getString(R.string.passphrase_passphrase_does_not_match)
-            else                           -> {
+            else -> {
                 view?.hideKeyboard()
                 sharedViewModel.handle(BootstrapActions.DoInitialize(passphrase))
             }

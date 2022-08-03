@@ -94,12 +94,12 @@ class RoomProfileActivity :
                 .stream()
                 .onEach { sharedAction ->
                     when (sharedAction) {
-                        RoomProfileSharedAction.OpenRoomMembers                 -> openRoomMembers()
-                        RoomProfileSharedAction.OpenRoomSettings                -> openRoomSettings()
-                        RoomProfileSharedAction.OpenRoomAliasesSettings         -> openRoomAlias()
-                        RoomProfileSharedAction.OpenRoomPermissionsSettings     -> openRoomPermissions()
-                        RoomProfileSharedAction.OpenRoomUploads                 -> openRoomUploads()
-                        RoomProfileSharedAction.OpenBannedRoomMembers        -> openBannedRoomMembers()
+                        RoomProfileSharedAction.OpenRoomMembers -> openRoomMembers()
+                        RoomProfileSharedAction.OpenRoomSettings -> openRoomSettings()
+                        RoomProfileSharedAction.OpenRoomAliasesSettings -> openRoomAlias()
+                        RoomProfileSharedAction.OpenRoomPermissionsSettings -> openRoomPermissions()
+                        RoomProfileSharedAction.OpenRoomUploads -> openRoomUploads()
+                        RoomProfileSharedAction.OpenBannedRoomMembers -> openBannedRoomMembers()
                         RoomProfileSharedAction.OpenRoomNotificationSettings -> openRoomNotificationSettings()
                     }
                 }

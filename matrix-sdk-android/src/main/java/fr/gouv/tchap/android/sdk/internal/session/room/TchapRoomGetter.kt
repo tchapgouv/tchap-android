@@ -17,6 +17,7 @@
 package fr.gouv.tchap.android.sdk.internal.session.room
 
 import android.util.Patterns
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.EventType.STATE_ROOM_CREATE
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
@@ -45,9 +46,9 @@ internal class TchapRoomGetter @Inject constructor(
                 // convert to Room objects
                 .map { roomFactory.create(it.roomId) }
                 // sort from the oldest to the most recent
-                .sortedBy { it.getStateEvent(STATE_ROOM_CREATE)?.originServerTs }
+                .sortedBy { it.stateService().getStateEvent(STATE_ROOM_CREATE, QueryStringValue.IsEmpty)?.originServerTs }
                 // convert to DirectRoomMemberships objects
-                .map { DirectRoomMemberships(it.roomId, it.roomSummary()?.membership, it.getRoomMember(otherUserId)?.membership) }
+                .map { DirectRoomMemberships(it.roomId, it.roomSummary()?.membership, it.membershipService().getRoomMember(otherUserId)?.membership) }
         }
 
         // In the description of the memberships, we display first the current user status and the other member in second.

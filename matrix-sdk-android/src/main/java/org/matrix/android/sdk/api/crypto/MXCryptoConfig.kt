@@ -37,5 +37,11 @@ data class MXCryptoConfig constructor(
          * If set to true, the SDK will send room key request to my devices only.
          * If set to false, the SDK will send room key request to my devices and the sender device.
          */
-        val onlyRequestRoomKeysToMyDevices: Boolean = true
+        val onlyRequestRoomKeysToMyDevices: Boolean = true,
+
+        /**
+         * Currently megolm keys are requested to the sender device and to all of our devices.
+         * You can limit request only to your sessions by turning this setting to `true`
+         */
+        val limitRoomKeyRequestsToMyDevices: Boolean = true
 )

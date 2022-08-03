@@ -36,7 +36,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStat
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.themes.ThemeUtils
 import me.gujun.android.span.span
-import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
@@ -51,14 +51,13 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
     @DrawableRes
     var iconRes: Int = 0
 
-//    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
-//    var clickListener: ClickListener? = null
+    @EpoxyAttribute
+    @JvmField
+    var isLocalFile = false
 
     @EpoxyAttribute
-    var izLocalFile = false
-
-    @EpoxyAttribute
-    var izDownloaded = false
+    @JvmField
+    var isDownloaded = false
 
     @EpoxyAttribute
     lateinit var contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder
@@ -75,8 +74,9 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
     override fun bind(holder: Holder) {
         super.bind(holder)
         renderSendState(holder.fileLayout, holder.filenameView)
+
         if (!attributes.informationData.sendState.hasFailed()) {
-            contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, izLocalFile, holder.progressLayout)
+            contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, isLocalFile, holder.progressLayout)
         } else {
             holder.fileImageView.setImageResource(R.drawable.ic_cross)
             holder.progressLayout.isVisible = false
@@ -86,10 +86,11 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
         contentScannerStateTracker?.bind(attributes.informationData.eventId, mxcUrl, encryptedFileInfo, holder)
 
         holder.filenameView.text = filename
+
         if (attributes.informationData.sendState.isSending()) {
             holder.fileImageView.setImageResource(iconRes)
         } else {
-            if (izDownloaded) {
+            if (isDownloaded) {
                 holder.fileImageView.setImageResource(iconRes)
                 holder.fileDownloadProgress.progress = 0
             } else {
@@ -97,7 +98,7 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
                 holder.fileImageView.setImageResource(R.drawable.ic_download)
             }
         }
-//        holder.view.setOnClickListener(clickListener)
+
         val backgroundTint = if (attributes.informationData.messageLayout is TimelineMessageLayout.Bubble) {
             Color.TRANSPARENT
         } else {

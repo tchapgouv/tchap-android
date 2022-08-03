@@ -66,9 +66,9 @@ data class MainActivityArgs(
 ) : Parcelable
 
 /**
- * This is the entry point of Element Android
+ * This is the entry point of Element Android.
  * This Activity, when started with argument, is also doing some cleanup when user signs out,
- * clears cache, is logged out, or is soft logged out
+ * clears cache, is logged out, or is soft logged out.
  */
 @AndroidEntryPoint
 class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity {
@@ -161,7 +161,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     startNextActivityAndFinish()
                 }
             }
-            args.isAccountExpired     -> {
+            args.isAccountExpired -> {
                 lifecycleScope.launch {
                     // Keep session but clear cache and do local cleanup,
                     // do not start syncing until account is expired
@@ -171,10 +171,10 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     startNextActivityAndFinish()
                 }
             }
-            args.clearCredentials     -> {
+            args.clearCredentials -> {
                 lifecycleScope.launch {
                     try {
-                        session.signOut(!args.isUserLoggedOut)
+                        session.signOutService().signOut(!args.isUserLoggedOut)
                     } catch (failure: Throwable) {
                         displayError(failure)
                         return@launch
@@ -185,7 +185,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     startNextActivityAndFinish()
                 }
             }
-            args.clearCache           -> {
+            args.clearCache -> {
                 lifecycleScope.launch {
                     session.clearCache()
                     doLocalCleanup(clearPreferences = false, onboardingStore)
@@ -209,7 +209,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             vectorPreferences.clearPreferences()
             uiStateRepository.reset()
             pinLocker.unlock()
-            pinCodeStore.deleteEncodedPin()
+            pinCodeStore.deletePinCode()
             vectorAnalytics.onSignOut()
             vectorSessionStore.clear()
         }
@@ -243,18 +243,18 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                 navigator.openLogin(this, null)
                 null
             }
-            args.isSoftLogout                                            -> {
+            args.isSoftLogout -> {
                 // The homeserver has invalidated the token, with a soft logout
                 navigator.softLogout(this)
                 null
             }
-            args.isUserLoggedOut                                         ->
+            args.isUserLoggedOut ->
                 // the homeserver has invalidated the token (password changed, device deleted, other security reasons)
                 SignedOutActivity.newIntent(this)
-            args.isAccountExpired                                        ->
+            args.isAccountExpired ->
                 // user account has expired, request to renew it
                 ExpiredAccountActivity.newIntent(this)
-            sessionHolder.hasActiveSession()                             ->
+            sessionHolder.hasActiveSession() ->
                 // We have a session.
                 // Check it can be opened
                 if (sessionHolder.getActiveSession().isOpenable) {
@@ -264,7 +264,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     navigator.softLogout(this)
                     null
                 }
-            else                                                         -> {
+            else -> {
                 // First start, or no active session
                 navigator.openLogin(this, null)
                 null

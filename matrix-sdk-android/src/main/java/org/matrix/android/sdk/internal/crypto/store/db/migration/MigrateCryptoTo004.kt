@@ -19,8 +19,8 @@ package org.matrix.android.sdk.internal.crypto.store.db.migration
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import io.realm.DynamicRealm
+import org.matrix.android.sdk.api.session.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.api.util.JsonDict
-import org.matrix.android.sdk.internal.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.model.CrossSigningInfoEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntityFields
@@ -33,7 +33,7 @@ import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import timber.log.Timber
 
 // Version 4L added Cross Signing info persistence
-class MigrateCryptoTo004(realm: DynamicRealm) : RealmMigrator(realm, 4) {
+internal class MigrateCryptoTo004(realm: DynamicRealm) : RealmMigrator(realm, 4) {
 
     override fun doMigrate(realm: DynamicRealm) {
         if (realm.schema.contains("TrustLevelEntity")) {
@@ -72,16 +72,20 @@ class MigrateCryptoTo004(realm: DynamicRealm) : RealmMigrator(realm, 4) {
                 ?.addField(CryptoMetadataEntityFields.X_SIGN_SELF_SIGNED_PRIVATE_KEY, String::class.java)
 
         val moshi = Moshi.Builder().add(SerializeNulls.JSON_ADAPTER_FACTORY).build()
-        val listMigrationAdapter = moshi.adapter<List<String>>(Types.newParameterizedType(
-                List::class.java,
-                String::class.java,
-                Any::class.java
-        ))
-        val mapMigrationAdapter = moshi.adapter<JsonDict>(Types.newParameterizedType(
-                Map::class.java,
-                String::class.java,
-                Any::class.java
-        ))
+        val listMigrationAdapter = moshi.adapter<List<String>>(
+                Types.newParameterizedType(
+                        List::class.java,
+                        String::class.java,
+                        Any::class.java
+                )
+        )
+        val mapMigrationAdapter = moshi.adapter<JsonDict>(
+                Types.newParameterizedType(
+                        Map::class.java,
+                        String::class.java,
+                        Any::class.java
+                )
+        )
 
         realm.schema.get("DeviceInfoEntity")
                 ?.addField(DeviceInfoEntityFields.USER_ID, String::class.java)
@@ -100,10 +104,10 @@ class MigrateCryptoTo004(realm: DynamicRealm) : RealmMigrator(realm, 4) {
 
                             val trustLevel = realm.createObject("TrustLevelEntity")
                             when (oldDevice.verified) {
-                                MXDeviceInfo.DEVICE_VERIFICATION_UNKNOWN    -> {
+                                MXDeviceInfo.DEVICE_VERIFICATION_UNKNOWN -> {
                                     obj.setNull(DeviceInfoEntityFields.TRUST_LEVEL_ENTITY.`$`)
                                 }
-                                MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED    -> {
+                                MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED -> {
                                     trustLevel.setNull(TrustLevelEntityFields.LOCALLY_VERIFIED)
                                     trustLevel.setNull(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED)
                                     obj.setBoolean(DeviceInfoEntityFields.IS_BLOCKED, oldDevice.isBlocked)
@@ -114,7 +118,7 @@ class MigrateCryptoTo004(realm: DynamicRealm) : RealmMigrator(realm, 4) {
                                     trustLevel.setBoolean(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED, false)
                                     obj.setObject(DeviceInfoEntityFields.TRUST_LEVEL_ENTITY.`$`, trustLevel)
                                 }
-                                MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED   -> {
+                                MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED -> {
                                     trustLevel.setBoolean(TrustLevelEntityFields.LOCALLY_VERIFIED, true)
                                     trustLevel.setBoolean(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED, false)
                                     obj.setObject(DeviceInfoEntityFields.TRUST_LEVEL_ENTITY.`$`, trustLevel)

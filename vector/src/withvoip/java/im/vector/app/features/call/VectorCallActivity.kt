@@ -24,6 +24,8 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.content.res.Configuration
 import android.graphics.Color
+import android.media.projection.MediaProjection
+import android.media.projection.MediaProjectionManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
@@ -31,6 +33,7 @@ import android.util.Rational
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import androidx.activity.result.ActivityResult
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
@@ -56,6 +59,8 @@ import im.vector.app.features.call.dialpad.CallDialPadBottomSheet
 import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.call.utils.EglUtils
+import im.vector.app.features.call.webrtc.ScreenCaptureService
+import im.vector.app.features.call.webrtc.ScreenCaptureServiceConnection
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.displayname.getBestName
@@ -73,6 +78,7 @@ import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.matrix.android.sdk.api.session.room.model.call.EndCallReason
 import org.webrtc.EglBase
 import org.webrtc.RendererCommon
+import org.webrtc.ScreenCapturerAndroid
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -94,6 +100,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var screenCaptureServiceConnection: ScreenCaptureServiceConnection
 
     private val callViewModel: VectorCallViewModel by viewModel()
 
@@ -157,6 +164,9 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 }
             }
         }
+
+        // Bind to service in case of user killed the app while there is an ongoing call
+        bindToScreenCaptureService()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -257,7 +267,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             is CallState.Idle,
             is CallState.CreateOffer,
             is CallState.LocalRinging,
-            is CallState.Dialing   -> {
+            is CallState.Dialing -> {
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isVisible = true
@@ -323,14 +333,14 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     toolbar?.setSubtitle(R.string.call_connecting)
                 }
             }
-            is CallState.Ended     -> {
+            is CallState.Ended -> {
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isVisible = true
                 toolbar?.setSubtitle(R.string.call_ended)
                 configureCallInfo(state)
             }
-            else                   -> {
+            else -> {
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isInvisible = true
@@ -370,7 +380,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     views.callInfoGroup.isVisible = false
                 }
             }
-            else                   -> {
+            else -> {
                 views.fullscreenRenderer.isVisible = false
                 views.callInfoGroup.isVisible = false
             }
@@ -385,13 +395,13 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             startActivity(startIntent)
         }
         when (callState.reason) {
-            EndCallReason.USER_BUSY      -> {
+            EndCallReason.USER_BUSY -> {
                 showEndCallDialog(R.string.call_ended_user_busy_title, R.string.call_ended_user_busy_description)
             }
             EndCallReason.INVITE_TIMEOUT -> {
                 showEndCallDialog(R.string.call_ended_invite_timeout_title, R.string.call_error_user_not_responding)
             }
-            else                         -> {
+            else -> {
                 finish()
             }
         }
@@ -512,10 +522,10 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     private fun handleViewEvents(event: VectorCallViewEvents?) {
         Timber.tag(loggerTag.value).v("handleViewEvents $event")
         when (event) {
-            is VectorCallViewEvents.ConnectionTimeout      -> {
+            is VectorCallViewEvents.ConnectionTimeout -> {
                 onErrorTimoutConnect(event.turn)
             }
-            is VectorCallViewEvents.ShowDialPad            -> {
+            is VectorCallViewEvents.ShowDialPad -> {
                 CallDialPadBottomSheet.newInstance(false).apply {
                     callback = dialPadCallback
                 }.show(supportFragmentManager, FRAGMENT_DIAL_PAD_TAG)
@@ -524,8 +534,10 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 val callId = withState(callViewModel) { it.callId }
                 navigator.openCallTransfer(this, callTransferActivityResultLauncher, callId)
             }
-            is VectorCallViewEvents.FailToTransfer         -> showSnackbar(getString(R.string.call_transfer_failure))
-            else                                           -> Unit
+            is VectorCallViewEvents.FailToTransfer -> showSnackbar(getString(R.string.call_transfer_failure))
+            is VectorCallViewEvents.ShowScreenSharingPermissionDialog -> handleShowScreenSharingPermissionDialog()
+            is VectorCallViewEvents.StopScreenSharingService -> handleStopScreenSharingService()
+            else -> Unit
         }
     }
 
@@ -534,7 +546,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             Activity.RESULT_CANCELED -> {
                 callViewModel.handle(VectorCallViewActions.CallTransferSelectionCancelled)
             }
-            Activity.RESULT_OK       -> {
+            Activity.RESULT_OK -> {
                 CallTransferActivity.getCallTransferResult(activityResult.data)
                         ?.let { callViewModel.handle(VectorCallViewActions.CallTransferSelectionResult(it)) }
             }
@@ -628,6 +640,54 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         }
     }
 
+    private val screenSharingPermissionActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                // We need to start a foreground service with a sticky notification during screen sharing
+                startScreenSharingService(activityResult)
+            } else {
+                startScreenSharing(activityResult)
+            }
+        }
+    }
+
+    private fun startScreenSharing(activityResult: ActivityResult) {
+        val videoCapturer = ScreenCapturerAndroid(activityResult.data, object : MediaProjection.Callback() {
+            override fun onStop() {
+                Timber.i("User revoked the screen capturing permission")
+            }
+        })
+        callViewModel.handle(VectorCallViewActions.StartScreenSharing(videoCapturer))
+    }
+
+    private fun startScreenSharingService(activityResult: ActivityResult) {
+        ContextCompat.startForegroundService(
+                this,
+                Intent(this, ScreenCaptureService::class.java)
+        )
+        bindToScreenCaptureService(activityResult)
+    }
+
+    private fun bindToScreenCaptureService(activityResult: ActivityResult? = null) {
+        screenCaptureServiceConnection.bind(object : ScreenCaptureServiceConnection.Callback {
+            override fun onServiceConnected() {
+                activityResult?.let { startScreenSharing(it) }
+            }
+        })
+    }
+
+    private fun handleShowScreenSharingPermissionDialog() {
+        getSystemService<MediaProjectionManager>()?.let {
+            navigator.openScreenSharingPermissionDialog(it.createScreenCaptureIntent(), screenSharingPermissionActivityResultLauncher)
+        }
+    }
+
+    private fun handleStopScreenSharingService() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            screenCaptureServiceConnection.stopScreenCapturing()
+        }
+    }
+
     companion object {
         private const val EXTRA_MODE = "EXTRA_MODE"
         private const val FRAGMENT_DIAL_PAD_TAG = "FRAGMENT_DIAL_PAD_TAG"
@@ -646,13 +706,15 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             }
         }
 
-        fun newIntent(context: Context,
-                      callId: String,
-                      signalingRoomId: String,
-                      otherUserId: String,
-                      isIncomingCall: Boolean,
-                      isVideoCall: Boolean,
-                      mode: String?): Intent {
+        fun newIntent(
+                context: Context,
+                callId: String,
+                signalingRoomId: String,
+                otherUserId: String,
+                isIncomingCall: Boolean,
+                isVideoCall: Boolean,
+                mode: String?
+        ): Intent {
             val callArgs = CallArgs(signalingRoomId, callId, otherUserId, isIncomingCall, isVideoCall)
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?

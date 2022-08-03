@@ -121,7 +121,7 @@ class SpacePreviewFragment @Inject constructor(
 
         when (it.inviteTermination) {
             is Loading -> sharedActionViewModel.post(SpacePreviewSharedAction.ShowModalLoading)
-            else       -> sharedActionViewModel.post(SpacePreviewSharedAction.HideModalLoading)
+            else -> sharedActionViewModel.post(SpacePreviewSharedAction.HideModalLoading)
         }
     }
 

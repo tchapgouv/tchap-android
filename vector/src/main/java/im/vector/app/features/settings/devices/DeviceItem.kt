@@ -17,6 +17,7 @@
 package im.vector.app.features.settings.devices
 
 import android.graphics.Typeface
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -31,8 +32,8 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.ShieldImageView
 import im.vector.app.core.utils.DimensionConverter
 import me.gujun.android.span.span
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
+import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 
 /**
  * A list item for Device.
@@ -86,6 +87,9 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
             )
 
             holder.trustIcon.render(shield)
+
+            // Tchap: Show the shield only in this view on Tchap
+            holder.trustIcon.visibility = View.VISIBLE
         } else {
             holder.trustIcon.render(null)
         }

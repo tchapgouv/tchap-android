@@ -26,7 +26,7 @@ import im.vector.app.databinding.FragmentBootstrapWaitingBinding
 import javax.inject.Inject
 
 class BootstrapWaitingFragment @Inject constructor() :
-    VectorBaseFragment<FragmentBootstrapWaitingBinding>() {
+        VectorBaseFragment<FragmentBootstrapWaitingBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapWaitingBinding {
         return FragmentBootstrapWaitingBinding.inflate(inflater, container, false)
@@ -45,7 +45,7 @@ class BootstrapWaitingFragment @Inject constructor() :
 //                bootstrapLoadingStatusText.isVisible = false
 //                bootstrapDescriptionText.isVisible = false
 //            }
-            else                          -> {
+            else -> {
                 // just show the spinner
                 views.bootstrapLoadingStatusText.isVisible = false
                 views.bootstrapDescriptionText.isVisible = false

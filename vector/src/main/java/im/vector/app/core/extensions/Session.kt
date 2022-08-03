@@ -20,7 +20,7 @@ import android.content.Context
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
-import im.vector.app.core.services.VectorSyncService
+import im.vector.app.core.services.VectorSyncAndroidService
 import im.vector.app.features.session.VectorSessionStore
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
@@ -30,11 +30,11 @@ import timber.log.Timber
 fun Session.configureAndStart(context: Context, startSyncing: Boolean = true) {
     Timber.i("Configure and start session for $myUserId")
     open()
-    setFilter(FilterService.FilterPreset.ElementFilter)
+    filterService().setFilter(FilterService.FilterPreset.ElementFilter)
     if (startSyncing) {
         startSyncing(context)
     }
-    refreshPushers()
+    pushersService().refreshPushers()
     configureContentScanner()
     context.singletonEntryPoint().webRtcCallManager().checkForProtocolsSupportIfNeeded()
 }
@@ -53,9 +53,9 @@ private fun Session.configureContentScanner() {
 
 fun Session.startSyncing(context: Context) {
     val applicationContext = context.applicationContext
-    if (!hasAlreadySynced()) {
+    if (!syncService().hasAlreadySynced()) {
         // initial sync is done as a service so it can continue below app lifecycle
-        VectorSyncService.newOneShotIntent(
+        VectorSyncAndroidService.newOneShotIntent(
                 context = applicationContext,
                 sessionId = sessionId
         )
@@ -70,16 +70,16 @@ fun Session.startSyncing(context: Context) {
     } else {
         val isAtLeastStarted = ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
         Timber.v("--> is at least started? $isAtLeastStarted")
-        startSync(isAtLeastStarted)
+        syncService().startSync(isAtLeastStarted)
     }
 }
 
 /**
- * Tell is the session has unsaved e2e keys in the backup
+ * Tell is the session has unsaved e2e keys in the backup.
  */
 fun Session.hasUnsavedKeys(): Boolean {
     return cryptoService().inboundGroupSessionsCount(false) > 0 &&
-            cryptoService().keysBackupService().state != KeysBackupState.ReadyToBackUp
+            cryptoService().keysBackupService().getState() != KeysBackupState.ReadyToBackUp
 }
 
 fun Session.cannotLogoutSafely(): Boolean {
@@ -87,8 +87,8 @@ fun Session.cannotLogoutSafely(): Boolean {
     return hasUnsavedKeys() ||
             // has local cross signing keys
             (cryptoService().crossSigningService().allPrivateKeysKnown() &&
-            // That are not backed up
-            !sharedSecretStorageService.isRecoverySetup())
+                    // That are not backed up
+                    !sharedSecretStorageService().isRecoverySetup())
 }
 
 fun Session.vectorStore(context: Context) = VectorSessionStore(context, myUserId)

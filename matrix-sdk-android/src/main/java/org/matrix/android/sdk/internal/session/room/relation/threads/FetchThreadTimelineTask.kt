@@ -18,13 +18,12 @@ package org.matrix.android.sdk.internal.session.room.relation.threads
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
-import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
-import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
@@ -42,7 +41,6 @@ import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.events.getFixedRoomMemberContent
@@ -51,6 +49,7 @@ import org.matrix.android.sdk.internal.session.room.relation.RelationsResponse
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -85,10 +84,9 @@ internal interface FetchThreadTimelineTask : Task<FetchThreadTimelineTask.Params
 internal class DefaultFetchThreadTimelineTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val globalErrorReceiver: GlobalErrorReceiver,
-        private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
         @SessionDatabase private val monarchy: Monarchy,
-        @UserId private val userId: String,
-        private val cryptoService: DefaultCryptoService
+        private val cryptoService: DefaultCryptoService,
+        private val clock: Clock,
 ) : FetchThreadTimelineTask {
 
     enum class Result {
@@ -111,8 +109,10 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
         return handleRelationsResponse(response, params)
     }
 
-    private suspend fun handleRelationsResponse(response: RelationsResponse,
-                                                params: FetchThreadTimelineTask.Params): Result {
+    private suspend fun handleRelationsResponse(
+            response: RelationsResponse,
+            params: FetchThreadTimelineTask.Params
+    ): Result {
         val threadList = response.chunks
         val threadRootEvent = response.originalEvent
         val hasReachEnd = response.nextBatch == null
@@ -156,7 +156,8 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
                             eventEntity = eventEntity,
                             direction = PaginationDirection.FORWARDS,
                             ownedByThreadChunk = true,
-                            roomMemberContentsByUser = roomMemberContentsByUser)
+                            roomMemberContentsByUser = roomMemberContentsByUser
+                    )
                 }
             }
 
@@ -178,7 +179,8 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
                             eventEntity = eventEntity,
                             direction = PaginationDirection.FORWARDS,
                             ownedByThreadChunk = true,
-                            roomMemberContentsByUser = roomMemberContentsByUser)
+                            roomMemberContentsByUser = roomMemberContentsByUser
+                    )
                 }
             }
         }
@@ -192,7 +194,7 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
 
     // TODO Reuse this function to all the app
     /**
-     * If we don't have any new state on this user, get it from db
+     * If we don't have any new state on this user, get it from db.
      */
     private fun HashMap<String, RoomMemberContent?>.addSenderState(realm: Realm, roomId: String, senderId: String) {
         getOrPut(senderId) {
@@ -204,15 +206,16 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
     }
 
     /**
-     * Create an EventEntity to be added in the TimelineEventEntity
+     * Create an EventEntity to be added in the TimelineEventEntity.
      */
     private fun createEventEntity(roomId: String, event: Event, realm: Realm): EventEntity {
-        val ageLocalTs = event.unsignedData?.age?.let { System.currentTimeMillis() - it }
+        val now = clock.epochMillis()
+        val ageLocalTs = now - (event.unsignedData?.age ?: 0)
         return event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
     }
 
     /**
-     * Invoke the event decryption mechanism for a specific event
+     * Invoke the event decryption mechanism for a specific event.
      */
     private suspend fun decryptIfNeeded(event: Event, roomId: String) {
         try {
@@ -232,9 +235,11 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
         }
     }
 
-    private fun handleReaction(realm: Realm,
-                               event: Event,
-                               roomId: String) {
+    private fun handleReaction(
+            realm: Realm,
+            event: Event,
+            roomId: String
+    ) {
         val unsignedData = event.unsignedData ?: return
         val relatedEventId = event.eventId ?: return
 
@@ -251,7 +256,7 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
                     sum = realm.createObject(ReactionAggregatedSummaryEntity::class.java)
                     sum.key = reaction
                     sum.firstTimestamp = event.originServerTs ?: 0
-                    Timber.v("Adding synced reaction $reaction")
+                    Timber.v("Adding synced reaction")
                     sum.count = 1
                     // reactionEventId not included in the /relations API
 //                    sum.sourceEvents.add(reactionEventId)

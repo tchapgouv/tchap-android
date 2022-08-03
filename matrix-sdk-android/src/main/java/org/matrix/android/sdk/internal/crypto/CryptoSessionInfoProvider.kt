@@ -28,7 +28,7 @@ import javax.inject.Inject
 
 /**
  * The crypto module needs some information regarding rooms that are stored
- * in the session DB, this class encapsulate this functionality
+ * in the session DB, this class encapsulate this functionality.
  */
 internal class CryptoSessionInfoProvider @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy
@@ -46,9 +46,10 @@ internal class CryptoSessionInfoProvider @Inject constructor(
     }
 
     /**
+     * @param roomId the room Id
      * @param allActive if true return joined as well as invited, if false, only joined
      */
-     fun getRoomUserIds(roomId: String, allActive: Boolean): List<String> {
+    fun getRoomUserIds(roomId: String, allActive: Boolean): List<String> {
         var userIds: List<String> = emptyList()
         monarchy.doWithRealm { realm ->
             userIds = if (allActive) {

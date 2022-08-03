@@ -56,8 +56,8 @@ abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineIte
         val startDrawable = when (attributes.shieldUIState) {
             ShieldUIState.GREEN -> R.drawable.ic_shield_trusted
             ShieldUIState.BLACK -> R.drawable.ic_shield_black
-            ShieldUIState.RED   -> R.drawable.ic_shield_warning
-            ShieldUIState.ERROR   -> R.drawable.ic_warning_badge
+            ShieldUIState.RED -> R.drawable.ic_shield_warning
+            ShieldUIState.ERROR -> R.drawable.ic_warning_badge
         }
 
         holder.titleView.setCompoundDrawablesWithIntrinsicBounds(

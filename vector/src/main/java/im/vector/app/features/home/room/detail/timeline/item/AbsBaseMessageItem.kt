@@ -39,7 +39,7 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.view.TimelineMessageLayoutRenderer
 import im.vector.app.features.reactions.widget.ReactionButton
 import im.vector.app.features.themes.ThemeUtils
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.send.SendState
 
 private const val MAX_REACTIONS_TO_SHOW = 8
@@ -80,7 +80,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
         super.bind(holder)
         renderReactions(holder, baseAttributes.informationData.reactionsSummary)
         when (baseAttributes.informationData.e2eDecoration) {
-            E2EDecoration.NONE                 -> {
+            E2EDecoration.NONE -> {
                 holder.e2EDecorationView.render(null)
             }
             E2EDecoration.WARN_IN_CLEAR,

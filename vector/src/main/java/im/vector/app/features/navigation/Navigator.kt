@@ -23,12 +23,14 @@ import android.net.Uri
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.util.Pair
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.login.LoginConfig
+import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.pin.PinMode
 import im.vector.app.features.poll.PollMode
@@ -50,12 +52,20 @@ interface Navigator {
 
     fun softLogout(context: Context)
 
-    fun openRoom(context: Context, roomId: String, eventId: String? = null, buildTask: Boolean = false, isInviteAlreadyAccepted: Boolean = false)
+    fun openRoom(
+            context: Context,
+            roomId: String,
+            eventId: String? = null,
+            buildTask: Boolean = false,
+            isInviteAlreadyAccepted: Boolean = false,
+            trigger: ViewRoom.Trigger? = null
+    )
 
     sealed class PostSwitchSpaceAction {
         object None : PostSwitchSpaceAction()
-        data class OpenDefaultRoom(val roomId: String, val showShareSheet: Boolean) : PostSwitchSpaceAction()
         object OpenAddExistingRooms : PostSwitchSpaceAction()
+        object OpenRoomList : PostSwitchSpaceAction()
+        data class OpenDefaultRoom(val roomId: String, val showShareSheet: Boolean) : PostSwitchSpaceAction()
     }
 
     fun switchToSpace(context: Context, spaceId: String, postSwitchSpaceAction: PostSwitchSpaceAction)
@@ -78,7 +88,7 @@ interface Navigator {
 
     fun openRoomPreview(context: Context, roomPreviewData: RoomPreviewData, fromEmailInviteLink: PermalinkData.RoomEmailInviteLink? = null)
 
-    fun openMatrixToBottomSheet(context: Context, link: String)
+    fun openMatrixToBottomSheet(context: Context, link: String, origin: OriginOfMatrixTo)
 
     fun openCreateRoom(context: Context, initialName: String = "", openAfterCreate: Boolean = true)
 
@@ -116,35 +126,45 @@ interface Navigator {
 
     fun openAnalyticsOptIn(context: Context)
 
-    fun openPinCode(context: Context,
-                    activityResultLauncher: ActivityResultLauncher<Intent>,
-                    pinMode: PinMode)
+    fun openPinCode(
+            context: Context,
+            activityResultLauncher: ActivityResultLauncher<Intent>,
+            pinMode: PinMode
+    )
 
-    fun openTerms(context: Context,
-                  activityResultLauncher: ActivityResultLauncher<Intent>,
-                  serviceType: TermsService.ServiceType,
-                  baseUrl: String,
-                  token: String?)
+    fun openTerms(
+            context: Context,
+            activityResultLauncher: ActivityResultLauncher<Intent>,
+            serviceType: TermsService.ServiceType,
+            baseUrl: String,
+            token: String?
+    )
 
-    fun openStickerPicker(context: Context,
-                          activityResultLauncher: ActivityResultLauncher<Intent>,
-                          roomId: String,
-                          widget: Widget)
+    fun openStickerPicker(
+            context: Context,
+            activityResultLauncher: ActivityResultLauncher<Intent>,
+            roomId: String,
+            widget: Widget
+    )
 
-    fun openIntegrationManager(context: Context,
-                               activityResultLauncher: ActivityResultLauncher<Intent>,
-                               roomId: String,
-                               integId: String?,
-                               screen: String?)
+    fun openIntegrationManager(
+            context: Context,
+            activityResultLauncher: ActivityResultLauncher<Intent>,
+            roomId: String,
+            integId: String?,
+            screen: String?
+    )
 
     fun openRoomWidget(context: Context, roomId: String, widget: Widget, options: Map<String, Any>? = null)
 
-    fun openMediaViewer(activity: Activity,
-                        roomId: String,
-                        mediaData: AttachmentData,
-                        view: View,
-                        inMemory: List<AttachmentData> = emptyList(),
-                        options: ((MutableList<Pair<View, String>>) -> Unit)?)
+    fun openMediaViewer(
+            activity: Activity,
+            roomId: String,
+            mediaData: AttachmentData,
+            view: View,
+            inMemory: List<AttachmentData> = emptyList(),
+            options: ((MutableList<Pair<View, String>>) -> Unit)?
+    )
 
     fun openSearch(context: Context, roomId: String, roomDisplayName: String?, roomAvatarUrl: String?)
 
@@ -158,13 +178,22 @@ interface Navigator {
 
     fun openCreatePoll(context: Context, roomId: String, editedEventId: String?, mode: PollMode)
 
-    fun openLocationSharing(context: Context,
-                            roomId: String,
-                            mode: LocationSharingMode,
-                            initialLocationData: LocationData?,
-                            locationOwnerId: String?)
+    fun openLocationSharing(
+            context: Context,
+            roomId: String,
+            mode: LocationSharingMode,
+            initialLocationData: LocationData?,
+            locationOwnerId: String?
+    )
+
+    fun openLocationLiveMap(context: Context, roomId: String)
 
     fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs, eventIdToNavigate: String? = null)
 
     fun openThreadList(context: Context, threadTimelineArgs: ThreadTimelineArgs)
+
+    fun openScreenSharingPermissionDialog(
+            screenCaptureIntent: Intent,
+            activityResultLauncher: ActivityResultLauncher<Intent>
+    )
 }

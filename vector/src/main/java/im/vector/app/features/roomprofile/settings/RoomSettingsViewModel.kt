@@ -45,6 +45,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
@@ -57,9 +58,11 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.mapOptional
 import org.matrix.android.sdk.flow.unwrap
 
-class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: RoomSettingsViewState,
-                                                        private val vectorPreferences: VectorPreferences,
-                                                        private val session: Session) :
+class RoomSettingsViewModel @AssistedInject constructor(
+        @Assisted initialState: RoomSettingsViewState,
+        private val vectorPreferences: VectorPreferences,
+        private val session: Session
+) :
         VectorViewModel<RoomSettingsViewState, RoomSettingsAction, RoomSettingsViewEvents>(initialState) {
 
     @AssistedFactory
@@ -79,9 +82,9 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
         observeRoomAvatar()
         observeState()
 
-        val homeServerCapabilities = session.getHomeServerCapabilities()
+        val homeServerCapabilities = session.homeServerCapabilitiesService().getHomeServerCapabilities()
         val canUseRestricted = homeServerCapabilities
-                .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED, room.getRoomVersion())
+                .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED, room.roomVersionService().getRoomVersion())
 
         val restrictedSupport = homeServerCapabilities.isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
         val couldUpgradeToRestricted = restrictedSupport == HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED
@@ -102,7 +105,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
         }
         viewModelScope.launch {
             runCatching {
-                session.getRoomDirectoryVisibility(room.roomId)
+                session.roomDirectoryService().getRoomDirectoryVisibility(room.roomId)
             }.fold(
                     {
                         setState {
@@ -129,12 +132,13 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 RoomSettingsViewState::newTopic,
                 RoomSettingsViewState::newHistoryVisibility,
                 RoomSettingsViewState::newRoomJoinRules,
-                RoomSettingsViewState::roomSummary) { avatarAction,
-                                                      newName,
-                                                      newTopic,
-                                                      newHistoryVisibility,
-                                                      newJoinRule,
-                                                      asyncSummary ->
+                RoomSettingsViewState::roomSummary
+        ) { avatarAction,
+            newName,
+            newTopic,
+            newHistoryVisibility,
+            newJoinRule,
+            asyncSummary ->
             val summary = asyncSummary()
             setState {
                 copy(
@@ -172,20 +176,35 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_AVATAR),
                             canChangeName = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_NAME),
                             canChangeTopic = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_TOPIC),
-                            canChangeHistoryVisibility = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                    EventType.STATE_ROOM_HISTORY_VISIBILITY),
-                            canChangeJoinRule = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                    EventType.STATE_ROOM_JOIN_RULES) &&
-                                    powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                            EventType.STATE_ROOM_GUEST_ACCESS),
-                            canChangeCanonicalAlias = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_CANONICAL_ALIAS),
-                            canAddChildren = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                    EventType.STATE_SPACE_CHILD),
+                            canChangeHistoryVisibility = powerLevelsHelper.isUserAllowedToSend(
+                                    session.myUserId, true,
+                                    EventType.STATE_ROOM_HISTORY_VISIBILITY
+                            ),
+                            canChangeJoinRule = powerLevelsHelper.isUserAllowedToSend(
+                                    session.myUserId, true,
+                                    EventType.STATE_ROOM_JOIN_RULES
+                            ) &&
+                                    powerLevelsHelper.isUserAllowedToSend(
+                                            session.myUserId, true,
+                                            EventType.STATE_ROOM_GUEST_ACCESS
+                                    ),
+                            canAddChildren = powerLevelsHelper.isUserAllowedToSend(
+                                    session.myUserId, true,
+                                    EventType.STATE_SPACE_CHILD
+                            ),
+                            canChangeCanonicalAlias = powerLevelsHelper.isUserAllowedToSend(
+                                    session.myUserId, true,
+                                    EventType.STATE_ROOM_CANONICAL_ALIAS
+                            ),
+                            canChangeRoomAccessRules = powerLevelsHelper.isUserAllowedToSend(
+                                    session.myUserId, true,
+                                    TchapEventType.STATE_ROOM_ACCESS_RULES
+                            ),
+                            // Tchap: Custom parameter
                             canRemoveFromRoomsDirectory = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_JOIN_RULES) &&
                                     powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_CANONICAL_ALIAS) &&
                                     powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION) &&
-                                    powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_HISTORY_VISIBILITY),
-                            canChangeRoomAccessRules = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, TchapEventType.STATE_ROOM_ACCESS_RULES)
+                                    powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_HISTORY_VISIBILITY)
                     )
                     setState {
                         copy(actionPermissions = permissions)
@@ -195,7 +214,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
     private fun observeRoomHistoryVisibility() {
         room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, QueryStringValue.NoCondition)
+                .liveStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<RoomHistoryVisibilityContent>() }
                 .unwrap()
                 .mapNotNull { it.historyVisibility }
@@ -206,7 +225,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
     private fun observeJoinRule() {
         room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.NoCondition)
+                .liveStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<RoomJoinRulesContent>() }
                 .unwrap()
                 .mapNotNull { it.joinRules }
@@ -217,7 +236,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
     private fun observeGuestAccess() {
         room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_GUEST_ACCESS, QueryStringValue.NoCondition)
+                .liveStateEvent(EventType.STATE_ROOM_GUEST_ACCESS, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<RoomGuestAccessContent>() }
                 .unwrap()
                 .mapNotNull { it.guestAccess }
@@ -231,7 +250,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
      */
     private fun observeRoomAvatar() {
         room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_AVATAR, QueryStringValue.NoCondition)
+                .liveStateEvent(EventType.STATE_ROOM_AVATAR, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<RoomAvatarContent>() }
                 .unwrap()
                 .setOnEach {
@@ -241,16 +260,16 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
     override fun handle(action: RoomSettingsAction) {
         when (action) {
-            is RoomSettingsAction.SetAvatarAction          -> handleSetAvatarAction(action)
-            is RoomSettingsAction.SetRoomName              -> setState { copy(newName = action.newName) }
-            is RoomSettingsAction.SetRoomTopic             -> setState { copy(newTopic = action.newTopic) }
+            is RoomSettingsAction.SetAvatarAction -> handleSetAvatarAction(action)
+            is RoomSettingsAction.SetRoomName -> setState { copy(newName = action.newName) }
+            is RoomSettingsAction.SetRoomTopic -> setState { copy(newTopic = action.newTopic) }
             is RoomSettingsAction.SetRoomHistoryVisibility -> setState { copy(newHistoryVisibility = action.visibility) }
-            is RoomSettingsAction.SetRoomJoinRule          -> handleSetRoomJoinRule(action)
-            is RoomSettingsAction.SetRoomGuestAccess       -> handleSetGuestAccess(action)
-            RoomSettingsAction.RemoveFromRoomsDirectory    -> handleRemoveFromRoomsDirectory()
-            RoomSettingsAction.AllowExternalUsersToJoin    -> handleAllowExternalUsersToJoin()
-            is RoomSettingsAction.Save                     -> saveSettings()
-            is RoomSettingsAction.Cancel                   -> cancel()
+            is RoomSettingsAction.SetRoomJoinRule -> handleSetRoomJoinRule(action)
+            is RoomSettingsAction.SetRoomGuestAccess -> handleSetGuestAccess(action)
+            RoomSettingsAction.RemoveFromRoomsDirectory -> handleRemoveFromRoomsDirectory()
+            RoomSettingsAction.AllowExternalUsersToJoin -> handleAllowExternalUsersToJoin()
+            is RoomSettingsAction.Save -> saveSettings()
+            is RoomSettingsAction.Cancel -> cancel()
         }
     }
 
@@ -281,27 +300,27 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
     /**
      * Several changes are required:
-     * The new members can access only on invite
-     * The encryption has to be enabled by default
-     * The room will become private
-     * The history visibility value is replaced with invited
+     * The new members can access only on invite.
+     * The encryption has to be enabled by default.
+     * The room will become private.
+     * The history visibility value is replaced with invited.
      */
     private fun handleRemoveFromRoomsDirectory() {
         session.coroutineScope.launch {
             updateLoadingState(isLoading = true)
             try {
                 // Update first the joinrule to INVITE.
-                room.setJoinRuleInviteOnly()
+                room.stateService().setJoinRuleInviteOnly()
                 // Turn on the encryption in this room (if this is not already done).
-                if (!room.isEncrypted()) room.enableEncryption()
+                if (!room.roomCryptoService().isEncrypted()) room.roomCryptoService().enableEncryption()
                 // Remove the room from the room directory.
-                session.setRoomDirectoryVisibility(room.roomId, RoomDirectoryVisibility.PRIVATE)
+                session.roomDirectoryService().setRoomDirectoryVisibility(room.roomId, RoomDirectoryVisibility.PRIVATE)
             } catch (failure: Throwable) {
                 updateLoadingState(isLoading = false)
                 _viewEvents.post(RoomSettingsViewEvents.Failure(failure))
             }
             // Update history visibility.
-            tryOrNull { room.updateHistoryReadability(RoomHistoryVisibility.INVITED) }
+            tryOrNull { room.stateService().updateHistoryReadability(RoomHistoryVisibility.INVITED) }
             updateLoadingState(isLoading = false)
         }
     }
@@ -310,7 +329,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
         session.coroutineScope.launch {
             updateLoadingState(isLoading = true)
             try {
-                room.sendStateEvent(
+                room.stateService().sendStateEvent(
                         eventType = TchapEventType.STATE_ROOM_ACCESS_RULES,
                         stateKey = "",
                         body = RoomAccessRulesContent(RoomAccessRules.UNRESTRICTED.value).toContent()
@@ -341,27 +360,27 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
         val summary = state.roomSummary.invoke()
 
         when (val avatarAction = state.avatarAction) {
-            RoomSettingsViewState.AvatarAction.None            -> Unit
-            RoomSettingsViewState.AvatarAction.DeleteAvatar    -> {
-                operationList.add { room.deleteAvatar() }
+            RoomSettingsViewState.AvatarAction.None -> Unit
+            RoomSettingsViewState.AvatarAction.DeleteAvatar -> {
+                operationList.add { room.stateService().deleteAvatar() }
             }
             is RoomSettingsViewState.AvatarAction.UpdateAvatar -> {
-                operationList.add { room.updateAvatar(avatarAction.newAvatarUri, avatarAction.newAvatarFileName) }
+                operationList.add { room.stateService().updateAvatar(avatarAction.newAvatarUri, avatarAction.newAvatarFileName) }
             }
         }
         if (summary?.name != state.newName) {
-            operationList.add { room.updateName(state.newName ?: "") }
+            operationList.add { room.stateService().updateName(state.newName ?: "") }
         }
         if (summary?.topic != state.newTopic) {
-            operationList.add { room.updateTopic(state.newTopic ?: "") }
+            operationList.add { room.stateService().updateTopic(state.newTopic ?: "") }
         }
 
         if (state.newHistoryVisibility != null) {
-            operationList.add { room.updateHistoryReadability(state.newHistoryVisibility) }
+            operationList.add { room.stateService().updateHistoryReadability(state.newHistoryVisibility) }
         }
 
         if (state.newRoomJoinRules.hasChanged()) {
-            operationList.add { room.updateJoinRule(state.newRoomJoinRules.newJoinRules, state.newRoomJoinRules.newGuestAccess) }
+            operationList.add { room.stateService().updateJoinRule(state.newRoomJoinRules.newJoinRules, state.newRoomJoinRules.newGuestAccess) }
         }
         viewModelScope.launch {
             updateLoadingState(isLoading = true)

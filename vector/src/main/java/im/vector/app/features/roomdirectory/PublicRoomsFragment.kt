@@ -32,6 +32,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentPublicRoomsBinding
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
 import kotlinx.coroutines.flow.debounce
@@ -46,7 +47,7 @@ import javax.inject.Inject
 
 /**
  * What can be improved:
- * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect
+ * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect.
  */
 class PublicRoomsFragment @Inject constructor(
         private val publicRoomsController: PublicRoomsController,
@@ -61,6 +62,9 @@ class PublicRoomsFragment @Inject constructor(
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentPublicRoomsBinding {
         return FragmentPublicRoomsBinding.inflate(inflater, container, false)
     }
+
+    // Tchap: Not displayed in Tchap
+    // override fun getMenuRes() = R.menu.menu_room_directory
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -101,6 +105,18 @@ class PublicRoomsFragment @Inject constructor(
         super.onDestroyView()
     }
 
+    // Tchap: Not used in Tchap
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return when (item.itemId) {
+//            R.id.menu_room_directory_change_protocol -> {
+//                sharedActionViewModel.post(RoomDirectorySharedAction.ChangeProtocol)
+//                true
+//            }
+//            else ->
+//                super.onOptionsItemSelected(item)
+//        }
+//    }
+
     private fun setupRecyclerView() {
         views.publicRoomsList.trackItemsVisibilityChange()
         views.publicRoomsList.configureWith(publicRoomsController)
@@ -129,9 +145,13 @@ class PublicRoomsFragment @Inject constructor(
         withState(viewModel) { _ ->
             when (joinState) {
                 JoinState.JOINED -> {
-                    navigator.openRoom(requireActivity(), publicRoom.roomId)
+                    navigator.openRoom(
+                            context = requireActivity(),
+                            roomId = publicRoom.roomId,
+                            trigger = ViewRoom.Trigger.RoomDirectory
+                    )
                 }
-                else             -> {
+                else -> {
                     // ROOM PREVIEW
                     navigator.openRoomPreview(requireActivity(), publicRoom, roomDirectoryData)
                 }
