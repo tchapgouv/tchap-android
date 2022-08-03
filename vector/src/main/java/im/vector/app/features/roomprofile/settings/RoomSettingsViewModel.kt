@@ -199,7 +199,12 @@ class RoomSettingsViewModel @AssistedInject constructor(
                             canChangeRoomAccessRules = powerLevelsHelper.isUserAllowedToSend(
                                     session.myUserId, true,
                                     TchapEventType.STATE_ROOM_ACCESS_RULES
-                            )
+                            ),
+                            // Tchap: Custom parameter
+                            canRemoveFromRoomsDirectory = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_JOIN_RULES) &&
+                                    powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_CANONICAL_ALIAS) &&
+                                    powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION) &&
+                                    powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_HISTORY_VISIBILITY)
                     )
                     setState {
                         copy(actionPermissions = permissions)
