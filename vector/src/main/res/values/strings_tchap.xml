@@ -52,7 +52,7 @@
     <string name="tchap_scan_media_error_file_is_infected">We have detected that this file is infected, so it cannot be downloaded.</string>
 
     <!-- tchap room settings -->
-    <string name="tchap_room_settings_remove_from_directory">Remove this room from the forums directory</string>
+    <string name="tchap_room_settings_remove_from_directory">Convert to private room (irreversible)</string>
     <string name="tchap_room_settings_remove_from_directory_prompt_msg"><b>This action is irreversible.</b>\nAre you sure you want to remove this room from the forums directory?</string>
     <string name="tchap_room_settings_room_access_title">External accounts handling</string>
     <string name="tchap_room_settings_room_access_restricted">The externals are not allowed to join this room</string>
