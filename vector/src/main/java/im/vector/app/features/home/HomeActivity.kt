@@ -577,7 +577,8 @@ class HomeActivity :
                 return true
             }
             R.id.menu_home_report_bug -> {
-                bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT)
+                // Tchap: Disable default value for screenshot
+                bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT, withScreenshot = false)
                 return true
             }
             R.id.menu_home_init_sync_legacy -> {
