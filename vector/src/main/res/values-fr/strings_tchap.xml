@@ -52,8 +52,8 @@
     <string name="tchap_scan_media_error_file_is_infected">Le fichier est infecté, impossible de le télécharger.</string>
 
     <!-- tchap room settings -->
-    <string name="tchap_room_settings_remove_from_directory">Convertir en salon privé (irréversible)</string>
-    <string name="tchap_room_settings_remove_from_directory_prompt_msg"><b>Cette action est irréversible.</b>\nVoulez vous vraiment convertir ce forum en salon privé ?</string>
+    <string name="tchap_room_settings_convert_to_private">Retirer ce salon de la liste des forums</string>
+    <string name="tchap_room_settings_convert_to_private_prompt_msg"><b>Cette action est irréversible.</b>\nVoulez-vous vraiment retirer ce salon de la liste des forums ?</string>
     <string name="tchap_room_settings_room_access_title">Gestion des comptes externes</string>
     <string name="tchap_room_settings_room_access_restricted">Les externes ne sont pas autorisés à rejoindre ce salon</string>
     <string name="tchap_room_settings_room_access_unrestricted">Les externes sont autorisés à rejoindre ce salon</string>

@@ -181,7 +181,7 @@ class RoomSettingsController @Inject constructor(
         val host = this
         buildProfileAction(
                 id = "removeFromRoomsDirectory",
-                title = stringProvider.getString(R.string.tchap_room_settings_remove_from_directory),
+                title = stringProvider.getString(R.string.tchap_room_settings_convert_to_private),
                 divider = true,
                 destructive = true,
                 editable = false,
