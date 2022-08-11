@@ -34,10 +34,12 @@ import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
+import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
@@ -112,16 +114,16 @@ class SpaceMenuViewModel @AssistedInject constructor(
 
     override fun handle(action: SpaceLeaveViewAction) {
         when (action) {
-            SpaceLeaveViewAction.SetAutoLeaveAll      -> setState {
+            SpaceLeaveViewAction.SetAutoLeaveAll -> setState {
                 copy(leaveMode = SpaceMenuState.LeaveMode.LEAVE_ALL, leavingState = Uninitialized)
             }
-            SpaceLeaveViewAction.SetAutoLeaveNone     -> setState {
+            SpaceLeaveViewAction.SetAutoLeaveNone -> setState {
                 copy(leaveMode = SpaceMenuState.LeaveMode.LEAVE_NONE, leavingState = Uninitialized)
             }
             SpaceLeaveViewAction.SetAutoLeaveSelected -> setState {
                 copy(leaveMode = SpaceMenuState.LeaveMode.LEAVE_SELECTED, leavingState = Uninitialized)
             }
-            SpaceLeaveViewAction.LeaveSpace           -> handleLeaveSpace()
+            SpaceLeaveViewAction.LeaveSpace -> handleLeaveSpace()
         }
     }
 
@@ -136,10 +138,10 @@ class SpaceMenuViewModel @AssistedInject constructor(
                 } else if (state.leaveMode == SpaceMenuState.LeaveMode.LEAVE_ALL) {
                     // need to find all child rooms that i have joined
 
-                    session.getRoomSummaries(
+                    session.roomService().getRoomSummaries(
                             roomSummaryQueryParams {
                                 excludeType = null
-                                activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(initialState.spaceId)
+                                spaceFilter = SpaceFilter.ActiveSpace(initialState.spaceId)
                                 memberships = listOf(Membership.JOIN)
                                 roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
                             }

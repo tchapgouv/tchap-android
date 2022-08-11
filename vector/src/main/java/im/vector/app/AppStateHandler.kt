@@ -18,9 +18,12 @@ package im.vector.app
 
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.asFlow
 import arrow.core.Option
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.utils.BehaviorDataSource
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.UserProperties
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.CoroutineScope
@@ -28,13 +31,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -55,13 +63,16 @@ fun RoomGroupingMethod.group() = (this as? RoomGroupingMethod.ByLegacyGroup)?.gr
 class AppStateHandler @Inject constructor(
         private val sessionDataSource: ActiveSessionDataSource,
         private val uiStateRepository: UiStateRepository,
-        private val activeSessionHolder: ActiveSessionHolder
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val analyticsTracker: AnalyticsTracker
 ) : DefaultLifecycleObserver {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private val selectedSpaceDataSource = BehaviorDataSource<Option<RoomGroupingMethod>>(Option.empty())
 
     val selectedRoomGroupingFlow = selectedSpaceDataSource.stream()
+
+    private val spaceBackstack = ArrayDeque<String?>()
 
     fun getCurrentRoomGroupingMethod(): RoomGroupingMethod? {
         // XXX we should somehow make it live :/ just a work around
@@ -71,18 +82,22 @@ class AppStateHandler @Inject constructor(
         return selectedSpaceDataSource.currentValue?.orNull()?.let {
             if (it is RoomGroupingMethod.BySpace) {
                 // try to refresh sum?
-                it.spaceSummary?.roomId?.let { activeSessionHolder.getSafeActiveSession()?.getRoomSummary(it) }?.let {
+                it.spaceSummary?.roomId?.let { activeSessionHolder.getSafeActiveSession()?.roomService()?.getRoomSummary(it) }?.let {
                     RoomGroupingMethod.BySpace(it)
                 } ?: it
             } else it
         }
     }
 
-    fun setCurrentSpace(spaceId: String?, session: Session? = null, persistNow: Boolean = false) {
+    fun setCurrentSpace(spaceId: String?, session: Session? = null, persistNow: Boolean = false, isForwardNavigation: Boolean = true) {
+        val currentSpace = (selectedSpaceDataSource.currentValue?.orNull() as? RoomGroupingMethod.BySpace)?.space()
         val uSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return
-        if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.BySpace &&
-                spaceId == selectedSpaceDataSource.currentValue?.orNull()?.space()?.roomId) return
+        if (currentSpace != null && spaceId == currentSpace.roomId) return
         val spaceSum = spaceId?.let { uSession.getRoomSummary(spaceId) }
+
+        if (isForwardNavigation) {
+            spaceBackstack.addLast(currentSpace?.roomId)
+        }
 
         if (persistNow) {
             uiStateRepository.storeGroupingMethod(true, uSession.sessionId)
@@ -93,7 +108,7 @@ class AppStateHandler @Inject constructor(
         if (spaceId != null) {
             uSession.coroutineScope.launch(Dispatchers.IO) {
                 tryOrNull {
-                    uSession.getRoom(spaceId)?.loadRoomMembersIfNeeded()
+                    uSession.getRoom(spaceId)?.membershipService()?.loadRoomMembersIfNeeded()
                 }
             }
         }
@@ -103,12 +118,12 @@ class AppStateHandler @Inject constructor(
         val uSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return
         if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.ByLegacyGroup &&
                 groupId == selectedSpaceDataSource.currentValue?.orNull()?.group()?.groupId) return
-        val activeGroup = groupId?.let { uSession.getGroupSummary(groupId) }
+        val activeGroup = groupId?.let { uSession.groupService().getGroupSummary(groupId) }
         selectedSpaceDataSource.post(Option.just(RoomGroupingMethod.ByLegacyGroup(activeGroup)))
         if (groupId != null) {
             uSession.coroutineScope.launch {
                 tryOrNull {
-                    uSession.getGroup(groupId)?.fetchGroupData()
+                    uSession.groupService().getGroup(groupId)?.fetchGroupData()
                 }
             }
         }
@@ -125,10 +140,24 @@ class AppStateHandler @Inject constructor(
                         } else {
                             setCurrentGroup(uiStateRepository.getSelectedGroup(session.sessionId), session)
                         }
+                        observeSyncStatus(session)
                     }
                 }
                 .launchIn(coroutineScope)
     }
+
+    private fun observeSyncStatus(session: Session) {
+        session.syncService().getSyncRequestStateLive()
+                .asFlow()
+                .filterIsInstance<SyncRequestState.IncrementalSyncDone>()
+                .map { session.spaceService().getRootSpaceSummaries().size }
+                .distinctUntilChanged()
+                .onEach { spacesNumber ->
+                    analyticsTracker.updateUserProperties(UserProperties(numSpaces = spacesNumber))
+                }.launchIn(session.coroutineScope)
+    }
+
+    fun getSpaceBackstack() = spaceBackstack
 
     fun safeActiveSpaceId(): String? {
         return (selectedSpaceDataSource.currentValue?.orNull() as? RoomGroupingMethod.BySpace)?.spaceSummary?.roomId
@@ -146,7 +175,7 @@ class AppStateHandler @Inject constructor(
         coroutineScope.coroutineContext.cancelChildren()
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         when (val currentMethod = selectedSpaceDataSource.currentValue?.orNull() ?: RoomGroupingMethod.BySpace(null)) {
-            is RoomGroupingMethod.BySpace       -> {
+            is RoomGroupingMethod.BySpace -> {
                 uiStateRepository.storeGroupingMethod(true, session.sessionId)
                 uiStateRepository.storeSelectedSpace(currentMethod.spaceSummary?.roomId, session.sessionId)
             }

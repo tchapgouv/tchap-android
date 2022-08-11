@@ -36,7 +36,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.image
 import me.gujun.android.span.span
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.model.RoomEncryptionAlgorithm
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
@@ -182,15 +182,16 @@ class RoomProfileController @Inject constructor(
 
         // More
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
-
         if (roomType != TchapRoomType.DIRECT) {
             buildProfileAction(
                     id = "settings",
-                    title = stringProvider.getString(if (roomSummary.isDirect) {
-                        R.string.direct_room_profile_section_more_settings
-                    } else {
-                        R.string.room_profile_section_more_settings
-                    }),
+                    title = stringProvider.getString(
+                            if (roomSummary.isDirect) {
+                                R.string.direct_room_profile_section_more_settings
+                            } else {
+                                R.string.room_profile_section_more_settings
+                            }
+                    ),
                     icon = R.drawable.ic_room_profile_settings,
                     action = { callback?.onSettingsClicked() }
             )
@@ -240,11 +241,13 @@ class RoomProfileController @Inject constructor(
         }
         buildProfileAction(
                 id = "leave",
-                title = stringProvider.getString(if (roomType == TchapRoomType.DIRECT) {
-                    R.string.direct_room_profile_section_more_leave
-                } else {
-                    R.string.room_profile_section_more_leave
-                }),
+                title = stringProvider.getString(
+                        if (roomType == TchapRoomType.DIRECT) {
+                            R.string.direct_room_profile_section_more_leave
+                        } else {
+                            R.string.room_profile_section_more_leave
+                        }
+                ),
                 divider = false,
                 destructive = true,
                 icon = R.drawable.ic_room_actions_leave,

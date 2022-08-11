@@ -32,6 +32,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetMatrixToCardBinding
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.AvatarRenderer
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
@@ -44,7 +45,8 @@ class MatrixToBottomSheet :
 
     @Parcelize
     data class MatrixToArgs(
-            val matrixToLink: String
+            val matrixToLink: String,
+            val origin: OriginOfMatrixTo
     ) : Parcelable
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
@@ -58,23 +60,23 @@ class MatrixToBottomSheet :
     private val viewModel by fragmentViewModel(MatrixToBottomSheetViewModel::class)
 
     interface InteractionListener {
-        fun mxToBottomSheetNavigateToRoom(roomId: String)
+        fun mxToBottomSheetNavigateToRoom(roomId: String, trigger: ViewRoom.Trigger?)
         fun mxToBottomSheetSwitchToSpace(spaceId: String)
     }
 
     override fun invalidate() = withState(viewModel) { state ->
         super.invalidate()
         when (state.linkType) {
-            is PermalinkData.RoomLink            -> {
+            is PermalinkData.RoomLink -> {
                 views.matrixToCardContentLoading.isVisible = state.roomPeekResult is Incomplete
                 showFragment(MatrixToRoomSpaceFragment::class, Bundle())
             }
-            is PermalinkData.UserLink            -> {
+            is PermalinkData.UserLink -> {
                 views.matrixToCardContentLoading.isVisible = state.matrixItem is Incomplete
                 showFragment(MatrixToUserFragment::class, Bundle())
             }
-            is PermalinkData.GroupLink           -> Unit
-            is PermalinkData.FallbackLink        -> Unit
+            is PermalinkData.GroupLink -> Unit
+            is PermalinkData.FallbackLink -> Unit
             is PermalinkData.RoomEmailInviteLink -> Unit
         }
     }
@@ -82,7 +84,8 @@ class MatrixToBottomSheet :
     private fun showFragment(fragmentClass: KClass<out Fragment>, bundle: Bundle) {
         if (childFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
             childFragmentManager.commitTransaction {
-                replace(views.matrixToCardFragmentContainer.id,
+                replace(
+                        views.matrixToCardFragmentContainer.id,
                         fragmentClass.java,
                         bundle,
                         fragmentClass.simpleName
@@ -96,16 +99,18 @@ class MatrixToBottomSheet :
 
         viewModel.observeViewEvents {
             when (it) {
-                is MatrixToViewEvents.NavigateToRoom  -> {
-                    interactionListener?.mxToBottomSheetNavigateToRoom(it.roomId)
+                is MatrixToViewEvents.NavigateToRoom -> {
+                    withState(viewModel) { state ->
+                        interactionListener?.mxToBottomSheetNavigateToRoom(it.roomId, state.origin.toViewRoomTrigger())
+                    }
                     dismiss()
                 }
-                MatrixToViewEvents.Dismiss            -> dismiss()
+                MatrixToViewEvents.Dismiss -> dismiss()
                 is MatrixToViewEvents.NavigateToSpace -> {
                     interactionListener?.mxToBottomSheetSwitchToSpace(it.spaceId)
                     dismiss()
                 }
-                is MatrixToViewEvents.ShowModalError  -> {
+                is MatrixToViewEvents.ShowModalError -> {
                     MaterialAlertDialogBuilder(requireContext())
                             .setMessage(it.error)
                             .setPositiveButton(getString(R.string.ok), null)
@@ -116,9 +121,9 @@ class MatrixToBottomSheet :
     }
 
     companion object {
-        fun withLink(matrixToLink: String): MatrixToBottomSheet {
+        fun withLink(matrixToLink: String, origin: OriginOfMatrixTo): MatrixToBottomSheet {
             return MatrixToBottomSheet().apply {
-                setArguments(MatrixToArgs(matrixToLink = matrixToLink))
+                setArguments(MatrixToArgs(matrixToLink = matrixToLink, origin = origin))
             }
         }
     }

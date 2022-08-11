@@ -36,7 +36,7 @@ data class TchapRegisterWaitForEmailFragmentArgument(
 ) : Parcelable
 
 /**
- * In this screen, the user is asked to check his emails
+ * In this screen, the user is asked to check his emails.
  */
 class TchapRegisterWaitForEmailFragment @Inject constructor() : AbstractLoginFragment<FragmentTchapRegisterWaitForEmailBinding>() {
 

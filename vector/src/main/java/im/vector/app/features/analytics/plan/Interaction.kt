@@ -88,10 +88,34 @@ data class Interaction(
         WebAddExistingToSpaceDialogCreateRoomButton,
 
         /**
+         * User clicked the create DM button in the home page of Element
+         * Web/Desktop.
+         */
+        WebHomeCreateChatButton,
+
+        /**
          * User clicked the create room button in the home page of Element
          * Web/Desktop.
          */
         WebHomeCreateRoomButton,
+
+        /**
+         * User clicked the explore rooms button in the home page of Element
+         * Web/Desktop.
+         */
+        WebHomeExploreRoomsButton,
+
+        /**
+         * User clicked on the mini avatar uploader in the home page of Element
+         * Web/Desktop.
+         */
+        WebHomeMiniAvatarUploadButton,
+
+        /**
+         * User clicked the explore rooms button next to the search field at the
+         * top of the left panel in Element Web/Desktop.
+         */
+        WebLeftPanelExploreRoomsButton,
 
         /**
          * User interacted with pin to sidebar checkboxes in the quick settings
@@ -190,6 +214,12 @@ data class Interaction(
         WebRoomHeaderContextMenuSettingsItem,
 
         /**
+         * User clicked the create DM button in the + context menu of the room
+         * list header in Element Web/Desktop.
+         */
+        WebRoomListHeaderPlusMenuCreateChatItem,
+
+        /**
          * User clicked the create room button in the + context menu of the room
          * list header in Element Web/Desktop.
          */
@@ -230,6 +260,12 @@ data class Interaction(
          * on a room tile in the room list in Element Web/Desktop.
          */
         WebRoomListRoomTileNotificationsMenu,
+
+        /**
+         * User clicked the create DM button in the + context menu of the rooms
+         * sublist in Element Web/Desktop.
+         */
+        WebRoomListRoomsSublistPlusMenuCreateChatItem,
 
         /**
          * User clicked the create room button in the + context menu of the

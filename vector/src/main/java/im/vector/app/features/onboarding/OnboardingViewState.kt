@@ -39,26 +39,20 @@ data class OnboardingViewState(
         @PersistState
         val signMode: SignMode = SignMode.Unknown,
         @PersistState
-        val resetPasswordEmail: String? = null,
-        @PersistState
-        val homeServerUrlFromUser: String? = null,
-
-        // Can be modified after a Wellknown request
-        @PersistState
-        val homeServerUrl: String? = null,
+        val resetState: ResetState = ResetState(),
 
         // For SSO session recovery
         @PersistState
         val deviceId: String? = null,
 
-        // Network result
-        @PersistState
-        val loginMode: LoginMode = LoginMode.Unknown,
-        // Supported types for the login. We cannot use a sealed class for LoginType because it is not serializable
-        @PersistState
-        val loginModeSupportedTypes: List<String> = emptyList(),
         val knownCustomHomeServersUrls: List<String> = emptyList(),
         val isForceLoginFallbackEnabled: Boolean = false,
+
+        @PersistState
+        val selectedHomeserver: SelectedHomeserverState = SelectedHomeserverState(),
+
+        @PersistState
+        val selectedAuthenticationState: SelectedAuthenticationState = SelectedAuthenticationState(),
 
         @PersistState
         val personalizationState: PersonalizationState = PersonalizationState()
@@ -71,6 +65,16 @@ enum class OnboardingFlow {
 }
 
 @Parcelize
+data class SelectedHomeserverState(
+        val description: String? = null,
+        val userFacingUrl: String? = null,
+        val upstreamUrl: String? = null,
+        val preferredLoginMode: LoginMode = LoginMode.Unknown,
+        val supportedLoginTypes: List<String> = emptyList(),
+        val isLogoutDevicesSupported: Boolean = false,
+) : Parcelable
+
+@Parcelize
 data class PersonalizationState(
         val supportsChangingDisplayName: Boolean = false,
         val supportsChangingProfilePicture: Boolean = false,
@@ -80,3 +84,15 @@ data class PersonalizationState(
 
     fun supportsPersonalization() = supportsChangingDisplayName || supportsChangingProfilePicture
 }
+
+@Parcelize
+data class ResetState(
+        val email: String? = null,
+        val newPassword: String? = null,
+        val supportsLogoutAllDevices: Boolean = false
+) : Parcelable
+
+@Parcelize
+data class SelectedAuthenticationState(
+        val description: AuthenticationDescription? = null,
+) : Parcelable

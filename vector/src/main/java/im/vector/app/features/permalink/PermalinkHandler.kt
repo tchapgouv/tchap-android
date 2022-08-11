@@ -25,6 +25,7 @@ import im.vector.app.core.extensions.isIgnored
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.core.utils.toast
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
+import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import kotlinx.coroutines.Dispatchers
@@ -32,18 +33,23 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.timeline.isRootThread
 import javax.inject.Inject
 
-class PermalinkHandler @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
-                                           private val userPreferencesProvider: UserPreferencesProvider,
-                                           private val navigator: Navigator) {
+class PermalinkHandler @Inject constructor(
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val userPreferencesProvider: UserPreferencesProvider,
+        private val navigator: Navigator
+) {
 
     suspend fun launch(
             context: Context,
@@ -62,10 +68,10 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
             buildTask: Boolean = false
     ): Boolean {
         return when {
-            deepLink == null                                    -> false
-            deepLink.isIgnored()                                -> true
+            deepLink == null -> false
+            deepLink.isIgnored() -> true
             !isPermalinkSupported(context, deepLink.toString()) -> false
-            else                                                -> {
+            else -> {
                 tryOrNull {
                     withContext(Dispatchers.Default) {
                         val permalinkData = PermalinkParser.parse(deepLink)
@@ -84,7 +90,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
             buildTask: Boolean
     ): Boolean {
         return when (permalinkData) {
-            is PermalinkData.RoomLink            -> {
+            is PermalinkData.RoomLink -> {
                 val roomId = permalinkData.getRoomId()
                 val session = activeSessionHolder.getSafeActiveSession()
 
@@ -109,17 +115,17 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                 )
                 true
             }
-            is PermalinkData.GroupLink           -> {
+            is PermalinkData.GroupLink -> {
                 navigator.openGroupDetail(permalinkData.groupId, context, buildTask)
                 true
             }
-            is PermalinkData.UserLink            -> {
+            is PermalinkData.UserLink -> {
                 if (navigationInterceptor?.navToMemberProfile(permalinkData.userId, rawLink) != true) {
                     navigator.openRoomMemberProfile(userId = permalinkData.userId, roomId = null, context = context, buildTask = buildTask)
                 }
                 true
             }
-            is PermalinkData.FallbackLink        -> {
+            is PermalinkData.FallbackLink -> {
                 false
             }
             is PermalinkData.RoomEmailInviteLink -> {
@@ -145,7 +151,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
     private suspend fun PermalinkData.RoomLink.getRoomId(): String? {
         val session = activeSessionHolder.getSafeActiveSession()
         return if (isRoomAlias && session != null) {
-            val roomIdByAlias = session.getRoomIdByAlias(roomIdOrAlias, true)
+            val roomIdByAlias = session.roomService().getRoomIdByAlias(roomIdOrAlias, true)
             roomIdByAlias.getOrNull()?.roomId
         } else {
             roomIdOrAlias
@@ -161,7 +167,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
     }
 
     /**
-     * Open room either joined, or not
+     * Open room either joined, or not.
      */
     private fun openRoom(
             navigationInterceptor: NavigationInterceptor?,
@@ -183,30 +189,31 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
 //        val roomAlias = permalinkData.getRoomAliasOrNull()
         val isSpace = roomSummary?.roomType == RoomType.SPACE
         return when {
-            membership == Membership.BAN     -> context.toast(R.string.error_opening_banned_room)
+            membership == Membership.BAN -> context.toast(R.string.error_opening_banned_room)
             membership?.isActive().orFalse() -> {
                 if (!isSpace && membership == Membership.JOIN) {
                     // If it's a room you're in, let's just open it, you can tap back if needed
                     navigationInterceptor.openJoinedRoomScreen(buildTask, roomId, eventId, rawLink, context, rootThreadEventId, roomSummary)
                 } else {
                     // maybe open space preview navigator.openSpacePreview(context, roomId)? if already joined?
-                    navigator.openMatrixToBottomSheet(context, rawLink.toString())
+                    navigator.openMatrixToBottomSheet(context, rawLink.toString(), OriginOfMatrixTo.LINK)
                 }
             }
-            else                             -> {
+            else -> {
                 // XXX this could trigger another server load
-                navigator.openMatrixToBottomSheet(context, rawLink.toString())
+                navigator.openMatrixToBottomSheet(context, rawLink.toString(), OriginOfMatrixTo.LINK)
             }
         }
     }
 
-    private fun NavigationInterceptor?.openJoinedRoomScreen(buildTask: Boolean,
-                                                            roomId: String,
-                                                            eventId: String?,
-                                                            rawLink: Uri,
-                                                            context: Context,
-                                                            rootThreadEventId: String?,
-                                                            roomSummary: RoomSummary
+    private fun NavigationInterceptor?.openJoinedRoomScreen(
+            buildTask: Boolean,
+            roomId: String,
+            eventId: String?,
+            rawLink: Uri,
+            context: Context,
+            rootThreadEventId: String?,
+            roomSummary: RoomSummary
     ) {
         if (this?.navToRoom(roomId, eventId, rawLink, rootThreadEventId) != true) {
             if (rootThreadEventId != null && userPreferencesProvider.areThreadMessagesEnabled()) {
@@ -215,7 +222,8 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                         displayName = roomSummary.displayName,
                         avatarUrl = roomSummary.avatarUrl,
                         roomEncryptionTrustLevel = roomSummary.roomEncryptionTrustLevel,
-                        rootThreadEventId = rootThreadEventId)
+                        rootThreadEventId = rootThreadEventId
+                )
                 navigator.openThread(context, threadTimelineArgs, eventId)
             } else {
                 navigator.openRoom(context, roomId, eventId, buildTask)
@@ -233,14 +241,14 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
 interface NavigationInterceptor {
 
     /**
-     * Return true if the navigation has been intercepted
+     * Return true if the navigation has been intercepted.
      */
     fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri? = null, rootThreadEventId: String? = null): Boolean {
         return false
     }
 
     /**
-     * Return true if the navigation has been intercepted
+     * Return true if the navigation has been intercepted.
      */
     fun navToMemberProfile(userId: String, deepLink: Uri): Boolean {
         return false

@@ -116,6 +116,7 @@ You should consider adding Unit tests with your PR, and also integration tests (
 ### Internationalisation
 
 When adding new string resources, please only add new entries in the 2 files: `value/strings_tchap.xml` and `values-fr/strings_tchap.xml`.
+
 Do not hesitate to use plurals when appropriate.
 
 ### Accessibility

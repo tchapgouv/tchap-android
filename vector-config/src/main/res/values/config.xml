@@ -17,7 +17,12 @@
      -->
 
     <!-- Note: pusher_http_url should have path '/_matrix/push/v1/notify' -->
+    <!-- It is the push gateway for FCM embedded distributor -->
     <string name="pusher_http_url" translatable="false">https://sygnal.tchap.gouv.fr/_matrix/push/v1/notify</string>
+    <!-- Note: default_push_gateway_http_url should have path '/_matrix/push/v1/notify' -->
+    <!-- It is the push gateway for UnifiedPush -->
+    <!-- Tchap: Use empty default push gateway http url -->
+    <string name="default_push_gateway_http_url" translatable="false"> </string>
     <!-- Note: pusher_app_id cannot exceed 64 chars -->
 <!--    <string name="pusher_app_id" translatable="false">im.vector.app.android</string>-->
 

@@ -24,7 +24,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
-import im.vector.app.R
 import im.vector.app.databinding.ViewBooleanDropdownBinding
 
 class OverrideDropdownView @JvmOverloads constructor(
@@ -58,7 +57,7 @@ class OverrideDropdownView @JvmOverloads constructor(
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     when (position) {
-                        0    -> listener.onOverrideSelected(option = null)
+                        0 -> listener.onOverrideSelected(option = null)
                         else -> listener.onOverrideSelected(feature.options[position - 1])
                     }
                 }

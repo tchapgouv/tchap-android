@@ -32,8 +32,11 @@ import im.vector.app.features.userdirectory.PendingSelection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
@@ -61,9 +64,9 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
     override fun handle(action: CreateDirectRoomAction) {
         when (action) {
             is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onSubmitInvitees(action.selections)
-            is CreateDirectRoomAction.QrScannedAction                  -> onCodeParsed(action)
             is CreateDirectRoomAction.InviteByEmail                    -> handleIndividualInviteByEmail(action.email)
             is CreateDirectRoomAction.CreateDirectMessageByUserId      -> handleCreateDirectMessageByUserId(action.userId)
+            is CreateDirectRoomAction.QrScannedAction -> onCodeParsed(action)
         }
     }
 
@@ -78,7 +81,11 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
                 _viewEvents.post(CreateDirectRoomViewEvents.DmSelf)
             } else {
                 // Try to get user from known users and fall back to creating a User object from MXID
-                val qrInvitee = if (session.getUser(mxid) != null) session.getUser(mxid)!! else User(mxid, null, null)
+                val qrInvitee = if (session.getUser(mxid) != null) {
+                    session.getUser(mxid)!!
+                } else {
+                    User(mxid, null, null)
+                }
                 onSubmitInvitees(setOf(PendingSelection.UserPendingSelection(qrInvitee)))
             }
         }
@@ -96,7 +103,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
         setState { copy(isLoading = true) }
         when (selection) {
             // User already exists, so we can create or retrieve the DM with him
-            is PendingSelection.UserPendingSelection     -> handleCreateDirectMessageByUserId(selection.user.userId)
+            is PendingSelection.UserPendingSelection -> handleCreateDirectMessageByUserId(selection.user.userId)
             // User is unknown, so we have to invite him before creating the DM
             is PendingSelection.ThreePidPendingSelection -> {
                 if (selection.threePid is ThreePid.Email) {
@@ -105,6 +112,13 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
                     setState { copy(isLoading = false) }
                     _viewEvents.post(CreateDirectRoomViewEvents.Failure(Throwable("Invite by Msisdn is not supported yet.")))
                 }
+//        val existingRoomId = selections.singleOrNull()?.getMxId()?.let { userId ->
+//            session.roomService().getExistingDirectRoomWithUser(userId)
+//        }
+//        if (existingRoomId != null) {
+//            // Do not create a new DM, just tell that the creation is successful by passing the existing roomId
+//            setState {
+//                copy(createAndInviteState = Success(existingRoomId))
             }
         }
     }
@@ -130,9 +144,9 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
 //                        enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
 //                    }
 //
-//            val result = runCatchingToAsync {
+//                      val result = runCatchingToAsync {
 //                session.roomService().createRoom(roomParams)
-//            }
+//                  }
 //            analyticsTracker.capture(CreatedRoom(isDM = roomParams.isDirect.orFalse()))
 //
 //            setState {
@@ -161,7 +175,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
 
     private fun handleIndividualInviteByEmail(email: String) {
         setState { copy(isLoading = true) }
-        val existingRoom = session.getExistingDirectRoomWithUser(email)
+        val existingRoom = session.roomService().getExistingDirectRoomWithUser(email)
         viewModelScope.launch(Dispatchers.IO) {
             // Start the invite process by checking whether a Tchap account has been created for this email.
             val userId = tryOrNull { session.identityService().lookUp(listOf(ThreePid.Email(email))) }
@@ -171,7 +185,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
             // Email matches with an existing account, notify the UI with the resulting user
             if (userId != null) {
                 setState { copy(isLoading = false) }
-                val user = tryOrNull { session.resolveUser(userId) } ?: User(userId, TchapUtils.computeDisplayNameFromUserId(userId), null)
+                val user = tryOrNull { session.userService().resolveUser(userId) } ?: User(userId, TchapUtils.computeDisplayNameFromUserId(userId), null)
                 _viewEvents.post(CreateDirectRoomViewEvents.UserDiscovered(user))
             }
             // Email does not match with an existing account, try to invite him before creating the DM
@@ -223,7 +237,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
                 }
 
                 // Create the DM and notify UI about the result
-                runCatching { session.createRoom(roomParams) }.fold(
+                runCatching { session.roomService().createRoom(roomParams) }.fold(
                         {
                             setState { copy(isLoading = false) }
                             _viewEvents.post(CreateDirectRoomViewEvents.InviteSent)
@@ -239,11 +253,11 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
 
     private suspend fun revokePendingInviteAndLeave(roomId: String) {
         session.getRoom(roomId)?.let { room ->
-            val token = room.getStateEvent(EventType.STATE_ROOM_THIRD_PARTY_INVITE)?.stateKey
+            val token = room.stateService().getStateEvent(EventType.STATE_ROOM_THIRD_PARTY_INVITE, QueryStringValue.IsNotNull)?.stateKey
 
             try {
                 if (!token.isNullOrEmpty()) {
-                    room.sendStateEvent(
+                    room.stateService().sendStateEvent(
                             eventType = EventType.STATE_ROOM_THIRD_PARTY_INVITE,
                             stateKey = token,
                             body = emptyMap()
@@ -252,7 +266,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
                     Timber.d("unable to revoke invite (no pending invite)")
                 }
 
-                session.leaveRoom(roomId)
+                session.roomService().leaveRoom(roomId)
             } catch (failure: Throwable) {
                 setState { copy(isLoading = false) }
                 _viewEvents.post(CreateDirectRoomViewEvents.Failure(failure))

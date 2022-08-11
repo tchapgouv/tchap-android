@@ -162,7 +162,7 @@ class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentT
     }
 
     /**
-     * Detect if password ends or starts with spaces
+     * Detect if password ends or starts with spaces.
      */
     private fun spaceInPassword() = views.tchapPasswordField.text.toString().let { it.trim() != it }
 }

@@ -136,7 +136,7 @@ internal class EventSenderProcessorThread @Inject constructor(
     private var retryNoNetworkTask: TimerTask? = null
 
     override fun run() {
-        Timber.v("## SendThread started ts:${System.currentTimeMillis()}")
+        Timber.v("## SendThread started")
         try {
             while (!isInterrupted) {
                 Timber.v("## SendThread wait for task to process")
@@ -151,7 +151,7 @@ internal class EventSenderProcessorThread @Inject constructor(
                 }
                 // we check for network connectivity
                 while (!canReachServer) {
-                    Timber.v("## SendThread cannot reach server, wait ts:${System.currentTimeMillis()}")
+                    Timber.v("## SendThread cannot reach server")
                     // schedule to retry
                     waitForNetwork()
                     // if thread as been killed meanwhile
@@ -175,12 +175,12 @@ internal class EventSenderProcessorThread @Inject constructor(
                                     canReachServer = false
                                     if (task.retryCount.getAndIncrement() >= 3) task.onTaskFailed()
                                     while (!canReachServer) {
-                                        Timber.v("## SendThread retryLoop cannot reach server, wait ts:${System.currentTimeMillis()}")
+                                        Timber.v("## SendThread retryLoop cannot reach server")
                                         // schedule to retry
                                         waitForNetwork()
                                     }
                                 }
-                                (exception.isLimitExceededError())                                 -> {
+                                (exception.isLimitExceededError()) -> {
                                     if (task.retryCount.getAndIncrement() >= 3) task.onTaskFailed()
                                     Timber.v("## SendThread retryLoop retryable error for $task reason: ${exception.localizedMessage}")
                                     // wait a bit
@@ -188,17 +188,17 @@ internal class EventSenderProcessorThread @Inject constructor(
                                     sleep(3_000)
                                     continue@retryLoop
                                 }
-                                exception.isTokenError()                                           -> {
+                                exception.isTokenError() -> {
                                     Timber.v("## SendThread retryLoop retryable TOKEN error, interrupt")
                                     // we can exit the loop
                                     task.onTaskFailed()
                                     throw InterruptedException()
                                 }
-                                exception is CancellationException                                 -> {
+                                exception is CancellationException -> {
                                     Timber.v("## SendThread task has been cancelled")
                                     break@retryLoop
                                 }
-                                else                                                               -> {
+                                else -> {
                                     Timber.v("## SendThread retryLoop Un-Retryable error, try next task")
                                     // this task is in error, check next one?
                                     task.onTaskFailed()
@@ -218,7 +218,7 @@ internal class EventSenderProcessorThread @Inject constructor(
 //        state = State.KILLED
         // is this needed?
         retryNoNetworkTask?.cancel()
-        Timber.w("## SendThread finished ${System.currentTimeMillis()}")
+        Timber.w("## SendThread finished")
     }
 
     private fun waitForNetwork() {

@@ -34,6 +34,7 @@ import im.vector.app.config.analyticsConfig
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.time.Clock
 import im.vector.app.core.time.DefaultClock
 import im.vector.app.features.analytics.AnalyticsConfig
@@ -50,7 +51,9 @@ import im.vector.app.features.room.VectorRoomDisplayNameFallbackProvider
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
+import im.vector.app.flipper.FlipperProxy
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.SupervisorJob
@@ -61,6 +64,7 @@ import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -118,27 +122,30 @@ object VectorStaticModule {
     fun providesMatrixConfiguration(
             vectorPreferences: VectorPreferences,
             vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider,
-            context: Context
+            flipperProxy: FlipperProxy,
+            context: Context,
     ): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
                 roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
                 threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
-                presenceSyncEnabled = BuildConfig.PRESENCE_SYNC_ENABLED,
+                networkInterceptors = listOfNotNull(
+                        flipperProxy.getNetworkInterceptor(),
+                ),
                 // Tchap: Use custom permalink prefix
-                clientPermalinkBaseUrl = context.getString(R.string.permalink_prefix)
+                clientPermalinkBaseUrl = context.getString(R.string.permalink_prefix),
         )
     }
 
     @Provides
     @Singleton
     fun providesMatrix(context: Context, configuration: MatrixConfiguration): Matrix {
-        return Matrix.createInstance(context, configuration)
+        return Matrix(context, configuration)
     }
 
     @Provides
     fun providesCurrentSession(activeSessionHolder: ActiveSessionHolder): Session {
-        // TODO: handle session injection better
+        // TODO handle session injection better
         return activeSessionHolder.getActiveSession()
     }
 
@@ -158,6 +165,11 @@ object VectorStaticModule {
     }
 
     @Provides
+    fun providesLightweightSettingsStorage(matrix: Matrix): LightweightSettingsStorage {
+        return matrix.lightweightSettingsStorage()
+    }
+
+    @Provides
     fun providesHomeServerHistoryService(matrix: Matrix): HomeServerHistoryService {
         return matrix.homeServerHistoryService()
     }
@@ -173,7 +185,7 @@ object VectorStaticModule {
         return CoroutineDispatchers(io = Dispatchers.IO, computation = Dispatchers.Default)
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
+    @OptIn(DelicateCoroutinesApi::class)
     @Provides
     @NamedGlobalScope
     fun providesGlobalScope(): CoroutineScope {
@@ -184,4 +196,8 @@ object VectorStaticModule {
     fun providesAnalyticsConfig(): AnalyticsConfig {
         return analyticsConfig
     }
+
+    @Provides
+    @Singleton
+    fun providesBuildMeta() = BuildMeta()
 }

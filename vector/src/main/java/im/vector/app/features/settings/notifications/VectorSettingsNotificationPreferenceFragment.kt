@@ -38,9 +38,12 @@ import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.services.GuardServiceStarter
+import im.vector.app.core.utils.combineLatest
 import im.vector.app.core.utils.isIgnoringBatteryOptimizations
 import im.vector.app.core.utils.requestDisablingBatteryOptimization
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.BackgroundSyncMode
@@ -48,24 +51,24 @@ import im.vector.app.features.settings.BackgroundSyncModeChooserDialog
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsBaseFragment
 import im.vector.app.features.settings.VectorSettingsFragmentInteractionListener
-import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.pushrules.RuleIds
-import org.matrix.android.sdk.api.pushrules.RuleKind
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.pushers.Pusher
-import org.matrix.android.sdk.internal.extensions.combineLatest
+import org.matrix.android.sdk.api.session.pushrules.RuleIds
+import org.matrix.android.sdk.api.session.pushrules.RuleKind
 import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
 class VectorSettingsNotificationPreferenceFragment @Inject constructor(
-        private val pushManager: PushersManager,
+        private val unifiedPushHelper: UnifiedPushHelper,
+        private val pushersManager: PushersManager,
         private val activeSessionHolder: ActiveSessionHolder,
         private val vectorPreferences: VectorPreferences,
-        private val guardServiceStarter: GuardServiceStarter
+        private val guardServiceStarter: GuardServiceStarter,
+        private val vectorFeatures: VectorFeatures,
 ) : VectorSettingsBaseFragment(),
         BackgroundSyncModeChooserDialog.InteractionListener {
 
@@ -81,7 +84,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 
     override fun bindPref() {
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY)!!.let { pref ->
-            val pushRuleService = session
+            val pushRuleService = session.pushRuleService()
             val mRuleMaster = pushRuleService.getPushRules().getAllRules()
                     .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
 
@@ -98,14 +101,14 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)?.let {
             it.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
                 if (isChecked) {
-                    FcmHelper.getFcmToken(requireContext())?.let {
-                        pushManager.registerPusherWithFcmKey(it)
+                    unifiedPushHelper.register(requireActivity()) {
+                        // Update the summary
+                        findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_METHOD_KEY)
+                                ?.summary = unifiedPushHelper.getCurrentDistributorName()
                     }
                 } else {
-                    FcmHelper.getFcmToken(requireContext())?.let {
-                        pushManager.unregisterPusher(it)
-                        session.refreshPushers()
-                    }
+                    unifiedPushHelper.unregister(pushersManager)
+                    session.pushersService().refreshPushers()
                 }
             }
         }
@@ -148,6 +151,22 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             }
         }
 
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_METHOD_KEY)?.let {
+            if (vectorFeatures.allowExternalUnifiedPushDistributors()) {
+                it.summary = unifiedPushHelper.getCurrentDistributorName()
+                it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    unifiedPushHelper.openDistributorDialog(requireActivity(), pushersManager) {
+                        it.summary = unifiedPushHelper.getCurrentDistributorName()
+                        session.pushersService().refreshPushers()
+                        refreshBackgroundSyncPrefs()
+                    }
+                    true
+                }
+            } else {
+                it.isVisible = false
+            }
+        }
+
         bindEmailNotifications()
         refreshBackgroundSyncPrefs()
 
@@ -182,9 +201,9 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                     pref.isChecked = isEnabled
                     pref.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
                         if (isChecked) {
-                            pushManager.registerEmailForPush(emailPid.email)
+                            pushersManager.registerEmailForPush(emailPid.email)
                         } else {
-                            pushManager.unregisterEmailPusher(emailPid.email)
+                            pushersManager.unregisterEmailPusher(emailPid.email)
                         }
                     }
                     category.addPreference(pref)
@@ -204,7 +223,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             // Important, Battery optim white listing is needed in this mode;
             // Even if using foreground service with foreground notif, it stops to work
             // in doze mode for certain devices :/
-            if (!isIgnoringBatteryOptimizations(requireContext())) {
+            if (!requireContext().isIgnoringBatteryOptimizations()) {
                 requestDisablingBatteryOptimization(requireActivity(), batteryStartForActivityResult)
             }
         }
@@ -215,14 +234,14 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
     private fun refreshBackgroundSyncPrefs() {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_FDROID_BACKGROUND_SYNC_MODE)?.let {
             it.summary = when (vectorPreferences.getFdroidSyncBackgroundMode()) {
-                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY  -> getString(R.string.settings_background_fdroid_sync_mode_battery)
+                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY -> getString(R.string.settings_background_fdroid_sync_mode_battery)
                 BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME -> getString(R.string.settings_background_fdroid_sync_mode_real_time)
-                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED     -> getString(R.string.settings_background_fdroid_sync_mode_disabled)
+                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED -> getString(R.string.settings_background_fdroid_sync_mode_disabled)
             }
         }
 
         findPreference<VectorPreferenceCategory>(VectorPreferences.SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY)?.let {
-            it.isVisible = !FcmHelper.isPushSupported()
+            it.isVisible = unifiedPushHelper.isBackgroundSync()
         }
 
         val backgroundSyncEnabled = vectorPreferences.isBackgroundSyncEnabled()
@@ -236,12 +255,12 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         }
         when {
             backgroundSyncEnabled -> guardServiceStarter.start()
-            else                  -> guardServiceStarter.stop()
+            else -> guardServiceStarter.stop()
         }
     }
 
     /**
-     * Convert a delay in seconds to string
+     * Convert a delay in seconds to string.
      *
      * @param seconds the delay in seconds
      * @return the text
@@ -318,7 +337,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 
     override fun onResume() {
         super.onResume()
-        activeSessionHolder.getSafeActiveSession()?.refreshPushers()
+        activeSessionHolder.getSafeActiveSession()?.pushersService()?.refreshPushers()
 
         interactionListener?.requestedKeyToHighlight()?.let { key ->
             interactionListener?.requestHighlightPreferenceKeyOnResume(null)
@@ -331,7 +350,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 
     private fun refreshPref() {
         // This pref may have change from troubleshoot pref fragment
-        if (!FcmHelper.isPushSupported()) {
+        if (unifiedPushHelper.isBackgroundSync()) {
             findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_START_ON_BOOT_PREFERENCE_KEY)
                     ?.isChecked = vectorPreferences.autoStartOnBoot()
         }
@@ -352,20 +371,20 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         super.onDetach()
     }
 
-    override fun onPreferenceTreeClick(preference: Preference?): Boolean {
-        return when (preference?.key) {
+    override fun onPreferenceTreeClick(preference: Preference): Boolean {
+        return when (preference.key) {
             VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY -> {
                 updateEnabledForAccount(preference)
                 true
             }
-            else                                                       -> {
+            else -> {
                 return super.onPreferenceTreeClick(preference)
             }
         }
     }
 
     private fun updateEnabledForAccount(preference: Preference?) {
-        val pushRuleService = session
+        val pushRuleService = session.pushRuleService()
         val switchPref = preference as SwitchPreference
         pushRuleService.getPushRules().getAllRules()
                 .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
@@ -373,9 +392,11 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                     // Trick, we must enable this room to disable notifications
                     lifecycleScope.launch {
                         try {
-                            pushRuleService.updatePushRuleEnableStatus(RuleKind.OVERRIDE,
+                            pushRuleService.updatePushRuleEnableStatus(
+                                    RuleKind.OVERRIDE,
                                     it,
-                                    !switchPref.isChecked)
+                                    !switchPref.isChecked
+                            )
                             // Push rules will be updated from the sync
                         } catch (failure: Throwable) {
                             if (!isAdded) {
@@ -414,15 +435,15 @@ private fun SwitchPreference.setTransactionalSwitchChangeListener(scope: Corouti
  * @see ThreePid.Email
  */
 private fun Session.getEmailsWithPushInformation(): List<Pair<ThreePid.Email, Boolean>> {
-    val emailPushers = getPushers().filter { it.kind == Pusher.KIND_EMAIL }
-    return getThreePids()
+    val emailPushers = pushersService().getPushers().filter { it.kind == Pusher.KIND_EMAIL }
+    return profileService().getThreePids()
             .filterIsInstance<ThreePid.Email>()
             .map { it to emailPushers.any { pusher -> pusher.pushKey == it.email } }
 }
 
 private fun Session.getEmailsWithPushInformationLive(): LiveData<List<Pair<ThreePid.Email, Boolean>>> {
-    val emailThreePids = getThreePidsLive(refreshData = true).map { it.filterIsInstance<ThreePid.Email>() }
-    val emailPushers = getPushersLive().map { it.filter { pusher -> pusher.kind == Pusher.KIND_EMAIL } }
+    val emailThreePids = profileService().getThreePidsLive(refreshData = true).map { it.filterIsInstance<ThreePid.Email>() }
+    val emailPushers = pushersService().getPushersLive().map { it.filter { pusher -> pusher.kind == Pusher.KIND_EMAIL } }
     return combineLatest(emailThreePids, emailPushers) { emailThreePidsResult, emailPushersResult ->
         emailThreePidsResult.map { it to emailPushersResult.any { pusher -> pusher.pushKey == it.email } }
     }.distinctUntilChanged()

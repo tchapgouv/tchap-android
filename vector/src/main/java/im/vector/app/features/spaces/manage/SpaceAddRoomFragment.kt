@@ -38,7 +38,6 @@ import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpaceAddRoomsBinding
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -141,11 +140,11 @@ class SpaceAddRoomFragment @Inject constructor(
                             .setNegativeButton(R.string.action_cancel, null)
                             .show()
                 }
-                is SpaceAddRoomsViewEvents.SaveFailed      -> {
+                is SpaceAddRoomsViewEvents.SaveFailed -> {
                     showErrorInSnackbar(it.reason)
                     invalidateOptionsMenu()
                 }
-                SpaceAddRoomsViewEvents.SavedDone          -> {
+                SpaceAddRoomsViewEvents.SavedDone -> {
                     sharedViewModel.handle(SpaceManagedSharedAction.HandleBack)
                 }
             }

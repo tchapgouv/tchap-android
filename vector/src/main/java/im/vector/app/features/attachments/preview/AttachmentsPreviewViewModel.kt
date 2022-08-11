@@ -20,13 +20,13 @@ package im.vector.app.features.attachments.preview
 import im.vector.app.core.platform.VectorViewModel
 
 class AttachmentsPreviewViewModel(initialState: AttachmentsPreviewViewState) :
-    VectorViewModel<AttachmentsPreviewViewState, AttachmentsPreviewAction, AttachmentsPreviewViewEvents>(initialState) {
+        VectorViewModel<AttachmentsPreviewViewState, AttachmentsPreviewAction, AttachmentsPreviewViewEvents>(initialState) {
 
     override fun handle(action: AttachmentsPreviewAction) {
         when (action) {
-            is AttachmentsPreviewAction.SetCurrentAttachment          -> handleSetCurrentAttachment(action)
+            is AttachmentsPreviewAction.SetCurrentAttachment -> handleSetCurrentAttachment(action)
             is AttachmentsPreviewAction.UpdatePathOfCurrentAttachment -> handleUpdatePathOfCurrentAttachment(action)
-            AttachmentsPreviewAction.RemoveCurrentAttachment          -> handleRemoveCurrentAttachment()
+            AttachmentsPreviewAction.RemoveCurrentAttachment -> handleRemoveCurrentAttachment()
         }
     }
 

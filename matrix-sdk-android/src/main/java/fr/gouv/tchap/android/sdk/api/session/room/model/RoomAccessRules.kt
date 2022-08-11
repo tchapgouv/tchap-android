@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Enum for [RoomJoinRulesContent]
+ * Enum for [RoomJoinRulesContent].
  */
 @JsonClass(generateAdapter = false)
 enum class RoomAccessRules(val value: String) {

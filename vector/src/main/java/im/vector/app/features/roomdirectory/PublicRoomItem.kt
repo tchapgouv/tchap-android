@@ -75,9 +75,9 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
 
         holder.buttonState.render(
                 when (joinState) {
-                    JoinState.NOT_JOINED    -> ButtonStateView.State.Button
-                    JoinState.JOINING       -> ButtonStateView.State.Loading
-                    JoinState.JOINED        -> ButtonStateView.State.Loaded
+                    JoinState.NOT_JOINED -> ButtonStateView.State.Button
+                    JoinState.JOINING -> ButtonStateView.State.Loading
+                    JoinState.JOINED -> ButtonStateView.State.Loaded
                     JoinState.JOINING_ERROR -> ButtonStateView.State.Error
                 }
         )

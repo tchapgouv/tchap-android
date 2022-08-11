@@ -86,9 +86,9 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
 //                    }
 
                     val modified = unsignedData.copy(redactedEvent = redactionEvent)
-                    // I Commented the line below, it should not be empty while we lose all the previous info about
-                    // the redacted event
-//                    eventToPrune.content = ContentMapper.map(emptyMap())
+                    // Deleting the content of a thread message will result to delete the thread relation, however threads are now dynamic
+                    // so there is not much of a problem
+                    eventToPrune.content = ContentMapper.map(emptyMap())
                     eventToPrune.unsignedData = MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(modified)
                     eventToPrune.decryptionResultJson = null
                     eventToPrune.decryptionErrorCode = null
@@ -145,10 +145,11 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
     private fun computeAllowedKeys(type: String): List<String> {
         // Add filtered content, allowed keys in content depends on the event type
         return when (type) {
-            EventType.STATE_ROOM_MEMBER          -> listOf("membership")
-            EventType.STATE_ROOM_CREATE          -> listOf("creator")
-            EventType.STATE_ROOM_JOIN_RULES      -> listOf("join_rule")
-            EventType.STATE_ROOM_POWER_LEVELS    -> listOf("users",
+            EventType.STATE_ROOM_MEMBER -> listOf("membership")
+            EventType.STATE_ROOM_CREATE -> listOf("creator")
+            EventType.STATE_ROOM_JOIN_RULES -> listOf("join_rule")
+            EventType.STATE_ROOM_POWER_LEVELS -> listOf(
+                    "users",
                     "users_default",
                     "events",
                     "events_default",
@@ -156,11 +157,12 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
                     "ban",
                     "kick",
                     "redact",
-                    "invite")
-            EventType.STATE_ROOM_ALIASES         -> listOf("aliases")
+                    "invite"
+            )
+            EventType.STATE_ROOM_ALIASES -> listOf("aliases")
             EventType.STATE_ROOM_CANONICAL_ALIAS -> listOf("alias")
-            EventType.FEEDBACK                   -> listOf("type", "target_event_id")
-            else                                 -> emptyList()
+            EventType.FEEDBACK -> listOf("type", "target_event_id")
+            else -> emptyList()
         }
     }
 }

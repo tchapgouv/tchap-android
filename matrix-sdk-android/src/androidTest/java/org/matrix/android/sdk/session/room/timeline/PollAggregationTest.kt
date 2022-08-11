@@ -30,6 +30,7 @@ import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.PollResponseAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.PollSummaryContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
@@ -37,8 +38,7 @@ import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import java.util.concurrent.CountDownLatch
 
 @RunWith(JUnit4::class)
@@ -46,9 +46,7 @@ import java.util.concurrent.CountDownLatch
 class PollAggregationTest : InstrumentedTest {
 
     @Test
-    fun testAllPollUseCases() {
-        val commonTestHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
+    fun testAllPollUseCases() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
@@ -57,10 +55,10 @@ class PollAggregationTest : InstrumentedTest {
 
         val roomFromBobPOV = cryptoTestData.secondSession!!.getRoom(cryptoTestData.roomId)!!
         // Bob creates a poll
-        roomFromBobPOV.sendPoll(PollType.DISCLOSED, pollQuestion, pollOptions)
+        roomFromBobPOV.sendService().sendPoll(PollType.DISCLOSED, pollQuestion, pollOptions)
 
-        aliceSession.startSync(true)
-        val aliceTimeline = roomFromAlicePOV.createTimeline(null, TimelineSettings(30))
+        aliceSession.syncService().startSync(true)
+        val aliceTimeline = roomFromAlicePOV.timelineService().createTimeline(null, TimelineSettings(30))
         aliceTimeline.start()
 
         val TOTAL_TEST_COUNT = 7
@@ -79,41 +77,41 @@ class PollAggregationTest : InstrumentedTest {
                     }
 
                     when (lock.count.toInt()) {
-                        TOTAL_TEST_COUNT     -> {
+                        TOTAL_TEST_COUNT -> {
                             // Poll has just been created.
                             testInitialPollConditions(pollContent, pollSummary)
                             lock.countDown()
-                            roomFromBobPOV.voteToPoll(pollEventId, pollContent.getBestPollCreationInfo()?.answers?.firstOrNull()?.id ?: "")
+                            roomFromBobPOV.sendService().voteToPoll(pollEventId, pollContent.getBestPollCreationInfo()?.answers?.firstOrNull()?.id ?: "")
                         }
                         TOTAL_TEST_COUNT - 1 -> {
                             // Bob: Option 1
                             testBobVotesOption1(pollContent, pollSummary)
                             lock.countDown()
-                            roomFromBobPOV.voteToPoll(pollEventId, pollContent.getBestPollCreationInfo()?.answers?.get(1)?.id ?: "")
+                            roomFromBobPOV.sendService().voteToPoll(pollEventId, pollContent.getBestPollCreationInfo()?.answers?.get(1)?.id ?: "")
                         }
                         TOTAL_TEST_COUNT - 2 -> {
                             // Bob: Option 2
                             testBobChangesVoteToOption2(pollContent, pollSummary)
                             lock.countDown()
-                            roomFromAlicePOV.voteToPoll(pollEventId, pollContent.getBestPollCreationInfo()?.answers?.get(1)?.id ?: "")
+                            roomFromAlicePOV.sendService().voteToPoll(pollEventId, pollContent.getBestPollCreationInfo()?.answers?.get(1)?.id ?: "")
                         }
                         TOTAL_TEST_COUNT - 3 -> {
                             // Alice: Option 2, Bob: Option 2
                             testAliceAndBobVoteToOption2(pollContent, pollSummary)
                             lock.countDown()
-                            roomFromAlicePOV.voteToPoll(pollEventId, pollContent.getBestPollCreationInfo()?.answers?.firstOrNull()?.id ?: "")
+                            roomFromAlicePOV.sendService().voteToPoll(pollEventId, pollContent.getBestPollCreationInfo()?.answers?.firstOrNull()?.id ?: "")
                         }
                         TOTAL_TEST_COUNT - 4 -> {
                             // Alice: Option 1, Bob: Option 2
                             testAliceVotesOption1AndBobVotesOption2(pollContent, pollSummary)
                             lock.countDown()
-                            roomFromBobPOV.endPoll(pollEventId)
+                            roomFromBobPOV.sendService().endPoll(pollEventId)
                         }
                         TOTAL_TEST_COUNT - 5 -> {
                             // Alice: Option 1, Bob: Option 2 [poll is ended]
                             testEndedPoll(pollSummary)
                             lock.countDown()
-                            roomFromAlicePOV.voteToPoll(pollEventId, pollContent.getBestPollCreationInfo()?.answers?.get(1)?.id ?: "")
+                            roomFromAlicePOV.sendService().voteToPoll(pollEventId, pollContent.getBestPollCreationInfo()?.answers?.get(1)?.id ?: "")
                         }
                         TOTAL_TEST_COUNT - 6 -> {
                             // Alice: Option 1 (ignore change), Bob: Option 2 [poll is ended]
@@ -121,7 +119,7 @@ class PollAggregationTest : InstrumentedTest {
                             testEndedPoll(pollSummary)
                             lock.countDown()
                         }
-                        else                 -> {
+                        else -> {
                             fail("Lock count ${lock.count} didn't handled.")
                         }
                     }
@@ -135,9 +133,8 @@ class PollAggregationTest : InstrumentedTest {
 
         aliceTimeline.removeAllListeners()
 
-        aliceSession.stopSync()
+        aliceSession.syncService().stopSync()
         aliceTimeline.dispose()
-        cryptoTestData.cleanUp(commonTestHelper)
     }
 
     private fun testInitialPollConditions(pollContent: MessagePollContent, pollSummary: PollResponseAggregatedSummary?) {

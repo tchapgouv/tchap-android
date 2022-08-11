@@ -190,6 +190,18 @@ class RoomMemberProfileController @Inject constructor(
         // More
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
 
+        if (!state.isMine) {
+            // Tchap: Both myUserId and otherUserId are not external
+            if (!TchapUtils.isExternalTchapUser(session.myUserId) || !TchapUtils.isExternalTchapUser(state.userId)) {
+                buildProfileAction(
+                        id = "direct",
+                        editable = false,
+                        title = stringProvider.getString(R.string.room_member_open_or_create_dm),
+                        action = { callback?.onOpenDmClicked() }
+                )
+            }
+        }
+
         // Tchap: Hidden in Tchap
 //        buildProfileAction(
 //                id = "overrideColor",
@@ -202,16 +214,6 @@ class RoomMemberProfileController @Inject constructor(
 
         if (!state.isMine) {
             val membership = state.asyncMembership() ?: return
-
-            // Both myUserId and otherUserId are not external
-            if (!TchapUtils.isExternalTchapUser(session.myUserId) || !TchapUtils.isExternalTchapUser(state.userId)) {
-                buildProfileAction(
-                        id = "direct",
-                        editable = false,
-                        title = stringProvider.getString(R.string.room_member_open_or_create_dm),
-                        action = { callback?.onOpenDmClicked() }
-                )
-            }
 
             if (!state.isSpace && state.hasReadReceipt) {
                 buildProfileAction(
@@ -288,7 +290,7 @@ class RoomMemberProfileController @Inject constructor(
 
         if (canKick) {
             when (membership) {
-                Membership.JOIN   -> {
+                Membership.JOIN -> {
                     buildProfileAction(
                             id = "kick",
                             editable = false,
@@ -308,7 +310,7 @@ class RoomMemberProfileController @Inject constructor(
                             action = { callback?.onCancelInviteClicked() }
                     )
                 }
-                else              -> Unit
+                else -> Unit
             }
         }
         if (canBan) {

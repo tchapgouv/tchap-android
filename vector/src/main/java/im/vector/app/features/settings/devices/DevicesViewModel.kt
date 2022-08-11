@@ -43,6 +43,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.auth.UIABaseAuth
@@ -53,17 +54,17 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
+import org.matrix.android.sdk.api.util.awaitCallback
+import org.matrix.android.sdk.api.util.fromBase64
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
-import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 import kotlin.coroutines.Continuation
@@ -90,7 +91,8 @@ class DevicesViewModel @AssistedInject constructor(
         @Assisted initialState: DevicesViewState,
         private val session: Session,
         private val reAuthHelper: ReAuthHelper,
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val matrix: Matrix,
 ) : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvents>(initialState), VerificationService.Listener {
 
     var uiaContinuation: Continuation<UIABaseAuth>? = null
@@ -200,15 +202,15 @@ class DevicesViewModel @AssistedInject constructor(
 
     override fun handle(action: DevicesAction) {
         return when (action) {
-            is DevicesAction.Refresh                -> queryRefreshDevicesList()
-            is DevicesAction.Delete                 -> handleDelete(action)
-            is DevicesAction.Rename                 -> handleRename(action)
-            is DevicesAction.PromptRename           -> handlePromptRename(action)
-            is DevicesAction.VerifyMyDevice         -> handleInteractiveVerification(action)
-            is DevicesAction.CompleteSecurity       -> handleCompleteSecurity()
+            is DevicesAction.Refresh -> queryRefreshDevicesList()
+            is DevicesAction.Delete -> handleDelete(action)
+            is DevicesAction.Rename -> handleRename(action)
+            is DevicesAction.PromptRename -> handlePromptRename(action)
+            is DevicesAction.VerifyMyDevice -> handleInteractiveVerification(action)
+            is DevicesAction.CompleteSecurity -> handleCompleteSecurity()
             is DevicesAction.MarkAsManuallyVerified -> handleVerifyManually(action)
             is DevicesAction.VerifyMyDeviceManually -> handleShowDeviceCryptoInfo(action)
-            is DevicesAction.SsoAuthDone            -> {
+            is DevicesAction.SsoAuthDone -> {
                 // we should use token based auth
                 // _viewEvents.post(CrossSigningSettingsViewEvents.ShowModalWaitingView(null))
                 // will release the interactive auth interceptor
@@ -220,8 +222,9 @@ class DevicesViewModel @AssistedInject constructor(
                 }
                 Unit
             }
-            is DevicesAction.PasswordAuthDone       -> {
-                val decryptedPass = session.loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
+            is DevicesAction.PasswordAuthDone -> {
+                val decryptedPass = matrix.secureStorageService()
+                        .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
                         UserPasswordAuth(
                                 session = pendingAuth?.session,
@@ -231,7 +234,7 @@ class DevicesViewModel @AssistedInject constructor(
                 )
                 Unit
             }
-            DevicesAction.ReAuthCancelled           -> {
+            DevicesAction.ReAuthCancelled -> {
                 Timber.d("## UIA - Reauth cancelled")
 //                _viewEvents.post(DevicesViewEvents.Loading)
                 uiaContinuation?.resumeWithException(Exception())
@@ -245,10 +248,12 @@ class DevicesViewModel @AssistedInject constructor(
         val txID = session.cryptoService()
                 .verificationService()
                 .beginKeyVerification(VerificationMethod.SAS, session.myUserId, action.deviceId, null)
-        _viewEvents.post(DevicesViewEvents.ShowVerifyDevice(
-                session.myUserId,
-                txID
-        ))
+        _viewEvents.post(
+                DevicesViewEvents.ShowVerifyDevice(
+                        session.myUserId,
+                        txID
+                )
+        )
     }
 
     private fun handleShowDeviceCryptoInfo(action: DevicesAction.VerifyMyDeviceManually) = withState { state ->
@@ -275,7 +280,8 @@ class DevicesViewModel @AssistedInject constructor(
                 session.cryptoService().setDeviceVerification(
                         DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
                         action.cryptoDeviceInfo.userId,
-                        action.cryptoDeviceInfo.deviceId)
+                        action.cryptoDeviceInfo.deviceId
+                )
             }
         }
     }

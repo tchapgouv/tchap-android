@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
+import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -55,11 +55,13 @@ data class CountInfo(
         val otherCount: RoomAggregateNotificationCount
 )
 
-class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initialState: UnreadMessagesState,
-                                                                session: Session,
-                                                                private val vectorPreferences: VectorPreferences,
-                                                                appStateHandler: AppStateHandler,
-                                                                private val autoAcceptInvites: AutoAcceptInvites) :
+class UnreadMessagesSharedViewModel @AssistedInject constructor(
+        @Assisted initialState: UnreadMessagesState,
+        session: Session,
+        private val vectorPreferences: VectorPreferences,
+        appStateHandler: AppStateHandler,
+        private val autoAcceptInvites: AutoAcceptInvites
+) :
         VectorViewModel<UnreadMessagesState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -71,29 +73,30 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
 
     override fun handle(action: EmptyAction) {}
 
-    init {
+    private val roomService = session.roomService()
 
-        session.getPagedRoomSummariesLive(
+    init {
+        roomService.getPagedRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
-                    this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
+                    this.spaceFilter = SpaceFilter.OrphanRooms
                 }, sortOrder = RoomSortOrder.NONE
         ).asFlow()
                 .throttleFirst(300)
                 .execute {
-                    val counts = session.getNotificationCountForRooms(
+                    val counts = roomService.getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)
-                                this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
+                                this.spaceFilter = SpaceFilter.OrphanRooms
                             }
                     )
                     val invites = if (autoAcceptInvites.hideInvites) {
                         0
                     } else {
-                        session.getRoomSummaries(
+                        roomService.getRoomSummaries(
                                 roomSummaryQueryParams {
                                     this.memberships = listOf(Membership.INVITE)
-                                    this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
+                                    this.spaceFilter = SpaceFilter.OrphanRooms
                                 }
                         ).size
                     }
@@ -109,7 +112,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
         combine(
                 appStateHandler.selectedRoomGroupingFlow.distinctUntilChanged(),
                 appStateHandler.selectedRoomGroupingFlow.flatMapLatest {
-                    session.getPagedRoomSummariesLive(
+                    roomService.getPagedRoomSummariesLive(
                             roomSummaryQueryParams {
                                 this.memberships = Membership.activeMemberships()
                             }, sortOrder = RoomSortOrder.NONE
@@ -125,13 +128,13 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                             RoomAggregateNotificationCount(0, 0)
                     )
                 }
-                is RoomGroupingMethod.BySpace       -> {
+                is RoomGroupingMethod.BySpace -> {
                     val selectedSpace = appStateHandler.safeActiveSpaceId()
 
                     val inviteCount = if (autoAcceptInvites.hideInvites) {
                         0
                     } else {
-                        session.getRoomSummaries(
+                        roomService.getRoomSummaries(
                                 roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
                         ).size
                     }
@@ -139,19 +142,19 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                     val spaceInviteCount = if (autoAcceptInvites.hideInvites) {
                         0
                     } else {
-                        session.getRoomSummaries(
+                        roomService.getRoomSummaries(
                                 spaceSummaryQueryParams {
                                     this.memberships = listOf(Membership.INVITE)
                                 }
                         ).size
                     }
 
-                    val totalCount = session.getNotificationCountForRooms(
+                    val totalCount = roomService.getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)
-                                this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
+                                this.spaceFilter = SpaceFilter.OrphanRooms.takeIf {
                                     !vectorPreferences.prefSpacesShowAllRoomInHome()
-                                } ?: ActiveSpaceFilter.None
+                                }
                             }
                     )
 
@@ -177,7 +180,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                             )
                     )
                 }
-                null                                -> {
+                null -> {
                     CountInfo(
                             RoomAggregateNotificationCount(0, 0),
                             RoomAggregateNotificationCount(0, 0)

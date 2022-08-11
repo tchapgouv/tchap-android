@@ -46,11 +46,11 @@ import im.vector.app.features.roomprofile.uploads.RoomUploadsAction
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewModel
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewState
+import org.matrix.android.sdk.api.session.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
-import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import javax.inject.Inject
 
 class RoomUploadsMediaFragment @Inject constructor(
@@ -157,7 +157,7 @@ class RoomUploadsMediaFragment @Inject constructor(
                             thumbnailMediaData = thumbnailData
                     )
                 }
-                else                   -> null
+                else -> null
             }
         }
     }
@@ -191,7 +191,7 @@ class RoomUploadsMediaFragment @Inject constructor(
                 is Loading -> {
                     views.genericStateViewListStateView.state = StateView.State.Loading
                 }
-                is Fail    -> {
+                is Fail -> {
                     views.genericStateViewListStateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncEventsRequest.error))
                 }
                 is Success -> {
@@ -205,7 +205,7 @@ class RoomUploadsMediaFragment @Inject constructor(
                         )
                     }
                 }
-                else       -> Unit
+                else -> Unit
             }
         } else {
             views.genericStateViewListStateView.state = StateView.State.Content

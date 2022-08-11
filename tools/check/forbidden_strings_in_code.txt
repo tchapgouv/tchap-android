@@ -60,7 +60,7 @@ private short
 final short
 
 ### Line length is limited to 160 chars. Please split long lines
-[^─]{161}
+#[^─]{161}
 
 ### "DO NOT COMMIT" has been committed
 DO NOT COMMIT
@@ -138,7 +138,7 @@ trim \{ it \<\= \' \' \}
 
 ### Use MaterialAlertDialogBuilder
 android\.app\.AlertDialog
-androidx\.appcompat\.app\.AlertDialog===4
+androidx\.appcompat\.app\.AlertDialog===5
 
 ### Put the operator at the beginning of next line
  ==$
@@ -174,3 +174,9 @@ PreferenceManager\.getDefaultSharedPreferences==2
 
 ### Do not use `template_` string. Please remove the prefix `template_` to use the generated resource instead.
 R\.string\.template_
+
+### Use the Clock interface, or use `measureTimeMillis`
+System\.currentTimeMillis\(\)===2
+
+### Remove extra space between the name and the description
+\* @\w+ \w+  +

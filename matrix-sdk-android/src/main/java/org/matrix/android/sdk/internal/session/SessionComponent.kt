@@ -22,13 +22,10 @@ import fr.gouv.tchap.android.sdk.internal.auth.TchapAccountValidityModule
 import fr.gouv.tchap.android.sdk.internal.session.users.TchapUsersInfoModule
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
+import org.matrix.android.sdk.api.securestorage.SecureStorageModule
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.crypto.CancelGossipRequestWorker
 import org.matrix.android.sdk.internal.crypto.CryptoModule
-import org.matrix.android.sdk.internal.crypto.SendGossipRequestWorker
-import org.matrix.android.sdk.internal.crypto.SendGossipWorker
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
-import org.matrix.android.sdk.internal.crypto.verification.SendVerificationMessageWorker
 import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.federation.FederationModule
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
@@ -52,6 +49,7 @@ import org.matrix.android.sdk.internal.session.profile.ProfileModule
 import org.matrix.android.sdk.internal.session.pushers.AddPusherWorker
 import org.matrix.android.sdk.internal.session.pushers.PushersModule
 import org.matrix.android.sdk.internal.session.room.RoomModule
+import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.DeactivateLiveLocationShareWorker
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
 import org.matrix.android.sdk.internal.session.room.send.RedactEventWorker
 import org.matrix.android.sdk.internal.session.room.send.SendEventWorker
@@ -70,8 +68,11 @@ import org.matrix.android.sdk.internal.session.widgets.WidgetModule
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.system.SystemModule
 
-@Component(dependencies = [MatrixComponent::class],
+@Component(
+        dependencies = [MatrixComponent::class],
         modules = [
+            TchapUsersInfoModule::class,
+            TchapAccountValidityModule::class,
             SessionModule::class,
             RoomModule::class,
             SyncModule::class,
@@ -103,8 +104,7 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
             SpaceModule::class,
             PresenceModule::class,
             RequestModule::class,
-            TchapUsersInfoModule::class,
-            TchapAccountValidityModule::class
+            SecureStorageModule::class,
         ]
 )
 @SessionScope
@@ -136,20 +136,15 @@ internal interface SessionComponent {
 
     fun inject(worker: AddPusherWorker)
 
-    fun inject(worker: SendVerificationMessageWorker)
-
-    fun inject(worker: SendGossipRequestWorker)
-
-    fun inject(worker: CancelGossipRequestWorker)
-
-    fun inject(worker: SendGossipWorker)
-
     fun inject(worker: UpdateTrustWorker)
+
+    fun inject(worker: DeactivateLiveLocationShareWorker)
 
     @Component.Factory
     interface Factory {
         fun create(
                 matrixComponent: MatrixComponent,
-                @BindsInstance sessionParams: SessionParams): SessionComponent
+                @BindsInstance sessionParams: SessionParams
+        ): SessionComponent
     }
 }

@@ -31,6 +31,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.user.model.User
@@ -41,7 +42,8 @@ class UserCodeSharedViewModel @AssistedInject constructor(
         private val session: Session,
         private val stringProvider: StringProvider,
         private val directRoomHelper: DirectRoomHelper,
-        private val rawService: RawService) : VectorViewModel<UserCodeState, UserCodeActions, UserCodeShareViewEvents>(initialState) {
+        private val rawService: RawService
+) : VectorViewModel<UserCodeState, UserCodeActions, UserCodeShareViewEvents>(initialState) {
 
     companion object : MavericksViewModelFactory<UserCodeSharedViewModel, UserCodeState> by hiltMavericksViewModelFactory()
 
@@ -62,23 +64,25 @@ class UserCodeSharedViewModel @AssistedInject constructor(
 
     override fun handle(action: UserCodeActions) {
         when (action) {
-            UserCodeActions.DismissAction                 -> _viewEvents.post(UserCodeShareViewEvents.Dismiss)
-            is UserCodeActions.SwitchMode                 -> setState { copy(mode = action.mode) }
-            is UserCodeActions.DecodedQRCode              -> handleQrCodeDecoded(action)
-            is UserCodeActions.StartChattingWithUser      -> handleStartChatting(action)
+            UserCodeActions.DismissAction -> _viewEvents.post(UserCodeShareViewEvents.Dismiss)
+            is UserCodeActions.SwitchMode -> setState { copy(mode = action.mode) }
+            is UserCodeActions.DecodedQRCode -> handleQrCodeDecoded(action)
+            is UserCodeActions.StartChattingWithUser -> handleStartChatting(action)
             is UserCodeActions.CameraPermissionNotGranted -> _viewEvents.post(UserCodeShareViewEvents.CameraPermissionNotGranted(action.deniedPermanently))
-            UserCodeActions.ShareByText                   -> handleShareByText()
+            UserCodeActions.ShareByText -> handleShareByText()
         }
     }
 
     private fun handleShareByText() {
         session.permalinkService().createPermalink(session.myUserId)?.let { permalink ->
             val text = stringProvider.getString(R.string.invite_friends_text, permalink)
-            _viewEvents.post(UserCodeShareViewEvents.SharePlainText(
-                    text,
-                    stringProvider.getString(R.string.invite_friends),
-                    stringProvider.getString(R.string.invite_friends_rich_title)
-            ))
+            _viewEvents.post(
+                    UserCodeShareViewEvents.SharePlainText(
+                            text,
+                            stringProvider.getString(R.string.invite_friends),
+                            stringProvider.getString(R.string.invite_friends_rich_title)
+                    )
+            )
         }
     }
 
@@ -110,12 +114,12 @@ class UserCodeSharedViewModel @AssistedInject constructor(
         _viewEvents.post(UserCodeShareViewEvents.ShowWaitingScreen)
         viewModelScope.launch(Dispatchers.IO) {
             when (linkedId) {
-                is PermalinkData.RoomLink            -> {
+                is PermalinkData.RoomLink -> {
                     // not yet supported
                     _viewEvents.post(UserCodeShareViewEvents.ToastMessage(stringProvider.getString(R.string.not_implemented)))
                 }
-                is PermalinkData.UserLink            -> {
-                    val user = tryOrNull { session.resolveUser(linkedId.userId) }
+                is PermalinkData.UserLink -> {
+                    val user = tryOrNull { session.userService().resolveUser(linkedId.userId) }
                     // Create raw Uxid in case the user is not searchable
                             ?: User(linkedId.userId, null, null)
 
@@ -125,11 +129,11 @@ class UserCodeSharedViewModel @AssistedInject constructor(
                         )
                     }
                 }
-                is PermalinkData.GroupLink           -> {
+                is PermalinkData.GroupLink -> {
                     // not yet supported
                     _viewEvents.post(UserCodeShareViewEvents.ToastMessage(stringProvider.getString(R.string.not_implemented)))
                 }
-                is PermalinkData.FallbackLink        -> {
+                is PermalinkData.FallbackLink -> {
                     // not yet supported
                     _viewEvents.post(UserCodeShareViewEvents.ToastMessage(stringProvider.getString(R.string.not_implemented)))
                 }

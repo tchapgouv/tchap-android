@@ -19,7 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.os.Parcelable
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.crypto.VerificationState
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -44,7 +44,8 @@ data class MessageInformationData(
         val isFirstFromThisSender: Boolean = false,
         val isLastFromThisSender: Boolean = false,
         // Tchap: Used to hide domain in DM.
-        val isDirect: Boolean = false
+        val isDirect: Boolean = false,
+        val messageType: String? = null
 ) : Parcelable {
 
     val matrixItem: MatrixItem
@@ -92,7 +93,10 @@ data class PollResponseData(
         val totalVotes: Int = 0,
         val winnerVoteCount: Int = 0,
         val isClosed: Boolean = false
-) : Parcelable
+) : Parcelable {
+
+    fun getVoteSummaryOfAnOption(optionId: String) = votes?.get(optionId)
+}
 
 @Parcelize
 data class PollVoteSummaryData(

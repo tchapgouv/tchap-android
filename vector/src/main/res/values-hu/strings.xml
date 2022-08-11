@@ -336,9 +336,7 @@
     <string name="settings_new_password">Új jelszó</string>
     <string name="settings_fail_to_update_password">Jelszó frissítése sikertelen</string>
     <string name="settings_password_updated">A jelszavad sikeresen frissítésre került</string>
-    <string name="settings_unignore_user">"Az összes üzenet mutatása %s -tól/-től?
-
-Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."</string>
+    <string name="settings_unignore_user">Az összes üzenet mutatása %s -tól/-től\?</string>
     <string name="settings_select_country">Válassz országot</string>
     <string name="room_settings_topic">Téma</string>
     <string name="room_settings_room_read_history_rules_pref_title">Üzenet előzmények láthatósága</string>
@@ -450,7 +448,6 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="has_been_banned">Ki lettél tiltva innen: %1$s, %2$s által</string>
     <string name="reason_colon">Ok: %1$s</string>
     <string name="settings_inline_url_preview">URL előnézet</string>
-    <string name="settings_flair">Kitűző</string>
     <string name="group_details_home">Kezdőlap</string>
     <string name="send_bug_report_rage_shake">Rázd meg az eszközt, ha hibát szeretnél bejelenteni</string>
     <plurals name="membership_changes">
@@ -545,7 +542,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="merged_events_expand">kinyit</string>
     <string name="merged_events_collapse">bezár</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="room_participants_action_remove">Elküld</string>
     <string name="settings_inline_url_preview_summary">URL előnézet a csevegő ablakban, ha a Matrix szervered támogatja ezt a lehetőséget.</string>
     <string name="settings_send_typing_notifs">Gépelés visszajelzés küldése</string>
@@ -1081,9 +1078,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="login_signup_submit">Következő</string>
     <string name="login_signup_error_user_in_use">A felhasználónév már használatban van</string>
     <string name="login_signup_cancel_confirmation_title">Figyelmeztetés</string>
-    <string name="login_signup_cancel_confirmation_content">A felhasználói fiókod még nincs kész.
-\n
-\nMegállítód a regisztrációt\?</string>
+    <string name="login_signup_cancel_confirmation_content">A felhasználói fiókod még nincs kész. Megállítód a regisztrációt\?</string>
     <string name="login_a11y_choose_matrix_org">matrix.org kiválasztása</string>
     <string name="login_a11y_choose_modular">Element Matrix Services kiválasztása</string>
     <string name="login_a11y_choose_other">Egyedi matrix szerver kiválasztása</string>
@@ -2201,10 +2196,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="space_add_space_to_any_space_you_manage">Add hozzá a teret bármelyik általad kezelt térhez.</string>
     <string name="space_add_existing_spaces">Meglévő terek hozzáadása</string>
     <string name="space_add_existing_rooms_only">Létező szobák hozzáadása</string>
-    <string name="pick_tings_to_leave">Válaszd ki ahonnan kilépsz</string>
-    <string name="leave_specific_ones">Kilépés a megadott szobákból és terekből…</string>
-    <string name="dont_leave_any">Nem lépek ki egyetlen szobából vagy térből sem</string>
-    <string name="leave_all_rooms_and_spaces">Minden szoba és tér elhagyása</string>
     <string name="space_leave_prompt_msg_with_name">Biztos, hogy ki akarsz lépni innen: %s\?</string>
     <string name="discovery_section">Felderítés (%s)</string>
     <string name="finish_setup">Beállítás befejezése</string>
@@ -2254,7 +2245,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="command_description_room_name">Szobanév beállítása</string>
     <string name="command_description_unignore_user">A felhasználó újbóli figyelembe vétele, és az üzenetei megjelenítése a jövőben</string>
     <string name="command_description_ignore_user">Figyelmen kívül hagy egy felhasználót, elrejtve előled az üzeneteit</string>
-    <string name="a11y_presence_unavailable">Elérhetetlen</string>
+    <string name="a11y_presence_unavailable">Távol</string>
     <string name="a11y_presence_offline">Kapcsolat nélkül</string>
     <string name="a11y_presence_online">Kapcsolódva</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Matrix szerver kiválasztása</string>
@@ -2337,19 +2328,14 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="tooltip_attachment_file">Fájl feltöltése</string>
     <string name="tooltip_attachment_gallery">Képek és videók küldése</string>
     <string name="tooltip_attachment_photo">Kamera megnyitása</string>
-    <string name="room_member_override_nick_color">Becenév színének megváltoztatása</string>
+    <string name="room_member_override_nick_color">Megjelenítendő név színének megváltoztatása</string>
     <string name="login_splash_already_have_account">Már van fiókom</string>
     <string name="ftue_auth_carousel_encrypted_title">Biztonságos üzenetküldés.</string>
     <string name="ftue_auth_carousel_control_title">Te irányítasz.</string>
     <string name="tooltip_attachment_location">Tartózkodási hely megosztása</string>
-    <string name="labs_render_locations_in_timeline">A felhasználó földrajzi helyzetének megjelenítése az idővonalon</string>
-    <string name="settings_enable_location_sharing_summary">A beállítás után bármelyik szobában megoszthatod a földrajzi helyzetedet</string>
-    <string name="settings_enable_location_sharing">Földrajzi hely megosztás engedélyezése</string>
     <string name="location_share_external">Megnyitás ezzel</string>
     <string name="location_not_available_dialog_content">Az ${app_name} nem fér hozzá a tartózkodási helyedhez. Próbáld újra később.</string>
     <string name="location_not_available_dialog_title">Az ${app_name} nem tudott hozzáférni a tartózkodási helyedhez</string>
-    <string name="location_share">Tartózkodási hely megosztása</string>
-    <string name="a11y_location_share_icon">Tartózkodási hely megosztása</string>
     <string name="location_activity_title_preview">Földrajzi helyzet</string>
     <string name="location_activity_title_static_sharing">Tartózkodási hely megosztása</string>
     <string name="closed_poll_option_description">Az eredmény csak a szavazás végeztével válik láthatóvá</string>
@@ -2419,8 +2405,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     </plurals>
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s és mások</string>
     <string name="room_notification_two_users_are_typing">%1$s és %2$s</string>
-    <string name="location_in_background_missing_permission_dialog_content">Ha folyamatosan meg akarod osztani a földrajzi pozíciódat ahhoz a(z) ${app_name} alkalmazásnak hozzá kell férnie a helyadatokhoz akkor is ha a háttérben fut.
-\nCsak az általad megadott idő intervallumban férünk hozzá a helyadatokhoz.</string>
     <string name="threads_notice_migration_message">Egyre közelebb kerülünk ahhoz, hogy publikus béta állapotba kerüljenek az üzenetszálak.
 \n
 \nAz előkészületekkel be kell vezetnünk pár változtatást: az eddig a pontig készített üzenetszálak hagyományos válaszokként fognak megjelenni.
@@ -2428,7 +2412,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 \nEz egy egyszeri változtatás ahogy az üzenetszálak ezentúl a Matrix specifikáció részét képezik.</string>
     <string name="location_share_live_stop">Állj</string>
     <string name="location_share_live_enabled">Folyamatos pozíció megosztás engedélyezve</string>
-    <string name="location_in_background_missing_permission_dialog_title">Hozzáférés engedélyezése</string>
     <string name="a11y_location_share_option_pinned_icon">Ennek a földrajzi helynek a megosztása</string>
     <string name="location_share_option_pinned">Ennek a földrajzi helynek a megosztása</string>
     <string name="a11y_location_share_option_user_live_icon">Pozícióm folyamatos megosztása</string>
@@ -2438,4 +2421,83 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="a11y_location_share_locate_button">Ugrás a jelenlegi pozícióra</string>
     <string name="a11y_location_share_pin_on_map">Kiválasztott hely rögzítése a térképen</string>
     <string name="threads_notice_migration_title">Üzenetszálak lassan béta állapotba kerülnek 🎉</string>
+    <string name="live_location_sharing_notification_description">Helymeghatározás folyamatban</string>
+    <string name="live_location_sharing_notification_title">${app_name} Folyamatos helymeghatározás</string>
+    <string name="error_forbidden_digits_only_username">A matrix szerver nem fogad el olyan felhasználói nevet ami csak számokból áll.</string>
+    <string name="ftue_personalize_skip_this_step">Lépés kihagyása</string>
+    <string name="ftue_personalize_submit">Mentés és tovább</string>
+    <string name="ftue_personalize_complete_subtitle">A beállítások elmentve.</string>
+    <string name="ftue_personalize_complete_title">Minden kész!</string>
+    <string name="ftue_personalize_lets_go">Gyerünk</string>
+    <string name="ftue_profile_picture_subtitle">Bármikor megváltoztatható.</string>
+    <string name="ftue_profile_picture_title">Profilkép hozzáadása</string>
+    <string name="ftue_display_name_entry_footer">Ezt később meg lehet változtatni</string>
+    <string name="ftue_display_name_entry_title">Megjelenítendő név</string>
+    <string name="ftue_display_name_subtitle">Ez fog megjelenni amikor üzenetet küldesz.</string>
+    <string name="ftue_display_name_title">Válassz egy megjelenítési nevet</string>
+    <string name="ftue_account_created_subtitle">A fiókod elkészült: %s.</string>
+    <string name="ftue_account_created_congratulations_title">Gratulálunk!</string>
+    <string name="ftue_account_created_take_me_home">Vigyél haza</string>
+    <string name="ftue_account_created_personalize">Profil személyre szabása</string>
+    <string name="action_disable">Tiltás</string>
+    <string name="location_share_live_started">Élő földrajzi helyzet meghatározás betöltése…</string>
+    <string name="location_share_live_select_duration_option_3">8 óra</string>
+    <string name="location_share_live_select_duration_option_2">1 óra</string>
+    <string name="location_share_live_select_duration_option_1">15 perc</string>
+    <string name="location_share_live_select_duration_title">Folyamatos helyzet megosztása ezért:</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">Nem lehet lejátszani ezt: %1$s</string>
+    <string name="a11y_pause_audio_message">Megállít: %1$s</string>
+    <string name="a11y_play_audio_message">Lejátszás: %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d perc %2$d másodperc</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="sent_live_location">A földrajzi helyzetüket folyamatosan megosztják</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} megállja a helyét a munkahelyen is. A világ legbiztonságosabb szervezetei bíznak meg benne.</string>
+    <string name="beta">Béta</string>
+    <string name="send_feedback_threads_info">Üzenetszálak fejlesztése folyamatban van, új és izgalmas funkciókkal, mint a fejlesztett értesítések. Szeretnénk hallani a véleményed!</string>
+    <string name="send_feedback_threads_title">Béta Üzenetszálak visszajelzés</string>
+    <string name="give_feedback_threads">Visszajelzés adása</string>
+    <string name="beta_title_bottom_sheet_action">Béta</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Ha engedélyezed úgy látszol majd mások számára, mintha nem kapcsolódnál a hálózathoz még akkor is amikor az alkalmazást használod.</string>
+    <string name="settings_presence_user_always_appears_offline">Hálózati kapcsolat nélkül</string>
+    <string name="settings_presence">Állapot</string>
+    <string name="threads_labs_enable_notice_message">A Matrix szervered jelenleg nem támogatja az üzenetszálakat így ez a funkció nem lesz megbízható. Bizonyos üzenetszálas üzenetek nem jelennek meg megbízhatóan. %sBiztos, hogy így is engedélyezed az üzenetszálakat\?</string>
+    <string name="threads_labs_enable_notice_title">Béta Üzenetszálak</string>
+    <string name="threads_beta_enable_notice_message">Az üzenetszálak segítenek a különböző témájú beszélgetések figyelemmel kísérésében. %sÜzenetszálak engedélyezése újraindítja az alkalmazást. Ez néhány fióknál sokáig tarthat.</string>
+    <string name="threads_beta_enable_notice_title">Béta Üzenetszálak</string>
+    <string name="action_learn_more">Tudj meg többet</string>
+    <string name="action_try_it_out">Próbáld ki</string>
+    <string name="screen_sharing_notification_description">Képernyőmegosztás folyamatban</string>
+    <string name="screen_sharing_notification_title">${app_name} képernyő megosztás</string>
+    <string name="call_stop_screen_sharing">Képernyőmegosztás megállítása</string>
+    <string name="call_start_screen_sharing">Képernyő megosztása</string>
+    <string name="initial_sync_request_reason_unignored_users">- Néhány felhasználó újra figyelembe vannak véve</string>
+    <string name="initial_sync_request_content">${app_name} alkalmazásnak az alábbi okokból törölnie kell a gyorsítótárat:
+\n%s
+\n
+\nFigyelem, ez az alkalmazást újra is indítja, ami eltarthat egy darabig.</string>
+    <string name="initial_sync_request_title">Kezdő szinkronizálási kérés</string>
+    <string name="settings_show_latest_profile_description">A legfrissebb profil információk (profilkép és megjelenítendő név) megjelenítése minden üzenetnél.</string>
+    <string name="settings_show_latest_profile">Legfrissebb felhasználói információ megjelenítése</string>
+    <string name="a11y_presence_busy">Foglalt</string>
+    <string name="keys_backup_settings_signature_from_this_user">A mentésnek érvényes aláírása van ettől a felhasználótól.</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Frissítve ekkor: %1$s</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Megosztás megállítása</string>
+    <string name="labs_enable_live_location_summary">Átmeneti megvalósítás: a helyadatok megmaradnak a szoba naplójában</string>
+    <string name="labs_enable_live_location">Élő helymegosztás engedélyezése</string>
+    <string name="location_share_live_remaining_time">%1$s kilépett</string>
+    <string name="location_share_live_until">Élő eddig: %1$s</string>
+    <string name="location_share_live_view">Élő földrajzi helyzet megtekintése</string>
+    <string name="location_share_live_ended">Élő pozíció megosztás befejeződött</string>
+    <string name="space_explore_filter_no_result_description">Néhány találat lehet rejtett, mert privát és meghívóra van szükséged hozzájuk.</string>
+    <string name="space_explore_filter_no_result_title">Nincs találat</string>
+    <string name="space_leave_radio_button_none">Egyet sem hagy el</string>
+    <string name="space_leave_radio_button_all">Mindet elhagy</string>
+    <string name="space_leave_radio_buttons_title">Dolgok ezen a téren</string>
+    <string name="settings_autoplay_animated_images_summary">Animált képek lejátszása ahogy megjelennek az idővonalon</string>
+    <string name="settings_autoplay_animated_images_title">Animált képek automatikus lejátszása</string>
+    <string name="time_unit_second_short">mperc</string>
+    <string name="time_unit_minute_short">perc</string>
+    <string name="time_unit_hour_short">ó</string>
 </resources>

@@ -27,7 +27,7 @@ import im.vector.app.features.login.SignMode
 import javax.inject.Inject
 
 /**
- * In this screen, the user is asked to sign up or to sign in to the homeserver
+ * In this screen, the user is asked to sign up or to sign in to the homeserver.
  */
 class TchapWelcomeFragment @Inject constructor() : AbstractLoginFragment<FragmentTchapWelcomeBinding>() {
 

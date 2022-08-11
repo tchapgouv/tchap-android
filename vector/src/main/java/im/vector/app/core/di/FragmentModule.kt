@@ -106,7 +106,13 @@ import im.vector.app.features.onboarding.ftueauth.FtueAuthAccountCreatedFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthCaptchaFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthChooseDisplayNameFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthChooseProfilePictureFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthCombinedLoginFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthCombinedRegisterFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthCombinedServerSelectionFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthEmailEntryFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthGenericTextInputFormFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthLegacyStyleCaptchaFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthLegacyWaitForEmailFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthLoginFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthPersonalizationCompleteFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordFragment
@@ -119,6 +125,7 @@ import im.vector.app.features.onboarding.ftueauth.FtueAuthSplashFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthUseCaseFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthWaitForEmailFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthWebFragment
+import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthLegacyStyleTermsFragment
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragment
 import im.vector.app.features.pin.PinFragment
 import im.vector.app.features.poll.create.CreatePollFragment
@@ -192,7 +199,7 @@ import im.vector.app.features.widgets.WidgetFragment
 @Module
 interface FragmentModule {
     /**
-     * Fragments with @IntoMap will be injected by this factory
+     * Fragments with @IntoMap will be injected by this factory.
      */
     @Binds
     fun bindFragmentFactory(factory: VectorFragmentFactory): FragmentFactory
@@ -414,6 +421,11 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(FtueAuthLegacyStyleCaptchaFragment::class)
+    fun bindFtueAuthLegacyStyleCaptchaFragment(fragment: FtueAuthLegacyStyleCaptchaFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(FtueAuthCaptchaFragment::class)
     fun bindFtueAuthCaptchaFragment(fragment: FtueAuthCaptchaFragment): Fragment
 
@@ -474,8 +486,18 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(FtueAuthLegacyWaitForEmailFragment::class)
+    fun bindFtueAuthLegacyWaitForEmailFragment(fragment: FtueAuthLegacyWaitForEmailFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(FtueAuthWebFragment::class)
     fun bindFtueAuthWebFragment(fragment: FtueAuthWebFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthLegacyStyleTermsFragment::class)
+    fun bindFtueAuthLegacyStyleTermsFragment(fragment: FtueAuthLegacyStyleTermsFragment): Fragment
 
     @Binds
     @IntoMap
@@ -486,6 +508,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(FtueAuthAccountCreatedFragment::class)
     fun bindFtueAuthAccountCreatedFragment(fragment: FtueAuthAccountCreatedFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthEmailEntryFragment::class)
+    fun bindFtueAuthEmailEntryFragment(fragment: FtueAuthEmailEntryFragment): Fragment
 
     @Binds
     @IntoMap
@@ -501,6 +528,21 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(FtueAuthPersonalizationCompleteFragment::class)
     fun bindFtueAuthPersonalizationCompleteFragment(fragment: FtueAuthPersonalizationCompleteFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthCombinedLoginFragment::class)
+    fun bindFtueAuthCombinedLoginFragment(fragment: FtueAuthCombinedLoginFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthCombinedRegisterFragment::class)
+    fun bindFtueAuthCombinedRegisterFragment(fragment: FtueAuthCombinedRegisterFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthCombinedServerSelectionFragment::class)
+    fun bindFtueAuthCombinedServerSelectionFragment(fragment: FtueAuthCombinedServerSelectionFragment): Fragment
 
     @Binds
     @IntoMap

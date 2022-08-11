@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.database.helper
 
 import io.realm.Realm
-import io.realm.Sort
 import io.realm.kotlin.createObject
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
@@ -34,31 +33,8 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.find
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
-import org.matrix.android.sdk.internal.database.query.whereRoomId
-import org.matrix.android.sdk.internal.extensions.assertIsManaged
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import timber.log.Timber
-
-internal fun ChunkEntity.merge(roomId: String, chunkToMerge: ChunkEntity, direction: PaginationDirection) {
-    assertIsManaged()
-    val localRealm = this.realm
-    val eventsToMerge: List<TimelineEventEntity>
-    if (direction == PaginationDirection.FORWARDS) {
-        this.nextToken = chunkToMerge.nextToken
-        this.isLastForward = chunkToMerge.isLastForward
-        eventsToMerge = chunkToMerge.timelineEvents.sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
-    } else {
-        this.prevToken = chunkToMerge.prevToken
-        this.isLastBackward = chunkToMerge.isLastBackward
-        eventsToMerge = chunkToMerge.timelineEvents.sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
-    }
-    chunkToMerge.stateEvents.forEach { stateEvent ->
-        addStateEvent(roomId, stateEvent, direction)
-    }
-    eventsToMerge.forEach {
-        addTimelineEventFromMerge(localRealm, it, direction)
-    }
-}
 
 internal fun ChunkEntity.addStateEvent(roomId: String, stateEvent: EventEntity, direction: PaginationDirection) {
     if (direction == PaginationDirection.BACKWARDS) {
@@ -79,11 +55,13 @@ internal fun ChunkEntity.addStateEvent(roomId: String, stateEvent: EventEntity, 
     }
 }
 
-internal fun ChunkEntity.addTimelineEvent(roomId: String,
-                                          eventEntity: EventEntity,
-                                          direction: PaginationDirection,
-                                          ownedByThreadChunk: Boolean = false,
-                                          roomMemberContentsByUser: Map<String, RoomMemberContent?>? = null): TimelineEventEntity? {
+internal fun ChunkEntity.addTimelineEvent(
+        roomId: String,
+        eventEntity: EventEntity,
+        direction: PaginationDirection,
+        ownedByThreadChunk: Boolean = false,
+        roomMemberContentsByUser: Map<String, RoomMemberContent?>? = null
+): TimelineEventEntity? {
     val eventId = eventEntity.eventId
     if (timelineEvents.find(eventId) != null) {
         return null
@@ -118,7 +96,7 @@ internal fun ChunkEntity.addTimelineEvent(roomId: String,
     return timelineEventEntity
 }
 
-fun computeIsUnique(
+internal fun computeIsUnique(
         realm: Realm,
         roomId: String,
         isLastForward: Boolean,
@@ -140,40 +118,6 @@ fun computeIsUnique(
     } else {
         isHistoricalUnique
     }
-}
-
-private fun ChunkEntity.addTimelineEventFromMerge(realm: Realm, timelineEventEntity: TimelineEventEntity, direction: PaginationDirection) {
-    val eventId = timelineEventEntity.eventId
-    if (timelineEvents.find(eventId) != null) {
-        return
-    }
-    val displayIndex = nextDisplayIndex(direction)
-    val localId = TimelineEventEntity.nextId(realm)
-    val copied = realm.createObject<TimelineEventEntity>().apply {
-        this.localId = localId
-        this.root = timelineEventEntity.root
-        this.eventId = timelineEventEntity.eventId
-        this.roomId = timelineEventEntity.roomId
-        this.annotations = timelineEventEntity.annotations
-        this.readReceipts = timelineEventEntity.readReceipts
-        this.displayIndex = displayIndex
-        this.senderAvatar = timelineEventEntity.senderAvatar
-        this.senderName = timelineEventEntity.senderName
-        this.isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName
-    }
-    handleThreadSummary(realm, eventId, copied)
-    timelineEvents.add(copied)
-}
-
-/**
- * Upon copy of the timeline events we should update the latestMessage TimelineEventEntity with the new one
- */
-private fun handleThreadSummary(realm: Realm, oldEventId: String, newTimelineEventEntity: TimelineEventEntity) {
-    EventEntity
-            .whereRoomId(realm, newTimelineEventEntity.roomId)
-            .equalTo(EventEntityFields.IS_ROOT_THREAD, true)
-            .equalTo(EventEntityFields.THREAD_SUMMARY_LATEST_MESSAGE.EVENT_ID, oldEventId)
-            .findFirst()?.threadSummaryLatestMessage = newTimelineEventEntity
 }
 
 private fun handleReadReceipts(realm: Realm, roomId: String, eventEntity: EventEntity, senderId: String): ReadReceiptsSummaryEntity {
@@ -199,7 +143,7 @@ private fun handleReadReceipts(realm: Realm, roomId: String, eventEntity: EventE
 
 internal fun ChunkEntity.nextDisplayIndex(direction: PaginationDirection): Int {
     return when (direction) {
-        PaginationDirection.FORWARDS  -> {
+        PaginationDirection.FORWARDS -> {
             (timelineEvents.where().max(TimelineEventEntityFields.DISPLAY_INDEX)?.toInt() ?: 0) + 1
         }
         PaginationDirection.BACKWARDS -> {
@@ -225,6 +169,9 @@ internal fun ChunkEntity.isMoreRecentThan(chunkToCheck: ChunkEntity): Boolean {
     // Check if the chunk to check is linked to this one
     if (chunkToCheck.doesNextChunksVerifyCondition { it == this }) {
         return true
+    }
+    if (this.doesNextChunksVerifyCondition { it == chunkToCheck }) {
+        return false
     }
     // Otherwise check if this chunk is linked to last forward
     if (this.doesNextChunksVerifyCondition { it.isLastForward }) {

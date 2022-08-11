@@ -39,6 +39,8 @@ data class LoginViewState(
         @PersistState
         val resetPasswordEmail: String? = null,
         @PersistState
+        val resetPasswordNewPassword: String? = null,
+        @PersistState
         val homeServerUrlFromUser: String? = null,
 
         // Can be modified after a Wellknown request

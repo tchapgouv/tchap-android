@@ -32,6 +32,8 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
@@ -40,9 +42,11 @@ import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 
-class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomBannedMemberListViewState,
-                                                                private val stringProvider: StringProvider,
-                                                                private val session: Session) :
+class RoomBannedMemberListViewModel @AssistedInject constructor(
+        @Assisted initialState: RoomBannedMemberListViewState,
+        private val stringProvider: StringProvider,
+        private val session: Session
+) :
         VectorViewModel<RoomBannedMemberListViewState, RoomBannedMemberListAction, RoomBannedMemberListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -82,7 +86,7 @@ class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initia
         when (action) {
             is RoomBannedMemberListAction.QueryInfo -> onQueryBanInfo(action.roomMemberSummary)
             is RoomBannedMemberListAction.UnBanUser -> unBanUser(action.roomMemberSummary)
-            is RoomBannedMemberListAction.Filter    -> handleFilter(action)
+            is RoomBannedMemberListAction.Filter -> handleFilter(action)
         }
     }
 
@@ -114,7 +118,7 @@ class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initia
         }
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                room.unban(roomMemberSummary.userId, null)
+                room.membershipService().unban(roomMemberSummary.userId, null)
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomBannedMemberListViewEvents.ToastError(stringProvider.getString(R.string.failed_to_unban)))
             } finally {

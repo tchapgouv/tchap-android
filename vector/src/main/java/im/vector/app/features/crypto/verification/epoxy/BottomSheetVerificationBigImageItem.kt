@@ -16,13 +16,14 @@
  */
 package im.vector.app.features.crypto.verification.epoxy
 
+import android.view.View
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.ui.views.ShieldImageView
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
 /**
  * A action for bottom sheet.
@@ -36,6 +37,8 @@ abstract class BottomSheetVerificationBigImageItem : VectorEpoxyModel<BottomShee
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.image.render(roomEncryptionTrustLevel, borderLess = true)
+        // Tchap: Force the visibility to visible
+        holder.image.visibility = View.VISIBLE
     }
 
     class Holder : VectorEpoxyHolder() {

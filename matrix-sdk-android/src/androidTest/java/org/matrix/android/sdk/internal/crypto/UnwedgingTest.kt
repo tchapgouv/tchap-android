@@ -21,6 +21,7 @@ import org.amshove.kluent.shouldBe
 import org.junit.Assert
 import org.junit.Before
 import org.junit.FixMethodOrder
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -32,15 +33,15 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.serializeForRealm
 import org.matrix.olm.OlmSession
@@ -59,11 +60,10 @@ import kotlin.coroutines.resume
  */
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
+@Ignore
 class UnwedgingTest : InstrumentedTest {
 
     private lateinit var messagesReceivedByBob: List<TimelineEvent>
-    private val testHelper = CommonTestHelper(context())
-    private val cryptoTestHelper = CryptoTestHelper(testHelper)
 
     @Before
     fun init() {
@@ -84,7 +84,7 @@ class UnwedgingTest : InstrumentedTest {
      * -> This is automatically fixed after SDKs restarted the olm session
      */
     @Test
-    fun testUnwedging() {
+    fun testUnwedging() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -97,7 +97,7 @@ class UnwedgingTest : InstrumentedTest {
         val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
 
-        val bobTimeline = roomFromBobPOV.createTimeline(null, TimelineSettings(20))
+        val bobTimeline = roomFromBobPOV.timelineService().createTimeline(null, TimelineSettings(20))
         bobTimeline.start()
 
         val bobFinalLatch = CountDownLatch(1)
@@ -128,7 +128,7 @@ class UnwedgingTest : InstrumentedTest {
         messagesReceivedByBob = emptyList()
 
         // - Alice sends a 1st message with a 1st megolm session
-        roomFromAlicePOV.sendTextMessage("First message")
+        roomFromAlicePOV.sendService().sendTextMessage("First message")
 
         // Wait for the message to be received by Bob
         testHelper.await(latch)
@@ -156,7 +156,7 @@ class UnwedgingTest : InstrumentedTest {
 
         Timber.i("## CRYPTO | testUnwedging:  Alice sends a 2nd message with a 2nd megolm session")
         // - Alice sends a 2nd message with a 2nd megolm session
-        roomFromAlicePOV.sendTextMessage("Second message")
+        roomFromAlicePOV.sendService().sendTextMessage("Second message")
 
         // Wait for the message to be received by Bob
         testHelper.await(latch)
@@ -170,7 +170,10 @@ class UnwedgingTest : InstrumentedTest {
         // Let us wedge the session now. Set crypto state like after the first message
         Timber.i("## CRYPTO | testUnwedging: wedge the session now. Set crypto state like after the first message")
 
-        aliceCryptoStore.storeSession(OlmSessionWrapper(deserializeFromRealm<OlmSession>(oldSession)!!), bobSession.cryptoService().getMyDevice().identityKey()!!)
+        aliceCryptoStore.storeSession(
+                OlmSessionWrapper(deserializeFromRealm<OlmSession>(oldSession)!!),
+                bobSession.cryptoService().getMyDevice().identityKey()!!
+        )
         olmDevice.clearOlmSessionCache()
         Thread.sleep(6_000)
 
@@ -185,7 +188,7 @@ class UnwedgingTest : InstrumentedTest {
 
             Timber.i("## CRYPTO | testUnwedging: Alice sends a 3rd message with a 3rd megolm session but a wedged olm session")
             // - Alice sends a 3rd message with a 3rd megolm session but a wedged olm session
-            roomFromAlicePOV.sendTextMessage("Third message")
+            roomFromAlicePOV.sendService().sendTextMessage("Third message")
             // Bob should not be able to decrypt, because the session key could not be sent
         }
         bobTimeline.removeListener(bobEventsListener)
@@ -217,7 +220,8 @@ class UnwedgingTest : InstrumentedTest {
                                             )
                                     )
                                 }
-                            }, it)
+                            }, it
+                    )
         }
 
         // Wait until we received back the key
@@ -235,8 +239,6 @@ class UnwedgingTest : InstrumentedTest {
         }
 
         bobTimeline.dispose()
-
-        cryptoTestData.cleanUp(testHelper)
     }
 
     private fun createEventListener(latch: CountDownLatch, expectedNumberOfMessages: Int): Timeline.Listener {

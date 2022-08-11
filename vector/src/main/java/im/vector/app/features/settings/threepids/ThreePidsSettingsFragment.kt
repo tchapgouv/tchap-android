@@ -68,13 +68,16 @@ class ThreePidsSettingsFragment @Inject constructor(
     }
 
     private fun askAuthentication(event: ThreePidsSettingsViewEvents.RequestReAuth) {
-        ReAuthActivity.newIntent(requireContext(),
+        ReAuthActivity.newIntent(
+                requireContext(),
                 event.registrationFlowResponse,
                 event.lastErrorCode,
-                getString(R.string.settings_add_email_address)).let { intent ->
+                getString(R.string.settings_add_email_address)
+        ).let { intent ->
             reAuthActivityResultLauncher.launch(intent)
         }
     }
+
     private val reAuthActivityResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             when (activityResult.data?.extras?.getString(ReAuthActivity.RESULT_FLOW_TYPE)) {
@@ -85,7 +88,7 @@ class ThreePidsSettingsFragment @Inject constructor(
                     val password = activityResult.data?.extras?.getString(ReAuthActivity.RESULT_VALUE) ?: ""
                     viewModel.handle(ThreePidsSettingsAction.PasswordAuthDone(password))
                 }
-                else                    -> {
+                else -> {
                     viewModel.handle(ThreePidsSettingsAction.ReAuthCancelled)
                 }
             }

@@ -33,11 +33,11 @@ import im.vector.app.features.login.terms.PolicyController
 import im.vector.app.features.login2.AbstractLoginFragment2
 import im.vector.app.features.login2.LoginAction2
 import im.vector.app.features.login2.LoginViewState2
-import org.matrix.android.sdk.internal.auth.registration.LocalizedFlowDataLoginTerms
+import org.matrix.android.sdk.api.auth.data.LocalizedFlowDataLoginTerms
 import javax.inject.Inject
 
 /**
- * LoginTermsFragment displays the list of policies the user has to accept
+ * LoginTermsFragment displays the list of policies the user has to accept.
  */
 class LoginTermsFragment2 @Inject constructor(
         private val policyController: PolicyController

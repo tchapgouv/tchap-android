@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="im.vector.app">
+
+    <application>
+
+        <service
+            android:name=".features.call.webrtc.ScreenCaptureService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection"
+            tools:targetApi="Q" />
+
+    </application>
+
+</manifest>
