@@ -21,6 +21,14 @@ Other changes
  - Add New Targets to build ([#653](https://github.com/tchapgouv/tchap-android-v2/issues/653))
 
 
+Changes in Tchap 2.3.4 (2022-08-10)
+===================================
+
+Other changes
+-------------
+- Remove Android Auto support ([#703](https://github.com/tchapgouv/tchap-android-v2/issues/703))
+
+
 Changes in Tchap 2.3.3 (2022-07-12)
 ===================================
 
