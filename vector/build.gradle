@@ -87,7 +87,8 @@ static def gitBranchName() {
 
 // For Google Play build, build on any other branch than main will have a "-dev" suffix
 static def getGplayVersionSuffix() {
-    if (gitBranchName() == "main") {
+    // Tchap: No suffix for tagged release
+    if (gitBranchName() == "main" || gitTag().startsWith("tchap_v")) {
         return ""
     } else {
         return "-dev"
