@@ -1,3 +1,16 @@
+Changes in Tchap 2.4.1 (2022-08-16)
+===================================
+
+Improvements 🙌
+--------------
+ - Auto-capitalize the room creation title field ([#687](https://github.com/tchapgouv/tchap-android-v2/issues/687))
+ 
+Other changes
+-------------
+ - Rename the action "Remove this room from the forums directory" to "Convert to private room (irreversible)" ([#669](https://github.com/tchapgouv/tchap-android-v2/issues/669))
+ - [Menu - Report Bug] Do not select "send screenshot" by default ([#686](https://github.com/tchapgouv/tchap-android-v2/issues/686))
+ - Remove Android Auto support ([#703](https://github.com/tchapgouv/tchap-android-v2/issues/703))
+
 Changes in Tchap 2.4.0 (2022-08-03)
 ===================================
 
