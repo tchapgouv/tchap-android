@@ -203,7 +203,7 @@ class RoomSettingsFragment @Inject constructor(
     override fun onRemoveFromRoomsDirectory() {
         MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                 .setTitle(R.string.dialog_title_warning)
-                .setMessage(getString(R.string.tchap_room_settings_remove_from_directory_prompt_msg))
+                .setMessage(getString(R.string.tchap_room_settings_convert_to_private_prompt_msg))
                 .setPositiveButton(R.string.yes) { _, _ ->
                     viewModel.handle(RoomSettingsAction.RemoveFromRoomsDirectory)
                 }
