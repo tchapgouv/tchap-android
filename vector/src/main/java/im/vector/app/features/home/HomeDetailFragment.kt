@@ -40,6 +40,7 @@ import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.CurrentCallsViewPresenter
@@ -82,7 +83,8 @@ class HomeDetailFragment @Inject constructor(
 ) : VectorBaseFragment<FragmentHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
         CurrentCallsView.Callback,
-        OnBackPressed {
+        OnBackPressed,
+        VectorMenuProvider {
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
@@ -103,24 +105,21 @@ class HomeDetailFragment @Inject constructor(
 
     override fun getMenuRes() = R.menu.room_list
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_home_mark_all_as_read -> {
                 viewModel.handle(HomeDetailAction.MarkAllRoomsRead)
-                return true
+                true
             }
-            else                            -> {
-                super.onOptionsItemSelected(item)
-            }
+            else -> false
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun handlePrepareMenu(menu: Menu) {
         withState(viewModel) { state ->
             val isRoomList = state.currentTab is HomeTab.RoomList
             menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
         }
-        super.onPrepareOptionsMenu(menu)
     }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeDetailBinding {
@@ -205,7 +204,7 @@ class HomeDetailFragment @Inject constructor(
                 .onEach { action ->
                     when (action) {
                         is HomeActivitySharedAction.InviteByEmail -> onInviteByEmail(action.email)
-                        else                                      -> Unit // no-op
+                        else -> Unit // no-op
                     }
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
@@ -220,25 +219,25 @@ class HomeDetailFragment @Inject constructor(
 
         createDirectRoomViewModel.observeViewEvents { viewEvent ->
             when (viewEvent) {
-                CreateDirectRoomViewEvents.InviteSent                 -> {
+                CreateDirectRoomViewEvents.InviteSent -> {
                     handleInviteByEmailResult(buildString {
                         appendLine(getString(R.string.tchap_invite_sending_succeeded))
                         appendLine(getString(R.string.tchap_send_invite_confirmation))
                     })
                 }
-                is CreateDirectRoomViewEvents.Failure                 -> showFailure(viewEvent.throwable)
-                is CreateDirectRoomViewEvents.UserDiscovered          -> handleExistingUser(viewEvent.user)
-                is CreateDirectRoomViewEvents.InviteAlreadySent       -> {
+                is CreateDirectRoomViewEvents.Failure -> showFailure(viewEvent.throwable)
+                is CreateDirectRoomViewEvents.UserDiscovered -> handleExistingUser(viewEvent.user)
+                is CreateDirectRoomViewEvents.InviteAlreadySent -> {
                     handleInviteByEmailResult(getString(R.string.tchap_invite_already_send_message, viewEvent.email))
                 }
                 is CreateDirectRoomViewEvents.InviteUnauthorizedEmail -> {
                     handleInviteByEmailResult(getString(R.string.tchap_invite_unauthorized_message, viewEvent.email))
                 }
-                is CreateDirectRoomViewEvents.OpenDirectChat          -> openRoom(viewEvent.roomId)
-                CreateDirectRoomViewEvents.DmSelf                     -> {
+                is CreateDirectRoomViewEvents.OpenDirectChat -> openRoom(viewEvent.roomId)
+                CreateDirectRoomViewEvents.DmSelf -> {
                     Toast.makeText(requireContext(), R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
                 }
-                CreateDirectRoomViewEvents.InvalidCode                -> {
+                CreateDirectRoomViewEvents.InvalidCode -> {
                     Toast.makeText(requireContext(), R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
                 }
             }

@@ -45,8 +45,8 @@ import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.presence.model.UserPresence
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_tchap_room)
-abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
+@EpoxyModelClass
+abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>(R.layout.item_tchap_room) {
 
     @EpoxyAttribute
     lateinit var typingMessage: String
@@ -180,11 +180,11 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
                     domainNameView.text = view.context.getString(R.string.tchap_room_extern_room_type)
                     domainNameView.setTextColor(ContextCompat.getColor(view.context, R.color.tchap_room_external))
                 }
-                TchapRoomType.FORUM    -> {
+                TchapRoomType.FORUM -> {
                     domainNameView.text = view.context.getString(R.string.tchap_room_forum_type)
                     domainNameView.setTextColor(ContextCompat.getColor(view.context, R.color.tchap_room_forum))
                 }
-                else                   -> {
+                else -> {
                     domainNameView.text = ""
                 }
             }

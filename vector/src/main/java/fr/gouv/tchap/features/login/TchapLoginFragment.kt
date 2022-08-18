@@ -27,6 +27,7 @@ import com.airbnb.mvrx.Success
 import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
 import im.vector.app.R
 import im.vector.app.core.extensions.isEmail
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.databinding.FragmentTchapLoginBinding
 import im.vector.app.features.login.AbstractLoginFragment
 import im.vector.app.features.login.LoginAction
@@ -42,7 +43,8 @@ import javax.inject.Inject
  * - the user is asked for email and password to sign in to a homeserver.
  * - He also can reset his password
  */
-class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentTchapLoginBinding>() {
+class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentTchapLoginBinding>(),
+        VectorMenuProvider {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTchapLoginBinding {
         return FragmentTchapLoginBinding.inflate(inflater, container, false)
@@ -57,17 +59,19 @@ class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentT
 
         loginViewModel.observeViewEvents {
             when (it) {
-                LoginViewEvents.OnLoginFlowRetrieved     ->
-                    loginViewModel.handle(LoginAction.LoginOrRegister(
-                            views.tchapLoginField.text.toString(),
-                            views.tchapPasswordField.text.toString(),
-                            getString(R.string.login_default_session_public_name)
-                    ))
+                LoginViewEvents.OnLoginFlowRetrieved ->
+                    loginViewModel.handle(
+                            LoginAction.LoginOrRegister(
+                                    views.tchapLoginField.text.toString(),
+                                    views.tchapPasswordField.text.toString(),
+                                    getString(R.string.login_default_session_public_name)
+                            )
+                    )
                 is LoginViewEvents.OnHomeServerRetrieved -> {
                     val homeServerUrl = resources.getString(R.string.server_url_prefix) + it.hs
                     loginViewModel.handle(LoginAction.UpdateHomeServer(homeServerUrl))
                 }
-                else                                     ->
+                else ->
                     // This is handled by the Activity
                     Unit
             }
@@ -76,15 +80,14 @@ class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentT
 
     override fun getMenuRes() = R.menu.tchap_menu_next
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.action_next -> {
                 submit()
-                return true
+                true
             }
+            else -> false
         }
-
-        return super.onOptionsItemSelected(item)
     }
 
     private fun setupForgottenPasswordButton() {
@@ -138,7 +141,7 @@ class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentT
     override fun updateWithState(state: LoginViewState) {
         when (state.asyncLoginAction) {
             is Loading -> Unit
-            is Fail    -> {
+            is Fail -> {
                 val error = state.asyncLoginAction.error
                 if (error is Failure.ServerError &&
                         error.error.code == MatrixError.M_FORBIDDEN &&
@@ -155,7 +158,7 @@ class TchapLoginFragment @Inject constructor() : AbstractLoginFragment<FragmentT
             }
             // Success is handled by the LoginActivity
             is Success -> Unit
-            else       -> {
+            else -> {
                 // Do Nothing
             }
         }
