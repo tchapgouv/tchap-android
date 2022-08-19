@@ -181,7 +181,8 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Unlo
         if (loginViewState.isUserLogged()) {
             val intent = HomeActivity.newIntent(
                     this,
-                    accountCreation = loginViewState.signMode == SignMode.SignUp
+                    accountCreation = loginViewState.signMode == SignMode.SignUp,
+                    firstStartMainActivity = false
             )
             startActivity(intent)
             finish()
