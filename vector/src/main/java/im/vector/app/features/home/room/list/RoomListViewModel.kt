@@ -71,7 +71,7 @@ class RoomListViewModel @AssistedInject constructor(
         override fun create(initialState: RoomListViewState): RoomListViewModel
     }
 
-    private var updatableQueries = mutableListOf<UpdatableLivePageResult>()
+    private var updatableQuery: UpdatableLivePageResult? = null
 
     private val suggestedRoomJoiningState: MutableLiveData<Map<String, Async<Unit>>> = MutableLiveData(emptyMap())
 
@@ -152,7 +152,7 @@ class RoomListViewModel @AssistedInject constructor(
             viewModelScope,
             autoAcceptInvites,
             {
-                updatableQueries.add(it)
+                updatableQuery = it
             },
             suggestedRoomJoiningState,
             !vectorPreferences.prefSpacesShowAllRoomInHome()
@@ -214,14 +214,10 @@ class RoomListViewModel @AssistedInject constructor(
                     roomFilter = action.filter
             )
         }
-
-        // filter query for each section
-        updatableQueries.forEach { updatableQuery ->
-            updatableQuery.apply {
-                queryParams = queryParams.copy(
-                        displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.NORMALIZED)
-                )
-            }
+        updatableQuery?.apply {
+            queryParams = queryParams.copy(
+                    displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.NORMALIZED)
+            )
         }
     }
 
