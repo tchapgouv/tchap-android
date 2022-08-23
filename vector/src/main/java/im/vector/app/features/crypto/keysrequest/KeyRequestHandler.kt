@@ -17,10 +17,10 @@
 package im.vector.app.features.crypto.keysrequest
 
 import android.content.Context
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.popup.DefaultVectorAlert
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.session.coroutineScope
@@ -52,6 +52,7 @@ import javax.inject.Singleton
 
 @Singleton
 class KeyRequestHandler @Inject constructor(
+        private val vectorFeatures: VectorFeatures,
         private val context: Context,
         private val popupAlertManager: PopupAlertManager,
         private val dateFormatter: VectorDateFormatter
@@ -121,7 +122,7 @@ class KeyRequestHandler @Inject constructor(
                     return
                 }
 
-                if (BuildConfig.ENABLE_CROSS_SIGNING) {
+                if (vectorFeatures.isCrossSigningEnabled()) {
                     if (deviceInfo.isUnknown) {
                         session?.cryptoService()?.setDeviceVerification(
                                 DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false), userId, deviceId)

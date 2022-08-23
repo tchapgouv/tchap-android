@@ -24,12 +24,12 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.databinding.FragmentLoginResetPasswordBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.plan.MobileScreen
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -41,7 +41,9 @@ import javax.inject.Inject
 /**
  * In this screen, the user is asked for email and new password to reset his password.
  */
-class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginResetPasswordBinding>() {
+class LoginResetPasswordFragment @Inject constructor(
+        private val vectorFeatures: VectorFeatures,
+) : AbstractLoginFragment<FragmentLoginResetPasswordBinding>() {
 
     // Show warning only once
     private var showWarning = true
@@ -62,13 +64,13 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
 
         loginViewModel.observeViewEvents { loginViewEvents ->
             when (loginViewEvents) {
-                LoginViewEvents.OnLoginFlowRetrieved     ->
+                LoginViewEvents.OnLoginFlowRetrieved ->
                     loginViewModel.handle(LoginAction.CheckPasswordPolicy(views.passwordField.text.toString()))
-                LoginViewEvents.OnPasswordValidated      ->
+                LoginViewEvents.OnPasswordValidated ->
                     submit()
                 is LoginViewEvents.OnHomeServerRetrieved ->
                     updateHomeServer(loginViewEvents.hs)
-                else                                     -> Unit // This is handled by the Activity
+                else -> Unit // This is handled by the Activity
             }
         }
     }
@@ -96,7 +98,7 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
 
         if (showWarning) {
             showWarning = false
-            val message = if (BuildConfig.IS_KEY_BACKUP_SUPPORTED) {
+            val message = if (vectorFeatures.isKeyBackupEnabled()) {
                 R.string.login_reset_password_warning_content
             } else {
                 R.string.tchap_login_reset_password_warning_content

@@ -24,6 +24,8 @@ import im.vector.app.core.resources.BooleanProvider
 interface VectorFeatures {
 
     fun isVoipSupported(): Boolean
+    fun isCrossSigningEnabled(): Boolean
+    fun isKeyBackupEnabled(): Boolean
     fun onboardingVariant(): OnboardingVariant
     fun isOnboardingAlreadyHaveAccountSplashEnabled(): Boolean
     fun isOnboardingSplashCarouselEnabled(): Boolean
@@ -42,6 +44,9 @@ interface VectorFeatures {
 class DefaultVectorFeatures(
         private val booleanProvider: BooleanProvider
 ) : VectorFeatures {
+    override fun isVoipSupported() = booleanProvider.getBoolean(R.bool.tchap_is_voip_supported)
+    override fun isCrossSigningEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_cross_signing_enabled)
+    override fun isKeyBackupEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_key_backup_enabled)
     override fun onboardingVariant() = Config.ONBOARDING_VARIANT
     override fun isOnboardingAlreadyHaveAccountSplashEnabled() = true
     override fun isOnboardingSplashCarouselEnabled() = true
@@ -55,5 +60,4 @@ class DefaultVectorFeatures(
     override fun forceUsageOfOpusEncoder(): Boolean = false
     override fun shouldStartDmOnFirstMessage(): Boolean = false
     override fun isNewAppLayoutEnabled(): Boolean = false
-    override fun isVoipSupported(): Boolean = booleanProvider.getBoolean(R.bool.tchap_is_voip_supported)
 }

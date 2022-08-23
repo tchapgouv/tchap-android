@@ -346,14 +346,6 @@ android {
 
             applicationId "fr.gouv.tchap.dev"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}" + "_dev"
-
-            // Tchap: CrossSigning initialization is disabled
-            def enableCrossSigning = true
-            buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
-            resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
-
-            // Tchap: Key Backup is not supported
-            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "true"
         }
 
         btchap {
@@ -363,14 +355,6 @@ android {
 
             applicationId "fr.gouv.rie.tchap"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}" + "_b"
-
-            // Tchap: CrossSigning initialization is disabled
-            def enableCrossSigning = true
-            buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
-            resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
-
-            // Tchap: Key Backup is not supported
-            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
         }
 
         tchap {
@@ -380,14 +364,6 @@ android {
 
             applicationId "fr.gouv.tchap.a"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}"
-
-            // Tchap: CrossSigning initialization is disabled
-            def enableCrossSigning = false
-            buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
-            resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
-
-            // Tchap: Key Backup is not supported
-            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
         }
     }
 

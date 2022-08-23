@@ -24,12 +24,12 @@ import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.BuildConfig
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.VectorFeatures
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -65,6 +65,7 @@ sealed class BannerState {
 
 class ServerBackupStatusViewModel @AssistedInject constructor(
         @Assisted initialState: ServerBackupStatusViewState,
+        vectorFeatures: VectorFeatures,
         private val session: Session
 ) :
         VectorViewModel<ServerBackupStatusViewState, EmptyAction, EmptyViewEvents>(initialState), KeysBackupStateListener {
@@ -84,7 +85,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(
 
     init {
         // if key backup is not supported, do nothing
-        if (BuildConfig.IS_KEY_BACKUP_SUPPORTED) {
+        if (vectorFeatures.isKeyBackupEnabled()) {
             init()
         }
     }

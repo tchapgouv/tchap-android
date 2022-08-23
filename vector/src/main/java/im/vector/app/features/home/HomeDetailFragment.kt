@@ -31,7 +31,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.SpaceStateHandler
 import im.vector.app.core.extensions.commitTransaction
@@ -45,6 +44,7 @@ import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.CurrentCallsViewPresenter
 import im.vector.app.core.ui.views.KeysBackupBanner
 import im.vector.app.databinding.FragmentHomeDetailBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.dialpad.DialPadFragment
@@ -72,6 +72,7 @@ import org.matrix.android.sdk.api.session.user.model.User
 import javax.inject.Inject
 
 class HomeDetailFragment @Inject constructor(
+        private val vectorFeatures: VectorFeatures,
         private val avatarRenderer: AvatarRenderer,
         private val colorProvider: ColorProvider,
         private val alertManager: PopupAlertManager,
@@ -170,7 +171,7 @@ class HomeDetailFragment @Inject constructor(
                     val newest = unknownDevices.firstOrNull { it.isNew }?.deviceInfo
                     if (newest != null) {
                         promptForNewUnknownDevices(uid, state, newest)
-                    } else if (BuildConfig.ENABLE_CROSS_SIGNING && olderUnverified.isNotEmpty()) {
+                    } else if (vectorFeatures.isCrossSigningEnabled() && olderUnverified.isNotEmpty()) {
                         // In this case we prompt to go to settings to review logins
                         promptToReviewChanges(uid, state, olderUnverified.map { it.deviceInfo })
                     }
