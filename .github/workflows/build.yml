@@ -8,10 +8,8 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  CI_GRADLE_ARG_PROPERTIES: >
-    -Porg.gradle.jvmargs=-Xmx4g
-    -Porg.gradle.parallel=false
-    --no-daemon
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
 
 jobs:
   debug:
@@ -37,7 +35,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Assemble ${{ matrix.target }} debug apk
-        run: ./gradlew assemble${{ matrix.target }}Debug $CI_GRADLE_ARG_PROPERTIES --stacktrace
+        run: ./gradlew assemble${{ matrix.target }}Debug $CI_GRADLE_ARG_PROPERTIES
       - name: Upload ${{ matrix.target }} debug APKs
         uses: actions/upload-artifact@v3
         with:
@@ -69,7 +67,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Assemble ${{ matrix.target }} unsigned apk
-        run: ./gradlew clean assemble${{ matrix.target }}Release $CI_GRADLE_ARG_PROPERTIES  --stacktrace
+        run: ./gradlew clean assemble${{ matrix.target }}Release $CI_GRADLE_ARG_PROPERTIES
       - name: Upload ${{ matrix.target }} unsigned APKs
         uses: actions/upload-artifact@v3
         with:

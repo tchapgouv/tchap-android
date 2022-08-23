@@ -17,9 +17,9 @@ package im.vector.app.features.home.room.detail.timeline.action
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Success
-import im.vector.app.BuildConfig
 import im.vector.app.EmojiCompatFontProvider
 import im.vector.app.R
+import im.vector.app.config.Config
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.bottomSheetDividerItem
@@ -149,10 +149,9 @@ class MessageActionsEpoxyController @Inject constructor(
             }
         }
 
-        // Tchap: Disable message reaction
         // Quick reactions
-        if (state.canReact() && state.quickStates is Success &&
-                BuildConfig.SHOW_ADD_MESSAGE_REACTION) {
+        // Tchap: feature flag
+        if (state.canReact() && state.quickStates is Success && Config.SHOW_ADD_MESSAGE_REACTION) {
             // Separator
             bottomSheetDividerItem {
                 id("reaction_separator")

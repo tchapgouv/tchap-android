@@ -20,8 +20,8 @@ import dagger.Lazy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.config.Config
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
@@ -296,7 +296,7 @@ class MessageActionsViewModel @AssistedInject constructor(
         }
         add(EventSharedAction.Remove(eventId))
         // Tchap: Disable editing messages
-        if (canEdit(timelineEvent, session.myUserId, actionPermissions) && BuildConfig.SHOW_EDIT_MESSAGE) {
+        if (canEdit(timelineEvent, session.myUserId, actionPermissions) && Config.SHOW_EDIT_MESSAGE) {
             add(EventSharedAction.Edit(eventId, timelineEvent.root.getClearType()))
         }
         if (canCopy(msgType)) {
@@ -350,8 +350,8 @@ class MessageActionsViewModel @AssistedInject constructor(
             if (canEndPoll(timelineEvent, actionPermissions)) {
                 add(EventSharedAction.EndPoll(timelineEvent.eventId))
             }
-            // Tchap: Disable editing messages
-            if (canEdit(timelineEvent, session.myUserId, actionPermissions) && BuildConfig.SHOW_EDIT_MESSAGE) {
+            // Tchap: feature flag
+            if (canEdit(timelineEvent, session.myUserId, actionPermissions) && Config.SHOW_EDIT_MESSAGE) {
                 add(EventSharedAction.Edit(eventId, timelineEvent.root.getClearType()))
             }
 
@@ -360,9 +360,8 @@ class MessageActionsViewModel @AssistedInject constructor(
                 add(EventSharedAction.Copy(messageContent!!.body))
             }
 
-            // Tchap: Disable message reaction
-            if (timelineEvent.canReact() && actionPermissions.canReact &&
-                    BuildConfig.SHOW_ADD_MESSAGE_REACTION) {
+            // Tchap: feature flag
+            if (timelineEvent.canReact() && actionPermissions.canReact && Config.SHOW_ADD_MESSAGE_REACTION) {
                 add(EventSharedAction.AddReaction(eventId))
             }
 
