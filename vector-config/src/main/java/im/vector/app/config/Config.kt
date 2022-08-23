@@ -28,12 +28,6 @@ object Config {
     // Tchap: Hide voice message recorder button
     const val SHOW_VOICE_RECORDER = false
 
-    // Tchap: Enable add messages reaction
-    const val SHOW_ADD_MESSAGE_REACTION = true
-
-    // Tchap: Enable editing messages
-    const val SHOW_EDIT_MESSAGE = true
-
     /**
      * Flag to allow external UnifiedPush distributors to be chosen by the user.
      *
