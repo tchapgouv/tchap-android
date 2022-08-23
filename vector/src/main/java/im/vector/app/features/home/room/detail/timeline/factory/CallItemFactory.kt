@@ -17,6 +17,7 @@ package im.vector.app.features.home.room.detail.timeline.factory
 
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.UserPreferencesProvider
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
@@ -34,6 +35,7 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class CallItemFactory @Inject constructor(
+        private val vectorFeatures: VectorFeatures,
         private val session: Session,
         private val userPreferencesProvider: UserPreferencesProvider,
         private val messageColorProvider: MessageColorProvider,
@@ -145,6 +147,7 @@ class CallItemFactory @Inject constructor(
         val userOfInterest = roomSummary.toMatrixItem()
         val attributes = messageItemAttributesFactory.create(null, informationData, callback, reactionsSummaryEvents).let {
             CallTileTimelineItem.Attributes(
+                    isVoipSupported = vectorFeatures.isVoipSupported(),
                     callId = callId,
                     callKind = callKind,
                     callStatus = callStatus,

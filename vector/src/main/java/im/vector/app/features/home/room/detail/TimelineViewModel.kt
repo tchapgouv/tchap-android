@@ -27,7 +27,6 @@ import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
@@ -37,6 +36,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.BehaviorDataSource
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.DecryptionFailureTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
@@ -120,6 +120,7 @@ import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
 class TimelineViewModel @AssistedInject constructor(
+        private val vectorFeatures: VectorFeatures,
         @Assisted private val initialState: RoomDetailViewState,
         private val vectorPreferences: VectorPreferences,
         private val vectorDataStore: VectorDataStore,
@@ -764,9 +765,9 @@ class TimelineViewModel @AssistedInject constructor(
                     R.id.invite -> state.canInvite
                     R.id.open_matrix_apps -> false // Tchap: there are no matrix apps
                     // Tchap: check if voip is enabled
-                    R.id.voice_call -> BuildConfig.IS_VOIP_SUPPORTED && (state.isCallOptionAvailable() || state.hasActiveElementCallWidget())
+                    R.id.voice_call -> vectorFeatures.isVoipSupported() && (state.isCallOptionAvailable() || state.hasActiveElementCallWidget())
                     // Tchap: check if voip is enabled
-                    R.id.video_call -> BuildConfig.IS_VOIP_SUPPORTED &&
+                    R.id.video_call -> vectorFeatures.isVoipSupported() &&
                             (state.isCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined)
                     // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
                     R.id.join_conference -> !state.isCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined

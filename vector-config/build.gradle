@@ -10,6 +10,15 @@ android {
         minSdk versions.minSdk
         targetSdk versions.targetSdk
     }
+
+    // The 'voip' flavor dimension permits to include/exclude jitsi at compilation time
+    flavorDimensions "voip"
+
+    productFlavors {
+        withvoip { dimension "voip" }
+        withoutvoip { dimension "voip" }
+    }
+
     compileOptions {
         sourceCompatibility versions.sourceCompat
         targetCompatibility versions.targetCompat

@@ -16,11 +16,14 @@
 
 package im.vector.app.features
 
+import im.vector.app.R
 import im.vector.app.config.Config
 import im.vector.app.config.OnboardingVariant
+import im.vector.app.core.resources.BooleanProvider
 
 interface VectorFeatures {
 
+    fun isVoipSupported(): Boolean
     fun onboardingVariant(): OnboardingVariant
     fun isOnboardingAlreadyHaveAccountSplashEnabled(): Boolean
     fun isOnboardingSplashCarouselEnabled(): Boolean
@@ -36,7 +39,9 @@ interface VectorFeatures {
     fun isNewAppLayoutEnabled(): Boolean
 }
 
-class DefaultVectorFeatures : VectorFeatures {
+class DefaultVectorFeatures(
+        private val booleanProvider: BooleanProvider
+) : VectorFeatures {
     override fun onboardingVariant() = Config.ONBOARDING_VARIANT
     override fun isOnboardingAlreadyHaveAccountSplashEnabled() = true
     override fun isOnboardingSplashCarouselEnabled() = true
@@ -50,4 +55,5 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun forceUsageOfOpusEncoder(): Boolean = false
     override fun shouldStartDmOnFirstMessage(): Boolean = false
     override fun isNewAppLayoutEnabled(): Boolean = false
+    override fun isVoipSupported(): Boolean = booleanProvider.getBoolean(R.bool.tchap_is_voip_supported)
 }
