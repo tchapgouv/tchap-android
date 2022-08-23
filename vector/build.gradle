@@ -333,21 +333,11 @@ android {
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
         }
 
-        withvoip {
-            dimension "voip"
-        }
+        withvoip { dimension "voip" }
+        withoutvoip { dimension "voip" }
 
-        withoutvoip {
-            dimension "voip"
-        }
-
-        withpinning {
-            dimension "pinning"
-        }
-
-        withoutpinning {
-            dimension "pinning"
-        }
+        withpinning { dimension "pinning" }
+        withoutpinning { dimension "pinning" }
 
         devTchap {
             dimension "target"
