@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--<im.vector.app.core.preference.VectorPreferenceCategory-->
     <!--android:key="SETTINGS_LABS_PREFERENCE_KEY"-->
@@ -72,7 +71,7 @@
         android:title="@string/labs_auto_report_uisi" />
 
     <im.vector.app.core.preference.VectorSwitchPreference
-        android:defaultValue="@bool/enable_location_sharing"
+        android:defaultValue="@bool/tchap_settings_labs_enable_location_sharing"
         android:key="SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE"
         android:summary="@string/labs_enable_live_location_summary"
         android:title="@string/labs_enable_live_location" />

@@ -4,7 +4,7 @@
 
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:title="@string/settings_developer_mode"
-        app:isPreferenceVisible="@bool/developer_mode_visible">
+        app:isPreferenceVisible="@bool/tchap_settings_advanced_developer_mode_visible">
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"
@@ -85,7 +85,7 @@
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:dependency="SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
         android:title="@string/settings_dev_tools"
-        app:isPreferenceVisible="@bool/developer_mode_visible">
+        app:isPreferenceVisible="@bool/tchap_settings_advanced_developer_mode_visible">
 
         <im.vector.app.core.preference.VectorPreference
             android:persistent="false"
