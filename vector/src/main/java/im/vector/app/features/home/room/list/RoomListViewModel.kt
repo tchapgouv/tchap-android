@@ -26,7 +26,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
-import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
@@ -72,7 +71,7 @@ class RoomListViewModel @AssistedInject constructor(
         override fun create(initialState: RoomListViewState): RoomListViewModel
     }
 
-    private var updatableQueries = mutableListOf<UpdatableLivePageResult>()
+    private var updatableQuery: UpdatableLivePageResult? = null
 
     private val suggestedRoomJoiningState: MutableLiveData<Map<String, Async<Unit>>> = MutableLiveData(emptyMap())
 
@@ -101,11 +100,11 @@ class RoomListViewModel @AssistedInject constructor(
         observeMembershipChanges()
         observeLocalRooms()
 
-        appStateHandler.selectedRoomGroupingFlow
+        appStateHandler.selectedSpaceFlow
                 .distinctUntilChanged()
                 .execute {
                     copy(
-                            currentRoomGrouping = it.invoke()?.orNull()?.let { Success(it) } ?: Loading()
+                            asyncSelectedSpace = it.invoke()?.orNull()?.let { Success(it) } ?: Loading()
                     )
                 }
 
@@ -146,30 +145,18 @@ class RoomListViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> by hiltMavericksViewModelFactory()
 
-    private val roomListSectionBuilder = if (appStateHandler.getCurrentRoomGroupingMethod() is RoomGroupingMethod.BySpace) {
-        RoomListSectionBuilderSpace(
-                session,
-                stringProvider,
-                appStateHandler,
-                viewModelScope,
-                autoAcceptInvites,
-                {
-                    updatableQueries.add(it)
-                },
-                suggestedRoomJoiningState,
-                !vectorPreferences.prefSpacesShowAllRoomInHome()
-        )
-    } else {
-        RoomListSectionBuilderGroup(
-                viewModelScope,
-                session,
-                stringProvider,
-                appStateHandler,
-                autoAcceptInvites
-        ) {
-            updatableQueries.add(it)
-        }
-    }
+    private val roomListSectionBuilder = RoomListSectionBuilder(
+            session,
+            stringProvider,
+            appStateHandler,
+            viewModelScope,
+            autoAcceptInvites,
+            {
+                updatableQuery = it
+            },
+            suggestedRoomJoiningState,
+            !vectorPreferences.prefSpacesShowAllRoomInHome()
+    )
 
     val sections: List<RoomsSection> by lazy {
         roomListSectionBuilder.buildSections(initialState.displayMode)
@@ -227,14 +214,10 @@ class RoomListViewModel @AssistedInject constructor(
                     roomFilter = action.filter
             )
         }
-
-        // filter query for each section
-        updatableQueries.forEach { updatableQuery ->
-            updatableQuery.apply {
-                queryParams = queryParams.copy(
-                        displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.NORMALIZED)
-                )
-            }
+        updatableQuery?.apply {
+            queryParams = queryParams.copy(
+                    displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.NORMALIZED)
+            )
         }
     }
 

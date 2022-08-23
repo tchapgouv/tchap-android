@@ -355,6 +355,9 @@ class BugReporter @Inject constructor(
                     // Special for Element
                     builder.addFormDataPart("label", "[${BuildConfig.FLAVOR_target}]")
 
+                    // Possible values for BuildConfig.BUILD_TYPE: "debug", "nightly", "release".
+                    builder.addFormDataPart("label", BuildConfig.BUILD_TYPE)
+
                     when (reportType) {
                         ReportType.BUG_REPORT -> {
                             /* nop */
