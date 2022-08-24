@@ -102,7 +102,13 @@ class UnifiedPushHelper @Inject constructor(
                 UnifiedPush.registerApp(context)
                 onDoneRunnable?.run()
             } else {
-                openDistributorDialogInternal(activity, pushersManager, onDoneRunnable, distributors, !force, !force)
+                openDistributorDialogInternal(
+                        activity = activity,
+                        pushersManager = pushersManager,
+                        onDoneRunnable = onDoneRunnable,
+                        distributors = distributors,
+                        unregisterFirst = force
+                )
             }
         }
     }
@@ -118,7 +124,6 @@ class UnifiedPushHelper @Inject constructor(
                 pushersManager,
                 onDoneRunnable, distributors,
                 unregisterFirst = true,
-                cancellable = true,
         )
     }
 
@@ -128,7 +133,6 @@ class UnifiedPushHelper @Inject constructor(
             onDoneRunnable: Runnable?,
             distributors: List<String>,
             unregisterFirst: Boolean,
-            cancellable: Boolean,
     ) {
         val internalDistributorName = stringProvider.getString(
                 if (fcmHelper.isFirebaseAvailable()) {
@@ -166,7 +170,13 @@ class UnifiedPushHelper @Inject constructor(
                         onDoneRunnable?.run()
                     }
                 }
-                .setCancelable(cancellable)
+                .setOnCancelListener {
+                    // By default, use internal solution (fcm/background sync)
+                    UnifiedPush.saveDistributor(context, context.packageName)
+                    UnifiedPush.registerApp(context)
+                    onDoneRunnable?.run()
+                }
+                .setCancelable(true)
                 .show()
     }
 
