@@ -30,6 +30,7 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import im.vector.app.R
 import im.vector.app.config.OnboardingVariant
+import im.vector.app.core.resources.BooleanProvider
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.DefaultVectorFeatures
 import im.vector.app.features.debug.features.DebugVectorFeatures
@@ -39,7 +40,8 @@ class OnboardingRobot {
 
     // Tchap: Use different onboarding variant to run the tests
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
-    private val defaultVectorFeatures = DebugVectorFeatures(context, DefaultVectorFeatures()).apply {
+    private val booleanProvider = BooleanProvider(context.resources)
+    private val defaultVectorFeatures = DebugVectorFeatures(context, DefaultVectorFeatures(booleanProvider)).apply {
         overrideEnum(OnboardingVariant.FTUE_AUTH, OnboardingVariant::class)
     }
 

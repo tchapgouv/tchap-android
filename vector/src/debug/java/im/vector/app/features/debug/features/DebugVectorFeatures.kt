@@ -40,6 +40,12 @@ class DebugVectorFeatures(
 
     private val dataStore = context.dataStore
 
+    override fun isVoipSupported() = vectorFeatures.isVoipSupported()
+
+    override fun isCrossSigningEnabled() = vectorFeatures.isCrossSigningEnabled()
+
+    override fun isKeyBackupEnabled() = vectorFeatures.isKeyBackupEnabled()
+
     override fun onboardingVariant(): OnboardingVariant {
         return readPreferences().getEnum<OnboardingVariant>() ?: vectorFeatures.onboardingVariant()
     }
