@@ -48,6 +48,8 @@ class UnifiedPushHelper @Inject constructor(
         private val fcmHelper: FcmHelper,
 ) {
 
+    // Called when the home activity starts
+    // or when notifications are enabled
     fun register(
             activity: FragmentActivity,
             onDoneRunnable: Runnable? = null,
@@ -120,6 +122,8 @@ class UnifiedPushHelper @Inject constructor(
         }
     }
 
+    // There is no case where this function is called
+    // with a saved distributor and/or a pusher
     private fun openDistributorDialogInternal(
             activity: FragmentActivity,
             onDoneRunnable: Runnable?,
