@@ -38,6 +38,7 @@ import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
+import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -103,7 +104,9 @@ class CommonTestHelper internal constructor(context: Context) {
                     context,
                     MatrixConfiguration(
                             applicationFlavor = "TestFlavor",
-                            roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider()
+                            roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider(),
+                            // Tchap: Do not limit here key requests to my devices to unblock crypto tests
+                            cryptoConfig = MXCryptoConfig(limitRoomKeyRequestsToMyDevices = false),
                     )
             )
         }

@@ -111,7 +111,6 @@ class MessageComposerViewModel @AssistedInject constructor(
             is MessageComposerAction.PlayOrPauseVoicePlayback -> handlePlayOrPauseVoicePlayback(action)
             MessageComposerAction.PauseRecordingVoiceMessage -> handlePauseRecordingVoiceMessage()
             MessageComposerAction.PlayOrPauseRecordingPlayback -> handlePlayOrPauseRecordingPlayback()
-            is MessageComposerAction.EndAllVoiceActions -> handleEndAllVoiceActions(action.deleteRecord)
             is MessageComposerAction.InitializeVoiceRecorder -> handleInitializeVoiceRecorder(action.attachmentData)
             is MessageComposerAction.OnEntersBackground -> handleEntersBackground(action.composerText)
             is MessageComposerAction.VoiceWaveformTouchedUp -> handleVoiceWaveformTouchedUp(action)
@@ -904,7 +903,7 @@ class MessageComposerViewModel @AssistedInject constructor(
         audioMessageHelper.startOrPauseRecordingPlayback()
     }
 
-    private fun handleEndAllVoiceActions(deleteRecord: Boolean) {
+    fun endAllVoiceActions(deleteRecord: Boolean = true) {
         audioMessageHelper.clearTracker()
         audioMessageHelper.stopAllVoiceActions(deleteRecord)
     }

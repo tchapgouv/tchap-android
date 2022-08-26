@@ -23,11 +23,11 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.BuildConfig
-import im.vector.app.config.analyticsConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsType
 import im.vector.app.features.analytics.plan.Signup
@@ -81,7 +81,8 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val analyticsStore: AnalyticsStore,
         private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val vectorPreferences: VectorPreferences,
-        private val analyticsTracker: AnalyticsTracker
+        private val analyticsTracker: AnalyticsTracker,
+        private val analyticsConfig: AnalyticsConfig,
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
@@ -232,9 +233,9 @@ class HomeActivityViewModel @AssistedInject constructor(
         session.syncService().getSyncRequestStateFlow()
                 .onEach { status ->
                     when (status) {
-                            is SyncRequestState.Idle                   -> {
-                                maybeVerifyOrBootstrapCrossSigning()
-                            }
+                        is SyncRequestState.Idle -> {
+                            maybeVerifyOrBootstrapCrossSigning()
+                        }
                         else -> Unit
                     }
 
@@ -473,7 +474,7 @@ class HomeActivityViewModel @AssistedInject constructor(
             HomeActivityViewActions.ViewStarted -> {
                 initialize()
             }
-            HomeActivityViewActions.DisclaimerDialogShown     -> {
+            HomeActivityViewActions.DisclaimerDialogShown -> {
                 // Tchap: in case of migration, there is no initial sync, so force the update of the identity server url
                 updateIdentityServer()
             }

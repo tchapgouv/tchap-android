@@ -27,6 +27,7 @@ knit {
         exclude '**/.gradle/**'
         exclude '**/towncrier/template.md'
         exclude '**/CHANGES.md'
+        exclude '/node_modules'
     }
 }
 
@@ -157,38 +158,14 @@ android {
         buildConfigField "String", "GIT_BRANCH_NAME", "\"${gitBranchName()}\""
         buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
 
-        buildConfigField "im.vector.app.features.VectorFeatures.OnboardingVariant", "ONBOARDING_VARIANT", "im.vector.app.features.VectorFeatures.OnboardingVariant.LEGACY"
-
-        buildConfigField "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy", "outboundSessionKeySharingStrategy", "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy.WhenTyping"
-
-        buildConfigField "Long", "VOICE_MESSAGE_DURATION_LIMIT_MS", "120_000L"
-
-        //  If set, MSC3086 asserted identity messages sent on VoIP calls will cause the call to appear in the room corresponding to the asserted identity.
-        //  This *must* only be set in trusted environments.
-        buildConfigField "Boolean", "handleCallAssertedIdentityEvents", "false"
-
         // Tchap: Disable Location Sharing
-        def enableLocationSharing = false
-        buildConfigField "Boolean", "enableLocationSharing", "${enableLocationSharing}"
-        resValue "bool", "enable_location_sharing", "${enableLocationSharing}"
-        buildConfigField "String", "mapTilerKey", "\"\""
+        resValue "bool", "enable_location_sharing", "false"
 
         // Tchap: The spaces feature is hidden, show all rooms in the home
         def showSpaces = false
         def showAllInHome = !showSpaces
-        buildConfigField "Boolean", "SHOW_SPACES", "${showSpaces}"
         resValue "bool", "show_spaces", "${showSpaces}"
-        buildConfigField "Boolean", "SPACES_SHOW_ALL_IN_HOME", "${showAllInHome}"
         resValue "bool", "spaces_show_all_in_home", "${showAllInHome}"
-
-        // Tchap: Hide voice message recorder button
-        buildConfigField "Boolean", "SHOW_VOICE_RECORDER", "false"
-
-        // Tchap: Enable add messages reaction
-        buildConfigField "Boolean", "SHOW_ADD_MESSAGE_REACTION", "true"
-
-        // Tchap: Enable editing messages
-        buildConfigField "Boolean", "SHOW_EDIT_MESSAGE", "true"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -278,12 +255,6 @@ android {
 //            resValue "string", "app_name", "Element dbg"
 //            resValue "color", "launcher_background", "#0DBD8B"
 
-            buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
-            // Set to true if you want to enable strict mode in debug
-            buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
-
-            // Tchap: Disable the location sharing
-            buildConfigField "Boolean", "ENABLE_LIVE_LOCATION_SHARING", "false"
             // Tchap: Show developer mode only in debug
             resValue "bool", "developer_mode_visible", "true"
 
@@ -298,13 +269,9 @@ android {
 //            resValue "string", "app_name", "Element"
 //            resValue "color", "launcher_background", "#0DBD8B"
 
-            buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
-            buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
-
             // Tchap: Show developer mode only in debug
             resValue "bool", "developer_mode_visible", "false"
 
-            // When updating this block, please also update the same block in the `nightly` buildType below
             postprocessing {
                 removeUnusedCode true
                 removeUnusedResources true
@@ -369,7 +336,6 @@ android {
             isDefault = true
 
             resValue "bool", "isGplay", "true"
-            buildConfigField "boolean", "ALLOW_FCM_USE", "true"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
         }
@@ -378,7 +344,6 @@ android {
             dimension "store"
 
             resValue "bool", "isGplay", "false"
-            buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
         }
@@ -606,7 +571,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.52'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.53'
 
     // FlowBinding
     implementation libs.github.flowBinding
@@ -617,6 +582,9 @@ dependencies {
     kapt libs.airbnb.epoxyProcessor
     implementation libs.airbnb.epoxyPaging
     implementation libs.airbnb.mavericks
+
+    // Snap Helper https://github.com/rubensousa/GravitySnapHelper
+    implementation 'com.github.rubensousa:gravitysnaphelper:2.2.2'
 
     // Nightly
     // API-only library
@@ -758,44 +726,44 @@ dependencies {
 
     // Tchap: We had to exclude fbjni for withVoip, the library is already include in jitsi library
     // Flipper, debug builds only
-    gplayBtchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni'}
-    gplayBtchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) {exclude group: 'com.facebook.fbjni', module: 'fbjni'}
+    gplayBtchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    gplayBtchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
-    gplayTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni'}
-    gplayTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) {exclude group: 'com.facebook.fbjni', module: 'fbjni'}
+    gplayTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    gplayTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
-    gplayDevTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni'}
-    gplayDevTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) {exclude group: 'com.facebook.fbjni', module: 'fbjni'}
-
-
-    fdroidBtchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni'}
-    fdroidBtchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) {exclude group: 'com.facebook.fbjni', module: 'fbjni'}
-
-    fdroidTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni'}
-    fdroidTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) {exclude group: 'com.facebook.fbjni', module: 'fbjni'}
-
-    fdroidDevTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni'}
-    fdroidDevTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) {exclude group: 'com.facebook.fbjni', module: 'fbjni'}
+    gplayDevTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    gplayDevTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
 
-    gplayBtchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni'}
-    gplayBtchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) {exclude group: 'com.facebook.fbjni', module: 'fbjni'}
+    fdroidBtchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    fdroidBtchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
-    gplayDevTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni'}
-    gplayDevTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) {exclude group: 'com.facebook.fbjni', module: 'fbjni'}
+    fdroidTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    fdroidTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
-    gplayTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni'}
-    gplayTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) {exclude group: 'com.facebook.fbjni', module: 'fbjni'}
+    fdroidDevTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    fdroidDevTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
 
-    fdroidBtchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni'}
-    fdroidBtchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) {exclude group: 'com.facebook.fbjni', module: 'fbjni'}
+    gplayBtchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    gplayBtchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
-    fdroidDevTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni'}
-    fdroidDevTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) {exclude group: 'com.facebook.fbjni', module: 'fbjni'}
+    gplayDevTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    gplayDevTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
-    fdroidTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni'}
-    fdroidTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) {exclude group: 'com.facebook.fbjni', module: 'fbjni'}
+    gplayTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    gplayTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+
+
+    fdroidBtchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    fdroidBtchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+
+    fdroidDevTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    fdroidDevTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+
+    fdroidTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    fdroidTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
     gplayBtchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
     gplayBtchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
@@ -837,7 +805,7 @@ dependencies {
 
     debugImplementation 'com.facebook.soloader:soloader:0.10.4'
     debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"
-    
+
     // Activate when you want to check for leaks, from time to time.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
 
@@ -862,4 +830,5 @@ dependencies {
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestUtil libs.androidx.orchestrator
     debugImplementation libs.androidx.fragmentTesting
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.10"
 }

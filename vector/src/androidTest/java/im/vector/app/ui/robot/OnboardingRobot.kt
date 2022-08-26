@@ -22,19 +22,26 @@ import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.platform.app.InstrumentationRegistry
 import com.adevinta.android.barista.assertion.BaristaEnabledAssertions.assertDisabled
 import com.adevinta.android.barista.assertion.BaristaEnabledAssertions.assertEnabled
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import im.vector.app.R
+import im.vector.app.config.OnboardingVariant
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.DefaultVectorFeatures
+import im.vector.app.features.debug.features.DebugVectorFeatures
 import im.vector.app.waitForView
 
 class OnboardingRobot {
 
-    private val defaultVectorFeatures = DefaultVectorFeatures()
+    // Tchap: Use different onboarding variant to run the tests
+    private val context = InstrumentationRegistry.getInstrumentation().targetContext
+    private val defaultVectorFeatures = DebugVectorFeatures(context, DefaultVectorFeatures()).apply {
+        overrideEnum(OnboardingVariant.FTUE_AUTH, OnboardingVariant::class)
+    }
 
     fun crawl() {
         waitUntilViewVisible(withId(R.id.loginSplashSubmit))
