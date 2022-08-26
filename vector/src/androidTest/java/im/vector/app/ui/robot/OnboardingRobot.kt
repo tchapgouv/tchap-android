@@ -33,6 +33,7 @@ import im.vector.app.config.OnboardingVariant
 import im.vector.app.core.resources.BooleanProvider
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.DefaultVectorFeatures
+import im.vector.app.features.debug.features.DebugFeatureKeys
 import im.vector.app.features.debug.features.DebugVectorFeatures
 import im.vector.app.waitForView
 
@@ -43,6 +44,7 @@ class OnboardingRobot {
     private val booleanProvider = BooleanProvider(context.resources)
     private val defaultVectorFeatures = DebugVectorFeatures(context, DefaultVectorFeatures(booleanProvider)).apply {
         overrideEnum(OnboardingVariant.FTUE_AUTH, OnboardingVariant::class)
+        override(true, DebugFeatureKeys.tchapIsKeyBackupEnabled)
     }
 
     fun crawl() {

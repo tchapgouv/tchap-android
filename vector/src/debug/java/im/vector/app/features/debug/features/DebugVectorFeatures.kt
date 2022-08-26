@@ -44,7 +44,7 @@ class DebugVectorFeatures(
 
     override fun isCrossSigningEnabled() = vectorFeatures.isCrossSigningEnabled()
 
-    override fun isKeyBackupEnabled() = vectorFeatures.isKeyBackupEnabled()
+    override fun isKeyBackupEnabled() = read(DebugFeatureKeys.tchapIsKeyBackupEnabled) ?: vectorFeatures.isKeyBackupEnabled()
 
     override fun onboardingVariant(): OnboardingVariant {
         return readPreferences().getEnum<OnboardingVariant>() ?: vectorFeatures.onboardingVariant()
@@ -133,6 +133,7 @@ private inline fun <reified T : Enum<T>> enumPreferencesKey() = enumPreferencesK
 private fun <T : Enum<T>> enumPreferencesKey(type: KClass<T>) = stringPreferencesKey("enum-${type.simpleName}")
 
 object DebugFeatureKeys {
+    val tchapIsKeyBackupEnabled = booleanPreferencesKey("tchap_is_key_backup_enabled")
     val onboardingAlreadyHaveAnAccount = booleanPreferencesKey("onboarding-already-have-an-account")
     val onboardingSplashCarousel = booleanPreferencesKey("onboarding-splash-carousel")
     val onboardingUseCase = booleanPreferencesKey("onboarding-use-case")

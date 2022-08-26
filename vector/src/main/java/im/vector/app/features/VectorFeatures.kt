@@ -20,6 +20,7 @@ import im.vector.app.R
 import im.vector.app.config.Config
 import im.vector.app.config.OnboardingVariant
 import im.vector.app.core.resources.BooleanProvider
+import javax.inject.Inject
 
 interface VectorFeatures {
 
@@ -41,7 +42,7 @@ interface VectorFeatures {
     fun isNewAppLayoutEnabled(): Boolean
 }
 
-class DefaultVectorFeatures(
+class DefaultVectorFeatures @Inject constructor(
         private val booleanProvider: BooleanProvider
 ) : VectorFeatures {
     override fun isVoipSupported() = booleanProvider.getBoolean(R.bool.tchap_is_voip_supported)

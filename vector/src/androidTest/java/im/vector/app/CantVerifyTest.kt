@@ -25,7 +25,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import im.vector.app.features.MainActivity
 import im.vector.app.ui.robot.ElementRobot
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -34,7 +33,6 @@ import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-@Ignore("Tchap: Secure Backup is disabled, so this test cannot succeed")
 class CantVerifyTest : VerificationTestBase() {
 
     @get:Rule
