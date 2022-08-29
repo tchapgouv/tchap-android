@@ -333,7 +333,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
     // Todo this should be refactored and use same state as 4S section
     private fun refreshXSigningStatus() {
-        if (vectorFeatures.isCrossSigningEnabled()) {
+        if (vectorFeatures.tchapIsCrossSigningEnabled()) {
             val crossSigningKeys = session.cryptoService().crossSigningService().getMyCrossSigningKeys()
             val xSigningIsEnableInAccount = crossSigningKeys != null
             val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()

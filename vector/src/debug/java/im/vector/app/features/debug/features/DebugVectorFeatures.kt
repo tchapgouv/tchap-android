@@ -42,7 +42,7 @@ class DebugVectorFeatures(
 
     override fun tchapIsVoipSupported() = vectorFeatures.tchapIsVoipSupported()
 
-    override fun isCrossSigningEnabled() = vectorFeatures.isCrossSigningEnabled()
+    override fun tchapIsCrossSigningEnabled() = vectorFeatures.tchapIsCrossSigningEnabled()
 
     override fun isKeyBackupEnabled() = read(DebugFeatureKeys.tchapIsKeyBackupEnabled) ?: vectorFeatures.isKeyBackupEnabled()
 

@@ -104,7 +104,7 @@ class HomeActivityViewModel @AssistedInject constructor(
     private var checkBootstrap = false
 
     // Tchap: Disable cross-signing
-    private var hasCheckedBootstrap = !vectorFeatures.isCrossSigningEnabled()
+    private var hasCheckedBootstrap = !vectorFeatures.tchapIsCrossSigningEnabled()
     private var onceTrusted = false
 
     private fun initialize() {
@@ -171,7 +171,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .onEach { info ->
                     // Tchap: Disable cross-signing
                     val mxCrossSigningInfo = info.getOrNull()
-                    if (!vectorFeatures.isCrossSigningEnabled() && mxCrossSigningInfo != null) {
+                    if (!vectorFeatures.tchapIsCrossSigningEnabled() && mxCrossSigningInfo != null) {
                         Timber.i("Cross signing feature is disabled. This account should not have cross signing keys")
                     }
 

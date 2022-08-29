@@ -122,7 +122,7 @@ class KeyRequestHandler @Inject constructor(
                     return
                 }
 
-                if (vectorFeatures.isCrossSigningEnabled()) {
+                if (vectorFeatures.tchapIsCrossSigningEnabled()) {
                     if (deviceInfo.isUnknown) {
                         session?.cryptoService()?.setDeviceVerification(
                                 DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false), userId, deviceId)

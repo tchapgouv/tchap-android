@@ -171,7 +171,7 @@ class HomeDetailFragment @Inject constructor(
                     val newest = unknownDevices.firstOrNull { it.isNew }?.deviceInfo
                     if (newest != null) {
                         promptForNewUnknownDevices(uid, state, newest)
-                    } else if (vectorFeatures.isCrossSigningEnabled() && olderUnverified.isNotEmpty()) {
+                    } else if (vectorFeatures.tchapIsCrossSigningEnabled() && olderUnverified.isNotEmpty()) {
                         // In this case we prompt to go to settings to review logins
                         promptToReviewChanges(uid, state, olderUnverified.map { it.deviceInfo })
                     }
