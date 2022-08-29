@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 interface VectorFeatures {
 
-    fun isVoipSupported(): Boolean
+    fun tchapIsVoipSupported(): Boolean
     fun isCrossSigningEnabled(): Boolean
     fun isKeyBackupEnabled(): Boolean
     fun onboardingVariant(): OnboardingVariant
@@ -45,7 +45,7 @@ interface VectorFeatures {
 class DefaultVectorFeatures @Inject constructor(
         private val booleanProvider: BooleanProvider
 ) : VectorFeatures {
-    override fun isVoipSupported() = booleanProvider.getBoolean(R.bool.tchap_is_voip_supported)
+    override fun tchapIsVoipSupported() = booleanProvider.getBoolean(R.bool.tchap_is_voip_supported)
     override fun isCrossSigningEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_cross_signing_enabled)
     override fun isKeyBackupEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_key_backup_enabled)
     override fun onboardingVariant() = Config.ONBOARDING_VARIANT
