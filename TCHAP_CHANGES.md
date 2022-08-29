@@ -1,3 +1,11 @@
+Changes in Tchap 2.4.2 (2022-08-29)
+===================================
+
+Bugfixes 🐛
+----------
+ - Forum creation: limited to my domain is not working ([#695](https://github.com/tchapgouv/tchap-android-v2/issues/695))
+
+
 Changes in Tchap 2.4.1 (2022-08-16)
 ===================================
 
@@ -11,12 +19,15 @@ Other changes
  - [Menu - Report Bug] Do not select "send screenshot" by default ([#686](https://github.com/tchapgouv/tchap-android-v2/issues/686))
  - Remove Android Auto support ([#703](https://github.com/tchapgouv/tchap-android-v2/issues/703))
 
+
 Changes in Tchap 2.4.0 (2022-08-03)
 ===================================
 
 Improvements 🙌
 --------------
- - Using a secondary button style in the case of binary actions ([#668](https://github.com/tchapgouv/tchap-android-v2/issues/668))
+ - Use a secondary button style in the case of binary actions ([#668](https://github.com/tchapgouv/tchap-android-v2/issues/668))
+ - [Manage Sessions] Restore the shields in the sessions list ([605](https://github.com/tchapgouv/tchap-android-v2/issues/605))
+ - Enable cross-signing in Btchap and DevTchap, key backup in DevTchap ([458](https://github.com/tchapgouv/tchap-android-v2/issues/458))
 
 Bugfixes 🐛
 ----------
