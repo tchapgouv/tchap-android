@@ -98,7 +98,7 @@ class LoginResetPasswordFragment @Inject constructor(
 
         if (showWarning) {
             showWarning = false
-            val message = if (vectorFeatures.isKeyBackupEnabled()) {
+            val message = if (vectorFeatures.tchapIsKeyBackupEnabled()) {
                 R.string.login_reset_password_warning_content
             } else {
                 R.string.tchap_login_reset_password_warning_content

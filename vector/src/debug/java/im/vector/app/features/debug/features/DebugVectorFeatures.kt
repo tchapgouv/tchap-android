@@ -44,7 +44,7 @@ class DebugVectorFeatures(
 
     override fun tchapIsCrossSigningEnabled() = vectorFeatures.tchapIsCrossSigningEnabled()
 
-    override fun isKeyBackupEnabled() = read(DebugFeatureKeys.tchapIsKeyBackupEnabled) ?: vectorFeatures.isKeyBackupEnabled()
+    override fun tchapIsKeyBackupEnabled() = read(DebugFeatureKeys.tchapIsKeyBackupEnabled) ?: vectorFeatures.tchapIsKeyBackupEnabled()
 
     override fun onboardingVariant(): OnboardingVariant {
         return readPreferences().getEnum<OnboardingVariant>() ?: vectorFeatures.onboardingVariant()

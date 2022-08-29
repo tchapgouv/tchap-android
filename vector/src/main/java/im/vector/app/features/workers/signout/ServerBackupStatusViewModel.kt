@@ -85,7 +85,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(
 
     init {
         // if key backup is not supported, do nothing
-        if (vectorFeatures.isKeyBackupEnabled()) {
+        if (vectorFeatures.tchapIsKeyBackupEnabled()) {
             init()
         }
     }

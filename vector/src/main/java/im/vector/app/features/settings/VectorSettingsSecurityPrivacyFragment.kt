@@ -200,7 +200,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     private fun refresh4SSection(info: SecretsSynchronisationInfo) {
         // it's a lot of if / else if / else
         // But it's not yet clear how to manage all cases
-        if (!vectorFeatures.isKeyBackupEnabled() || !info.isCrossSigningEnabled) {
+        if (!vectorFeatures.tchapIsKeyBackupEnabled() || !info.isCrossSigningEnabled) {
             // Key backup is not supported or there is not cross signing, so we can remove the section
             secureBackupCategory.isVisible = false
         } else {

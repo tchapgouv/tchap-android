@@ -75,7 +75,7 @@ class SignoutCheckViewModel @AssistedInject constructor(
     // Tchap: init viewState with key backup
     companion object : MavericksViewModelFactory<SignoutCheckViewModel, SignoutCheckViewState> by hiltMavericksViewModelFactory() {
         override fun initialState(viewModelContext: ViewModelContext): SignoutCheckViewState? {
-            val isKeyBackupEnabled = (viewModelContext.activity as? VectorBaseActivity<*>)?.vectorFeatures?.isKeyBackupEnabled().orFalse()
+            val isKeyBackupEnabled = (viewModelContext.activity as? VectorBaseActivity<*>)?.vectorFeatures?.tchapIsKeyBackupEnabled().orFalse()
             return SignoutCheckViewState(isKeyBackupSupported = isKeyBackupEnabled)
         }
     }

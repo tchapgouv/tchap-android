@@ -73,7 +73,7 @@ class VerificationRequestController @Inject constructor(
                 }
             }
 
-            if (vectorFeatures.isKeyBackupEnabled() && state.quadSContainsSecrets) {
+            if (vectorFeatures.tchapIsKeyBackupEnabled() && state.quadSContainsSecrets) {
                 val subtitle = if (state.hasAnyOtherSession) {
                     stringProvider.getString(R.string.verification_use_passphrase)
                 } else {
