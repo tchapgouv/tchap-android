@@ -45,7 +45,7 @@
     <string name="tchap_room_extern_room_type">Externes</string>
     <string name="tchap_room_forum_type">Forum</string>
     <string name="tchap_room_invited_you">%s vous a invité</string>
-    <string name="tchap_fab_join_public_room">Rejoindre un forum depuis l\'annuaire</string>
+    <string name="tchap_fab_join_public_room">Rejoindre un forum depuis l’annuaire</string>
 
     <!-- tchap scan media -->
     <string name="tchap_scan_media_untrusted_content_message">Le document (%s) a été filtré par la politique de sécurité</string>
