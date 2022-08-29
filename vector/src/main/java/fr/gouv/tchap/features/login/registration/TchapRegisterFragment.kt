@@ -25,6 +25,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
 import im.vector.app.core.extensions.isEmail
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.databinding.FragmentTchapRegisterBinding
 import im.vector.app.features.login.AbstractLoginFragment
 import im.vector.app.features.login.LoginAction
@@ -44,7 +45,8 @@ import javax.inject.Inject
  * In signup mode:
  * - the user is asked for login and password
  */
-class TchapRegisterFragment @Inject constructor() : AbstractLoginFragment<FragmentTchapRegisterBinding>() {
+class TchapRegisterFragment @Inject constructor() : AbstractLoginFragment<FragmentTchapRegisterBinding>(),
+        VectorMenuProvider {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTchapRegisterBinding {
         return FragmentTchapRegisterBinding.inflate(inflater, container, false)
@@ -57,12 +59,14 @@ class TchapRegisterFragment @Inject constructor() : AbstractLoginFragment<Fragme
 
         loginViewModel.observeViewEvents { loginViewEvents ->
             when (loginViewEvents) {
-                LoginViewEvents.OnLoginFlowRetrieved      ->
-                    loginViewModel.handle(LoginAction.LoginOrRegister(
-                            username = views.tchapRegisterEmail.text.toString(),
-                            password = views.tchapRegisterPassword.text.toString(),
-                            initialDeviceName = getString(R.string.login_default_session_public_name)
-                    ))
+                LoginViewEvents.OnLoginFlowRetrieved ->
+                    loginViewModel.handle(
+                            LoginAction.LoginOrRegister(
+                                    username = views.tchapRegisterEmail.text.toString(),
+                                    password = views.tchapRegisterPassword.text.toString(),
+                                    initialDeviceName = getString(R.string.login_default_session_public_name)
+                            )
+                    )
                 is LoginViewEvents.RegistrationFlowResult -> {
                     // Result from registration request when the account password is set.
                     // Email stage is mandatory at this time and another stage should not happen.
@@ -79,23 +83,22 @@ class TchapRegisterFragment @Inject constructor() : AbstractLoginFragment<Fragme
                         Unit
                     }
                 }
-                is LoginViewEvents.OnHomeServerRetrieved  -> updateHomeServer(loginViewEvents.hs)
-                else                                      -> Unit // This is handled by the Activity
+                is LoginViewEvents.OnHomeServerRetrieved -> updateHomeServer(loginViewEvents.hs)
+                else -> Unit // This is handled by the Activity
             }
         }
     }
 
     override fun getMenuRes() = R.menu.tchap_menu_next
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.action_next -> {
                 submit()
-                return true
+                true
             }
+            else -> false
         }
-
-        return super.onOptionsItemSelected(item)
     }
 
     private fun submit() {
@@ -152,8 +155,10 @@ class TchapRegisterFragment @Inject constructor() : AbstractLoginFragment<Fragme
     }
 
     override fun onError(throwable: Throwable) {
-        val passwordErrors = setOf(MatrixError.M_WEAK_PASSWORD, MatrixError.M_PASSWORD_TOO_SHORT, MatrixError.M_PASSWORD_NO_UPPERCASE,
-                MatrixError.M_PASSWORD_NO_DIGIT, MatrixError.M_PASSWORD_NO_SYMBOL, MatrixError.M_PASSWORD_NO_LOWERCASE, MatrixError.M_PASSWORD_IN_DICTIONARY)
+        val passwordErrors = setOf(
+                MatrixError.M_WEAK_PASSWORD, MatrixError.M_PASSWORD_TOO_SHORT, MatrixError.M_PASSWORD_NO_UPPERCASE,
+                MatrixError.M_PASSWORD_NO_DIGIT, MatrixError.M_PASSWORD_NO_SYMBOL, MatrixError.M_PASSWORD_NO_LOWERCASE, MatrixError.M_PASSWORD_IN_DICTIONARY
+        )
 
         if (throwable is Failure.ServerError &&
                 throwable.error.code in passwordErrors) {

@@ -38,7 +38,7 @@ import im.vector.app.features.themes.ThemeUtils
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
+@EpoxyModelClass
 abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
 
     @EpoxyAttribute

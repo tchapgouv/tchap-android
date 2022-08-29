@@ -23,11 +23,13 @@ import android.provider.MediaStore
 import androidx.annotation.BoolRes
 import androidx.core.content.edit
 import com.squareup.seismic.ShakeDetector
-import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.config.Config
 import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.time.Clock
 import im.vector.app.features.disclaimer.SHARED_PREF_KEY
+import im.vector.app.features.home.ShortcutsHandler
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -37,6 +39,7 @@ import javax.inject.Inject
 class VectorPreferences @Inject constructor(
         private val context: Context,
         private val clock: Clock,
+        private val buildMeta: BuildMeta,
 ) {
 
     companion object {
@@ -158,7 +161,6 @@ class VectorPreferences @Inject constructor(
         private const val SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY = "SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY"
 
         const val SETTINGS_LABS_ALLOW_EXTENDED_LOGS = "SETTINGS_LABS_ALLOW_EXTENDED_LOGS"
-        const val SETTINGS_LABS_SPACES_HOME_AS_ORPHAN = "SETTINGS_LABS_SPACES_HOME_AS_ORPHAN"
         const val SETTINGS_LABS_AUTO_REPORT_UISI = "SETTINGS_LABS_AUTO_REPORT_UISI"
         const val SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME = "SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME"
 
@@ -167,6 +169,8 @@ class VectorPreferences @Inject constructor(
         private const val SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY = "SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
         private const val SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY"
         private const val SETTINGS_DEVELOPER_MODE_SHOW_INFO_ON_SCREEN_KEY = "SETTINGS_DEVELOPER_MODE_SHOW_INFO_ON_SCREEN_KEY"
+
+        const val SETTINGS_LABS_MSC3061_SHARE_KEYS_HISTORY = "SETTINGS_LABS_MSC3061_SHARE_KEYS_HISTORY"
 
         // SETTINGS_LABS_HIDE_TECHNICAL_E2E_ERRORS
         private const val SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM = "SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM"
@@ -209,6 +213,8 @@ class VectorPreferences @Inject constructor(
         private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
 
         private const val SETTINGS_LABS_ENABLE_LIVE_LOCATION = "SETTINGS_LABS_ENABLE_LIVE_LOCATION"
+
+        private const val SETTINGS_LABS_ENABLE_ELEMENT_CALL_PERMISSION_SHORTCUTS = "SETTINGS_LABS_ENABLE_ELEMENT_CALL_PERMISSION_SHORTCUTS"
 
         // This key will be used to identify clients with the old thread support enabled io.element.thread
         const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES_OLD_CLIENTS = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES"
@@ -270,7 +276,9 @@ class VectorPreferences @Inject constructor(
                 SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY,
 
                 SETTINGS_USE_RAGE_SHAKE_KEY,
-                SETTINGS_SECURITY_USE_FLAG_SECURE
+                SETTINGS_SECURITY_USE_FLAG_SECURE,
+
+                ShortcutsHandler.SHARED_PREF_KEY,
         )
     }
 
@@ -363,7 +371,7 @@ class VectorPreferences @Inject constructor(
     }
 
     fun failFast(): Boolean {
-        return BuildConfig.DEBUG || (developerMode() && defaultPrefs.getBoolean(SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY, false))
+        return buildMeta.isDebug || (developerMode() && defaultPrefs.getBoolean(SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY, false))
     }
 
     fun didAskUserToEnableSessionPush(): Boolean {
@@ -1024,17 +1032,13 @@ class VectorPreferences @Inject constructor(
         }
     }
 
-    private fun labsSpacesOnlyOrphansInHome(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_SPACES_HOME_AS_ORPHAN, false)
-    }
-
     fun labsAutoReportUISI(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_AUTO_REPORT_UISI, false)
     }
 
     fun prefSpacesShowAllRoomInHome(): Boolean {
         // Tchap: Show all rooms in the home while the spaces are hidden
-        return defaultPrefs.getBoolean(SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME, BuildConfig.SPACES_SHOW_ALL_IN_HOME)
+        return defaultPrefs.getBoolean(SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME, Config.SPACES_SHOW_ALL_IN_HOME)
     }
 
     /*
@@ -1058,6 +1062,10 @@ class VectorPreferences @Inject constructor(
         defaultPrefs.edit {
             putBoolean(SETTINGS_LABS_ENABLE_LIVE_LOCATION, isEnabled)
         }
+    }
+
+    fun labsEnableElementCallPermissionShortcuts(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_ELEMENT_CALL_PERMISSION_SHORTCUTS, false)
     }
 
     /**

@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -24,11 +23,11 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.BuildConfig
-import im.vector.app.config.analyticsConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsType
 import im.vector.app.features.analytics.plan.Signup
@@ -82,7 +81,8 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val analyticsStore: AnalyticsStore,
         private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val vectorPreferences: VectorPreferences,
-        private val analyticsTracker: AnalyticsTracker
+        private val analyticsTracker: AnalyticsTracker,
+        private val analyticsConfig: AnalyticsConfig,
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
@@ -230,13 +230,12 @@ class HomeActivityViewModel @AssistedInject constructor(
     private fun observeInitialSync() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
-        session.syncService().getSyncRequestStateLive()
-                .asFlow()
+        session.syncService().getSyncRequestStateFlow()
                 .onEach { status ->
                     when (status) {
-                            is SyncRequestState.Idle                   -> {
-                                maybeVerifyOrBootstrapCrossSigning()
-                            }
+                        is SyncRequestState.Idle -> {
+                            maybeVerifyOrBootstrapCrossSigning()
+                        }
                         else -> Unit
                     }
 
@@ -376,14 +375,30 @@ class HomeActivityViewModel @AssistedInject constructor(
                             // If 4S is forced, force verification
                             _viewEvents.post(HomeActivityViewEvents.ForceVerification(true))
                         } else {
-                            // New session
-                            _viewEvents.post(
-                                    HomeActivityViewEvents.OnNewSession(
-                                            session.getUser(session.myUserId)?.toMatrixItem(),
-                                            // Always send request instead of waiting for an incoming as per recent EW changes
-                                            false
-                                    )
-                            )
+                            // we wan't to check if there is a way to actually verify this session,
+                            // that means that there is another session to verify against, or
+                            // secure backup is setup
+                            val hasTargetDeviceToVerifyAgainst = session
+                                    .cryptoService()
+                                    .getUserDevices(session.myUserId)
+                                    .size >= 2 // this one + another
+                            val is4Ssetup = session.sharedSecretStorageService().isRecoverySetup()
+                            if (hasTargetDeviceToVerifyAgainst || is4Ssetup) {
+                                // New session
+                                _viewEvents.post(
+                                        HomeActivityViewEvents.CurrentSessionNotVerified(
+                                                session.getUser(session.myUserId)?.toMatrixItem(),
+                                                // Always send request instead of waiting for an incoming as per recent EW changes
+                                                false
+                                        )
+                                )
+                            } else {
+                                _viewEvents.post(
+                                        HomeActivityViewEvents.CurrentSessionCannotBeVerified(
+                                                session.getUser(session.myUserId)?.toMatrixItem(),
+                                        )
+                                )
+                            }
                         }
                     }
                 }
@@ -459,7 +474,7 @@ class HomeActivityViewModel @AssistedInject constructor(
             HomeActivityViewActions.ViewStarted -> {
                 initialize()
             }
-            HomeActivityViewActions.DisclaimerDialogShown     -> {
+            HomeActivityViewActions.DisclaimerDialogShown -> {
                 // Tchap: in case of migration, there is no initial sync, so force the update of the identity server url
                 updateIdentityServer()
             }

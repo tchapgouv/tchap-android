@@ -78,7 +78,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     when (action) {
                         UserListSharedAction.Close -> finish()
                         UserListSharedAction.GoBack -> onBackPressed()
-                        is UserListSharedAction.OnMenuItemSelected -> onMenuItemSelected(action)
+                        is UserListSharedAction.OnMenuItemSubmitClick -> handleOnMenuItemSubmitClick(action)
                         UserListSharedAction.OpenPhoneBook -> openPhoneBook()
                         UserListSharedAction.AddByQrCode -> openAddByQrCode()
                     }
@@ -89,11 +89,12 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     views.container,
                     UserListFragment::class.java,
                     UserListFragmentArgs(
+                            singleSelection = true, // Tchap: disable multi selection
+                            showContactBookAction = false, // Tchap: hide contact book action
+                            showInviteActions = false, // Tchap: hide invite action
                             title = getString(R.string.fab_menu_create_chat),
                             menuResId = R.menu.vector_create_direct_room,
-                            singleSelection = true,
-                            showContactBookAction = false,
-                            showInviteActions = false
+                            submitMenuItemId = R.id.action_create_direct_room,
                     )
             )
         }
@@ -112,7 +113,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
         viewModel.observeViewEvents {
             when (it) {
-                CreateDirectRoomViewEvents.InvalidCode                -> {
+                CreateDirectRoomViewEvents.InvalidCode -> {
                     Toast.makeText(this, R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
                     finish()
                 }
@@ -121,21 +122,21 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     Toast.makeText(this, R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
                     finish()
                 }
-                CreateDirectRoomViewEvents.InviteSent                 -> {
+                CreateDirectRoomViewEvents.InviteSent -> {
                     handleInviteByEmailResult(buildString {
                         appendLine(getString(R.string.tchap_invite_sending_succeeded))
                         appendLine(getString(R.string.tchap_send_invite_confirmation))
                     })
                 }
-                is CreateDirectRoomViewEvents.Failure                 -> renderCreationFailure(it.throwable)
-                is CreateDirectRoomViewEvents.UserDiscovered          -> handleExistingUser(it.user)
-                is CreateDirectRoomViewEvents.InviteAlreadySent       -> {
+                is CreateDirectRoomViewEvents.Failure -> renderCreationFailure(it.throwable)
+                is CreateDirectRoomViewEvents.UserDiscovered -> handleExistingUser(it.user)
+                is CreateDirectRoomViewEvents.InviteAlreadySent -> {
                     handleInviteByEmailResult(getString(R.string.tchap_invite_already_send_message, it.email))
                 }
                 is CreateDirectRoomViewEvents.InviteUnauthorizedEmail -> {
                     handleInviteByEmailResult(getString(R.string.tchap_invite_unauthorized_message, it.email))
                 }
-                is CreateDirectRoomViewEvents.OpenDirectChat          -> {
+                is CreateDirectRoomViewEvents.OpenDirectChat -> {
                     renderCreationSuccess(it.roomId)
                 }
             }
@@ -186,10 +187,8 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         }
     }
 
-    private fun onMenuItemSelected(action: UserListSharedAction.OnMenuItemSelected) {
-        if (action.itemId == R.id.action_create_direct_room) {
-            viewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(action.selections))
-        }
+    private fun handleOnMenuItemSubmitClick(action: UserListSharedAction.OnMenuItemSubmitClick) {
+        viewModel.handle(CreateDirectRoomAction.PrepareRoomWithSelectedUsers(action.selections))
     }
 
     // Tchap: Not used in Tchap
