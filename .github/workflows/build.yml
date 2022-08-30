@@ -54,7 +54,6 @@ jobs:
       fail-fast: false
       matrix:
         target: [ GplayBtchapWithoutvoipWithpinning, GplayTchapWithoutvoipWithpinning, FdroidBtchapWithoutvoipWithoutpinning, FdroidTchapWithoutvoipWithoutpinning, GplayBtchapWithvoipWithpinning ]
-    # Only runs on main, no concurrency.
     concurrency:
       group: ${{ github.ref == 'refs/head/main' && format('build-release-apk-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('build-release-apk-develop-{0}', github.sha) || format('build-debug-{0}', github.ref)  }}
       cancel-in-progress: ${{ github.ref != 'refs/head/main' }}
@@ -80,18 +79,26 @@ jobs:
   exodus:
     runs-on: ubuntu-latest
     needs: release
+    env:
+      # Tchap: custom fields
+      TARGET_NAME: "GplayTchapWithoutvoipWithpinning"
+      TARGET_FOLDER: "gplayTchapWithoutvoipWithpinning"
     steps:
       - name: Obtain apk from artifact
         id: download
         uses: actions/download-artifact@v3
         with:
-          name: vector-gplay-release-unsigned
+          name: ${{ env.TARGET_NAME }}-release-unsigned
       - name: Show apks in artifact
-        run: ls -R ${{steps.download.outputs.download-path}}
+        id: list-apks
+        # Tchap: Find apks in artifacts
+        run: |
+          ls -R ${{steps.download.outputs.download-path}} | grep ".apk"
+          echo ::set-output name=FIRST_APK_NAME::$(ls -R ${{steps.download.outputs.download-path}} | grep ".apk" | head -1)
       - name: Execute exodus-standalone
         uses: docker://exodusprivacy/exodus-standalone:latest
         with:
-          args: /github/workspace/gplay/release/vector-gplay-universal-release-unsigned.apk -j -o /github/workspace/exodus.json
+          args: /github/workspace/${{ env.TARGET_FOLDER }}/release/${{ steps.list-apks.outputs.FIRST_APK_NAME }} -j -o /github/workspace/exodus.json
       - name: Upload exodus json report
         uses: actions/upload-artifact@v3
         with:
