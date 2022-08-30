@@ -19,6 +19,7 @@ package im.vector.app.features.voice
 import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry
 import im.vector.app.AndroidVersionTestOverrider
+import im.vector.app.core.resources.BooleanProvider
 import im.vector.app.features.DefaultVectorFeatures
 import org.amshove.kluent.shouldBeInstanceOf
 import org.junit.After
@@ -27,7 +28,8 @@ import org.junit.Test
 class VoiceRecorderProviderTests {
 
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
-    private val provider = VoiceRecorderProvider(context, DefaultVectorFeatures())
+    private val booleanProvider = BooleanProvider(context.resources)
+    private val provider = VoiceRecorderProvider(context, DefaultVectorFeatures(booleanProvider))
 
     @After
     fun tearDown() {
