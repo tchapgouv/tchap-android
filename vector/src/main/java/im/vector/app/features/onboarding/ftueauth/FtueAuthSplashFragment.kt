@@ -24,7 +24,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.resources.BuildMeta
-import im.vector.app.databinding.FragmentTchapWelcomeBinding
+import im.vector.app.databinding.FragmentFtueAuthSplashBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingFlow
@@ -38,10 +38,10 @@ class FtueAuthSplashFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val vectorFeatures: VectorFeatures,
         private val buildMeta: BuildMeta,
-) : AbstractFtueAuthFragment<FragmentTchapWelcomeBinding>() {
+) : AbstractFtueAuthFragment<FragmentFtueAuthSplashBinding>() {
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTchapWelcomeBinding {
-        return FragmentTchapWelcomeBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueAuthSplashBinding {
+        return FragmentFtueAuthSplashBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,7 +52,7 @@ class FtueAuthSplashFragment @Inject constructor(
     private fun setupViews() {
         val isAlreadyHaveAccountEnabled = vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
         views.loginSplashSubmit.apply {
-            setText(if (isAlreadyHaveAccountEnabled) R.string.tchap_has_account_no else R.string.login_splash_submit)
+            setText(if (isAlreadyHaveAccountEnabled) R.string.login_splash_create_account else R.string.login_splash_submit)
             debouncedClicks { splashSubmit(isAlreadyHaveAccountEnabled) }
         }
         views.loginSplashAlreadyHaveAccount.apply {
