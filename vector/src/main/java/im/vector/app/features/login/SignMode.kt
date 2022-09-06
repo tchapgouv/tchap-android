@@ -20,6 +20,9 @@ enum class SignMode {
     // Tchap: Login with email
     TchapSignIn,
 
+    // Tchap: Account creation
+    TchapSignUp,
+
     Unknown,
 
     // Account creation

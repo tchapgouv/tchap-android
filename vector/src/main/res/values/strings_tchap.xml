@@ -100,6 +100,7 @@
     <string name="tchap_register_pwd_no_lowercase">The password must include at least one lowercase</string>
     <string name="tchap_register_pwd_no_symbol">The password must include at least one special character</string>
     <string name="tchap_login_error_unable_register">Unable to register</string>
+    <string name="tchap_ftue_account_created_subtitle">Your account has been created</string>
 
     <!-- Logout Tchap -->
     <string name="tchap_action_sign_out_confirmation">For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.</string>

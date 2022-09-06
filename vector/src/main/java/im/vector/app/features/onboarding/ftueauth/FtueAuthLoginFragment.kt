@@ -31,6 +31,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
+import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginBinding
 import im.vector.app.features.login.LoginMode
@@ -65,6 +66,8 @@ import javax.inject.Inject
  */
 class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentLoginBinding>() {
 
+    private val tchap = Tchap()
+
     private var isSignupMode = false
 
     // Temporary patch for https://github.com/vector-im/riotX-android/issues/1410,
@@ -98,6 +101,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             when (state.signMode) {
                 SignMode.Unknown -> error("developer error")
+                SignMode.TchapSignUp,
                 SignMode.SignUp -> {
                     views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
                     views.passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
@@ -115,6 +119,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
     private fun setupSocialLoginButtons(state: OnboardingViewState) {
         views.loginSocialLoginButtons.mode = when (state.signMode) {
             SignMode.Unknown -> error("developer error")
+            SignMode.TchapSignUp,
             SignMode.SignUp -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
             SignMode.TchapSignIn,
             SignMode.SignIn,
@@ -131,14 +136,9 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
 
             // This can be called by the IME action, so deal with empty cases
             var error = 0
-            if (login.isEmpty()) {
-                views.loginFieldTil.error = getString(
-                        if (isSignupMode) {
-                            R.string.error_empty_field_choose_user_name
-                        } else {
-                            R.string.error_empty_field_enter_user_name
-                        }
-                )
+            // Tchap: custom error policy
+            if (login.isEmpty() || !login.isEmail()) {
+                views.loginFieldTil.error = getString(R.string.auth_invalid_email)
                 error++
             }
             if (isSignupMode && isNumericOnlyUserIdForbidden && login.isDigitsOnly()) {
@@ -156,6 +156,12 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
                 error++
             }
 
+            // Tchap: password confirmation
+            if (state.signMode == SignMode.TchapSignUp && password != views.tchapPasswordConfirmationField.text.toString()) {
+                views.passwordFieldTil.error = getString(R.string.tchap_auth_password_dont_match)
+                error++
+            }
+
             if (error == 0) {
                 val initialDeviceName = getString(R.string.login_default_session_public_name)
                 viewModel.handle(state.signMode.toAuthenticateAction(login, password, initialDeviceName))
@@ -167,6 +173,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
         views.loginSubmit.hideKeyboard()
         views.loginFieldTil.error = null
         views.passwordFieldTil.error = null
+        views.tchapPasswordConfirmationFieldTil.error = null
     }
 
     private fun setupUi(state: OnboardingViewState) {
@@ -175,6 +182,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
                     SignMode.Unknown -> error("developer error")
                     SignMode.SignUp -> R.string.login_signup_username_hint
                     SignMode.SignIn -> R.string.login_signin_username_hint
+                    SignMode.TchapSignUp,
                     SignMode.TchapSignIn -> R.string.tchap_connection_email
                     SignMode.SignInWithMatrixId -> R.string.login_signin_matrix_id_hint
                 }
@@ -189,6 +197,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
         } else {
             val resId = when (state.signMode) {
                 SignMode.Unknown -> error("developer error")
+                SignMode.TchapSignUp,
                 SignMode.SignUp -> R.string.login_signup_to
                 SignMode.TchapSignIn -> R.string.login_connect_to
                 SignMode.SignIn -> R.string.login_connect_to
@@ -248,6 +257,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
         views.loginSubmit.text = getString(
                 when (state.signMode) {
                     SignMode.Unknown -> error("developer error")
+                    SignMode.TchapSignUp,
                     SignMode.SignUp -> R.string.login_signup_submit
                     SignMode.TchapSignIn,
                     SignMode.SignIn,
@@ -310,10 +320,10 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
     }
 
     override fun updateWithState(state: OnboardingViewState) {
-        isSignupMode = state.signMode == SignMode.SignUp
+        isSignupMode = state.signMode == SignMode.SignUp || state.signMode == SignMode.TchapSignUp
         isNumericOnlyUserIdForbidden = state.serverType == ServerType.MatrixOrg
 
-        setupUi(state)
+        tchap.setupUi(state)
         setupAutoFill(state)
         setupSocialLoginButtons(state)
         setupButtons(state)
@@ -328,4 +338,20 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
      * Detect if password ends or starts with spaces.
      */
     private fun spaceInPassword() = views.passwordField.text.toString().let { it.trim() != it }
+
+    private inner class Tchap {
+
+        fun setupUi(state: OnboardingViewState) {
+            this@FtueAuthLoginFragment.setupUi(state) // call "super" method
+            if (state.signMode == SignMode.TchapSignUp) {
+                views.loginFieldTil.isHelperTextEnabled = true
+                views.passwordFieldTil.isHelperTextEnabled = true
+                views.tchapPasswordConfirmationFieldTil.isVisible = true
+            } else {
+                views.loginFieldTil.isHelperTextEnabled = false
+                views.passwordFieldTil.isHelperTextEnabled = false
+                views.tchapPasswordConfirmationFieldTil.isVisible = false
+            }
+        }
+    }
 }

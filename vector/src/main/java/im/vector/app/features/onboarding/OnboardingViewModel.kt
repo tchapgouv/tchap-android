@@ -61,6 +61,7 @@ import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.login.LoginWizard
+import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.auth.registration.RegistrationAvailability
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
@@ -243,6 +244,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is AuthenticateAction.Login -> handleLogin(action)
             is AuthenticateAction.LoginDirect -> handleDirectLogin(action, homeServerConnectionConfig = null)
             is AuthenticateAction.TchapLogin -> tchap.handleLogin(action)
+            is AuthenticateAction.TchapRegister -> tchap.handleRegisterWith(action)
         }
     }
 
@@ -254,13 +256,14 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun continueToPageAfterSplash(onboardingFlow: OnboardingFlow) {
         when (onboardingFlow) {
             OnboardingFlow.SignUp -> {
-                _viewEvents.post(
-                        if (vectorFeatures.isOnboardingUseCaseEnabled()) {
-                            OnboardingViewEvents.OpenUseCaseSelection
-                        } else {
-                            OnboardingViewEvents.OpenServerSelection
-                        }
-                )
+                handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.TchapSignUp))
+//                _viewEvents.post(
+//                        if (vectorFeatures.isOnboardingUseCaseEnabled()) {
+//                            OnboardingViewEvents.OpenUseCaseSelection
+//                        } else {
+//                            OnboardingViewEvents.OpenServerSelection
+//                        }
+//                )
             }
             OnboardingFlow.SignIn -> when {
                 vectorFeatures.isOnboardingCombinedLoginEnabled() -> {
@@ -328,12 +331,12 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleRegisterAction(action: RegisterAction) {
+    private fun handleRegisterAction(action: RegisterAction, overrideNextStage: (() -> Unit)? = null) {
         val job = viewModelScope.launch {
             if (action.hasLoadingState()) {
                 setState { copy(isLoading = true) }
             }
-            internalRegisterAction(action)
+            internalRegisterAction(action, overrideNextStage)
             setState { copy(isLoading = false) }
         }
 
@@ -382,18 +385,20 @@ class OnboardingViewModel @AssistedInject constructor(
         )
     }
 
-    private fun handleRegisterWith(userName: String, password: String, initialDeviceName: String) {
+    private fun handleRegisterWith(userName: String?, password: String, initialDeviceName: String?, email: String? = null) {
         setState {
             val authDescription = AuthenticationDescription.Register(AuthenticationDescription.AuthenticationType.Password)
             copy(selectedAuthenticationState = SelectedAuthenticationState(authDescription))
         }
         reAuthHelper.data = password
+        val overrideNextStage = email?.let { { handleRegisterAction(RegisterAction.AddThreePid(RegisterThreePid.Email(email))) } }
         handleRegisterAction(
                 RegisterAction.CreateAccount(
                         userName,
                         password,
                         initialDeviceName
-                )
+                ),
+                overrideNextStage
         )
     }
 
@@ -457,6 +462,7 @@ class OnboardingViewModel @AssistedInject constructor(
         updateSignMode(action.signMode)
         when (action.signMode) {
             SignMode.TchapSignIn -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.TchapSignIn))
+            SignMode.TchapSignUp -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.TchapSignUp))
             SignMode.SignUp -> handleRegisterAction(RegisterAction.StartRegistration)
             SignMode.SignIn -> startAuthenticationFlow()
             SignMode.SignInWithMatrixId -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
@@ -937,6 +943,15 @@ class OnboardingViewModel @AssistedInject constructor(
     @Inject lateinit var getPlatformTask: TchapGetPlatformTask
 
     private inner class Tchap {
+
+        fun handleRegisterWith(action: AuthenticateAction.TchapRegister) {
+            startTchapAuthenticationFlow(action.email) {
+                // Tchap registration doesn't require userName.
+                // The initialDeviceDisplayName is useless because the account will be actually created after the email validation (eventually on another device).
+                // This first register request will link the account password with the returned session id (used in the following steps).
+                handleRegisterWith(null, action.password, null, action.email)
+            }
+        }
 
         fun handleLogin(action: AuthenticateAction.TchapLogin) {
             startTchapAuthenticationFlow(action.email) {

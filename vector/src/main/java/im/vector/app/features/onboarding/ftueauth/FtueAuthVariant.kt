@@ -313,8 +313,9 @@ class FtueAuthVariant(
         // state.signMode could not be ready yet. So use value from the ViewEvent
         when (onboardingViewEvents.signMode) {
             SignMode.Unknown -> error("Sign mode has to be set before calling this method")
-            SignMode.SignUp -> Unit // This case is processed in handleOnboardingViewEvents
+            SignMode.TchapSignUp -> tchap.handleSignUpSelected()
             SignMode.TchapSignIn -> tchap.handleSignInSelected()
+            SignMode.SignUp -> Unit // This case is processed in handleOnboardingViewEvents
             SignMode.SignIn -> handleSignInSelected(state)
             SignMode.SignInWithMatrixId -> handleSignInWithMatrixId(state)
         }
@@ -544,5 +545,6 @@ class FtueAuthVariant(
 
     private inner class Tchap {
         fun handleSignInSelected() = openAuthLoginFragmentWithTag(FRAGMENT_LOGIN_TAG)
+        fun handleSignUpSelected() = openAuthLoginFragmentWithTag(FRAGMENT_LOGIN_TAG)
     }
 }

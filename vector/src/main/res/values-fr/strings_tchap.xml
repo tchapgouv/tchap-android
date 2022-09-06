@@ -89,7 +89,7 @@
     <string name="tchap_register_warning_for_external">Le domaine de votre adresse e\u2011mail n’est pas déclaré dans ${app_name}. Si vous avez reçu une invitation, vous allez pouvoir créer un compte ${app_name} « invité », permettant uniquement de participer aux échanges privés auxquels vous êtes convié.</string>
     <string name="tchap_register_warning_for_external_proceed">Poursuivre</string>
     <string name="tchap_register_wait_for_email_title">Un e\u2011mail vous a été envoyé à l’adresse suivante, sauf si un compte ${app_name} lui a déjà été associé :</string>
-    <string name="tchap_register_wait_for_email_subtitle">Merci de cliquer sur le lien proposé dans cet e\u2011mail afin de terminer la création de votre compte. Vous pourrez alors vous connecter en allant sur l’écran de connexion.</string>
+    <string name="tchap_register_wait_for_email_subtitle">Merci de cliquer sur le lien proposé dans cet e\u2011mail afin de terminer la création de votre compte.</string>
     <string name="tchap_register_wait_for_email_login_button">Aller à l’écran de connexion</string>
     <string name="tchap_register_wait_for_email_no_email">Je n’ai pas reçu l’email!</string>
     <string name="tchap_password_weak_pwd_error">Ce mot de passe est trop faible. Il doit contenir au moins 8 caractères, avec au moins un caractère de chaque type : majuscule, minuscule, chiffre, caractère spécial.</string>
@@ -100,6 +100,7 @@
     <string name="tchap_register_pwd_no_lowercase">Ce mot de passe doit contenir au moins une minuscule</string>
     <string name="tchap_register_pwd_no_symbol">Ce mot de passe doit contenir au moins un caractère spécial</string>
     <string name="tchap_login_error_unable_register">Impossible de s’inscrire</string>
+    <string name="tchap_ftue_account_created_subtitle">Votre compte a été créé</string>
 
     <!-- Logout Tchap -->
     <string name="tchap_action_sign_out_confirmation">Pour des raisons de sécurité, la déconnexion supprimera toutes les clés de chiffrement de bout en bout, rendant l’historique des conversations chiffrées inaccessible lorsque vous vous reconnecterez. Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>

@@ -86,6 +86,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
     private fun setupAutoFill(state: LoginViewState) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             when (state.signMode) {
+                SignMode.TchapSignUp,
                 SignMode.TchapSignIn,
                 SignMode.Unknown -> error("developer error")
                 SignMode.SignUp -> {
@@ -103,6 +104,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
 
     private fun setupSocialLoginButtons(state: LoginViewState) {
         views.loginSocialLoginButtons.mode = when (state.signMode) {
+            SignMode.TchapSignUp,
             SignMode.TchapSignIn,
             SignMode.Unknown -> error("developer error")
             SignMode.SignUp -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
@@ -158,6 +160,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
     private fun setupUi(state: LoginViewState) {
         views.loginFieldTil.hint = getString(
                 when (state.signMode) {
+                    SignMode.TchapSignUp,
                     SignMode.TchapSignIn,
                     SignMode.Unknown -> error("developer error")
                     SignMode.SignUp -> R.string.login_signup_username_hint
@@ -174,6 +177,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
             views.loginPasswordNotice.isVisible = true
         } else {
             val resId = when (state.signMode) {
+                SignMode.TchapSignUp,
                 SignMode.TchapSignIn,
                 SignMode.Unknown -> error("developer error")
                 SignMode.SignUp -> R.string.login_signup_to
@@ -228,6 +232,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
 
         views.loginSubmit.text = getString(
                 when (state.signMode) {
+                    SignMode.TchapSignUp,
                     SignMode.TchapSignIn,
                     SignMode.Unknown -> error("developer error")
                     SignMode.SignUp -> R.string.login_signup_submit
