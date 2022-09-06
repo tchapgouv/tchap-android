@@ -38,6 +38,12 @@ jobs:
       group: ${{ github.ref == 'refs/heads/main' && format('lint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('lint-develop-{0}', github.sha) || format('lint-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID_DANGERBOT }}
+          private_key: ${{ secrets.APP_PEM_DANGERBOT }}
       - uses: actions/checkout@v3
       - name: Run ktlint
         run: |
@@ -66,11 +72,11 @@ jobs:
           yarn add danger-plugin-lint-report --dev
       - name: Danger lint
         if: always()
-        uses: danger/danger-js@11.1.1
+        uses: danger/danger-js@11.1.2
         with:
           args: "--dangerfile tools/danger/dangerfile-lint.js"
         env:
-          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
+          DANGER_GITHUB_API_TOKEN: ${{ steps.generate_token.outputs.token }}
 
   # Gradle dependency analysis using https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin
   dependency-analysis:
