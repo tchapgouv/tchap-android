@@ -26,3 +26,6 @@ Even if we try to be able to work on all the functionalities, we have more knowl
 
 [@yoanp:matrix.org](https://matrix.to/#/@yoanp:matrix.org)
 - Android developer
+
+[@nicolas.fries-beta.gouv.fr:agent.dinum.tchap.gouv.fr](https://tchap.gouv.fr/#/@nicolas.fries-beta.gouv.fr:agent.dinum.tchap.gouv.fr)
+- DevOps
