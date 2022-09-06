@@ -70,6 +70,8 @@ class FtueAuthVariant(
         private val orientationLocker: ScreenOrientationLocker,
 ) : OnboardingVariant {
 
+    private val tchap = Tchap()
+
     private val enterAnim = R.anim.enter_fade_in
     private val exitAnim = R.anim.exit_fade_out
 
@@ -312,6 +314,7 @@ class FtueAuthVariant(
         when (onboardingViewEvents.signMode) {
             SignMode.Unknown -> error("Sign mode has to be set before calling this method")
             SignMode.SignUp -> Unit // This case is processed in handleOnboardingViewEvents
+            SignMode.TchapSignIn -> tchap.handleSignInSelected()
             SignMode.SignIn -> handleSignInSelected(state)
             SignMode.SignInWithMatrixId -> handleSignInWithMatrixId(state)
         }
@@ -537,5 +540,9 @@ class FtueAuthVariant(
                 tag = FRAGMENT_LOGIN_TAG,
                 option = commonOption
         )
+    }
+
+    private inner class Tchap {
+        fun handleSignInSelected() = openAuthLoginFragmentWithTag(FRAGMENT_LOGIN_TAG)
     }
 }

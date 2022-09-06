@@ -21,6 +21,9 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import fr.gouv.tchap.features.platform.GetPlatformResult
+import fr.gouv.tchap.features.platform.Params
+import fr.gouv.tchap.features.platform.TchapGetPlatformTask
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
@@ -66,6 +69,7 @@ import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.CancellationException
+import javax.inject.Inject
 
 /**
  *
@@ -95,6 +99,8 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     companion object : MavericksViewModelFactory<OnboardingViewModel, OnboardingViewState> by hiltMavericksViewModelFactory()
+
+    private val tchap = Tchap()
 
     init {
         getKnownCustomHomeServersUrls()
@@ -236,6 +242,7 @@ class OnboardingViewModel @AssistedInject constructor(
             )
             is AuthenticateAction.Login -> handleLogin(action)
             is AuthenticateAction.LoginDirect -> handleDirectLogin(action, homeServerConnectionConfig = null)
+            is AuthenticateAction.TchapLogin -> tchap.handleLogin(action)
         }
     }
 
@@ -257,7 +264,8 @@ class OnboardingViewModel @AssistedInject constructor(
             }
             OnboardingFlow.SignIn -> when {
                 vectorFeatures.isOnboardingCombinedLoginEnabled() -> {
-                    handle(OnboardingAction.HomeServerChange.SelectHomeServer(deeplinkOrDefaultHomeserverUrl()))
+                    handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.TchapSignIn))
+//                    handle(OnboardingAction.HomeServerChange.SelectHomeServer(deeplinkOrDefaultHomeserverUrl()))
                 }
                 else -> openServerSelectionOrDeeplinkToOther()
             }
@@ -448,6 +456,7 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleUpdateSignMode(action: OnboardingAction.UpdateSignMode) {
         updateSignMode(action.signMode)
         when (action.signMode) {
+            SignMode.TchapSignIn -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.TchapSignIn))
             SignMode.SignUp -> handleRegisterAction(RegisterAction.StartRegistration)
             SignMode.SignIn -> startAuthenticationFlow()
             SignMode.SignInWithMatrixId -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
@@ -506,7 +515,7 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun handleResetPassword(action: OnboardingAction.ResetPassword) {
-        startResetPasswordFlow(action.email) {
+        tchap.startResetPasswordFlow(action.email) {
             setState { copy(isLoading = false, resetState = createResetState(action, selectedHomeserver)) }
             _viewEvents.post(OnboardingViewEvents.OnResetPasswordEmailConfirmationSent(action.email))
         }
@@ -524,7 +533,7 @@ class OnboardingViewModel @AssistedInject constructor(
             when (resetState.email) {
                 null -> _viewEvents.post(OnboardingViewEvents.Failure(IllegalStateException("Developer error - No reset email has been set")))
                 else -> {
-                    startResetPasswordFlow(resetState.email) {
+                    tchap.startResetPasswordFlow(resetState.email) {
                         setState { copy(isLoading = false) }
                     }
                 }
@@ -923,6 +932,39 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun cancelWaitForEmailValidation() {
         emailVerificationPollingJob = null
+    }
+
+    @Inject lateinit var getPlatformTask: TchapGetPlatformTask
+
+    private inner class Tchap {
+
+        fun handleLogin(action: AuthenticateAction.TchapLogin) {
+            startTchapAuthenticationFlow(action.email) {
+                handleLogin(AuthenticateAction.Login(action.email, action.password, action.initialDeviceName))
+            }
+        }
+
+        fun startResetPasswordFlow(email: String, onSuccess: suspend () -> Unit) {
+            startTchapAuthenticationFlow(email) {
+                this@OnboardingViewModel.startResetPasswordFlow(email, onSuccess)
+            }
+        }
+
+        private fun startTchapAuthenticationFlow(email: String, postAction: suspend () -> Unit) {
+            setState { copy(isLoading = true) }
+            currentJob = viewModelScope.launch {
+                when (val result = getPlatformTask.execute(Params(email))) {
+                    is GetPlatformResult.Success -> {
+                        val homeServerUrl = stringProvider.getString(R.string.server_url_prefix) + result.platform.hs
+                        handleHomeserverChange(OnboardingAction.HomeServerChange.EditHomeServer(homeServerUrl), postAction = postAction)
+                    }
+                    is GetPlatformResult.Failure -> {
+                        _viewEvents.post(OnboardingViewEvents.Failure(result.throwable))
+                        setState { copy(isLoading = false) }
+                    }
+                }
+            }
+        }
     }
 }
 

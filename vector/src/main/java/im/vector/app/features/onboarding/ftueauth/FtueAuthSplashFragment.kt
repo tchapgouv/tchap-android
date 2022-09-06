@@ -24,7 +24,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.resources.BuildMeta
-import im.vector.app.databinding.FragmentFtueAuthSplashBinding
+import im.vector.app.databinding.FragmentTchapWelcomeBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingFlow
@@ -38,10 +38,10 @@ class FtueAuthSplashFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val vectorFeatures: VectorFeatures,
         private val buildMeta: BuildMeta,
-) : AbstractFtueAuthFragment<FragmentFtueAuthSplashBinding>() {
+) : AbstractFtueAuthFragment<FragmentTchapWelcomeBinding>() {
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueAuthSplashBinding {
-        return FragmentFtueAuthSplashBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTchapWelcomeBinding {
+        return FragmentTchapWelcomeBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

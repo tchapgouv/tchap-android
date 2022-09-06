@@ -31,7 +31,6 @@ import androidx.core.app.TaskStackBuilder
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import fr.gouv.tchap.features.login.TchapLoginActivity
 import im.vector.app.R
 import im.vector.app.SpaceStateHandler
 import im.vector.app.config.Config
@@ -70,6 +69,7 @@ import im.vector.app.features.location.LocationSharingArgs
 import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.location.live.map.LiveLocationMapViewActivity
 import im.vector.app.features.location.live.map.LiveLocationMapViewArgs
+import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.matrixto.OriginOfMatrixTo
@@ -131,7 +131,7 @@ class DefaultNavigator @Inject constructor(
 
     override fun openLogin(context: Context, loginConfig: LoginConfig?, flags: Int) {
         val intent = when (features.onboardingVariant()) {
-            OnboardingVariant.LEGACY -> TchapLoginActivity.newIntent(context, loginConfig)
+            OnboardingVariant.LEGACY -> LoginActivity.newIntent(context, loginConfig)
             OnboardingVariant.LOGIN_2,
             OnboardingVariant.FTUE_AUTH -> OnboardingActivity.newIntent(context, loginConfig)
         }
@@ -141,7 +141,7 @@ class DefaultNavigator @Inject constructor(
 
     override fun loginSSORedirect(context: Context, data: Uri?) {
         val intent = when (features.onboardingVariant()) {
-            OnboardingVariant.LEGACY -> TchapLoginActivity.redirectIntent(context, data)
+            OnboardingVariant.LEGACY -> LoginActivity.redirectIntent(context, data)
             OnboardingVariant.LOGIN_2,
             OnboardingVariant.FTUE_AUTH -> OnboardingActivity.redirectIntent(context, data)
         }

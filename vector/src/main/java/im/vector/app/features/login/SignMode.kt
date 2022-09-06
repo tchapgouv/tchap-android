@@ -17,6 +17,9 @@
 package im.vector.app.features.login
 
 enum class SignMode {
+    // Tchap: Login with email
+    TchapSignIn,
+
     Unknown,
 
     // Account creation

@@ -24,8 +24,6 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.multibindings.IntoMap
-import fr.gouv.tchap.features.login.TchapLoginFragment
-import fr.gouv.tchap.features.login.TchapWelcomeFragment
 import fr.gouv.tchap.features.login.registration.TchapRegisterFragment
 import fr.gouv.tchap.features.login.registration.TchapRegisterWaitForEmailFragment
 import fr.gouv.tchap.features.roomprofile.settings.linkaccess.TchapRoomLinkAccessFragment
@@ -959,16 +957,6 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(RoomDevToolSendFormFragment::class)
     fun bindRoomDevToolSendFormFragment(fragment: RoomDevToolSendFormFragment): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(TchapWelcomeFragment::class)
-    fun bindTchapWelcomeFragment(fragment: TchapWelcomeFragment): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(TchapLoginFragment::class)
-    fun bindTchapLoginFragment(fragment: TchapLoginFragment): Fragment
 
     @Binds
     @IntoMap

@@ -442,9 +442,9 @@ class LoginViewModel @AssistedInject constructor(
         when (action.signMode) {
             // Tchap: Custom login flow
             SignMode.SignUp -> _viewEvents.post(LoginViewEvents.OnSignModeSelected(SignMode.SignUp))
-            SignMode.SignIn -> _viewEvents.post(LoginViewEvents.OnSignModeSelected(SignMode.SignIn))
+            SignMode.TchapSignIn -> _viewEvents.post(LoginViewEvents.OnSignModeSelected(SignMode.SignIn))
 //            SignMode.SignUp -> startRegistrationFlow()
-//            SignMode.SignIn -> startAuthenticationFlow()
+            SignMode.SignIn -> startAuthenticationFlow()
             SignMode.SignInWithMatrixId -> _viewEvents.post(LoginViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
             SignMode.Unknown -> Unit
         }
@@ -608,6 +608,7 @@ class LoginViewModel @AssistedInject constructor(
     private fun handleLoginOrRegister(action: LoginAction.LoginOrRegister) = withState { state ->
         when (state.signMode) {
             SignMode.Unknown -> error("Developer error, invalid sign mode")
+            SignMode.TchapSignIn,
             SignMode.SignIn -> handleLogin(action)
             SignMode.SignUp -> handleRegisterWith(action)
             SignMode.SignInWithMatrixId -> handleDirectLogin(action, null)

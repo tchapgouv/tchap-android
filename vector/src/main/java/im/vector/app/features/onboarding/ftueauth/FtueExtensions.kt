@@ -25,6 +25,7 @@ fun SignMode.toAuthenticateAction(login: String, password: String, initialDevice
     return when (this) {
         SignMode.Unknown -> error("developer error")
         SignMode.SignUp -> OnboardingAction.AuthenticateAction.Register(username = login, password, initialDeviceName)
+        SignMode.TchapSignIn -> OnboardingAction.AuthenticateAction.TchapLogin(email = login, password, initialDeviceName)
         SignMode.SignIn -> OnboardingAction.AuthenticateAction.Login(username = login, password, initialDeviceName)
         SignMode.SignInWithMatrixId -> OnboardingAction.AuthenticateAction.LoginDirect(matrixId = login, password, initialDeviceName)
     }

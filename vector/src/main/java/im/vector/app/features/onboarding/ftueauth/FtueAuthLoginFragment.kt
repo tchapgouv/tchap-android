@@ -102,6 +102,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
                     views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
                     views.passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
                 }
+                SignMode.TchapSignIn,
                 SignMode.SignIn,
                 SignMode.SignInWithMatrixId -> {
                     views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_USERNAME)
@@ -115,6 +116,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
         views.loginSocialLoginButtons.mode = when (state.signMode) {
             SignMode.Unknown -> error("developer error")
             SignMode.SignUp -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
+            SignMode.TchapSignIn,
             SignMode.SignIn,
             SignMode.SignInWithMatrixId -> SocialLoginButtonsView.Mode.MODE_SIGN_IN
         }
@@ -173,6 +175,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
                     SignMode.Unknown -> error("developer error")
                     SignMode.SignUp -> R.string.login_signup_username_hint
                     SignMode.SignIn -> R.string.login_signin_username_hint
+                    SignMode.TchapSignIn -> R.string.tchap_connection_email
                     SignMode.SignInWithMatrixId -> R.string.login_signin_matrix_id_hint
                 }
         )
@@ -187,6 +190,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
             val resId = when (state.signMode) {
                 SignMode.Unknown -> error("developer error")
                 SignMode.SignUp -> R.string.login_signup_to
+                SignMode.TchapSignIn -> R.string.login_connect_to
                 SignMode.SignIn -> R.string.login_connect_to
                 SignMode.SignInWithMatrixId -> R.string.login_connect_to
             }
@@ -209,7 +213,12 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
                     views.loginTitle.text = getString(resId, state.selectedHomeserver.userFacingUrl.toReducedUrl())
                     views.loginNotice.text = getString(R.string.login_server_other_text)
                 }
-                ServerType.Unknown -> Unit /* Should not happen */
+                ServerType.Unknown -> {
+                    // Tchap: Hide views if empty
+                    views.loginServerIcon.isVisible = false
+                    views.loginTitle.isVisible = false
+                    views.loginNotice.isVisible = false
+                }
             }
             views.loginPasswordNotice.isVisible = false
 
@@ -234,12 +243,13 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
     }
 
     private fun setupButtons(state: OnboardingViewState) {
-        views.forgetPasswordButton.isVisible = state.signMode == SignMode.SignIn
+        views.forgetPasswordButton.isVisible = state.signMode == SignMode.SignIn || state.signMode == SignMode.TchapSignIn
 
         views.loginSubmit.text = getString(
                 when (state.signMode) {
                     SignMode.Unknown -> error("developer error")
                     SignMode.SignUp -> R.string.login_signup_submit
+                    SignMode.TchapSignIn,
                     SignMode.SignIn,
                     SignMode.SignInWithMatrixId -> R.string.login_signin
                 }
