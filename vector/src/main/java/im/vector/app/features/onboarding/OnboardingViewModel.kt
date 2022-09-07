@@ -64,6 +64,7 @@ import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.auth.registration.RegistrationAvailability
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
@@ -160,7 +161,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.WebLoginSuccess -> handleWebLoginSuccess(action)
             is OnboardingAction.ResetPassword -> handleResetPassword(action)
             OnboardingAction.ResendResetPassword -> handleResendResetPassword()
-            is OnboardingAction.ConfirmNewPassword -> handleResetPasswordConfirmed(action)
+            is OnboardingAction.ConfirmNewPassword -> tchap.handleResetPasswordConfirmed(action)
             is OnboardingAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
             is OnboardingAction.PostRegisterAction -> handleRegisterAction(action.registerAction)
             is OnboardingAction.ResetAction -> handleResetAction(action)
@@ -949,7 +950,15 @@ class OnboardingViewModel @AssistedInject constructor(
                 // Tchap registration doesn't require userName.
                 // The initialDeviceDisplayName is useless because the account will be actually created after the email validation (eventually on another device).
                 // This first register request will link the account password with the returned session id (used in the following steps).
-                handleRegisterWith(null, action.password, null, action.email)
+                checkPasswordPolicy(action.password) {
+                    handleRegisterWith(null, action.password, null, action.email)
+                }
+            }
+        }
+
+        fun handleResetPasswordConfirmed(action: OnboardingAction.ConfirmNewPassword) {
+            checkPasswordPolicy(action.newPassword) {
+                this@OnboardingViewModel.handleResetPasswordConfirmed(action)
             }
         }
 
@@ -959,13 +968,13 @@ class OnboardingViewModel @AssistedInject constructor(
             }
         }
 
-        fun startResetPasswordFlow(email: String, onSuccess: suspend () -> Unit) {
+        fun startResetPasswordFlow(email: String, onSuccess: () -> Unit) {
             startTchapAuthenticationFlow(email) {
                 this@OnboardingViewModel.startResetPasswordFlow(email, onSuccess)
             }
         }
 
-        private fun startTchapAuthenticationFlow(email: String, postAction: suspend () -> Unit) {
+        private fun startTchapAuthenticationFlow(email: String, postAction: () -> Unit) {
             setState { copy(isLoading = true) }
             currentJob = viewModelScope.launch {
                 when (val result = getPlatformTask.execute(Params(email))) {
@@ -976,6 +985,33 @@ class OnboardingViewModel @AssistedInject constructor(
                     is GetPlatformResult.Failure -> {
                         _viewEvents.post(OnboardingViewEvents.Failure(result.throwable))
                         setState { copy(isLoading = false) }
+                    }
+                }
+            }
+        }
+
+        private fun checkPasswordPolicy(password: String, onSuccess: () -> Unit) {
+            val homeServerConnectionConfig = currentHomeServerConnectionConfig
+            if (homeServerConnectionConfig == null) {
+                // This is invalid
+                _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
+            } else {
+                currentJob = viewModelScope.launch {
+                    val passwordPolicy = tryOrNull { authenticationService.getPasswordPolicy(homeServerConnectionConfig) }
+                    val isValid = if (passwordPolicy != null) {
+                        passwordPolicy.minLength?.let { it <= password.length } ?: true &&
+                                passwordPolicy.requireDigit?.let { it && password.any { char -> char.isDigit() } } ?: true &&
+                                passwordPolicy.requireLowercase?.let { it && password.any { char -> char.isLetter() && char.isLowerCase() } } ?: true &&
+                                passwordPolicy.requireUppercase?.let { it && password.any { char -> char.isLetter() && char.isUpperCase() } } ?: true &&
+                                passwordPolicy.requireSymbol?.let { it && password.any { char -> !char.isLetter() && !char.isDigit() } } ?: true
+                    } else {
+                        true
+                    }
+
+                    if (!isValid) {
+                        _viewEvents.post(OnboardingViewEvents.Failure(Throwable(stringProvider.getString(R.string.tchap_password_weak_pwd_error))))
+                    } else {
+                        onSuccess.invoke()
                     }
                 }
             }
