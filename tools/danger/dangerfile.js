@@ -45,6 +45,7 @@ if (requiresChangelog) {
             "misc",
             "sdk",
             "wip",
+            "improvements",
         ]
         if (!changelogFiles.every(file => validTowncrierExtensions.includes(file.split(".").pop()))) {
             fail("Invalid extension for changelog. See instructions [here](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#changelog)")
@@ -62,7 +63,7 @@ const allowList = [
     "giomfo",
     "yostyle",
     "jdauphant",
-    "appndigital"
+    "appndigital",
 ]
 
 const requiresSignOff = !allowList.includes(user)
