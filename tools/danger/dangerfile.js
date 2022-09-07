@@ -57,24 +57,12 @@ const signOff = "Signed-off-by:"
 
 // Please add new names following the alphabetical order.
 const allowList = [
-    "aringenbach",
-    "BillCarsonFr",
-    "bmarty",
-    "Claire1817",
     "dependabot[bot]",
-    "ericdecanini",
-    "fedrunov",
     "Florian14",
-    "ganfra",
-    "jmartinesp",
-    "langleyd",
-    "MadLittleMods",
-    "manuroe",
-    "mnaturel",
-    "onurays",
-    "ouchadam",
-    "stefanceriu",
+    "giomfo",
     "yostyle",
+    "jdauphant",
+    "appndigital"
 ]
 
 const requiresSignOff = !allowList.includes(user)
