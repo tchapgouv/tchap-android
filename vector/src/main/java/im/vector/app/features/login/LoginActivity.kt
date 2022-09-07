@@ -211,9 +211,6 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
             is LoginViewEvents.Loading ->
                 // This is handled by the Fragments
                 Unit
-            else                                                          -> {
-                // Do Nothing
-            }
         }
     }
 
