@@ -948,7 +948,7 @@ class OnboardingViewModel @AssistedInject constructor(
         fun handleRegisterWith(action: AuthenticateAction.TchapRegister) {
             startTchapAuthenticationFlow(action.email) {
                 // Tchap registration doesn't require userName.
-                // The initialDeviceDisplayName is useless because the account will be actually created after the email validation (eventually on another device).
+                // The initialDeviceDisplayName is useless because the account will be created after the email validation (eventually on another device).
                 // This first register request will link the account password with the returned session id (used in the following steps).
                 checkPasswordPolicy(action.password) {
                     handleRegisterWith(null, action.password, null, action.email)
