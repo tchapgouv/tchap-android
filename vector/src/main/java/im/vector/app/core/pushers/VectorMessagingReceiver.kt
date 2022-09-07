@@ -45,6 +45,8 @@ import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
+import org.unifiedpush.android.connector.EXTRA_BYTES_MESSAGE
+import org.unifiedpush.android.connector.EXTRA_TOKEN
 import org.unifiedpush.android.connector.MessagingReceiver
 import timber.log.Timber
 import javax.inject.Inject
@@ -59,6 +61,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var notifiableEventResolver: NotifiableEventResolver
     @Inject lateinit var pushersManager: PushersManager
+    @Inject lateinit var fcmHelper: FcmHelper
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var vectorDataStore: VectorDataStore
@@ -159,6 +162,19 @@ class VectorMessagingReceiver : MessagingReceiver() {
                 pushersManager.unregisterPusher(unifiedPushStore.getEndpointOrToken().orEmpty())
             } catch (e: Exception) {
                 Timber.tag(loggerTag.value).d("Probably unregistering a non existing pusher")
+            }
+        }
+    }
+
+    override fun onReceive(context: Context, intent: Intent) {
+        // Injections happens here
+        super.onReceive(context, intent)
+
+        // if it is from FirebaseReceiver, then the token has been rejected
+        if (unifiedPushHelper.isEmbeddedDistributor()
+                && intent.getStringExtra(EXTRA_TOKEN) == fcmHelper.getFcmToken()) {
+            intent.getByteArrayExtra(EXTRA_BYTES_MESSAGE)?.let {
+                onMessage(context, it, "")
             }
         }
     }
