@@ -587,10 +587,7 @@ class OnboardingViewModel @AssistedInject constructor(
         runCatching { loginWizard.resetPasswordMailConfirmed(newPassword, logoutAllDevices = logoutAllDevices) }.fold(
                 onSuccess = {
                     setState { copy(isLoading = false, resetState = ResetState()) }
-                    val nextEvent = when {
-                        vectorFeatures.isOnboardingCombinedLoginEnabled() -> OnboardingViewEvents.OnResetPasswordComplete
-                        else -> OnboardingViewEvents.OpenResetPasswordComplete
-                    }
+                    val nextEvent = OnboardingViewEvents.OpenResetPasswordComplete // Tchap: always redirect to this screen
                     _viewEvents.post(nextEvent)
                 },
                 onFailure = {
