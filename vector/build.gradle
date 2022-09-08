@@ -18,7 +18,7 @@ kapt {
     correctErrorTypes = true
 }
 
-knit {
+ knit {
     files = fileTree(project.rootDir) {
         include '**/*.md'
         include '**/*.kt'
@@ -26,7 +26,7 @@ knit {
         exclude '**/build/**'
         exclude '**/.gradle/**'
         exclude '**/towncrier/template.md'
-        exclude '**/CHANGES.md'
+        exclude '**/*_CHANGES.md' // Tchap: Exclude all changes files
         exclude '/node_modules'
     }
 }
