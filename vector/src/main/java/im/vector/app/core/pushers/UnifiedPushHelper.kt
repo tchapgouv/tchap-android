@@ -171,7 +171,10 @@ class UnifiedPushHelper @Inject constructor(
         val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
         vectorPreferences.setFdroidSyncBackgroundMode(mode)
         try {
-            pushersManager?.unregisterPusher(unifiedPushStore.getEndpointOrToken().orEmpty())
+            getEndpointOrToken()?.let {
+                Timber.d("Removing $it")
+                pushersManager?.unregisterPusher(it)
+            }
         } catch (e: Exception) {
             Timber.d(e, "Probably unregistering a non existing pusher")
         }
@@ -248,7 +251,7 @@ class UnifiedPushHelper @Inject constructor(
     }
 
     fun getPrivacyFriendlyUpEndpoint(): String? {
-        val endpoint = unifiedPushStore.getEndpointOrToken()
+        val endpoint = getEndpointOrToken()
         if (endpoint.isNullOrEmpty()) return null
         if (isEmbeddedDistributor()) {
             return endpoint
@@ -260,5 +263,10 @@ class UnifiedPushHelper @Inject constructor(
             Timber.e(e, "Error parsing unifiedpush endpoint")
             null
         }
+    }
+
+    fun getEndpointOrToken(): String? {
+        return if (isEmbeddedDistributor()) fcmHelper.getFcmToken()
+        else unifiedPushStore.getEndpoint()
     }
 }
