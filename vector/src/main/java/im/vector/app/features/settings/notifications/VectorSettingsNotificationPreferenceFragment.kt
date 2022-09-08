@@ -72,6 +72,14 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 ) : VectorSettingsBaseFragment(),
         BackgroundSyncModeChooserDialog.InteractionListener {
 
+    @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
+    @Inject lateinit var pushersManager: PushersManager
+    @Inject lateinit var fcmHelper: FcmHelper
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var guardServiceStarter: GuardServiceStarter
+    @Inject lateinit var vectorFeatures: VectorFeatures
+
     override var titleRes: Int = R.string.settings_notifications
     override val preferenceXmlRes = R.xml.vector_settings_notifications
 
@@ -103,6 +111,13 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                 if (isChecked) {
                     unifiedPushHelper.register(requireActivity()) {
                         // Update the summary
+                        if (unifiedPushHelper.isEmbeddedDistributor()) {
+                            fcmHelper.ensureFcmTokenIsRetrieved(
+                                    requireActivity(),
+                                    pushersManager,
+                                    vectorPreferences.areNotificationEnabledForDevice()
+                            )
+                        }
                         findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_METHOD_KEY)
                                 ?.summary = unifiedPushHelper.getCurrentDistributorName()
                     }
@@ -156,6 +171,13 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                 it.summary = unifiedPushHelper.getCurrentDistributorName()
                 it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                     unifiedPushHelper.forceRegister(requireActivity(), pushersManager) {
+                        if (unifiedPushHelper.isEmbeddedDistributor()) {
+                            fcmHelper.ensureFcmTokenIsRetrieved(
+                                    requireActivity(),
+                                    pushersManager,
+                                    vectorPreferences.areNotificationEnabledForDevice()
+                            )
+                        }
                         it.summary = unifiedPushHelper.getCurrentDistributorName()
                         session.pushersService().refreshPushers()
                         refreshBackgroundSyncPrefs()
