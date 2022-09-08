@@ -253,7 +253,6 @@ class UnifiedPushHelper @Inject constructor(
     private fun isInternalDistributor(): Boolean {
         return UnifiedPush.getDistributor(context).isEmpty() ||
                 UnifiedPush.getDistributor(context) == context.packageName
-
     }
 
     fun getPrivacyFriendlyUpEndpoint(): String? {
@@ -277,7 +276,7 @@ class UnifiedPushHelper @Inject constructor(
     }
 
     fun getPushGateway(): String? {
-        return if (isEmbeddedDistributor()) context.getString(R.string.pusher_http_url)
+        return if (isEmbeddedDistributor()) stringProvider.getString(R.string.pusher_http_url)
         else unifiedPushStore.getPushGateway()
     }
 }
