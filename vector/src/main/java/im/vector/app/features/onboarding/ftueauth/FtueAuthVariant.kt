@@ -57,6 +57,8 @@ import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.auth.toLocalizedLoginTerms
 import org.matrix.android.sdk.api.extensions.tryOrNull
 
+// Tchap: custom tag to separate the reset password screens from the initial login screen
+private const val TCHAP_FRAGMENT_LOGIN_STAGE_TAG = "TCHAP_FRAGMENT_LOGIN_STAGE_TAG"
 private const val FRAGMENT_REGISTRATION_STAGE_TAG = "FRAGMENT_REGISTRATION_STAGE_TAG"
 private const val FRAGMENT_LOGIN_TAG = "FRAGMENT_LOGIN_TAG"
 private const val FRAGMENT_EDIT_HOMESERVER_TAG = "FRAGMENT_EDIT_HOMESERVER"
@@ -169,7 +171,7 @@ class FtueAuthVariant(
                     else -> addLoginStageFragmentToBackstack(FtueAuthResetPasswordFragment::class.java)
                 }
             is OnboardingViewEvents.OnResetPasswordEmailConfirmationSent -> {
-                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                supportFragmentManager.popBackStack(TCHAP_FRAGMENT_LOGIN_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 when {
                     vectorFeatures.isOnboardingCombinedLoginEnabled() -> addLoginStageFragmentToBackstack(
                             FtueAuthResetPasswordBreakerFragment::class.java,
@@ -182,20 +184,16 @@ class FtueAuthVariant(
                 }
             }
             OnboardingViewEvents.OnResetPasswordBreakerConfirmed -> {
-                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                activity.addFragmentToBackstack(
-                        views.loginFragmentContainer,
-                        FtueAuthResetPasswordEntryFragment::class.java,
-                        option = commonOption
-                )
+                supportFragmentManager.popBackStack(TCHAP_FRAGMENT_LOGIN_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                addLoginStageFragmentToBackstack(FtueAuthResetPasswordEntryFragment::class.java)
             }
             is OnboardingViewEvents.OpenResetPasswordComplete -> {
-                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                supportFragmentManager.popBackStack(TCHAP_FRAGMENT_LOGIN_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 addLoginStageFragmentToBackstack(FtueAuthResetPasswordSuccessFragment::class.java)
             }
             OnboardingViewEvents.OnResetPasswordComplete -> {
                 Toast.makeText(activity, R.string.ftue_auth_password_reset_confirmation, Toast.LENGTH_SHORT).show()
-                activity.popBackstack()
+                supportFragmentManager.popBackStack(TCHAP_FRAGMENT_LOGIN_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
             }
             is OnboardingViewEvents.OnSendEmailSuccess -> {
                 openWaitForEmailVerification(viewEvents.email, viewEvents.isRestoredSession)
@@ -538,7 +536,7 @@ class FtueAuthVariant(
                 views.loginFragmentContainer,
                 fragmentClass,
                 params,
-                tag = FRAGMENT_LOGIN_TAG,
+                tag = TCHAP_FRAGMENT_LOGIN_STAGE_TAG,
                 option = commonOption
         )
     }
