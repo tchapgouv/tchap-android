@@ -2060,7 +2060,7 @@
     <string name="login_reset_password_password_hint">New password</string>
 
     <string name="login_reset_password_warning_title">Warning!</string>
-    <string name="login_reset_password_warning_content">Changing your password will reset any end-to-end encryption keys on all of your sessions, making encrypted chat history unreadable. Set up Key Backup or export your room keys from another session before resetting your password.</string>
+    <string name="login_reset_password_warning_content">Changing your password will reset any end-to-end encryption keys on all of your sessions, making encrypted chat history unreadable. Export your room keys from another session before resetting your password.</string> <!-- Tchap: Custom string -->
     <string name="login_reset_password_warning_submit">Continue</string>
 
     <string name="login_reset_password_error_not_found">This email is not linked to any account</string>
