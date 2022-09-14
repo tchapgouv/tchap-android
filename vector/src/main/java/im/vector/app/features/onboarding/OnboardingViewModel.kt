@@ -392,6 +392,7 @@ class OnboardingViewModel @AssistedInject constructor(
             copy(selectedAuthenticationState = SelectedAuthenticationState(authDescription))
         }
         reAuthHelper.data = password
+        // Tchap: Need to override next stage to verify the email which is mandatory before creating a Tchap account
         val overrideNextStage = email?.let { { handleRegisterAction(RegisterAction.AddThreePid(RegisterThreePid.Email(email))) } }
         handleRegisterAction(
                 RegisterAction.CreateAccount(
