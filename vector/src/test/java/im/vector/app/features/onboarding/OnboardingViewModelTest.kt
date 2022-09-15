@@ -19,6 +19,8 @@ package im.vector.app.features.onboarding
 import android.net.Uri
 import android.os.Build
 import com.airbnb.mvrx.test.MvRxTestRule
+import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
+import fr.gouv.tchap.features.platform.GetPlatformResult
 import im.vector.app.R
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
@@ -41,6 +43,7 @@ import im.vector.app.test.fakes.FakeRegistrationWizard
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeStartAuthenticationFlowUseCase
 import im.vector.app.test.fakes.FakeStringProvider
+import im.vector.app.test.fakes.FakeTchapGetPlatformTask
 import im.vector.app.test.fakes.FakeUri
 import im.vector.app.test.fakes.FakeUriFilenameResolver
 import im.vector.app.test.fakes.FakeVectorFeatures
@@ -52,6 +55,7 @@ import im.vector.app.test.test
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
@@ -94,6 +98,9 @@ class OnboardingViewModelTest {
     @get:Rule
     val mvrxTestRule = MvRxTestRule()
 
+    private val fakeGetPlatformTask = FakeTchapGetPlatformTask()
+    private val fakeStringProvider = FakeStringProvider()
+
     private val fakeUri = FakeUri()
     private val fakeContext = FakeContext()
     private val fakeSession = FakeSession()
@@ -117,6 +124,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    @Ignore("Tchap: this flow does not exist anymore in Tchap")
     fun `given usecase screen enabled, when handling sign up splash action, then emits OpenUseCaseSelection`() = runTest {
         val test = viewModel.test()
         fakeVectorFeatures.givenOnboardingUseCaseEnabled()
@@ -126,13 +134,33 @@ class OnboardingViewModelTest {
         test
                 .assertStatesChanges(
                         initialState,
-                        { copy(onboardingFlow = OnboardingFlow.SignUp) }
+                        { copy(onboardingFlow = OnboardingFlow.SignUp) },
+                        { copy(signMode = SignMode.TchapSignUp) }
                 )
-                .assertEvents(OnboardingViewEvents.OpenUseCaseSelection)
+                .assertEvents(OnboardingViewEvents.OnSignModeSelected(SignMode.TchapSignUp))
+                .finish()
+    }
+
+    // Tchap unit test
+    @Test
+    fun `given usecase screen enabled, when handling sign up splash action, then emits Tchap sign up`() = runTest {
+        val test = viewModel.test()
+        fakeVectorFeatures.givenOnboardingUseCaseEnabled()
+
+        viewModel.handle(OnboardingAction.SplashAction.OnGetStarted(OnboardingFlow.SignUp))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(onboardingFlow = OnboardingFlow.SignUp) },
+                        { copy(signMode = SignMode.TchapSignUp) }
+                )
+                .assertEvents(OnboardingViewEvents.OnSignModeSelected(SignMode.TchapSignUp))
                 .finish()
     }
 
     @Test
+    @Ignore("Tchap: this flow does not exist anymore in Tchap")
     fun `given combined login enabled, when handling sign in splash action, then emits OpenCombinedLogin with default homeserver`() = runTest {
         val test = viewModel.test()
         fakeVectorFeatures.givenCombinedLoginEnabled()
@@ -150,6 +178,24 @@ class OnboardingViewModelTest {
                         { copy(isLoading = false) }
                 )
                 .assertEvents(OnboardingViewEvents.OpenCombinedLogin)
+                .finish()
+    }
+
+    // Tchap unit test
+    @Test
+    fun `given combined login enabled, when handling sign in splash action, then emits Tchap sign in`() = runTest {
+        val test = viewModel.test()
+        fakeVectorFeatures.givenCombinedLoginEnabled()
+
+        viewModel.handle(OnboardingAction.SplashAction.OnIAlreadyHaveAnAccount(OnboardingFlow.SignIn))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(onboardingFlow = OnboardingFlow.SignIn) },
+                        { copy(signMode = SignMode.TchapSignIn) },
+                )
+                .assertEvents(OnboardingViewEvents.OnSignModeSelected(SignMode.TchapSignIn))
                 .finish()
     }
 
@@ -726,10 +772,12 @@ class OnboardingViewModelTest {
 
     @Test
     fun `given can successfully start password reset, when resetting password, then emits confirmation email sent`() = runTest {
-        viewModelWith(initialState.copy(selectedHomeserver = SELECTED_HOMESERVER_STATE_SUPPORTED_LOGOUT_DEVICES))
+        // Tchap: add get platform step
+        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignIn))
         val test = viewModel.test()
         fakeLoginWizard.givenResetPasswordSuccess(AN_EMAIL)
         fakeAuthenticationService.givenLoginWizard(fakeLoginWizard)
+        givenTchapGetPlatform(selectedHomeserverState = SELECTED_HOMESERVER_STATE_SUPPORTED_LOGOUT_DEVICES)
 
         viewModel.handle(OnboardingAction.ResetPassword(email = AN_EMAIL, newPassword = A_PASSWORD))
 
@@ -737,21 +785,24 @@ class OnboardingViewModelTest {
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = true) },
+                        { copy(selectedHomeserver = SELECTED_HOMESERVER_STATE_SUPPORTED_LOGOUT_DEVICES) },
                         {
                             val resetState = ResetState(AN_EMAIL, A_PASSWORD, supportsLogoutAllDevices = true)
                             copy(isLoading = false, resetState = resetState)
                         }
                 )
-                .assertEvents(OnboardingViewEvents.OnResetPasswordEmailConfirmationSent(AN_EMAIL))
+                .assertEvents(OnboardingViewEvents.OnHomeserverEdited, OnboardingViewEvents.OnResetPasswordEmailConfirmationSent(AN_EMAIL))
                 .finish()
     }
 
     @Test
     fun `given existing reset state, when resending reset password email, then triggers reset password and emits nothing`() = runTest {
-        viewModelWith(initialState.copy(resetState = ResetState(AN_EMAIL, A_PASSWORD)))
+        // Tchap: add get platform step
+        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignIn, resetState = ResetState(AN_EMAIL, A_PASSWORD)))
         val test = viewModel.test()
         fakeLoginWizard.givenResetPasswordSuccess(AN_EMAIL)
         fakeAuthenticationService.givenLoginWizard(fakeLoginWizard)
+        givenTchapGetPlatform()
 
         viewModel.handle(OnboardingAction.ResendResetPassword)
 
@@ -759,9 +810,10 @@ class OnboardingViewModelTest {
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = true) },
+                        { copy(selectedHomeserver = SELECTED_HOMESERVER_STATE) },
                         { copy(isLoading = false) }
                 )
-                .assertNoEvents()
+                .assertEvents(OnboardingViewEvents.OnHomeserverEdited)
                 .finish()
         fakeLoginWizard.verifyResetPassword(AN_EMAIL)
     }
@@ -802,7 +854,7 @@ class OnboardingViewModelTest {
                         { copy(isLoading = true) },
                         { copy(isLoading = false, resetState = ResetState()) }
                 )
-                .assertEvents(OnboardingViewEvents.OnResetPasswordComplete)
+                .assertEvents(OnboardingViewEvents.OpenResetPasswordComplete) // Tchap: display a new screen
                 .finish()
     }
 
@@ -931,7 +983,7 @@ class OnboardingViewModelTest {
                 fakeActiveSessionHolder.instance,
                 fakeHomeServerConnectionConfigFactory.instance,
                 ReAuthHelper(),
-                FakeStringProvider().instance,
+                fakeStringProvider.instance,
                 fakeHomeServerHistoryService,
                 fakeVectorFeatures,
                 FakeAnalyticsTracker(),
@@ -942,6 +994,7 @@ class OnboardingViewModelTest {
                 fakeRegistrationActionHandler.instance,
                 TestBuildVersionSdkIntProvider().also { it.value = Build.VERSION_CODES.O },
         ).also {
+            it.getPlatformTask = fakeGetPlatformTask.instance
             viewModel = it
             initialState = state
         }
@@ -1021,6 +1074,17 @@ class OnboardingViewModelTest {
     private fun initialRegistrationState(homeServerUrl: String) = initialState.copy(
             onboardingFlow = OnboardingFlow.SignUp, selectedHomeserver = SelectedHomeserverState(userFacingUrl = homeServerUrl)
     )
+
+    private fun givenTchapGetPlatform(
+            homeServerUrl: String = A_HOMESERVER_URL,
+            homeServerConfig: HomeServerConnectionConfig = A_HOMESERVER_CONFIG,
+            selectedHomeserverState: SelectedHomeserverState = SELECTED_HOMESERVER_STATE
+    ) {
+        fakeGetPlatformTask.givenGetPlatformResult(GetPlatformResult.Success(Platform(homeServerUrl)))
+        fakeStringProvider.givenResult("")
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(homeServerUrl, homeServerConfig)
+        givenCanSuccessfullyUpdateHomeserver(homeServerUrl, selectedHomeserverState)
+    }
 }
 
 private fun HomeServerCapabilities.toPersonalisationState(displayName: String? = null) = PersonalizationState(

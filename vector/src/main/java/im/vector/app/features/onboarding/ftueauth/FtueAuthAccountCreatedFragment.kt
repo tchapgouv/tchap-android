@@ -16,18 +16,15 @@
 
 package im.vector.app.features.onboarding.ftueauth
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.animations.play
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.utils.isAnimationEnabled
-import im.vector.app.core.utils.styleMatchingText
 import im.vector.app.databinding.FragmentFtueAccountCreatedBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
@@ -50,8 +47,7 @@ class FtueAuthAccountCreatedFragment @Inject constructor(
     }
 
     private fun setupViews() {
-        val userId = activeSessionHolder.getActiveSession().myUserId
-        val subtitle = getString(R.string.ftue_account_created_subtitle, userId).toSpannable().styleMatchingText(userId, Typeface.BOLD)
+        val subtitle = getString(R.string.tchap_ftue_account_created_subtitle)
         views.accountCreatedSubtitle.text = subtitle
         views.accountCreatedPersonalize.debouncedClicks { viewModel.handle(OnboardingAction.PersonalizeProfile) }
         views.accountCreatedTakeMeHome.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome)) }

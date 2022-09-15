@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.login
+package im.vector.app.test.fakes
 
-enum class SignMode {
-    // Tchap: Login with email
-    TchapSignIn,
+import fr.gouv.tchap.features.platform.GetPlatformResult
+import fr.gouv.tchap.features.platform.TchapGetPlatformTask
+import io.mockk.coEvery
+import io.mockk.mockk
 
-    // Tchap: Account creation
-    TchapSignUp,
+class FakeTchapGetPlatformTask {
 
-    Unknown,
+    val instance = mockk<TchapGetPlatformTask>()
 
-    // Account creation
-    SignUp,
-
-    // Login
-    SignIn,
-
-    // Login directly with matrix Id
-    SignInWithMatrixId
+    fun givenGetPlatformResult(getPlatformResult: GetPlatformResult) {
+        coEvery { instance.execute(any()) } returns getPlatformResult
+    }
 }

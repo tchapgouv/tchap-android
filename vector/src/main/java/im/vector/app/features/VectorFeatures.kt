@@ -39,9 +39,9 @@ interface VectorFeatures {
 class DefaultVectorFeatures : VectorFeatures {
     override fun onboardingVariant() = Config.ONBOARDING_VARIANT
     override fun isOnboardingAlreadyHaveAccountSplashEnabled() = true
-    override fun isOnboardingSplashCarouselEnabled() = true
+    override fun isOnboardingSplashCarouselEnabled() = false // Tchap: no carousel
     override fun isOnboardingUseCaseEnabled() = true
-    override fun isOnboardingPersonalizeEnabled() = true
+    override fun isOnboardingPersonalizeEnabled() = false // Tchap: no personalization
     override fun isOnboardingCombinedRegisterEnabled() = true
     override fun isOnboardingCombinedLoginEnabled() = true
     override fun allowExternalUnifiedPushDistributors(): Boolean = Config.ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS

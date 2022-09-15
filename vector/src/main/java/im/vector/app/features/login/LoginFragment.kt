@@ -86,6 +86,8 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
     private fun setupAutoFill(state: LoginViewState) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             when (state.signMode) {
+                SignMode.TchapSignUp,
+                SignMode.TchapSignIn,
                 SignMode.Unknown -> error("developer error")
                 SignMode.SignUp -> {
                     views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
@@ -102,6 +104,8 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
 
     private fun setupSocialLoginButtons(state: LoginViewState) {
         views.loginSocialLoginButtons.mode = when (state.signMode) {
+            SignMode.TchapSignUp,
+            SignMode.TchapSignIn,
             SignMode.Unknown -> error("developer error")
             SignMode.SignUp -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
             SignMode.SignIn,
@@ -156,6 +160,8 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
     private fun setupUi(state: LoginViewState) {
         views.loginFieldTil.hint = getString(
                 when (state.signMode) {
+                    SignMode.TchapSignUp,
+                    SignMode.TchapSignIn,
                     SignMode.Unknown -> error("developer error")
                     SignMode.SignUp -> R.string.login_signup_username_hint
                     SignMode.SignIn -> R.string.login_signin_username_hint
@@ -171,6 +177,8 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
             views.loginPasswordNotice.isVisible = true
         } else {
             val resId = when (state.signMode) {
+                SignMode.TchapSignUp,
+                SignMode.TchapSignIn,
                 SignMode.Unknown -> error("developer error")
                 SignMode.SignUp -> R.string.login_signup_to
                 SignMode.SignIn -> R.string.login_connect_to
@@ -224,6 +232,8 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
 
         views.loginSubmit.text = getString(
                 when (state.signMode) {
+                    SignMode.TchapSignUp,
+                    SignMode.TchapSignIn,
                     SignMode.Unknown -> error("developer error")
                     SignMode.SignUp -> R.string.login_signup_submit
                     SignMode.SignIn,

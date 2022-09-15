@@ -102,7 +102,9 @@ sealed interface RegistrationResult {
 
 sealed interface RegisterAction {
     object StartRegistration : RegisterAction
-    data class CreateAccount(val username: String, val password: String, val initialDeviceName: String) : RegisterAction
+
+    // Tchap: username and initialDeviceName are not necessary to create an account
+    data class CreateAccount(val username: String?, val password: String, val initialDeviceName: String?) : RegisterAction
 
     data class AddThreePid(val threePid: RegisterThreePid) : RegisterAction
     object SendAgainThreePid : RegisterAction

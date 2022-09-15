@@ -144,11 +144,6 @@
         </activity>
 
         <activity
-            android:name="fr.gouv.tchap.features.login.TchapLoginActivity"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
             android:name=".features.onboarding.OnboardingActivity"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize" />

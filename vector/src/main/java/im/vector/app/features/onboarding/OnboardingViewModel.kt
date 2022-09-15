@@ -21,6 +21,9 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import fr.gouv.tchap.features.platform.GetPlatformResult
+import fr.gouv.tchap.features.platform.Params
+import fr.gouv.tchap.features.platform.TchapGetPlatformTask
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
@@ -58,14 +61,17 @@ import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.login.LoginWizard
+import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.auth.registration.RegistrationAvailability
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.CancellationException
+import javax.inject.Inject
 
 /**
  *
@@ -95,6 +101,8 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     companion object : MavericksViewModelFactory<OnboardingViewModel, OnboardingViewState> by hiltMavericksViewModelFactory()
+
+    private val tchap = Tchap()
 
     init {
         getKnownCustomHomeServersUrls()
@@ -153,7 +161,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.WebLoginSuccess -> handleWebLoginSuccess(action)
             is OnboardingAction.ResetPassword -> handleResetPassword(action)
             OnboardingAction.ResendResetPassword -> handleResendResetPassword()
-            is OnboardingAction.ConfirmNewPassword -> handleResetPasswordConfirmed(action)
+            is OnboardingAction.ConfirmNewPassword -> tchap.handleResetPasswordConfirmed(action)
             is OnboardingAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
             is OnboardingAction.PostRegisterAction -> handleRegisterAction(action.registerAction)
             is OnboardingAction.ResetAction -> handleResetAction(action)
@@ -236,6 +244,8 @@ class OnboardingViewModel @AssistedInject constructor(
             )
             is AuthenticateAction.Login -> handleLogin(action)
             is AuthenticateAction.LoginDirect -> handleDirectLogin(action, homeServerConnectionConfig = null)
+            is AuthenticateAction.TchapLogin -> tchap.handleLogin(action)
+            is AuthenticateAction.TchapRegister -> tchap.handleRegisterWith(action)
         }
     }
 
@@ -247,17 +257,19 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun continueToPageAfterSplash(onboardingFlow: OnboardingFlow) {
         when (onboardingFlow) {
             OnboardingFlow.SignUp -> {
-                _viewEvents.post(
-                        if (vectorFeatures.isOnboardingUseCaseEnabled()) {
-                            OnboardingViewEvents.OpenUseCaseSelection
-                        } else {
-                            OnboardingViewEvents.OpenServerSelection
-                        }
-                )
+                handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.TchapSignUp))
+//                _viewEvents.post(
+//                        if (vectorFeatures.isOnboardingUseCaseEnabled()) {
+//                            OnboardingViewEvents.OpenUseCaseSelection
+//                        } else {
+//                            OnboardingViewEvents.OpenServerSelection
+//                        }
+//                )
             }
             OnboardingFlow.SignIn -> when {
                 vectorFeatures.isOnboardingCombinedLoginEnabled() -> {
-                    handle(OnboardingAction.HomeServerChange.SelectHomeServer(deeplinkOrDefaultHomeserverUrl()))
+                    handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.TchapSignIn))
+//                    handle(OnboardingAction.HomeServerChange.SelectHomeServer(deeplinkOrDefaultHomeserverUrl()))
                 }
                 else -> openServerSelectionOrDeeplinkToOther()
             }
@@ -320,12 +332,12 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleRegisterAction(action: RegisterAction) {
+    private fun handleRegisterAction(action: RegisterAction, overrideNextStage: (() -> Unit)? = null) {
         val job = viewModelScope.launch {
             if (action.hasLoadingState()) {
                 setState { copy(isLoading = true) }
             }
-            internalRegisterAction(action)
+            internalRegisterAction(action, overrideNextStage)
             setState { copy(isLoading = false) }
         }
 
@@ -374,18 +386,21 @@ class OnboardingViewModel @AssistedInject constructor(
         )
     }
 
-    private fun handleRegisterWith(userName: String, password: String, initialDeviceName: String) {
+    private fun handleRegisterWith(userName: String?, password: String, initialDeviceName: String?, email: String? = null) {
         setState {
             val authDescription = AuthenticationDescription.Register(AuthenticationDescription.AuthenticationType.Password)
             copy(selectedAuthenticationState = SelectedAuthenticationState(authDescription))
         }
         reAuthHelper.data = password
+        // Tchap: Need to override next stage to verify the email which is mandatory before creating a Tchap account
+        val overrideNextStage = email?.let { { handleRegisterAction(RegisterAction.AddThreePid(RegisterThreePid.Email(email))) } }
         handleRegisterAction(
                 RegisterAction.CreateAccount(
                         userName,
                         password,
                         initialDeviceName
-                )
+                ),
+                overrideNextStage
         )
     }
 
@@ -448,6 +463,8 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleUpdateSignMode(action: OnboardingAction.UpdateSignMode) {
         updateSignMode(action.signMode)
         when (action.signMode) {
+            SignMode.TchapSignIn -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.TchapSignIn))
+            SignMode.TchapSignUp -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.TchapSignUp))
             SignMode.SignUp -> handleRegisterAction(RegisterAction.StartRegistration)
             SignMode.SignIn -> startAuthenticationFlow()
             SignMode.SignInWithMatrixId -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
@@ -506,7 +523,7 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun handleResetPassword(action: OnboardingAction.ResetPassword) {
-        startResetPasswordFlow(action.email) {
+        tchap.startResetPasswordFlow(action.email) {
             setState { copy(isLoading = false, resetState = createResetState(action, selectedHomeserver)) }
             _viewEvents.post(OnboardingViewEvents.OnResetPasswordEmailConfirmationSent(action.email))
         }
@@ -524,7 +541,7 @@ class OnboardingViewModel @AssistedInject constructor(
             when (resetState.email) {
                 null -> _viewEvents.post(OnboardingViewEvents.Failure(IllegalStateException("Developer error - No reset email has been set")))
                 else -> {
-                    startResetPasswordFlow(resetState.email) {
+                    tchap.startResetPasswordFlow(resetState.email) {
                         setState { copy(isLoading = false) }
                     }
                 }
@@ -571,10 +588,7 @@ class OnboardingViewModel @AssistedInject constructor(
         runCatching { loginWizard.resetPasswordMailConfirmed(newPassword, logoutAllDevices = logoutAllDevices) }.fold(
                 onSuccess = {
                     setState { copy(isLoading = false, resetState = ResetState()) }
-                    val nextEvent = when {
-                        vectorFeatures.isOnboardingCombinedLoginEnabled() -> OnboardingViewEvents.OnResetPasswordComplete
-                        else -> OnboardingViewEvents.OpenResetPasswordComplete
-                    }
+                    val nextEvent = OnboardingViewEvents.OpenResetPasswordComplete // Tchap: always redirect to this screen
                     _viewEvents.post(nextEvent)
                 },
                 onFailure = {
@@ -923,6 +937,84 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun cancelWaitForEmailValidation() {
         emailVerificationPollingJob = null
+    }
+
+    @Inject lateinit var getPlatformTask: TchapGetPlatformTask
+
+    private inner class Tchap {
+
+        fun handleRegisterWith(action: AuthenticateAction.TchapRegister) {
+            // TODO Tchap: restore the warning dialog for the external emails
+            startTchapAuthenticationFlow(action.email) {
+                // Tchap registration doesn't require userName.
+                // The initialDeviceDisplayName is useless because the account will be created after the email validation (eventually on another device).
+                // This first register request will link the account password with the returned session id (used in the following steps).
+                checkPasswordPolicy(action.password) {
+                    handleRegisterWith(null, action.password, null, action.email)
+                }
+            }
+        }
+
+        fun handleResetPasswordConfirmed(action: OnboardingAction.ConfirmNewPassword) {
+            checkPasswordPolicy(action.newPassword) {
+                this@OnboardingViewModel.handleResetPasswordConfirmed(action)
+            }
+        }
+
+        fun handleLogin(action: AuthenticateAction.TchapLogin) {
+            startTchapAuthenticationFlow(action.email) {
+                handleLogin(AuthenticateAction.Login(action.email, action.password, action.initialDeviceName))
+            }
+        }
+
+        fun startResetPasswordFlow(email: String, onSuccess: () -> Unit) {
+            startTchapAuthenticationFlow(email) {
+                this@OnboardingViewModel.startResetPasswordFlow(email, onSuccess)
+            }
+        }
+
+        private fun startTchapAuthenticationFlow(email: String, postAction: () -> Unit) {
+            setState { copy(isLoading = true) }
+            currentJob = viewModelScope.launch {
+                when (val result = getPlatformTask.execute(Params(email))) {
+                    is GetPlatformResult.Success -> {
+                        val homeServerUrl = stringProvider.getString(R.string.server_url_prefix) + result.platform.hs
+                        handleHomeserverChange(OnboardingAction.HomeServerChange.EditHomeServer(homeServerUrl), postAction = postAction)
+                    }
+                    is GetPlatformResult.Failure -> {
+                        _viewEvents.post(OnboardingViewEvents.Failure(result.throwable))
+                        setState { copy(isLoading = false) }
+                    }
+                }
+            }
+        }
+
+        private fun checkPasswordPolicy(password: String, onSuccess: () -> Unit) {
+            val homeServerConnectionConfig = currentHomeServerConnectionConfig
+            if (homeServerConnectionConfig == null) {
+                // This is invalid
+                _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
+            } else {
+                currentJob = viewModelScope.launch {
+                    val passwordPolicy = tryOrNull { authenticationService.getPasswordPolicy(homeServerConnectionConfig) }
+                    val isValid = if (passwordPolicy != null) {
+                        passwordPolicy.minLength?.let { it <= password.length } ?: true &&
+                                passwordPolicy.requireDigit?.let { it && password.any { char -> char.isDigit() } } ?: true &&
+                                passwordPolicy.requireLowercase?.let { it && password.any { char -> char.isLetter() && char.isLowerCase() } } ?: true &&
+                                passwordPolicy.requireUppercase?.let { it && password.any { char -> char.isLetter() && char.isUpperCase() } } ?: true &&
+                                passwordPolicy.requireSymbol?.let { it && password.any { char -> !char.isLetter() && !char.isDigit() } } ?: true
+                    } else {
+                        true
+                    }
+
+                    if (!isValid) {
+                        _viewEvents.post(OnboardingViewEvents.Failure(Throwable(stringProvider.getString(R.string.tchap_password_weak_pwd_error))))
+                    } else {
+                        onSuccess.invoke()
+                    }
+                }
+            }
+        }
     }
 }
 

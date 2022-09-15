@@ -21,7 +21,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
 import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
@@ -36,6 +38,8 @@ import org.matrix.android.sdk.api.failure.isMissingEmailVerification
 @AndroidEntryPoint
 class FtueAuthResetPasswordEntryFragment : AbstractFtueAuthFragment<FragmentFtueResetPasswordInputBinding>() {
 
+    private val tchap = Tchap()
+
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueResetPasswordInputBinding {
         return FragmentFtueResetPasswordInputBinding.inflate(inflater, container, false)
     }
@@ -47,9 +51,9 @@ class FtueAuthResetPasswordEntryFragment : AbstractFtueAuthFragment<FragmentFtue
 
     private fun setupViews() {
         views.newPasswordInput.associateContentStateWith(button = views.newPasswordSubmit)
-        views.newPasswordInput.setOnImeDoneListener { resetPassword() }
+        views.newPasswordInput.setOnImeDoneListener { tchap.resetPassword() }
         views.newPasswordInput.clearErrorOnChange(viewLifecycleOwner)
-        views.newPasswordSubmit.debouncedClicks { resetPassword() }
+        views.newPasswordSubmit.debouncedClicks { tchap.resetPassword() }
     }
 
     private fun resetPassword() {
@@ -80,5 +84,27 @@ class FtueAuthResetPasswordEntryFragment : AbstractFtueAuthFragment<FragmentFtue
 
     override fun resetViewModel() {
         viewModel.handle(OnboardingAction.ResetResetPassword)
+    }
+
+    private inner class Tchap {
+
+        private var showWarning: Boolean = true
+
+        // Tchap: Show warning once before changing the password
+        fun resetPassword() {
+            if (showWarning) {
+                showWarning = false
+                MaterialAlertDialogBuilder(requireActivity())
+                        .setTitle(R.string.login_reset_password_warning_title)
+                        .setMessage(R.string.login_reset_password_warning_content)
+                        .setPositiveButton(R.string.login_reset_password_warning_submit) { _, _ ->
+                            this@FtueAuthResetPasswordEntryFragment.resetPassword()
+                        }
+                        .setNegativeButton(R.string.action_cancel, null)
+                        .show()
+            } else {
+                this@FtueAuthResetPasswordEntryFragment.resetPassword()
+            }
+        }
     }
 }
