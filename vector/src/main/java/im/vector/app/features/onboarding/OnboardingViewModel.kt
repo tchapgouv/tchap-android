@@ -944,6 +944,7 @@ class OnboardingViewModel @AssistedInject constructor(
     private inner class Tchap {
 
         fun handleRegisterWith(action: AuthenticateAction.TchapRegister) {
+            // TODO Tchap: restore the warning dialog for the external emails
             startTchapAuthenticationFlow(action.email) {
                 // Tchap registration doesn't require userName.
                 // The initialDeviceDisplayName is useless because the account will be created after the email validation (eventually on another device).

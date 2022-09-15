@@ -81,6 +81,10 @@
     <string name="tchap_connection_email_help">Use your business address</string>
     <string name="tchap_connection_password_help">Your password must include a lower-case letter, an upper-case letter, a number and a symbol and be at a minimum 8 characters in length.</string>
     <string name="tchap_connection_password_confirm">Password confirmation</string>
+    <!-- FIXME Tchap: restore these strings by restoring the warning dialog during the registration flow of an external account -->
+<!--    <string name="tchap_register_warning_for_external_title">Information about your registration</string>-->
+<!--    <string name="tchap_register_warning_for_external">Your email domain is not registered on ${app_name}. If you have received an invite, you will be able to create a ${app_name} account, which will allow you to join only the private discussions in which you are invited.</string>-->
+<!--    <string name="tchap_register_warning_for_external_proceed">Proceed</string>-->
     <string name="tchap_register_wait_for_email_title">An e-mail has been sent, except if a ${app_name} account already exists:</string>
     <string name="tchap_register_wait_for_email_subtitle">Please open it and click in the link it contains to create your account</string>
     <string name="tchap_password_weak_pwd_error">This password is too weak. It must include a lower-case letter, an upper-case letter, a number and a symbol and be at a minimum 8 characters in length.</string>
