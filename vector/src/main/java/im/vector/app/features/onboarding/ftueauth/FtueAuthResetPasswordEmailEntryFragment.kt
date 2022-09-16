@@ -27,7 +27,6 @@ import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setOnImeDoneListener
-import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentFtueResetPasswordEmailInputBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
@@ -59,7 +58,7 @@ class FtueAuthResetPasswordEmailEntryFragment : AbstractFtueAuthFragment<Fragmen
     override fun updateWithState(state: OnboardingViewState) {
         views.emailEntryHeaderSubtitle.text = getString(
                 R.string.ftue_auth_reset_password_email_subtitle,
-                state.selectedHomeserver.userFacingUrl.toReducedUrl()
+                getString(R.string.app_name) // Tchap: do not show the server url
         )
     }
 

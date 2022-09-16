@@ -1078,7 +1078,7 @@
     <string name="login_reset_password_email_hint">Courriel</string>
     <string name="login_reset_password_password_hint">Nouveau mot de passe</string>
     <string name="login_reset_password_warning_title">Attention !</string>
-    <string name="login_reset_password_warning_content">Le changement de mot de passe réinitialisera toutes les clés de chiffrement sur toutes vos sessions, rendant l’historique des discussions chiffrées illisible. Configurez la sauvegarde de clés ou exportez vos clés de salon depuis une autre session avant de réinitialiser votre mot de passe.</string>
+    <string name="login_reset_password_warning_content">Le changement de mot de passe réinitialisera toutes les clés de chiffrement sur toutes vos sessions, rendant l’historique des discussions chiffrées illisible. Exportez vos clés de salon depuis une autre session avant de réinitialiser votre mot de passe.</string> <!-- Tchap: Custom string -->
     <string name="login_reset_password_warning_submit">Poursuivre</string>
     <string name="login_reset_password_error_not_found">Ce courriel n’est lié à aucun compte</string>
     <string name="login_reset_password_mail_confirmation_title">Vérifiez votre boîte de réception</string>

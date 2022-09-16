@@ -57,6 +57,8 @@ sealed interface OnboardingAction : VectorViewModelAction {
         data class Login(val userId: String) : UserNameEnteredAction
     }
     sealed interface AuthenticateAction : OnboardingAction {
+        data class TchapRegister(val email: String, val password: String, val initialDeviceName: String) : AuthenticateAction
+        data class TchapLogin(val email: String, val password: String, val initialDeviceName: String) : AuthenticateAction
         data class Register(val username: String, val password: String, val initialDeviceName: String) : AuthenticateAction
         data class RegisterWithMatrixId(val matrixId: String, val password: String, val initialDeviceName: String) : AuthenticateAction
         data class Login(val username: String, val password: String, val initialDeviceName: String) : AuthenticateAction
