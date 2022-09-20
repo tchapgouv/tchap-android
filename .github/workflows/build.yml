@@ -4,7 +4,7 @@ on:
   pull_request: { }
   push:
     branches: [ main, develop ]
-    tags: [tchap_v*]
+    tags: [ tchap_v* ]
 
 # Enrich gradle.properties for CI/CD
 env:
@@ -54,8 +54,8 @@ jobs:
         target: [ GplayBtchapWithoutvoipWithpinning, GplayTchapWithoutvoipWithpinning, FdroidBtchapWithoutvoipWithoutpinning, FdroidTchapWithoutvoipWithoutpinning, GplayBtchapWithvoipWithpinning ]
     concurrency:
       # Tchap: custom group
-      group: ${{ github.ref == 'refs/head/main' && format('build-release-apk-main-{0}-{1}', github.sha, matrix.target) || startsWith(github.ref, 'refs/tags/tchap_v' && format('build-release-apk-tag-{0}-{1}', github.sha, matrix.target) }}
-      cancel-in-progress: ${{ github.ref != 'refs/head/main' && !startsWith(github.ref, 'refs/tags/tchap_v'}}
+      group: ${{ github.ref == 'refs/head/main' && format('build-release-apk-main-{0}-{1}', github.sha, matrix.target) || startsWith(github.ref, 'refs/tags/tchap_v') && format('build-release-apk-tag-{0}-{1}', github.sha, matrix.target) }}
+      cancel-in-progress: ${{ github.ref != 'refs/head/main' && !startsWith(github.ref, 'refs/tags/tchap_v') }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
