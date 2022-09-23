@@ -20,6 +20,14 @@ package im.vector.app.config
  * Set of flags to configure the application.
  */
 object Config {
+
+    // Tchap: The spaces feature is hidden, show all rooms in the home
+    const val SHOW_SPACES = false
+    const val SPACES_SHOW_ALL_IN_HOME = !SHOW_SPACES
+
+    // Tchap: Hide voice message recorder button
+    const val SHOW_VOICE_RECORDER = false
+
     /**
      * Flag to allow external UnifiedPush distributors to be chosen by the user.
      *
@@ -35,5 +43,50 @@ object Config {
      * - Changing the value from `false` to `true` will let the user be able to select an external UnifiedPush distributor;
      * - Changing the value from `true` to `false` will force the app to return to the background sync / Firebase Push.
      */
-    const val ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS = false
+    const val ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS = false // Tchap: Disable UnifiedPush (use Firebase/background sync)
+
+    const val ENABLE_LOCATION_SHARING = false // Tchap: Disable Location Sharing
+    const val LOCATION_MAP_TILER_KEY = "" // Tchap: Disable Location Sharing
+
+    /**
+     * The maximum length of voice messages in milliseconds.
+     */
+    const val VOICE_MESSAGE_LIMIT_MS = 120_000L
+
+    /**
+     * The strategy for sharing device keys.
+     */
+    val KEY_SHARING_STRATEGY = KeySharingStrategy.WhenTyping
+
+    /**
+     * The onboarding flow.
+     */
+    val ONBOARDING_VARIANT = OnboardingVariant.FTUE_AUTH
+
+    /**
+     * If set, MSC3086 asserted identity messages sent on VoIP calls will cause the call to appear in the room corresponding to the asserted identity.
+     * This *must* only be set in trusted environments.
+     */
+    const val HANDLE_CALL_ASSERTED_IDENTITY_EVENTS = false
+
+    const val LOW_PRIVACY_LOG_ENABLE = false
+    const val ENABLE_STRICT_MODE_LOGS = false
+
+    /**
+     * The analytics configuration to use for the Debug build type.
+     * Can be disabled by providing Analytics.Disabled
+     */
+    val DEBUG_ANALYTICS_CONFIG = Analytics.Disabled // Tchap: No analytics
+
+    /**
+     * The analytics configuration to use for the Release build type.
+     * Can be disabled by providing Analytics.Disabled
+     */
+    val RELEASE_ANALYTICS_CONFIG = Analytics.Disabled // Tchap: No analytics
+
+    /**
+     * The analytics configuration to use for the Nightly build type.
+     * Can be disabled by providing Analytics.Disabled
+     */
+    val NIGHTLY_ANALYTICS_CONFIG = Analytics.Disabled // Tchap: No analytics
 }

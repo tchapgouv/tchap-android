@@ -54,6 +54,8 @@ class PublicRoomsFragment @Inject constructor(
         private val permalinkHandler: PermalinkHandler,
         private val session: Session
 ) : VectorBaseFragment<FragmentPublicRoomsBinding>(),
+        // Tchap: No menu
+//        VectorMenuProvider
         PublicRoomsController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
@@ -64,7 +66,7 @@ class PublicRoomsFragment @Inject constructor(
     }
 
     // Tchap: Not displayed in Tchap
-    // override fun getMenuRes() = R.menu.menu_room_directory
+//     override fun getMenuRes() = R.menu.menu_room_directory
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -106,14 +108,13 @@ class PublicRoomsFragment @Inject constructor(
     }
 
     // Tchap: Not used in Tchap
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//    override fun handleMenuItemSelected(item: MenuItem): Boolean {
 //        return when (item.itemId) {
 //            R.id.menu_room_directory_change_protocol -> {
 //                sharedActionViewModel.post(RoomDirectorySharedAction.ChangeProtocol)
 //                true
 //            }
-//            else ->
-//                super.onOptionsItemSelected(item)
+//            else -> false
 //        }
 //    }
 

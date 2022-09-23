@@ -24,10 +24,6 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.multibindings.IntoMap
-import fr.gouv.tchap.features.login.TchapLoginFragment
-import fr.gouv.tchap.features.login.TchapWelcomeFragment
-import fr.gouv.tchap.features.login.registration.TchapRegisterFragment
-import fr.gouv.tchap.features.login.registration.TchapRegisterWaitForEmailFragment
 import fr.gouv.tchap.features.roomprofile.settings.linkaccess.TchapRoomLinkAccessFragment
 import im.vector.app.features.analytics.ui.consent.AnalyticsOptInFragment
 import im.vector.app.features.attachments.preview.AttachmentsPreviewFragment
@@ -62,13 +58,15 @@ import im.vector.app.features.discovery.change.SetIdentityServerFragment
 import im.vector.app.features.home.HomeDetailFragment
 import im.vector.app.features.home.HomeDrawerFragment
 import im.vector.app.features.home.LoadingFragment
+import im.vector.app.features.home.NewHomeDetailFragment
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
 import im.vector.app.features.home.room.detail.TimelineFragment
 import im.vector.app.features.home.room.detail.search.SearchFragment
 import im.vector.app.features.home.room.list.RoomListFragment
+import im.vector.app.features.home.room.list.home.HomeRoomListFragment
 import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
-import im.vector.app.features.location.LocationPreviewFragment
 import im.vector.app.features.location.LocationSharingFragment
+import im.vector.app.features.location.preview.LocationPreviewFragment
 import im.vector.app.features.login.LoginCaptchaFragment
 import im.vector.app.features.login.LoginFragment
 import im.vector.app.features.login.LoginGenericTextInputFormFragment
@@ -115,6 +113,8 @@ import im.vector.app.features.onboarding.ftueauth.FtueAuthLegacyStyleCaptchaFrag
 import im.vector.app.features.onboarding.ftueauth.FtueAuthLegacyWaitForEmailFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthLoginFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthPersonalizationCompleteFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthPhoneConfirmationFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthPhoneEntryFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordMailConfirmationFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordSuccessFragment
@@ -165,6 +165,7 @@ import im.vector.app.features.settings.devtools.GossipingEventsPaperTrailFragmen
 import im.vector.app.features.settings.devtools.IncomingKeyRequestListFragment
 import im.vector.app.features.settings.devtools.KeyRequestsFragment
 import im.vector.app.features.settings.devtools.OutgoingKeyRequestListFragment
+import im.vector.app.features.settings.font.FontScaleSettingFragment
 import im.vector.app.features.settings.homeserver.HomeserverSettingsFragment
 import im.vector.app.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.app.features.settings.legals.LegalsFragment
@@ -198,6 +199,12 @@ import im.vector.app.features.widgets.WidgetFragment
 @InstallIn(ActivityComponent::class)
 @Module
 interface FragmentModule {
+
+    @Binds
+    @IntoMap
+    @FragmentKey(TchapRoomLinkAccessFragment::class)
+    fun bindTchapRoomLinkAccessFragment(fragment: TchapRoomLinkAccessFragment): Fragment
+
     /**
      * Fragments with @IntoMap will be injected by this factory.
      */
@@ -258,6 +265,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(HomeDetailFragment::class)
     fun bindHomeDetailFragment(fragment: HomeDetailFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(NewHomeDetailFragment::class)
+    fun bindNewHomeDetailFragment(fragment: NewHomeDetailFragment): Fragment
 
     @Binds
     @IntoMap
@@ -516,6 +528,16 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(FtueAuthPhoneEntryFragment::class)
+    fun bindFtueAuthPhoneEntryFragment(fragment: FtueAuthPhoneEntryFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthPhoneConfirmationFragment::class)
+    fun bindFtueAuthPhoneConfirmationFragment(fragment: FtueAuthPhoneConfirmationFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(FtueAuthChooseDisplayNameFragment::class)
     fun bindFtueAuthChooseDisplayNameFragment(fragment: FtueAuthChooseDisplayNameFragment): Fragment
 
@@ -578,6 +600,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(HomeserverSettingsFragment::class)
     fun bindHomeserverSettingsFragment(fragment: HomeserverSettingsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FontScaleSettingFragment::class)
+    fun bindFontScaleSettingFragment(fragment: FontScaleSettingFragment): Fragment
 
     @Binds
     @IntoMap
@@ -931,26 +958,6 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(TchapWelcomeFragment::class)
-    fun bindTchapWelcomeFragment(fragment: TchapWelcomeFragment): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(TchapLoginFragment::class)
-    fun bindTchapLoginFragment(fragment: TchapLoginFragment): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(TchapRegisterFragment::class)
-    fun bindTchapRegisterFragment(fragment: TchapRegisterFragment): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(TchapRegisterWaitForEmailFragment::class)
-    fun bindTchapRegisterWaitForEmailFragment(fragment: TchapRegisterWaitForEmailFragment): Fragment
-
-    @Binds
-    @IntoMap
     @FragmentKey(SpacePreviewFragment::class)
     fun bindSpacePreviewFragment(fragment: SpacePreviewFragment): Fragment
 
@@ -1051,6 +1058,6 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(TchapRoomLinkAccessFragment::class)
-    fun bindTchapRoomLinkAccessFragment(fragment: TchapRoomLinkAccessFragment): Fragment
+    @FragmentKey(HomeRoomListFragment::class)
+    fun binHomeRoomListFragment(fragment: HomeRoomListFragment): Fragment
 }

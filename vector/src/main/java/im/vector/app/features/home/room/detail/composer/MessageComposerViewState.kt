@@ -17,7 +17,7 @@
 package im.vector.app.features.home.room.detail.composer
 
 import com.airbnb.mvrx.MavericksState
-import im.vector.app.BuildConfig
+import im.vector.app.config.Config
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -60,7 +60,7 @@ fun CanSendStatus.boolean(): Boolean {
         CanSendStatus.Allowed -> true
         CanSendStatus.NoPermission -> false
         is CanSendStatus.UnSupportedE2eAlgorithm -> false
-        CanSendStatus.EmptyDM                    -> false
+        CanSendStatus.EmptyDM -> false
     }
 }
 
@@ -84,7 +84,7 @@ data class MessageComposerViewState(
     val isVoiceMessageIdle = !isVoiceRecording
 
     val isComposerVisible = canSendMessage.boolean() && !isVoiceRecording
-    val isVoiceMessageRecorderVisible = canSendMessage.boolean() && !isSendButtonVisible && BuildConfig.SHOW_VOICE_RECORDER
+    val isVoiceMessageRecorderVisible = canSendMessage.boolean() && !isSendButtonVisible && Config.SHOW_VOICE_RECORDER
 
     constructor(args: TimelineArgs) : this(
             roomId = args.roomId,

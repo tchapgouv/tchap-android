@@ -24,13 +24,14 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import fr.gouv.tchap.core.dialogs.InviteByEmailDialog
-import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.config.Config
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.observeK
 import im.vector.app.core.extensions.replaceChildFragment
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentHomeDrawerBinding
 import im.vector.app.features.analytics.plan.MobileScreen
@@ -44,10 +45,11 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class HomeDrawerFragment @Inject constructor(
+        private val homeDrawerActionsController: HomeDrawerActionsController,
         private val session: Session,
         private val vectorPreferences: VectorPreferences,
         private val avatarRenderer: AvatarRenderer,
-        private val homeDrawerActionsController: HomeDrawerActionsController
+        private val buildMeta: BuildMeta,
 ) : VectorBaseFragment<FragmentHomeDrawerBinding>(),
         HomeDrawerActionsController.Listener {
 
@@ -65,7 +67,7 @@ class HomeDrawerFragment @Inject constructor(
         homeDrawerActionsController.listener = this
         views.tchapHomeDrawerActionsRecyclerView.configureWith(homeDrawerActionsController)
 
-        if (BuildConfig.SHOW_SPACES && savedInstanceState == null) {
+        if (Config.SHOW_SPACES && savedInstanceState == null) {
             replaceChildFragment(R.id.homeDrawerGroupListContainer, SpaceListFragment::class.java)
         }
         session.userService().getUserLive(session.myUserId).observeK(viewLifecycleOwner) { optionalUser ->
@@ -110,7 +112,7 @@ class HomeDrawerFragment @Inject constructor(
                 val text = getString(R.string.invite_friends_text, permalink)
 
                 startSharePlainTextIntent(
-                        fragment = this,
+                        context = requireContext(),
                         activityResultLauncher = null,
                         chooserTitle = getString(R.string.invite_friends),
                         text = text,
@@ -120,7 +122,7 @@ class HomeDrawerFragment @Inject constructor(
         }
 
         // Debug menu
-        views.homeDrawerHeaderDebugView.isVisible = BuildConfig.DEBUG && vectorPreferences.developerMode()
+        views.homeDrawerHeaderDebugView.isVisible = buildMeta.isDebug && vectorPreferences.developerMode()
         views.homeDrawerHeaderDebugView.debouncedClicks {
             sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
             navigator.openDebug(requireActivity())
