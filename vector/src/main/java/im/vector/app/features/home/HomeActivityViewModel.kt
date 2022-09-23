@@ -235,6 +235,9 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .onEach { status ->
                     when (status) {
                             is SyncRequestState.Idle                   -> {
+                                // Tchap edition : Force Identity server definition
+                                updateIdentityServer()
+
                                 maybeVerifyOrBootstrapCrossSigning()
                             }
                         else -> Unit
