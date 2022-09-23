@@ -1,3 +1,15 @@
+Changes in Tchap 2.4.3 (2022-09-23)
+===================================
+
+Bugfixes 🐛
+----------
+ - Create DM by selecting an email is not working anymore ([#672](https://github.com/tchapgouv/tchap-android-v2/issues/672))
+
+Other changes
+-------------
+ - CI - Fix build APKs script ([#724](https://github.com/tchapgouv/tchap-android-v2/issues/724))
+
+
 Changes in Tchap 2.4.2 (2022-08-29)
 ===================================
 
