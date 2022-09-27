@@ -202,7 +202,8 @@ android {
 
         applicationVariants.all { variant ->
             // assign different version code for each output
-            def baseVariantVersion = variant.versionCode * 10
+            // Tchap : Increase the factor from 10 to 100 due to Neo users integration
+            def baseVariantVersion = variant.versionCode * 100
             variant.outputs.each { output ->
                 def baseAbiVersionCode = project.ext.abiVersionCodes.get(output.getFilter(OutputFile.ABI))
                 // Known limitation: it does not modify the value in the BuildConfig.java generated file
