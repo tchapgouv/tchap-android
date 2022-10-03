@@ -48,4 +48,13 @@ class PushParser @Inject constructor() {
             tryOrNull { moshi.adapter(PushDataUnifiedPush::class.java).fromJson(message) }?.toPushData()
         }
     }
+
+    fun parsePushDataFcm(message: Map<String, String?>): PushData {
+        val pushDataFcm = PushDataFcm(
+                eventId = message["event_id"],
+                roomId = message["room_id"],
+                unread = message["unread"]?.let { tryOrNull { Integer.parseInt(it) } },
+        )
+        return pushDataFcm.toPushData()
+    }
 }
