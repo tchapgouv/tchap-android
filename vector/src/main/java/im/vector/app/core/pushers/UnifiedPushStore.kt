@@ -19,10 +19,12 @@ package im.vector.app.core.pushers
 import android.content.Context
 import androidx.core.content.edit
 import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.push.fcm.FcmHelper
 import javax.inject.Inject
 
 class UnifiedPushStore @Inject constructor(
         context: Context,
+        val fcmHelper: FcmHelper
 ) {
     private val defaultPrefs = DefaultSharedPreferences.getInstance(context)
 
@@ -31,7 +33,7 @@ class UnifiedPushStore @Inject constructor(
      *
      * @return the UnifiedPush Endpoint or null if not received
      */
-    fun getEndpointOrToken(): String? {
+    fun getEndpoint(): String? {
         return defaultPrefs.getString(PREFS_ENDPOINT_OR_TOKEN, null)
     }
 
