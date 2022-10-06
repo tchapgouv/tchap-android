@@ -16,7 +16,6 @@
 
 package im.vector.app.core.pushers.model
 
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.MatrixPatterns
 
@@ -34,9 +33,9 @@ import org.matrix.android.sdk.api.MatrixPatterns
  */
 @JsonClass(generateAdapter = true)
 data class PushDataFcm(
-        @Json(name = "event_id") val eventId: String?,
-        @Json(name = "room_id") val roomId: String?,
-        @Json(name = "unread") var unread: Int?,
+        val eventId: String?,
+        val roomId: String?,
+        var unread: Int?,
 )
 
 fun PushDataFcm.toPushData() = PushData(
