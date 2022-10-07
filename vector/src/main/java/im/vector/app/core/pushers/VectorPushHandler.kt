@@ -23,13 +23,14 @@ import android.os.Looper
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import im.vector.app.BuildConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.network.WifiDetector
 import im.vector.app.core.pushers.model.PushData
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.notifications.NotifiableEventResolver
-import im.vector.app.features.notifications.NotificationActionIds
 import im.vector.app.features.notifications.NotificationDrawerManager
+import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.CoroutineScope
@@ -54,7 +55,6 @@ class VectorPushHandler @Inject constructor(
     private val vectorPreferences: VectorPreferences,
     private val vectorDataStore: VectorDataStore,
     private val wifiDetector: WifiDetector,
-    private val actionIds: NotificationActionIds,
     private val context: Context,
     private val buildMeta: BuildMeta
 ) {
@@ -74,7 +74,8 @@ class VectorPushHandler @Inject constructor(
     fun handle(pushData: PushData) {
         Timber.tag(loggerTag.value).d("## handling pushData")
 
-        if (buildMeta.lowPrivacyLoggingEnabled) {
+        // tchap : use BuildCongig instead of BuildMeta
+        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
             Timber.tag(loggerTag.value).d("## pushData: $pushData")
         }
 
@@ -84,7 +85,8 @@ class VectorPushHandler @Inject constructor(
 
         // Diagnostic Push
         if (pushData.eventId == PushersManager.TEST_EVENT_ID) {
-            val intent = Intent(actionIds.push)
+            // tchap : use NotificationsUtils instead of actionIds
+            val intent = Intent(NotificationUtils.PUSH_ACTION)
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
             return
         }
@@ -111,13 +113,15 @@ class VectorPushHandler @Inject constructor(
      */
     private suspend fun handleInternal(pushData: PushData) {
         try {
-            if (buildMeta.lowPrivacyLoggingEnabled) {
+            // tchap : use BuildCongig instead of BuildMeta
+            if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
                 Timber.tag(loggerTag.value).d("## handleInternal() : $pushData")
             } else {
                 Timber.tag(loggerTag.value).d("## handleInternal()")
             }
 
-            val session = activeSessionHolder.getOrInitializeSession(startSync = false)
+            // tchap : getOrInitializeSession not implemented
+            val session = activeSessionHolder.getSafeActiveSession()
 
             if (session == null) {
                 Timber.tag(loggerTag.value).w("## Can't sync from push, no current session")
