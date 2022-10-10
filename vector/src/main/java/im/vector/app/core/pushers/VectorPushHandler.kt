@@ -74,7 +74,7 @@ class VectorPushHandler @Inject constructor(
     fun handle(pushData: PushData) {
         Timber.tag(loggerTag.value).d("## handling pushData")
 
-        // tchap : use BuildCongig instead of BuildMeta
+        // Tchap TODO: use BuildMeta instead of BuildConfig
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
             Timber.tag(loggerTag.value).d("## pushData: $pushData")
         }
@@ -85,7 +85,7 @@ class VectorPushHandler @Inject constructor(
 
         // Diagnostic Push
         if (pushData.eventId == PushersManager.TEST_EVENT_ID) {
-            // tchap : use NotificationsUtils instead of actionIds
+            // Tchap TODO: use actionIds instead of NotificationsUtils
             val intent = Intent(NotificationUtils.PUSH_ACTION)
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
             return
@@ -113,7 +113,7 @@ class VectorPushHandler @Inject constructor(
      */
     private suspend fun handleInternal(pushData: PushData) {
         try {
-            // tchap : use BuildCongig instead of BuildMeta
+            // Tchap TODO: use BuildMeta instead of BuildConfig
             if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
                 Timber.tag(loggerTag.value).d("## handleInternal() : $pushData")
             } else {
