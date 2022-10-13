@@ -347,7 +347,7 @@
         <activity android:name=".features.poll.create.CreatePollActivity" />
         <activity android:name=".features.location.LocationSharingActivity" />
         <activity android:name=".features.location.live.map.LiveLocationMapViewActivity" />
-        <activity android:name=".features.settings.font.FontScaleSettingActivity"/>
+        <activity android:name=".features.settings.font.FontScaleSettingActivity" />
 
         <activity android:name="fr.gouv.tchap.features.expired.ExpiredAccountActivity" />
 
@@ -424,7 +424,7 @@
 
         <!-- UnifiedPush -->
         <receiver
-            android:name=".core.pushers.VectorMessagingReceiver"
+            android:name=".core.pushers.VectorUnifiedPushMessagingReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -471,6 +471,20 @@
             android:exported="false"
             tools:node="merge" />
         <!-- Temporary fix for Android 12 change - END -->
+
+        <receiver
+            android:name=".core.pushers.KeepInternalDistributor"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <!--
+                This action is checked to track installed and uninstalled distributors.
+                We declare it to keep the background sync as an internal
+                unifiedpush distributor.
+                -->
+                <action android:name="org.unifiedpush.android.distributor.REGISTER" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

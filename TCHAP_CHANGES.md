@@ -1,3 +1,12 @@
+Changes in Tchap 2.4.4 (2022-10-12)
+===================================
+
+Bugfixes 🐛
+----------
+ - [2.4.2] Notifications problems appear to be back ([#736](https://github.com/tchapgouv/tchap-android-v2/issues/736))
+ - Fix app restarts in loop on Android 13 on the first run of the app. ([#759](https://github.com/tchapgouv/tchap-android-v2/issues/759))
+
+
 Changes in Tchap 2.4.3 (2022-09-23)
 ===================================
 

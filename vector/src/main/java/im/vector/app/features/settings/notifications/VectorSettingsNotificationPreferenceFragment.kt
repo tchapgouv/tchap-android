@@ -51,6 +51,7 @@ import im.vector.app.features.settings.BackgroundSyncModeChooserDialog
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsBaseFragment
 import im.vector.app.features.settings.VectorSettingsFragmentInteractionListener
+import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -62,15 +63,16 @@ import org.matrix.android.sdk.api.session.pushrules.RuleKind
 import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
-class VectorSettingsNotificationPreferenceFragment @Inject constructor(
-        private val unifiedPushHelper: UnifiedPushHelper,
-        private val pushersManager: PushersManager,
-        private val activeSessionHolder: ActiveSessionHolder,
-        private val vectorPreferences: VectorPreferences,
-        private val guardServiceStarter: GuardServiceStarter,
-        private val vectorFeatures: VectorFeatures,
-) : VectorSettingsBaseFragment(),
+class VectorSettingsNotificationPreferenceFragment @Inject constructor() : VectorSettingsBaseFragment(),
         BackgroundSyncModeChooserDialog.InteractionListener {
+
+    @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
+    @Inject lateinit var pushersManager: PushersManager
+    @Inject lateinit var fcmHelper: FcmHelper
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var guardServiceStarter: GuardServiceStarter
+    @Inject lateinit var vectorFeatures: VectorFeatures
 
     override var titleRes: Int = R.string.settings_notifications
     override val preferenceXmlRes = R.xml.vector_settings_notifications
@@ -103,6 +105,13 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                 if (isChecked) {
                     unifiedPushHelper.register(requireActivity()) {
                         // Update the summary
+                        if (unifiedPushHelper.isEmbeddedDistributor()) {
+                            fcmHelper.ensureFcmTokenIsRetrieved(
+                                    requireActivity(),
+                                    pushersManager,
+                                    vectorPreferences.areNotificationEnabledForDevice()
+                            )
+                        }
                         findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_METHOD_KEY)
                                 ?.summary = unifiedPushHelper.getCurrentDistributorName()
                     }
@@ -155,7 +164,14 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             if (vectorFeatures.allowExternalUnifiedPushDistributors()) {
                 it.summary = unifiedPushHelper.getCurrentDistributorName()
                 it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                    unifiedPushHelper.openDistributorDialog(requireActivity(), pushersManager) {
+                    unifiedPushHelper.forceRegister(requireActivity(), pushersManager) {
+                        if (unifiedPushHelper.isEmbeddedDistributor()) {
+                            fcmHelper.ensureFcmTokenIsRetrieved(
+                                    requireActivity(),
+                                    pushersManager,
+                                    vectorPreferences.areNotificationEnabledForDevice()
+                            )
+                        }
                         it.summary = unifiedPushHelper.getCurrentDistributorName()
                         session.pushersService().refreshPushers()
                         refreshBackgroundSyncPrefs()
