@@ -37,8 +37,10 @@ import fr.gouv.tchap.android.sdk.api.session.accountdata.HideProfileContent
 import fr.gouv.tchap.android.sdk.api.session.accountdata.TchapUserAccountDataTypes.TYPE_HIDE_PROFILE
 import fr.gouv.tchap.core.utils.TchapUtils
 import fr.gouv.tchap.features.settings.TchapSettingsChangePasswordPreDialog
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelperFactory
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.toMvRxBundle
@@ -47,8 +49,6 @@ import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.preference.UserAvatarPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
-import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.core.utils.getSizeOfFiles
 import im.vector.app.core.utils.toast
@@ -81,18 +81,21 @@ import java.io.File
 import java.util.UUID
 import javax.inject.Inject
 
-class VectorSettingsGeneralFragment @Inject constructor(
-        private val keysExporter: KeysExporter,
-        colorProvider: ColorProvider,
-        clock: Clock,
-) :
+@AndroidEntryPoint
+class VectorSettingsGeneralFragment :
         VectorSettingsBaseFragment(),
         GalleryOrCameraDialogHelper.Listener {
+
+    @Inject lateinit var galleryOrCameraDialogHelperFactory: GalleryOrCameraDialogHelperFactory
+
+    //private val keysExporter: KeysExporter,
+    //        colorProvider: ColorProvider,
+    //        clock: Clock,
 
     override var titleRes = R.string.settings_general_title
     override val preferenceXmlRes = R.xml.vector_settings_general
 
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
+    private lateinit var galleryOrCameraDialogHelper: GalleryOrCameraDialogHelper
 
     private val mUserSettingsCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_USER_SETTINGS_PREFERENCE_KEY)!!
@@ -135,6 +138,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         analyticsScreenName = MobileScreen.ScreenName.SettingsGeneral
+        galleryOrCameraDialogHelper = galleryOrCameraDialogHelperFactory.create(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

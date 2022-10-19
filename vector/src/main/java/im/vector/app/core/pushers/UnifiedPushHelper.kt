@@ -28,7 +28,6 @@ import im.vector.app.core.utils.getApplicationLabel
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorPreferences
-import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.cache.CacheStrategy
@@ -104,8 +103,6 @@ class UnifiedPushHelper @Inject constructor(
                 return@launch
             }
 
-            // By default, use internal solution (fcm/background sync)
-            UnifiedPush.saveDistributor(context, context.packageName)
             val distributors = UnifiedPush.getDistributors(context)
 
             if (!force && distributors.size == 1) {

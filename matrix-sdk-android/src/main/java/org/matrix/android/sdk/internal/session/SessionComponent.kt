@@ -57,6 +57,7 @@ import org.matrix.android.sdk.internal.session.space.SpaceModule
 import org.matrix.android.sdk.internal.session.sync.SyncModule
 import org.matrix.android.sdk.internal.session.sync.SyncTask
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
+import org.matrix.android.sdk.internal.session.sync.handler.UpdateUserWorker
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
 import org.matrix.android.sdk.internal.session.terms.TermsModule
 import org.matrix.android.sdk.internal.session.thirdparty.ThirdPartyModule
@@ -131,6 +132,8 @@ internal interface SessionComponent {
     fun inject(worker: AddPusherWorker)
 
     fun inject(worker: UpdateTrustWorker)
+
+    fun inject(worker: UpdateUserWorker)
 
     fun inject(worker: DeactivateLiveLocationShareWorker)
 

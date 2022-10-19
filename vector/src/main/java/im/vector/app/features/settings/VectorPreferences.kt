@@ -28,6 +28,7 @@ import im.vector.app.config.Config
 import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.time.Clock
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.disclaimer.SHARED_PREF_KEY
 import im.vector.app.features.home.ShortcutsHandler
 import im.vector.app.features.homeserver.ServerUrlsRepository
@@ -40,6 +41,7 @@ class VectorPreferences @Inject constructor(
         private val context: Context,
         private val clock: Clock,
         private val buildMeta: BuildMeta,
+        private val vectorFeatures: VectorFeatures,
 ) {
 
     companion object {
@@ -64,6 +66,7 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
         const val SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY"
         const val SETTINGS_LABS_PREFERENCE_KEY = "SETTINGS_LABS_PREFERENCE_KEY"
+        const val SETTINGS_LABS_NEW_APP_LAYOUT_KEY = "SETTINGS_LABS_NEW_APP_LAYOUT_KEY"
         const val SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY"
         const val SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY"
         const val SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY"
@@ -75,9 +78,11 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
         const val SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY"
         const val SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY = "SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY"
+        const val SETTINGS_SHOW_DEVICES_LIST_V2_PREFERENCE_KEY = "SETTINGS_SHOW_DEVICES_LIST_V2_PREFERENCE_KEY"
         const val SETTINGS_ALLOW_INTEGRATIONS_KEY = "SETTINGS_ALLOW_INTEGRATIONS_KEY"
         const val SETTINGS_INTEGRATION_MANAGER_UI_URL_KEY = "SETTINGS_INTEGRATION_MANAGER_UI_URL_KEY"
         const val SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY = "SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
+        const val SETTINGS_PERSISTED_SPACE_BACKSTACK = "SETTINGS_PERSISTED_SPACE_BACKSTACK"
 
         const val SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT = "SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT"
 //        const val SETTINGS_SECURE_BACKUP_RESET_PREFERENCE_KEY = "SETTINGS_SECURE_BACKUP_RESET_PREFERENCE_KEY"
@@ -164,11 +169,17 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_LABS_AUTO_REPORT_UISI = "SETTINGS_LABS_AUTO_REPORT_UISI"
         const val SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME = "SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME"
 
+        /**
+         * This is not preference, but category on preferences screen which contains [SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME].
+         * Needed to show/hide this category, depending on visibility of [SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME]. */
+        const val SETTINGS_PREF_SPACE_CATEGORY = "SETTINGS_PREF_SPACE_CATEGORY"
+
         private const val SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
         private const val SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY = "SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
         private const val SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY = "SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
         private const val SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY"
         private const val SETTINGS_DEVELOPER_MODE_SHOW_INFO_ON_SCREEN_KEY = "SETTINGS_DEVELOPER_MODE_SHOW_INFO_ON_SCREEN_KEY"
+        private const val SETTINGS_ENABLE_MEMORY_LEAK_ANALYSIS_KEY = "SETTINGS_ENABLE_MEMORY_LEAK_ANALYSIS_KEY"
 
         const val SETTINGS_LABS_MSC3061_SHARE_KEYS_HISTORY = "SETTINGS_LABS_MSC3061_SHARE_KEYS_HISTORY"
 
@@ -274,6 +285,7 @@ class VectorPreferences @Inject constructor(
                 SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY,
                 SETTINGS_LABS_ALLOW_EXTENDED_LOGS,
                 SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY,
+                SETTINGS_ENABLE_MEMORY_LEAK_ANALYSIS_KEY,
 
                 SETTINGS_USE_RAGE_SHAKE_KEY,
                 SETTINGS_SECURITY_USE_FLAG_SECURE,
@@ -372,6 +384,16 @@ class VectorPreferences @Inject constructor(
 
     fun failFast(): Boolean {
         return buildMeta.isDebug || (developerMode() && defaultPrefs.getBoolean(SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY, false))
+    }
+
+    fun enableMemoryLeakAnalysis(isEnabled: Boolean) {
+        defaultPrefs.edit(commit = true) {
+            putBoolean(SETTINGS_ENABLE_MEMORY_LEAK_ANALYSIS_KEY, isEnabled)
+        }
+    }
+
+    fun isMemoryLeakAnalysisEnabled(): Boolean {
+        return buildMeta.isDebug && defaultPrefs.getBoolean(SETTINGS_ENABLE_MEMORY_LEAK_ANALYSIS_KEY, false)
     }
 
     fun didAskUserToEnableSessionPush(): Boolean {
@@ -1119,6 +1141,33 @@ class VectorPreferences @Inject constructor(
                 .edit()
                 .putBoolean(SETTINGS_THREAD_MESSAGES_SYNCED, shouldMigrate)
                 .apply()
+    }
+
+    /**
+     * Sets the space backstack that is used for up navigation.
+     * This needs to be persisted because navigating up through spaces should work across sessions.
+     *
+     * Only the IDs of the spaces are stored.
+     */
+    fun setSpaceBackstack(spaceBackstack: List<String?>) {
+        val spaceIdsJoined = spaceBackstack.takeIf { it.isNotEmpty() }?.joinToString(",")
+        defaultPrefs.edit().putString(SETTINGS_PERSISTED_SPACE_BACKSTACK, spaceIdsJoined).apply()
+    }
+
+    /**
+     * Gets the space backstack used for up navigation.
+     */
+    fun getSpaceBackstack(): List<String?> {
+        val spaceIdsJoined = defaultPrefs.getString(SETTINGS_PERSISTED_SPACE_BACKSTACK, null)
+        return spaceIdsJoined?.takeIf { it.isNotEmpty() }?.split(",").orEmpty()
+    }
+
+    /**
+     * Indicates whether or not new app layout is enabled.
+     */
+    fun isNewAppLayoutEnabled(): Boolean {
+        return vectorFeatures.isNewAppLayoutFeatureEnabled() &&
+                defaultPrefs.getBoolean(SETTINGS_LABS_NEW_APP_LAYOUT_KEY, getDefault(R.bool.settings_labs_new_app_layout_default))
     }
 
     fun showLiveSenderInfo(): Boolean {

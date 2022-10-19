@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -49,14 +50,17 @@ import javax.inject.Inject
  * What can be improved:
  * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect.
  */
-class PublicRoomsFragment @Inject constructor(
-        private val publicRoomsController: PublicRoomsController,
-        private val permalinkHandler: PermalinkHandler,
-        private val session: Session
-) : VectorBaseFragment<FragmentPublicRoomsBinding>(),
-        // Tchap: No menu
-//        VectorMenuProvider
-        PublicRoomsController.Callback {
+@AndroidEntryPoint
+class PublicRoomsFragment :
+        VectorBaseFragment<FragmentPublicRoomsBinding>(),
+        PublicRoomsController.Callback
+    // Tchap: No menu
+    //    VectorMenuProvider
+    {
+
+    @Inject lateinit var publicRoomsController: PublicRoomsController
+    @Inject lateinit var permalinkHandler: PermalinkHandler
+    @Inject lateinit var session: Session
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
@@ -128,7 +132,7 @@ class PublicRoomsFragment @Inject constructor(
         viewLifecycleOwner.lifecycleScope.launch {
             val permalink = session.permalinkService().createPermalink(roomIdOrAlias)
             val isHandled = permalinkHandler
-                    .launch(requireContext(), permalink, object : NavigationInterceptor {
+                    .launch(requireActivity(), permalink, object : NavigationInterceptor {
                         override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {
                             requireActivity().finish()
                             return false

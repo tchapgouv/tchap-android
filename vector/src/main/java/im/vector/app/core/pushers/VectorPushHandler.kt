@@ -48,15 +48,15 @@ import javax.inject.Inject
 private val loggerTag = LoggerTag("Push", LoggerTag.SYNC)
 
 class VectorPushHandler @Inject constructor(
-        private val notificationDrawerManager: NotificationDrawerManager,
-        private val notifiableEventResolver: NotifiableEventResolver,
-        private val activeSessionHolder: ActiveSessionHolder,
-        private val vectorPreferences: VectorPreferences,
-        private val vectorDataStore: VectorDataStore,
-        private val wifiDetector: WifiDetector,
-        private val actionIds: NotificationActionIds,
-        private val context: Context,
-        private val buildMeta: BuildMeta
+    private val notificationDrawerManager: NotificationDrawerManager,
+    private val notifiableEventResolver: NotifiableEventResolver,
+    private val activeSessionHolder: ActiveSessionHolder,
+    private val vectorPreferences: VectorPreferences,
+    private val vectorDataStore: VectorDataStore,
+    private val wifiDetector: WifiDetector,
+    private val actionIds: NotificationActionIds,
+    private val context: Context,
+    private val buildMeta: BuildMeta
 ) {
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
