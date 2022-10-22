@@ -162,11 +162,7 @@ interface ViewModelModule {
 
     @Binds
     @IntoMap
-<<<<<<< HEAD
     @ViewModelKey(TchapRoomLinkAccessBottomSheetSharedActionViewModel::class)
     fun bindTchapRoomLinkAccessBottomSheetSharedActionViewModel(viewModel: TchapRoomLinkAccessBottomSheetSharedActionViewModel): ViewModel
-=======
-    @ViewModelKey(RoomListSharedActionViewModel::class)
-    fun bindRoomListSharedActionViewModel(viewModel: RoomListSharedActionViewModel): ViewModel
->>>>>>> v1.4.36
+
 }

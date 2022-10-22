@@ -30,12 +30,9 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-<<<<<<< HEAD
 import fr.gouv.tchap.core.utils.TchapRoomType
 import fr.gouv.tchap.features.home.roomdirectory.createroom.TchapCreateRoomController
-=======
 import dagger.hilt.android.AndroidEntryPoint
->>>>>>> v1.4.36
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelperFactory
@@ -66,20 +63,11 @@ data class CreateRoomArgs(
         val openAfterCreate: Boolean = true
 ) : Parcelable
 
-<<<<<<< HEAD
-class CreateRoomFragment @Inject constructor(
-        private val createRoomController: TchapCreateRoomController,
-        private val createSpaceController: CreateSubSpaceController,
-        colorProvider: ColorProvider,
-        clock: Clock,
-) : VectorBaseFragment<FragmentCreateRoomBinding>(),
-        TchapCreateRoomController.Listener,
-=======
 @AndroidEntryPoint
 class CreateRoomFragment :
         VectorBaseFragment<FragmentCreateRoomBinding>(),
+        TchapCreateRoomController.Listener,
         CreateRoomController.Listener,
->>>>>>> v1.4.36
         GalleryOrCameraDialogHelper.Listener,
         OnBackPressed {
 

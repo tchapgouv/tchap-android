@@ -146,15 +146,10 @@ object VectorStaticModule {
                 roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
                 threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
                 networkInterceptors = listOfNotNull(
-<<<<<<< HEAD:vector/src/main/java/im/vector/app/core/di/SingletonModule.kt
-                        flipperProxy.getNetworkInterceptor(),
+                        flipperProxy.networkInterceptor(),
                 ),
                 // Tchap: Use custom permalink prefix
                 clientPermalinkBaseUrl = context.getString(R.string.permalink_prefix),
-=======
-                        flipperProxy.networkInterceptor(),
-                )
->>>>>>> v1.4.36:vector-app/src/main/java/im/vector/app/core/di/SingletonModule.kt
         )
     }
 

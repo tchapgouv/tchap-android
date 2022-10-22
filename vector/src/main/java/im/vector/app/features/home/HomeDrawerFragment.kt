@@ -23,11 +23,8 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
-<<<<<<< HEAD
 import fr.gouv.tchap.core.dialogs.InviteByEmailDialog
-=======
 import dagger.hilt.android.AndroidEntryPoint
->>>>>>> v1.4.36
 import im.vector.app.R
 import im.vector.app.config.Config
 import im.vector.app.core.extensions.cleanup
@@ -48,25 +45,16 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-<<<<<<< HEAD
-class HomeDrawerFragment @Inject constructor(
-        private val homeDrawerActionsController: HomeDrawerActionsController,
-        private val session: Session,
-        private val vectorPreferences: VectorPreferences,
-        private val avatarRenderer: AvatarRenderer,
-        private val buildMeta: BuildMeta,
-) : VectorBaseFragment<FragmentHomeDrawerBinding>(),
-        HomeDrawerActionsController.Listener {
-=======
 @AndroidEntryPoint
 class HomeDrawerFragment :
-        VectorBaseFragment<FragmentHomeDrawerBinding>() {
+        VectorBaseFragment<FragmentHomeDrawerBinding>(),
+        HomeDrawerActionsController.Listener {
 
+    @Inject lateinit var homeDrawerActionsController: HomeDrawerActionsController
     @Inject lateinit var session: Session
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var buildMeta: BuildMeta
->>>>>>> v1.4.36
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
@@ -143,7 +131,6 @@ class HomeDrawerFragment :
         }
     }
 
-<<<<<<< HEAD
     override fun onDestroyView() {
         homeDrawerActionsController.listener = null
         views.tchapHomeDrawerActionsRecyclerView.cleanup()
@@ -163,10 +150,10 @@ class HomeDrawerFragment :
 
     override fun reportBug() {
         sharedActionViewModel.post(HomeActivitySharedAction.OpenBugReport)
-=======
+    }
+
     override fun onResume() {
         super.onResume()
         views.homeDrawerHeaderDebugView.isVisible = buildMeta.isDebug && vectorPreferences.developerMode()
->>>>>>> v1.4.36
     }
 }

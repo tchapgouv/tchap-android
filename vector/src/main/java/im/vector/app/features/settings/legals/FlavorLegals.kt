@@ -14,22 +14,6 @@
  * limitations under the License.
  */
 
-<<<<<<<< HEAD:vector/src/test/java/im/vector/app/test/fakes/FakeTchapGetPlatformTask.kt
-package im.vector.app.test.fakes
-
-import fr.gouv.tchap.features.platform.GetPlatformResult
-import fr.gouv.tchap.features.platform.TchapGetPlatformTask
-import io.mockk.coEvery
-import io.mockk.mockk
-
-class FakeTchapGetPlatformTask {
-
-    val instance = mockk<TchapGetPlatformTask>()
-
-    fun givenGetPlatformResult(getPlatformResult: GetPlatformResult) {
-        coEvery { instance.execute(any()) } returns getPlatformResult
-    }
-========
 package im.vector.app.features.settings.legals
 
 import android.content.Context
@@ -37,5 +21,4 @@ import android.content.Context
 interface FlavorLegals {
     fun hasThirdPartyNotices(): Boolean
     fun navigateToThirdPartyNotices(context: Context)
->>>>>>>> v1.4.36:vector/src/main/java/im/vector/app/features/settings/legals/FlavorLegals.kt
 }

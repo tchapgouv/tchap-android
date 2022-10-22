@@ -801,7 +801,7 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     fun isDirect(): Boolean {
-        return room.roomSummary()?.isDirect ?: false
+        return room?.roomSummary()?.isDirect ?: false
     }
 
     // PRIVATE METHODS *****************************************************************************

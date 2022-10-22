@@ -2596,8 +2596,6 @@
     </plurals>
     <string name="search_space_two_parents">%1$s et %2$s</string>
     <string name="auth_reset_password_error_unverified">Courriel non vérifié, relevez votre boîte de réception</string>
-<<<<<<< HEAD:vector/src/main/res/values-fr/strings.xml
-=======
     <string name="location_share_loading_map_error">Impossible de charger la carte
 \nCe serveur d’accueil n’a peut-être pas été configuré pour afficher les cartes.</string>
     <string name="a11y_open_settings">Ouvrir les paramètres</string>
@@ -2638,5 +2636,4 @@
     <string name="timeline_error_room_not_found">Désolé, impossible de trouver ce salon.
 \nVeuillez réessayer plus tard.%s</string>
     <string name="invites_title">Invitations</string>
->>>>>>> v1.4.36:library/ui-strings/src/main/res/values-fr/strings.xml
 </resources>

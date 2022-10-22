@@ -509,15 +509,10 @@ class BugReporter @Inject constructor(
      */
     fun openBugReportScreen(activity: FragmentActivity, reportType: ReportType = ReportType.BUG_REPORT, withScreenshot: Boolean = true) {
         screenshot = takeScreenshot(activity)
-<<<<<<< HEAD
-        matrix.debugService().logDbUsageInfo()
-        activity.startActivity(BugReportActivity.intent(activity, reportType, withScreenshot))
-=======
         logDbInfo()
         logProcessInfo()
         logOtherInfo()
-        activity.startActivity(BugReportActivity.intent(activity, reportType))
->>>>>>> v1.4.36
+        activity.startActivity(BugReportActivity.intent(activity, reportType, withScreenshot))
     }
 
     private fun logOtherInfo() {

@@ -27,11 +27,8 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilActivityVisible
-<<<<<<< HEAD:vector/src/androidTest/java/im/vector/app/ui/robot/RoomListRobot.kt
 import im.vector.app.espresso.tools.waitUntilViewVisible
-=======
 import im.vector.app.espresso.tools.waitUntilDialogVisible
->>>>>>> v1.4.36:vector-app/src/androidTest/java/im/vector/app/ui/robot/RoomListRobot.kt
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 import im.vector.app.ui.robot.settings.labs.LabFeaturesPreferences
 
@@ -55,23 +52,17 @@ class RoomListRobot(private val labsPreferences: LabFeaturesPreferences) {
     }
 
     fun newRoom(block: NewRoomRobot.() -> Unit) {
-<<<<<<< HEAD:vector/src/androidTest/java/im/vector/app/ui/robot/RoomListRobot.kt
-        clickOn(R.id.createRoomFabMenu)
-        waitUntilViewVisible(ViewMatchers.withId(R.id.joinForumItemGroup))
-        clickOn(R.id.joinForumItemGroup)
-        waitUntilActivityVisible<RoomDirectoryActivity> {
-            BaristaVisibilityAssertions.assertDisplayed(R.id.publicRoomsList)
-=======
         if (labsPreferences.isNewAppLayoutEnabled) {
             clickOn(R.id.newLayoutCreateChatButton)
             waitUntilDialogVisible(ViewMatchers.withId(R.id.create_room))
             clickOn(R.id.create_room)
         } else {
-            clickOn(R.id.createGroupRoomButton)
+            clickOn(R.id.createRoomFabMenu)
+            waitUntilViewVisible(ViewMatchers.withId(R.id.joinForumItemGroup))
+            clickOn(R.id.joinForumItemGroup)
             waitUntilActivityVisible<RoomDirectoryActivity> {
                 BaristaVisibilityAssertions.assertDisplayed(R.id.publicRoomsList)
             }
->>>>>>> v1.4.36:vector-app/src/androidTest/java/im/vector/app/ui/robot/RoomListRobot.kt
         }
         val newRoomRobot = NewRoomRobot(false, labsPreferences)
         block(newRoomRobot)

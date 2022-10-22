@@ -50,22 +50,12 @@ import javax.inject.Inject
  * What can be improved:
  * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect.
  */
-<<<<<<< HEAD
-class PublicRoomsFragment @Inject constructor(
-        private val publicRoomsController: PublicRoomsController,
-        private val permalinkHandler: PermalinkHandler,
-        private val session: Session
-) : VectorBaseFragment<FragmentPublicRoomsBinding>(),
-        // Tchap: No menu
-//        VectorMenuProvider
-        PublicRoomsController.Callback {
-=======
 @AndroidEntryPoint
 class PublicRoomsFragment :
         VectorBaseFragment<FragmentPublicRoomsBinding>(),
-        PublicRoomsController.Callback,
-        VectorMenuProvider {
->>>>>>> v1.4.36
+        PublicRoomsController.Callback {
+        // Tchap: No menu
+        // VectorMenuProvider {
 
     @Inject lateinit var publicRoomsController: PublicRoomsController
     @Inject lateinit var permalinkHandler: PermalinkHandler

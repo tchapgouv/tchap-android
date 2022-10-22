@@ -103,23 +103,13 @@ class LoginFragment :
         }
     }
 
-<<<<<<< HEAD
-    private fun setupSocialLoginButtons(state: LoginViewState) {
-        views.loginSocialLoginButtons.mode = when (state.signMode) {
-            SignMode.TchapSignUp,
-            SignMode.TchapSignIn,
-            SignMode.Unknown -> error("developer error")
-            SignMode.SignUp -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
-            SignMode.SignIn,
-            SignMode.SignInWithMatrixId -> SocialLoginButtonsView.Mode.MODE_SIGN_IN
-        }
-=======
     private fun ssoMode(state: LoginViewState) = when (state.signMode) {
+        SignMode.TchapSignUp,
+        SignMode.TchapSignIn,
         SignMode.Unknown -> error("developer error")
         SignMode.SignUp -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
         SignMode.SignIn,
         SignMode.SignInWithMatrixId -> SocialLoginButtonsView.Mode.MODE_SIGN_IN
->>>>>>> v1.4.36
     }
 
     private fun submit() {

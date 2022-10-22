@@ -176,11 +176,7 @@ fun Fragment.queryExportKeys(userId: String, activityResultLauncher: ActivityRes
     selectTxtFileToWrite(
             activity = requireActivity(),
             activityResultLauncher = activityResultLauncher,
-<<<<<<< HEAD
             defaultFileName = "$appName-keys-export-$timestamp.txt",
-=======
-            defaultFileName = "$appName-megolm-export-$userId-${timestamp}.txt",
->>>>>>> v1.4.36
             chooserHint = getString(R.string.keys_backup_setup_step1_manual_export)
     )
 }
@@ -193,11 +189,7 @@ fun Activity.queryExportKeys(userId: String, activityResultLauncher: ActivityRes
     selectTxtFileToWrite(
             activity = this,
             activityResultLauncher = activityResultLauncher,
-<<<<<<< HEAD
             defaultFileName = "$appName-keys-export-$timestamp.txt",
-=======
-            defaultFileName = "$appName-megolm-export-$userId-${timestamp}.txt",
->>>>>>> v1.4.36
             chooserHint = getString(R.string.keys_backup_setup_step1_manual_export)
     )
 }

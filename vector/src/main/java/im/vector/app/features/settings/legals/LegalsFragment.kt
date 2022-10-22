@@ -34,11 +34,7 @@ import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.discovery.ServerPolicy
 import im.vector.app.features.settings.VectorSettingsUrls
-<<<<<<< HEAD
 import im.vector.app.features.webview.VectorWebViewActivity
-import im.vector.app.openOssLicensesMenuActivity
-=======
->>>>>>> v1.4.36
 import javax.inject.Inject
 
 @AndroidEntryPoint

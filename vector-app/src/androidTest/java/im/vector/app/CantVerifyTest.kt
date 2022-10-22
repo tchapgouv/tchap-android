@@ -35,12 +35,8 @@ import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-<<<<<<< HEAD:vector/src/androidTest/java/im/vector/app/CantVerifyTest.kt
 @Ignore("Tchap: Secure Backup is disabled, so this test cannot succeed")
-class CantVerifyTest : VerificationTestBase() {
-=======
 class CantVerifyTest {
->>>>>>> v1.4.36:vector-app/src/androidTest/java/im/vector/app/CantVerifyTest.kt
 
     @get:Rule
     val testRule = RuleChain

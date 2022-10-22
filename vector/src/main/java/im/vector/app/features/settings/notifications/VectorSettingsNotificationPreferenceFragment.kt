@@ -53,7 +53,6 @@ import im.vector.app.features.settings.BackgroundSyncModeChooserDialog
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsBaseFragment
 import im.vector.app.features.settings.VectorSettingsFragmentInteractionListener
-import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -65,13 +64,9 @@ import org.matrix.android.sdk.api.session.pushrules.RuleKind
 import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
-<<<<<<< HEAD
-class VectorSettingsNotificationPreferenceFragment @Inject constructor() : VectorSettingsBaseFragment(),
-=======
 @AndroidEntryPoint
 class VectorSettingsNotificationPreferenceFragment :
         VectorSettingsBaseFragment(),
->>>>>>> v1.4.36
         BackgroundSyncModeChooserDialog.InteractionListener {
 
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper

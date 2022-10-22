@@ -30,12 +30,9 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
-<<<<<<< HEAD
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.BuildConfig
-=======
 import dagger.hilt.android.AndroidEntryPoint
->>>>>>> v1.4.36
 import im.vector.app.R
 import im.vector.app.SpaceStateHandler
 import im.vector.app.core.extensions.commitTransaction

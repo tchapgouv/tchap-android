@@ -34,11 +34,8 @@ import androidx.preference.SwitchPreference
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.fragmentViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-<<<<<<< HEAD
 import im.vector.app.BuildConfig
-=======
 import dagger.hilt.android.AndroidEntryPoint
->>>>>>> v1.4.36
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog

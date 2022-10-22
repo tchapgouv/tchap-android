@@ -36,16 +36,12 @@ import im.vector.app.features.debug.features.DebugVectorFeatures
 import im.vector.app.waitForView
 
 class OnboardingRobot {
-<<<<<<< HEAD:vector/src/androidTest/java/im/vector/app/ui/robot/OnboardingRobot.kt
 
     // Tchap: Use different onboarding variant to run the tests
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
     private val defaultVectorFeatures = DebugVectorFeatures(context, DefaultVectorFeatures()).apply {
         overrideEnum(OnboardingVariant.FTUE_AUTH, OnboardingVariant::class)
     }
-=======
-    private val defaultVectorFeatures = DefaultVectorFeatures()
->>>>>>> v1.4.36:vector-app/src/androidTest/java/im/vector/app/ui/robot/OnboardingRobot.kt
 
     fun crawl() {
         waitUntilViewVisible(withId(R.id.loginSplashSubmit))

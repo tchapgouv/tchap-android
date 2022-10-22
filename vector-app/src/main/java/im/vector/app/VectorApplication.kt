@@ -66,13 +66,7 @@ import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
-<<<<<<< HEAD:vector/src/main/java/im/vector/app/VectorApplication.kt
-import im.vector.app.flipper.FlipperProxy
-import im.vector.app.push.fcm.FcmHelper
-=======
 import im.vector.application.R
-import org.jitsi.meet.sdk.log.JitsiMeetDefaultLogHandler
->>>>>>> v1.4.36:vector-app/src/main/java/im/vector/app/VectorApplication.kt
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter

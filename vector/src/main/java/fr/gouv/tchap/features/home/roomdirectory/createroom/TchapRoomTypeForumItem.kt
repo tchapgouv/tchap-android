@@ -29,7 +29,7 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
 
-@EpoxyModelClass(layout = R.layout.item_tchap_room_type_forum)
+@EpoxyModelClass
 abstract class TchapRoomTypeForumItem : EpoxyModelWithHolder<TchapRoomTypeForumItem.Holder>() {
 
     @EpoxyAttribute
@@ -49,6 +49,8 @@ abstract class TchapRoomTypeForumItem : EpoxyModelWithHolder<TchapRoomTypeForumI
 
     @EpoxyAttribute
     var userDomain: String? = null
+
+    override fun getDefaultLayout() = R.layout.item_tchap_room_type_forum
 
     override fun bind(holder: Holder) {
         super.bind(holder)

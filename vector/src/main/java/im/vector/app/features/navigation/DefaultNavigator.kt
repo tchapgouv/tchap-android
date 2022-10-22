@@ -246,28 +246,6 @@ class DefaultNavigator @Inject constructor(
 
     override fun requestSessionVerification(fragmentActivity: FragmentActivity, otherSessionId: String) {
         val session = sessionHolder.getSafeActiveSession() ?: return
-<<<<<<< HEAD
-
-        val txId = if (session.cryptoService().crossSigningService().isCrossSigningInitialized()) {
-            session.cryptoService().verificationService().requestKeyVerification(
-                    supportedVerificationMethodsProvider.provide(),
-                    session.myUserId,
-                    listOf(otherSessionId)
-            ).transactionId
-        } else {
-            session.cryptoService()
-                    .verificationService()
-                    .beginKeyVerification(VerificationMethod.SAS, session.myUserId, otherSessionId, null)
-        }
-
-        if (context is AppCompatActivity) {
-            VerificationBottomSheet.withArgs(
-                    roomId = null,
-                    otherUserId = session.myUserId,
-                    transactionId = txId
-            ).show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
-        }
-=======
         val pr = session.cryptoService().verificationService().requestKeyVerification(
                 supportedVerificationMethodsProvider.provide(),
                 session.myUserId,
@@ -278,7 +256,6 @@ class DefaultNavigator @Inject constructor(
                 otherUserId = session.myUserId,
                 transactionId = pr.transactionId
         ).show(fragmentActivity.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
->>>>>>> v1.4.36
     }
 
     override fun requestSelfSessionVerification(fragmentActivity: FragmentActivity) {

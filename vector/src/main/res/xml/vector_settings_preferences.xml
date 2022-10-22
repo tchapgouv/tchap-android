@@ -32,11 +32,8 @@
 
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:title="@string/spaces"
-<<<<<<< HEAD
-        app:isPreferenceVisible="@bool/show_spaces">
-=======
+        app:isPreferenceVisible="@bool/show_spaces"
         android:key="SETTINGS_PREF_SPACE_CATEGORY">
->>>>>>> v1.4.36
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="@bool/spaces_show_all_in_home"

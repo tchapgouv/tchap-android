@@ -39,6 +39,7 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
+import im.vector.app.features.login.SocialLoginButtonsView
 import im.vector.app.features.login.SocialLoginButtonsView.Mode
 import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
@@ -118,23 +119,13 @@ class FtueAuthLoginFragment :
         }
     }
 
-<<<<<<< HEAD
-    private fun setupSocialLoginButtons(state: OnboardingViewState) {
-        views.loginSocialLoginButtons.mode = when (state.signMode) {
-            SignMode.Unknown -> error("developer error")
-            SignMode.TchapSignUp,
-            SignMode.SignUp -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
-            SignMode.TchapSignIn,
-            SignMode.SignIn,
-            SignMode.SignInWithMatrixId -> SocialLoginButtonsView.Mode.MODE_SIGN_IN
-        }
-=======
     private fun ssoMode(state: OnboardingViewState) = when (state.signMode) {
         SignMode.Unknown -> error("developer error")
-        SignMode.SignUp -> Mode.MODE_SIGN_UP
+        SignMode.TchapSignUp,
+        SignMode.SignUp -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
+        SignMode.TchapSignIn,
         SignMode.SignIn,
-        SignMode.SignInWithMatrixId -> Mode.MODE_SIGN_IN
->>>>>>> v1.4.36
+        SignMode.SignInWithMatrixId -> SocialLoginButtonsView.Mode.MODE_SIGN_IN
     }
 
     private fun submit() {

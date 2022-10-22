@@ -1232,7 +1232,6 @@ class OnboardingViewModelTest {
             onboardingFlow = OnboardingFlow.SignUp, selectedHomeserver = SelectedHomeserverState(userFacingUrl = homeServerUrl)
     )
 
-<<<<<<< HEAD
     private fun givenTchapGetPlatform(
             homeServerUrl: String = A_HOMESERVER_URL,
             homeServerConfig: HomeServerConnectionConfig = A_HOMESERVER_CONFIG,
@@ -1240,9 +1239,10 @@ class OnboardingViewModelTest {
     ) {
         fakeGetPlatformTask.givenGetPlatformResult(GetPlatformResult.Success(Platform(homeServerUrl)))
         fakeStringProvider.givenResult("")
-        fakeHomeServerConnectionConfigFactory.givenConfigFor(homeServerUrl, homeServerConfig)
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(homeServerUrl, null, homeServerConfig)
         givenCanSuccessfullyUpdateHomeserver(homeServerUrl, selectedHomeserverState)
-=======
+    }
+
     private fun givenHomeserverSelectionFailsWithNetworkError() {
         fakeContext.givenHasConnection()
         fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprint = null, A_HOMESERVER_CONFIG)
@@ -1253,7 +1253,6 @@ class OnboardingViewModelTest {
         fakeContext.givenHasConnection()
         fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprint = null, A_HOMESERVER_CONFIG)
         fakeStartAuthenticationFlowUseCase.givenErrors(A_HOMESERVER_CONFIG, cause)
->>>>>>> v1.4.36
     }
 }
 

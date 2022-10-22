@@ -33,14 +33,11 @@ import androidx.preference.SwitchPreference
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.cache.DiskCache
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-<<<<<<< HEAD
 import fr.gouv.tchap.android.sdk.api.session.accountdata.HideProfileContent
 import fr.gouv.tchap.android.sdk.api.session.accountdata.TchapUserAccountDataTypes.TYPE_HIDE_PROFILE
 import fr.gouv.tchap.core.utils.TchapUtils
 import fr.gouv.tchap.features.settings.TchapSettingsChangePasswordPreDialog
-=======
 import dagger.hilt.android.AndroidEntryPoint
->>>>>>> v1.4.36
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelperFactory
@@ -84,19 +81,12 @@ import java.io.File
 import java.util.UUID
 import javax.inject.Inject
 
-<<<<<<< HEAD
-class VectorSettingsGeneralFragment @Inject constructor(
-        private val keysExporter: KeysExporter,
-        colorProvider: ColorProvider,
-        clock: Clock,
-) :
-=======
 @AndroidEntryPoint
 class VectorSettingsGeneralFragment :
->>>>>>> v1.4.36
         VectorSettingsBaseFragment(),
         GalleryOrCameraDialogHelper.Listener {
 
+    @Inject lateinit var keysExporter: KeysExporter
     @Inject lateinit var galleryOrCameraDialogHelperFactory: GalleryOrCameraDialogHelperFactory
 
     override var titleRes = R.string.settings_general_title

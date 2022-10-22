@@ -35,11 +35,8 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-<<<<<<< HEAD
 import fr.gouv.tchap.core.utils.TchapUtils
-=======
 import dagger.hilt.android.AndroidEntryPoint
->>>>>>> v1.4.36
 import im.vector.app.R
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
@@ -243,14 +240,15 @@ class RoomListFragment :
         val showFab = !TchapUtils.isExternalTchapUser(roomListViewModel.session.myUserId)
         when (roomListParams.displayMode) {
             RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.isVisible = showFab
-            RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.isVisible = showFab
+            RoomListDisplayMode.PEOPLE -> Unit // tchap : no people button
             RoomListDisplayMode.ROOMS -> views.createRoomFabMenu.isVisible = showFab
             RoomListDisplayMode.FILTERED -> Unit // No button in this mode
         }
 
-        views.createChatRoomButton.debouncedClicks {
-            fabCreateDirectChat()
-        }
+        // tchap : no people button
+        // views.createChatRoomButton.debouncedClicks {
+        //     fabCreateDirectChat()
+        // }
 
         // Hide FAB when list is scrolling
         views.roomListView.addOnScrollListener(
@@ -270,7 +268,7 @@ class RoomListFragment :
                             RecyclerView.SCROLL_STATE_SETTLING -> {
                                 when (roomListParams.displayMode) {
                                     RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.hide()
-                                    RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.hide()
+                                    RoomListDisplayMode.PEOPLE -> Unit // tchap : no people button
                                     RoomListDisplayMode.ROOMS -> views.createRoomFabMenu.hide()
                                     RoomListDisplayMode.FILTERED -> Unit
                                 }
@@ -439,7 +437,7 @@ class RoomListFragment :
         if (isAdded) {
             when (roomListParams.displayMode) {
                 RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.show()
-                RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.show()
+                RoomListDisplayMode.PEOPLE -> Unit // tchap : no people button
                 RoomListDisplayMode.ROOMS -> views.createRoomFabMenu.show()
                 RoomListDisplayMode.FILTERED -> Unit
             }

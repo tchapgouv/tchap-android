@@ -64,12 +64,9 @@ import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.auth.registration.RegistrationAvailability
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
-<<<<<<< HEAD
 import org.matrix.android.sdk.api.extensions.tryOrNull
-=======
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.isHomeserverConnectionError
->>>>>>> v1.4.36
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.failure.isUnrecognisedCertificate
 import org.matrix.android.sdk.api.network.ssl.Fingerprint
@@ -127,6 +124,9 @@ class OnboardingViewModel @AssistedInject constructor(
             copy(isForceLoginFallbackEnabled = isForceLoginFallbackEnabled)
         }
     }
+
+    // tchap
+    private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
 
     private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
     private val defaultHomeserverUrl = matrixOrgUrl
@@ -705,6 +705,9 @@ class OnboardingViewModel @AssistedInject constructor(
             serverTypeOverride: ServerType?,
             postAction: suspend () -> Unit = {},
     ) {
+        // tchap
+        currentHomeServerConnectionConfig = homeServerConnectionConfig
+
         currentJob = viewModelScope.launch {
             setState { copy(isLoading = true) }
             runCatching { startAuthenticationFlowUseCase.execute(homeServerConnectionConfig) }.fold(

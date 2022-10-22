@@ -124,12 +124,8 @@ class MessageInformationDataFactory @Inject constructor(
                 isLastFromThisSender = isLastFromThisSender,
                 e2eDecoration = e2eDecoration,
                 sendStateDecoration = sendStateDecoration,
-<<<<<<< HEAD
                 isDirect = roomSummary?.isDirect.orFalse(),
-                messageType = event.root.getMsgType()
-=======
                 messageType = if (event.root.isSticker()) { MessageType.MSGTYPE_STICKER_LOCAL } else { event.root.getMsgType() }
->>>>>>> v1.4.36
         )
     }
 
