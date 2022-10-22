@@ -1,9 +1,9 @@
 name: Test
 
 on:
-  pull_request: {}
+  pull_request: { }
   push:
-    branches: [main, develop]
+    branches: [ main, develop ]
 
 # Enrich gradle.properties for CI/CD
 env:
@@ -49,10 +49,14 @@ jobs:
           disable-animations: true
           emulator-build: 7425822
           script: |
+<<<<<<< HEAD
+=======
+            ./gradlew gatherGplayDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
+>>>>>>> v1.4.36
             ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
             ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
             ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
-# NB: continue-on-error marks steps.tests.conclusion = 'success' but leaves stes.tests.outcome = 'failure'
+      # NB: continue-on-error marks steps.tests.conclusion = 'success' but leaves stes.tests.outcome = 'failure'
       - name: Run all the codecoverage tests at once (retry if emulator failed)
         uses: reactivecircus/android-emulator-runner@v2
         if: always() && steps.tests.outcome == 'failure' # don't run if previous step succeeded.
@@ -65,16 +69,25 @@ jobs:
           disable-animations: true
           emulator-build: 7425822
           script: |
+            ./gradlew gatherGplayDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
             ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
             ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
             ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
+<<<<<<< HEAD
       - run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
         # Tchap: Skip in forks
         if: github.repository == 'vector-im/element-android' && always() # we may have failed a previous step and retried, that's OK
+=======
+
+      # we may have failed a previous step and retried, that's OK
+      - name: Publish results to Sonar
+>>>>>>> v1.4.36
         env:
           GITHUB_TOKEN: ${{ secrets.SONARQUBE_GITHUB_API_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
+        if: ${{ always() && env.GITHUB_TOKEN != '' && env.SONAR_TOKEN != '' && env.ORG_GRADLE_PROJECT_SONAR_LOGIN != '' }}
+        run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
 
       - name: Format unit test results
         if: always()

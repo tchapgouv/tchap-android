@@ -21,6 +21,10 @@ import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+<<<<<<< HEAD
+=======
+import im.vector.app.core.pushers.FcmHelper
+>>>>>>> v1.4.36
 import im.vector.app.core.pushers.PushParser
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper

@@ -17,21 +17,6 @@
 #
 
 #######################################################################################################################
-# Check frozen class modification
-#######################################################################################################################
-
-echo "Check if frozen class modified"
-git diff "HEAD@{1}" --name-only | grep -e OlmInboundGroupSessionWrapper.kt -e OlmInboundGroupSessionWrapper2.kt
-FROZEN_CHANGED=$?
-if [ ${FROZEN_CHANGED} -eq 0 ]; then
-  echo "❌ FROZEN CLASS CHANGED ERROR"
-  exit 1
-else
-  echo "Frozen check OK"
-fi
-
-
-#######################################################################################################################
 # Check drawable quantity
 #######################################################################################################################
 
@@ -89,7 +74,9 @@ ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code.txt \
     ./vector/src/debug/java \
     ./vector/src/release/java \
     ./vector/src/fdroid/java \
-    ./vector/src/gplay/java
+    ./vector/src/gplay/java \
+    ./vector-app/src/gplay/java \
+    ./vector-app/src/main/java
 
 resultForbiddenStringInCode=$?
 
@@ -121,7 +108,9 @@ ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code_app.txt 
     ./vector/src/debug/java \
     ./vector/src/release/java \
     ./vector/src/fdroid/java \
-    ./vector/src/gplay/java
+    ./vector/src/gplay/java \
+    ./vector-app/src/gplay/java \
+    ./vector-app/src/main/java
 
 resultForbiddenStringInCodeApp=$?
 
@@ -133,7 +122,8 @@ ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_resources.txt
     ./vector/src/main/res/color \
     ./vector/src/main/res/layout \
     ./vector/src/main/res/values \
-    ./vector/src/main/res/xml
+    ./vector/src/main/res/xml \
+    ./vector-app/src/main/res/values
 
 resultForbiddenStringInResource=$?
 
@@ -141,7 +131,8 @@ echo
 echo "Search for forbidden patterns in layouts..."
 
 ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_layout.txt \
-    ./vector/src/main/res/layout
+    ./vector/src/main/res/layout \
+    ./vector-app/src/main/res/layout
 
 resultForbiddenStringInLayout=$?
 
@@ -181,7 +172,11 @@ ${checkLongFilesScript} ${maxLines} \
     ./vector/src/main/java \
     ./vector/src/release/java \
     ./vector/src/sharedTest/java \
-    ./vector/src/test/java
+    ./vector/src/test/java \
+    ./vector/src/androidTest/java \
+    ./vector/src/gplay/java \
+    ./vector/src/main/java
+
 
 resultLongFiles=$?
 

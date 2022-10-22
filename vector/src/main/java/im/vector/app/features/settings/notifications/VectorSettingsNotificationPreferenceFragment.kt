@@ -30,6 +30,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -37,6 +38,7 @@ import im.vector.app.core.preference.VectorEditTextPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.preference.VectorSwitchPreference
+import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.services.GuardServiceStarter
@@ -63,7 +65,13 @@ import org.matrix.android.sdk.api.session.pushrules.RuleKind
 import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
+<<<<<<< HEAD
 class VectorSettingsNotificationPreferenceFragment @Inject constructor() : VectorSettingsBaseFragment(),
+=======
+@AndroidEntryPoint
+class VectorSettingsNotificationPreferenceFragment :
+        VectorSettingsBaseFragment(),
+>>>>>>> v1.4.36
         BackgroundSyncModeChooserDialog.InteractionListener {
 
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper

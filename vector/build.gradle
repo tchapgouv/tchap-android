@@ -1,14 +1,8 @@
-import com.android.build.OutputFile
-
-apply plugin: 'com.android.application'
-apply plugin: 'com.google.firebase.appdistribution'
-apply plugin: 'com.google.android.gms.oss-licenses-plugin'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.likethesalad.stem'
 apply plugin: 'dagger.hilt.android.plugin'
-apply plugin: 'kotlinx-knit'
 
 if (project.hasProperty("coverage")) {
     apply plugin: 'jacoco'
@@ -18,6 +12,7 @@ kapt {
     correctErrorTypes = true
 }
 
+<<<<<<< HEAD
  knit {
     files = fileTree(project.rootDir) {
         include '**/*.md'
@@ -65,11 +60,14 @@ def getVersionCode() {
     }
 }
 
+=======
+>>>>>>> v1.4.36
 static def gitRevision() {
     def cmd = "git rev-parse --short=8 HEAD"
     return cmd.execute().text.trim()
 }
 
+<<<<<<< HEAD
 static def gitRevisionDate() {
     def cmd = "git show -s --format=%ci HEAD^{commit}"
     return cmd.execute().text.trim()
@@ -113,19 +111,14 @@ static def getFdroidVersionSuffix() {
     }
 }
 
+=======
+>>>>>>> v1.4.36
 project.android.buildTypes.all { buildType ->
     buildType.javaCompileOptions.annotationProcessorOptions.arguments =
             [
                     validateEpoxyModelUsage: String.valueOf(buildType.name == 'debug')
             ]
 }
-
-// map for the version codes last digit
-// x86 must have greater values than arm
-// 64 bits have greater value than 32 bits
-ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].withDefault { 0 }
-
-def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
 
 android {
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
@@ -138,25 +131,6 @@ android {
         // Set to API 21: see #405
         minSdk versions.minSdk
         targetSdk versions.targetSdk
-        multiDexEnabled true
-
-        renderscriptTargetApi 24
-        renderscriptSupportModeEnabled true
-
-        // `develop` branch will have version code from timestamp, to ensure each build from CI has a incremented versionCode.
-        // Other branches (main, features, etc.) will have version code based on application version.
-        versionCode project.getVersionCode()
-
-        // Required for sonar analysis
-        versionName "${versionMajor}.${versionMinor}.${versionPatch}-sonar"
-
-        // Generate a random app task affinity
-        manifestPlaceholders = [appTaskAffinitySuffix: "H_${gitRevision()}"]
-
-        buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
-        buildConfigField "String", "GIT_REVISION_DATE", "\"${gitRevisionDate()}\""
-        buildConfigField "String", "GIT_BRANCH_NAME", "\"${gitBranchName()}\""
-        buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
 
         // Tchap: Disable Location Sharing
         resValue "bool", "enable_location_sharing", "false"
@@ -178,6 +152,7 @@ android {
         // Tchap: Use only en and fr
         resConfigs "en", "fr"
 
+<<<<<<< HEAD
         // Ref: https://developer.android.com/studio/build/configure-apk-splits.html
         splits {
             // Configures multiple APKs based on ABI.
@@ -212,6 +187,10 @@ android {
                 print "ABI " + output.getFilter(OutputFile.ABI) + " \t-> VersionCode = " + output.versionCodeOverride + "\n"
             }
         }
+=======
+        // Generate a random app task affinity
+        manifestPlaceholders = [appTaskAffinitySuffix: "H_${gitRevision()}"]
+>>>>>>> v1.4.36
 
         // The following argument makes the Android Test Orchestrator run its
         // "pm clear" command after each test invocation. This command ensures
@@ -227,6 +206,7 @@ android {
         // Comment to run on Android 12
 //        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
+<<<<<<< HEAD
     signingConfigs {
         debug {
             keyAlias 'androiddebugkey'
@@ -261,10 +241,15 @@ android {
 
             signingConfig signingConfigs.debug
 
+=======
+    buildTypes {
+        debug {
+>>>>>>> v1.4.36
             if (project.hasProperty("coverage")) {
                 testCoverageEnabled = coverage.enableTestCoverage
             }
         }
+<<<<<<< HEAD
 
         release {
 //            resValue "string", "app_name", "Element"
@@ -318,6 +303,13 @@ android {
 //                appId = "1:912726360885:android:efd8545af52a9f9300427c"
 //            }
 //        }
+=======
+        nightly {
+            initWith release
+            matchingFallbacks = ['release']
+        }
+        release
+>>>>>>> v1.4.36
     }
 
     // The 'store' dimension permits to deal with GooglePlay/Fdroid app
@@ -328,25 +320,26 @@ android {
 
     productFlavors {
         gplay {
-            apply plugin: 'com.google.gms.google-services'
-            afterEvaluate {
-                tasks.matching { it.name.contains("GoogleServices") && !it.name.contains("Gplay") }*.enabled = false
-            }
-
             dimension "store"
+<<<<<<< HEAD
             isDefault = true
 
             resValue "bool", "isGplay", "true"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
+=======
+>>>>>>> v1.4.36
         }
 
         fdroid {
             dimension "store"
+<<<<<<< HEAD
 
             resValue "bool", "isGplay", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
+=======
+>>>>>>> v1.4.36
         }
 
         withvoip {
@@ -441,13 +434,6 @@ android {
         }
     }
 
-    lintOptions {
-        lintConfig file("lint.xml")
-
-        checkDependencies true
-        abortOnError true
-    }
-
     compileOptions {
         sourceCompatibility versions.sourceCompat
         targetCompatibility versions.targetCompat
@@ -526,15 +512,15 @@ configurations {
 
 dependencies {
     implementation project(":vector-config")
-    implementation project(":matrix-sdk-android")
+    api project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-flow")
     implementation project(":library:jsonviewer")
+    implementation project(":library:ui-strings")
     implementation project(":library:ui-styles")
     implementation project(":library:core-utils")
     implementation project(":library:attachment-viewer")
     implementation project(":library:diff-match-patch")
     implementation project(":library:multipicker")
-    implementation 'androidx.multidex:multidex:2.0.1'
 
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid
@@ -543,49 +529,47 @@ dependencies {
     implementation libs.androidx.appCompat
     implementation libs.androidx.fragmentKtx
     implementation libs.androidx.constraintLayout
-    implementation "androidx.sharetarget:sharetarget:1.1.0"
     implementation libs.androidx.core
     implementation "androidx.media:media:1.6.0"
     implementation "androidx.transition:transition:1.4.1"
     implementation libs.androidx.biometric
 
-    implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
-    implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.10.0"
+    api "org.threeten:threetenbp:1.4.0:no-tzdb"
+    api "com.gabrielittner.threetenbp:lazythreetenbp:0.11.0"
 
     implementation libs.squareup.moshi
     kapt libs.squareup.moshiKotlin
 
     // Lifecycle
     implementation libs.androidx.lifecycleLivedata
-    implementation libs.androidx.lifecycleProcess
+    api libs.androidx.lifecycleProcess
     implementation libs.androidx.lifecycleRuntimeKtx
 
-    implementation libs.androidx.datastorepreferences
+    api libs.androidx.datastorepreferences
 
     // Opus Encoder
     implementation libs.element.opusencoder
 
     // Log
-    implementation libs.jakewharton.timber
+    api libs.jakewharton.timber
 
     // Debug
-    implementation 'com.facebook.stetho:stetho:1.6.0'
+    api 'com.facebook.stetho:stetho:1.6.0'
 
-    // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.53'
+    api libs.google.phonenumber
 
     // FlowBinding
     implementation libs.github.flowBinding
     implementation libs.github.flowBindingAppcompat
 
-    implementation libs.airbnb.epoxy
+    api libs.airbnb.epoxy
     implementation libs.airbnb.epoxyGlide
     kapt libs.airbnb.epoxyProcessor
     implementation libs.airbnb.epoxyPaging
-    implementation libs.airbnb.mavericks
+    api libs.airbnb.mavericks
 
     // Snap Helper https://github.com/rubensousa/GravitySnapHelper
-    implementation 'com.github.rubensousa:gravitysnaphelper:2.2.2'
+    api 'com.github.rubensousa:gravitysnaphelper:2.2.2'
 
     // Nightly
     // API-only library
@@ -594,7 +578,7 @@ dependencies {
     gplayImplementation libs.google.appdistribution
 
     // Work
-    implementation libs.androidx.work
+    api libs.androidx.work
 
     // Paging
     implementation libs.androidx.pagingRuntimeKtx
@@ -603,7 +587,7 @@ dependencies {
     implementation libs.arrow.core
 
     // Pref
-    implementation libs.androidx.preferenceKtx
+    api libs.androidx.preferenceKtx
 
     // UI
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
@@ -659,7 +643,7 @@ dependencies {
     implementation 'com.posthog.android:posthog:1.1.2'
 
     // UnifiedPush
-    implementation 'com.github.UnifiedPush:android-connector:2.0.0'
+    implementation 'com.github.UnifiedPush:android-connector:2.0.1'
     // UnifiedPush gplay flavor only
     gplayImplementation('com.google.firebase:firebase-messaging:23.0.8') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
@@ -678,7 +662,11 @@ dependencies {
     implementation('com.facebook.react:react-native-webrtc:1.94.2-jitsi-10227332@aar')
 
     // Jitsi
+<<<<<<< HEAD
     withvoipImplementation('org.jitsi.react:jitsi-meet-sdk:5.0.2') {
+=======
+    api('org.jitsi.react:jitsi-meet-sdk:5.0.2') {
+>>>>>>> v1.4.36
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'
@@ -690,8 +678,8 @@ dependencies {
     implementation 'me.dm7.barcodescanner:zxing:1.9.13'
 
     // Emoji Keyboard
-    implementation libs.vanniktech.emojiMaterial
-    implementation libs.vanniktech.emojiGoogle
+    api libs.vanniktech.emojiMaterial
+    api libs.vanniktech.emojiGoogle
 
     implementation 'im.dlg:android-dialer:1.2.5'
 
@@ -704,14 +692,14 @@ dependencies {
     implementation 'commons-codec:commons-codec:1.15'
 
     // MapTiler
-    fdroidImplementation(libs.maplibre.androidSdk) {
+    fdroidApi(libs.maplibre.androidSdk) {
         exclude group: 'com.google.android.gms', module: 'play-services-location'
     }
-    fdroidImplementation(libs.maplibre.pluginAnnotation) {
+    fdroidApi(libs.maplibre.pluginAnnotation) {
         exclude group: 'com.google.android.gms', module: 'play-services-location'
     }
-    gplayImplementation libs.maplibre.androidSdk
-    gplayImplementation libs.maplibre.pluginAnnotation
+    gplayApi libs.maplibre.androidSdk
+    gplayApi libs.maplibre.pluginAnnotation
 
     // TESTS
     testImplementation libs.tests.junit
@@ -808,7 +796,7 @@ dependencies {
     debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"
 
     // Activate when you want to check for leaks, from time to time.
-    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 
     androidTestImplementation libs.androidx.testCore
     androidTestImplementation libs.androidx.testRunner

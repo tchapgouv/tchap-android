@@ -900,7 +900,11 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handlePlayOrPauseRecordingPlayback() {
-        audioMessageHelper.startOrPauseRecordingPlayback()
+        try {
+            audioMessageHelper.startOrPauseRecordingPlayback()
+        } catch (failure: Throwable) {
+            _viewEvents.post(MessageComposerViewEvents.VoicePlaybackOrRecordingFailure(failure))
+        }
     }
 
     fun endAllVoiceActions(deleteRecord: Boolean = true) {
