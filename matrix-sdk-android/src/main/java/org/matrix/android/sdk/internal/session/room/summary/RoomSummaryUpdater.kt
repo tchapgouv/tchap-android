@@ -65,6 +65,7 @@ import org.matrix.android.sdk.internal.session.room.accountdata.RoomAccountDataD
 import org.matrix.android.sdk.internal.session.room.membership.RoomDisplayNameResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.relationship.RoomChildRelationInfo
+import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis
@@ -93,7 +94,8 @@ internal class RoomSummaryUpdater @Inject constructor(
             roomSummary: RoomSyncSummary? = null,
             unreadNotifications: RoomSyncUnreadNotifications? = null,
             updateMembers: Boolean = false,
-            inviterId: String? = null
+            inviterId: String? = null,
+            aggregator: SyncResponsePostTreatmentAggregator? = null
     ) {
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
         if (roomSummary != null) {
@@ -184,8 +186,14 @@ internal class RoomSummaryUpdater @Inject constructor(
             roomSummaryEntity.otherMemberIds.clear()
             roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)
             if (roomSummaryEntity.isEncrypted && otherRoomMembers.isNotEmpty()) {
-                // mmm maybe we could only refresh shield instead of checking trust also?
-                crossSigningService.onUsersDeviceUpdate(otherRoomMembers)
+                if (aggregator == null) {
+                    // Do it now
+                    // mmm maybe we could only refresh shield instead of checking trust also?
+                    crossSigningService.checkTrustAndAffectedRoomShields(otherRoomMembers)
+                } else {
+                    // Schedule it
+                    aggregator.userIdsForCheckingTrustAndAffectedRoomShields.addAll(otherRoomMembers)
+                }
             }
         }
     }

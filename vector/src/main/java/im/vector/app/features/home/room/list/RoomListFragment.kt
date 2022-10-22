@@ -35,6 +35,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
@@ -73,17 +74,19 @@ data class RoomListParams(
         val displayMode: RoomListDisplayMode
 ) : Parcelable
 
-class RoomListFragment @Inject constructor(
-        private val pagedControllerFactory: RoomSummaryPagedControllerFactory,
-        private val notificationDrawerManager: NotificationDrawerManager,
-        private val footerController: RoomListFooterController,
-        private val userPreferencesProvider: UserPreferencesProvider
-) : VectorBaseFragment<FragmentRoomListBinding>(),
+@AndroidEntryPoint
+class RoomListFragment :
+        VectorBaseFragment<FragmentRoomListBinding>(),
         RoomListListener,
         OnBackPressed,
         FilteredRoomFooterItem.Listener,
         NotifsFabMenuView.Listener,
         TchapRoomsFabMenuView.Listener {
+
+    @Inject lateinit var pagedControllerFactory: RoomSummaryPagedControllerFactory
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+    @Inject lateinit var footerController: RoomListFooterController
+    @Inject lateinit var userPreferencesProvider: UserPreferencesProvider
 
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
@@ -195,7 +198,7 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun handleShowMxToLink(link: String) {
-        navigator.openMatrixToBottomSheet(requireContext(), link, OriginOfMatrixTo.ROOM_LIST)
+        navigator.openMatrixToBottomSheet(requireActivity(), link, OriginOfMatrixTo.ROOM_LIST)
     }
 
     override fun onDestroyView() {
@@ -237,14 +240,15 @@ class RoomListFragment @Inject constructor(
         val showFab = !TchapUtils.isExternalTchapUser(roomListViewModel.session.myUserId)
         when (roomListParams.displayMode) {
             RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.isVisible = showFab
-            RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.isVisible = showFab
+            RoomListDisplayMode.PEOPLE -> views.createChatFabMenu.isVisible = showFab
             RoomListDisplayMode.ROOMS -> views.createRoomFabMenu.isVisible = showFab
             RoomListDisplayMode.FILTERED -> Unit // No button in this mode
         }
 
-        views.createChatRoomButton.debouncedClicks {
-            fabCreateDirectChat()
-        }
+        // Tchap : No createChatRoomButton
+        // views.createChatRoomButton.debouncedClicks {
+        //     fabCreateDirectChat()
+        // }
 
         // Hide FAB when list is scrolling
         views.roomListView.addOnScrollListener(
@@ -264,7 +268,7 @@ class RoomListFragment @Inject constructor(
                             RecyclerView.SCROLL_STATE_SETTLING -> {
                                 when (roomListParams.displayMode) {
                                     RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.hide()
-                                    RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.hide()
+                                    RoomListDisplayMode.PEOPLE -> views.createChatFabMenu.hide()
                                     RoomListDisplayMode.ROOMS -> views.createRoomFabMenu.hide()
                                     RoomListDisplayMode.FILTERED -> Unit
                                 }
@@ -433,7 +437,7 @@ class RoomListFragment @Inject constructor(
         if (isAdded) {
             when (roomListParams.displayMode) {
                 RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.show()
-                RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.show()
+                RoomListDisplayMode.PEOPLE -> Unit // tchap : no people button
                 RoomListDisplayMode.ROOMS -> views.createRoomFabMenu.show()
                 RoomListDisplayMode.FILTERED -> Unit
             }

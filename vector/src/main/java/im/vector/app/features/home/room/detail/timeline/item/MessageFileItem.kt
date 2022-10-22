@@ -188,6 +188,6 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentFileStub
+        private val STUB_ID = R.id.messageContentFileStub
     }
 }

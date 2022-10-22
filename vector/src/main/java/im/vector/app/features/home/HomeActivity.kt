@@ -41,9 +41,11 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
+import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorMenuProvider
+import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.utils.startSharePlainTextIntent
@@ -56,6 +58,10 @@ import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.disclaimer.shouldShowDisclaimerDialog
 import im.vector.app.features.disclaimer.showDisclaimerDialog
+import im.vector.app.features.home.room.list.actions.RoomListSharedAction
+import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
+import im.vector.app.features.home.room.list.home.layout.HomeLayoutSettingBottomDialogFragment
+import im.vector.app.features.home.room.list.home.release.ReleaseNotesActivity
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
@@ -82,8 +88,6 @@ import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.webview.VectorWebViewActivity
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
-import im.vector.app.nightly.NightlyProxy
-import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -114,6 +118,7 @@ class HomeActivity :
         VectorMenuProvider {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
+    private lateinit var roomListSharedActionViewModel: RoomListSharedActionViewModel
 
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
 
@@ -140,6 +145,8 @@ class HomeActivity :
     @Inject lateinit var fcmHelper: FcmHelper
     @Inject lateinit var nightlyProxy: NightlyProxy
 
+    private var isNewAppLayoutEnabled: Boolean = false // delete once old app layout is removed
+
     private val createSpaceResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             val spaceId = SpaceCreationActivity.getCreatedSpaceId(activityResult.data)
@@ -159,8 +166,9 @@ class HomeActivity :
                 navigator.switchToSpace(
                         context = this,
                         spaceId = spaceId,
-                        postSwitchOption
+                        postSwitchOption,
                 )
+                roomListSharedActionViewModel.post(RoomListSharedAction.CloseBottomSheet)
             }
         }
     }
@@ -197,6 +205,7 @@ class HomeActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        isNewAppLayoutEnabled = vectorPreferences.isNewAppLayoutEnabled()
         analyticsScreenName = MobileScreen.ScreenName.Home
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
         unifiedPushHelper.register(this) {
@@ -209,14 +218,16 @@ class HomeActivity :
             }
         }
         sharedActionViewModel = viewModelProvider[HomeSharedActionViewModel::class.java]
+        roomListSharedActionViewModel = viewModelProvider[RoomListSharedActionViewModel::class.java]
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
-            if (vectorFeatures.isNewAppLayoutEnabled()) {
+            if (vectorPreferences.isNewAppLayoutEnabled()) {
                 views.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 replaceFragment(views.homeDetailFragmentContainer, NewHomeDetailFragment::class.java)
             } else {
                 replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java)
                 replaceFragment(views.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
+                views.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             }
         }
 
@@ -275,6 +286,7 @@ class HomeActivity :
                 }
                 is HomeActivityViewEvents.OnCrossSignedInvalidated -> handleCrossSigningInvalidated(it)
                 HomeActivityViewEvents.ShowAnalyticsOptIn -> handleShowAnalyticsOptIn()
+                HomeActivityViewEvents.ShowReleaseNotes -> handleShowReleaseNotes()
                 HomeActivityViewEvents.NotifyUserForThreadsMigration -> handleNotifyUserForThreadsMigration()
                 is HomeActivityViewEvents.MigrateThreads -> migrateThreadsIfNeeded(it.checkSession)
             }
@@ -289,6 +301,10 @@ class HomeActivity :
         homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
     }
 
+    private fun handleShowReleaseNotes() {
+        startActivity(Intent(this, ReleaseNotesActivity::class.java))
+    }
+
     private fun showSpaceSettings(spaceId: String) {
         // open bottom sheet
         SpaceSettingsMenuBottomSheet
@@ -298,6 +314,11 @@ class HomeActivity :
                     }
                 })
                 .show(supportFragmentManager, "SPACE_SETTINGS")
+    }
+
+    private fun showLayoutSettings() {
+        HomeLayoutSettingBottomDialogFragment()
+                .show(supportFragmentManager, "LAYOUT_SETTINGS")
     }
 
     private fun openSpaceInvite(spaceId: String) {
@@ -373,7 +394,7 @@ class HomeActivity :
 
             lifecycleScope.launch {
                 val isHandled = permalinkHandler.launch(
-                        context = this@HomeActivity,
+                        fragmentActivity = this@HomeActivity,
                         deepLink = resolvedLink,
                         navigationInterceptor = this@HomeActivity,
                         buildTask = true
@@ -573,9 +594,17 @@ class HomeActivity :
 
         // Check nightly
         nightlyProxy.onHomeResumed()
+
+        checkNewAppLayoutFlagChange()
     }
 
-    override fun getMenuRes() = if (vectorFeatures.isNewAppLayoutEnabled()) R.menu.menu_new_home else R.menu.menu_home
+    private fun checkNewAppLayoutFlagChange() {
+        if (vectorPreferences.isNewAppLayoutEnabled() != isNewAppLayoutEnabled) {
+            restart()
+        }
+    }
+
+    override fun getMenuRes() = if (vectorPreferences.isNewAppLayoutEnabled()) R.menu.menu_new_home else R.menu.menu_home
 
     override fun handlePrepareMenu(menu: Menu) {
         menu.findItem(R.id.menu_home_init_sync_legacy).isVisible = vectorPreferences.developerMode()
@@ -613,6 +642,10 @@ class HomeActivity :
             }
             R.id.menu_home_setting -> {
                 navigator.openSettings(this)
+                true
+            }
+            R.id.menu_home_layout_settings -> {
+                showLayoutSettings()
                 true
             }
             R.id.menu_home_invite_friends -> {

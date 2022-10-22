@@ -149,10 +149,10 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
                 if (vectorFeatures.shouldStartDmOnFirstMessage()) {
                     session.roomService().createLocalRoom(roomParams)
                 } else {
+                    analyticsTracker.capture(CreatedRoom(isDM = roomParams.isDirect.orFalse()))
                     session.roomService().createRoom(roomParams)
                 }
             }
-            analyticsTracker.capture(CreatedRoom(isDM = roomParams.isDirect.orFalse()))
 
             setState {
                 copy(

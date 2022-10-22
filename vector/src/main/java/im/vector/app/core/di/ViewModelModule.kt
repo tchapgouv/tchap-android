@@ -35,6 +35,7 @@ import im.vector.app.features.home.HomeSharedActionViewModel
 import im.vector.app.features.home.room.detail.RoomDetailSharedActionViewModel
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
+import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import im.vector.app.features.reactions.EmojiChooserViewModel
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
 import im.vector.app.features.roomprofile.RoomProfileSharedActionViewModel
@@ -158,6 +159,11 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(SpacePeopleSharedActionViewModel::class)
     fun bindSpacePeopleSharedActionViewModel(viewModel: SpacePeopleSharedActionViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RoomListSharedActionViewModel::class)
+    fun bindRoomListSharedActionViewModel(viewModel: RoomListSharedActionViewModel): ViewModel
 
     @Binds
     @IntoMap
