@@ -29,11 +29,11 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import fr.gouv.tchap.features.roomprofile.settings.linkaccess.TchapRoomLinkAccessFragment
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.addFragmentToBackstack
-import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelperFactory
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith

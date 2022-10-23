@@ -23,8 +23,8 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
-import fr.gouv.tchap.core.dialogs.InviteByEmailDialog
 import dagger.hilt.android.AndroidEntryPoint
+import fr.gouv.tchap.core.dialogs.InviteByEmailDialog
 import im.vector.app.R
 import im.vector.app.config.Config
 import im.vector.app.core.extensions.cleanup

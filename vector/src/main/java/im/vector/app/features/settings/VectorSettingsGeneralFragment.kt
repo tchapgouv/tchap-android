@@ -33,11 +33,11 @@ import androidx.preference.SwitchPreference
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.cache.DiskCache
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import fr.gouv.tchap.android.sdk.api.session.accountdata.HideProfileContent
 import fr.gouv.tchap.android.sdk.api.session.accountdata.TchapUserAccountDataTypes.TYPE_HIDE_PROFILE
 import fr.gouv.tchap.core.utils.TchapUtils
 import fr.gouv.tchap.features.settings.TchapSettingsChangePasswordPreDialog
-import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelperFactory

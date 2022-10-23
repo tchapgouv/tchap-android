@@ -35,8 +35,8 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import fr.gouv.tchap.core.utils.TchapUtils
 import dagger.hilt.android.AndroidEntryPoint
+import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
