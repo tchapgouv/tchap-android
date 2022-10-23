@@ -105,7 +105,6 @@ import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
