@@ -235,7 +235,8 @@ class FtueAuthVariant(
                         FRAGMENT_EDIT_HOMESERVER_TAG,
                         FragmentManager.POP_BACK_STACK_INCLUSIVE
                 )
-                ensureEditServerBackstack()
+                // tchap : we should not edited server
+                // ensureEditServerBackstack()
             }
             OnboardingViewEvents.OpenCombinedLogin -> onStartCombinedLogin()
             OnboardingViewEvents.DisplayRegistrationFallback -> displayFallbackWebDialog()
