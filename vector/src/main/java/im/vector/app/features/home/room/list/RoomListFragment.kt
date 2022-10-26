@@ -240,15 +240,14 @@ class RoomListFragment :
         val showFab = !TchapUtils.isExternalTchapUser(roomListViewModel.session.myUserId)
         when (roomListParams.displayMode) {
             RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.isVisible = showFab
-            RoomListDisplayMode.PEOPLE -> Unit // tchap : no people button
+            RoomListDisplayMode.PEOPLE -> views.createChatFabMenu.isVisible = showFab
             RoomListDisplayMode.ROOMS -> views.createRoomFabMenu.isVisible = showFab
             RoomListDisplayMode.FILTERED -> Unit // No button in this mode
         }
 
-        // tchap : no people button
-        // views.createChatRoomButton.debouncedClicks {
-        //     fabCreateDirectChat()
-        // }
+        views.createChatFabMenu.debouncedClicks {
+             fabCreateDirectChat()
+        }
 
         // Hide FAB when list is scrolling
         views.roomListView.addOnScrollListener(
@@ -268,7 +267,7 @@ class RoomListFragment :
                             RecyclerView.SCROLL_STATE_SETTLING -> {
                                 when (roomListParams.displayMode) {
                                     RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.hide()
-                                    RoomListDisplayMode.PEOPLE -> Unit // tchap : no people button
+                                    RoomListDisplayMode.PEOPLE -> views.createChatFabMenu.hide()
                                     RoomListDisplayMode.ROOMS -> views.createRoomFabMenu.hide()
                                     RoomListDisplayMode.FILTERED -> Unit
                                 }

@@ -393,10 +393,6 @@ dependencies {
         exclude group: 'com.android.installreferrer'
     }
 
-    // tchap
-    // Fix issue on okhttp3 import
-    api 'com.squareup.okhttp3:okhttp'
-
     // QR-code
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170
     implementation 'com.google.zxing:core:3.3.3'
