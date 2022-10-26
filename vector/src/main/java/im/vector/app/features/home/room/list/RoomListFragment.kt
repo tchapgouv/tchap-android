@@ -245,9 +245,10 @@ class RoomListFragment :
             RoomListDisplayMode.FILTERED -> Unit // No button in this mode
         }
 
-        views.createChatFabMenu.debouncedClicks {
-             fabCreateDirectChat()
-        }
+        // Tchap : No createChatRoomButton
+        // views.createChatRoomButton.debouncedClicks {
+        //     fabCreateDirectChat()
+        // }
 
         // Hide FAB when list is scrolling
         views.roomListView.addOnScrollListener(
