@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.list
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -513,6 +514,9 @@ class RoomListFragment :
     private fun checkEmptyState() {
         val shouldShowEmpty = adapterInfosList.all { it.sectionHeaderAdapter.roomsSectionData.isHidden } &&
                 !adapterInfosList.any { it.sectionHeaderAdapter.roomsSectionData.isLoading }
+        adapterInfosList.filter { it.sectionHeaderAdapter.roomsSectionData.isLoading }.forEach {
+            Log.d("TAG", it.sectionHeaderAdapter.roomsSectionData.name)
+        }
         if (shouldShowEmpty) {
             val emptyState = when (roomListParams.displayMode) {
                 RoomListDisplayMode.NOTIFICATIONS -> {
