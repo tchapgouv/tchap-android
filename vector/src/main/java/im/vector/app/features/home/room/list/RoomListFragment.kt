@@ -139,14 +139,14 @@ class RoomListFragment :
                 is RoomListViewEvents.SelectRoom -> handleSelectRoom(it, it.isInviteAlreadyAccepted)
                 is RoomListViewEvents.Done -> Unit
                 is RoomListViewEvents.NavigateToMxToBottomSheet -> handleShowMxToLink(it.link)
-                RoomListViewEvents.CreateDirectChat             -> handleCreateDirectChat()
-                is RoomListViewEvents.CreateRoom                -> handleCreateRoom(it.initialName)
-                is RoomListViewEvents.OpenRoomDirectory         -> handleOpenRoomDirectory(it.filter)
+                RoomListViewEvents.CreateDirectChat -> handleCreateDirectChat()
+                is RoomListViewEvents.CreateRoom -> handleCreateRoom(it.initialName)
+                is RoomListViewEvents.OpenRoomDirectory -> handleOpenRoomDirectory(it.filter)
             }
         }
 
         views.createChatFabMenu.listener = this
-        views.createRoomFabMenu.listener = this
+        views.tchapCreateRoomFabMenu.listener = this
 
         sharedActionViewModel
                 .stream()
@@ -210,7 +210,7 @@ class RoomListFragment :
         footerController.listener = null
         // TODO Cleanup listener on the ConcatAdapter's adapters?
         stateRestorer.clear()
-        views.createRoomFabMenu.listener = null
+        views.tchapCreateRoomFabMenu.listener = null
         views.createChatFabMenu.listener = null
         concatAdapter = null
         super.onDestroyView()
@@ -241,15 +241,14 @@ class RoomListFragment :
         val showFab = !TchapUtils.isExternalTchapUser(roomListViewModel.session.myUserId)
         when (roomListParams.displayMode) {
             RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.isVisible = showFab
-            RoomListDisplayMode.PEOPLE -> views.createChatFabMenu.isVisible = showFab
-            RoomListDisplayMode.ROOMS -> views.createRoomFabMenu.isVisible = showFab
+            RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.isVisible = showFab
+            RoomListDisplayMode.ROOMS -> views.tchapCreateRoomFabMenu.isVisible = showFab
             RoomListDisplayMode.FILTERED -> Unit // No button in this mode
         }
 
-        // Tchap : No createChatRoomButton
-        // views.createChatRoomButton.debouncedClicks {
-        //     fabCreateDirectChat()
-        // }
+        views.createChatRoomButton.debouncedClicks {
+            fabCreateDirectChat()
+        }
 
         // Hide FAB when list is scrolling
         views.roomListView.addOnScrollListener(
@@ -258,19 +257,19 @@ class RoomListFragment :
                         if (!showFab) return // do nothing
 
                         views.createChatFabMenu.removeCallbacks(showFabRunnable)
-                        views.createRoomFabMenu.removeCallbacks(showFabRunnable)
+                        views.tchapCreateRoomFabMenu.removeCallbacks(showFabRunnable)
 
                         when (newState) {
                             RecyclerView.SCROLL_STATE_IDLE -> {
                                 views.createChatFabMenu.postDelayed(showFabRunnable, 250)
-                                views.createRoomFabMenu.postDelayed(showFabRunnable, 250)
+                                views.tchapCreateRoomFabMenu.postDelayed(showFabRunnable, 250)
                             }
                             RecyclerView.SCROLL_STATE_DRAGGING,
                             RecyclerView.SCROLL_STATE_SETTLING -> {
                                 when (roomListParams.displayMode) {
                                     RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.hide()
-                                    RoomListDisplayMode.PEOPLE -> views.createChatFabMenu.hide()
-                                    RoomListDisplayMode.ROOMS -> views.createRoomFabMenu.hide()
+                                    RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.hide()
+                                    RoomListDisplayMode.ROOMS -> views.tchapCreateRoomFabMenu.hide()
                                     RoomListDisplayMode.FILTERED -> Unit
                                 }
                             }
@@ -438,8 +437,8 @@ class RoomListFragment :
         if (isAdded) {
             when (roomListParams.displayMode) {
                 RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.show()
-                RoomListDisplayMode.PEOPLE -> Unit // tchap : no people button
-                RoomListDisplayMode.ROOMS -> views.createRoomFabMenu.show()
+                RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.show()
+                RoomListDisplayMode.ROOMS -> views.tchapCreateRoomFabMenu.show()
                 RoomListDisplayMode.FILTERED -> Unit
             }
         }
@@ -556,7 +555,7 @@ class RoomListFragment :
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
-        if (views.createChatFabMenu.onBackPressed() || views.createRoomFabMenu.onBackPressed()) {
+        if (views.createChatFabMenu.onBackPressed() || views.tchapCreateRoomFabMenu.onBackPressed()) {
             return true
         }
         return false
