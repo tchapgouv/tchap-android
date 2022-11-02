@@ -152,6 +152,9 @@ android {
         tchap {
             dimension "target"
 
+            // Tchap: Key Backup is not supported
+            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
+
             // Tchap: CrossSigning initialization is disabled
             def enableCrossSigning = false
             buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"

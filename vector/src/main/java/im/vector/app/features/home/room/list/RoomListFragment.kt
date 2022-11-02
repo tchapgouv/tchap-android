@@ -513,9 +513,6 @@ class RoomListFragment :
     private fun checkEmptyState() {
         val shouldShowEmpty = adapterInfosList.all { it.sectionHeaderAdapter.roomsSectionData.isHidden } &&
                 !adapterInfosList.any { it.sectionHeaderAdapter.roomsSectionData.isLoading }
-        adapterInfosList.filter { it.sectionHeaderAdapter.roomsSectionData.isLoading }.forEach {
-            Log.d("TAG", it.sectionHeaderAdapter.roomsSectionData.name)
-        }
         if (shouldShowEmpty) {
             val emptyState = when (roomListParams.displayMode) {
                 RoomListDisplayMode.NOTIFICATIONS -> {

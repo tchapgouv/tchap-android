@@ -105,6 +105,7 @@ import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
@@ -245,6 +246,25 @@ class DefaultNavigator @Inject constructor(
 
     override fun requestSessionVerification(fragmentActivity: FragmentActivity, otherSessionId: String) {
         val session = sessionHolder.getSafeActiveSession() ?: return
+
+        // Tchap: Check if cross signing is initialized & support verification between v1 and v2
+        val txId = if (session.cryptoService().crossSigningService().isCrossSigningInitialized()) {
+            session.cryptoService().verificationService().requestKeyVerification(
+                    supportedVerificationMethodsProvider.provide(),
+                    session.myUserId,
+                    listOf(otherSessionId)
+            ).transactionId
+        } else {
+            session.cryptoService()
+                    .verificationService()
+                    .beginKeyVerification(VerificationMethod.SAS, session.myUserId, otherSessionId, null)
+        }
+        VerificationBottomSheet.withArgs(
+                roomId = null,
+                otherUserId = session.myUserId,
+                transactionId = txId
+        ).show(fragmentActivity.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+
         val pr = session.cryptoService().verificationService().requestKeyVerification(
                 supportedVerificationMethodsProvider.provide(),
                 session.myUserId,

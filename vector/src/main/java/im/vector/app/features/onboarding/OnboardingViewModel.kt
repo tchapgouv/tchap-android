@@ -739,9 +739,10 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun canEditServerSelectionError(state: OnboardingViewState) =
-            (state.onboardingFlow == OnboardingFlow.SignIn && vectorFeatures.isOnboardingCombinedLoginEnabled()) ||
-                    (state.onboardingFlow == OnboardingFlow.SignUp && vectorFeatures.isOnboardingCombinedRegisterEnabled())
+    private fun canEditServerSelectionError(@Suppress("UNUSED_PARAMETER") state: OnboardingViewState) = false
+            // tchap : we should not be able to edit servor
+            // (state.onboardingFlow == OnboardingFlow.SignIn && vectorFeatures.isOnboardingCombinedLoginEnabled()) ||
+            //         (state.onboardingFlow == OnboardingFlow.SignUp && vectorFeatures.isOnboardingCombinedRegisterEnabled())
 
     private fun isUnableToSelectServer(error: Throwable, trigger: OnboardingAction.HomeServerChange) =
             trigger is OnboardingAction.HomeServerChange.SelectHomeServer && error.isHomeserverConnectionError()

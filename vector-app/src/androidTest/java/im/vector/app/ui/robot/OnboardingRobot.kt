@@ -37,11 +37,7 @@ import im.vector.app.waitForView
 
 class OnboardingRobot {
 
-    // Tchap: Use different onboarding variant to run the tests
-    private val context = InstrumentationRegistry.getInstrumentation().targetContext
-    private val defaultVectorFeatures = DebugVectorFeatures(context, DefaultVectorFeatures()).apply {
-        overrideEnum(OnboardingVariant.FTUE_AUTH, OnboardingVariant::class)
-    }
+    private val defaultVectorFeatures = DefaultVectorFeatures()
 
     fun crawl() {
         waitUntilViewVisible(withId(R.id.loginSplashSubmit))

@@ -26,7 +26,7 @@ knit {
         exclude '**/build/**'
         exclude '**/.gradle/**'
         exclude '**/towncrier/template.md'
-        exclude '**/CHANGES.md'
+        exclude '**/*_CHANGES.md' // Tchap: Exclude all changes files
     }
 }
 
@@ -88,7 +88,8 @@ static def gitBranchName() {
 
 // For Google Play build, build on any other branch than main will have a "-dev" suffix
 static def getGplayVersionSuffix() {
-    if (gitBranchName() == "main") {
+    // Tchap: No suffix for tagged release
+    if (gitBranchName() == "main" || gitTag().startsWith("tchap_v")) {
         return ""
     } else {
         return "-dev"
@@ -380,9 +381,6 @@ android {
 
             // Tchap: Hide labs menu item in tchap
             resValue "bool", "labs_settings_visible", "false"
-
-            // Tchap: Key Backup is not supported
-            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
         }
     }
 

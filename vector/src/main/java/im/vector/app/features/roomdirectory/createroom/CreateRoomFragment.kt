@@ -67,11 +67,10 @@ data class CreateRoomArgs(
 class CreateRoomFragment :
         VectorBaseFragment<FragmentCreateRoomBinding>(),
         TchapCreateRoomController.Listener,
-        CreateRoomController.Listener,
         GalleryOrCameraDialogHelper.Listener,
         OnBackPressed {
 
-    @Inject lateinit var createRoomController: CreateRoomController
+    @Inject lateinit var createRoomController: TchapCreateRoomController
     @Inject lateinit var createSpaceController: CreateSubSpaceController
     @Inject lateinit var galleryOrCameraDialogHelperFactory: GalleryOrCameraDialogHelperFactory
 
