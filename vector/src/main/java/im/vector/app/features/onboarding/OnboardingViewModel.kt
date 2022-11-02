@@ -740,7 +740,7 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun canEditServerSelectionError(@Suppress("UNUSED_PARAMETER") state: OnboardingViewState) = false
-            // tchap : we should not be able to edit servor
+            // tchap : we should not be able to edit server
             // (state.onboardingFlow == OnboardingFlow.SignIn && vectorFeatures.isOnboardingCombinedLoginEnabled()) ||
             //         (state.onboardingFlow == OnboardingFlow.SignUp && vectorFeatures.isOnboardingCombinedRegisterEnabled())
 
