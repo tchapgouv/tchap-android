@@ -18,7 +18,6 @@ package im.vector.app.features.home.room.list
 
 import android.os.Bundle
 import android.os.Parcelable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
