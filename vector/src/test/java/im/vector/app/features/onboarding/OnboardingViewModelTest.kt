@@ -491,7 +491,9 @@ class OnboardingViewModelTest {
                         { copy(isLoading = true) },
                         { copy(isLoading = false) }
                 )
-                .assertEvents(OnboardingViewEvents.EditServerSelection)
+                // Tchap: display error instead of server selection
+                .assertEvent { it is OnboardingViewEvents.Failure && it.throwable is Failure.NetworkConnection }
+//                .assertEvents(OnboardingViewEvents.EditServerSelection)
                 .finish()
     }
 
@@ -510,7 +512,9 @@ class OnboardingViewModelTest {
                         { copy(isLoading = true) },
                         { copy(isLoading = false) }
                 )
-                .assertEvents(OnboardingViewEvents.EditServerSelection)
+                // Tchap: display error instead of server selection
+                .assertEvent { it is OnboardingViewEvents.Failure && it.throwable is Failure.NetworkConnection }
+//                .assertEvents(OnboardingViewEvents.EditServerSelection)
                 .finish()
     }
 

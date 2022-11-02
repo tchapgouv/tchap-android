@@ -26,6 +26,7 @@ import im.vector.app.test.fakes.FakeVectorFeatures
 import im.vector.app.test.fakes.FakeVectorPreferences
 import im.vector.app.test.fakes.FakeWidgetArgsBuilder
 import im.vector.app.test.fixtures.RoomSummaryFixture.aRoomSummary
+import io.mockk.verify
 import org.junit.Test
 
 internal class DefaultNavigatorTest {
@@ -63,6 +64,8 @@ internal class DefaultNavigatorTest {
 
         navigator.switchToSpace(FakeContext().instance, spaceId, Navigator.PostSwitchSpaceAction.None)
 
-        spaceStateHandler.verifySetCurrentSpace(spaceId)
+        // Tchap: Spaces are disabled
+        verify(exactly = 0) { spaceStateHandler.setCurrentSpace(spaceId) }
+//        spaceStateHandler.verifySetCurrentSpace(spaceId)
     }
 }
