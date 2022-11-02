@@ -76,6 +76,9 @@ android {
 
     buildTypes {
         debug {
+            // Tchap: Show developer mode only in debug
+            resValue "bool", "developer_mode_visible", "true"
+
             if (project.hasProperty("coverage")) {
                 testCoverageEnabled = coverage.enableTestCoverage
             }
@@ -85,7 +88,10 @@ android {
 //            initWith release
 //            matchingFallbacks = ['release']
 //        }
-        release
+        release {
+            // Tchap: Show developer mode only in debug
+            resValue "bool", "developer_mode_visible", "false"
+        }
     }
 
     // The 'store' dimension permits to deal with GooglePlay/Fdroid app
