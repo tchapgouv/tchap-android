@@ -57,7 +57,7 @@ class RoomListRobot(private val labsPreferences: LabFeaturesPreferences) {
             waitUntilDialogVisible(ViewMatchers.withId(R.id.create_room))
             clickOn(R.id.create_room)
         } else {
-            clickOn(R.id.createRoomFabMenu)
+            clickOn(R.id.tchapCreateRoomFabMenu)
             waitUntilViewVisible(ViewMatchers.withId(R.id.joinForumItemGroup))
             clickOn(R.id.joinForumItemGroup)
             waitUntilActivityVisible<RoomDirectoryActivity> {
