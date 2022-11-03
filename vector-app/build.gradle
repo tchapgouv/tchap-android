@@ -351,9 +351,6 @@ android {
 
             applicationId "fr.gouv.tchap.dev"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}" + "_dev"
-
-            // Tchap: Show labs menu item in devTchap
-            resValue "bool", "labs_settings_visible", "true"
         }
 
         btchap {
@@ -363,9 +360,6 @@ android {
 
             applicationId "fr.gouv.rie.tchap"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}" + "_b"
-
-            // Tchap: Show labs menu item in btchap
-            resValue "bool", "labs_settings_visible", "true"
         }
 
         tchap {
@@ -375,9 +369,6 @@ android {
 
             applicationId "fr.gouv.tchap.a"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}"
-
-            // Tchap: Hide labs menu item in tchap
-            resValue "bool", "labs_settings_visible", "false"
         }
     }
 

@@ -141,6 +141,9 @@ android {
             def enableCrossSigning = true
             buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
             resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
+
+            // Tchap: Show labs menu item in devTchap
+            resValue "bool", "labs_settings_visible", "true"
         }
 
         btchap {
@@ -153,6 +156,9 @@ android {
             def enableCrossSigning = true
             buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
             resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
+
+            // Tchap: Show labs menu item in btchap
+            resValue "bool", "labs_settings_visible", "true"
         }
 
         tchap {
@@ -165,6 +171,9 @@ android {
             def enableCrossSigning = false
             buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
             resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
+
+            // Tchap: Hide labs menu item in tchap
+            resValue "bool", "labs_settings_visible", "false"
         }
     }
 
