@@ -28,6 +28,9 @@
         <!-- Ignore unused resource in debug build type -->
         <ignore path="**/src/debug/**" />
         <!-- Tchap: Use custom lint rules -->
+        <ignore path="**/devTchap/res/values/config.xml"/>
+        <ignore path="**/btchap/res/values/config.xml"/>
+        <ignore path="**/tchap/res/values/config.xml"/>
         <ignore path="**/main/res/values/strings.xml"/>
         <ignore path="**/main/res/drawable/ic_call_back_to_chat.xml"/>
         <ignore path="**/main/res/menu/vector_call.xml"/>
