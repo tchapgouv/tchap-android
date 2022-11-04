@@ -158,9 +158,10 @@ dependencies {
     // - https://github.com/square/okhttp/issues/3278
     // - https://github.com/square/okhttp/issues/4455
     // - https://github.com/square/okhttp/issues/3146
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
-    implementation 'com.squareup.okhttp3:okhttp'
-    implementation 'com.squareup.okhttp3:logging-interceptor'
+    // Tchap: Use api instead of implementation to share these dependencies with the other modules
+    api(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
+    api 'com.squareup.okhttp3:okhttp'
+    api 'com.squareup.okhttp3:logging-interceptor'
 
     implementation libs.squareup.moshi
     implementation libs.squareup.moshiAdapters
