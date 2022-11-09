@@ -17,7 +17,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "io.realm:realm-gradle-plugin:10.11.0"
+        classpath "io.realm:realm-gradle-plugin:10.11.1"
     }
 }
 
@@ -60,7 +60,7 @@ android {
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
-        buildConfigField "String", "SDK_VERSION", "\"1.4.32\""
+        buildConfigField "String", "SDK_VERSION", "\"1.4.36\""
 
         buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
         buildConfigField "String", "GIT_SDK_REVISION_UNIX_DATE", "\"${gitRevisionUnixDate()}\""
@@ -158,11 +158,13 @@ dependencies {
     // - https://github.com/square/okhttp/issues/3278
     // - https://github.com/square/okhttp/issues/4455
     // - https://github.com/square/okhttp/issues/3146
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
-    implementation 'com.squareup.okhttp3:okhttp'
-    implementation 'com.squareup.okhttp3:logging-interceptor'
+    // Tchap: Use api instead of implementation to share these dependencies with the other modules
+    api(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
+    api 'com.squareup.okhttp3:okhttp'
+    api 'com.squareup.okhttp3:logging-interceptor'
 
     implementation libs.squareup.moshi
+    implementation libs.squareup.moshiAdapters
     kapt libs.squareup.moshiKotlin
 
     api "com.atlassian.commonmark:commonmark:0.13.0"
@@ -198,8 +200,7 @@ dependencies {
     // Exif data handling
     implementation libs.apache.commonsImaging
 
-    // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.53'
+    implementation libs.google.phonenumber
 
     testImplementation libs.tests.junit
     // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281

@@ -26,7 +26,7 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_tchap_setting_link_access)
+@EpoxyModelClass
 abstract class TchapRoomLinkAccessItem : EpoxyModelWithHolder<TchapRoomLinkAccessItem.Holder>() {
 
     @EpoxyAttribute
@@ -41,6 +41,8 @@ abstract class TchapRoomLinkAccessItem : EpoxyModelWithHolder<TchapRoomLinkAcces
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var itemClickListener: ClickListener? = null
+
+    override fun getDefaultLayout() = R.layout.item_tchap_setting_link_access
 
     override fun bind(holder: Holder) {
         super.bind(holder)

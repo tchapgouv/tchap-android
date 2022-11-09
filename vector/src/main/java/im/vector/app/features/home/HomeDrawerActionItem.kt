@@ -27,7 +27,7 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
 
-@EpoxyModelClass(layout = R.layout.item_home_drawer_action)
+@EpoxyModelClass
 abstract class HomeDrawerActionItem : EpoxyModelWithHolder<HomeDrawerActionItem.Holder>() {
 
     @EpoxyAttribute
@@ -40,6 +40,8 @@ abstract class HomeDrawerActionItem : EpoxyModelWithHolder<HomeDrawerActionItem.
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var itemClickAction: ClickListener? = null
+
+    override fun getDefaultLayout() = R.layout.item_home_drawer_action
 
     override fun bind(holder: Holder) {
         super.bind(holder)

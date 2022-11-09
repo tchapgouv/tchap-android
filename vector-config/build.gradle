@@ -10,6 +10,16 @@ android {
         minSdk versions.minSdk
         targetSdk versions.targetSdk
     }
+
+    // The 'target' dimension permits to specify which platform are used
+    flavorDimensions "target"
+
+    productFlavors {
+        devTchap { dimension "target" }
+        btchap { dimension "target" }
+        tchap { dimension "target" }
+    }
+
     compileOptions {
         sourceCompatibility versions.sourceCompat
         targetCompatibility versions.targetCompat

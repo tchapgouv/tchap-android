@@ -41,7 +41,7 @@ jobs:
         with:
           name: ${{ matrix.target }}-debug
           path: |
-            vector/build/outputs/apk/*/debug/*.apk
+            vector-app/build/outputs/apk/*/debug/*.apk
 
   release:
     name: Build unsigned ${{ matrix.target }} APKs
@@ -73,7 +73,7 @@ jobs:
         with:
           name: ${{ matrix.target }}-release-unsigned
           path: |
-            vector/build/outputs/apk/*/release/*.apk
+            vector-app/build/outputs/apk/*/release/*.apk
 
   exodus:
     runs-on: ubuntu-latest

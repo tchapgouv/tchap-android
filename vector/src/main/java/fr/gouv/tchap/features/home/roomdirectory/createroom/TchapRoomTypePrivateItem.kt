@@ -26,7 +26,7 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
 
-@EpoxyModelClass(layout = R.layout.item_tchap_room_type_private)
+@EpoxyModelClass
 abstract class TchapRoomTypePrivateItem : EpoxyModelWithHolder<TchapRoomTypePrivateItem.Holder>() {
 
     @EpoxyAttribute
@@ -34,6 +34,8 @@ abstract class TchapRoomTypePrivateItem : EpoxyModelWithHolder<TchapRoomTypePriv
 
     @EpoxyAttribute
     var clickListener: ClickListener? = null
+
+    override fun getDefaultLayout() = R.layout.item_tchap_room_type_private
 
     override fun bind(holder: Holder) {
         super.bind(holder)

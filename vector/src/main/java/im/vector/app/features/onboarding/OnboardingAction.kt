@@ -84,7 +84,7 @@ sealed interface OnboardingAction : VectorViewModelAction {
 
     data class PostViewEvent(val viewEvent: OnboardingViewEvents) : OnboardingAction
 
-    data class UserAcceptCertificate(val fingerprint: Fingerprint) : OnboardingAction
+    data class UserAcceptCertificate(val fingerprint: Fingerprint, val retryAction: OnboardingAction) : OnboardingAction
 
     object PersonalizeProfile : OnboardingAction
     data class UpdateDisplayName(val displayName: String) : OnboardingAction

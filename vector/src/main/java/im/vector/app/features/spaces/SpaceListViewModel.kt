@@ -65,7 +65,7 @@ class SpaceListViewModel @AssistedInject constructor(
         private val session: Session,
         private val vectorPreferences: VectorPreferences,
         private val autoAcceptInvites: AutoAcceptInvites,
-        private val analyticsTracker: AnalyticsTracker
+        private val analyticsTracker: AnalyticsTracker,
 ) : VectorViewModel<SpaceListViewState, SpaceListAction, SpaceListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -88,9 +88,7 @@ class SpaceListViewModel @AssistedInject constructor(
         spaceStateHandler.getSelectedSpaceFlow()
                 .distinctUntilChanged()
                 .setOnEach { selectedSpaceOption ->
-                    copy(
-                            selectedSpace = selectedSpaceOption.orNull()
-                    )
+                    copy(selectedSpace = selectedSpaceOption.orNull())
                 }
 
         // XXX there should be a way to refactor this and share it
@@ -194,7 +192,7 @@ class SpaceListViewModel @AssistedInject constructor(
                         val moved = removeAt(index)
                         add(index + action.delta, moved)
                     },
-                    spaceOrderLocalEchos = updatedLocalEchos
+                    spaceOrderLocalEchos = updatedLocalEchos,
             )
         }
         session.coroutineScope.launch {
@@ -257,29 +255,32 @@ class SpaceListViewModel @AssistedInject constructor(
         }
 
         combine(
-                session.flow()
-                        .liveSpaceSummaries(params),
+                session.flow().liveSpaceSummaries(params),
                 session.accountDataService()
                         .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
                         .asFlow()
         ) { spaces, _ ->
             spaces
+        }.execute { asyncSpaces ->
+            val spaces = asyncSpaces.invoke().orEmpty()
+            val rootSpaces = asyncSpaces.invoke().orEmpty().filter { it.flattenParentIds.isEmpty() }
+            val orders = rootSpaces.associate {
+                it.roomId to session.getRoom(it.roomId)
+                        ?.roomAccountDataService()
+                        ?.getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER)
+                        ?.content.toModel<SpaceOrderContent>()
+                        ?.safeOrder()
+            }
+            val inviterIds = spaces.mapNotNull { it.inviterId }
+            val inviters = inviterIds.mapNotNull { session.userService().getUser(it) }
+            copy(
+                    asyncSpaces = asyncSpaces,
+                    spaces = spaces,
+                    inviters = inviters,
+                    rootSpacesOrdered = rootSpaces.sortedWith(TopLevelSpaceComparator(orders)),
+                    spaceOrderInfo = orders,
+            )
         }
-                .execute { async ->
-                    val rootSpaces = async.invoke().orEmpty().filter { it.flattenParentIds.isEmpty() }
-                    val orders = rootSpaces.associate {
-                        it.roomId to session.getRoom(it.roomId)
-                                ?.roomAccountDataService()
-                                ?.getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER)
-                                ?.content.toModel<SpaceOrderContent>()
-                                ?.safeOrder()
-                    }
-                    copy(
-                            asyncSpaces = async,
-                            rootSpacesOrdered = rootSpaces.sortedWith(TopLevelSpaceComparator(orders)),
-                            spaceOrderInfo = orders
-                    )
-                }
 
         // clear local echos on update
         session.accountDataService()
