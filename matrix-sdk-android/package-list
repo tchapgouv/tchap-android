@@ -340,7 +340,7 @@ $dokka.location:org.matrix.android.sdk.api.crypto/MXCryptoConfig/onlyRequestRoom
 $dokka.location:org.matrix.android.sdk.api.debug////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.debug/index.html
 $dokka.location:org.matrix.android.sdk.api.debug/DebugService///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.debug/-debug-service/index.html
 $dokka.location:org.matrix.android.sdk.api.debug/DebugService/getAllRealmConfigurations/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.debug/-debug-service/get-all-realm-configurations.html
-$dokka.location:org.matrix.android.sdk.api.debug/DebugService/logDbUsageInfo/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.debug/-debug-service/log-db-usage-info.html
+$dokka.location:org.matrix.android.sdk.api.debug/DebugService/getDbUsageInfo/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.debug/-debug-service/get-db-usage-info.html
 $dokka.location:org.matrix.android.sdk.api.extensions////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.extensions/index.html
 $dokka.location:org.matrix.android.sdk.api.extensions//appendNl/java.lang.StringBuilder#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.extensions/append-nl.html
 $dokka.location:org.matrix.android.sdk.api.extensions//ensureNotEmpty/kotlin.String#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.extensions/ensure-not-empty.html
@@ -354,6 +354,7 @@ $dokka.location:org.matrix.android.sdk.api.failure////PointingToDeclaration/mat
 $dokka.location:org.matrix.android.sdk.api.failure//getRetryDelay/kotlin.Throwable#kotlin.Long/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/get-retry-delay.html
 $dokka.location:org.matrix.android.sdk.api.failure//is401/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is401.html
 $dokka.location:org.matrix.android.sdk.api.failure//is404/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is404.html
+$dokka.location:org.matrix.android.sdk.api.failure//isHomeserverConnectionError/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-homeserver-connection-error.html
 $dokka.location:org.matrix.android.sdk.api.failure//isHomeserverUnavailable/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-homeserver-unavailable.html
 $dokka.location:org.matrix.android.sdk.api.failure//isInvalidPassword/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-invalid-password.html
 $dokka.location:org.matrix.android.sdk.api.failure//isInvalidUIAAuth/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-invalid-u-i-a-auth.html
@@ -364,6 +365,7 @@ $dokka.location:org.matrix.android.sdk.api.failure//isMissingEmailVerification/k
 $dokka.location:org.matrix.android.sdk.api.failure//isRegistrationAvailabilityError/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-registration-availability-error.html
 $dokka.location:org.matrix.android.sdk.api.failure//isRegistrationDisabled/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-registration-disabled.html
 $dokka.location:org.matrix.android.sdk.api.failure//isTokenError/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-token-error.html
+$dokka.location:org.matrix.android.sdk.api.failure//isUnrecognisedCertificate/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-unrecognised-certificate.html
 $dokka.location:org.matrix.android.sdk.api.failure//isUsernameInUse/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-username-in-use.html
 $dokka.location:org.matrix.android.sdk.api.failure//isWeakPassword/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-weak-password.html
 $dokka.location:org.matrix.android.sdk.api.failure//shouldBeRetried/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/should-be-retried.html
@@ -1519,10 +1521,10 @@ $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/enableSh
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/encryptEventContent/#kotlin.collections.Map[kotlin.String,kotlin.Any]#kotlin.String#kotlin.String#org.matrix.android.sdk.api.MatrixCallback[org.matrix.android.sdk.api.session.crypto.model.MXEncryptEventContentResult]/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/encrypt-event-content.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/exportRoomKeys/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/export-room-keys.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/fetchDevicesList/#org.matrix.android.sdk.api.MatrixCallback[org.matrix.android.sdk.api.session.crypto.model.DevicesListResponse]/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/fetch-devices-list.html
+$dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getCryptoDeviceInfo/#kotlin.String#kotlin.String?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-crypto-device-info.html
+$dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getCryptoDeviceInfo/#kotlin.String#org.matrix.android.sdk.api.MatrixCallback[org.matrix.android.sdk.api.session.crypto.model.DeviceInfo]/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-crypto-device-info.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getCryptoDeviceInfo/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-crypto-device-info.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getCryptoVersion/#android.content.Context#kotlin.Boolean/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-crypto-version.html
-$dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getDeviceInfo/#kotlin.String#kotlin.String?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-device-info.html
-$dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getDeviceInfo/#kotlin.String#org.matrix.android.sdk.api.MatrixCallback[org.matrix.android.sdk.api.session.crypto.model.DeviceInfo]/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-device-info.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getDeviceTrackingStatus/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-device-tracking-status.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getEncryptionAlgorithm/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-encryption-algorithm.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getGlobalBlacklistUnverifiedDevices/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-global-blacklist-unverified-devices.html
@@ -1533,9 +1535,11 @@ $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getIncom
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getLiveCryptoDeviceInfo/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-live-crypto-device-info.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getLiveCryptoDeviceInfo/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-live-crypto-device-info.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getLiveCryptoDeviceInfo/#kotlin.collections.List[kotlin.String]/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-live-crypto-device-info.html
-$dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getLiveMyDevicesInfo/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-live-my-devices-info.html
+$dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getLiveCryptoDeviceInfoWithId/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-live-crypto-device-info-with-id.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getMyDevice/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-my-device.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getMyDevicesInfo/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-my-devices-info.html
+$dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getMyDevicesInfoLive/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-my-devices-info-live.html
+$dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getMyDevicesInfoLive/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-my-devices-info-live.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getOutgoingRoomKeyRequests/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-outgoing-room-key-requests.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getOutgoingRoomKeyRequestsPaged/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-outgoing-room-key-requests-paged.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getSharedWithInfo/#kotlin.String?#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-shared-with-info.html
@@ -1814,6 +1818,7 @@ $dokka.location:org.matrix.android.sdk.api.session.events.model/EventType/KEY_VE
 $dokka.location:org.matrix.android.sdk.api.session.events.model/EventType/KEY_VERIFICATION_MAC/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.events.model/-event-type/-k-e-y_-v-e-r-i-f-i-c-a-t-i-o-n_-m-a-c.html
 $dokka.location:org.matrix.android.sdk.api.session.events.model/EventType/KEY_VERIFICATION_READY/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.events.model/-event-type/-k-e-y_-v-e-r-i-f-i-c-a-t-i-o-n_-r-e-a-d-y.html
 $dokka.location:org.matrix.android.sdk.api.session.events.model/EventType/KEY_VERIFICATION_START/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.events.model/-event-type/-k-e-y_-v-e-r-i-f-i-c-a-t-i-o-n_-s-t-a-r-t.html
+$dokka.location:org.matrix.android.sdk.api.session.events.model/EventType/LOCAL_STATE_ROOM_THIRD_PARTY_INVITE/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.events.model/-event-type/-l-o-c-a-l_-s-t-a-t-e_-r-o-o-m_-t-h-i-r-d_-p-a-r-t-y_-i-n-v-i-t-e.html
 $dokka.location:org.matrix.android.sdk.api.session.events.model/EventType/MESSAGE/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.events.model/-event-type/-m-e-s-s-a-g-e.html
 $dokka.location:org.matrix.android.sdk.api.session.events.model/EventType/MISSING_TYPE/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.events.model/-event-type/-m-i-s-s-i-n-g_-t-y-p-e.html
 $dokka.location:org.matrix.android.sdk.api.session.events.model/EventType/PLUMBING/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.events.model/-event-type/-p-l-u-m-b-i-n-g.html
@@ -2598,6 +2603,7 @@ $dokka.location:org.matrix.android.sdk.api.session.room.model.call/SdpType.OFFER
 $dokka.location:org.matrix.android.sdk.api.session.room.model.call/SdpType///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.call/-sdp-type/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model.create////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.create/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model.create/CreateRoomParams.Companion///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.create/-create-room-params/-companion/index.html
+$dokka.location:org.matrix.android.sdk.api.session.room.model.create/CreateRoomParams.Companion/fromJson/#kotlin.String?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.create/-create-room-params/-companion/from-json.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model.create/CreateRoomParams///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.create/-create-room-params/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model.create/CreateRoomParams/CreateRoomParams/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.create/-create-room-params/-create-room-params.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model.create/CreateRoomParams/algorithm/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.create/-create-room-params/algorithm.html
@@ -3190,6 +3196,7 @@ $dokka.location:org.matrix.android.sdk.api.session.room.model/RoomHistoryVisibil
 $dokka.location:org.matrix.android.sdk.api.session.room.model/RoomHistoryVisibility.SHARED///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}matrix-sdk-android/org.matrix.android.sdk.api.session.room.model/-room-history-visibility/-s-h-a-r-e-d/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model/RoomHistoryVisibility.WORLD_READABLE///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}matrix-sdk-android/org.matrix.android.sdk.api.session.room.model/-room-history-visibility/-w-o-r-l-d_-r-e-a-d-a-b-l-e/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model/RoomHistoryVisibility///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model/-room-history-visibility/index.html
+$dokka.location:org.matrix.android.sdk.api.session.room.model/RoomHistoryVisibility/value/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model/-room-history-visibility/value.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model/RoomHistoryVisibilityContent///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model/-room-history-visibility-content/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model/RoomHistoryVisibilityContent/RoomHistoryVisibilityContent/#kotlin.String?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model/-room-history-visibility-content/-room-history-visibility-content.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model/RoomHistoryVisibilityContent/historyVisibility/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model/-room-history-visibility-content/history-visibility.html
@@ -4167,6 +4174,7 @@ $dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/getSyncReque
 $dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/getSyncState/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/get-sync-state.html
 $dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/getSyncStateLive/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/get-sync-state-live.html
 $dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/hasAlreadySynced/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/has-already-synced.html
+$dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/isSyncThreadAlive/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/is-sync-thread-alive.html
 $dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/requireBackgroundSync/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/require-background-sync.html
 $dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/startAutomaticBackgroundSync/#kotlin.Long#kotlin.Long/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/start-automatic-background-sync.html
 $dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/startSync/#kotlin.Boolean/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/start-sync.html
@@ -4384,6 +4392,7 @@ $dokka.location:org.matrix.android.sdk.api.session/Session/eventStreamService/#/
 $dokka.location:org.matrix.android.sdk.api.session/Session/federationService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/federation-service.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/fileService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/file-service.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/filterService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/filter-service.html
+$dokka.location:org.matrix.android.sdk.api.session/Session/getDbUsageInfo/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/get-db-usage-info.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/getOkHttpClient/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/get-ok-http-client.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/getRealmConfigurations/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/get-realm-configurations.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/getUiaSsoFallbackUrl/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/get-uia-sso-fallback-url.html
@@ -4391,7 +4400,6 @@ $dokka.location:org.matrix.android.sdk.api.session/Session/homeServerCapabilitie
 $dokka.location:org.matrix.android.sdk.api.session/Session/identityService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/identity-service.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/integrationManagerService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/integration-manager-service.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/isOpenable/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/is-openable.html
-$dokka.location:org.matrix.android.sdk.api.session/Session/logDbUsageInfo/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/log-db-usage-info.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/mediaService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/media-service.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/myUserId/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/my-user-id.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/open/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/open.html
@@ -4648,6 +4656,11 @@ $dokka.location:org.matrix.android.sdk.internal.crypto.model/SessionInfo///Point
 $dokka.location:org.matrix.android.sdk.internal.crypto.model/SessionInfo/SessionInfo/#kotlin.String#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.model/-session-info/-session-info.html
 $dokka.location:org.matrix.android.sdk.internal.crypto.model/SessionInfo/senderKey/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.model/-session-info/sender-key.html
 $dokka.location:org.matrix.android.sdk.internal.crypto.model/SessionInfo/sessionId/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.model/-session-info/session-id.html
+$dokka.location:org.matrix.android.sdk.internal.database////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.database/index.html
+$dokka.location:org.matrix.android.sdk.internal.database/RealmCompactOnLaunch///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.database/-realm-compact-on-launch/index.html
+$dokka.location:org.matrix.android.sdk.internal.database/RealmCompactOnLaunch/RealmCompactOnLaunch/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.database/-realm-compact-on-launch/-realm-compact-on-launch.html
+$dokka.location:org.matrix.android.sdk.internal.database/RealmCompactOnLaunch/equals/#kotlin.Any?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.database/-realm-compact-on-launch/equals.html
+$dokka.location:org.matrix.android.sdk.internal.database/RealmCompactOnLaunch/hashCode/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.database/-realm-compact-on-launch/hash-code.html
 $dokka.location:org.matrix.android.sdk.internal.session.room.aggregation.poll////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.session.room.aggregation.poll/index.html
 $dokka.location:org.matrix.android.sdk.internal.session.room.aggregation.poll/DefaultPollAggregationProcessor///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.session.room.aggregation.poll/-default-poll-aggregation-processor/index.html
 $dokka.location:org.matrix.android.sdk.internal.session.room.aggregation.poll/DefaultPollAggregationProcessor/DefaultPollAggregationProcessor/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.session.room.aggregation.poll/-default-poll-aggregation-processor/-default-poll-aggregation-processor.html
@@ -4792,6 +4805,7 @@ org.matrix.android.sdk.api.session.widgets.model
 org.matrix.android.sdk.api.settings
 org.matrix.android.sdk.api.util
 org.matrix.android.sdk.internal.crypto.model
+org.matrix.android.sdk.internal.database
 org.matrix.android.sdk.internal.session.room.aggregation.poll
 org.matrix.android.sdk.userstories
 
