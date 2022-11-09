@@ -222,14 +222,16 @@ class RoomListSectionBuilder(
             liveSuggestedRooms.postValue(it)
         }.launchIn(viewModelScope)
 
-        sections.add(
-                RoomsSection(
-                        sectionName = stringProvider.getString(R.string.suggested_header),
-                        liveSuggested = liveSuggestedRooms,
-                        notifyOfLocalEcho = false,
-                        itemCount = suggestedRoomsFlow.map { suggestions -> suggestions.size }
-                )
-        )
+
+        // Tchap : bypass temporarily live suggested rooms to prevent infinite load
+//        sections.add(
+//                RoomsSection(
+//                        sectionName = stringProvider.getString(R.string.suggested_header),
+//                        liveSuggested = liveSuggestedRooms,
+//                        notifyOfLocalEcho = false,
+//                        itemCount = suggestedRoomsFlow.map { suggestions -> suggestions.size }
+//                )
+//        )
     }
 
     private fun buildDmSections(
