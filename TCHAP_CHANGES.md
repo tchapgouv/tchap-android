@@ -1,3 +1,20 @@
+Changes in Tchap 2.5.0 (2022-11-10)
+===================================
+
+Improvements 🙌
+--------------
+ - Update the registration, login and forget password flows ([#708](https://github.com/tchapgouv/tchap-android-v2/issues/708))
+ - Rebase against Element-Android v1.4.28 ([#711](https://github.com/tchapgouv/tchap-android-v2/issues/711))
+ - Rebase against Element-Android v1.4.30 ([#712](https://github.com/tchapgouv/tchap-android-v2/issues/712))
+ - Rebase against Element-Android v1.4.32 ([#713](https://github.com/tchapgouv/tchap-android-v2/issues/713))
+
+Other changes
+-------------
+ - Enable Danger on the CI ([#714](https://github.com/tchapgouv/tchap-android-v2/issues/714))
+ - CI - Fix build APKs script ([#724](https://github.com/tchapgouv/tchap-android-v2/issues/724))
+ - Rebase against Element-Android v1.4.36 ([#753](https://github.com/tchapgouv/tchap-android-v2/issues/753))
+
+
 Changes in Tchap 2.4.4 (2022-10-12)
 ===================================
 
