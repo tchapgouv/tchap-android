@@ -30,7 +30,6 @@ import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -64,16 +63,19 @@ import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.epoxy.addGlidePreloader
 import com.airbnb.epoxy.glidePreloader
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.vanniktech.emoji.EmojiPopup
-import im.vector.app.BuildConfig
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.config.Config
 import im.vector.app.core.animations.play
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelperFactory
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.error.fatalError
 import im.vector.app.core.extensions.cleanup
@@ -91,8 +93,10 @@ import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.platform.lifecycleAwareLazy
 import im.vector.app.core.platform.showOptimizedSnackbar
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.core.time.Clock
@@ -126,6 +130,7 @@ import im.vector.app.core.utils.startInstallFromSourceIntent
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogReportContentBinding
 import im.vector.app.databinding.FragmentTimelineBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.extensions.toAnalyticsInteraction
 import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.analytics.plan.MobileScreen
@@ -159,6 +164,7 @@ import im.vector.app.features.home.room.detail.composer.SendMode
 import im.vector.app.features.home.room.detail.composer.boolean
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingUiState
+import im.vector.app.features.home.room.detail.error.RoomNotFound
 import im.vector.app.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
@@ -255,36 +261,41 @@ import java.net.URL
 import java.util.UUID
 import javax.inject.Inject
 
-class TimelineFragment @Inject constructor(
-        private val session: Session,
-        private val avatarRenderer: AvatarRenderer,
-        private val timelineEventController: TimelineEventController,
-        autoCompleterFactory: AutoCompleter.Factory,
-        private val permalinkHandler: PermalinkHandler,
-        private val notificationDrawerManager: NotificationDrawerManager,
-        private val eventHtmlRenderer: EventHtmlRenderer,
-        private val vectorPreferences: VectorPreferences,
-        private val threadsManager: ThreadsManager,
-        private val colorProvider: ColorProvider,
-        private val dimensionConverter: DimensionConverter,
-        private val userPreferencesProvider: UserPreferencesProvider,
-        private val notificationUtils: NotificationUtils,
-        private val matrixItemColorProvider: MatrixItemColorProvider,
-        private val imageContentRenderer: ImageContentRenderer,
-        private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
-        private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
-        private val callManager: WebRtcCallManager,
-        private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
-        private val shareIntentHandler: ShareIntentHandler,
-        private val clock: Clock
-) :
+@AndroidEntryPoint
+class TimelineFragment :
         VectorBaseFragment<FragmentTimelineBinding>(),
         TimelineEventController.Callback,
         VectorInviteView.Callback,
         AttachmentTypeSelectorView.Callback,
         AttachmentsHelper.Callback,
         GalleryOrCameraDialogHelper.Listener,
-        CurrentCallsView.Callback {
+        CurrentCallsView.Callback,
+        VectorMenuProvider {
+
+    @Inject lateinit var session: Session
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var timelineEventController: TimelineEventController
+    @Inject lateinit var autoCompleterFactory: AutoCompleter.Factory
+    @Inject lateinit var permalinkHandler: PermalinkHandler
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+    @Inject lateinit var eventHtmlRenderer: EventHtmlRenderer
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var threadsManager: ThreadsManager
+    @Inject lateinit var colorProvider: ColorProvider
+    @Inject lateinit var dimensionConverter: DimensionConverter
+    @Inject lateinit var userPreferencesProvider: UserPreferencesProvider
+    @Inject lateinit var notificationUtils: NotificationUtils
+    @Inject lateinit var matrixItemColorProvider: MatrixItemColorProvider
+    @Inject lateinit var imageContentRenderer: ImageContentRenderer
+    @Inject lateinit var roomDetailPendingActionStore: RoomDetailPendingActionStore
+    @Inject lateinit var pillsPostProcessorFactory: PillsPostProcessor.Factory
+    @Inject lateinit var callManager: WebRtcCallManager
+    @Inject lateinit var audioMessagePlaybackTracker: AudioMessagePlaybackTracker
+    @Inject lateinit var shareIntentHandler: ShareIntentHandler
+    @Inject lateinit var clock: Clock
+    @Inject lateinit var vectorFeatures: VectorFeatures
+    @Inject lateinit var buildMeta: BuildMeta
+    @Inject lateinit var galleryOrCameraDialogHelperFactory: GalleryOrCameraDialogHelperFactory
 
     companion object {
 
@@ -306,7 +317,7 @@ class TimelineFragment @Inject constructor(
         private const val ircPattern = " (IRC)"
     }
 
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
+    private lateinit var galleryOrCameraDialogHelper: GalleryOrCameraDialogHelper
 
     private val timelineArgs: TimelineArgs by args()
     private val glideRequests by lazy {
@@ -359,6 +370,7 @@ class TimelineFragment @Inject constructor(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         analyticsScreenName = MobileScreen.ScreenName.Room
+        galleryOrCameraDialogHelper = galleryOrCameraDialogHelperFactory.create(this)
         setFragmentResultListener(MigrateRoomBottomSheet.REQUEST_KEY) { _, bundle ->
             bundle.getString(MigrateRoomBottomSheet.BUNDLE_KEY_REPLACEMENT_ROOM)?.let { replacementRoomId ->
                 timelineViewModel.handle(RoomDetailAction.RoomUpgradeSuccess(replacementRoomId))
@@ -372,7 +384,7 @@ class TimelineFragment @Inject constructor(
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
         sharedActivityActionViewModel = activityViewModelProvider.get(RoomDetailSharedActionViewModel::class.java)
         knownCallsViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
-        attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
+        attachmentsHelper = AttachmentsHelper(requireContext(), this, buildMeta).register()
         callActionsHandler = StartCallActionsHandler(
                 roomId = timelineArgs.roomId,
                 fragment = this,
@@ -487,7 +499,7 @@ class TimelineFragment @Inject constructor(
                 RoomDetailViewEvents.HideWaitingView -> vectorBaseActivity.hideWaitingView()
                 is RoomDetailViewEvents.RequestNativeWidgetPermission -> requestNativeWidgetPermission(it)
                 is RoomDetailViewEvents.OpenRoom -> handleOpenRoom(it)
-                RoomDetailViewEvents.OpenInvitePeople -> navigator.openInviteUsersToRoom(requireContext(), timelineArgs.roomId)
+                RoomDetailViewEvents.OpenInvitePeople -> navigator.openInviteUsersToRoom(requireActivity(), timelineArgs.roomId)
                 RoomDetailViewEvents.OpenSetRoomAvatarDialog -> galleryOrCameraDialogHelper.show()
                 RoomDetailViewEvents.OpenRoomSettings -> handleOpenRoomSettings(RoomProfileActivity.EXTRA_DIRECT_ACCESS_ROOM_SETTINGS)
                 RoomDetailViewEvents.OpenRoomProfile -> handleOpenRoomSettings()
@@ -498,7 +510,7 @@ class TimelineFragment @Inject constructor(
                 RoomDetailViewEvents.StopChatEffects -> handleStopChatEffects()
                 is RoomDetailViewEvents.DisplayAndAcceptCall -> acceptIncomingCall(it)
                 RoomDetailViewEvents.RoomReplacementStarted -> handleRoomReplacement()
-                is RoomDetailViewEvents.ChangeLocationIndicator -> handleChangeLocationIndicator(it)
+                RoomDetailViewEvents.OpenElementCallWidget -> handleOpenElementCallWidget()
             }
         }
 
@@ -543,7 +555,7 @@ class TimelineFragment @Inject constructor(
         } else {
             views.composerLayout.views.sendButton.isInvisible = true
             views.voiceMessageRecorderView.alpha = 0f
-            views.voiceMessageRecorderView.isVisible = BuildConfig.SHOW_VOICE_RECORDER
+            views.voiceMessageRecorderView.isVisible = Config.SHOW_VOICE_RECORDER
             views.voiceMessageRecorderView.animate().alpha(1f).setDuration(150).start()
         }
     }
@@ -656,15 +668,11 @@ class TimelineFragment @Inject constructor(
                 )
     }
 
-    private fun navigateToLocationLiveMap() {
-        navigator.openLocationLiveMap(
+    private fun navigateToLiveLocationMap() {
+        navigator.openLiveLocationMap(
                 context = requireContext(),
                 roomId = timelineArgs.roomId
         )
-    }
-
-    private fun handleChangeLocationIndicator(event: RoomDetailViewEvents.ChangeLocationIndicator) {
-        views.locationLiveStatusIndicator.isVisible = event.isVisible
     }
 
     private fun displayErrorMessage(error: RoomDetailViewEvents.Failure) {
@@ -861,8 +869,11 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun setupLiveLocationIndicator() {
-        views.locationLiveStatusIndicator.stopButton.debouncedClicks {
+        views.liveLocationStatusIndicator.stopButton.debouncedClicks {
             timelineViewModel.handle(RoomDetailAction.StopLiveLocationSharing)
+        }
+        views.liveLocationStatusIndicator.debouncedClicks {
+            navigateToLiveLocationMap()
         }
     }
 
@@ -963,7 +974,7 @@ class TimelineFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        audioMessagePlaybackTracker.makeAllPlaybacksIdle()
+        messageComposerViewModel.endAllVoiceActions()
         lazyLoadedViews.unBind()
         timelineEventController.callback = null
         timelineEventController.removeModelBuildListener(modelBuildListener)
@@ -985,9 +996,9 @@ class TimelineFragment @Inject constructor(
         views.jumpToBottomView.debouncedClicks {
             timelineViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
             views.jumpToBottomView.visibility = View.INVISIBLE
-            if (!timelineViewModel.timeline.isLive) {
+            if (timelineViewModel.timeline?.isLive == false) {
                 scrollOnNewMessageCallback.forceScrollOnNextUpdate()
-                timelineViewModel.timeline.restartWithEventId(null)
+                timelineViewModel.timeline?.restartWithEventId(null)
             } else {
                 layoutManager.scrollToPosition(0)
             }
@@ -1059,15 +1070,14 @@ class TimelineFragment @Inject constructor(
     }
 
     @SuppressLint("RestrictedApi")
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    override fun handlePostCreateMenu(menu: Menu) {
         if (isThreadTimeLine()) {
             if (menu is MenuBuilder) menu.setOptionalIconsVisible(true)
         }
-        super.onCreateOptionsMenu(menu, inflater)
         // We use a custom layout for this menu item, so we need to set a ClickListener
         menu.findItem(R.id.open_matrix_apps)?.let { menuItem ->
             menuItem.actionView.debouncedClicks {
-                onOptionsItemSelected(menuItem)
+                handleMenuItemSelected(menuItem)
             }
         }
         val joinConfItem = menu.findItem(R.id.join_conference)
@@ -1077,13 +1087,13 @@ class TimelineFragment @Inject constructor(
 
         // Custom thread notification menu item
         menu.findItem(R.id.menu_timeline_thread_list)?.let { menuItem ->
-            menuItem.actionView.setOnClickListener {
-                onOptionsItemSelected(menuItem)
+            menuItem.actionView.debouncedClicks {
+                handleMenuItemSelected(menuItem)
             }
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun handlePrepareMenu(menu: Menu) {
         menu.forEach {
             it.isVisible = timelineViewModel.isMenuItemVisible(it.itemId)
         }
@@ -1096,9 +1106,8 @@ class TimelineFragment @Inject constructor(
                 2 -> state.isAllowedToStartWebRTCCall
                 else -> state.isAllowedToManageWidgets
             }
-            setOf(R.id.voice_call, R.id.video_call).forEach {
-                menu.findItem(it).icon?.alpha = if (callButtonsEnabled) 0xFF else 0x40
-            }
+            menu.findItem(R.id.video_call).icon?.alpha = if (callButtonsEnabled) 0xFF else 0x40
+            menu.findItem(R.id.voice_call).icon?.alpha = if (callButtonsEnabled || state.hasActiveElementCallWidget()) 0xFF else 0x40
 
             val matrixAppsMenuItem = menu.findItem(R.id.open_matrix_apps)
             val widgetsCount = state.activeRoomWidgets.invoke()?.size ?: 0
@@ -1125,7 +1134,7 @@ class TimelineFragment @Inject constructor(
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.invite -> {
                 navigator.openInviteUsersToRoom(requireActivity(), timelineArgs.roomId)
@@ -1178,7 +1187,7 @@ class TimelineFragment @Inject constructor(
                 }
                 true
             }
-            else -> super.onOptionsItemSelected(item)
+            else -> false
         }
     }
 
@@ -1212,19 +1221,19 @@ class TimelineFragment @Inject constructor(
         getRootThreadEventId()?.let {
             val newRoom = timelineArgs.copy(threadTimelineArgs = null, eventId = it)
             context?.let { con ->
-                val int = RoomDetailActivity.newIntent(con, newRoom)
-                int.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                con.startActivity(int)
+                val intent = RoomDetailActivity.newIntent(con, newRoom, false)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                con.startActivity(intent)
             }
         }
     }
 
-    private fun handleSearchAction() {
+    private fun handleSearchAction() = withState(timelineViewModel) { state ->
         navigator.openSearch(
                 context = requireContext(),
                 roomId = timelineArgs.roomId,
-                roomDisplayName = timelineViewModel.getRoomSummary()?.displayName,
-                roomAvatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl
+                roomDisplayName = state.asyncRoomSummary()?.displayName,
+                roomAvatarUrl = state.asyncRoomSummary()?.avatarUrl
         )
     }
 
@@ -1263,6 +1272,7 @@ class TimelineFragment @Inject constructor(
         val nonFormattedBody = when (messageContent) {
             is MessageAudioContent -> getAudioContentBodyText(messageContent)
             is MessagePollContent -> messageContent.getBestPollCreationInfo()?.question?.getBestQuestion()
+            is MessageBeaconInfoContent -> getString(R.string.live_location_description)
             else -> messageContent?.body.orEmpty()
         }
         var formattedBody: CharSequence? = null
@@ -1323,6 +1333,7 @@ class TimelineFragment @Inject constructor(
 
     private fun handlePendingAction(roomDetailPendingAction: RoomDetailPendingAction) {
         when (roomDetailPendingAction) {
+            RoomDetailPendingAction.DoNothing -> Unit
             is RoomDetailPendingAction.JumpToReadReceipt ->
                 timelineViewModel.handle(RoomDetailAction.JumpToReadReceipt(roomDetailPendingAction.userId))
             is RoomDetailPendingAction.MentionUser ->
@@ -1430,6 +1441,9 @@ class TimelineFragment @Inject constructor(
                 updateJumpToReadMarkerViewVisibility()
                 jumpToBottomViewVisibilityManager.maybeShowJumpToBottomViewVisibilityWithDelay()
             }
+        }.apply {
+            // For local rooms, pin the view's content to the top edge (the layout is reversed)
+            stackFromEnd = isLocalRoom()
         }
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager, timelineEventController)
@@ -1557,15 +1571,17 @@ class TimelineFragment @Inject constructor(
                     attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@TimelineFragment)
                     attachmentTypeSelector.setAttachmentVisibility(
                             AttachmentTypeSelectorView.Type.LOCATION,
-                            BuildConfig.enableLocationSharing
+                            vectorFeatures.isLocationSharingEnabled(),
                     )
                     // Tchap: Disable Polls
                     attachmentTypeSelector.setAttachmentVisibility(
-                            AttachmentTypeSelectorView.Type.POLL, isVisible = false)
+                            AttachmentTypeSelectorView.Type.POLL, isVisible = false
+                    )
 
                     // Tchap: Disable Stickers
                     attachmentTypeSelector.setAttachmentVisibility(
-                            AttachmentTypeSelectorView.Type.STICKER, isVisible = false)
+                            AttachmentTypeSelectorView.Type.STICKER, isVisible = false
+                    )
                 }
                 attachmentTypeSelector.show(views.composerLayout.views.attachmentButton)
             }
@@ -1623,7 +1639,7 @@ class TimelineFragment @Inject constructor(
 
     private fun sendUri(uri: Uri): Boolean {
         val shareIntent = Intent(Intent.ACTION_SEND, uri)
-        val isHandled = shareIntentHandler.handleIncomingShareIntent(requireContext(), shareIntent, ::onContentAttachmentsReady, onPlainText = {
+        val isHandled = shareIntentHandler.handleIncomingShareIntent(shareIntent, ::onContentAttachmentsReady, onPlainText = {
             fatalError("Should not happen as we're generating a File based share Intent", vectorPreferences.failFast())
         })
         if (!isHandled) {
@@ -1634,6 +1650,10 @@ class TimelineFragment @Inject constructor(
 
     override fun invalidate() = withState(timelineViewModel, messageComposerViewModel) { mainState, messageComposerState ->
         invalidateOptionsMenu()
+        if (mainState.asyncRoomSummary is Fail) {
+            handleRoomSummaryFailure(mainState.asyncRoomSummary)
+            return@withState
+        }
         val summary = mainState.asyncRoomSummary()
         renderToolbar(summary)
         renderTypingMessageNotification(summary, mainState)
@@ -1653,7 +1673,7 @@ class TimelineFragment @Inject constructor(
             if (mainState.tombstoneEvent == null) {
                 views.composerLayout.isInvisible = !messageComposerState.isComposerVisible
                 views.voiceMessageRecorderView.isVisible = messageComposerState.isVoiceMessageRecorderVisible
-                if (BuildConfig.SHOW_VOICE_RECORDER) {
+                if (Config.SHOW_VOICE_RECORDER) {
                     views.composerLayout.views.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
                 } else {
                     // Tchap: set visibility to gone if there is no voice recorder button
@@ -1694,6 +1714,28 @@ class TimelineFragment @Inject constructor(
         } else if (mainState.asyncInviter.complete) {
             vectorBaseActivity.finish()
         }
+        updateLiveLocationIndicator(mainState.isSharingLiveLocation)
+    }
+
+    private fun handleRoomSummaryFailure(asyncRoomSummary: Fail<RoomSummary>) {
+        views.roomNotFound.isVisible = true
+        views.roomNotFoundText.text = when (asyncRoomSummary.error) {
+            is RoomNotFound -> {
+                getString(
+                        R.string.timeline_error_room_not_found,
+                        if (vectorPreferences.developerMode()) {
+                            "\nDeveloper info: $timelineArgs"
+                        } else {
+                            ""
+                        }
+                )
+            }
+            else -> errorFormatter.toHumanReadable(asyncRoomSummary.error)
+        }
+    }
+
+    private fun updateLiveLocationIndicator(isSharingLiveLocation: Boolean) {
+        views.liveLocationStatusIndicator.isVisible = isSharingLiveLocation
     }
 
     private fun FragmentTimelineBinding.hideComposerViews() {
@@ -1713,31 +1755,41 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun renderToolbar(roomSummary: RoomSummary?) {
-        if (!isThreadTimeLine()) {
-            views.includeRoomToolbar.roomToolbarContentView.isVisible = true
-            views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = false
-            if (roomSummary == null) {
-                views.includeRoomToolbar.roomToolbarContentView.isClickable = false
-            } else {
-                views.includeRoomToolbar.roomToolbarContentView.isClickable = roomSummary.membership == Membership.JOIN
-                views.includeRoomToolbar.roomToolbarTitleView.text = roomSummary.displayName
-                avatarRenderer.render(roomSummary.toMatrixItem(), views.includeRoomToolbar.roomToolbarAvatarImageView)
-                val showPresence = roomSummary.isDirect
-                views.includeRoomToolbar.roomToolbarPresenceImageView.render(showPresence, roomSummary.directUserPresence)
-                val shieldView = if (showPresence) views.includeRoomToolbar.roomToolbarTitleShield else views.includeRoomToolbar.roomToolbarAvatarShield
-                shieldView.render(null) // Tchap does not display encryption trust level
-                views.includeRoomToolbar.roomToolbarPublicImageView.isVisible = roomSummary.isPublic && !roomSummary.isDirect
+        when {
+            isLocalRoom() -> {
+                views.includeRoomToolbar.roomToolbarContentView.isVisible = false
+                views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = false
+                setupToolbar(views.roomToolbar)
+                        .setTitle(R.string.room_member_open_or_create_dm)
+                        .allowBack(useCross = true)
             }
-        } else {
-            views.includeRoomToolbar.roomToolbarContentView.isVisible = false
-            views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = true
-            timelineArgs.threadTimelineArgs?.let {
-                val matrixItem = MatrixItem.RoomItem(it.roomId, it.displayName, it.avatarUrl)
-                avatarRenderer.render(matrixItem, views.includeThreadToolbar.roomToolbarThreadImageView)
-                views.includeThreadToolbar.roomToolbarThreadShieldImageView.render(it.roomEncryptionTrustLevel)
-                views.includeThreadToolbar.roomToolbarThreadSubtitleTextView.text = it.displayName
+            isThreadTimeLine() -> {
+                views.includeRoomToolbar.roomToolbarContentView.isVisible = false
+                views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = true
+                timelineArgs.threadTimelineArgs?.let {
+                    val matrixItem = MatrixItem.RoomItem(it.roomId, it.displayName, it.avatarUrl)
+                    avatarRenderer.render(matrixItem, views.includeThreadToolbar.roomToolbarThreadImageView)
+                    views.includeThreadToolbar.roomToolbarThreadShieldImageView.render(it.roomEncryptionTrustLevel)
+                    views.includeThreadToolbar.roomToolbarThreadSubtitleTextView.text = it.displayName
+                }
+                views.includeThreadToolbar.roomToolbarThreadTitleTextView.text = resources.getText(R.string.thread_timeline_title)
             }
-            views.includeThreadToolbar.roomToolbarThreadTitleTextView.text = resources.getText(R.string.thread_timeline_title)
+            else -> {
+                views.includeRoomToolbar.roomToolbarContentView.isVisible = true
+                views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = false
+                if (roomSummary == null) {
+                    views.includeRoomToolbar.roomToolbarContentView.isClickable = false
+                } else {
+                    views.includeRoomToolbar.roomToolbarContentView.isClickable = roomSummary.membership == Membership.JOIN
+                    views.includeRoomToolbar.roomToolbarTitleView.text = roomSummary.displayName
+                    avatarRenderer.render(roomSummary.toMatrixItem(), views.includeRoomToolbar.roomToolbarAvatarImageView)
+                    val showPresence = roomSummary.isDirect
+                    views.includeRoomToolbar.roomToolbarPresenceImageView.render(showPresence, roomSummary.directUserPresence)
+                    val shieldView = if (showPresence) views.includeRoomToolbar.roomToolbarTitleShield else views.includeRoomToolbar.roomToolbarAvatarShield
+                    shieldView.render(null) // Tchap does not display encryption trust level
+                    views.includeRoomToolbar.roomToolbarPublicImageView.isVisible = roomSummary.isPublic && !roomSummary.isDirect
+                }
+            }
         }
     }
 
@@ -2063,7 +2115,7 @@ class TimelineFragment @Inject constructor(
                 handleShowLocationPreview(messageContent, informationData.senderId)
             }
             is MessageBeaconInfoContent -> {
-                navigateToLocationLiveMap()
+                navigateToLiveLocationMap()
             }
             else -> {
                 val handled = onThreadSummaryClicked(informationData.eventId, isRootThreadEvent)
@@ -2157,7 +2209,7 @@ class TimelineFragment @Inject constructor(
     override fun onRoomCreateLinkClicked(url: String) {
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             permalinkHandler
-                    .launch(requireContext(), url, object : NavigationInterceptor {
+                    .launch(requireActivity(), url, object : NavigationInterceptor {
                         override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {
                             requireActivity().finish()
                             return false
@@ -2510,15 +2562,19 @@ class TimelineFragment @Inject constructor(
      * Navigate to Threads timeline for the specified rootThreadEventId
      * using the ThreadsActivity.
      */
-    private fun navigateToThreadTimeline(rootThreadEventId: String, startsThread: Boolean = false, showKeyboard: Boolean = false) {
+    private fun navigateToThreadTimeline(
+            rootThreadEventId: String,
+            startsThread: Boolean = false,
+            showKeyboard: Boolean = false,
+    ) = withState(timelineViewModel) { state ->
         analyticsTracker.capture(Interaction.Name.MobileRoomThreadSummaryItem.toAnalyticsInteraction())
         context?.let {
             val roomThreadDetailArgs = ThreadTimelineArgs(
                     startsThread = startsThread,
                     roomId = timelineArgs.roomId,
-                    displayName = timelineViewModel.getRoomSummary()?.displayName,
-                    avatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl,
-                    roomEncryptionTrustLevel = timelineViewModel.getRoomSummary()?.roomEncryptionTrustLevel,
+                    displayName = state.asyncRoomSummary()?.displayName,
+                    avatarUrl = state.asyncRoomSummary()?.avatarUrl,
+                    roomEncryptionTrustLevel = state.asyncRoomSummary()?.roomEncryptionTrustLevel,
                     rootThreadEventId = rootThreadEventId,
                     showKeyboard = showKeyboard
             )
@@ -2549,14 +2605,14 @@ class TimelineFragment @Inject constructor(
      * Navigate to Threads list for the current room
      * using the ThreadsActivity.
      */
-    private fun navigateToThreadList() {
+    private fun navigateToThreadList() = withState(timelineViewModel) { state ->
         analyticsTracker.capture(Interaction.Name.MobileRoomThreadListButton.toAnalyticsInteraction())
         context?.let {
             val roomThreadDetailArgs = ThreadTimelineArgs(
                     roomId = timelineArgs.roomId,
-                    displayName = timelineViewModel.getRoomSummary()?.displayName,
-                    roomEncryptionTrustLevel = timelineViewModel.getRoomSummary()?.roomEncryptionTrustLevel,
-                    avatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl
+                    displayName = state.asyncRoomSummary()?.displayName,
+                    roomEncryptionTrustLevel = state.asyncRoomSummary()?.roomEncryptionTrustLevel,
+                    avatarUrl = state.asyncRoomSummary()?.avatarUrl
             )
             navigator.openThreadList(it, roomThreadDetailArgs)
         }
@@ -2644,14 +2700,26 @@ class TimelineFragment @Inject constructor(
     }
 
     override fun onContactAttachmentReady(contactAttachment: ContactAttachment) {
-        super.onContactAttachmentReady(contactAttachment)
         val formattedContact = contactAttachment.toHumanReadable()
         messageComposerViewModel.handle(MessageComposerAction.SendMessage(formattedContact, false))
+    }
+
+    override fun onAttachmentError(throwable: Throwable) {
+        showFailure(throwable)
     }
 
     private fun onViewWidgetsClicked() {
         RoomWidgetsBottomSheet.newInstance()
                 .show(childFragmentManager, "ROOM_WIDGETS_BOTTOM_SHEET")
+    }
+
+    private fun handleOpenElementCallWidget() = withState(timelineViewModel) { state ->
+        state
+                .activeRoomWidgets()
+                ?.find { it.type == WidgetType.ElementCall }
+                ?.also { widget ->
+                    navigator.openRoomWidget(requireContext(), state.roomId, widget)
+                }
     }
 
     override fun onTapToReturnToCall() {
@@ -2674,6 +2742,11 @@ class TimelineFragment @Inject constructor(
      * Returns true if the current room is a Thread room, false otherwise.
      */
     private fun isThreadTimeLine(): Boolean = timelineArgs.threadTimelineArgs?.rootThreadEventId != null
+
+    /**
+     * Returns true if the current room is a local room, false otherwise.
+     */
+    private fun isLocalRoom(): Boolean = withState(timelineViewModel) { it.isLocalRoom() }
 
     /**
      * Returns the root thread event if we are in a thread room, otherwise returns null.

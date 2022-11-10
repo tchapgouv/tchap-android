@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.animations.play
 import im.vector.app.core.di.ActiveSessionHolder
@@ -31,9 +32,11 @@ import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
 import javax.inject.Inject
 
-class FtueAuthAccountCreatedFragment @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder
-) : AbstractFtueAuthFragment<FragmentFtueAccountCreatedBinding>() {
+@AndroidEntryPoint
+class FtueAuthAccountCreatedFragment :
+        AbstractFtueAuthFragment<FragmentFtueAccountCreatedBinding>() {
+
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
 
     private var hasPlayedConfetti = false
 
@@ -47,7 +50,8 @@ class FtueAuthAccountCreatedFragment @Inject constructor(
     }
 
     private fun setupViews() {
-        views.accountCreatedSubtitle.text = getString(R.string.ftue_account_created_subtitle, activeSessionHolder.getActiveSession().myUserId)
+        val subtitle = getString(R.string.tchap_ftue_account_created_subtitle)
+        views.accountCreatedSubtitle.text = subtitle
         views.accountCreatedPersonalize.debouncedClicks { viewModel.handle(OnboardingAction.PersonalizeProfile) }
         views.accountCreatedTakeMeHome.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome)) }
         views.accountCreatedTakeMeHomeCta.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome)) }

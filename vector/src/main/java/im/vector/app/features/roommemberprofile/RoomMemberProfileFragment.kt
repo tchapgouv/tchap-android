@@ -32,6 +32,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.animations.AppBarStateChangeListener
 import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
@@ -42,6 +43,7 @@ import im.vector.app.core.extensions.copyOnLongClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.DialogShareQrCodeBinding
@@ -68,13 +70,16 @@ data class RoomMemberProfileArgs(
         val roomId: String? = null
 ) : Parcelable
 
-class RoomMemberProfileFragment @Inject constructor(
-        private val roomMemberProfileController: RoomMemberProfileController,
-        private val avatarRenderer: AvatarRenderer,
-        private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
-        private val matrixItemColorProvider: MatrixItemColorProvider
-) : VectorBaseFragment<FragmentMatrixProfileBinding>(),
-        RoomMemberProfileController.Callback {
+@AndroidEntryPoint
+class RoomMemberProfileFragment :
+        VectorBaseFragment<FragmentMatrixProfileBinding>(),
+        RoomMemberProfileController.Callback,
+        VectorMenuProvider {
+
+    @Inject lateinit var roomMemberProfileController: RoomMemberProfileController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var roomDetailPendingActionStore: RoomDetailPendingActionStore
+    @Inject lateinit var matrixItemColorProvider: MatrixItemColorProvider
 
     private lateinit var headerViews: ViewStubRoomMemberProfileHeaderBinding
 
@@ -134,6 +139,7 @@ class RoomMemberProfileFragment @Inject constructor(
                 is RoomMemberProfileViewEvents.OnBanActionSuccess -> Unit
                 is RoomMemberProfileViewEvents.OnIgnoreActionSuccess -> Unit
                 is RoomMemberProfileViewEvents.OnInviteActionSuccess -> Unit
+                RoomMemberProfileViewEvents.GoBack -> handleGoBack()
             }
         }
         setupLongClicks()
@@ -160,14 +166,14 @@ class RoomMemberProfileFragment @Inject constructor(
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.roomMemberProfileShareAction -> {
                 viewModel.handle(RoomMemberProfileAction.ShareRoomMemberProfile)
-                return true
+                true
             }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun handleStartVerification(startVerification: RoomMemberProfileViewEvents.StartVerification) {
@@ -307,6 +313,11 @@ class RoomMemberProfileFragment @Inject constructor(
         viewModel.handle(RoomMemberProfileAction.OpenOrCreateDm(fragmentArgs.userId))
     }
 
+    private fun handleGoBack() {
+        roomDetailPendingActionStore.data = RoomDetailPendingAction.DoNothing
+        vectorBaseActivity.finish()
+    }
+
     override fun onJumpToReadReceiptClicked() {
         roomDetailPendingActionStore.data = RoomDetailPendingAction.JumpToReadReceipt(fragmentArgs.userId)
         vectorBaseActivity.finish()
@@ -326,7 +337,7 @@ class RoomMemberProfileFragment @Inject constructor(
                 .setNeutralButton(R.string.ok, null)
                 .setPositiveButton(R.string.share_by_text) { _, _ ->
                     startSharePlainTextIntent(
-                            fragment = this,
+                            context = requireContext(),
                             activityResultLauncher = null,
                             chooserTitle = null,
                             text = permalink

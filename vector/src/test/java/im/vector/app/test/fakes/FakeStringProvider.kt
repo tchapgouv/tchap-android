@@ -33,6 +33,13 @@ class FakeStringProvider {
         }
     }
 
+    // Tchap: returns the given string for any resource
+    fun givenResult(result: String) {
+        every { instance.getString(any()) } returns result
+
+        every { instance.getQuantityString(any(), any(), any()) } returns result
+    }
+
     fun given(id: Int, result: String) {
         every { instance.getString(id) } returns result
     }

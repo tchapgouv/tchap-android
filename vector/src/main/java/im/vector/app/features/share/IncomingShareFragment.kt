@@ -29,8 +29,8 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -40,7 +40,6 @@ import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.attachments.ShareIntentHandler
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
-import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
@@ -48,13 +47,13 @@ import javax.inject.Inject
  * Display the list of rooms.
  * The user can select multiple rooms to send the data to.
  */
-class IncomingShareFragment @Inject constructor(
-        private val incomingShareController: IncomingShareController,
-        private val sessionHolder: ActiveSessionHolder,
-        private val shareIntentHandler: ShareIntentHandler,
-) :
+@AndroidEntryPoint
+class IncomingShareFragment :
         VectorBaseFragment<FragmentIncomingShareBinding>(),
         IncomingShareController.Callback {
+
+    @Inject lateinit var incomingShareController: IncomingShareController
+    @Inject lateinit var shareIntentHandler: ShareIntentHandler
 
     private val viewModel: IncomingShareViewModel by fragmentViewModel()
 
@@ -63,12 +62,6 @@ class IncomingShareFragment @Inject constructor(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // If we are not logged in, stop the sharing process and open login screen.
-        // In the future, we might want to relaunch the sharing process after login.
-        if (!sessionHolder.hasActiveSession()) {
-            startLoginActivity()
-            return
-        }
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setupToolbar(views.incomingShareToolbar)
@@ -88,7 +81,7 @@ class IncomingShareFragment @Inject constructor(
                 // Direct share
                 if (intent.hasExtra(Intent.EXTRA_SHORTCUT_ID)) {
                     val roomId = intent.getStringExtra(Intent.EXTRA_SHORTCUT_ID)!!
-                    sessionHolder.getSafeActiveSession()?.getRoomSummary(roomId)?.let { viewModel.handle(IncomingShareAction.ShareToRoom(it)) }
+                    viewModel.handle(IncomingShareAction.ShareToRoom(roomId))
                 }
                 isShareManaged
             }
@@ -116,7 +109,6 @@ class IncomingShareFragment @Inject constructor(
     }
 
     private fun handleIncomingShareIntent(intent: Intent) = shareIntentHandler.handleIncomingShareIntent(
-            requireContext(),
             intent,
             onFile = {
                 val sharedData = SharedData.Attachments(it)
@@ -191,14 +183,6 @@ class IncomingShareFragment @Inject constructor(
                 }
                 .setNegativeButton(R.string.action_cancel, null)
                 .show()
-    }
-
-    private fun startLoginActivity() {
-        navigator.openLogin(
-                context = requireActivity(),
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-        )
-        requireActivity().finish()
     }
 
     override fun invalidate() = withState(viewModel) {

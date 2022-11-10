@@ -21,12 +21,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -42,11 +44,13 @@ import org.matrix.android.sdk.api.session.room.model.RoomThirdPartyInviteContent
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class RoomMemberListFragment @Inject constructor(
-        private val roomMemberListController: RoomMemberListController,
-        private val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment<FragmentRoomMemberListBinding>(),
+@AndroidEntryPoint
+class RoomMemberListFragment :
+        VectorBaseFragment<FragmentRoomMemberListBinding>(),
         RoomMemberListController.Callback {
+
+    @Inject lateinit var roomMemberListController: RoomMemberListController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     private val viewModel: RoomMemberListViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()
@@ -72,7 +76,7 @@ class RoomMemberListFragment @Inject constructor(
 
     private fun setupInviteUsersButton() {
         views.inviteUsersButton.debouncedClicks {
-            navigator.openInviteUsersToRoom(requireContext(), roomProfileArgs.roomId)
+            navigator.openInviteUsersToRoom(requireActivity(), roomProfileArgs.roomId)
         }
         // Hide FAB when list is scrolling
         views.roomSettingGeneric.roomSettingsRecyclerView.addOnScrollListener(
@@ -114,6 +118,7 @@ class RoomMemberListFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) { viewState ->
+        views.roomSettingGeneric.progressBar.isGone = viewState.areAllMembersLoaded
         roomMemberListController.setData(viewState)
         renderRoomSummary(viewState)
         views.inviteUsersButton.isVisible = viewState.actionsPermissions.canInvite

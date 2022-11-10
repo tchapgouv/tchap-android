@@ -21,6 +21,7 @@ import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import okhttp3.ConnectionSpec
+import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import okhttp3.logging.HttpLoggingInterceptor
@@ -41,7 +42,7 @@ internal object NetworkModule {
     @Provides
     @JvmStatic
     fun providesHttpLoggingInterceptor(): HttpLoggingInterceptor {
-        val logger = FormattedJsonHttpLogger()
+        val logger = FormattedJsonHttpLogger(BuildConfig.OKHTTP_LOGGING_LEVEL)
         val interceptor = HttpLoggingInterceptor(logger)
         interceptor.level = BuildConfig.OKHTTP_LOGGING_LEVEL
         return interceptor
@@ -73,7 +74,9 @@ internal object NetworkModule {
             apiInterceptor: ApiInterceptor
     ): OkHttpClient {
         val spec = ConnectionSpec.Builder(matrixConfiguration.connectionSpec).build()
-
+        val dispatcher = Dispatcher().apply {
+            maxRequestsPerHost = 20
+        }
         return OkHttpClient.Builder()
                 // workaround for #4669
                 .protocols(listOf(Protocol.HTTP_1_1))
@@ -94,6 +97,7 @@ internal object NetworkModule {
                         addInterceptor(curlLoggingInterceptor)
                     }
                 }
+                .dispatcher(dispatcher)
                 .connectionSpecs(Collections.singletonList(spec))
                 .applyMatrixConfiguration(matrixConfiguration)
                 .build()

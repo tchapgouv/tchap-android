@@ -28,9 +28,11 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
+import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginBinding
 import im.vector.app.features.login.LoginMode
@@ -38,6 +40,8 @@ import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import im.vector.app.features.login.SocialLoginButtonsView
+import im.vector.app.features.login.SocialLoginButtonsView.Mode
+import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
@@ -45,7 +49,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.failure.isInvalidUsername
 import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
@@ -53,7 +56,6 @@ import org.matrix.android.sdk.api.failure.isRegistrationDisabled
 import org.matrix.android.sdk.api.failure.isUsernameInUse
 import org.matrix.android.sdk.api.failure.isWeakPassword
 import reactivecircus.flowbinding.android.widget.textChanges
-import javax.inject.Inject
 
 /**
  * In this screen:
@@ -63,7 +65,11 @@ import javax.inject.Inject
  * In signup mode:
  * - the user is asked for login and password
  */
-class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentLoginBinding>() {
+@AndroidEntryPoint
+class FtueAuthLoginFragment :
+        AbstractSSOFtueAuthFragment<FragmentLoginBinding>() {
+
+    private val tchap = Tchap()
 
     private var isSignupMode = false
 
@@ -98,10 +104,12 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             when (state.signMode) {
                 SignMode.Unknown -> error("developer error")
+                SignMode.TchapSignUp,
                 SignMode.SignUp -> {
                     views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
                     views.passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
                 }
+                SignMode.TchapSignIn,
                 SignMode.SignIn,
                 SignMode.SignInWithMatrixId -> {
                     views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_USERNAME)
@@ -111,13 +119,13 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
         }
     }
 
-    private fun setupSocialLoginButtons(state: OnboardingViewState) {
-        views.loginSocialLoginButtons.mode = when (state.signMode) {
-            SignMode.Unknown -> error("developer error")
-            SignMode.SignUp -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
-            SignMode.SignIn,
-            SignMode.SignInWithMatrixId -> SocialLoginButtonsView.Mode.MODE_SIGN_IN
-        }
+    private fun ssoMode(state: OnboardingViewState) = when (state.signMode) {
+        SignMode.Unknown -> error("developer error")
+        SignMode.TchapSignUp,
+        SignMode.SignUp -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
+        SignMode.TchapSignIn,
+        SignMode.SignIn,
+        SignMode.SignInWithMatrixId -> SocialLoginButtonsView.Mode.MODE_SIGN_IN
     }
 
     private fun submit() {
@@ -129,14 +137,9 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
 
             // This can be called by the IME action, so deal with empty cases
             var error = 0
-            if (login.isEmpty()) {
-                views.loginFieldTil.error = getString(
-                        if (isSignupMode) {
-                            R.string.error_empty_field_choose_user_name
-                        } else {
-                            R.string.error_empty_field_enter_user_name
-                        }
-                )
+            // Tchap: custom error policy
+            if (login.isEmpty() || !login.isEmail()) {
+                views.loginFieldTil.error = getString(R.string.auth_invalid_email)
                 error++
             }
             if (isSignupMode && isNumericOnlyUserIdForbidden && login.isDigitsOnly()) {
@@ -154,6 +157,12 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
                 error++
             }
 
+            // Tchap: password confirmation
+            if (state.signMode == SignMode.TchapSignUp && password != views.tchapPasswordConfirmationField.text.toString()) {
+                views.passwordFieldTil.error = getString(R.string.tchap_auth_password_dont_match)
+                error++
+            }
+
             if (error == 0) {
                 val initialDeviceName = getString(R.string.login_default_session_public_name)
                 viewModel.handle(state.signMode.toAuthenticateAction(login, password, initialDeviceName))
@@ -165,6 +174,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
         views.loginSubmit.hideKeyboard()
         views.loginFieldTil.error = null
         views.passwordFieldTil.error = null
+        views.tchapPasswordConfirmationFieldTil.error = null
     }
 
     private fun setupUi(state: OnboardingViewState) {
@@ -173,6 +183,8 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
                     SignMode.Unknown -> error("developer error")
                     SignMode.SignUp -> R.string.login_signup_username_hint
                     SignMode.SignIn -> R.string.login_signin_username_hint
+                    SignMode.TchapSignUp,
+                    SignMode.TchapSignIn -> R.string.tchap_connection_email
                     SignMode.SignInWithMatrixId -> R.string.login_signin_matrix_id_hint
                 }
         )
@@ -186,7 +198,9 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
         } else {
             val resId = when (state.signMode) {
                 SignMode.Unknown -> error("developer error")
+                SignMode.TchapSignUp,
                 SignMode.SignUp -> R.string.login_signup_to
+                SignMode.TchapSignIn -> R.string.login_connect_to
                 SignMode.SignIn -> R.string.login_connect_to
                 SignMode.SignInWithMatrixId -> R.string.login_connect_to
             }
@@ -209,22 +223,24 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
                     views.loginTitle.text = getString(resId, state.selectedHomeserver.userFacingUrl.toReducedUrl())
                     views.loginNotice.text = getString(R.string.login_server_other_text)
                 }
-                ServerType.Unknown -> Unit /* Should not happen */
+                ServerType.Unknown -> {
+                    // Tchap: Hide views if empty
+                    views.loginServerIcon.isVisible = false
+                    views.loginTitle.isVisible = false
+                    views.loginNotice.isVisible = false
+                }
             }
             views.loginPasswordNotice.isVisible = false
 
             if (state.selectedHomeserver.preferredLoginMode is LoginMode.SsoAndPassword) {
                 views.loginSocialLoginContainer.isVisible = true
-                views.loginSocialLoginButtons.ssoIdentityProviders = state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders?.sorted()
-                views.loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
-                    override fun onProviderSelected(provider: SsoIdentityProvider?) {
-                        viewModel.fetchSsoUrl(
-                                redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
-                                deviceId = state.deviceId,
-                                provider = provider
-                        )
-                                ?.let { openInCustomTab(it) }
-                    }
+                views.loginSocialLoginButtons.render(state.selectedHomeserver.preferredLoginMode.ssoState, ssoMode(state)) { provider ->
+                    viewModel.fetchSsoUrl(
+                            redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                            deviceId = state.deviceId,
+                            provider = provider
+                    )
+                            ?.let { openInCustomTab(it) }
                 }
             } else {
                 views.loginSocialLoginContainer.isVisible = false
@@ -234,12 +250,14 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
     }
 
     private fun setupButtons(state: OnboardingViewState) {
-        views.forgetPasswordButton.isVisible = state.signMode == SignMode.SignIn
+        views.forgetPasswordButton.isVisible = state.signMode == SignMode.SignIn || state.signMode == SignMode.TchapSignIn
 
         views.loginSubmit.text = getString(
                 when (state.signMode) {
                     SignMode.Unknown -> error("developer error")
+                    SignMode.TchapSignUp,
                     SignMode.SignUp -> R.string.login_signup_submit
+                    SignMode.TchapSignIn,
                     SignMode.SignIn,
                     SignMode.SignInWithMatrixId -> R.string.login_signin
                 }
@@ -300,12 +318,11 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
     }
 
     override fun updateWithState(state: OnboardingViewState) {
-        isSignupMode = state.signMode == SignMode.SignUp
+        isSignupMode = state.signMode == SignMode.SignUp || state.signMode == SignMode.TchapSignUp
         isNumericOnlyUserIdForbidden = state.serverType == ServerType.MatrixOrg
 
-        setupUi(state)
+        tchap.setupUi(state)
         setupAutoFill(state)
-        setupSocialLoginButtons(state)
         setupButtons(state)
 
         if (state.isLoading) {
@@ -318,4 +335,20 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
      * Detect if password ends or starts with spaces.
      */
     private fun spaceInPassword() = views.passwordField.text.toString().let { it.trim() != it }
+
+    private inner class Tchap {
+
+        fun setupUi(state: OnboardingViewState) {
+            this@FtueAuthLoginFragment.setupUi(state) // call "super" method
+            if (state.signMode == SignMode.TchapSignUp) {
+                views.loginFieldTil.isHelperTextEnabled = true
+                views.passwordFieldTil.isHelperTextEnabled = true
+                views.tchapPasswordConfirmationFieldTil.isVisible = true
+            } else {
+                views.loginFieldTil.isHelperTextEnabled = false
+                views.passwordFieldTil.isHelperTextEnabled = false
+                views.tchapPasswordConfirmationFieldTil.isVisible = false
+            }
+        }
+    }
 }

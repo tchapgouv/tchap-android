@@ -24,11 +24,12 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import im.vector.app.BuildConfig
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.isEmail
+import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginResetPasswordBinding
 import im.vector.app.features.analytics.plan.MobileScreen
 import kotlinx.coroutines.flow.combine
@@ -36,12 +37,13 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.widget.textChanges
-import javax.inject.Inject
 
 /**
  * In this screen, the user is asked for email and new password to reset his password.
  */
-class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginResetPasswordBinding>() {
+@AndroidEntryPoint
+class LoginResetPasswordFragment :
+        AbstractLoginFragment<FragmentLoginResetPasswordBinding>() {
 
     // Show warning only once
     private var showWarning = true
@@ -59,24 +61,14 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
         super.onViewCreated(view, savedInstanceState)
 
         setupSubmitButton()
+    }
 
-        loginViewModel.observeViewEvents { loginViewEvents ->
-            when (loginViewEvents) {
-                LoginViewEvents.OnLoginFlowRetrieved     ->
-                    loginViewModel.handle(LoginAction.CheckPasswordPolicy(views.passwordField.text.toString()))
-                LoginViewEvents.OnPasswordValidated      ->
-                    submit()
-                is LoginViewEvents.OnHomeServerRetrieved ->
-                    updateHomeServer(loginViewEvents.hs)
-                else                                     -> Unit // This is handled by the Activity
-            }
-        }
+    private fun setupUi(state: LoginViewState) {
+        views.resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrlFromUser.toReducedUrl())
     }
 
     private fun setupSubmitButton() {
-        views.resetPasswordSubmit.debouncedClicks {
-            loginViewModel.handle(LoginAction.RetrieveHomeServer(views.resetPasswordEmail.text.toString()))
-        }
+        views.resetPasswordSubmit.debouncedClicks { submit() }
         combine(
                 views.resetPasswordEmail.textChanges().map { it.isEmail() },
                 views.passwordField.textChanges().map { it.isNotEmpty() }
@@ -96,15 +88,10 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
 
         if (showWarning) {
             showWarning = false
-            val message = if (BuildConfig.IS_KEY_BACKUP_SUPPORTED) {
-                R.string.login_reset_password_warning_content
-            } else {
-                R.string.tchap_login_reset_password_warning_content
-            }
             // Display a warning as Riot-Web does first
             MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.login_reset_password_warning_title)
-                    .setMessage(message)
+                    .setMessage(R.string.login_reset_password_warning_content)
                     .setPositiveButton(R.string.login_reset_password_warning_submit) { _, _ ->
                         doSubmit()
                     }
@@ -128,15 +115,13 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
         views.passwordFieldTil.error = null
     }
 
-    private fun updateHomeServer(hs: String) {
-        loginViewModel.handle(LoginAction.UpdateHomeServer(getString(R.string.server_url_prefix) + hs))
-    }
-
     override fun resetViewModel() {
         loginViewModel.handle(LoginAction.ResetResetPassword)
     }
 
     override fun updateWithState(state: LoginViewState) {
+        setupUi(state)
+
         when (state.asyncResetPassword) {
             is Loading -> {
                 // Ensure new password is hidden

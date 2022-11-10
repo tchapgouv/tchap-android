@@ -19,7 +19,6 @@ package im.vector.app.core.pushers
 import android.content.Context
 import androidx.core.content.edit
 import im.vector.app.core.di.DefaultSharedPreferences
-import im.vector.app.push.fcm.FcmHelper
 import javax.inject.Inject
 
 class UnifiedPushStore @Inject constructor(

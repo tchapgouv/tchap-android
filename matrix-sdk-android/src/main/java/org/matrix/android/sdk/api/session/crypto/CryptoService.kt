@@ -40,6 +40,8 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
+import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.internal.crypto.model.SessionInfo
 
 interface CryptoService {
 
@@ -84,6 +86,20 @@ interface CryptoService {
 
     fun isKeyGossipingEnabled(): Boolean
 
+    /**
+     * As per MSC3061.
+     * If true will make it possible to share part of e2ee room history
+     * on invite depending on the room visibility setting.
+     */
+    fun enableShareKeyOnInvite(enable: Boolean)
+
+    /**
+     * As per MSC3061.
+     * If true will make it possible to share part of e2ee room history
+     * on invite depending on the room visibility setting.
+     */
+    fun isShareKeysOnInviteEnabled(): Boolean
+
     fun setRoomUnBlacklistUnverifiedDevices(roomId: String)
 
     fun getDeviceTrackingStatus(userId: String): Int
@@ -98,7 +114,19 @@ interface CryptoService {
 
     fun setRoomBlacklistUnverifiedDevices(roomId: String)
 
-    fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo?
+    fun getCryptoDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo?
+
+    fun getCryptoDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>)
+
+    fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo>
+
+    fun getLiveCryptoDeviceInfo(): LiveData<List<CryptoDeviceInfo>>
+
+    fun getLiveCryptoDeviceInfoWithId(deviceId: String): LiveData<Optional<CryptoDeviceInfo>>
+
+    fun getLiveCryptoDeviceInfo(userId: String): LiveData<List<CryptoDeviceInfo>>
+
+    fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>>
 
     fun requestRoomKeyForEvent(event: Event)
 
@@ -112,9 +140,9 @@ interface CryptoService {
 
     fun getMyDevicesInfo(): List<DeviceInfo>
 
-    fun getLiveMyDevicesInfo(): LiveData<List<DeviceInfo>>
+    fun getMyDevicesInfoLive(): LiveData<List<DeviceInfo>>
 
-    fun getDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>)
+    fun getMyDevicesInfoLive(deviceId: String): LiveData<Optional<DeviceInfo>>
 
     fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int
 
@@ -140,14 +168,6 @@ interface CryptoService {
     fun shouldEncryptForInvitedMembers(roomId: String): Boolean
 
     fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>>)
-
-    fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo>
-
-    fun getLiveCryptoDeviceInfo(): LiveData<List<CryptoDeviceInfo>>
-
-    fun getLiveCryptoDeviceInfo(userId: String): LiveData<List<CryptoDeviceInfo>>
-
-    fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>>
 
     fun addNewSessionListener(newSessionListener: NewSessionListener)
     fun removeSessionListener(listener: NewSessionListener)
@@ -176,4 +196,9 @@ interface CryptoService {
      * send, in order to speed up sending of the message.
      */
     fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>)
+
+    /**
+     * Share all inbound sessions of the last chunk messages to the provided userId devices.
+     */
+    suspend fun sendSharedHistoryKeys(roomId: String, userId: String, sessionInfoSet: Set<SessionInfo>?)
 }

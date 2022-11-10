@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
+
+    <!-- tchap Authentication -->
+    <string name="start_message">Welcome to ${app_name}</string>
+
+    <!-- Register -->
+    <string name="tchap_auth_password_dont_match">Passwords don’t match</string>
+
+    <!-- Invitation -->
+    <string name="tchap_people_search_invite_by_id_dialog_title">Send an invitation</string>
+    <string name="tchap_people_search_invite_by_id_dialog_description">Please enter email address of the person to invite</string>
+    <string name="tchap_people_search_invite_by_id_dialog_hint">Email</string>
+
+    <!-- tchap room creation -->
+    <string name="tchap_room_creation_limited_domain">Limited to my domain (%s)</string>
+    <string name="tchap_room_creation_public_info">It must not contain any sensitive data.</string>
+    <string name="tchap_room_creation_room_type_title">Room type</string>
+    <string name="tchap_room_creation_private_room_title">Private</string>
+    <string name="tchap_room_creation_extern_room_title">Private with externals</string>
+    <string name="tchap_room_creation_forum_room_title">Forum</string>
+    <string name="tchap_room_creation_private_room_info">Encrypted and accessible only to agent users by invitation from an administrator.</string>
+    <string name="tchap_room_creation_extern_room_info">Encrypted and accessible to all agent users and to external guests by invitation of an administrator.</string>
+    <string name="tchap_room_creation_forum_room_info">Unencrypted and accessible automatically and only to all agent users from the forum directory (or a shared link).</string>
+
+    <!-- tchap new strings -->
+    <string name="tchap_room_last_admin_leave_prompt_msg">The room will no longer be administered, and you may not be able to join it again</string>
+    <string name="tchap_invite_already_send_message">You have already sent an invitation to %s</string>
+    <string name="tchap_invite_not_sent_for_discovered_user">This contact already uses ${app_name}, you can send him a message now.</string>
+    <string name="tchap_invite_unauthorized_message">Unable to send invite to %s</string>
+    <string name="tchap_send_invite_confirmation">You will receive a notification when \n your guest joins the ${app_name} community</string>
+    <string name="tchap_invite_sending_succeeded">The invitation has been sent.</string>
+    <string name="tchap_colon_append">:</string>
+    <string name="tchap_empty_room_no_permission_to_post">Your recipient has left the room or has refused your invite. You cannot send him a message.</string>
+    <string name="tchap_discovery_section">Discovered user</string>
+    <string name="tchap_login_reset_password_on">Reset password</string>
+
+    <!-- tchap discussion -->
+    <string name="tchap_contact_external">External</string>
+
+    <!-- tchap room -->
+    <string name="tchap_room_extern_room_type">External</string>
+    <string name="tchap_room_forum_type">Forum</string>
+    <string name="tchap_room_invited_you">%s invited you</string>
+    <string name="tchap_fab_join_public_room">Join a forum from the directory</string>
+
+    <!-- tchap scan media -->
+    <string name="tchap_scan_media_untrusted_content_message">The file (%s) has been blocked</string>
+    <string name="tchap_scan_media_error_file_is_infected">We have detected that this file is infected, so it cannot be downloaded.</string>
+
+    <!-- tchap room settings -->
+    <string name="tchap_room_settings_convert_to_private">Convert to private room (irreversible)</string>
+    <string name="tchap_room_settings_convert_to_private_prompt_msg"><b>This action is irreversible.</b>\nAre you sure you want to convert this forum into a private room?</string>
+    <string name="tchap_room_settings_room_access_title">External accounts handling</string>
+    <string name="tchap_room_settings_room_access_restricted">The externals are not allowed to join this room</string>
+    <string name="tchap_room_settings_room_access_unrestricted">The externals are allowed to join this room</string>
+    <string name="tchap_room_settings_allow_external_users_to_join">Allow the externals to join this room</string>
+    <string name="tchap_room_settings_allow_external_users_to_join_prompt_msg"><b>This action is irreversible.</b>\nAre you sure you want to allow the externals to join this room?</string>
+    <string name="tchap_room_settings_room_access_by_link_title">Access by link</string>
+    <string name="tchap_room_settings_room_access_by_link_disabled">This room is not accessible by link</string>
+    <string name="tchap_room_settings_room_access_by_link_enabled">This room is accessible by link</string>
+    <string name="tchap_room_settings_enable_room_access_by_link">Enable the room access by link</string>
+    <string name="tchap_room_settings_enable_room_access_by_link_info_off">Users will be allowed to join the room from a link</string>
+    <string name="tchap_room_settings_enable_room_access_by_link_info_on">Users can join the room from the following link:</string>
+    <string name="tchap_room_settings_enable_room_access_by_link_info_on_with_limitation">Users can join the room from the following link (an invite is still required for externals):</string>
+    <string name="tchap_room_settings_room_access_by_link_forward">Forward the link</string>
+    <string name="tchap_room_settings_room_access_by_link_share">Share the link</string>
+
+    <!-- tchap account validity -->
+    <string name="tchap_expired_account_msg">The validity period of your account has expired. An email has been sent to you in order to renew it. Once you’ve followed the link it contains, click below.</string>
+    <string name="tchap_expired_account_resume_button">I renewed the validity of my account</string>
+    <string name="tchap_request_renewal_email_button">Request a renewal email</string>
+    <string name="tchap_expired_account_on_new_sent_email_msg">A new email has been sent to you in order to renew your account validity. Once you’ve followed the link it contains, click below.</string>
+
+    <!-- Login/Register Tchap -->
+    <string name="tchap_has_account_no">I do not have\nan account</string>
+    <string name="tchap_has_account_yes">I already have\nan account</string>
+    <string name="tchap_connection_email">Email</string>
+    <string name="tchap_connection_email_help">Use your business address</string>
+    <string name="tchap_connection_password_help">Your password must include a lower-case letter, an upper-case letter, a number and a symbol and be at a minimum 8 characters in length.</string>
+    <string name="tchap_connection_password_confirm">Password confirmation</string>
+    <!-- FIXME Tchap: restore these strings by restoring the warning dialog during the registration flow of an external account -->
+<!--    <string name="tchap_register_warning_for_external_title">Information about your registration</string>-->
+<!--    <string name="tchap_register_warning_for_external">Your email domain is not registered on ${app_name}. If you have received an invite, you will be able to create a ${app_name} account, which will allow you to join only the private discussions in which you are invited.</string>-->
+<!--    <string name="tchap_register_warning_for_external_proceed">Proceed</string>-->
+    <string name="tchap_register_wait_for_email_title">An e-mail has been sent, except if a ${app_name} account already exists:</string>
+    <string name="tchap_register_wait_for_email_subtitle">Please open it and click in the link it contains to create your account</string>
+    <string name="tchap_password_weak_pwd_error">This password is too weak. It must include a lower-case letter, an upper-case letter, a number and a symbol and be at a minimum 8 characters in length.</string>
+    <string name="tchap_register_pwd_too_short">The password must be at least 8 characters long</string>
+    <string name="tchap_register_pwd_no_uppercase">The password must include at least one uppercase</string>
+    <string name="tchap_register_pwd_no_digit">The password must include at least one digit</string>
+    <string name="tchap_register_pwd_no_lowercase">The password must include at least one lowercase</string>
+    <string name="tchap_register_pwd_no_symbol">The password must include at least one special character</string>
+    <string name="tchap_ftue_account_created_subtitle">Your account has been created</string>
+
+    <!-- Logout Tchap -->
+    <string name="tchap_action_sign_out_confirmation">For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.</string>
+
+    <!-- Call -->
+    <string name="tchap_call_not_supported">${app_name} does not support calls</string>
+
+    <!-- Home drawer -->
+    <string name="tchap_invite_to">Invite to join ${app_name}</string>
+
+    <!-- Settings -->
+    <string name="tchap_settings_change_pwd_caution">Changing the password resets the encryption keys on all devices, making the chat history unreadable: first, backup your keys from all your sessions so you can use them after you change the password.</string>
+    <string name="tchap_settings_hide_from_users_directory_title">Subscribe to the red list.</string>
+    <string name="tchap_settings_hide_from_users_directory_summary">"Other users won't be able to find my account in their search results."</string>
+    <string name="tchap_settings_show_external_user_in_users_directory_prompt">To disable this option, you must accept that your email address is visible to the other users.</string>
+
+    <!-- Verification -->
+    <string name="tchap_verification_conclusion_not_secure">Failed to verify your new session.</string>
+</resources>

@@ -1,0 +1,24 @@
+name: Danger CI
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Danger
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID_DANGERBOT }}
+          private_key: ${{ secrets.APP_PEM_DANGERBOT }}
+      - uses: actions/checkout@v3
+      - run: |
+          npm install --save-dev @babel/plugin-transform-flow-strip-types
+      - name: Danger
+        uses: danger/danger-js@11.1.2
+        with:
+          args: "--dangerfile tools/danger/dangerfile.js"
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ steps.generate_token.outputs.token }}

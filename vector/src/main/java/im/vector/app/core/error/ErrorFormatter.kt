@@ -16,6 +16,7 @@
 
 package im.vector.app.core.error
 
+import android.content.ActivityNotFoundException
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.call.dialpad.DialPadLookup
@@ -25,6 +26,7 @@ import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.failure.isLimitExceededError
+import org.matrix.android.sdk.api.failure.isMissingEmailVerification
 import org.matrix.android.sdk.api.session.contentscanner.ScanFailure
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import java.net.HttpURLConnection
@@ -102,24 +104,27 @@ class DefaultErrorFormatter @Inject constructor(
                     throwable.error.code == MatrixError.M_THREEPID_AUTH_FAILED -> {
                         stringProvider.getString(R.string.error_threepid_auth_failed)
                     }
-                    throwable.error.code == MatrixError.M_PASSWORD_TOO_SHORT      -> {
+                    throwable.error.code == MatrixError.M_PASSWORD_TOO_SHORT -> {
                         stringProvider.getString(R.string.tchap_register_pwd_too_short)
                     }
-                    throwable.error.code == MatrixError.M_PASSWORD_NO_UPPERCASE   -> {
+                    throwable.error.code == MatrixError.M_PASSWORD_NO_UPPERCASE -> {
                         stringProvider.getString(R.string.tchap_register_pwd_no_uppercase)
                     }
-                    throwable.error.code == MatrixError.M_PASSWORD_NO_DIGIT       -> {
+                    throwable.error.code == MatrixError.M_PASSWORD_NO_DIGIT -> {
                         stringProvider.getString(R.string.tchap_register_pwd_no_digit)
                     }
-                    throwable.error.code == MatrixError.M_PASSWORD_NO_LOWERCASE   -> {
+                    throwable.error.code == MatrixError.M_PASSWORD_NO_LOWERCASE -> {
                         stringProvider.getString(R.string.tchap_register_pwd_no_lowercase)
                     }
-                    throwable.error.code == MatrixError.M_PASSWORD_NO_SYMBOL      -> {
+                    throwable.error.code == MatrixError.M_PASSWORD_NO_SYMBOL -> {
                         stringProvider.getString(R.string.tchap_register_pwd_no_symbol)
                     }
                     throwable.error.code == MatrixError.M_UNKNOWN &&
                             throwable.error.message == "Not allowed to join this room" -> {
                         stringProvider.getString(R.string.room_error_access_unauthorized)
+                    }
+                    throwable.isMissingEmailVerification() -> {
+                        stringProvider.getString(R.string.auth_reset_password_error_unverified)
                     }
                     else -> {
                         throwable.error.message.takeIf { it.isNotEmpty() }
@@ -139,7 +144,7 @@ class DefaultErrorFormatter @Inject constructor(
                         throwable.localizedMessage
                 }
             }
-            is ScanFailure                         -> stringProvider.getString(R.string.tchap_scan_media_error_file_is_infected)
+            is ScanFailure -> stringProvider.getString(R.string.tchap_scan_media_error_file_is_infected)
             is DialPadLookup.Failure.NumberIsYours ->
                 stringProvider.getString(R.string.cannot_call_yourself)
             is DialPadLookup.Failure.NoResult ->
@@ -147,6 +152,8 @@ class DefaultErrorFormatter @Inject constructor(
             is MatrixIdFailure.InvalidMatrixId ->
                 stringProvider.getString(R.string.login_signin_matrix_id_error_invalid_matrix_id)
             is VoiceFailure -> voiceMessageError(throwable)
+            is ActivityNotFoundException ->
+                stringProvider.getString(R.string.error_no_external_application_found)
             else -> throwable.localizedMessage
         }
                 ?: stringProvider.getString(R.string.unknown_error)

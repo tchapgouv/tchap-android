@@ -31,15 +31,16 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import im.vector.app.AppStateHandler
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.BuildConfig
 import im.vector.app.R
-import im.vector.app.RoomGroupingMethod
+import im.vector.app.SpaceStateHandler
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.CurrentCallsViewPresenter
@@ -67,22 +68,24 @@ import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
-import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.user.model.User
 import javax.inject.Inject
 
-class HomeDetailFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
-        private val colorProvider: ColorProvider,
-        private val alertManager: PopupAlertManager,
-        private val callManager: WebRtcCallManager,
-        private val vectorPreferences: VectorPreferences,
-        private val appStateHandler: AppStateHandler
-) : VectorBaseFragment<FragmentHomeDetailBinding>(),
+@AndroidEntryPoint
+class HomeDetailFragment :
+        VectorBaseFragment<FragmentHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
         CurrentCallsView.Callback,
-        OnBackPressed {
+        OnBackPressed,
+        VectorMenuProvider {
+
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var colorProvider: ColorProvider
+    @Inject lateinit var alertManager: PopupAlertManager
+    @Inject lateinit var callManager: WebRtcCallManager
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var spaceStateHandler: SpaceStateHandler
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
@@ -103,24 +106,21 @@ class HomeDetailFragment @Inject constructor(
 
     override fun getMenuRes() = R.menu.room_list
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_home_mark_all_as_read -> {
                 viewModel.handle(HomeDetailAction.MarkAllRoomsRead)
-                return true
+                true
             }
-            else                            -> {
-                super.onOptionsItemSelected(item)
-            }
+            else -> false
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun handlePrepareMenu(menu: Menu) {
         withState(viewModel) { state ->
             val isRoomList = state.currentTab is HomeTab.RoomList
             menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
         }
-        super.onPrepareOptionsMenu(menu)
     }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeDetailBinding {
@@ -144,11 +144,8 @@ class HomeDetailFragment @Inject constructor(
             views.bottomNavigationView.selectedItemId = it.currentTab.toMenuId()
         }
 
-        viewModel.onEach(HomeDetailViewState::roomGroupingMethod) { roomGroupingMethod ->
-            when (roomGroupingMethod) {
-                is RoomGroupingMethod.ByLegacyGroup -> onGroupChange(roomGroupingMethod.groupSummary)
-                is RoomGroupingMethod.BySpace -> onSpaceChange(roomGroupingMethod.spaceSummary)
-            }
+        viewModel.onEach(HomeDetailViewState::selectedSpace) { selectedSpace ->
+            onSpaceChange(selectedSpace)
         }
 
         viewModel.onEach(HomeDetailViewState::currentTab) { currentTab ->
@@ -186,7 +183,7 @@ class HomeDetailFragment @Inject constructor(
 
         unreadMessagesSharedViewModel.onEach { state ->
             views.drawerUnreadCounterBadgeView.render(
-                    UnreadCounterBadgeView.State(
+                    UnreadCounterBadgeView.State.Count(
                             count = state.otherSpacesUnread.totalCount,
                             highlighted = state.otherSpacesUnread.isHighlight
                     )
@@ -205,7 +202,7 @@ class HomeDetailFragment @Inject constructor(
                 .onEach { action ->
                     when (action) {
                         is HomeActivitySharedAction.InviteByEmail -> onInviteByEmail(action.email)
-                        else                                      -> Unit // no-op
+                        else -> Unit // no-op
                     }
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
@@ -220,25 +217,25 @@ class HomeDetailFragment @Inject constructor(
 
         createDirectRoomViewModel.observeViewEvents { viewEvent ->
             when (viewEvent) {
-                CreateDirectRoomViewEvents.InviteSent                 -> {
+                CreateDirectRoomViewEvents.InviteSent -> {
                     handleInviteByEmailResult(buildString {
                         appendLine(getString(R.string.tchap_invite_sending_succeeded))
                         appendLine(getString(R.string.tchap_send_invite_confirmation))
                     })
                 }
-                is CreateDirectRoomViewEvents.Failure                 -> showFailure(viewEvent.throwable)
-                is CreateDirectRoomViewEvents.UserDiscovered          -> handleExistingUser(viewEvent.user)
-                is CreateDirectRoomViewEvents.InviteAlreadySent       -> {
+                is CreateDirectRoomViewEvents.Failure -> showFailure(viewEvent.throwable)
+                is CreateDirectRoomViewEvents.UserDiscovered -> handleExistingUser(viewEvent.user)
+                is CreateDirectRoomViewEvents.InviteAlreadySent -> {
                     handleInviteByEmailResult(getString(R.string.tchap_invite_already_send_message, viewEvent.email))
                 }
                 is CreateDirectRoomViewEvents.InviteUnauthorizedEmail -> {
                     handleInviteByEmailResult(getString(R.string.tchap_invite_unauthorized_message, viewEvent.email))
                 }
-                is CreateDirectRoomViewEvents.OpenDirectChat          -> openRoom(viewEvent.roomId)
-                CreateDirectRoomViewEvents.DmSelf                     -> {
+                is CreateDirectRoomViewEvents.OpenDirectChat -> openRoom(viewEvent.roomId)
+                CreateDirectRoomViewEvents.DmSelf -> {
                     Toast.makeText(requireContext(), R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
                 }
-                CreateDirectRoomViewEvents.InvalidCode                -> {
+                CreateDirectRoomViewEvents.InvalidCode -> {
                     Toast.makeText(requireContext(), R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -246,25 +243,15 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun navigateBack() {
-        try {
-            val lastSpace = appStateHandler.getSpaceBackstack().removeLast()
-            setCurrentSpace(lastSpace)
-        } catch (e: NoSuchElementException) {
-            navigateUpOneSpace()
-        }
+        val previousSpaceId = spaceStateHandler.popSpaceBackstack()
+        val parentSpaceId = spaceStateHandler.getCurrentSpace()?.flattenParentIds?.lastOrNull()
+        setCurrentSpace(previousSpaceId ?: parentSpaceId)
     }
 
     private fun setCurrentSpace(spaceId: String?) {
-        appStateHandler.setCurrentSpace(spaceId, isForwardNavigation = false)
-        sharedActionViewModel.post(HomeActivitySharedAction.CloseGroup)
+        spaceStateHandler.setCurrentSpace(spaceId, isForwardNavigation = false)
+        sharedActionViewModel.post(HomeActivitySharedAction.OnCloseSpace)
     }
-
-    private fun navigateUpOneSpace() {
-        val parentId = getCurrentSpace()?.flattenParentIds?.lastOrNull()
-        setCurrentSpace(parentId)
-    }
-
-    private fun getCurrentSpace() = (appStateHandler.getCurrentRoomGroupingMethod() as? RoomGroupingMethod.BySpace)?.spaceSummary
 
     private fun handleCallStarted() {
         dismissLoadingDialog()
@@ -285,10 +272,8 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun refreshSpaceState() {
-        when (val roomGroupingMethod = appStateHandler.getCurrentRoomGroupingMethod()) {
-            is RoomGroupingMethod.ByLegacyGroup -> onGroupChange(roomGroupingMethod.groupSummary)
-            is RoomGroupingMethod.BySpace -> onSpaceChange(roomGroupingMethod.spaceSummary)
-            else -> Unit
+        spaceStateHandler.getCurrentSpace()?.let {
+            onSpaceChange(it)
         }
     }
 
@@ -304,9 +289,10 @@ class HomeDetailFragment @Inject constructor(
                     viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer)
                     colorInt = colorProvider.getColorFromAttribute(R.attr.colorPrimary)
                     contentAction = Runnable {
-                        (weakCurrentActivity?.get() as? VectorBaseActivity<*>)
-                                ?.navigator
-                                ?.requestSessionVerification(requireContext(), newest.deviceId ?: "")
+                        (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let { vectorBaseActivity ->
+                            vectorBaseActivity.navigator
+                                    .requestSessionVerification(vectorBaseActivity, newest.deviceId ?: "")
+                        }
                         unknownDeviceDetectorSharedViewModel.handle(
                                 UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(newest.deviceId?.let { listOf(it) }.orEmpty())
                         )
@@ -349,15 +335,6 @@ class HomeDetailFragment @Inject constructor(
         )
     }
 
-    private fun onGroupChange(groupSummary: GroupSummary?) {
-        if (groupSummary == null) {
-            views.groupToolbarSpaceTitleView.isVisible = false
-        } else {
-            views.groupToolbarSpaceTitleView.isVisible = true
-            views.groupToolbarSpaceTitleView.text = groupSummary.displayName
-        }
-    }
-
     private fun onSpaceChange(spaceSummary: RoomSummary?) {
         if (spaceSummary == null) {
             views.groupToolbarSpaceTitleView.isVisible = false
@@ -397,16 +374,9 @@ class HomeDetailFragment @Inject constructor(
         }
 
         views.homeToolbarContent.debouncedClicks {
-            withState(viewModel) {
-                when (it.roomGroupingMethod) {
-                    is RoomGroupingMethod.ByLegacyGroup -> {
-                        // do nothing
-                    }
-                    is RoomGroupingMethod.BySpace -> {
-                        it.roomGroupingMethod.spaceSummary?.let { spaceSummary ->
-                            sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(spaceSummary.roomId))
-                        }
-                    }
+            withState(viewModel) { viewState ->
+                viewState.selectedSpace?.let {
+                    sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(it.roomId))
                 }
             }
         }
@@ -580,7 +550,7 @@ class HomeDetailFragment @Inject constructor(
                 .show()
     }
 
-    override fun onBackPressed(toolbarButton: Boolean) = if (getCurrentSpace() != null) {
+    override fun onBackPressed(toolbarButton: Boolean) = if (spaceStateHandler.getCurrentSpace() != null) {
         navigateBack()
         true
     } else {

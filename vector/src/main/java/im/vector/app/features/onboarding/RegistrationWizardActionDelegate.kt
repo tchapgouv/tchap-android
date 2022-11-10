@@ -59,7 +59,8 @@ class RegistrationWizardActionDelegate @Inject constructor(
                 onSuccess = { it.toRegistrationResult() },
                 onFailure = {
                     when {
-                        action.threePid is RegisterThreePid.Email && it.is401() -> RegistrationResult.SendEmailSuccess(action.threePid.email)
+                        action.threePid is RegisterThreePid.Email && it.is401() -> RegistrationResult.SendEmailSuccess(action.threePid)
+                        action.threePid is RegisterThreePid.Msisdn && it.is401() -> RegistrationResult.SendMsisdnSuccess(action.threePid)
                         else -> RegistrationResult.Error(it)
                     }
                 }
@@ -95,12 +96,15 @@ sealed interface RegistrationResult {
     data class Error(val cause: Throwable) : RegistrationResult
     data class Complete(val session: Session) : RegistrationResult
     data class NextStep(val flowResult: FlowResult) : RegistrationResult
-    data class SendEmailSuccess(val email: String) : RegistrationResult
+    data class SendEmailSuccess(val email: RegisterThreePid.Email) : RegistrationResult
+    data class SendMsisdnSuccess(val msisdn: RegisterThreePid.Msisdn) : RegistrationResult
 }
 
 sealed interface RegisterAction {
     object StartRegistration : RegisterAction
-    data class CreateAccount(val username: String, val password: String, val initialDeviceName: String) : RegisterAction
+
+    // Tchap: username and initialDeviceName are not necessary to create an account
+    data class CreateAccount(val username: String?, val password: String, val initialDeviceName: String?) : RegisterAction
 
     data class AddThreePid(val threePid: RegisterThreePid) : RegisterAction
     object SendAgainThreePid : RegisterAction

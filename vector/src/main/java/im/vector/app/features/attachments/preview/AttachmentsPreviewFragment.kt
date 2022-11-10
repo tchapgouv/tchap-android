@@ -39,11 +39,13 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.yalantis.ucrop.UCrop
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.insertBeforeLast
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.OnSnapPositionChangeListener
@@ -62,12 +64,16 @@ data class AttachmentsPreviewArgs(
         val attachments: List<ContentAttachmentData>
 ) : Parcelable
 
-class AttachmentsPreviewFragment @Inject constructor(
-        private val attachmentMiniaturePreviewController: AttachmentMiniaturePreviewController,
-        private val attachmentBigPreviewController: AttachmentBigPreviewController,
-        private val colorProvider: ColorProvider,
-        private val clock: Clock,
-) : VectorBaseFragment<FragmentAttachmentsPreviewBinding>(), AttachmentMiniaturePreviewController.Callback {
+@AndroidEntryPoint
+class AttachmentsPreviewFragment :
+        VectorBaseFragment<FragmentAttachmentsPreviewBinding>(),
+        AttachmentMiniaturePreviewController.Callback,
+        VectorMenuProvider {
+
+    @Inject lateinit var attachmentMiniaturePreviewController: AttachmentMiniaturePreviewController
+    @Inject lateinit var attachmentBigPreviewController: AttachmentBigPreviewController
+    @Inject lateinit var colorProvider: ColorProvider
+    @Inject lateinit var clock: Clock
 
     private val fragmentArgs: AttachmentsPreviewArgs by args()
     private val viewModel: AttachmentsPreviewViewModel by fragmentViewModel()
@@ -97,7 +103,7 @@ class AttachmentsPreviewFragment @Inject constructor(
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.attachmentsPreviewRemoveAction -> {
                 handleRemoveAction()
@@ -107,20 +113,16 @@ class AttachmentsPreviewFragment @Inject constructor(
                 handleEditAction()
                 true
             }
-            else -> {
-                super.onOptionsItemSelected(item)
-            }
+            else -> false
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun handlePrepareMenu(menu: Menu) {
         withState(viewModel) { state ->
             val editMenuItem = menu.findItem(R.id.attachmentsPreviewEditAction)
             val showEditMenuItem = state.attachments.getOrNull(state.currentAttachmentIndex)?.isEditable().orFalse()
             editMenuItem.setVisible(showEditMenuItem)
         }
-
-        super.onPrepareOptionsMenu(menu)
     }
 
     override fun getMenuRes() = R.menu.vector_attachments_preview

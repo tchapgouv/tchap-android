@@ -39,7 +39,7 @@ import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_tchap_editable_avatar_with_name)
+@EpoxyModelClass
 abstract class TchapRoomAvatarWithNameItem : EpoxyModelWithHolder<TchapRoomAvatarWithNameItem.Holder>() {
 
     @EpoxyAttribute
@@ -92,6 +92,8 @@ abstract class TchapRoomAvatarWithNameItem : EpoxyModelWithHolder<TchapRoomAvata
 
     @EpoxyAttribute
     var editorActionListener: TextView.OnEditorActionListener? = null
+
+    override fun getDefaultLayout() = R.layout.item_tchap_editable_avatar_with_name
 
     private val onTextChangeListener = object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {

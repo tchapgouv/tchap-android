@@ -20,7 +20,7 @@ import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import androidx.core.content.FileProvider
-import im.vector.app.BuildConfig
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.voice.VoiceFailure
 import im.vector.app.features.voice.VoiceRecorder
@@ -43,11 +43,12 @@ import javax.inject.Inject
 class AudioMessageHelper @Inject constructor(
         private val context: Context,
         private val playbackTracker: AudioMessagePlaybackTracker,
+        private val buildMeta: BuildMeta,
         voiceRecorderProvider: VoiceRecorderProvider
 ) {
     private var mediaPlayer: MediaPlayer? = null
     private var currentPlayingId: String? = null
-    private var voiceRecorder: VoiceRecorder = voiceRecorderProvider.provideVoiceRecorder()
+    private val voiceRecorder: VoiceRecorder by lazy { voiceRecorderProvider.provideVoiceRecorder() }
 
     private val amplitudeList = mutableListOf<Int>()
 
@@ -78,18 +79,19 @@ class AudioMessageHelper @Inject constructor(
     }
 
     fun stopRecording(): MultiPickerAudioType? {
-        tryOrNull("Cannot stop media recording amplitude") {
-            stopRecordingAmplitudes()
-        }
         val voiceMessageFile = tryOrNull("Cannot stop media recorder!") {
             voiceRecorder.stopRecord()
             voiceRecorder.getVoiceMessageFile()
         }
 
-        try {
+        tryOrNull("Cannot stop media recording amplitude") {
+            stopRecordingAmplitudes()
+        }
+
+        return try {
             voiceMessageFile?.let {
-                val outputFileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", it, "Voice message.${it.extension}")
-                return outputFileUri
+                val outputFileUri = FileProvider.getUriForFile(context, buildMeta.applicationId + ".fileProvider", it, "Voice message.${it.extension}")
+                outputFileUri
                         .toMultiPickerAudioType(context)
                         ?.apply {
                             waveform = if (amplitudeList.size < 50) {
@@ -98,10 +100,13 @@ class AudioMessageHelper @Inject constructor(
                                 amplitudeList.chunked(amplitudeList.size / 50) { items -> items.maxOrNull() ?: 0 }
                             }
                         }
-            } ?: return null
+            }
         } catch (e: FileNotFoundException) {
             Timber.e(e, "Cannot stop voice recording")
-            return null
+            null
+        } catch (e: RuntimeException) {
+            Timber.e(e, "Error while retrieving metadata")
+            null
         }
     }
 

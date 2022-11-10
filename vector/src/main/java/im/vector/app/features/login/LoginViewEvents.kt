@@ -40,13 +40,9 @@ sealed class LoginViewEvents : VectorViewEvents {
     object OnResetPasswordSendThreePidDone : LoginViewEvents()
     object OnResetPasswordMailConfirmationSuccess : LoginViewEvents()
     object OnResetPasswordMailConfirmationSuccessDone : LoginViewEvents()
-    object OnGoToSignInClicked : LoginViewEvents()
 
     data class OnSendEmailSuccess(val email: String) : LoginViewEvents()
     data class OnSendMsisdnSuccess(val msisdn: String) : LoginViewEvents()
 
     data class OnWebLoginError(val errorCode: Int, val description: String, val failingUrl: String) : LoginViewEvents()
-
-    object OnPasswordValidated : LoginViewEvents()
-    data class OnHomeServerRetrieved(val hs: String) : LoginViewEvents()
 }

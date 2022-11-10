@@ -71,7 +71,9 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.model.shouldShareHistory
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
+import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXEncrypting
@@ -81,6 +83,7 @@ import org.matrix.android.sdk.internal.crypto.algorithms.olm.MXOlmEncryptionFact
 import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 import org.matrix.android.sdk.internal.crypto.model.MXKey.Companion.KEY_SIGNED_CURVE_25519_TYPE
+import org.matrix.android.sdk.internal.crypto.model.SessionInfo
 import org.matrix.android.sdk.internal.crypto.model.toRest
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -271,21 +274,16 @@ internal class DefaultCryptoService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun getLiveMyDevicesInfo(): LiveData<List<DeviceInfo>> {
+    override fun getMyDevicesInfoLive(): LiveData<List<DeviceInfo>> {
         return cryptoStore.getLiveMyDevicesInfo()
+    }
+
+    override fun getMyDevicesInfoLive(deviceId: String): LiveData<Optional<DeviceInfo>> {
+        return cryptoStore.getLiveMyDevicesInfo(deviceId)
     }
 
     override fun getMyDevicesInfo(): List<DeviceInfo> {
         return cryptoStore.getMyDevicesInfo()
-    }
-
-    override fun getDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>) {
-        getDeviceInfoTask
-                .configureWith(GetDeviceInfoTask.Params(deviceId)) {
-                    this.executionThread = TaskThread.CRYPTO
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
     }
 
     override fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int {
@@ -511,12 +509,21 @@ internal class DefaultCryptoService @Inject constructor(
      * @param userId the user id
      * @param deviceId the device id
      */
-    override fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo? {
+    override fun getCryptoDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo? {
         return if (userId.isNotEmpty() && !deviceId.isNullOrEmpty()) {
             cryptoStore.getUserDevice(userId, deviceId)
         } else {
             null
         }
+    }
+
+    override fun getCryptoDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>) {
+        getDeviceInfoTask
+                .configureWith(GetDeviceInfoTask.Params(deviceId)) {
+                    this.executionThread = TaskThread.CRYPTO
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
     }
 
     override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
@@ -525,6 +532,10 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun getLiveCryptoDeviceInfo(): LiveData<List<CryptoDeviceInfo>> {
         return cryptoStore.getLiveDeviceList()
+    }
+
+    override fun getLiveCryptoDeviceInfoWithId(deviceId: String): LiveData<Optional<CryptoDeviceInfo>> {
+        return cryptoStore.getLiveDeviceWithId(deviceId)
     }
 
     override fun getLiveCryptoDeviceInfo(userId: String): LiveData<List<CryptoDeviceInfo>> {
@@ -818,7 +829,7 @@ internal class DefaultCryptoService @Inject constructor(
                 EventType.SEND_SECRET -> {
                     onSecretSendReceived(event)
                 }
-                EventType.ROOM_KEY_WITHHELD -> {
+                in EventType.ROOM_KEY_WITHHELD.values -> {
                     onKeyWithHeldReceived(event)
                 }
                 else -> {
@@ -867,7 +878,7 @@ internal class DefaultCryptoService @Inject constructor(
                 senderKey = withHeldContent.senderKey,
                 fromDevice = withHeldContent.fromDevice,
                 event = Event(
-                        type = EventType.ROOM_KEY_WITHHELD,
+                        type = EventType.ROOM_KEY_WITHHELD.stable,
                         senderId = senderId,
                         content = event.getClearContent()
                 )
@@ -963,8 +974,12 @@ internal class DefaultCryptoService @Inject constructor(
     private fun onRoomHistoryVisibilityEvent(roomId: String, event: Event) {
         if (!event.isStateEvent()) return
         val eventContent = event.content.toModel<RoomHistoryVisibilityContent>()
-        eventContent?.historyVisibility?.let {
-            cryptoStore.setShouldEncryptForInvitedMembers(roomId, it != RoomHistoryVisibility.JOINED)
+        val historyVisibility = eventContent?.historyVisibility
+        if (historyVisibility == null) {
+            cryptoStore.setShouldShareHistory(roomId, false)
+        } else {
+            cryptoStore.setShouldEncryptForInvitedMembers(roomId, historyVisibility != RoomHistoryVisibility.JOINED)
+            cryptoStore.setShouldShareHistory(roomId, historyVisibility.shouldShareHistory())
         }
     }
 
@@ -1110,6 +1125,10 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun isKeyGossipingEnabled() = cryptoStore.isKeyGossipingEnabled()
+
+    override fun isShareKeysOnInviteEnabled() = cryptoStore.isShareKeysOnInviteEnabled()
+
+    override fun enableShareKeyOnInvite(enable: Boolean) = cryptoStore.enableShareKeyOnInvite(enable)
 
     /**
      * Tells whether the client should ever send encrypted messages to unverified devices.
@@ -1332,6 +1351,30 @@ internal class DefaultCryptoService @Inject constructor(
                         callback.onFailure(it)
                     }
             )
+        }
+    }
+
+    override suspend fun sendSharedHistoryKeys(roomId: String, userId: String, sessionInfoSet: Set<SessionInfo>?) {
+        deviceListManager.downloadKeys(listOf(userId), false)
+        val userDevices = cryptoStore.getUserDeviceList(userId)
+        val sessionToShare = sessionInfoSet.orEmpty().mapNotNull { sessionInfo ->
+            // Get inbound session from sessionId and sessionKey
+            withContext(coroutineDispatchers.crypto) {
+                olmDevice.getInboundGroupSession(
+                        sessionId = sessionInfo.sessionId,
+                        senderKey = sessionInfo.senderKey,
+                        roomId = roomId
+                ).takeIf { it.wrapper.sessionData.sharedHistory }
+            }
+        }
+
+        userDevices?.forEach { deviceInfo ->
+            // Lets share the provided inbound sessions for every user device
+            sessionToShare.forEach { inboundGroupSession ->
+                val encryptor = roomEncryptorsStore.get(roomId)
+                encryptor?.shareHistoryKeysWithDevice(inboundGroupSession, deviceInfo)
+                Timber.i("## CRYPTO | Sharing inbound session")
+            }
         }
     }
 

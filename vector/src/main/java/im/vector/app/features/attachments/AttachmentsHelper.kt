@@ -16,6 +16,7 @@
 package im.vector.app.features.attachments
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -23,9 +24,9 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import im.vector.app.core.dialogs.PhotoOrVideoDialog
 import im.vector.app.core.platform.Restorable
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.multipicker.MultiPicker
-import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import timber.log.Timber
 
@@ -35,16 +36,16 @@ private const val PENDING_TYPE_KEY = "PENDING_TYPE_KEY"
 /**
  * This class helps to handle attachments by providing simple methods.
  */
-class AttachmentsHelper(val context: Context, val callback: Callback) : Restorable {
+class AttachmentsHelper(
+        val context: Context,
+        val callback: Callback,
+        private val buildMeta: BuildMeta,
+) : Restorable {
 
     interface Callback {
-        fun onContactAttachmentReady(contactAttachment: ContactAttachment) {
-            if (BuildConfig.LOG_PRIVATE_DATA) {
-                Timber.v("On contact attachment ready: $contactAttachment")
-            }
-        }
-
+        fun onContactAttachmentReady(contactAttachment: ContactAttachment)
         fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>)
+        fun onAttachmentError(throwable: Throwable)
     }
 
     // Capture path allows to handle camera image picking. It must be restored if the activity gets killed.
@@ -74,21 +75,21 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
     /**
      * Starts the process for handling file picking.
      */
-    fun selectFile(activityResultLauncher: ActivityResultLauncher<Intent>) {
+    fun selectFile(activityResultLauncher: ActivityResultLauncher<Intent>) = doSafe {
         MultiPicker.get(MultiPicker.FILE).startWith(activityResultLauncher)
     }
 
     /**
      * Starts the process for handling image/video picking.
      */
-    fun selectGallery(activityResultLauncher: ActivityResultLauncher<Intent>) {
+    fun selectGallery(activityResultLauncher: ActivityResultLauncher<Intent>) = doSafe {
         MultiPicker.get(MultiPicker.MEDIA).startWith(activityResultLauncher)
     }
 
     /**
      * Starts the process for handling audio picking.
      */
-    fun selectAudio(activityResultLauncher: ActivityResultLauncher<Intent>) {
+    fun selectAudio(activityResultLauncher: ActivityResultLauncher<Intent>) = doSafe {
         MultiPicker.get(MultiPicker.AUDIO).startWith(activityResultLauncher)
     }
 
@@ -102,11 +103,11 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
             cameraVideoActivityResultLauncher: ActivityResultLauncher<Intent>
     ) {
         PhotoOrVideoDialog(activity, vectorPreferences).show(object : PhotoOrVideoDialog.PhotoOrVideoDialogListener {
-            override fun takePhoto() {
+            override fun takePhoto() = doSafe {
                 captureUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(context, cameraActivityResultLauncher)
             }
 
-            override fun takeVideo() {
+            override fun takeVideo() = doSafe {
                 captureUri = MultiPicker.get(MultiPicker.CAMERA_VIDEO).startWithExpectingFile(context, cameraVideoActivityResultLauncher)
             }
         })
@@ -115,8 +116,16 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
     /**
      * Starts the process for handling contact picking.
      */
-    fun selectContact(activityResultLauncher: ActivityResultLauncher<Intent>) {
+    fun selectContact(activityResultLauncher: ActivityResultLauncher<Intent>) = doSafe {
         MultiPicker.get(MultiPicker.CONTACT).startWith(activityResultLauncher)
+    }
+
+    private fun doSafe(function: () -> Unit) {
+        try {
+            function()
+        } catch (activityNotFound: ActivityNotFoundException) {
+            callback.onAttachmentError(activityNotFound)
+        }
     }
 
     /**
@@ -144,6 +153,9 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
                 .firstOrNull()
                 ?.toContactAttachment()
                 ?.let {
+                    if (buildMeta.lowPrivacyLoggingEnabled) {
+                        Timber.v("On contact attachment ready: $it")
+                    }
                     callback.onContactAttachmentReady(it)
                 }
     }

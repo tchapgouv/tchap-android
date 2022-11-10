@@ -35,7 +35,6 @@ import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
 import org.matrix.android.sdk.api.session.file.FileService
-import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.identity.IdentityService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
@@ -155,11 +154,6 @@ interface Session {
      * Returns the RoomDirectoryService associated with the session.
      */
     fun roomDirectoryService(): RoomDirectoryService
-
-    /**
-     * Returns the GroupService associated with the session.
-     */
-    fun groupService(): GroupService
 
     /**
      * Returns the UserService associated with the session.
@@ -341,9 +335,9 @@ interface Session {
     fun getUiaSsoFallbackUrl(authenticationSessionId: String): String
 
     /**
-     * Debug API, will print out info on DB size to logcat.
+     * Debug API, will return info about the DB.
      */
-    fun logDbUsageInfo()
+    fun getDbUsageInfo(): String
 
     /**
      * Debug API, return the list of all RealmConfiguration used by this session.

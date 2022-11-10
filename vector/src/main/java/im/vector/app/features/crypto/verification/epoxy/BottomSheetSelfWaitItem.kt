@@ -26,8 +26,8 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 /**
  * A action for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_verification_wait)
-abstract class BottomSheetSelfWaitItem : VectorEpoxyModel<BottomSheetSelfWaitItem.Holder>() {
+@EpoxyModelClass
+abstract class BottomSheetSelfWaitItem : VectorEpoxyModel<BottomSheetSelfWaitItem.Holder>(R.layout.item_verification_wait) {
 
     override fun bind(holder: Holder) {
         super.bind(holder)

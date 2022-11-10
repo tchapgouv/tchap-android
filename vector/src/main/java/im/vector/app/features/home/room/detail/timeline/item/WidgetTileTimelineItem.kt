@@ -32,8 +32,8 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base_state)
-abstract class WidgetTileTimelineItem : AbsBaseMessageItem<WidgetTileTimelineItem.Holder>() {
+@EpoxyModelClass
+abstract class WidgetTileTimelineItem : AbsBaseMessageItem<WidgetTileTimelineItem.Holder>(R.layout.item_timeline_event_base_state) {
 
     override val baseAttributes: AbsBaseMessageItem.Attributes
         get() = attributes
@@ -66,7 +66,7 @@ abstract class WidgetTileTimelineItem : AbsBaseMessageItem<WidgetTileTimelineIte
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageWidgetStub
+        private val STUB_ID = R.id.messageWidgetStub
     }
 
     /**

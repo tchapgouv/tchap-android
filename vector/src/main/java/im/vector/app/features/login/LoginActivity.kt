@@ -37,6 +37,7 @@ import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.HomeActivity
@@ -210,9 +211,6 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
             is LoginViewEvents.Loading ->
                 // This is handled by the Fragments
                 Unit
-            else                                                          -> {
-                // Do Nothing
-            }
         }
     }
 
@@ -223,7 +221,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                 analyticsScreenName = MobileScreen.ScreenName.Register
             }
             val authDescription = inferAuthDescription(loginViewState)
-            val intent = HomeActivity.newIntent(this, authenticationDescription = authDescription)
+            val intent = HomeActivity.newIntent(this, firstStartMainActivity = false, authenticationDescription = authDescription)
             startActivity(intent)
             finish()
             return
@@ -234,9 +232,11 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
     }
 
     private fun inferAuthDescription(loginViewState: LoginViewState) = when (loginViewState.signMode) {
-        SignMode.Unknown            -> null
-        SignMode.SignUp             -> AuthenticationDescription.Register(type = AuthenticationDescription.AuthenticationType.Other)
-        SignMode.SignIn             -> AuthenticationDescription.Login
+        SignMode.TchapSignUp,
+        SignMode.TchapSignIn -> error("developer error")
+        SignMode.Unknown -> null
+        SignMode.SignUp -> AuthenticationDescription.Register(type = AuthenticationDescription.AuthenticationType.Other)
+        SignMode.SignIn -> AuthenticationDescription.Login
         SignMode.SignInWithMatrixId -> AuthenticationDescription.Login
     }
 
@@ -268,6 +268,8 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
     private fun onSignModeSelected(loginViewEvents: LoginViewEvents.OnSignModeSelected) = withState(loginViewModel) { state ->
         // state.signMode could not be ready yet. So use value from the ViewEvent
         when (loginViewEvents.signMode) {
+            SignMode.TchapSignUp,
+            SignMode.TchapSignIn -> error("developer error")
             SignMode.Unknown -> error("Sign mode has to be set before calling this method")
             SignMode.SignUp -> {
                 // This is managed by the LoginViewEvents
@@ -275,8 +277,8 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
             SignMode.SignIn -> {
                 // It depends on the LoginMode
                 when (state.loginMode) {
-                    LoginMode.Unknown,
-                    is LoginMode.Sso -> error("Developer error")
+                    LoginMode.Unknown -> error("Developer error")
+                    is LoginMode.Sso -> launchSsoFlow()
                     is LoginMode.SsoAndPassword,
                     LoginMode.Password -> addFragmentToBackstack(
                             views.loginFragmentContainer,
@@ -293,6 +295,16 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                     tag = FRAGMENT_LOGIN_TAG,
                     option = commonOption
             )
+        }
+    }
+
+    private fun launchSsoFlow() = withState(loginViewModel) { state ->
+        loginViewModel.getSsoUrl(
+                redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                deviceId = state.deviceId,
+                providerId = null,
+        )?.let { ssoUrl ->
+            openUrlInChromeCustomTab(this, null, ssoUrl)
         }
     }
 

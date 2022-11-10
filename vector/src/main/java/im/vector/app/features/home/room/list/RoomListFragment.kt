@@ -35,6 +35,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
@@ -73,17 +74,19 @@ data class RoomListParams(
         val displayMode: RoomListDisplayMode
 ) : Parcelable
 
-class RoomListFragment @Inject constructor(
-        private val pagedControllerFactory: RoomSummaryPagedControllerFactory,
-        private val notificationDrawerManager: NotificationDrawerManager,
-        private val footerController: RoomListFooterController,
-        private val userPreferencesProvider: UserPreferencesProvider
-) : VectorBaseFragment<FragmentRoomListBinding>(),
+@AndroidEntryPoint
+class RoomListFragment :
+        VectorBaseFragment<FragmentRoomListBinding>(),
         RoomListListener,
         OnBackPressed,
         FilteredRoomFooterItem.Listener,
         NotifsFabMenuView.Listener,
         TchapRoomsFabMenuView.Listener {
+
+    @Inject lateinit var pagedControllerFactory: RoomSummaryPagedControllerFactory
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+    @Inject lateinit var footerController: RoomListFooterController
+    @Inject lateinit var userPreferencesProvider: UserPreferencesProvider
 
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
@@ -135,14 +138,14 @@ class RoomListFragment @Inject constructor(
                 is RoomListViewEvents.SelectRoom -> handleSelectRoom(it, it.isInviteAlreadyAccepted)
                 is RoomListViewEvents.Done -> Unit
                 is RoomListViewEvents.NavigateToMxToBottomSheet -> handleShowMxToLink(it.link)
-                RoomListViewEvents.CreateDirectChat             -> handleCreateDirectChat()
-                is RoomListViewEvents.CreateRoom                -> handleCreateRoom(it.initialName)
-                is RoomListViewEvents.OpenRoomDirectory         -> handleOpenRoomDirectory(it.filter)
+                RoomListViewEvents.CreateDirectChat -> handleCreateDirectChat()
+                is RoomListViewEvents.CreateRoom -> handleCreateRoom(it.initialName)
+                is RoomListViewEvents.OpenRoomDirectory -> handleOpenRoomDirectory(it.filter)
             }
         }
 
         views.createChatFabMenu.listener = this
-        views.createRoomFabMenu.listener = this
+        views.tchapCreateRoomFabMenu.listener = this
 
         sharedActionViewModel
                 .stream()
@@ -155,6 +158,10 @@ class RoomListFragment @Inject constructor(
                     .onEach {
                         (it.contentEpoxyController as? RoomSummaryPagedController)?.roomChangeMembershipStates = ms
                     }
+        }
+        roomListViewModel.onEach(RoomListViewState::localRoomIds) {
+            // Local rooms should not exist anymore when the room list is shown
+            roomListViewModel.deleteLocalRooms(it)
         }
     }
 
@@ -191,7 +198,7 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun handleShowMxToLink(link: String) {
-        navigator.openMatrixToBottomSheet(requireContext(), link, OriginOfMatrixTo.ROOM_LIST)
+        navigator.openMatrixToBottomSheet(requireActivity(), link, OriginOfMatrixTo.ROOM_LIST)
     }
 
     override fun onDestroyView() {
@@ -202,7 +209,7 @@ class RoomListFragment @Inject constructor(
         footerController.listener = null
         // TODO Cleanup listener on the ConcatAdapter's adapters?
         stateRestorer.clear()
-        views.createRoomFabMenu.listener = null
+        views.tchapCreateRoomFabMenu.listener = null
         views.createChatFabMenu.listener = null
         concatAdapter = null
         super.onDestroyView()
@@ -234,7 +241,7 @@ class RoomListFragment @Inject constructor(
         when (roomListParams.displayMode) {
             RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.isVisible = showFab
             RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.isVisible = showFab
-            RoomListDisplayMode.ROOMS -> views.createRoomFabMenu.isVisible = showFab
+            RoomListDisplayMode.ROOMS -> views.tchapCreateRoomFabMenu.isVisible = showFab
             RoomListDisplayMode.FILTERED -> Unit // No button in this mode
         }
 
@@ -249,19 +256,19 @@ class RoomListFragment @Inject constructor(
                         if (!showFab) return // do nothing
 
                         views.createChatFabMenu.removeCallbacks(showFabRunnable)
-                        views.createRoomFabMenu.removeCallbacks(showFabRunnable)
+                        views.tchapCreateRoomFabMenu.removeCallbacks(showFabRunnable)
 
                         when (newState) {
                             RecyclerView.SCROLL_STATE_IDLE -> {
                                 views.createChatFabMenu.postDelayed(showFabRunnable, 250)
-                                views.createRoomFabMenu.postDelayed(showFabRunnable, 250)
+                                views.tchapCreateRoomFabMenu.postDelayed(showFabRunnable, 250)
                             }
                             RecyclerView.SCROLL_STATE_DRAGGING,
                             RecyclerView.SCROLL_STATE_SETTLING -> {
                                 when (roomListParams.displayMode) {
                                     RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.hide()
                                     RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.hide()
-                                    RoomListDisplayMode.ROOMS -> views.createRoomFabMenu.hide()
+                                    RoomListDisplayMode.ROOMS -> views.tchapCreateRoomFabMenu.hide()
                                     RoomListDisplayMode.FILTERED -> Unit
                                 }
                             }
@@ -430,7 +437,7 @@ class RoomListFragment @Inject constructor(
             when (roomListParams.displayMode) {
                 RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.show()
                 RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.show()
-                RoomListDisplayMode.ROOMS -> views.createRoomFabMenu.show()
+                RoomListDisplayMode.ROOMS -> views.tchapCreateRoomFabMenu.show()
                 RoomListDisplayMode.FILTERED -> Unit
             }
         }
@@ -544,7 +551,7 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
-        if (views.createChatFabMenu.onBackPressed() || views.createRoomFabMenu.onBackPressed()) {
+        if (views.createChatFabMenu.onBackPressed() || views.tchapCreateRoomFabMenu.onBackPressed()) {
             return true
         }
         return false

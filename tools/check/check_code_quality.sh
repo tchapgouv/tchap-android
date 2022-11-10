@@ -74,7 +74,9 @@ ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code.txt \
     ./vector/src/debug/java \
     ./vector/src/release/java \
     ./vector/src/fdroid/java \
-    ./vector/src/gplay/java
+    ./vector/src/gplay/java \
+    ./vector-app/src/gplay/java \
+    ./vector-app/src/main/java
 
 resultForbiddenStringInCode=$?
 
@@ -106,7 +108,9 @@ ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code_app.txt 
     ./vector/src/debug/java \
     ./vector/src/release/java \
     ./vector/src/fdroid/java \
-    ./vector/src/gplay/java
+    ./vector/src/gplay/java \
+    ./vector-app/src/gplay/java \
+    ./vector-app/src/main/java
 
 resultForbiddenStringInCodeApp=$?
 
@@ -118,7 +122,8 @@ ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_resources.txt
     ./vector/src/main/res/color \
     ./vector/src/main/res/layout \
     ./vector/src/main/res/values \
-    ./vector/src/main/res/xml
+    ./vector/src/main/res/xml \
+    ./vector-app/src/main/res/values
 
 resultForbiddenStringInResource=$?
 
@@ -126,7 +131,8 @@ echo
 echo "Search for forbidden patterns in layouts..."
 
 ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_layout.txt \
-    ./vector/src/main/res/layout
+    ./vector/src/main/res/layout \
+    ./vector-app/src/main/res/layout
 
 resultForbiddenStringInLayout=$?
 
@@ -166,7 +172,11 @@ ${checkLongFilesScript} ${maxLines} \
     ./vector/src/main/java \
     ./vector/src/release/java \
     ./vector/src/sharedTest/java \
-    ./vector/src/test/java
+    ./vector/src/test/java \
+    ./vector/src/androidTest/java \
+    ./vector/src/gplay/java \
+    ./vector/src/main/java
+
 
 resultLongFiles=$?
 
