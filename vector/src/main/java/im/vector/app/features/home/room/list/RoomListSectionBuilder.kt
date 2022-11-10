@@ -38,7 +38,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -221,8 +220,7 @@ class RoomListSectionBuilder(
         }.onEach {
             liveSuggestedRooms.postValue(it)
         }.launchIn(viewModelScope)
-
-
+        
         // Tchap : bypass temporarily live suggested rooms to prevent infinite load
 //        sections.add(
 //                RoomsSection(
