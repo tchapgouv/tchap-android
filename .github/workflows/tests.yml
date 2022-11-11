@@ -97,29 +97,10 @@ jobs:
         uses: actions/upload-artifact@v3
         if: always()
         with:
-<<<<<<< HEAD
-          api-level: 28
-          arch: x86
-          profile: Nexus 5X
-          force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: true
-          emulator-build: 7425822
-          script: |
-            # Tchap : comment this task because CI failed
-            # ./gradlew gatherGplayDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
-      - run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
-        # Tchap: Skip in forks
-        if: github.repository == 'vector-im/element-android' && always() # we may have failed a previous step and retried, that's OK
-=======
           name: integration-test-error-results
           path: |
             */build/outputs/androidTest-results/connected/
             */build/reports/androidTests/connected/
->>>>>>> v1.5.2
 
       # we may have failed a previous step and retried, that's OK
       - name: Publish results to Sonar

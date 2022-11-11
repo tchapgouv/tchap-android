@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 # Contributing to Element Android
 
 <!--- TOC -->
@@ -40,7 +38,6 @@ Element Android support can be found in this room: [![Element Android Matrix roo
 
 The rest of the document contains specific rules for Matrix Android projects
 
->>>>>>> v1.5.2
 ## Android Studio settings
 
 Please set the "hard wrap" setting of Android Studio to 160 chars, this is the setting we use internally to format the source code (Menu `Settings/Editor/Code Style` then `Hard wrap at`).
@@ -158,21 +155,7 @@ You should consider adding Unit tests with your PR, and also integration tests (
 
 ### Internationalisation
 
-<<<<<<< HEAD
 When adding new string resources, please only add new entries in the 2 files: `value/strings_tchap.xml` and `values-fr/strings_tchap.xml`.
-=======
-Translations are handled using an external tool: [Weblate](https://translate.element.io/projects/element-android/)
-
-**As a general rule, please never edit or add or remove translations to the project in a Pull Request**. It can lead to merge conflict if the translations are also modified in Weblate side. Pull Request containing change(s) on the translation files cannot be merged.
-
-#### Adding new string
-
-When adding new string resources, please only add new entries in the file `values/strings.xml` ([this file](./library/ui-strings/src/main/res/values/strings.xml)). Translations will be added later by the community of translators using Weblate.
-
-The file `values/strings.xml` must only contain American English (U. S. English) values, as this is the default language of the Android operating system. So for instance, please use "color" instead of "colour". Element Android will still use the language set on the system by the user, like any other Android applications which provide translations. The system language can be any other English language variants, or any other languages. Note that this is also possible to override the system language using the Element Android in-app language settings.
-
-New strings can be added anywhere in the file `values/strings.xml`, not necessarily at the end of the file. Generally, it's even better to add the new strings in some dedicated section per feature, and not at the end of the file, to avoid merge conflict between 2 PR adding strings at the end of the same file.
->>>>>>> v1.5.2
 
 ##### Plurals
 
@@ -180,8 +163,6 @@ Please use `plurals` resources when appropriate, and note that some languages ha
 
 Specific plural forms can be found [here](https://unicode-org.github.io/cldr-staging/charts/37/supplemental/language_plural_rules.html).
 
-<<<<<<< HEAD
-=======
 #### Editing existing strings
 
 Two cases:
@@ -217,7 +198,6 @@ To group strings per feature, or for any other reasons, it is possible to reorde
 
 It is also possible to add empty lines between string resources, and to add XML comments. Please note that the XML comment just above a String resource will also appear on Weblate and be visible to the translators.
 
->>>>>>> v1.5.2
 ### Accessibility
 
 Please consider accessibility as an important point. As a minimum requirement, in layout XML files please use attributes such as `android:contentDescription` and `android:importantForAccessibility`, and test with a screen reader if it's working well. You can add new string resources, dedicated to accessibility, in this case, please prefix theirs id with `a11y_`.

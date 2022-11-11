@@ -31,20 +31,12 @@ knit {
 }
 
 // Note: 2 digits max for each value
-<<<<<<< HEAD
 ext.versionMajor = 2
-=======
-ext.versionMajor = 1
->>>>>>> v1.5.2
 ext.versionMinor = 5
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-<<<<<<< HEAD
 ext.versionPatch = 0
-=======
-ext.versionPatch = 2
->>>>>>> v1.5.2
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -309,21 +301,11 @@ android {
 //        }
     }
 
-<<<<<<< HEAD
     // The 'store' dimension permits to deal with GooglePlay/Fdroid app
     // The 'target' dimension permits to specify which platform are used
     // The 'voip' flavor dimension permits to include/exclude jitsi at compilation time
     // The 'pinning' flavor dimension permits to enable/disable certificate pinning with fingerprint check
     flavorDimensions "store", "target", "voip", "pinning"
-=======
-    sourceSets {
-        nightly {
-            java.srcDirs += "src/release/java"
-        }
-    }
-
-    flavorDimensions "store"
->>>>>>> v1.5.2
 
     productFlavors {
         gplay {

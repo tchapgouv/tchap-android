@@ -34,12 +34,9 @@ import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
-<<<<<<< HEAD
 import kotlinx.coroutines.flow.distinctUntilChanged
-=======
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
->>>>>>> v1.5.2
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -88,9 +85,7 @@ class RoomProfileViewModel @AssistedInject constructor(
         observeBannedRoomMembers(flowRoom)
         observePermissions()
         observePowerLevels()
-<<<<<<< HEAD
         observeAdminMembers()
-=======
         observeCryptoSettings(flowRoom)
     }
 
@@ -130,7 +125,6 @@ class RoomProfileViewModel @AssistedInject constructor(
                     unverifiedDevicesInTheRoom = it
             )
         }
->>>>>>> v1.5.2
     }
 
     private fun observePowerLevels() {

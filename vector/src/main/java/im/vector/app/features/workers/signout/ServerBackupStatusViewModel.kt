@@ -26,11 +26,8 @@ import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-<<<<<<< HEAD
 import im.vector.app.BuildConfig
-=======
 import im.vector.app.core.di.DefaultPreferences
->>>>>>> v1.5.2
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents

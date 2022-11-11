@@ -24,12 +24,8 @@ import androidx.annotation.BoolRes
 import androidx.core.content.edit
 import com.squareup.seismic.ShakeDetector
 import im.vector.app.R
-<<<<<<< HEAD
 import im.vector.app.config.Config
-import im.vector.app.core.di.DefaultSharedPreferences
-=======
 import im.vector.app.core.di.DefaultPreferences
->>>>>>> v1.5.2
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.time.Clock

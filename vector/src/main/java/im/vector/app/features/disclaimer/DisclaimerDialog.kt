@@ -21,48 +21,16 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-<<<<<<< HEAD
-import im.vector.app.core.di.DefaultSharedPreferences
-=======
 import im.vector.app.core.di.DefaultPreferences
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.settings.VectorSettingsUrls
 import javax.inject.Inject
->>>>>>> v1.5.2
 
 // Increase this value to show again the disclaimer dialog after an upgrade of the application
 private const val CURRENT_DISCLAIMER_VALUE = 2
 
 const val SHARED_PREF_KEY = "LAST_DISCLAIMER_VERSION_VALUE"
 
-<<<<<<< HEAD
-fun shouldShowDisclaimerDialog(activity: Activity): Boolean {
-    val sharedPrefs = DefaultSharedPreferences.getInstance(activity)
-    return sharedPrefs.getInt(SHARED_PREF_KEY, 0) < CURRENT_DISCLAIMER_VALUE
-}
-
-fun showDisclaimerDialog(activity: Activity) {
-    // Tchap: condition to show the disclaimer dialog is done at the activity level (see #shouldShowDisclaimerDialog usages)
-    val sharedPrefs = DefaultSharedPreferences.getInstance(activity)
-    sharedPrefs.edit {
-        putInt(SHARED_PREF_KEY, CURRENT_DISCLAIMER_VALUE)
-    }
-
-    val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_disclaimer_content, null)
-
-    MaterialAlertDialogBuilder(activity)
-            .setView(dialogLayout)
-            .setCancelable(false)
-            .setNeutralButton(R.string.ok, null)
-            .show()
-}
-
-fun doNotShowDisclaimerDialog(context: Context) {
-    val sharedPrefs = DefaultSharedPreferences.getInstance(context)
-
-    sharedPrefs.edit {
-        putInt(SHARED_PREF_KEY, CURRENT_DISCLAIMER_VALUE)
-=======
 class DisclaimerDialog @Inject constructor(
         @DefaultPreferences
         private val sharedPrefs: SharedPreferences,
@@ -90,6 +58,5 @@ class DisclaimerDialog @Inject constructor(
         sharedPrefs.edit {
             putInt(SHARED_PREF_KEY, CURRENT_DISCLAIMER_VALUE)
         }
->>>>>>> v1.5.2
     }
 }

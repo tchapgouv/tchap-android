@@ -85,7 +85,6 @@ android {
                 testCoverageEnabled = coverage.enableTestCoverage
             }
         }
-<<<<<<< HEAD
         // Tchap: No nightly
 //        nightly {
 //            initWith release
@@ -178,8 +177,6 @@ android {
             // Tchap: Hide labs menu item in tchap
             resValue "bool", "labs_settings_visible", "false"
         }
-=======
->>>>>>> v1.5.2
     }
 
     compileOptions {
@@ -208,21 +205,12 @@ android {
         test {
             java.srcDirs += "src/sharedTest/java"
         }
-<<<<<<< HEAD
-        // Add sourceSets for `release` version when building `nightly`
-        // Tchap: No nightly
-//        nightly {
-//            java.srcDirs += "src/release/java"
-//        }
-=======
->>>>>>> v1.5.2
     }
 
     buildFeatures {
         viewBinding true
     }
 }
-<<<<<<< HEAD
 
 // Tchap: Use custom configuration for Flipper library
 configurations {
@@ -262,8 +250,6 @@ configurations {
     gplayTchapWithoutvoipWithoutpinningDebugImplementation
 }
 
-=======
->>>>>>> v1.5.2
 dependencies {
     implementation project(":vector-config")
     api project(":matrix-sdk-android")
@@ -465,8 +451,6 @@ dependencies {
         exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
     }
 
-<<<<<<< HEAD
-
     // Tchap: We had to exclude fbjni for withVoip, the library is already include in jitsi library
     // Flipper, debug builds only
     gplayBtchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
@@ -552,8 +536,6 @@ dependencies {
     // Activate when you want to check for leaks, from time to time.
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 
-=======
->>>>>>> v1.5.2
     androidTestImplementation libs.androidx.testCore
     androidTestImplementation libs.androidx.testRunner
     androidTestImplementation libs.androidx.testRules

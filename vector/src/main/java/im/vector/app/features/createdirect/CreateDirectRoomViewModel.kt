@@ -43,22 +43,15 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
-<<<<<<< HEAD
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.user.model.User
 import timber.log.Timber
-=======
-import org.matrix.android.sdk.api.session.getUserOrDefault
-import org.matrix.android.sdk.api.session.permalinks.PermalinkData
-import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
-import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
->>>>>>> v1.5.2
 
 class CreateDirectRoomViewModel @AssistedInject constructor(
         @Assisted initialState: CreateDirectRoomViewState,
@@ -101,17 +94,8 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
                 _viewEvents.post(CreateDirectRoomViewEvents.DmSelf)
             } else {
                 // Try to get user from known users and fall back to creating a User object from MXID
-<<<<<<< HEAD
-                val qrInvitee = if (session.getUser(mxid) != null) {
-                    session.getUser(mxid)!!
-                } else {
-                    User(mxid, null, null)
-                }
-                tchap.onSubmitInvitees(setOf(PendingSelection.UserPendingSelection(qrInvitee)))
-=======
                 val qrInvitee = session.getUserOrDefault(mxid)
-                onSubmitInvitees(setOf(PendingSelection.UserPendingSelection(qrInvitee)))
->>>>>>> v1.5.2
+                tchap.onSubmitInvitees(setOf(PendingSelection.UserPendingSelection(qrInvitee)))
             }
         }
     }

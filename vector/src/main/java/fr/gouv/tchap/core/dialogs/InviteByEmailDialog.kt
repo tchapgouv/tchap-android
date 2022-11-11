@@ -24,7 +24,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.databinding.DialogInviteByIdBinding
-import im.vector.app.features.settings.VectorLocale
 
 class InviteByEmailDialog(
         private val activity: Activity
@@ -42,7 +41,7 @@ class InviteByEmailDialog(
                 .setTitle(R.string.tchap_people_search_invite_by_id_dialog_title)
                 .setView(dialogLayout)
                 .setPositiveButton(R.string.action_invite) { _, _ ->
-                    val text = views.inviteByIdEditText.text.toString().lowercase(VectorLocale.applicationLocale).trim()
+                    val text = views.inviteByIdEditText.text.toString().lowercase().trim()
 
                     if (text.isEmail()) {
                         views.root.hideKeyboard()
