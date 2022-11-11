@@ -24,6 +24,8 @@ project.android.buildTypes.all { buildType ->
             ]
 }
 
+initScreenshotTests(project)
+
 android {
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
     // Ref: https://issuetracker.google.com/issues/144111441
@@ -83,6 +85,7 @@ android {
                 testCoverageEnabled = coverage.enableTestCoverage
             }
         }
+<<<<<<< HEAD
         // Tchap: No nightly
 //        nightly {
 //            initWith release
@@ -175,6 +178,8 @@ android {
             // Tchap: Hide labs menu item in tchap
             resValue "bool", "labs_settings_visible", "false"
         }
+=======
+>>>>>>> v1.5.2
     }
 
     compileOptions {
@@ -203,17 +208,21 @@ android {
         test {
             java.srcDirs += "src/sharedTest/java"
         }
+<<<<<<< HEAD
         // Add sourceSets for `release` version when building `nightly`
         // Tchap: No nightly
 //        nightly {
 //            java.srcDirs += "src/release/java"
 //        }
+=======
+>>>>>>> v1.5.2
     }
 
     buildFeatures {
         viewBinding true
     }
 }
+<<<<<<< HEAD
 
 // Tchap: Use custom configuration for Flipper library
 configurations {
@@ -253,16 +262,18 @@ configurations {
     gplayTchapWithoutvoipWithoutpinningDebugImplementation
 }
 
+=======
+>>>>>>> v1.5.2
 dependencies {
     implementation project(":vector-config")
     api project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-flow")
-    implementation project(":library:jsonviewer")
+    implementation project(":library:external:jsonviewer")
+    implementation project(":library:external:diff-match-patch")
     implementation project(":library:ui-strings")
     implementation project(":library:ui-styles")
     implementation project(":library:core-utils")
     implementation project(":library:attachment-viewer")
-    implementation project(":library:diff-match-patch")
     implementation project(":library:multipicker")
 
     implementation libs.jetbrains.coroutinesCore
@@ -314,12 +325,6 @@ dependencies {
     // Snap Helper https://github.com/rubensousa/GravitySnapHelper
     api 'com.github.rubensousa:gravitysnaphelper:2.2.2'
 
-    // Nightly
-    // API-only library
-    gplayImplementation libs.google.appdistributionApi
-    // Full SDK implementation
-    gplayImplementation libs.google.appdistribution
-
     // Work
     api libs.androidx.work
 
@@ -335,9 +340,12 @@ dependencies {
     // UI
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation libs.google.material
-    implementation 'me.gujun.android:span:1.7'
+    api('me.gujun.android:span:1.7') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
     implementation libs.markwon.core
     implementation libs.markwon.extLatex
+    implementation libs.markwon.imageGlide
     implementation libs.markwon.inlineParser
     implementation libs.markwon.html
     implementation 'com.googlecode.htmlcompressor:htmlcompressor:1.5.2'
@@ -364,7 +372,6 @@ dependencies {
     // Image Loading
     implementation libs.github.bigImageViewer
     implementation libs.github.glideImageLoader
-    implementation libs.github.progressPieIndicator
     implementation libs.github.glideImageViewFactory
 
     // implementation 'com.github.MikeOrtiz:TouchImageView:3.0.2'
@@ -383,21 +390,15 @@ dependencies {
     kapt libs.dagger.hiltCompiler
 
     // Analytics
-    implementation 'com.posthog.android:posthog:1.1.2'
+    implementation('com.posthog.android:posthog:1.1.2') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    implementation libs.sentry.sentryAndroid
 
     // UnifiedPush
-    implementation 'com.github.UnifiedPush:android-connector:2.0.1'
-    // UnifiedPush gplay flavor only
-    gplayImplementation('com.google.firebase:firebase-messaging:23.0.8') {
-        exclude group: 'com.google.firebase', module: 'firebase-core'
-        exclude group: 'com.google.firebase', module: 'firebase-analytics'
-        exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
-    }
+    implementation 'com.github.UnifiedPush:android-connector:2.1.0'
 
-    // OSS License, gplay flavor only
-    gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
-
-    implementation "androidx.emoji2:emoji2:1.1.0"
+    implementation "androidx.emoji2:emoji2:1.2.0"
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
@@ -409,6 +410,11 @@ dependencies {
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'
+
+        // Exclude jitsi's android-scalablevideoview fork's support library
+        // The library exports a jetified artifact but doesn't remove the support library dependency
+        // https://github.com/MatrixFrog/Android-ScalableVideoView/blob/master/gradle.properties#L1
+        exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
     // tchap
@@ -418,13 +424,18 @@ dependencies {
     // QR-code
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170
     implementation 'com.google.zxing:core:3.3.3'
-    implementation 'me.dm7.barcodescanner:zxing:1.9.13'
+
+    // Excludes the legacy support library annotation usages
+    // https://github.com/dm77/barcodescanner/blob/d036996c8a6f36a68843ffe539c834c28944b2d5/core/src/main/java/me/dm7/barcodescanner/core/CameraWrapper.java#L4
+    implementation ('me.dm7.barcodescanner:zxing:1.9.13') {
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
 
     // Emoji Keyboard
     api libs.vanniktech.emojiMaterial
     api libs.vanniktech.emojiGoogle
 
-    implementation 'im.dlg:android-dialer:1.2.5'
+    implementation project(":library:external:dialpad")
 
     // JWT
     api libs.jsonwebtoken.jjwtApi
@@ -435,19 +446,18 @@ dependencies {
     implementation 'commons-codec:commons-codec:1.15'
 
     // MapTiler
-    fdroidApi(libs.maplibre.androidSdk) {
+    api(libs.maplibre.androidSdk) {
         exclude group: 'com.google.android.gms', module: 'play-services-location'
     }
-    fdroidApi(libs.maplibre.pluginAnnotation) {
+    api(libs.maplibre.pluginAnnotation) {
         exclude group: 'com.google.android.gms', module: 'play-services-location'
     }
-    gplayApi libs.maplibre.androidSdk
-    gplayApi libs.maplibre.pluginAnnotation
 
     // TESTS
     testImplementation libs.tests.junit
     testImplementation libs.tests.kluent
     testImplementation libs.mockk.mockk
+    testImplementation libs.androidx.coreTesting
     // Plant Timber tree for test
     testImplementation libs.tests.timberJunitRule
     testImplementation libs.airbnb.mavericksTesting
@@ -455,6 +465,7 @@ dependencies {
         exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
     }
 
+<<<<<<< HEAD
 
     // Tchap: We had to exclude fbjni for withVoip, the library is already include in jitsi library
     // Flipper, debug builds only
@@ -541,6 +552,8 @@ dependencies {
     // Activate when you want to check for leaks, from time to time.
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 
+=======
+>>>>>>> v1.5.2
     androidTestImplementation libs.androidx.testCore
     androidTestImplementation libs.androidx.testRunner
     androidTestImplementation libs.androidx.testRules
@@ -562,5 +575,5 @@ dependencies {
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestUtil libs.androidx.orchestrator
     debugImplementation libs.androidx.fragmentTesting
-    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.10"
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.20"
 }

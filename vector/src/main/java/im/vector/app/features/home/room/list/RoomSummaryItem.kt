@@ -105,8 +105,13 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>(R.layo
     @EpoxyAttribute
     var showSelected: Boolean = false
 
+<<<<<<< HEAD
     // Tchap items
     @EpoxyAttribute lateinit var roomType: TchapRoomType
+=======
+    @EpoxyAttribute
+    var useSingleLineForLastEvent: Boolean = false
+>>>>>>> v1.5.2
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -132,8 +137,14 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>(R.layo
         renderSelection(holder, showSelected)
         holder.roomAvatarPresenceImageView.render(showPresence, userPresence)
 
+<<<<<<< HEAD
         // Tchap items
         renderTchapRoomType(holder)
+=======
+        if (useSingleLineForLastEvent) {
+            holder.subtitleView.setLines(1)
+        }
+>>>>>>> v1.5.2
     }
 
     private fun renderDisplayMode(holder: Holder) = when (displayMode) {

@@ -56,8 +56,12 @@ import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewMode
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.crypto.recover.SetupMode
+<<<<<<< HEAD
 import im.vector.app.features.disclaimer.shouldShowDisclaimerDialog
 import im.vector.app.features.disclaimer.showDisclaimerDialog
+=======
+import im.vector.app.features.disclaimer.DisclaimerDialog
+>>>>>>> v1.5.2
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import im.vector.app.features.home.room.list.home.layout.HomeLayoutSettingBottomDialogFragment
@@ -86,7 +90,11 @@ import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
 import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
+<<<<<<< HEAD
 import im.vector.app.features.webview.VectorWebViewActivity
+=======
+import im.vector.app.features.usercode.UserCodeActivity
+>>>>>>> v1.5.2
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -144,6 +152,7 @@ class HomeActivity :
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
     @Inject lateinit var fcmHelper: FcmHelper
     @Inject lateinit var nightlyProxy: NightlyProxy
+    @Inject lateinit var disclaimerDialog: DisclaimerDialog
 
     private var isNewAppLayoutEnabled: Boolean = false // delete once old app layout is removed
 
@@ -530,7 +539,7 @@ class HomeActivity :
         )
     }
 
-    private fun promptSecurityEvent(userItem: MatrixItem.UserItem?, titleRes: Int, descRes: Int, action: ((VectorBaseActivity<*>) -> Unit)) {
+    private fun promptSecurityEvent(userItem: MatrixItem.UserItem, titleRes: Int, descRes: Int, action: ((VectorBaseActivity<*>) -> Unit)) {
         popupAlertManager.postVectorAlert(
                 VerificationVectorAlert(
                         uid = "upgradeSecurity",
@@ -584,9 +593,14 @@ class HomeActivity :
                     .setPositiveButton(R.string.yes) { _, _ -> bugReporter.openBugReportScreen(this) }
                     .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile() }
                     .show()
+<<<<<<< HEAD
         } else if (shouldShowDisclaimerDialog(this)) {
             showDisclaimerDialog(this)
             homeActivityViewModel.handle(HomeActivityViewActions.DisclaimerDialogShown)
+=======
+        } else {
+            disclaimerDialog.showDisclaimerDialog(this)
+>>>>>>> v1.5.2
         }
 
         // Force remote backup state update to update the banner if needed
@@ -652,8 +666,16 @@ class HomeActivity :
                 launchInviteFriends()
                 true
             }
+            R.id.menu_home_qr -> {
+                launchQrCode()
+                true
+            }
             else -> false
         }
+    }
+
+    private fun launchQrCode() {
+        startActivity(UserCodeActivity.newIntent(this, sharedActionViewModel.session.myUserId))
     }
 
     private fun launchInviteFriends() {

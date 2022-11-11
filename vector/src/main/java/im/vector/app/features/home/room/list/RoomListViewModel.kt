@@ -47,7 +47,6 @@ import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
-import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
@@ -98,7 +97,6 @@ class RoomListViewModel @AssistedInject constructor(
 
     init {
         observeMembershipChanges()
-        observeLocalRooms()
 
         spaceStateHandler.getSelectedSpaceFlow()
                 .distinctUntilChanged()
@@ -123,23 +121,6 @@ class RoomListViewModel @AssistedInject constructor(
                 .liveRoomChangeMembershipState()
                 .setOnEach {
                     copy(roomMembershipChanges = it)
-                }
-    }
-
-    private fun observeLocalRooms() {
-        val queryParams = roomSummaryQueryParams {
-            memberships = listOf(Membership.JOIN)
-        }
-        session
-                .flow()
-                .liveRoomSummaries(queryParams)
-                .map { roomSummaries ->
-                    roomSummaries.mapNotNull { summary ->
-                        summary.roomId.takeIf { RoomLocalEcho.isLocalEchoId(it) }
-                    }.toSet()
-                }
-                .setOnEach { roomIds ->
-                    copy(localRoomIds = roomIds)
                 }
     }
 
@@ -174,22 +155,18 @@ class RoomListViewModel @AssistedInject constructor(
             is RoomListAction.ToggleSection -> handleToggleSection(action.section)
             is RoomListAction.JoinSuggestedRoom -> handleJoinSuggestedRoom(action)
             is RoomListAction.ShowRoomDetails -> handleShowRoomDetails(action)
+<<<<<<< HEAD
             RoomListAction.CreateDirectChat -> handleCreateDirectChat()
             is RoomListAction.CreateRoom -> handleCreateRoom(action)
             is RoomListAction.OpenRoomDirectory -> handleOpenRoomDirectory(action)
+=======
+            RoomListAction.DeleteAllLocalRoom -> handleDeleteLocalRooms()
+>>>>>>> v1.5.2
         }
     }
 
     fun isPublicRoom(roomId: String): Boolean {
         return session.getRoom(roomId)?.stateService()?.isPublic().orFalse()
-    }
-
-    fun deleteLocalRooms(roomsIds: Set<String>) {
-        viewModelScope.launch {
-            roomsIds.forEach {
-                session.roomService().deleteLocalRoom(it)
-            }
-        }
     }
 
     // PRIVATE METHODS *****************************************************************************
@@ -350,6 +327,7 @@ class RoomListViewModel @AssistedInject constructor(
         }
     }
 
+<<<<<<< HEAD
     private fun handleCreateDirectChat() {
         _viewEvents.post(RoomListViewEvents.CreateDirectChat)
     }
@@ -360,5 +338,17 @@ class RoomListViewModel @AssistedInject constructor(
 
     private fun handleOpenRoomDirectory(action: RoomListAction.OpenRoomDirectory) {
         _viewEvents.post(RoomListViewEvents.OpenRoomDirectory(action.filter))
+=======
+    private fun handleDeleteLocalRooms() {
+        val localRoomIds = session.roomService()
+                .getRoomSummaries(roomSummaryQueryParams { roomId = QueryStringValue.Contains(RoomLocalEcho.PREFIX) })
+                .map { it.roomId }
+
+        viewModelScope.launch {
+            localRoomIds.forEach {
+                session.roomService().deleteLocalRoom(it)
+            }
+        }
+>>>>>>> v1.5.2
     }
 }

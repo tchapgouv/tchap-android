@@ -30,11 +30,11 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.CreatedRoom
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.userdirectory.PendingSelection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,6 +43,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
+<<<<<<< HEAD
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getUser
@@ -52,15 +53,21 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.user.model.User
 import timber.log.Timber
+=======
+import org.matrix.android.sdk.api.session.getUserOrDefault
+import org.matrix.android.sdk.api.session.permalinks.PermalinkData
+import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
+import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
+>>>>>>> v1.5.2
 
 class CreateDirectRoomViewModel @AssistedInject constructor(
         @Assisted initialState: CreateDirectRoomViewState,
         private val directRoomHelper: DirectRoomHelper,
         private val getPlatformTask: TchapGetPlatformTask,
         private val rawService: RawService,
+        private val vectorPreferences: VectorPreferences,
         val session: Session,
         val analyticsTracker: AnalyticsTracker,
-        val vectorFeatures: VectorFeatures
 ) :
         VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
 
@@ -94,12 +101,17 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
                 _viewEvents.post(CreateDirectRoomViewEvents.DmSelf)
             } else {
                 // Try to get user from known users and fall back to creating a User object from MXID
+<<<<<<< HEAD
                 val qrInvitee = if (session.getUser(mxid) != null) {
                     session.getUser(mxid)!!
                 } else {
                     User(mxid, null, null)
                 }
                 tchap.onSubmitInvitees(setOf(PendingSelection.UserPendingSelection(qrInvitee)))
+=======
+                val qrInvitee = session.getUserOrDefault(mxid)
+                onSubmitInvitees(setOf(PendingSelection.UserPendingSelection(qrInvitee)))
+>>>>>>> v1.5.2
             }
         }
     }
@@ -146,7 +158,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
                     }
 
             val result = runCatchingToAsync {
-                if (vectorFeatures.shouldStartDmOnFirstMessage()) {
+                if (vectorPreferences.isDeferredDmEnabled()) {
                     session.roomService().createLocalRoom(roomParams)
                 } else {
                     analyticsTracker.capture(CreatedRoom(isDM = roomParams.isDirect.orFalse()))

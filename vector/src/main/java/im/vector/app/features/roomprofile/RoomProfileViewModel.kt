@@ -17,6 +17,7 @@
 
 package im.vector.app.features.roomprofile
 
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -33,8 +34,14 @@ import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
+<<<<<<< HEAD
 import kotlinx.coroutines.flow.distinctUntilChanged
+=======
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+>>>>>>> v1.5.2
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -81,7 +88,49 @@ class RoomProfileViewModel @AssistedInject constructor(
         observeBannedRoomMembers(flowRoom)
         observePermissions()
         observePowerLevels()
+<<<<<<< HEAD
         observeAdminMembers()
+=======
+        observeCryptoSettings(flowRoom)
+    }
+
+    private fun observeCryptoSettings(flowRoom: FlowRoom) {
+        val perRoomBlockStatus = session.cryptoService().getLiveBlockUnverifiedDevices(initialState.roomId)
+                .asFlow()
+
+        perRoomBlockStatus
+                .execute {
+                    copy(encryptToVerifiedDeviceOnly = it)
+                }
+
+        val globalBlockStatus = session.cryptoService().getLiveGlobalCryptoConfig()
+                .asFlow()
+
+        globalBlockStatus
+                .execute {
+                    copy(globalCryptoConfig = it)
+                }
+
+        perRoomBlockStatus.combine(globalBlockStatus) { perRoom, global ->
+            perRoom || global.globalBlockUnverifiedDevices
+        }.flatMapLatest {
+            if (it) {
+                flowRoom.liveRoomMembers(roomMemberQueryParams { memberships = Membership.activeMemberships() })
+                        .map { it.map { it.userId } }
+                        .flatMapLatest {
+                            session.cryptoService().getLiveCryptoDeviceInfo(it).asFlow()
+                        }
+            } else {
+                flowOf(emptyList())
+            }
+        }.map {
+            it.isNotEmpty()
+        }.execute {
+            copy(
+                    unverifiedDevicesInTheRoom = it
+            )
+        }
+>>>>>>> v1.5.2
     }
 
     private fun observePowerLevels() {
@@ -175,6 +224,7 @@ class RoomProfileViewModel @AssistedInject constructor(
             is RoomProfileAction.ShareRoomProfile -> handleShareRoomProfile()
             RoomProfileAction.CreateShortcut -> handleCreateShortcut()
             RoomProfileAction.RestoreEncryptionState -> restoreEncryptionState()
+            is RoomProfileAction.SetEncryptToVerifiedDeviceOnly -> setEncryptToVerifiedDeviceOnly(action.enabled)
         }
     }
 
@@ -244,6 +294,12 @@ class RoomProfileViewModel @AssistedInject constructor(
                 ?.let { permalink ->
                     _viewEvents.post(RoomProfileViewEvents.ShareRoomProfile(permalink))
                 }
+    }
+
+    private fun setEncryptToVerifiedDeviceOnly(enabled: Boolean) {
+        session.coroutineScope.launch {
+            session.cryptoService().setRoomBlockUnverifiedDevices(room.roomId, enabled)
+        }
     }
 
     private fun restoreEncryptionState() {

@@ -458,14 +458,21 @@ class MessageItemFactory @Inject constructor(
                 maxWidth = maxWidth,
                 allowNonMxcUrls = informationData.sendState.isSending()
         )
+
+        val playable = messageContent.mimeType == MimeTypes.Gif
+
         return MessageImageVideoItem_()
                 .attributes(attributes)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
+<<<<<<< HEAD
                 .playable(messageContent.mimeType == MimeTypes.Gif)
                 // Tchap: Use for the Antivirus
                 .contentScannerStateTracker(contentScannerStateTracker)
+=======
+                .playable(playable)
+>>>>>>> v1.5.2
                 .highlighted(highlight)
                 .mediaData(data)
                 .apply {
@@ -478,6 +485,10 @@ class MessageItemFactory @Inject constructor(
                         clickListener { view ->
                             callback?.onImageMessageClicked(messageContent, data, view, emptyList())
                         }
+                    }
+                }.apply {
+                    if (playable && vectorPreferences.autoplayAnimatedImages()) {
+                        mode(ImageContentRenderer.Mode.ANIMATED_THUMBNAIL)
                     }
                 }
     }

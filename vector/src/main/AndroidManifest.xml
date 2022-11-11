@@ -35,14 +35,6 @@
     <!-- To be able to install APK from the application -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
-    <!-- Jitsi libs adds CALENDAR permissions, but we can remove them safely according to https://github.com/jitsi/jitsi-meet/issues/4068#issuecomment-480482481 -->
-    <uses-permission
-        android:name="android.permission.READ_CALENDAR"
-        tools:node="remove" />
-    <uses-permission
-        android:name="android.permission.WRITE_CALENDAR"
-        tools:node="remove" />
-
     <!-- Location Sharing -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -77,6 +69,9 @@
 
     <application android:supportsRtl="true">
 
+        <!-- Sentry auto-initialization disable -->
+        <meta-data android:name="io.sentry.auto-init" android:value="false" />
+
         <!-- No limit for screen ratio: avoid black strips -->
         <meta-data
             android:name="android.max_aspect"
@@ -92,6 +87,7 @@
             android:launchMode="singleTask"
             android:theme="@style/Theme.Tchap.Launcher" />
 
+<<<<<<< HEAD
         <!-- Activity alias for the launcher Activity (must be declared after the Activity it targets) -->
         <!-- exported="true" is required to launch application -->
         <activity-alias
@@ -112,6 +108,9 @@
         <activity
             android:name=".features.home.HomeActivity"
             android:launchMode="singleTask" />
+=======
+        <activity android:name=".features.home.HomeActivity" />
+>>>>>>> v1.5.2
 
         <activity
             android:name=".features.login.SSORedirectRouterActivity"
@@ -335,12 +334,18 @@
         <activity android:name=".features.location.LocationSharingActivity" />
         <activity android:name=".features.location.live.map.LiveLocationMapViewActivity" />
         <activity android:name=".features.settings.font.FontScaleSettingActivity" />
+<<<<<<< HEAD
 
         <activity android:name="fr.gouv.tchap.features.expired.ExpiredAccountActivity" />
+=======
+>>>>>>> v1.5.2
         <activity android:name=".features.call.dialpad.PstnDialActivity" />
-        <activity android:name=".features.home.room.list.home.invites.InvitesActivity"/>
-        <activity android:name=".features.home.room.list.home.release.ReleaseNotesActivity"/>
-        <activity android:name=".features.settings.devices.v2.overview.SessionOverviewActivity"/>
+        <activity android:name=".features.home.room.list.home.invites.InvitesActivity" />
+        <activity android:name=".features.home.room.list.home.release.ReleaseNotesActivity" />
+        <activity android:name=".features.settings.devices.v2.overview.SessionOverviewActivity" />
+        <activity android:name=".features.settings.devices.v2.othersessions.OtherSessionsActivity" />
+        <activity android:name=".features.settings.devices.v2.details.SessionDetailsActivity" />
+        <activity android:name=".features.settings.devices.v2.rename.RenameSessionActivity" />
 
         <!-- Services -->
 

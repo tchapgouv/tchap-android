@@ -16,7 +16,6 @@
 
 package im.vector.app.features.lifecycle
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
 import android.app.Application
@@ -69,7 +68,11 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
 
             // Get all activities from PermissionController module
             // See https://source.android.com/docs/core/architecture/modular-system/permissioncontroller#package-format
+<<<<<<< HEAD
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S) {
+=======
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S_V2) {
+>>>>>>> v1.5.2
                 activitiesInfo += tryOrNull {
                     packageManager.getPackageInfo("com.google.android.permissioncontroller", PackageManager.GET_ACTIVITIES).activities
                 } ?: tryOrNull {
@@ -112,8 +115,6 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
      *
      * @return true if an app task is corrupted by a potentially malicious activity
      */
-    @SuppressLint("NewApi")
-    @Suppress("DEPRECATION")
     private suspend fun isTaskCorrupted(activity: Activity): Boolean = withContext(Dispatchers.Default) {
         val context = activity.applicationContext
 
@@ -135,6 +136,7 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
             // This was present in ActivityManager.RunningTaskInfo class since API level 1!
             // and it is inherited from TaskInfo since Android Q (API level 29).
             // API 29 changes : https://developer.android.com/sdk/api_diff/29/changes/android.app.ActivityManager.RunningTaskInfo
+            @Suppress("DEPRECATION")
             manager.getRunningTasks(10).any { runningTaskInfo ->
                 runningTaskInfo.topActivity?.let {
                     // Check whether the activity task affinity matches with app task affinity.
