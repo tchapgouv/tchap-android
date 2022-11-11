@@ -39,13 +39,13 @@ class VerificationVectorAlert(
     override var colorAttribute: Int? = R.attr.colorPrimary
 
     class ViewBinder(
-            private val matrixItem: MatrixItem?,
+            private val matrixItem: MatrixItem,
             private val avatarRenderer: AvatarRenderer
     ) : VectorAlert.ViewBinder {
 
         override fun bind(view: View) {
             val views = AlerterVerificationLayoutBinding.bind(view)
-            matrixItem?.let { avatarRenderer.render(it, views.ivUserAvatar, GlideApp.with(view.context.applicationContext)) }
+            avatarRenderer.render(matrixItem, views.ivUserAvatar, GlideApp.with(view.context.applicationContext))
         }
     }
 }

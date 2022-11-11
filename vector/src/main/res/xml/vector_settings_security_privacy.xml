@@ -36,7 +36,7 @@
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY"
             android:persistent="false"
-            android:title="@string/encryption_information_device_id"
+            android:title="@string/device_manager_session_details_session_id"
             tools:summary="VZRHETBEER" />
 
         <im.vector.app.core.preference.VectorPreference
@@ -146,7 +146,13 @@
             android:title="@string/settings_security_application_protection_title" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
+            android:key="SETTINGS_SECURITY_INCOGNITO_KEYBOARD_PREFERENCE_KEY"
+            android:summary="@string/settings_security_incognito_keyboard_summary"
+            android:title="@string/settings_security_incognito_keyboard_title" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="false"
             android:key="SETTINGS_SECURITY_USE_FLAG_SECURE"
             android:summary="@string/settings_security_prevent_screenshots_summary"
             android:title="@string/settings_security_prevent_screenshots_title"

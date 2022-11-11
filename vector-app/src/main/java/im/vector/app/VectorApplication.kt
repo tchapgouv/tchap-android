@@ -53,7 +53,7 @@ import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
-import im.vector.app.features.disclaimer.doNotShowDisclaimerDialog
+import im.vector.app.features.disclaimer.DisclaimerDialog
 import im.vector.app.features.invite.InvitesAcceptor
 import im.vector.app.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.app.features.notifications.NotificationDrawerManager
@@ -108,6 +108,8 @@ class VectorApplication :
     @Inject lateinit var fcmHelper: FcmHelper
     @Inject lateinit var buildMeta: BuildMeta
     @Inject lateinit var leakDetector: LeakDetector
+    @Inject lateinit var vectorLocale: VectorLocale
+    @Inject lateinit var disclaimerDialog: DisclaimerDialog
 
     // font thread handler
     private var fontThreadHandler: Handler? = null
@@ -160,7 +162,7 @@ class VectorApplication :
                 R.array.com_google_android_gms_fonts_certs
         )
         FontsContractCompat.requestFont(this, fontRequest, emojiCompatFontProvider, getFontThreadHandler())
-        VectorLocale.init(this, buildMeta)
+        vectorLocale.init()
         ThemeUtils.init(this)
         vectorConfiguration.applyToApplicationContext()
 
@@ -172,7 +174,7 @@ class VectorApplication :
         val sessionImported = legacySessionImporter.process()
         if (!sessionImported) {
             // Do not display the name change popup
-            doNotShowDisclaimerDialog(this)
+            disclaimerDialog.doNotShowDisclaimerDialog()
         }
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {

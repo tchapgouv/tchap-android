@@ -17,6 +17,8 @@
 package im.vector.app.features.settings.devices.v2
 
 import android.content.Intent
+import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
+import im.vector.app.features.settings.devices.v2.othersessions.OtherSessionsActivity
 import im.vector.app.features.settings.devices.v2.overview.SessionOverviewActivity
 import im.vector.app.test.fakes.FakeContext
 import io.mockk.every
@@ -29,6 +31,8 @@ import org.junit.Before
 import org.junit.Test
 
 private const val A_SESSION_ID = "session_id"
+private const val A_TITLE_RESOURCE_ID = 1234
+private val A_DEFAULT_FILTER = DeviceManagerFilterType.INACTIVE
 
 class VectorSettingsDevicesViewNavigatorTest {
 
@@ -38,6 +42,7 @@ class VectorSettingsDevicesViewNavigatorTest {
     @Before
     fun setUp() {
         mockkObject(SessionOverviewActivity.Companion)
+        mockkObject(OtherSessionsActivity.Companion)
     }
 
     @After
@@ -57,9 +62,27 @@ class VectorSettingsDevicesViewNavigatorTest {
         }
     }
 
+    @Test
+    fun `given an intent when navigating to other sessions list then it starts the correct activity`() {
+        val intent = givenIntentForOtherSessions(A_TITLE_RESOURCE_ID, A_DEFAULT_FILTER, true)
+        context.givenStartActivity(intent)
+
+        vectorSettingsDevicesViewNavigator.navigateToOtherSessions(context.instance, A_TITLE_RESOURCE_ID, A_DEFAULT_FILTER, true)
+
+        verify {
+            context.instance.startActivity(intent)
+        }
+    }
+
     private fun givenIntentForSessionOverview(sessionId: String): Intent {
         val intent = mockk<Intent>()
         every { SessionOverviewActivity.newIntent(context.instance, sessionId) } returns intent
+        return intent
+    }
+
+    private fun givenIntentForOtherSessions(titleResourceId: Int, defaultFilter: DeviceManagerFilterType, excludeCurrentDevice: Boolean): Intent {
+        val intent = mockk<Intent>()
+        every { OtherSessionsActivity.newIntent(context.instance, titleResourceId, defaultFilter, excludeCurrentDevice) } returns intent
         return intent
     }
 }

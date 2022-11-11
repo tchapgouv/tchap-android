@@ -21,7 +21,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
@@ -37,8 +36,11 @@ import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentSettingsDevicesBinding
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
-import im.vector.app.features.settings.devices.v2.list.OtherSessionsController
+import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
+import im.vector.app.features.settings.devices.v2.list.NUMBER_OF_OTHER_DEVICES_TO_RENDER
+import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
+import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationView
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import javax.inject.Inject
@@ -48,7 +50,8 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class VectorSettingsDevicesFragment :
-        VectorBaseFragment<FragmentSettingsDevicesBinding>() {
+        VectorBaseFragment<FragmentSettingsDevicesBinding>(),
+        OtherSessionsView.Callback {
 
     @Inject lateinit var viewNavigator: VectorSettingsDevicesViewNavigator
 
@@ -78,9 +81,9 @@ class VectorSettingsDevicesFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initLearnMoreButtons()
         initWaitingView()
         initOtherSessionsView()
+        initSecurityRecommendationsView()
         observeViewEvents()
     }
 
@@ -99,8 +102,7 @@ class VectorSettingsDevicesFragment :
                     ).show(childFragmentManager, "REQPOP")
                 }
                 is DevicesViewEvent.SelfVerification -> {
-                    VerificationBottomSheet.forSelfVerification(it.session)
-                            .show(childFragmentManager, "REQPOP")
+                    navigator.requestSelfSessionVerification(requireActivity())
                 }
                 is DevicesViewEvent.ShowManuallyVerify -> {
                     ManuallyVerifyDialog.show(requireActivity(), it.cryptoDeviceInfo) {
@@ -120,22 +122,35 @@ class VectorSettingsDevicesFragment :
     }
 
     private fun initOtherSessionsView() {
-        views.deviceListOtherSessions.setCallback(object : OtherSessionsController.Callback {
-            override fun onItemClicked(deviceId: String) {
-                navigateToSessionOverview(deviceId)
+        views.deviceListOtherSessions.callback = this
+    }
+
+    private fun initSecurityRecommendationsView() {
+        views.deviceListUnverifiedSessionsRecommendation.callback = object : SecurityRecommendationView.Callback {
+            override fun onViewAllClicked() {
+                viewNavigator.navigateToOtherSessions(
+                        requireActivity(),
+                        R.string.device_manager_header_section_security_recommendations_title,
+                        DeviceManagerFilterType.UNVERIFIED,
+                        excludeCurrentDevice = false
+                )
             }
-        })
+        }
+        views.deviceListInactiveSessionsRecommendation.callback = object : SecurityRecommendationView.Callback {
+            override fun onViewAllClicked() {
+                viewNavigator.navigateToOtherSessions(
+                        requireActivity(),
+                        R.string.device_manager_header_section_security_recommendations_title,
+                        DeviceManagerFilterType.INACTIVE,
+                        excludeCurrentDevice = false
+                )
+            }
+        }
     }
 
     override fun onDestroyView() {
         cleanUpLearnMoreButtonsListeners()
         super.onDestroyView()
-    }
-
-    private fun initLearnMoreButtons() {
-        views.deviceListHeaderOtherSessions.onLearnMoreClickListener = {
-            Toast.makeText(context, "Learn more other", Toast.LENGTH_LONG).show()
-        }
     }
 
     private fun cleanUpLearnMoreButtonsListeners() {
@@ -201,7 +216,11 @@ class VectorSettingsDevicesFragment :
         } else {
             views.deviceListHeaderOtherSessions.isVisible = true
             views.deviceListOtherSessions.isVisible = true
-            views.deviceListOtherSessions.render(otherDevices)
+            views.deviceListOtherSessions.render(
+                    devices = otherDevices.take(NUMBER_OF_OTHER_DEVICES_TO_RENDER),
+                    totalNumberOfDevices = otherDevices.size,
+                    showViewAll = otherDevices.size > NUMBER_OF_OTHER_DEVICES_TO_RENDER
+            )
         }
     }
 
@@ -224,6 +243,9 @@ class VectorSettingsDevicesFragment :
             }
             views.deviceListCurrentSession.viewDetailsButton.debouncedClicks {
                 currentDeviceInfo.deviceInfo.deviceId?.let { deviceId -> navigateToSessionOverview(deviceId) }
+            }
+            views.deviceListCurrentSession.viewVerifyButton.debouncedClicks {
+                viewModel.handle(DevicesAction.VerifyCurrentSession)
             }
         } ?: run {
             hideCurrentSessionView()
@@ -251,5 +273,18 @@ class VectorSettingsDevicesFragment :
 
     private fun handleLoadingStatus(isLoading: Boolean) {
         views.waitingView.root.isVisible = isLoading
+    }
+
+    override fun onOtherSessionClicked(deviceId: String) {
+        navigateToSessionOverview(deviceId)
+    }
+
+    override fun onViewAllOtherSessionsClicked() {
+        viewNavigator.navigateToOtherSessions(
+                context = requireActivity(),
+                titleResourceId = R.string.device_manager_sessions_other_title,
+                defaultFilter = DeviceManagerFilterType.ALL_SESSIONS,
+                excludeCurrentDevice = true
+        )
     }
 }
