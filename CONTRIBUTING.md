@@ -163,41 +163,6 @@ Please use `plurals` resources when appropriate, and note that some languages ha
 
 Specific plural forms can be found [here](https://unicode-org.github.io/cldr-staging/charts/37/supplemental/language_plural_rules.html).
 
-#### Editing existing strings
-
-Two cases:
-- If the meaning stays the same, it's OK to edit the original string (i.e. the English version).
-- If the meaning is not the same, please create a new string and do not remove the existing string. See below for instructions to remove existing string.
-
-#### Removing existing strings
-
-If a string is not used anymore, it should be removed from the resource, but please do not remove the strings or its translations in the PR. It can lead to merge conflict with Weblate, and to lint error if new translations from deleted strings are added with Weblate.
-
-Instead, please comment the original string with:
-```xml
-<!-- TODO TO BE REMOVED -->
-```
-And add `tools:ignore="UnusedResources"` to the string, to let lint ignore that the string is not used.
-
-The string will be removed during the next sync with Weblate.
-
-#### Renaming string ids
-
-This is possible to rename ids of the String resources, but since translation files cannot be edited, add TODO in the main strings.xml file above the strings you want to rename. 
-
-```xml
-<!-- TODO Rename id to put_new_id_here -->
-<string name="current_id">Hello Matrix world!</string>
-```
-
-The string id(s) will be renamed during the next Weblate sync.
-
-#### Reordering strings
-
-To group strings per feature, or for any other reasons, it is possible to reorder string resources, but only in the [main strings.xml file](./library/ui-strings/src/main/res/values/strings.xml). ). We do not mind about ordering in the translation files, and anyway this is forbidden to edit manually the translation files.
-
-It is also possible to add empty lines between string resources, and to add XML comments. Please note that the XML comment just above a String resource will also appear on Weblate and be visible to the translators.
-
 ### Accessibility
 
 Please consider accessibility as an important point. As a minimum requirement, in layout XML files please use attributes such as `android:contentDescription` and `android:importantForAccessibility`, and test with a screen reader if it's working well. You can add new string resources, dedicated to accessibility, in this case, please prefix theirs id with `a11y_`.

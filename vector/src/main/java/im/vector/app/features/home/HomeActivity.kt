@@ -585,7 +585,7 @@ class HomeActivity :
                     .setPositiveButton(R.string.yes) { _, _ -> bugReporter.openBugReportScreen(this) }
                     .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile() }
                     .show()
-        } else {
+        } else if (disclaimerDialog.shouldShowDisclaimerDialog()) {
             disclaimerDialog.showDisclaimerDialog(this)
         }
 

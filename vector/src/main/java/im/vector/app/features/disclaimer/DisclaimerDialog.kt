@@ -35,23 +35,26 @@ class DisclaimerDialog @Inject constructor(
         @DefaultPreferences
         private val sharedPrefs: SharedPreferences,
 ) {
+    // Tchap: Check if disclaimer needs to be displayed
+    fun shouldShowDisclaimerDialog(): Boolean {
+        return sharedPrefs.getInt(SHARED_PREF_KEY, 0) < CURRENT_DISCLAIMER_VALUE
+    }
+
     fun showDisclaimerDialog(activity: Activity) {
-        if (sharedPrefs.getInt(SHARED_PREF_KEY, 0) < CURRENT_DISCLAIMER_VALUE) {
-            sharedPrefs.edit {
-                putInt(SHARED_PREF_KEY, CURRENT_DISCLAIMER_VALUE)
-            }
-
-            val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_disclaimer_content, null)
-
-            MaterialAlertDialogBuilder(activity)
-                    .setView(dialogLayout)
-                    .setCancelable(false)
-                    .setNegativeButton(R.string.disclaimer_negative_button, null)
-                    .setPositiveButton(R.string.disclaimer_positive_button) { _, _ ->
-                        openUrlInChromeCustomTab(activity, null, VectorSettingsUrls.DISCLAIMER_URL)
-                    }
-                    .show()
+        sharedPrefs.edit {
+            putInt(SHARED_PREF_KEY, CURRENT_DISCLAIMER_VALUE)
         }
+
+        val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_disclaimer_content, null)
+
+        MaterialAlertDialogBuilder(activity)
+                .setView(dialogLayout)
+                .setCancelable(false)
+                .setNegativeButton(R.string.disclaimer_negative_button, null)
+                .setPositiveButton(R.string.disclaimer_positive_button) { _, _ ->
+                    openUrlInChromeCustomTab(activity, null, VectorSettingsUrls.DISCLAIMER_URL)
+                }
+                .show()
     }
 
     fun doNotShowDisclaimerDialog() {
