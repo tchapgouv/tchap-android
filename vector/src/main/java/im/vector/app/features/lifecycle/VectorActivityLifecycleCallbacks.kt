@@ -68,7 +68,7 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
 
             // Get all activities from PermissionController module
             // See https://source.android.com/docs/core/architecture/modular-system/permissioncontroller#package-format
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S) {
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S_V2) {
                 activitiesInfo += tryOrNull {
                     packageManager.getPackageInfo("com.google.android.permissioncontroller", PackageManager.GET_ACTIVITIES).activities
                 } ?: tryOrNull {

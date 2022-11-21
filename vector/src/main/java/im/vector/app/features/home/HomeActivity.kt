@@ -587,6 +587,7 @@ class HomeActivity :
                     .show()
         } else if (disclaimerDialog.shouldShowDisclaimerDialog()) {
             disclaimerDialog.showDisclaimerDialog(this)
+            homeActivityViewModel.handle(HomeActivityViewActions.DisclaimerDialogShown)
         }
 
         // Force remote backup state update to update the banner if needed
