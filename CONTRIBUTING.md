@@ -2,7 +2,6 @@
 
 <!--- TOC -->
 
-* [Contributing code to Matrix](#contributing-code-to-matrix)
 * [Android Studio settings](#android-studio-settings)
   * [Template](#template)
 * [Compilation](#compilation)
@@ -29,14 +28,6 @@
 * [Thanks](#thanks)
 
 <!--- END -->
-
-## Contributing code to Matrix
-
-Please read https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.md
-
-Element Android support can be found in this room: [![Element Android Matrix room #element-android:matrix.org](https://img.shields.io/matrix/element-android:matrix.org.svg?label=%23element-android:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-android:matrix.org).
-
-The rest of the document contains specific rules for Matrix Android projects
 
 ## Android Studio settings
 
