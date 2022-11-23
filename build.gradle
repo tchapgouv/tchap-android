@@ -307,10 +307,11 @@ tasks.register("recordScreenshots", GradleBuild) {
     tasks = [':vector:recordPaparazziDebug']
 }
 
-tasks.register("verifyScreenshots", GradleBuild) {
-    startParameter.projectProperties.screenshot = ""
-    tasks = [':vector:verifyPaparazziDebug']
-}
+// Tchap : remove task not found
+//tasks.register("verifyScreenshots", GradleBuild) {
+//    startParameter.projectProperties.screenshot = ""
+//    tasks = [':vector:verifyPaparazziDebug']
+//}
 
 ext.initScreenshotTests = { project ->
     def hasScreenshots = project.hasProperty("screenshot")
