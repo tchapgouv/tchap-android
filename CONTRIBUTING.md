@@ -1,3 +1,28 @@
+# Contributing to Element Android
+
+<!--- TOC -->
+
+* [Android Studio settings](#android-studio-settings)
+  * [Template](#template)
+* [Compilation](#compilation)
+* [I want to submit a PR to fix an issue](#i-want-to-submit-a-pr-to-fix-an-issue)
+  * [Kotlin](#kotlin)
+  * [Tchap changes](#tchap-changes)
+  * [Changelog](#changelog)
+  * [Code quality](#code-quality)
+    * [Internal tool](#internal-tool)
+    * [ktlint](#ktlint)
+    * [lint](#lint)
+  * [Unit tests](#unit-tests)
+  * [Tests](#tests)
+  * [Internationalisation](#internationalisation)
+  * [Accessibility](#accessibility)
+  * [Layout](#layout)
+  * [Authors](#authors)
+* [Thanks](#thanks)
+
+<!--- END -->
+
 ## Android Studio settings
 
 Please set the "hard wrap" setting of Android Studio to 160 chars, this is the setting we use internally to format the source code (Menu `Settings/Editor/Code Style` then `Hard wrap at`).
@@ -11,7 +36,7 @@ To install the template (to be done only once):
 - Go to folder `./tools/template`.
 - Mac OSX: Run the script `./configure.sh`.
 
-  Linux: Run `ANDROID_STUDIO=/path/to/android-studio ./configure`
+   Linux: Run `ANDROID_STUDIO=/path/to/android-studio ./configure`
     - e.g. `ANDROID_STUDIO=/usr/local/android-studio ./configure`
 
 - Restart Android Studio.
