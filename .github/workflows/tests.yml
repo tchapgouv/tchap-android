@@ -13,7 +13,7 @@ env:
 jobs:
   tests:
     name: Runs all tests
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: ubuntu-latest # Tchap : try to fix not runing CI
     strategy:
       matrix:
         api-level: [28]
