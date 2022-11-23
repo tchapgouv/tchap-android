@@ -5,7 +5,6 @@
 * [Android Studio settings](#android-studio-settings)
   * [Template](#template)
 * [Compilation](#compilation)
-* [I want to help translating Element](#i-want-to-help-translating-element)
 * [I want to submit a PR to fix an issue](#i-want-to-submit-a-pr-to-fix-an-issue)
   * [Kotlin](#kotlin)
   * [Changelog](#changelog)
