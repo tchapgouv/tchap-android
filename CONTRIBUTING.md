@@ -15,12 +15,6 @@
   * [Unit tests](#unit-tests)
   * [Tests](#tests)
   * [Internationalisation](#internationalisation)
-    * [Adding new string](#adding-new-string)
-      * [Plurals](#plurals)
-    * [Editing existing strings](#editing-existing-strings)
-    * [Removing existing strings](#removing-existing-strings)
-    * [Renaming string ids](#renaming-string-ids)
-    * [Reordering strings](#reordering-strings)
   * [Accessibility](#accessibility)
   * [Layout](#layout)
   * [Authors](#authors)
@@ -147,11 +141,7 @@ You should consider adding Unit tests with your PR, and also integration tests (
 
 When adding new string resources, please only add new entries in the 2 files: `value/strings_tchap.xml` and `values-fr/strings_tchap.xml`.
 
-##### Plurals
-
-Please use `plurals` resources when appropriate, and note that some languages have specific rules for `plurals`, so even if the string will always be at the plural form for English, please always create a `plurals` resource.
-
-Specific plural forms can be found [here](https://unicode-org.github.io/cldr-staging/charts/37/supplemental/language_plural_rules.html).
+Do not hesitate to use plurals when appropriate.
 
 ### Accessibility
 
