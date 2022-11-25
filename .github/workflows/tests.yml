@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest # Tchap : try to fix not runing CI
     strategy:
       matrix:
-        api-level: 28
+        api-level: [29]
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/main' && format('unit-tests-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('unit-tests-develop-{0}', github.sha) || format('unit-tests-{0}', github.ref) }}
