@@ -13,7 +13,7 @@ env:
 jobs:
   tests:
     name: Runs all tests
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: macos-latest
     strategy:
       matrix:
         api-level: [28]
@@ -60,7 +60,7 @@ jobs:
 
       - name: Run all the codecoverage tests at once
         uses: reactivecircus/android-emulator-runner@v2
-        # continue-on-error: true
+        continue-on-error: true
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86
@@ -69,7 +69,7 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          # emulator-build: 7425822
+          emulator-build: 7425822
           script: |
             # Tchap : comment this task because CI failed
             # ./gradlew gatherGplayDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
