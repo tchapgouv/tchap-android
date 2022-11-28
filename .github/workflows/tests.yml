@@ -60,7 +60,7 @@ jobs:
 
       - name: Run all the codecoverage tests at once
         uses: reactivecircus/android-emulator-runner@v2
-        continue-on-error: true
+        # continue-on-error: true
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86
