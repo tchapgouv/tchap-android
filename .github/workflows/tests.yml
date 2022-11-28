@@ -35,9 +35,8 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
           gradle-home-cache-cleanup: ${{ github.ref == 'refs/heads/develop' }}
 
-      # tchap : remove verifyScreenshots
-      #- name: Run screenshot tests
-      #  run: ./gradlew verifyScreenshots $CI_GRADLE_ARG_PROPERTIES
+      - name: Run screenshot tests
+        run: ./gradlew verifyScreenshots $CI_GRADLE_ARG_PROPERTIES
 
       - name: Archive Screenshot Results on Error
         if: failure()
