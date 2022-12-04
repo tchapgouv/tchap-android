@@ -58,7 +58,7 @@ import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.auth.toLocalizedLoginTerms
 import org.matrix.android.sdk.api.extensions.tryOrNull
 
-// Tchap: custom tag to separate the reset password screens from the initial login screen
+// Tchap : custom tag to separate the reset password screens from the initial login screen
 private const val TCHAP_FRAGMENT_LOGIN_STAGE_TAG = "TCHAP_FRAGMENT_LOGIN_STAGE_TAG"
 private const val FRAGMENT_REGISTRATION_STAGE_TAG = "FRAGMENT_REGISTRATION_STAGE_TAG"
 private const val FRAGMENT_LOGIN_TAG = "FRAGMENT_LOGIN_TAG"

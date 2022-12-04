@@ -80,21 +80,13 @@ task generateCoverageReport(type: JacocoReport) {
 
 task unitTestsWithCoverage(type: GradleBuild) {
     // the 7.1.3 android gradle plugin has a bug where enableTestCoverage generates invalid coverage
-<<<<<<< HEAD
     startParameter.projectProperties.coverage = [enableTestCoverage:  false]
-    tasks = [':vector:testGplayBtchapWithoutvoipWithoutpinningDebugUnitTest', ':matrix-sdk-android:testDebugUnitTest']
-=======
-    startParameter.projectProperties.coverage = [enableTestCoverage: false]
-    tasks = ['testDebugUnitTest']
->>>>>>> v1.5.2
+    // Tchap: Specify variant for every module
+    tasks = [':matrix-sdk-android:testDebugUnitTest', ':vector:testGplayBtchapWithoutvoipWithoutpinningDebugUnitTest', ':vector-app:testGplayBtchapWithoutvoipWithoutpinningDebugUnitTest', ':vector-config:testBtchapDebugUnitTest']
 }
 
 task instrumentationTestsWithCoverage(type: GradleBuild) {
     startParameter.projectProperties.coverage = [enableTestCoverage: true]
     startParameter.projectProperties['android.testInstrumentationRunnerArguments.notPackage'] = 'im.vector.app.ui'
-<<<<<<< HEAD
     tasks = [':vector-app:connectedGplayBtchapWithoutvoipWithoutpinningDebugAndroidTest', ':vector:connectedGplayBtchapWithoutvoipWithoutpinningDebugAndroidTest', 'matrix-sdk-android:connectedDebugAndroidTest']
-=======
-    tasks = [':vector-app:connectedGplayDebugAndroidTest', ':vector:connectedDebugAndroidTest', 'matrix-sdk-android:connectedDebugAndroidTest']
->>>>>>> v1.5.2
 }

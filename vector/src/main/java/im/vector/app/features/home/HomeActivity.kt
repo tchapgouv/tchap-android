@@ -56,12 +56,7 @@ import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewMode
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.crypto.recover.SetupMode
-<<<<<<< HEAD
-import im.vector.app.features.disclaimer.shouldShowDisclaimerDialog
-import im.vector.app.features.disclaimer.showDisclaimerDialog
-=======
 import im.vector.app.features.disclaimer.DisclaimerDialog
->>>>>>> v1.5.2
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import im.vector.app.features.home.room.list.home.layout.HomeLayoutSettingBottomDialogFragment
@@ -90,11 +85,8 @@ import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
 import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
-<<<<<<< HEAD
-import im.vector.app.features.webview.VectorWebViewActivity
-=======
 import im.vector.app.features.usercode.UserCodeActivity
->>>>>>> v1.5.2
+import im.vector.app.features.webview.VectorWebViewActivity
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -593,14 +585,9 @@ class HomeActivity :
                     .setPositiveButton(R.string.yes) { _, _ -> bugReporter.openBugReportScreen(this) }
                     .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile() }
                     .show()
-<<<<<<< HEAD
-        } else if (shouldShowDisclaimerDialog(this)) {
-            showDisclaimerDialog(this)
-            homeActivityViewModel.handle(HomeActivityViewActions.DisclaimerDialogShown)
-=======
-        } else {
+        } else if (disclaimerDialog.shouldShowDisclaimerDialog()) {
             disclaimerDialog.showDisclaimerDialog(this)
->>>>>>> v1.5.2
+            homeActivityViewModel.handle(HomeActivityViewActions.DisclaimerDialogShown)
         }
 
         // Force remote backup state update to update the banner if needed

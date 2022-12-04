@@ -71,14 +71,6 @@ const signOff = "Signed-off-by:"
 
 // Please add new names following the alphabetical order.
 const allowList = [
-<<<<<<< HEAD
-=======
-    "amitkma",
-    "aringenbach",
-    "BillCarsonFr",
-    "bmarty",
-    "Claire1817",
->>>>>>> v1.5.2
     "dependabot[bot]",
     "Florian14",
     "giomfo",

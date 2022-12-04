@@ -107,7 +107,9 @@ enum class Command(
             CREATE_SPACE,
             ADD_TO_SPACE,
             JOIN_SPACE,
-            LEAVE_ROOM   -> false
+            LEAVE_ROOM,
+            DEVTOOLS,
+            TABLE_FLIP -> false
         }
 
     val allAliases = arrayOf(command, *aliases.orEmpty())

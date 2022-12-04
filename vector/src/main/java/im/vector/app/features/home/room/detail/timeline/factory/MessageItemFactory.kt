@@ -466,13 +466,9 @@ class MessageItemFactory @Inject constructor(
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
-<<<<<<< HEAD
-                .playable(messageContent.mimeType == MimeTypes.Gif)
+                .playable(playable)
                 // Tchap: Use for the Antivirus
                 .contentScannerStateTracker(contentScannerStateTracker)
-=======
-                .playable(playable)
->>>>>>> v1.5.2
                 .highlighted(highlight)
                 .mediaData(data)
                 .apply {

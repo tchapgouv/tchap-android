@@ -114,13 +114,9 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
                     MatrixConfiguration(
                             applicationFlavor = "TestFlavor",
                             roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider(),
-<<<<<<< HEAD
+                            syncConfig = SyncConfig(longPollTimeout = 5_000L),
                             // Tchap: Do not limit here key requests to my devices to unblock crypto tests
                             cryptoConfig = MXCryptoConfig(limitRoomKeyRequestsToMyDevices = false),
-=======
-                            syncConfig = SyncConfig(longPollTimeout = 5_000L),
-                            cryptoConfig = cryptoConfig ?: MXCryptoConfig()
->>>>>>> v1.5.2
                     )
             )
         }

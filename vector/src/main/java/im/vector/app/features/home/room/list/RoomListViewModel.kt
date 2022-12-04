@@ -155,13 +155,10 @@ class RoomListViewModel @AssistedInject constructor(
             is RoomListAction.ToggleSection -> handleToggleSection(action.section)
             is RoomListAction.JoinSuggestedRoom -> handleJoinSuggestedRoom(action)
             is RoomListAction.ShowRoomDetails -> handleShowRoomDetails(action)
-<<<<<<< HEAD
             RoomListAction.CreateDirectChat -> handleCreateDirectChat()
             is RoomListAction.CreateRoom -> handleCreateRoom(action)
             is RoomListAction.OpenRoomDirectory -> handleOpenRoomDirectory(action)
-=======
             RoomListAction.DeleteAllLocalRoom -> handleDeleteLocalRooms()
->>>>>>> v1.5.2
         }
     }
 
@@ -327,7 +324,6 @@ class RoomListViewModel @AssistedInject constructor(
         }
     }
 
-<<<<<<< HEAD
     private fun handleCreateDirectChat() {
         _viewEvents.post(RoomListViewEvents.CreateDirectChat)
     }
@@ -338,7 +334,8 @@ class RoomListViewModel @AssistedInject constructor(
 
     private fun handleOpenRoomDirectory(action: RoomListAction.OpenRoomDirectory) {
         _viewEvents.post(RoomListViewEvents.OpenRoomDirectory(action.filter))
-=======
+    }
+
     private fun handleDeleteLocalRooms() {
         val localRoomIds = session.roomService()
                 .getRoomSummaries(roomSummaryQueryParams { roomId = QueryStringValue.Contains(RoomLocalEcho.PREFIX) })
@@ -349,6 +346,5 @@ class RoomListViewModel @AssistedInject constructor(
                 session.roomService().deleteLocalRoom(it)
             }
         }
->>>>>>> v1.5.2
     }
 }

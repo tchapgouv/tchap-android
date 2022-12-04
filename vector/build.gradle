@@ -85,12 +85,6 @@ android {
                 testCoverageEnabled = coverage.enableTestCoverage
             }
         }
-<<<<<<< HEAD
-        // Tchap: No nightly
-//        nightly {
-//            initWith release
-//            matchingFallbacks = ['release']
-//        }
         release {
             // Tchap: Show developer mode only in debug
             resValue "bool", "developer_mode_visible", "false"
@@ -178,8 +172,6 @@ android {
             // Tchap: Hide labs menu item in tchap
             resValue "bool", "labs_settings_visible", "false"
         }
-=======
->>>>>>> v1.5.2
     }
 
     compileOptions {
@@ -208,62 +200,13 @@ android {
         test {
             java.srcDirs += "src/sharedTest/java"
         }
-<<<<<<< HEAD
-        // Add sourceSets for `release` version when building `nightly`
-        // Tchap: No nightly
-//        nightly {
-//            java.srcDirs += "src/release/java"
-//        }
-=======
->>>>>>> v1.5.2
     }
 
     buildFeatures {
         viewBinding true
     }
 }
-<<<<<<< HEAD
 
-// Tchap: Use custom configuration for Flipper library
-configurations {
-    fdroidBtchapWithvoipWithoutpinningDebugImplementation
-    fdroidDevTchapWithvoipWithoutpinningDebugImplementation
-    fdroidTchapWithvoipWithoutpinningDebugImplementation
-
-    gplayBtchapWithvoipWithoutpinningDebugImplementation
-    gplayDevTchapWithvoipWithoutpinningDebugImplementation
-    gplayTchapWithvoipWithoutpinningDebugImplementation
-
-
-    fdroidBtchapWithvoipWithpinningDebugImplementation
-    fdroidDevTchapWithvoipWithpinningDebugImplementation
-    fdroidTchapWithvoipWithpinningDebugImplementation
-
-    gplayBtchapWithvoipWithpinningDebugImplementation
-    gplayDevTchapWithvoipWithpinningDebugImplementation
-    gplayTchapWithvoipWithpinningDebugImplementation
-
-
-    fdroidBtchapWithoutvoipWithpinningDebugImplementation
-    fdroidDevTchapWithoutvoipWithpinningDebugImplementation
-    fdroidTchapWithoutvoipWithpinningDebugImplementation
-
-    gplayBtchapWithoutvoipWithpinningDebugImplementation
-    gplayDevTchapWithoutvoipWithpinningDebugImplementation
-    gplayTchapWithoutvoipWithpinningDebugImplementation
-
-
-    fdroidBtchapWithoutvoipWithoutpinningDebugImplementation
-    fdroidDevTchapWithoutvoipWithoutpinningDebugImplementation
-    fdroidTchapWithoutvoipWithoutpinningDebugImplementation
-
-    gplayBtchapWithoutvoipWithoutpinningDebugImplementation
-    gplayDevTchapWithoutvoipWithoutpinningDebugImplementation
-    gplayTchapWithoutvoipWithoutpinningDebugImplementation
-}
-
-=======
->>>>>>> v1.5.2
 dependencies {
     implementation project(":vector-config")
     api project(":matrix-sdk-android")
@@ -465,95 +408,6 @@ dependencies {
         exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
     }
 
-<<<<<<< HEAD
-
-    // Tchap: We had to exclude fbjni for withVoip, the library is already include in jitsi library
-    // Flipper, debug builds only
-    gplayBtchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    gplayBtchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-    gplayTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    gplayTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-    gplayDevTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    gplayDevTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-
-    fdroidBtchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    fdroidBtchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-    fdroidTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    fdroidTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-    fdroidDevTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    fdroidDevTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-
-    gplayBtchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    gplayBtchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-    gplayDevTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    gplayDevTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-    gplayTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    gplayTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-
-    fdroidBtchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    fdroidBtchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-    fdroidDevTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    fdroidDevTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-    fdroidTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    fdroidTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-    gplayBtchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
-    gplayBtchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    gplayTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
-    gplayTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    gplayDevTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
-    gplayDevTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-
-    fdroidBtchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
-    fdroidBtchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    fdroidTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
-    fdroidTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    fdroidDevTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
-    fdroidDevTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-
-    gplayBtchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
-    gplayBtchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    gplayTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
-    gplayTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    gplayDevTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
-    gplayDevTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    fdroidBtchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
-    fdroidBtchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    fdroidTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
-    fdroidTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    fdroidDevTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
-    fdroidDevTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    debugImplementation 'com.facebook.soloader:soloader:0.10.4'
-    debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"
-
-    // Activate when you want to check for leaks, from time to time.
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
-
-=======
->>>>>>> v1.5.2
     androidTestImplementation libs.androidx.testCore
     androidTestImplementation libs.androidx.testRunner
     androidTestImplementation libs.androidx.testRules

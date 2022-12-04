@@ -22,10 +22,7 @@ If you would like to receive releases more quickly (bearing in mind that they ma
 
 ## Contributing
 
-<<<<<<< HEAD
 Please refer to [CONTRIBUTING.md](https://github.com/tchapgouv/tchap-android-v2/blob/develop/CONTRIBUTING.md) if you want to contribute on the Tchap Android project!
-=======
-Please refer to [CONTRIBUTING.md](./CONTRIBUTING.md) if you want to contribute on Matrix Android projects!
 
 Come chat with the community in the dedicated Matrix [room](https://matrix.to/#/#element-android:matrix.org).
 

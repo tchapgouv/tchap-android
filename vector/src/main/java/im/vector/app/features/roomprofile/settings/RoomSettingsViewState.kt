@@ -47,10 +47,7 @@ data class RoomSettingsViewState(
         val actionPermissions: ActionPermissions = ActionPermissions(),
         val supportsRestricted: Boolean = false,
         val canUpgradeToRestricted: Boolean = false,
-<<<<<<< HEAD
         val roomDirectoryVisibility: Async<RoomDirectoryVisibility> = Uninitialized
-=======
->>>>>>> v1.5.2
 ) : MavericksState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
