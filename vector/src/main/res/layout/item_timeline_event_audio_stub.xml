@@ -94,6 +94,16 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <TextView
+        android:id="@+id/messageFileAvText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="4dp"
+        android:visibility="gone"
+        tools:drawableLeft="@drawable/ic_av_checked"
+        tools:text="@string/antivirus_infected"
+        tools:visibility="visible" />
+
     <include
         android:id="@+id/messageFileUploadProgressLayout"
         layout="@layout/media_upload_download_progress_layout"
