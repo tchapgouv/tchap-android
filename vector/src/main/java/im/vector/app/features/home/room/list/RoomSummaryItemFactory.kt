@@ -56,7 +56,8 @@ class RoomSummaryItemFactory @Inject constructor(
             roomChangeMembershipStates: Map<String, ChangeMembershipState>,
             selectedRoomIds: Set<String>,
             displayMode: RoomListDisplayMode,
-            listener: RoomListListener?
+            listener: RoomListListener?,
+            singleLineLastEvent: Boolean = false
     ): VectorEpoxyModel<*> {
         return when (roomSummary.membership) {
             Membership.INVITE -> {
@@ -64,7 +65,7 @@ class RoomSummaryItemFactory @Inject constructor(
                 createInvitationItem(roomSummary, changeMembershipState, listener)
             }
             else -> createRoomItem(
-                    roomSummary, selectedRoomIds, displayMode, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked }
+                    roomSummary, selectedRoomIds, displayMode, singleLineLastEvent, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked }
             )
         }
     }
@@ -131,8 +132,9 @@ class RoomSummaryItemFactory @Inject constructor(
             roomSummary: RoomSummary,
             selectedRoomIds: Set<String>,
             displayMode: RoomListDisplayMode,
+            singleLineLastEvent: Boolean,
             onClick: ((RoomSummary) -> Unit)?,
-            onLongClick: ((RoomSummary) -> Boolean)?
+            onLongClick: ((RoomSummary) -> Boolean)?,
     ): VectorEpoxyModel<*> {
         val subtitle = getSearchResultSubtitle(roomSummary)
         val unreadCount = roomSummary.notificationCount
@@ -153,7 +155,7 @@ class RoomSummaryItemFactory @Inject constructor(
         } else {
             createRoomSummaryItem(
                     roomSummary, displayMode, subtitle, latestEventTime, typingMessage,
-                    latestFormattedEvent, showHighlighted, showSelected, unreadCount, onClick, onLongClick
+                    latestFormattedEvent, showHighlighted, showSelected, unreadCount, singleLineLastEvent, onClick, onLongClick
             )
         }
     }
@@ -168,6 +170,7 @@ class RoomSummaryItemFactory @Inject constructor(
             showHighlighted: Boolean,
             showSelected: Boolean,
             unreadCount: Int,
+            singleLineLastEvent: Boolean,
             onClick: ((RoomSummary) -> Unit)?,
             onLongClick: ((RoomSummary) -> Boolean)?
     ) = RoomSummaryItem_()
@@ -190,6 +193,7 @@ class RoomSummaryItemFactory @Inject constructor(
             .unreadNotificationCount(unreadCount)
             .hasUnreadMessage(roomSummary.hasUnreadMessages)
             .hasDraft(roomSummary.userDrafts.isNotEmpty())
+            .useSingleLineForLastEvent(singleLineLastEvent)
             .itemLongClickListener { _ -> onLongClick?.invoke(roomSummary) ?: false }
             .itemClickListener { onClick?.invoke(roomSummary) }
             // Tchap: Used only for Tchap

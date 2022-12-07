@@ -106,7 +106,11 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>(R.layo
     var showSelected: Boolean = false
 
     // Tchap items
-    @EpoxyAttribute lateinit var roomType: TchapRoomType
+    @EpoxyAttribute
+    lateinit var roomType: TchapRoomType
+
+    @EpoxyAttribute
+    var useSingleLineForLastEvent: Boolean = false
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -134,6 +138,10 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>(R.layo
 
         // Tchap items
         renderTchapRoomType(holder)
+
+        if (useSingleLineForLastEvent) {
+            holder.subtitleView.setLines(1)
+        }
     }
 
     private fun renderDisplayMode(holder: Holder) = when (displayMode) {

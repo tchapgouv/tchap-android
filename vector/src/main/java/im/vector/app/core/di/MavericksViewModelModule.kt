@@ -88,7 +88,11 @@ import im.vector.app.features.settings.account.deactivation.DeactivateAccountVie
 import im.vector.app.features.settings.crosssigning.CrossSigningSettingsViewModel
 import im.vector.app.features.settings.devices.DeviceVerificationInfoBottomSheetViewModel
 import im.vector.app.features.settings.devices.DevicesViewModel
+import im.vector.app.features.settings.devices.v2.details.SessionDetailsViewModel
+import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreViewModel
+import im.vector.app.features.settings.devices.v2.othersessions.OtherSessionsViewModel
 import im.vector.app.features.settings.devices.v2.overview.SessionOverviewViewModel
+import im.vector.app.features.settings.devices.v2.rename.RenameSessionViewModel
 import im.vector.app.features.settings.devtools.AccountDataViewModel
 import im.vector.app.features.settings.devtools.GossipingEventsPaperTrailViewModel
 import im.vector.app.features.settings.devtools.KeyRequestListViewModel
@@ -641,4 +645,24 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(SessionOverviewViewModel::class)
     fun sessionOverviewViewModelFactory(factory: SessionOverviewViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(OtherSessionsViewModel::class)
+    fun otherSessionsViewModelFactory(factory: OtherSessionsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SessionDetailsViewModel::class)
+    fun sessionDetailsViewModelFactory(factory: SessionDetailsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RenameSessionViewModel::class)
+    fun renameSessionViewModelFactory(factory: RenameSessionViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SessionLearnMoreViewModel::class)
+    fun sessionLearnMoreViewModelFactory(factory: SessionLearnMoreViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }
