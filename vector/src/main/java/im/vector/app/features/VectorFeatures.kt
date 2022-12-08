@@ -56,7 +56,7 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isScreenSharingEnabled(): Boolean = true
     override fun isLocationSharingEnabled() = Config.ENABLE_LOCATION_SHARING
     override fun forceUsageOfOpusEncoder(): Boolean = false
-    override fun isNewAppLayoutFeatureEnabled(): Boolean = true
+    override fun isNewAppLayoutFeatureEnabled(): Boolean = false // Tchap : Old layout for 2.5.1
     override fun isNewDeviceManagementEnabled(): Boolean = false
     override fun isVoiceBroadcastEnabled(): Boolean = false
 }
