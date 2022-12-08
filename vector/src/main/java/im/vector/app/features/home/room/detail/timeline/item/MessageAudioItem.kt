@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -33,9 +34,12 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
+import im.vector.app.features.home.room.detail.timeline.helper.ContentScannerStateTracker
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.themes.ThemeUtils
+import me.gujun.android.span.span
+import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 
 @EpoxyModelClass
 abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
@@ -71,6 +75,12 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
     @EpoxyAttribute
     lateinit var audioMessagePlaybackTracker: AudioMessagePlaybackTracker
 
+    @EpoxyAttribute
+    var contentScannerStateTracker: ContentScannerStateTracker? = null
+
+    @EpoxyAttribute
+    var elementToDecrypt: ElementToDecrypt? = null
+
     private var isUserSeeking = false
 
     override fun bind(holder: Holder) {
@@ -82,6 +92,9 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
         bindSeekBar(holder)
         holder.audioPlaybackControlButton.setOnClickListener { playbackControlButtonClickListener?.invoke(it) }
         renderStateBasedOnAudioPlayback(holder)
+
+        holder.resetAV()
+        contentScannerStateTracker?.bind(attributes.informationData.eventId, mxcUrl, elementToDecrypt, holder)
     }
 
     private fun bindUploadState(holder: Holder) {
@@ -193,11 +206,12 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
         contentUploadStateTrackerBinder.unbind(attributes.informationData.eventId)
         contentDownloadStateTrackerBinder.unbind(mxcUrl)
         audioMessagePlaybackTracker.untrack(attributes.informationData.eventId)
+        contentScannerStateTracker?.unBind(attributes.informationData.eventId)
     }
 
     override fun getViewStubId() = STUB_ID
 
-    class Holder : AbsMessageItem.Holder(STUB_ID) {
+    class Holder : AbsMessageItem.Holder(STUB_ID), ScannableHolder {
         val rootLayout by bind<ViewGroup>(R.id.messageRootLayout)
         val mainLayout by bind<ViewGroup>(R.id.messageMainInnerLayout)
         val filenameView by bind<TextView>(R.id.messageFilenameView)
@@ -207,6 +221,46 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
         val fileSize by bind<TextView>(R.id.fileSize)
         val audioPlaybackDuration by bind<TextView>(R.id.audioPlaybackDuration)
         val audioSeekBar by bind<SeekBar>(R.id.audioSeekBar)
+
+        private val messageFileAvText by bind<TextView>(R.id.messageFileAvText)
+
+        fun resetAV() {
+            messageFileAvText.isVisible = false
+        }
+
+        override fun mediaScanResult(clean: Boolean) {
+            if (clean) {
+                messageFileAvText.text = view.context.getText(R.string.antivirus_clean)
+                messageFileAvText.isVisible = true
+                messageFileAvText.setCompoundDrawablesWithIntrinsicBounds(
+                        ContextCompat.getDrawable(view.context, R.drawable.ic_av_checked),
+                        null,
+                        null,
+                        null
+                )
+            } else {
+                // disable click on infected files
+                audioPlaybackControlButton.setOnClickListener(null)
+                audioSeekBar.isEnabled = false
+                audioSeekBar.setOnSeekBarChangeListener(null)
+                filenameView.onClick(null)
+
+                messageFileAvText.text = span(view.context.getText(R.string.antivirus_infected)) {
+                    textColor = ThemeUtils.getColor(view.context, R.attr.colorError)
+                }
+                messageFileAvText.isVisible = true
+                messageFileAvText.setCompoundDrawables(null, null, null, null)
+                filenameView.text = view.context.getString(R.string.tchap_scan_media_untrusted_content_message, filenameView.text)
+            }
+        }
+
+        override fun mediaScanInProgress() {
+            messageFileAvText.text = span(view.context.getText(R.string.antivirus_in_progress)) {
+                textColor = ThemeUtils.getColor(view.context, R.attr.vctr_notice_secondary)
+            }
+            messageFileAvText.isVisible = true
+            messageFileAvText.setCompoundDrawables(null, null, null, null)
+        }
     }
 
     companion object {

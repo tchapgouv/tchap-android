@@ -289,6 +289,9 @@ class MessageItemFactory @Inject constructor(
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
+                // Tchap: Use for the Antivirus
+                .elementToDecrypt(messageContent.encryptedFileInfo?.toElementToDecrypt())
+                .contentScannerStateTracker(contentScannerStateTracker)
     }
 
     private fun getAudioFileUrl(
@@ -347,6 +350,9 @@ class MessageItemFactory @Inject constructor(
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
+                // Tchap: Use for the Antivirus
+                .elementToDecrypt(messageContent.encryptedFileInfo?.toElementToDecrypt())
+                .contentScannerStateTracker(contentScannerStateTracker)
     }
 
     private fun buildVerificationRequestMessageItem(
