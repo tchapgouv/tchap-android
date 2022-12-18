@@ -24,6 +24,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import fr.gouv.tchap.features.roomprofile.settings.linkaccess.detail.TchapRoomLinkAccessBottomSheet
 import fr.gouv.tchap.features.roomprofile.settings.linkaccess.detail.TchapRoomLinkAccessBottomSheetSharedAction
 import fr.gouv.tchap.features.roomprofile.settings.linkaccess.detail.TchapRoomLinkAccessBottomSheetSharedActionViewModel
@@ -40,12 +41,13 @@ import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class TchapRoomLinkAccessFragment @Inject constructor(
-        val viewModelFactory: TchapRoomLinkAccessViewModel.Factory,
-        val controller: TchapRoomLinkAccessController,
-        private val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
+@AndroidEntryPoint
+class TchapRoomLinkAccessFragment : VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
         TchapRoomLinkAccessController.InteractionListener {
+
+    @Inject lateinit var viewModelFactory: TchapRoomLinkAccessViewModel.Factory
+    @Inject lateinit var controller: TchapRoomLinkAccessController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     private val viewModel: TchapRoomLinkAccessViewModel by fragmentViewModel()
     private lateinit var sharedActionViewModel: TchapRoomLinkAccessBottomSheetSharedActionViewModel
