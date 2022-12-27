@@ -1,3 +1,17 @@
+Changes in Tchap 2.5.2 (2022-12-18)
+===================================
+
+Bugfixes 🐛
+----------
+ - Crash on open the "access by link" screen ([#776](https://github.com/tchapgouv/tchap-android-v2/issues/776))
+
+Other changes
+-------------
+ - Rebase against Element-Android v1.5.2 ([#764](https://github.com/tchapgouv/tchap-android-v2/issues/764))
+ - Activate the antivirus for audio files ([#780](https://github.com/tchapgouv/tchap-android-v2/issues/780))
+ - Disable app layout by default ([#784](https://github.com/tchapgouv/tchap-android-v2/issues/784))
+
+
 Changes in Tchap 2.5.0 (2022-11-10)
 ===================================
 
