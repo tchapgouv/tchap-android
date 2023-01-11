@@ -35,6 +35,7 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import fr.gouv.tchap.core.dialogs.InviteByEmailDialog
 import im.vector.app.R
 import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.ActiveSessionHolder
@@ -650,7 +651,9 @@ class HomeActivity :
                 true
             }
             R.id.menu_home_invite_friends -> {
-                launchInviteFriends()
+                // Tchap : change for invite by email
+                // launchInviteFriends()
+                inviteByEmail()
                 true
             }
             R.id.menu_home_qr -> {
@@ -677,6 +680,12 @@ class HomeActivity :
                     text = text,
                     extraTitle = getString(R.string.invite_friends_rich_title)
             )
+        }
+    }
+
+    private fun inviteByEmail() {
+        InviteByEmailDialog(this).show { email ->
+            sharedActionViewModel.post(HomeActivitySharedAction.InviteByEmail(email))
         }
     }
 
