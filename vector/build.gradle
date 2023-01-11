@@ -151,7 +151,7 @@ android {
             buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
 
             // Tchap: CrossSigning initialization is disabled
-            def enableCrossSigning = true
+            def enableCrossSigning = false
             buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
             resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
 
