@@ -27,6 +27,7 @@ project.android.buildTypes.all { buildType ->
 initScreenshotTests(project)
 
 android {
+    namespace "im.vector.app"
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
     // Ref: https://issuetracker.google.com/issues/144111441
     ndkVersion "21.3.6528147"
@@ -150,7 +151,7 @@ android {
             buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
 
             // Tchap: CrossSigning initialization is disabled
-            def enableCrossSigning = true
+            def enableCrossSigning = false
             buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
             resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
 
