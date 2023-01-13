@@ -72,6 +72,7 @@ class CommandParserTest {
     private fun test(message: String, expectedResult: ParsedCommand) {
         val commandParser = CommandParser()
         val result = commandParser.parseSlashCommand(message, null, false)
+        // Tchap: some commands are not allowed in Tchap, in this case the resulting command will be ParsedCommand.ErrorNotATchapCommand
         result shouldBeIn arrayOf(expectedResult, ParsedCommand.ErrorNotATchapCommand)
     }
 }

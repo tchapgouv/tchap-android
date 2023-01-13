@@ -337,6 +337,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             args.isUserLoggedOut ->
                 // the homeserver has invalidated the token (password changed, device deleted, other security reasons)
                 SignedOutActivity.newIntent(this)
+            // Tchap: add account expiration handling
             args.isAccountExpired ->
                 // user account has expired, request to renew it
                 ExpiredAccountActivity.newIntent(this)
