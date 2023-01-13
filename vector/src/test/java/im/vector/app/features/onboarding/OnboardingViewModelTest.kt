@@ -945,6 +945,7 @@ class OnboardingViewModelTest {
                         initialState,
                         { copy(isLoading = true) },
                         { copy(selectedHomeserver = SELECTED_HOMESERVER_STATE_SUPPORTED_LOGOUT_DEVICES) },
+                        { copy(isLoading = false) },
                         {
                             val resetState = ResetState(AN_EMAIL, A_PASSWORD, supportsLogoutAllDevices = true)
                             copy(isLoading = false, resetState = resetState)
