@@ -18,9 +18,9 @@ package im.vector.app.features.onboarding
 
 import android.net.Uri
 import android.os.Build
+import com.airbnb.mvrx.test.MavericksTestRule
 import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
 import fr.gouv.tchap.features.platform.GetPlatformResult
-import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.R
 import im.vector.app.core.session.ConfigureAndStartSessionUseCase
 import im.vector.app.features.login.LoginConfig
