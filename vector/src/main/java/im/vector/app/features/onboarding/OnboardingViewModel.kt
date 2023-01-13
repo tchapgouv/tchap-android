@@ -126,10 +126,6 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-<<<<<<< HEAD
-    // tchap
-    private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
-=======
     private fun checkQrCodeLoginCapability(homeServerUrl: String) {
         if (!vectorFeatures.isQrCodeLoginEnabled()) {
             setState {
@@ -158,7 +154,9 @@ class OnboardingViewModel @AssistedInject constructor(
             }
         }
     }
->>>>>>> v1.5.7
+
+    // tchap
+    private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
 
     private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
     private val defaultHomeserverUrl = matrixOrgUrl

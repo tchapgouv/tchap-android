@@ -99,12 +99,8 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     init {
         loadDraftIfAny()
-<<<<<<< HEAD
         observeCanSendMessageAndEncryption()
-=======
-        observePowerLevelAndEncryption()
         observeVoiceBroadcast()
->>>>>>> v1.5.7
         subscribeToStateInternal()
     }
 

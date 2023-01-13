@@ -126,7 +126,6 @@ abstract class AbstractLoginFragment<VB : ViewBinding> : VectorBaseFragment<VB>(
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         return when {
-<<<<<<< HEAD
 //            displayCancelDialog && loginViewModel.isRegistrationStarted -> {
 //                // Ask for confirmation before cancelling the registration
 //                MaterialAlertDialogBuilder(requireActivity())
@@ -134,6 +133,7 @@ abstract class AbstractLoginFragment<VB : ViewBinding> : VectorBaseFragment<VB>(
 //                        .setMessage(R.string.login_signup_cancel_confirmation_content)
 //                        .setPositiveButton(R.string.yes) { _, _ ->
 //                            displayCancelDialog = false
+//                            @Suppress("DEPRECATION")
 //                            vectorBaseActivity.onBackPressed()
 //                        }
 //                        .setNegativeButton(R.string.no, null)
@@ -141,23 +141,6 @@ abstract class AbstractLoginFragment<VB : ViewBinding> : VectorBaseFragment<VB>(
 //
 //                true
 //            }
-=======
-            displayCancelDialog && loginViewModel.isRegistrationStarted -> {
-                // Ask for confirmation before cancelling the registration
-                MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(R.string.login_signup_cancel_confirmation_title)
-                        .setMessage(R.string.login_signup_cancel_confirmation_content)
-                        .setPositiveButton(R.string.yes) { _, _ ->
-                            displayCancelDialog = false
-                            @Suppress("DEPRECATION")
-                            vectorBaseActivity.onBackPressed()
-                        }
-                        .setNegativeButton(R.string.no, null)
-                        .show()
-
-                true
-            }
->>>>>>> v1.5.7
             displayCancelDialog && isResetPasswordStarted -> {
                 // Ask for confirmation before cancelling the reset password
                 MaterialAlertDialogBuilder(requireActivity())

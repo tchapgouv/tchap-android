@@ -53,29 +53,14 @@ class CommandParser @Inject constructor() {
                 return ParsedCommand.ErrorNotACommand
             }
 
-<<<<<<< HEAD
-            val messageParts = try {
-                textMessage.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
-            } catch (e: Exception) {
-                Timber.e(e, "## parseSlashCommand() : split failed")
-                null
-            }
-
-            // test if the string cut fails
-            if (messageParts.isNullOrEmpty()) {
-                return ParsedCommand.ErrorEmptySlashCommand
-            }
+            val (messageParts, message) = extractMessage(message.toString()) ?: return ParsedCommand.ErrorEmptySlashCommand
+            val slashCommand = messageParts.first()
 
             // Tchap: Handle tchap commands only
             val command = Command.values().find { it.command == messageParts.first() }
             if (command?.isTchapCommand == false) {
                 return ParsedCommand.ErrorNotATchapCommand
             }
-
-=======
-            val (messageParts, message) = extractMessage(message.toString()) ?: return ParsedCommand.ErrorEmptySlashCommand
->>>>>>> v1.5.7
-            val slashCommand = messageParts.first()
 
             getNotSupportedByThreads(isInThreadTimeline, slashCommand)?.let {
                 return ParsedCommand.ErrorCommandNotSupportedInThreads(it)

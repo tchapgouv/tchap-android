@@ -127,11 +127,11 @@ interface AuthenticationService {
     ): Session
 
     /**
-<<<<<<< HEAD
      * Get password policy.
      */
     suspend fun getPasswordPolicy(homeServerConnectionConfig: HomeServerConnectionConfig): PasswordPolicy
-=======
+
+    /**
      * @param homeServerConnectionConfig the information about the homeserver and other configuration
      * Return true if qr code login is supported by the server, false otherwise.
      */
@@ -150,5 +150,4 @@ interface AuthenticationService {
             initialDeviceName: String? = null,
             deviceId: String? = null
     ): Session
->>>>>>> v1.5.7
 }

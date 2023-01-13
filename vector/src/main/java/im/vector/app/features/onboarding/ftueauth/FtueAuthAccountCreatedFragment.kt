@@ -46,19 +46,14 @@ class FtueAuthAccountCreatedFragment :
     }
 
     private fun setupViews() {
-<<<<<<< HEAD
-        val subtitle = getString(R.string.tchap_ftue_account_created_subtitle)
-        views.accountCreatedSubtitle.text = subtitle
-=======
->>>>>>> v1.5.7
         views.accountCreatedPersonalize.debouncedClicks { viewModel.handle(OnboardingAction.PersonalizeProfile) }
         views.accountCreatedTakeMeHome.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome)) }
         views.accountCreatedTakeMeHomeCta.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome)) }
     }
 
     override fun updateWithState(state: OnboardingViewState) {
-        val userId = state.personalizationState.userId
-        val subtitle = getString(R.string.ftue_account_created_subtitle, userId).toSpannable().styleMatchingText(userId, Typeface.BOLD)
+        // Tchap: custom string
+        val subtitle = getString(R.string.tchap_ftue_account_created_subtitle)
         views.accountCreatedSubtitle.text = subtitle
         val canPersonalize = state.personalizationState.supportsPersonalization()
         views.personalizeButtonGroup.isVisible = canPersonalize

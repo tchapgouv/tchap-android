@@ -25,6 +25,7 @@ import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.config.Config
 import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.time.Clock
@@ -112,7 +113,7 @@ class VoiceRecorderFragment : VectorBaseFragment<FragmentVoiceRecorderBinding>()
             views.root.isVisible = false
         } else {
             views.root.alpha = 0f
-            views.root.isVisible = true
+            views.root.isVisible = Config.SHOW_VOICE_RECORDER
             views.root.animate().alpha(1f).setDuration(150).start()
         }
     }

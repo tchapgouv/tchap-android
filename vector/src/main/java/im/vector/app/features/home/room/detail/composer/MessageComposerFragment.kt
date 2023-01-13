@@ -49,6 +49,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.vanniktech.emoji.EmojiPopup
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.config.Config
 import im.vector.app.core.error.fatalError
 import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -169,13 +170,14 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
     private val attachmentViewModel: AttachmentTypeSelectorSharedActionViewModel by viewModels()
 
-    private val composer: MessageComposerView get() {
-        return if (vectorPreferences.isRichTextEditorEnabled()) {
-            views.richTextComposerLayout
-        } else {
-            views.composerLayout
+    private val composer: MessageComposerView
+        get() {
+            return if (vectorPreferences.isRichTextEditorEnabled()) {
+                views.richTextComposerLayout
+            } else {
+                views.composerLayout
+            }
         }
-    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentComposerBinding {
         return FragmentComposerBinding.inflate(inflater, container, false)
@@ -268,7 +270,12 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         if (mainState.tombstoneEvent != null) return@withState
 
         composer.setInvisible(!messageComposerState.isComposerVisible)
-        composer.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
+        if (Config.SHOW_VOICE_RECORDER) {
+            composer.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
+        } else {
+            // Tchap: set visibility to gone if there is no voice recorder button
+            composer.sendButton.isGone = !messageComposerState.isSendButtonVisible
+        }
     }
 
     private fun setupComposer() {
@@ -320,8 +327,15 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                                 AttachmentType.LOCATION,
                                 vectorFeatures.isLocationSharingEnabled(),
                         )
+
+                        // Tchap: Disable Polls
                         attachmentTypeSelector.setAttachmentVisibility(
-                                AttachmentType.POLL, !isThreadTimeLine()
+                                AttachmentType.POLL, isVisible = false
+                        )
+
+                        // Tchap: Disable Stickers
+                        attachmentTypeSelector.setAttachmentVisibility(
+                                AttachmentType.STICKER, isVisible = false
                         )
                         attachmentTypeSelector.setAttachmentVisibility(
                                 AttachmentType.VOICE_BROADCAST,

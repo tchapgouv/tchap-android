@@ -29,6 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityCallBinding
 import im.vector.app.features.call.webrtc.WebRtcCall
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.logger.LoggerTag
 import timber.log.Timber
@@ -64,7 +65,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         super.onCreate(savedInstanceState)
 
         if (intent.hasExtra(Mavericks.KEY_ARG)) {
-            callArgs = intent.getParcelableExtra(Mavericks.KEY_ARG)!!
+            callArgs = intent.getParcelableExtraCompat(Mavericks.KEY_ARG)!!
         } else {
             Timber.tag(loggerTag.value).e("missing callArgs for VectorCall Activity")
             finish()

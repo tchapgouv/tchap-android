@@ -409,7 +409,6 @@ internal class DefaultAuthenticationService @Inject constructor(
         )
     }
 
-<<<<<<< HEAD
     override suspend fun getPasswordPolicy(homeServerConnectionConfig: HomeServerConnectionConfig): PasswordPolicy {
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
 
@@ -418,7 +417,6 @@ internal class DefaultAuthenticationService @Inject constructor(
         }
     }
 
-=======
     override suspend fun isQrLoginSupported(homeServerConnectionConfig: HomeServerConnectionConfig): Boolean {
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
         val versions = runCatching {
@@ -449,7 +447,6 @@ internal class DefaultAuthenticationService @Inject constructor(
         )
     }
 
->>>>>>> v1.5.7
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {
         val retrofit = retrofitFactory.create(buildClient(homeServerConnectionConfig), homeServerConnectionConfig.homeServerUriBase.toString())
         return retrofit.create(AuthAPI::class.java)

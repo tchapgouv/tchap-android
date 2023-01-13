@@ -71,12 +71,7 @@ class CommandParserTest {
 
     private fun test(message: String, expectedResult: ParsedCommand) {
         val commandParser = CommandParser()
-<<<<<<< HEAD
-        val result = commandParser.parseSlashCommand(message, false)
-        result shouldBeIn arrayOf(expectedResult, ParsedCommand.ErrorNotATchapCommand)
-=======
         val result = commandParser.parseSlashCommand(message, null, false)
-        result shouldBeEqualTo expectedResult
->>>>>>> v1.5.7
+        result shouldBeIn arrayOf(expectedResult, ParsedCommand.ErrorNotATchapCommand)
     }
 }

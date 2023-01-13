@@ -337,14 +337,10 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             args.isUserLoggedOut ->
                 // the homeserver has invalidated the token (password changed, device deleted, other security reasons)
                 SignedOutActivity.newIntent(this)
-<<<<<<< HEAD
             args.isAccountExpired ->
                 // user account has expired, request to renew it
                 ExpiredAccountActivity.newIntent(this)
-            sessionHolder.hasActiveSession() ->
-=======
             activeSessionHolder.hasActiveSession() ->
->>>>>>> v1.5.7
                 // We have a session.
                 // Check it can be opened
                 if (activeSessionHolder.getActiveSession().isOpenable) {

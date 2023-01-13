@@ -141,11 +141,8 @@ import javax.inject.Singleton
             vectorPreferences: VectorPreferences,
             vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider,
             flipperProxy: FlipperProxy,
-<<<<<<< HEAD
             context: Context,
-=======
             vectorPlugins: VectorPlugins,
->>>>>>> v1.5.7
     ): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
@@ -154,12 +151,9 @@ import javax.inject.Singleton
                 networkInterceptors = listOfNotNull(
                         flipperProxy.networkInterceptor(),
                 ),
-<<<<<<< HEAD
                 // Tchap: Use custom permalink prefix
                 clientPermalinkBaseUrl = context.getString(R.string.permalink_prefix),
-=======
                 metricPlugins = vectorPlugins.plugins(),
->>>>>>> v1.5.7
         )
     }
 

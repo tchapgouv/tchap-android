@@ -42,9 +42,22 @@ class ConfigureAndStartSessionUseCase @Inject constructor(
             session.startSyncing(context)
         }
         session.pushersService().refreshPushers()
+        configureContentScanner(session)
         webRtcCallManager.checkForProtocolsSupportIfNeeded()
         if (vectorPreferences.isClientInfoRecordingEnabled()) {
             updateMatrixClientInfoUseCase.execute(session)
+        }
+    }
+
+    private fun configureContentScanner(session: Session) {
+        val url = session.sessionParams.homeServerConnectionConfig.antiVirusServerUri
+        if (url != null) {
+            with(session.contentScannerService()) {
+                enableScanner(true)
+                setScannerUrl(url.toString())
+            }
+        } else {
+            Timber.w("Content scanner is disabled.")
         }
     }
 }

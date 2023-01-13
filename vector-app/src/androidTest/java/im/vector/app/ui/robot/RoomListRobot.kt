@@ -31,11 +31,8 @@ import im.vector.app.espresso.tools.selectTabAtPosition
 import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.espresso.tools.waitUntilDialogVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
-<<<<<<< HEAD
-=======
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.room.list.home.header.HomeRoomFilter
->>>>>>> v1.5.7
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 import im.vector.app.ui.robot.settings.labs.LabFeaturesPreferences
 import im.vector.app.waitForView
@@ -72,7 +69,7 @@ class RoomListRobot(private val labsPreferences: LabFeaturesPreferences) {
             clickOn(R.id.create_room)
         } else {
             clickOn(R.id.tchapCreateRoomFabMenu)
-            waitUntilViewVisible(ViewMatchers.withId(R.id.joinForumItemGroup))
+            waitUntilViewVisible(withId(R.id.joinForumItemGroup))
             clickOn(R.id.joinForumItemGroup)
             waitUntilActivityVisible<RoomDirectoryActivity> {
                 BaristaVisibilityAssertions.assertDisplayed(R.id.publicRoomsList)

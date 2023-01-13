@@ -40,7 +40,6 @@ import androidx.core.text.toSpannable
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
-import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
@@ -60,7 +59,6 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.config.Config
 import im.vector.app.core.animations.play
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
@@ -418,49 +416,6 @@ class TimelineFragment :
         }
     }
 
-<<<<<<< HEAD
-    private fun handleSlashCommandConfirmationRequest(action: MessageComposerViewEvents.SlashCommandConfirmationRequest) {
-        when (action.parsedCommand) {
-            is ParsedCommand.UnignoreUser -> promptUnignoreUser(action.parsedCommand)
-            else -> TODO("Add case for ${action.parsedCommand.javaClass.simpleName}")
-        }
-        lockSendButton = false
-    }
-
-    private fun promptUnignoreUser(command: ParsedCommand.UnignoreUser) {
-        MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.room_participants_action_unignore_title)
-                .setMessage(getString(R.string.settings_unignore_user, command.userId))
-                .setPositiveButton(R.string.unignore) { _, _ ->
-                    messageComposerViewModel.handle(MessageComposerAction.SlashCommandConfirmed(command))
-                }
-                .setNegativeButton(R.string.action_cancel, null)
-                .show()
-    }
-
-    private fun renderVoiceMessageMode(content: String) {
-        ContentAttachmentData.fromJsonString(content)?.let { audioAttachmentData ->
-            views.voiceMessageRecorderView.isVisible = true
-            messageComposerViewModel.handle(MessageComposerAction.InitializeVoiceRecorder(audioAttachmentData))
-        }
-    }
-
-    private fun handleSendButtonVisibilityChanged(event: MessageComposerViewEvents.AnimateSendButtonVisibility) {
-        if (event.isVisible) {
-            views.voiceMessageRecorderView.isVisible = false
-            views.composerLayout.views.sendButton.alpha = 0f
-            views.composerLayout.views.sendButton.isVisible = true
-            views.composerLayout.views.sendButton.animate().alpha(1f).setDuration(150).start()
-        } else {
-            views.composerLayout.views.sendButton.isInvisible = true
-            views.voiceMessageRecorderView.alpha = 0f
-            views.voiceMessageRecorderView.isVisible = Config.SHOW_VOICE_RECORDER
-            views.voiceMessageRecorderView.animate().alpha(1f).setDuration(150).start()
-        }
-    }
-
-=======
->>>>>>> v1.5.7
     private fun setupRemoveJitsiWidgetView() {
         views.removeJitsiWidgetView.onCompleteSliding = {
             withState(timelineViewModel) {
@@ -1153,133 +1108,6 @@ class TimelineFragment :
         }
     }
 
-<<<<<<< HEAD
-    private fun setupComposer() {
-        val composerEditText = views.composerLayout.views.composerEditText
-        autoCompleter.setup(composerEditText)
-
-        observerUserTyping()
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            composerEditText.setUseIncognitoKeyboard(vectorPreferences.useIncognitoKeyboard())
-        }
-        composerEditText.setSendMessageWithEnter(vectorPreferences.sendMessageWithEnter())
-
-        composerEditText.setOnEditorActionListener { v, actionId, keyEvent ->
-            val imeActionId = actionId and EditorInfo.IME_MASK_ACTION
-            if (EditorInfo.IME_ACTION_DONE == imeActionId || EditorInfo.IME_ACTION_SEND == imeActionId) {
-                sendTextMessage(v.text)
-                true
-            }
-            // Add external keyboard functionality (to send messages)
-            else if (null != keyEvent &&
-                    !keyEvent.isShiftPressed &&
-                    keyEvent.keyCode == KeyEvent.KEYCODE_ENTER &&
-                    resources.configuration.keyboard != Configuration.KEYBOARD_NOKEYS) {
-                sendTextMessage(v.text)
-                true
-            } else false
-        }
-
-        views.composerLayout.views.composerEmojiButton.isVisible = vectorPreferences.showEmojiKeyboard()
-
-        if (isThreadTimeLine() && timelineArgs.threadTimelineArgs?.showKeyboard == true) {
-            // Show keyboard when the user started a thread
-            views.composerLayout.views.composerEditText.showKeyboard(andRequestFocus = true)
-        }
-        views.composerLayout.callback = object : MessageComposerView.Callback {
-            override fun onAddAttachment() {
-                if (!::attachmentTypeSelector.isInitialized) {
-                    attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@TimelineFragment)
-                    attachmentTypeSelector.setAttachmentVisibility(
-                            AttachmentTypeSelectorView.Type.LOCATION,
-                            vectorFeatures.isLocationSharingEnabled(),
-                    )
-                    // Tchap: Disable Polls
-                    attachmentTypeSelector.setAttachmentVisibility(
-                            AttachmentTypeSelectorView.Type.POLL, isVisible = false
-                    )
-
-                    // Tchap: Disable Stickers
-                    attachmentTypeSelector.setAttachmentVisibility(
-                            AttachmentTypeSelectorView.Type.STICKER, isVisible = false
-                    )
-                    attachmentTypeSelector.setAttachmentVisibility(
-                            AttachmentTypeSelectorView.Type.VOICE_BROADCAST,
-                            vectorFeatures.isVoiceBroadcastEnabled(), // TODO check user permission
-                    )
-                }
-                attachmentTypeSelector.show(views.composerLayout.views.attachmentButton)
-            }
-
-            override fun onExpandOrCompactChange() {
-                views.composerLayout.views.composerEmojiButton.isVisible = isEmojiKeyboardVisible
-            }
-
-            override fun onSendMessage(text: CharSequence) {
-                sendTextMessage(text)
-            }
-
-            override fun onCloseRelatedMessage() {
-                messageComposerViewModel.handle(MessageComposerAction.EnterRegularMode(views.composerLayout.text.toString(), false))
-            }
-
-            override fun onRichContentSelected(contentUri: Uri): Boolean {
-                return sendUri(contentUri)
-            }
-
-            override fun onTextChanged(text: CharSequence) {
-                messageComposerViewModel.handle(MessageComposerAction.OnTextChanged(text))
-            }
-        }
-    }
-
-    private fun sendTextMessage(text: CharSequence) {
-        if (lockSendButton) {
-            Timber.w("Send button is locked")
-            return
-        }
-        if (text.isNotBlank()) {
-            // We collapse ASAP, if not there will be a slight annoying delay
-            views.composerLayout.collapse(true)
-            lockSendButton = true
-            messageComposerViewModel.handle(MessageComposerAction.SendMessage(text, vectorPreferences.isMarkdownEnabled()))
-            emojiPopup.dismiss()
-        }
-    }
-
-    private fun observerUserTyping() {
-        if (isThreadTimeLine()) return
-        views.composerLayout.views.composerEditText.textChanges()
-                .skipInitialValue()
-                .debounce(300)
-                .map { it.isNotEmpty() }
-                .onEach {
-                    Timber.d("Typing: User is typing: $it")
-                    messageComposerViewModel.handle(MessageComposerAction.UserIsTyping(it))
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-        views.composerLayout.views.composerEditText.focusChanges()
-                .onEach {
-                    timelineViewModel.handle(RoomDetailAction.ComposerFocusChange(it))
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-    }
-
-    private fun sendUri(uri: Uri): Boolean {
-        val shareIntent = Intent(Intent.ACTION_SEND, uri)
-        val isHandled = shareIntentHandler.handleIncomingShareIntent(shareIntent, ::onContentAttachmentsReady, onPlainText = {
-            fatalError("Should not happen as we're generating a File based share Intent", vectorPreferences.failFast())
-        })
-        if (!isHandled) {
-            Toast.makeText(requireContext(), R.string.error_handling_incoming_share, Toast.LENGTH_SHORT).show()
-        }
-        return isHandled
-    }
-
-=======
->>>>>>> v1.5.7
     override fun invalidate() = withState(timelineViewModel, messageComposerViewModel) { mainState, messageComposerState ->
         invalidateOptionsMenu()
         if (mainState.asyncRoomSummary is Fail) {
@@ -1303,20 +1131,6 @@ class TimelineFragment :
             lazyLoadedViews.inviteView(false)?.isVisible = false
 
             if (mainState.tombstoneEvent == null) {
-<<<<<<< HEAD
-                views.composerLayout.isInvisible = !messageComposerState.isComposerVisible
-                views.voiceMessageRecorderView.isVisible = messageComposerState.isVoiceMessageRecorderVisible
-                if (Config.SHOW_VOICE_RECORDER) {
-                    views.composerLayout.views.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
-                } else {
-                    // Tchap: set visibility to gone if there is no voice recorder button
-                    views.composerLayout.views.sendButton.isGone = !messageComposerState.isSendButtonVisible
-                }
-                views.voiceMessageRecorderView.render(messageComposerState.voiceRecordingUiState)
-                views.composerLayout.setRoomEncrypted(summary.isEncrypted)
-                // views.composerLayout.alwaysShowSendButton = false
-=======
->>>>>>> v1.5.7
                 when (messageComposerState.canSendMessage) {
                     CanSendStatus.Allowed -> {
                         NotificationAreaView.State.Hidden

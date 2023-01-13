@@ -20,7 +20,6 @@ import android.annotation.SuppressLint
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.application.databinding.ActivityDebugJitsiBinding
-import org.jitsi.meet.sdk.JitsiMeet
 
 @AndroidEntryPoint
 class DebugJitsiActivity : VectorBaseActivity<ActivityDebugJitsiBinding>() {
@@ -31,15 +30,16 @@ class DebugJitsiActivity : VectorBaseActivity<ActivityDebugJitsiBinding>() {
 
     @SuppressLint("SetTextI18n")
     override fun initUiAndData() {
-        val isCrashReportingDisabled = JitsiMeet.isCrashReportingDisabled(this)
-        views.status.text = "Jitsi crash reporting is disabled: $isCrashReportingDisabled"
-
-        views.splash.setOnClickListener {
-            JitsiMeet.showSplashScreen(this)
-        }
-
-        views.dev.setOnClickListener {
-            JitsiMeet.showDevOptions()
-        }
+        // Tchap: Jitsi is only available on withvoip flavor, just comment the following lines to remove the dependency
+//        val isCrashReportingDisabled = JitsiMeet.isCrashReportingDisabled(this)
+//        views.status.text = "Jitsi crash reporting is disabled: $isCrashReportingDisabled"
+//
+//        views.splash.setOnClickListener {
+//            JitsiMeet.showSplashScreen(this)
+//        }
+//
+//        views.dev.setOnClickListener {
+//            JitsiMeet.showDevOptions()
+//        }
     }
 }

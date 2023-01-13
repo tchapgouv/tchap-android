@@ -26,33 +26,6 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import timber.log.Timber
 
-<<<<<<< HEAD
-fun Session.configureAndStart(context: Context, startSyncing: Boolean = true) {
-    Timber.i("Configure and start session for $myUserId. startSyncing: $startSyncing")
-    open()
-    filterService().setFilter(FilterService.FilterPreset.ElementFilter)
-    if (startSyncing) {
-        startSyncing(context)
-    }
-    pushersService().refreshPushers()
-    configureContentScanner()
-    context.singletonEntryPoint().webRtcCallManager().checkForProtocolsSupportIfNeeded()
-}
-
-private fun Session.configureContentScanner() {
-    val url = sessionParams.homeServerConnectionConfig.antiVirusServerUri
-    if (url != null) {
-        with(contentScannerService()) {
-            enableScanner(true)
-            setScannerUrl(url.toString())
-        }
-    } else {
-        Timber.w("Content scanner is disabled.")
-    }
-}
-
-=======
->>>>>>> v1.5.7
 fun Session.startSyncing(context: Context) {
     val applicationContext = context.applicationContext
     if (!syncService().hasAlreadySynced()) {
