@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.helper
 
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactoryParams
 import im.vector.app.features.home.room.detail.timeline.item.E2EDecoration
@@ -41,7 +42,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
 import javax.inject.Inject
 
@@ -123,8 +123,16 @@ class MessageInformationDataFactory @Inject constructor(
                 isLastFromThisSender = isLastFromThisSender,
                 e2eDecoration = e2eDecoration,
                 sendStateDecoration = sendStateDecoration,
+<<<<<<< HEAD
                 isDirect = roomSummary?.isDirect.orFalse(),
                 messageType = if (event.root.isSticker()) { MessageType.MSGTYPE_STICKER_LOCAL } else { event.root.getMsgType() }
+=======
+                messageType = if (event.root.isSticker()) {
+                    MessageType.MSGTYPE_STICKER_LOCAL
+                } else {
+                    event.root.getMsgType()
+                }
+>>>>>>> v1.5.7
         )
     }
 
@@ -231,7 +239,7 @@ class MessageInformationDataFactory @Inject constructor(
             EventType.KEY_VERIFICATION_DONE,
             EventType.KEY_VERIFICATION_CANCEL -> true
             EventType.MESSAGE -> {
-                event.getLastMessageContent() is MessageVerificationRequestContent
+                event.getVectorLastMessageContent() is MessageVerificationRequestContent
             }
             else -> false
         }

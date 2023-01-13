@@ -35,6 +35,8 @@ import im.vector.app.SpaceStateHandler
 import im.vector.app.SpaceStateHandlerImpl
 import im.vector.app.config.Config
 import im.vector.app.core.debug.FlipperProxy
+import im.vector.app.core.device.DefaultGetDeviceInfoUseCase
+import im.vector.app.core.device.GetDeviceInfoUseCase
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
@@ -46,6 +48,7 @@ import im.vector.app.core.utils.SystemSettingsProvider
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.impl.DefaultVectorAnalytics
+import im.vector.app.features.analytics.metrics.VectorPlugins
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.CompileTimeAutoAcceptInvites
 import im.vector.app.features.navigation.DefaultNavigator
@@ -74,9 +77,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
-@Module
-abstract class VectorBindModule {
+@InstallIn(SingletonComponent::class) @Module abstract class VectorBindModule {
 
     @Binds
     abstract fun bindNavigator(navigator: DefaultNavigator): Navigator
@@ -113,11 +114,12 @@ abstract class VectorBindModule {
 
     @Binds
     abstract fun bindSpaceStateHandler(spaceStateHandlerImpl: SpaceStateHandlerImpl): SpaceStateHandler
+
+    @Binds
+    abstract fun bindGetDeviceInfoUseCase(getDeviceInfoUseCase: DefaultGetDeviceInfoUseCase): GetDeviceInfoUseCase
 }
 
-@InstallIn(SingletonComponent::class)
-@Module
-object VectorStaticModule {
+@InstallIn(SingletonComponent::class) @Module object VectorStaticModule {
 
     @Provides
     fun providesContext(application: Application): Context {
@@ -139,7 +141,11 @@ object VectorStaticModule {
             vectorPreferences: VectorPreferences,
             vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider,
             flipperProxy: FlipperProxy,
+<<<<<<< HEAD
             context: Context,
+=======
+            vectorPlugins: VectorPlugins,
+>>>>>>> v1.5.7
     ): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
@@ -148,8 +154,12 @@ object VectorStaticModule {
                 networkInterceptors = listOfNotNull(
                         flipperProxy.networkInterceptor(),
                 ),
+<<<<<<< HEAD
                 // Tchap: Use custom permalink prefix
                 clientPermalinkBaseUrl = context.getString(R.string.permalink_prefix),
+=======
+                metricPlugins = vectorPlugins.plugins(),
+>>>>>>> v1.5.7
         )
     }
 

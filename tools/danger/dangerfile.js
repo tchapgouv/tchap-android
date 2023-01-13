@@ -73,7 +73,21 @@ const signOff = "Signed-off-by:"
 const allowList = [
     "dependabot[bot]",
     "Florian14",
+<<<<<<< HEAD
     "giomfo",
+=======
+    "ganfra",
+    "jmartinesp",
+    "jonnyandrew",
+    "kittykat",
+    "langleyd",
+    "MadLittleMods",
+    "manuroe",
+    "mnaturel",
+    "onurays",
+    "ouchadam",
+    "stefanceriu",
+>>>>>>> v1.5.7
     "yostyle",
     "jdauphant",
     "appndigital",

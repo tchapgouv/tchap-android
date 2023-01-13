@@ -24,9 +24,9 @@ import im.vector.app.core.services.VectorSyncAndroidService
 import im.vector.app.features.session.VectorSessionStore
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
-import org.matrix.android.sdk.api.session.sync.FilterService
 import timber.log.Timber
 
+<<<<<<< HEAD
 fun Session.configureAndStart(context: Context, startSyncing: Boolean = true) {
     Timber.i("Configure and start session for $myUserId. startSyncing: $startSyncing")
     open()
@@ -51,6 +51,8 @@ private fun Session.configureContentScanner() {
     }
 }
 
+=======
+>>>>>>> v1.5.7
 fun Session.startSyncing(context: Context) {
     val applicationContext = context.applicationContext
     if (!syncService().hasAlreadySynced()) {
