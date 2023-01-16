@@ -180,7 +180,7 @@ class RoomSummaryItemFactory @Inject constructor(
             // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
             .displayMode(displayMode)
             .subtitle(subtitle)
-            .isPublic(roomSummary.isPublic)
+            .izPublic(roomSummary.isPublic)
             .showPresence(roomSummary.isDirect)
             .userPresence(roomSummary.directUserPresence)
             .matrixItem(roomSummary.toMatrixItem())
@@ -206,13 +206,13 @@ class RoomSummaryItemFactory @Inject constructor(
             unreadCount: Int,
             onClick: ((RoomSummary) -> Unit)?,
             onLongClick: ((RoomSummary) -> Boolean)?
-    ) = RoomSummaryItemCentered_()
+    ) = RoomSummaryCenteredItem_()
             .id(roomSummary.roomId)
             .avatarRenderer(avatarRenderer)
             // We do not display shield in the room list anymore
             // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
             .displayMode(displayMode)
-            .isPublic(roomSummary.isPublic)
+            .izPublic(roomSummary.isPublic)
             .showPresence(roomSummary.isDirect)
             .userPresence(roomSummary.directUserPresence)
             .matrixItem(roomSummary.toMatrixItem())
