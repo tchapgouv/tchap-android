@@ -47,6 +47,8 @@ import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.dialpad.PstnDialActivity
 import im.vector.app.features.call.webrtc.WebRtcCallManager
+import im.vector.app.features.createdirect.CreateDirectRoomAction
+import im.vector.app.features.createdirect.CreateDirectRoomViewModel
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import im.vector.app.features.home.room.list.home.HomeRoomListFragment
@@ -84,6 +86,7 @@ class NewHomeDetailFragment :
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
+    private val createDirectRoomViewModel: CreateDirectRoomViewModel by activityViewModel() // Tchap : for managing invite
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private lateinit var sharedRoomListActionViewModel: RoomListSharedActionViewModel
@@ -173,6 +176,17 @@ class NewHomeDetailFragment :
                 }
             }
         }
+
+        // Tchap : observe invite action
+        sharedActionViewModel
+                .stream()
+                .onEach { action ->
+                    when (action) {
+                        is HomeActivitySharedAction.InviteByEmail -> onInviteByEmail(action.email)
+                        else -> Unit // no-op
+                    }
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         sharedCallActionViewModel
                 .liveKnownCalls
@@ -393,6 +407,11 @@ class NewHomeDetailFragment :
                 startActivity(it)
             }
         }
+    }
+
+    // Tchap : action for invite
+    private fun onInviteByEmail(email: String) {
+        createDirectRoomViewModel.handle(CreateDirectRoomAction.InviteByEmail(email))
     }
 
     override fun onBackPressed(toolbarButton: Boolean) = if (spaceStateHandler.isRoot()) {
