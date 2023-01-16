@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail
 
 import android.net.Uri
 import androidx.annotation.IdRes
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -66,6 +67,7 @@ import im.vector.app.features.raw.wellknown.withElementWellKnown
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.voicebroadcast.VoiceBroadcastHelper
 import im.vector.lib.core.utils.flow.chunk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -150,6 +152,7 @@ class TimelineViewModel @AssistedInject constructor(
         buildMeta: BuildMeta,
         timelineFactory: TimelineFactory,
         private val spaceStateHandler: SpaceStateHandler,
+        private val voiceBroadcastHelper: VoiceBroadcastHelper,
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener, LocationSharingServiceConnection.Callback {
 
@@ -407,21 +410,40 @@ class TimelineViewModel @AssistedInject constructor(
      */
     private fun observeLocalThreadNotifications() {
         if (room == null) return
-        room.flow()
-                .liveLocalUnreadThreadList()
-                .execute {
-                    val threadList = it.invoke()
-                    val isUserMentioned = threadList?.firstOrNull { threadRootEvent ->
-                        threadRootEvent.root.threadDetails?.threadNotificationState == ThreadNotificationState.NEW_HIGHLIGHTED_MESSAGE
-                    }?.let { true } ?: false
-                    val numberOfLocalUnreadThreads = threadList?.size ?: 0
-                    copy(
-                            threadNotificationBadgeState = ThreadNotificationBadgeState(
-                                    numberOfLocalUnreadThreads = numberOfLocalUnreadThreads,
-                                    isUserMentioned = isUserMentioned
-                            )
-                    )
-                }
+        val threadNotificationsSupported = session.homeServerCapabilitiesService().getHomeServerCapabilities().canUseThreadReadReceiptsAndNotifications
+        if (threadNotificationsSupported) {
+            room.getRoomSummaryLive()
+                    .asFlow()
+                    .onEach {
+                        it.getOrNull()?.let {
+                            setState {
+                                copy(
+                                        threadNotificationBadgeState = ThreadNotificationBadgeState(
+                                                numberOfLocalUnreadThreads = it.threadNotificationCount + it.threadHighlightCount,
+                                                isUserMentioned = it.threadHighlightCount > 0,
+                                        )
+                                )
+                            }
+                        }
+                    }
+                    .launchIn(viewModelScope)
+        } else {
+            room.flow()
+                    .liveLocalUnreadThreadList()
+                    .execute {
+                        val threadList = it.invoke()
+                        val isUserMentioned = threadList?.firstOrNull { threadRootEvent ->
+                            threadRootEvent.root.threadDetails?.threadNotificationState == ThreadNotificationState.NEW_HIGHLIGHTED_MESSAGE
+                        } != null
+                        val numberOfLocalUnreadThreads = threadList?.size ?: 0
+                        copy(
+                                threadNotificationBadgeState = ThreadNotificationBadgeState(
+                                        numberOfLocalUnreadThreads = numberOfLocalUnreadThreads,
+                                        isUserMentioned = isUserMentioned
+                                )
+                        )
+                    }
+        }
     }
 
     override fun handle(action: RoomDetailAction) {
@@ -457,7 +479,7 @@ class TimelineViewModel @AssistedInject constructor(
             is RoomDetailAction.ReRequestKeys -> handleReRequestKeys(action)
             is RoomDetailAction.TapOnFailedToDecrypt -> handleTapOnFailedToDecrypt(action)
             is RoomDetailAction.SelectStickerAttachment -> handleSelectStickerAttachment()
-            is RoomDetailAction.StartVoiceBroadcast -> handleStartVoiceBroadcast()
+            is RoomDetailAction.VoiceBroadcastAction -> handleVoiceBroadcastAction(action)
             is RoomDetailAction.OpenIntegrationManager -> handleOpenIntegrationManager()
             is RoomDetailAction.StartCall -> handleStartCall(action)
             is RoomDetailAction.AcceptCall -> handleAcceptCall(action)
@@ -599,9 +621,19 @@ class TimelineViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleStartVoiceBroadcast() {
-        // Todo implement start voice broadcast action
-        Timber.d("Start voice broadcast clicked")
+    private fun handleVoiceBroadcastAction(action: RoomDetailAction.VoiceBroadcastAction) {
+        if (room == null) return
+        viewModelScope.launch {
+            when (action) {
+                RoomDetailAction.VoiceBroadcastAction.Recording.Start -> voiceBroadcastHelper.startVoiceBroadcast(room.roomId)
+                RoomDetailAction.VoiceBroadcastAction.Recording.Pause -> voiceBroadcastHelper.pauseVoiceBroadcast(room.roomId)
+                RoomDetailAction.VoiceBroadcastAction.Recording.Resume -> voiceBroadcastHelper.resumeVoiceBroadcast(room.roomId)
+                RoomDetailAction.VoiceBroadcastAction.Recording.Stop -> voiceBroadcastHelper.stopVoiceBroadcast(room.roomId)
+                is RoomDetailAction.VoiceBroadcastAction.Listening.PlayOrResume -> voiceBroadcastHelper.playOrResumePlayback(room.roomId, action.eventId)
+                RoomDetailAction.VoiceBroadcastAction.Listening.Pause -> voiceBroadcastHelper.pausePlayback()
+                RoomDetailAction.VoiceBroadcastAction.Listening.Stop -> voiceBroadcastHelper.stopPlayback()
+            }
+        }
     }
 
     private fun handleOpenIntegrationManager() {

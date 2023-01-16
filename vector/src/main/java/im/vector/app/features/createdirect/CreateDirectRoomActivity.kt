@@ -28,7 +28,6 @@ import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.platform.SimpleFragmentActivity
@@ -55,7 +54,6 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.user.model.User
 import java.net.HttpURLConnection
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class CreateDirectRoomActivity : SimpleFragmentActivity() {
@@ -64,7 +62,6 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     private val qrViewModel: QrCodeScannerViewModel by viewModel()
 
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
-    @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +72,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         sharedActionViewModel
                 .stream()
                 .onEach { action ->
+                    @Suppress("DEPRECATION")
                     when (action) {
                         UserListSharedAction.Close -> finish()
                         UserListSharedAction.GoBack -> onBackPressed()

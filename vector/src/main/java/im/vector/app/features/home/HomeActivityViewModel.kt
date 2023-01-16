@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home
 
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -42,14 +43,17 @@ import im.vector.app.features.raw.wellknown.isSecureBackupRequired
 import im.vector.app.features.raw.wellknown.withElementWellKnown
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
@@ -58,9 +62,11 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -97,7 +103,7 @@ class HomeActivityViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<HomeActivityViewModel, HomeActivityViewState> by hiltMavericksViewModelFactory() {
         override fun initialState(viewModelContext: ViewModelContext): HomeActivityViewState? {
             val activity: HomeActivity = viewModelContext.activity()
-            val args: HomeActivityArgs? = activity.intent.getParcelableExtra(Mavericks.KEY_ARG)
+            val args: HomeActivityArgs? = activity.intent.getParcelableExtraCompat(Mavericks.KEY_ARG)
             return args?.let { HomeActivityViewState(authenticationDescription = it.authenticationDescription) }
                     ?: super.initialState(viewModelContext)
         }
@@ -119,6 +125,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         observeCrossSigningReset()
         observeAnalytics()
         observeReleaseNotes()
+        observeLocalNotificationsSilenced()
         initThreadsMigration()
     }
 
@@ -140,12 +147,34 @@ class HomeActivityViewModel @AssistedInject constructor(
         }
     }
 
+    fun shouldAddHttpPusher() = if (vectorPreferences.areNotificationEnabledForDevice()) {
+        val currentSession = activeSessionHolder.getActiveSession()
+        val currentPushers = currentSession.pushersService().getPushers()
+        currentPushers.none { it.deviceId == currentSession.sessionParams.deviceId }
+    } else {
+        false
+    }
+
+    fun observeLocalNotificationsSilenced() {
+        val currentSession = activeSessionHolder.getActiveSession()
+        val deviceId = currentSession.cryptoService().getMyDevice().deviceId
+        viewModelScope.launch {
+            currentSession.accountDataService()
+                    .getLiveUserAccountDataEvent(UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId)
+                    .asFlow()
+                    .map { it.getOrNull()?.content?.toModel<LocalNotificationSettingsContent>()?.isSilenced ?: false }
+                    .onEach { setState { copy(areNotificationsSilenced = it) } }
+        }
+    }
+
     private fun observeAnalytics() {
         if (analyticsConfig.isEnabled) {
             analyticsStore.didAskUserConsentFlow
                     .onEach { didAskUser ->
                         if (!didAskUser) {
                             _viewEvents.post(HomeActivityViewEvents.ShowAnalyticsOptIn)
+                        } else {
+                            _viewEvents.post(HomeActivityViewEvents.ShowNotificationDialog)
                         }
                     }
                     .launchIn(viewModelScope)
@@ -165,6 +194,8 @@ class HomeActivityViewModel @AssistedInject constructor(
                     // do nothing
                 }
             }
+        } else {
+            _viewEvents.post(HomeActivityViewEvents.ShowNotificationDialog)
         }
     }
 
