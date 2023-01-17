@@ -2025,7 +2025,7 @@
     <string name="ftue_auth_new_password_title">Choose a new password</string>
     <string name="ftue_auth_new_password_subtitle">Make sure it\'s 8 characters or more.</string>
     <string name="ftue_auth_reset_password">Reset password</string>
-    <string name="ftue_auth_sign_out_all_devices">Lock my messages and disconnect me from all my devices (in case your account is hacked or a device loss)</string>
+    <string name="ftue_auth_sign_out_all_devices">Lock my messages and disconnect me from all my devices (in case your account is hacked or a device loss)</string>  <!-- Tchap: Custom string -->
 
     <string name="ftue_auth_phone_confirmation_title">Confirm your phone number</string>
     <!-- Note for translators, %s is the users international phone number -->
