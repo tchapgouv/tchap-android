@@ -32,6 +32,7 @@ import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.SpaceStateHandler
+import im.vector.app.config.Config
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
@@ -211,7 +212,11 @@ class NewHomeDetailFragment :
 
     private fun showFABs() {
         views.newLayoutCreateChatButton.show()
-        views.newLayoutOpenSpacesButton.show()
+
+        // Tchap : hide space button
+        if (Config.SHOW_SPACES) {
+            views.newLayoutOpenSpacesButton.show()
+        }
     }
 
     private fun setCurrentSpace(spaceId: String?) {
