@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.orTrue
 import javax.inject.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "layout_preferences")
@@ -43,7 +44,7 @@ class HomeLayoutPreferencesStore @Inject constructor(
             .distinctUntilChanged()
 
     val areFiltersEnabledFlow: Flow<Boolean> = context.dataStore.data
-            .map { preferences -> preferences[areFiltersEnabled].orFalse() }
+            .map { preferences -> preferences[areFiltersEnabled].orTrue() } // Tchap : filter activate by default
             .distinctUntilChanged()
 
     val isAZOrderingEnabledFlow: Flow<Boolean> = context.dataStore.data
