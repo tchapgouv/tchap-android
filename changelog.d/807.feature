@@ -1,1 +1,0 @@
-Activate new layout by default
