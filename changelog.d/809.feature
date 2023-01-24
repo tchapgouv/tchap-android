@@ -1,1 +1,1 @@
-Add DISCARD_SESSION function for Tchap
+Allow /discard_session command in Tchap
