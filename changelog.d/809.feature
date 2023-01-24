@@ -1,0 +1,1 @@
+Add DISCARD_SESSION function for Tchap
