@@ -9,7 +9,7 @@
 
     <item
         android:id="@+id/menu_home_invite_friends"
-        android:title="@string/invite_friends"
+        android:title="@string/tchap_invite_to"
         app:showAsAction="never" />
 
     <item

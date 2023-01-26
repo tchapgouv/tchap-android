@@ -78,8 +78,8 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>(R.layo
     @EpoxyAttribute
     var showPresence: Boolean = false
 
-    @EpoxyAttribute @JvmField
-    var isPublic: Boolean = false
+    @EpoxyAttribute
+    var izPublic: Boolean = false
 
     @EpoxyAttribute
     var unreadNotificationCount: Int = 0
@@ -130,7 +130,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>(R.layo
         avatarRenderer.render(matrixItem, holder.avatarImageView)
         // Tchap: deleted in Tchap layout
 //        holder.roomAvatarDecorationImageView.render(encryptionTrustLevel)
-//        holder.roomAvatarPublicDecorationImageView.isVisible = isPublic
+//        holder.roomAvatarPublicDecorationImageView.isVisible = izPublic
         // Tchap: Set invisible instead of gone to keep view size
         holder.roomAvatarFailSendingImageView.isInvisible = !hasFailedSending
         renderSelection(holder, showSelected)

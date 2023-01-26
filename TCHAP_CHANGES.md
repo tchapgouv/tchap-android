@@ -1,3 +1,16 @@
+Changes in Tchap 2.6.0 (2023-01-24)
+===================================
+
+Features ✨
+----------
+ - Activate new layout by default ([#807](https://github.com/tchapgouv/tchap-android-v2/issues/807))
+ - Allow /discard_session command in Tchap ([#809](https://github.com/tchapgouv/tchap-android-v2/issues/809))
+
+Improvements 🙌
+--------------
+ - Rebase against Element-Android v1.5.7 ([#805](https://github.com/tchapgouv/tchap-android-v2/issues/805))
+
+
 Changes in Tchap 2.5.2 (2022-12-18)
 ===================================
 

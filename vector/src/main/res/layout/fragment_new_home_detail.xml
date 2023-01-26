@@ -62,7 +62,7 @@
                     android:layout_height="?attr/actionBarSize"
                     android:elevation="0dp"
                     app:layout_collapseMode="pin"
-                    tools:title="@string/all_chats">
+                    tools:title="@string/group_details_home"> <!-- Tchap: use different string -->
 
                     <ImageView
                         android:id="@+id/avatar"

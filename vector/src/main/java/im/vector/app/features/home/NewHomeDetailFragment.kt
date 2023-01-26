@@ -32,6 +32,7 @@ import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.SpaceStateHandler
+import im.vector.app.config.Config
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
@@ -47,6 +48,8 @@ import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.dialpad.PstnDialActivity
 import im.vector.app.features.call.webrtc.WebRtcCallManager
+import im.vector.app.features.createdirect.CreateDirectRoomAction
+import im.vector.app.features.createdirect.CreateDirectRoomViewModel
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import im.vector.app.features.home.room.list.home.HomeRoomListFragment
@@ -61,7 +64,6 @@ import im.vector.app.features.workers.signout.ServerBackupStatusAction
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
@@ -80,12 +82,12 @@ class NewHomeDetailFragment :
     @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var spaceStateHandler: SpaceStateHandler
-    @Inject lateinit var session: Session
     @Inject lateinit var buildMeta: BuildMeta
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
+    private val createDirectRoomViewModel: CreateDirectRoomViewModel by activityViewModel() // Tchap : for managing invite
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private lateinit var sharedRoomListActionViewModel: RoomListSharedActionViewModel
@@ -176,6 +178,17 @@ class NewHomeDetailFragment :
             }
         }
 
+        // Tchap : observe invite action
+        sharedActionViewModel
+                .stream()
+                .onEach { action ->
+                    when (action) {
+                        is HomeActivitySharedAction.InviteByEmail -> onInviteByEmail(action.email)
+                        else -> Unit // no-op
+                    }
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+
         sharedCallActionViewModel
                 .liveKnownCalls
                 .observe(viewLifecycleOwner) {
@@ -213,7 +226,11 @@ class NewHomeDetailFragment :
 
     private fun showFABs() {
         views.newLayoutCreateChatButton.show()
-        views.newLayoutOpenSpacesButton.show()
+
+        // Tchap : hide space button
+        if (Config.SHOW_SPACES) {
+            views.newLayoutOpenSpacesButton.show()
+        }
     }
 
     private fun setCurrentSpace(spaceId: String?) {
@@ -395,6 +412,11 @@ class NewHomeDetailFragment :
                 startActivity(it)
             }
         }
+    }
+
+    // Tchap : action for invite
+    private fun onInviteByEmail(email: String) {
+        createDirectRoomViewModel.handle(CreateDirectRoomAction.InviteByEmail(email))
     }
 
     override fun onBackPressed(toolbarButton: Boolean) = if (spaceStateHandler.isRoot()) {

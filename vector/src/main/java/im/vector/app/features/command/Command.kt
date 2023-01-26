@@ -74,6 +74,7 @@ enum class Command(
      */
     val isTchapCommand
         get() = when (this) {
+            DISCARD_SESSION,
             EMOTE,
             MARKDOWN,
             RAINBOW,
@@ -103,7 +104,6 @@ enum class Command(
             CLEAR_SCALAR_TOKEN,
             SPOILER,
             WHOIS,
-            DISCARD_SESSION,
             CREATE_SPACE,
             ADD_TO_SPACE,
             JOIN_SPACE,
