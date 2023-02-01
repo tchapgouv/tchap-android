@@ -136,7 +136,9 @@ android {
             dimension "target"
 
             // Tchap: Key Backup is not supported
-            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "true"
+            def isKeyBackupSupported = true
+            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "${isKeyBackupSupported}"
+            resValue "bool", "is_key_backup_supported", "${isKeyBackupSupported}"
 
             // Tchap: CrossSigning initialization is disabled
             def enableCrossSigning = true
@@ -151,7 +153,9 @@ android {
             dimension "target"
 
             // Tchap: Key Backup is not supported
-            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
+            def isKeyBackupSupported = false
+            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "${isKeyBackupSupported}"
+            resValue "bool", "is_key_backup_supported", "${isKeyBackupSupported}"
 
             // Tchap: CrossSigning initialization is disabled
             def enableCrossSigning = false
@@ -166,7 +170,9 @@ android {
             dimension "target"
 
             // Tchap: Key Backup is not supported
-            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
+            def isKeyBackupSupported = false
+            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "${isKeyBackupSupported}"
+            resValue "bool", "is_key_backup_supported", "${isKeyBackupSupported}"
 
             // Tchap: CrossSigning initialization is disabled
             def enableCrossSigning = false
