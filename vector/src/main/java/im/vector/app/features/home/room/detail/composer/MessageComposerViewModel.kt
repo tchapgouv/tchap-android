@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.composer
 
+import android.text.SpannableString
 import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
@@ -126,6 +127,7 @@ class MessageComposerViewModel @AssistedInject constructor(
             is MessageComposerAction.AudioSeekBarMovedTo -> handleAudioSeekBarMovedTo(action)
             is MessageComposerAction.SlashCommandConfirmed -> handleSlashCommandConfirmed(action)
             is MessageComposerAction.InsertUserDisplayName -> handleInsertUserDisplayName(action)
+            is MessageComposerAction.SetFullScreen -> handleSetFullScreen(action)
         }
     }
 
@@ -134,12 +136,11 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleOnTextChanged(action: MessageComposerAction.OnTextChanged) {
-        setState {
-            // Makes sure currentComposerText is upToDate when accessing further setState
-            currentComposerText = action.text
-            this
+        val needsSendButtonVisibilityUpdate = currentComposerText.isEmpty() != action.text.isEmpty()
+        currentComposerText = SpannableString(action.text)
+        if (needsSendButtonVisibilityUpdate) {
+            updateIsSendButtonVisibility(true)
         }
-        updateIsSendButtonVisibility(true)
     }
 
     private fun subscribeToStateInternal() {
@@ -167,6 +168,10 @@ class MessageComposerViewModel @AssistedInject constructor(
         }
     }
 
+    private fun handleSetFullScreen(action: MessageComposerAction.SetFullScreen) {
+        setState { copy(isFullScreen = action.isFullScreen) }
+    }
+
     private fun observeCanSendMessageAndEncryption() {
         val roomMemberQueryParams = roomMemberQueryParams {
             displayName = QueryStringValue.IsNotEmpty
@@ -184,7 +189,7 @@ class MessageComposerViewModel @AssistedInject constructor(
             val isLastMemberInDm = isLastMember && roomType == TchapRoomType.DIRECT
             val canSendMessage = PowerLevelsHelper(pl).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE) && !isLastMemberInDm
             when {
-                canSendMessage   -> {
+                canSendMessage -> {
                     val isE2E = sum.isEncrypted
                     if (isE2E) {
                         val roomEncryptionAlgorithm = sum.roomEncryptionAlgorithm
@@ -198,7 +203,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                     }
                 }
                 isLastMemberInDm -> CanSendStatus.EmptyDM
-                else             -> CanSendStatus.NoPermission
+                else -> CanSendStatus.NoPermission
             }
         }.setOnEach {
             copy(canSendMessage = it)
@@ -240,7 +245,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                             isInThreadTimeline = state.isInThreadTimeline()
                     )) {
                         is ParsedCommand.ErrorNotACommand,
-                            ParsedCommand.ErrorNotATchapCommand -> {
+                        ParsedCommand.ErrorNotATchapCommand -> {
                             // Send the text message to the room
                             if (state.rootThreadEventId != null) {
                                 room.relationService().replyInThread(
@@ -972,7 +977,7 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     fun endAllVoiceActions(deleteRecord: Boolean = true) {
-        audioMessageHelper.clearTracker()
+        audioMessageHelper.stopTracking()
         audioMessageHelper.stopAllVoiceActions(deleteRecord)
     }
 

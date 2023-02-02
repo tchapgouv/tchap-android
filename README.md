@@ -1,6 +1,6 @@
 # Tchap Android
 
-Tchap Android v2 is an Android Matrix client. The app can be run on every Android devices with Android OS Lollipop and more (API 21).
+Tchap Android is an Android Matrix Client provided by [DINUM](https://tchap.beta.gouv.fr/). The app can be run on every Android devices with Android OS Lollipop and more (API 21).
 
 [<img src="resources/img/google-play-badge.png" alt="Get it on Google Play" height="60">](https://play.google.com/store/apps/details?id=fr.gouv.tchap.a)
 
@@ -33,5 +33,3 @@ Also [this documentation](./docs/_developer_onboarding.md) can hopefully help de
 Issues are triaged by community members and the Android App Team, following the [triage process](https://github.com/vector-im/element-meta/wiki/Triage-process).
 
 We use [issue labels](https://github.com/vector-im/element-meta/wiki/Issue-labelling) to sort all incoming issues.
-
->>>>>>> v1.5.2
