@@ -136,7 +136,7 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleOnTextChanged(action: MessageComposerAction.OnTextChanged) {
-            val needsSendButtonVisibilityUpdate = currentComposerText.isEmpty() != action.text.isEmpty()
+        val needsSendButtonVisibilityUpdate = currentComposerText.isEmpty() != action.text.isEmpty()
         currentComposerText = SpannableString(action.text)
         if (needsSendButtonVisibilityUpdate) {
             updateIsSendButtonVisibility(true)
@@ -168,20 +168,16 @@ class MessageComposerViewModel @AssistedInject constructor(
         }
     }
 
-<<<<<<< HEAD
+    private fun handleSetFullScreen(action: MessageComposerAction.SetFullScreen) {
+        setState { copy(isFullScreen = action.isFullScreen) }
+    }
+
     private fun observeCanSendMessageAndEncryption() {
         val roomMemberQueryParams = roomMemberQueryParams {
             displayName = QueryStringValue.IsNotEmpty
             memberships = Membership.activeMemberships()
         }
 
-=======
-    private fun handleSetFullScreen(action: MessageComposerAction.SetFullScreen) {
-        setState { copy(isFullScreen = action.isFullScreen) }
-    }
-
-    private fun observePowerLevelAndEncryption() {
->>>>>>> v1.5.11
         combine(
                 PowerLevelsFlowFactory(room).createFlow(),
                 room.flow().liveRoomSummary().unwrap(),
@@ -193,7 +189,7 @@ class MessageComposerViewModel @AssistedInject constructor(
             val isLastMemberInDm = isLastMember && roomType == TchapRoomType.DIRECT
             val canSendMessage = PowerLevelsHelper(pl).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE) && !isLastMemberInDm
             when {
-                canSendMessage   -> {
+                canSendMessage -> {
                     val isE2E = sum.isEncrypted
                     if (isE2E) {
                         val roomEncryptionAlgorithm = sum.roomEncryptionAlgorithm
@@ -207,7 +203,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                     }
                 }
                 isLastMemberInDm -> CanSendStatus.EmptyDM
-                else             -> CanSendStatus.NoPermission
+                else -> CanSendStatus.NoPermission
             }
         }.setOnEach {
             copy(canSendMessage = it)
@@ -249,7 +245,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                             isInThreadTimeline = state.isInThreadTimeline()
                     )) {
                         is ParsedCommand.ErrorNotACommand,
-                            ParsedCommand.ErrorNotATchapCommand -> {
+                        ParsedCommand.ErrorNotATchapCommand -> {
                             // Send the text message to the room
                             if (state.rootThreadEventId != null) {
                                 room.relationService().replyInThread(
