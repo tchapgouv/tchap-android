@@ -46,13 +46,14 @@ class SessionSanityMigrationTest {
         realm?.close()
     }
 
+    // Tchap: use custom realm database
     @Test
     fun sessionDatabaseShouldMigrateGracefully() {
-        val realmName = "session_42.realm"
+        val realmName = "tchap_session_41.realm"
         val migration = RealmSessionStoreMigration(Normalizer())
         val realmConfiguration = configurationFactory.createConfiguration(
                 realmName,
-                "efa9ab2c77ae06b0e767ffdb1c45b12be3c77d48d94f1ac41a7cd1d637fc59ac41f869a250453074e21ce13cfe7ed535593e7d150c08ce2bad7a2ab8c7b841f0",
+                "2948ff8106ad80ca8aeba7ef59775075258d8805f9f6eb306add6c3097154bf5c99bbc965931a29e4512f0b3981d3a562c4c86b860846bac2312e1ab61026762",
                 SessionRealmModule(),
                 migration.schemaVersion,
                 migration
