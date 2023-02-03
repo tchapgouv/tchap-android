@@ -56,11 +56,12 @@ class RealmSessionStoreMigration43Test {
     }
 
     @Test
+    // Tchap: Use custom realm database
     fun migrationShouldBeNeeed() {
-        val realmName = "session_42.realm"
+        val realmName = "tchap_session_41.realm"
         val realmConfiguration = configurationFactory.createConfiguration(
                 realmName,
-                "efa9ab2c77ae06b0e767ffdb1c45b12be3c77d48d94f1ac41a7cd1d637fc59ac41f869a250453074e21ce13cfe7ed535593e7d150c08ce2bad7a2ab8c7b841f0",
+                "2948ff8106ad80ca8aeba7ef59775075258d8805f9f6eb306add6c3097154bf5c99bbc965931a29e4512f0b3981d3a562c4c86b860846bac2312e1ab61026762",
                 SessionRealmModule(),
                 43,
                 null
@@ -75,16 +76,17 @@ class RealmSessionStoreMigration43Test {
         }
     }
 
-    //  Database key for alias `session_db_e00482619b2597069b1f192b86de7da9`: efa9ab2c77ae06b0e767ffdb1c45b12be3c77d48d94f1ac41a7cd1d637fc59ac41f869a250453074e21ce13cfe7ed535593e7d150c08ce2bad7a2ab8c7b841f0
-    // $WEJ8U6Zsx3TDZx3qmHIOKh-mXe5kqL_MnPcIkStEwwI
-    // $11EtAQ8RYcudJVtw7e6B5Vm4ufCqKTOWKblY2U_wrpo
+    // Tchap: Use custom realm database
+    //  Database key for alias `session_db_feb3823dd11e8b4b0b19d5d1d9e3b864`: 2948ff8106ad80ca8aeba7ef59775075258d8805f9f6eb306add6c3097154bf5c99bbc965931a29e4512f0b3981d3a562c4c86b860846bac2312e1ab61026762
+    // $167541532417nKwjC:agent2.tchap.incubateur.net
+    // $167541543920SxkBP:agent2.tchap.incubateur.net
     @Test
     fun testMigration43() {
-        val realmName = "session_42.realm"
+        val realmName = "tchap_session_41.realm"
         val migration = RealmSessionStoreMigration(Normalizer())
         val realmConfiguration = configurationFactory.createConfiguration(
                 realmName,
-                "efa9ab2c77ae06b0e767ffdb1c45b12be3c77d48d94f1ac41a7cd1d637fc59ac41f869a250453074e21ce13cfe7ed535593e7d150c08ce2bad7a2ab8c7b841f0",
+                "2948ff8106ad80ca8aeba7ef59775075258d8805f9f6eb306add6c3097154bf5c99bbc965931a29e4512f0b3981d3a562c4c86b860846bac2312e1ab61026762",
                 SessionRealmModule(),
                 43,
                 migration
@@ -95,7 +97,7 @@ class RealmSessionStoreMigration43Test {
 
         // assert that the edit from 42 are migrated
         val editions = EventAnnotationsSummaryEntity
-                .where(realm!!, "\$WEJ8U6Zsx3TDZx3qmHIOKh-mXe5kqL_MnPcIkStEwwI")
+                .where(realm!!, "\$167541532417nKwjC:agent2.tchap.incubateur.net")
                 .findFirst()
                 ?.editSummary
                 ?.editions
@@ -103,7 +105,7 @@ class RealmSessionStoreMigration43Test {
         editions shouldNotBe null
         editions!!.size shouldBe 1
         val firstEdition = editions.first()
-        firstEdition?.eventId shouldBeEqualTo "\$DvOyA8vJxwGfTaJG3OEJVcL4isShyaVDnprihy38W28"
+        firstEdition?.eventId shouldBeEqualTo "\$167541534818YsPGX:agent2.tchap.incubateur.net"
         firstEdition?.isLocalEcho shouldBeEqualTo false
 
         val editEvent = EventMapper.map(firstEdition!!.event!!)
@@ -112,7 +114,7 @@ class RealmSessionStoreMigration43Test {
 
         // assert that the edit from 42 are migrated
         val editionsOfE2E = EventAnnotationsSummaryEntity
-                .where(realm!!, "\$11EtAQ8RYcudJVtw7e6B5Vm4ufCqKTOWKblY2U_wrpo")
+                .where(realm!!, "\$167541543920SxkBP:agent2.tchap.incubateur.net")
                 .findFirst()
                 ?.editSummary
                 ?.editions
@@ -120,7 +122,7 @@ class RealmSessionStoreMigration43Test {
         editionsOfE2E shouldNotBe null
         editionsOfE2E!!.size shouldBe 1
         val firstEditionE2E = editionsOfE2E.first()
-        firstEditionE2E?.eventId shouldBeEqualTo "\$HUwJOQRCJwfPv7XSKvBPcvncjM0oR3q2tGIIIdv9Zts"
+        firstEditionE2E?.eventId shouldBeEqualTo "\$167541545321BMCNj:agent2.tchap.incubateur.net"
         firstEditionE2E?.isLocalEcho shouldBeEqualTo false
 
         val editEventE2E = EventMapper.map(firstEditionE2E!!.event!!)
