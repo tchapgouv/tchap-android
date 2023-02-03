@@ -55,8 +55,8 @@ class RealmSessionStoreMigration43Test {
         realm?.close()
     }
 
-    @Test
     // Tchap: Use custom realm database
+    @Test
     fun migrationShouldBeNeeed() {
         val realmName = "tchap_session_41.realm"
         val realmConfiguration = configurationFactory.createConfiguration(
