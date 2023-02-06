@@ -40,6 +40,31 @@ class ShieldImageView @JvmOverloads constructor(
         isVisible = false
     }
 
+    /**
+     * Renders device shield with the support of unknown shields instead of black shields which is used for rooms.
+     * @param roomEncryptionTrustLevel trust level that is usually calculated with [im.vector.app.features.settings.devices.TrustUtils.shieldForTrust]
+     * @param borderLess if true then the shield icon with border around is used
+     */
+    fun renderDeviceShield(roomEncryptionTrustLevel: RoomEncryptionTrustLevel?, borderLess: Boolean = false) {
+        when (roomEncryptionTrustLevel) {
+            null -> {
+                contentDescription = context.getString(R.string.a11y_trust_level_warning)
+                setImageResource(
+                        if (borderLess) R.drawable.ic_shield_warning_no_border
+                        else R.drawable.ic_shield_warning
+                )
+            }
+            RoomEncryptionTrustLevel.Default -> {
+                contentDescription = context.getString(R.string.a11y_trust_level_default)
+                setImageResource(
+                        if (borderLess) R.drawable.ic_shield_unknown_no_border
+                        else R.drawable.ic_shield_unknown
+                )
+            }
+            else -> render(roomEncryptionTrustLevel, borderLess)
+        }
+    }
+
     fun render(roomEncryptionTrustLevel: RoomEncryptionTrustLevel?, borderLess: Boolean = false) {
         // Tchap: Hide the shield
         isVisible = false
@@ -48,8 +73,8 @@ class ShieldImageView @JvmOverloads constructor(
             RoomEncryptionTrustLevel.Default -> {
                 contentDescription = context.getString(R.string.a11y_trust_level_default)
                 setImageResource(
-                        if (borderLess) R.drawable.ic_shield_unknown_no_border
-                        else R.drawable.ic_shield_unknown
+                        if (borderLess) R.drawable.ic_shield_black_no_border
+                        else R.drawable.ic_shield_black
                 )
             }
             RoomEncryptionTrustLevel.Warning -> {
@@ -140,7 +165,7 @@ class ShieldImageView @JvmOverloads constructor(
 @DrawableRes
 fun RoomEncryptionTrustLevel.toDrawableRes(): Int {
     return when (this) {
-        RoomEncryptionTrustLevel.Default -> R.drawable.ic_shield_unknown
+        RoomEncryptionTrustLevel.Default -> R.drawable.ic_shield_black
         RoomEncryptionTrustLevel.Warning -> R.drawable.ic_shield_warning
         RoomEncryptionTrustLevel.Trusted -> R.drawable.ic_shield_trusted
         RoomEncryptionTrustLevel.E2EWithUnsupportedAlgorithm -> R.drawable.ic_warning_badge
