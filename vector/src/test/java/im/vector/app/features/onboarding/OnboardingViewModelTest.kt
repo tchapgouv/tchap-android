@@ -208,6 +208,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    @Ignore("Tchap: this flow does not exist anymore in Tchap")
     fun `given combined login enabled, when handling sign in splash action, then emits OpenCombinedLogin with default homeserver qrCode supported`() = runTest {
         val test = viewModel.test()
         fakeVectorFeatures.givenCombinedLoginEnabled()
