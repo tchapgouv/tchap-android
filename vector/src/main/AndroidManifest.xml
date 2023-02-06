@@ -114,7 +114,7 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize" />
 
-        <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite :/ -->
+        <!-- Add tools:ignore="Instantiatable" for the error reported only by CI :/ -->
         <activity
             android:name=".features.media.VectorAttachmentViewerActivity"
             android:theme="@style/Theme.Vector.Black.Transparent"
@@ -147,7 +147,8 @@
 
         <activity
             android:name=".features.home.room.detail.RoomDetailActivity"
-            android:parentActivityName=".features.home.HomeActivity">
+            android:parentActivityName=".features.home.HomeActivity"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".features.home.HomeActivity" />
@@ -335,7 +336,7 @@
             </intent-filter>
         </service>
 
-        <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite and for lintGplayRelease check :/ -->
+        <!-- Add tools:ignore="Instantiatable" for the error reported only by CI and for lintGplayRelease check :/ -->
         <service
             android:name=".core.services.VectorSyncAndroidService"
             android:exported="false"

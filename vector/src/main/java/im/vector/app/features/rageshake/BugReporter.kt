@@ -292,7 +292,7 @@ class BugReporter @Inject constructor(
                             .addFormDataPart("user_id", userId)
                             .addFormDataPart("can_contact", canContact.toString())
                             .addFormDataPart("device_id", deviceId)
-                            .addFormDataPart("version", versionProvider.getVersion(longFormat = true, useBuildNumber = false))
+                            .addFormDataPart("version", versionProvider.getVersion(longFormat = true))
                             .addFormDataPart("branch_name", buildMeta.gitBranchName)
                             .addFormDataPart("matrix_sdk_version", Matrix.getSdkVersion())
                             .addFormDataPart("olm_version", olmVersion)
@@ -313,11 +313,6 @@ class BugReporter @Inject constructor(
                                     addFormDataPart(name, value)
                                 }
                             }
-
-                    val buildNumber = buildMeta.buildNumber
-                    if (buildNumber.isNotEmpty() && buildNumber != "0") {
-                        builder.addFormDataPart("build_number", buildNumber)
-                    }
 
                     // add the gzipped files
                     for (file in gzippedFiles) {
