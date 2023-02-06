@@ -38,14 +38,10 @@ import im.vector.app.features.voicebroadcast.isVoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.usecase.GetRoomLiveVoiceBroadcastsUseCase
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
-<<<<<<< HEAD
-import org.matrix.android.sdk.api.session.Session
-=======
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
->>>>>>> v1.5.18
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -63,11 +59,7 @@ class RoomSummaryItemFactory @Inject constructor(
         private val typingHelper: TypingHelper,
         private val avatarRenderer: AvatarRenderer,
         private val errorFormatter: ErrorFormatter,
-<<<<<<< HEAD
-        private val session: Session
-=======
         private val getRoomLiveVoiceBroadcastsUseCase: GetRoomLiveVoiceBroadcastsUseCase,
->>>>>>> v1.5.18
 ) {
 
     fun create(
@@ -122,7 +114,7 @@ class RoomSummaryItemFactory @Inject constructor(
     ): VectorEpoxyModel<*> {
         // Tchap: userXXX invited you
         val secondLine = roomSummary.inviterId?.let { userId ->
-            val displayName = session.userService().getUser(userId)?.toMatrixItem()?.getBestName()
+            val displayName = sessionHolder.getSafeActiveSession()?.userService()?.getUser(userId)?.toMatrixItem()?.getBestName()
                     ?.let { displayName ->
                         if (roomSummary.isDirect) {
                             // We remove the user domain in second line because it is already present in first line

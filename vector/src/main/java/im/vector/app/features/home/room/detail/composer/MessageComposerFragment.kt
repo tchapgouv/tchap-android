@@ -272,8 +272,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     ) { mainState, messageComposerState, attachmentState ->
         if (mainState.tombstoneEvent != null) return@withState
 
-<<<<<<< HEAD
-        (composer as? View)?.isInvisible = !messageComposerState.isComposerVisible
+        (composer as? View)?.isVisible = messageComposerState.isComposerVisible
         if (Config.SHOW_VOICE_RECORDER) {
             composer.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
         } else {
@@ -281,11 +280,6 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             composer.sendButton.isGone = !messageComposerState.isSendButtonVisible
             (composer as? RichTextComposerLayout)?.isTextFormattingEnabled = attachmentState.isTextFormattingEnabled
         }
-=======
-        (composer as? View)?.isVisible = messageComposerState.isComposerVisible
-        composer.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
-        (composer as? RichTextComposerLayout)?.isTextFormattingEnabled = attachmentState.isTextFormattingEnabled
->>>>>>> v1.5.18
     }
 
     private fun setupBottomSheet() {

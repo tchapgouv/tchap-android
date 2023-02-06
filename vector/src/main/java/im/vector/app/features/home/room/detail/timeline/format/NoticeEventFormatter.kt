@@ -70,35 +70,13 @@ class NoticeEventFormatter @Inject constructor(
     private fun Event.isSentByCurrentUser() = senderId != null && senderId == currentUserId
 
     fun format(timelineEvent: TimelineEvent, isDm: Boolean): CharSequence? {
-<<<<<<< HEAD
+        val event = timelineEvent.root
         // Tchap: Hide the domain if we are in DM.
         val senderName = if (isDm) {
             TchapUtils.getNameFromDisplayName(timelineEvent.senderInfo.disambiguatedDisplayName)
         } else {
             timelineEvent.senderInfo.disambiguatedDisplayName
         }
-        return when (val type = timelineEvent.root.getClearType()) {
-            EventType.STATE_ROOM_JOIN_RULES -> formatJoinRulesEvent(timelineEvent.root, senderName, isDm)
-            EventType.STATE_ROOM_CREATE -> formatRoomCreateEvent(timelineEvent.root, isDm)
-            EventType.STATE_ROOM_NAME -> formatRoomNameEvent(timelineEvent.root, senderName)
-            EventType.STATE_ROOM_TOPIC -> formatRoomTopicEvent(timelineEvent.root, senderName)
-            EventType.STATE_ROOM_AVATAR -> formatRoomAvatarEvent(timelineEvent.root, senderName)
-            EventType.STATE_ROOM_MEMBER -> formatRoomMemberEvent(timelineEvent.root, senderName, isDm)
-            EventType.STATE_ROOM_THIRD_PARTY_INVITE -> formatRoomThirdPartyInvite(timelineEvent.root, senderName, isDm)
-            EventType.STATE_ROOM_ALIASES -> formatRoomAliasesEvent(timelineEvent.root, senderName)
-            EventType.STATE_ROOM_CANONICAL_ALIAS -> formatRoomCanonicalAliasEvent(timelineEvent.root, senderName)
-            EventType.STATE_ROOM_HISTORY_VISIBILITY ->
-                formatRoomHistoryVisibilityEvent(timelineEvent.root, senderName, isDm)
-            EventType.STATE_ROOM_SERVER_ACL -> formatRoomServerAclEvent(timelineEvent.root, senderName)
-            EventType.STATE_ROOM_GUEST_ACCESS -> formatRoomGuestAccessEvent(timelineEvent.root, senderName, isDm)
-            EventType.STATE_ROOM_ENCRYPTION -> formatRoomEncryptionEvent(timelineEvent.root, senderName)
-            EventType.STATE_ROOM_WIDGET,
-            EventType.STATE_ROOM_WIDGET_LEGACY -> formatWidgetEvent(timelineEvent.root, senderName)
-            EventType.STATE_ROOM_TOMBSTONE -> formatRoomTombstoneEvent(timelineEvent.root, senderName, isDm)
-            EventType.STATE_ROOM_POWER_LEVELS -> formatRoomPowerLevels(timelineEvent.root, senderName)
-=======
-        val event = timelineEvent.root
-        val senderName = timelineEvent.senderInfo.disambiguatedDisplayName
         return when (val type = event.getClearType()) {
             EventType.STATE_ROOM_JOIN_RULES -> formatJoinRulesEvent(event, senderName, isDm)
             EventType.STATE_ROOM_CREATE -> formatRoomCreateEvent(event, isDm)
@@ -117,17 +95,12 @@ class NoticeEventFormatter @Inject constructor(
             EventType.STATE_ROOM_WIDGET_LEGACY -> formatWidgetEvent(event, senderName)
             EventType.STATE_ROOM_TOMBSTONE -> formatRoomTombstoneEvent(event, senderName, isDm)
             EventType.STATE_ROOM_POWER_LEVELS -> formatRoomPowerLevels(event, senderName)
->>>>>>> v1.5.18
             EventType.CALL_INVITE,
             EventType.CALL_CANDIDATES,
             EventType.CALL_HANGUP,
             EventType.CALL_REJECT,
-<<<<<<< HEAD
-            EventType.CALL_ANSWER -> formatCallEvent(type, timelineEvent.root, senderName)
-=======
             EventType.CALL_ANSWER -> formatCallEvent(type, event, senderName)
             VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO -> formatVoiceBroadcastEvent(event, senderName)
->>>>>>> v1.5.18
             EventType.CALL_NEGOTIATE,
             EventType.CALL_SELECT_ANSWER,
             EventType.CALL_REPLACES,

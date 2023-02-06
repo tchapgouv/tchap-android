@@ -86,14 +86,10 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>(R.layout.item_de
                     trusted
             )
 
-<<<<<<< HEAD
-            holder.trustIcon.render(shield)
+            holder.trustIcon.renderDeviceShield(shield)
 
             // Tchap: Show the shield only in this view on Tchap
             holder.trustIcon.visibility = View.VISIBLE
-=======
-            holder.trustIcon.renderDeviceShield(shield)
->>>>>>> v1.5.18
         } else {
             holder.trustIcon.renderDeviceShield(null)
         }

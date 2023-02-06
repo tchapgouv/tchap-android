@@ -90,11 +90,7 @@ object Config {
      * The analytics configuration to use for the Nightly build type.
      * Can be disabled by providing Analytics.Disabled
      */
-<<<<<<< HEAD
     val NIGHTLY_ANALYTICS_CONFIG = Analytics.Disabled // Tchap: No analytics
-=======
-    val NIGHTLY_ANALYTICS_CONFIG = RELEASE_ANALYTICS_CONFIG.copy(sentryEnvironment = "NIGHTLY")
 
     val SHOW_UNVERIFIED_SESSIONS_ALERT_AFTER_MILLIS = 7.days.inWholeMilliseconds // 1 Week
->>>>>>> v1.5.18
 }

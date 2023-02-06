@@ -542,20 +542,18 @@ class HomeActivityViewModel @AssistedInject constructor(
 
     override fun handle(action: HomeActivityViewActions) {
         when (action) {
+            HomeActivityViewActions.DisclaimerDialogShown -> {
+                // Tchap: in case of migration, there is no initial sync, so force the update of the identity server url
+                updateIdentityServer()
+            }
             HomeActivityViewActions.PushPromptHasBeenReviewed -> {
                 vectorPreferences.setDidAskUserToEnableSessionPush()
             }
             HomeActivityViewActions.ViewStarted -> {
                 initialize()
             }
-<<<<<<< HEAD
-            HomeActivityViewActions.DisclaimerDialogShown -> {
-                // Tchap: in case of migration, there is no initial sync, so force the update of the identity server url
-                updateIdentityServer()
-=======
             is HomeActivityViewActions.RegisterPushDistributor -> {
                 registerUnifiedPush(distributor = action.distributor)
->>>>>>> v1.5.18
             }
         }
     }

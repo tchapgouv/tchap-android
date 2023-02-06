@@ -2866,10 +2866,6 @@
     <string name="quoting">Citation de</string>
     <string name="replying_to">Réponse à %s</string>
     <string name="editing">Modification</string>
-<<<<<<< HEAD
-</resources>
-=======
     <string name="settings_enable_direct_share_summary">Affiche les conversations récentes dans le menu de partage du système</string>
     <string name="settings_enable_direct_share_title">Activer le partage direct</string>
 </resources>
->>>>>>> v1.5.18

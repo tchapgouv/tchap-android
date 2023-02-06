@@ -409,7 +409,6 @@ internal class DefaultAuthenticationService @Inject constructor(
         )
     }
 
-<<<<<<< HEAD
     override suspend fun getPasswordPolicy(homeServerConnectionConfig: HomeServerConnectionConfig): PasswordPolicy {
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
 
@@ -418,22 +417,6 @@ internal class DefaultAuthenticationService @Inject constructor(
         }
     }
 
-    override suspend fun isQrLoginSupported(homeServerConnectionConfig: HomeServerConnectionConfig): Boolean {
-        val authAPI = buildAuthAPI(homeServerConnectionConfig)
-        val versions = runCatching {
-            executeRequest(null) {
-                authAPI.versions()
-            }
-        }
-        return if (versions.isSuccess) {
-            versions.getOrNull()?.doesServerSupportQrCodeLogin().orFalse()
-        } else {
-            false
-        }
-    }
-
-=======
->>>>>>> v1.5.18
     override suspend fun loginUsingQrLoginToken(
             homeServerConnectionConfig: HomeServerConnectionConfig,
             loginToken: String,

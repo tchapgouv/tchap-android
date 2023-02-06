@@ -100,21 +100,14 @@ class MessageComposerViewModel @AssistedInject constructor(
     private var currentComposerText: CharSequence = ""
 
     init {
-<<<<<<< HEAD
-        loadDraftIfAny()
-        observeCanSendMessageAndEncryption()
-        observeVoiceBroadcast()
-        subscribeToStateInternal()
-=======
         if (room != null) {
             loadDraftIfAny(room)
-            observePowerLevelAndEncryption(room)
+            observeCanSendMessageAndEncryption(room)
             observeVoiceBroadcast(room)
             subscribeToStateInternal()
         } else {
             onRoomError()
         }
->>>>>>> v1.5.18
     }
 
     override fun handle(action: MessageComposerAction) {
@@ -185,16 +178,12 @@ class MessageComposerViewModel @AssistedInject constructor(
         setState { copy(isFullScreen = action.isFullScreen) }
     }
 
-<<<<<<< HEAD
-    private fun observeCanSendMessageAndEncryption() {
+    private fun observeCanSendMessageAndEncryption(room: Room) {
         val roomMemberQueryParams = roomMemberQueryParams {
             displayName = QueryStringValue.IsNotEmpty
             memberships = Membership.activeMemberships()
         }
 
-=======
-    private fun observePowerLevelAndEncryption(room: Room) {
->>>>>>> v1.5.18
         combine(
                 PowerLevelsFlowFactory(room).createFlow(),
                 room.flow().liveRoomSummary().unwrap(),
