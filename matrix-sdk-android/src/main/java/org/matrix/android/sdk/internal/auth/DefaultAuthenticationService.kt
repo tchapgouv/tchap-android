@@ -31,7 +31,6 @@ import org.matrix.android.sdk.api.auth.data.PasswordPolicy
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.session.Session
@@ -300,7 +299,8 @@ internal class DefaultAuthenticationService @Inject constructor(
                 isLoginAndRegistrationSupported = versions.isLoginAndRegistrationSupportedBySdk(),
                 homeServerUrl = homeServerUrl,
                 isOutdatedHomeserver = !versions.isSupportedBySdk(),
-                isLogoutDevicesSupported = versions.doesServerSupportLogoutDevices()
+                isLogoutDevicesSupported = versions.doesServerSupportLogoutDevices(),
+                isLoginWithQrSupported = versions.doesServerSupportQrCodeLogin(),
         )
     }
 
@@ -409,6 +409,7 @@ internal class DefaultAuthenticationService @Inject constructor(
         )
     }
 
+<<<<<<< HEAD
     override suspend fun getPasswordPolicy(homeServerConnectionConfig: HomeServerConnectionConfig): PasswordPolicy {
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
 
@@ -431,6 +432,8 @@ internal class DefaultAuthenticationService @Inject constructor(
         }
     }
 
+=======
+>>>>>>> v1.5.18
     override suspend fun loginUsingQrLoginToken(
             homeServerConnectionConfig: HomeServerConnectionConfig,
             loginToken: String,

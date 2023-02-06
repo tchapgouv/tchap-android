@@ -127,6 +127,7 @@ interface AuthenticationService {
     ): Session
 
     /**
+<<<<<<< HEAD
      * Get password policy.
      */
     suspend fun getPasswordPolicy(homeServerConnectionConfig: HomeServerConnectionConfig): PasswordPolicy
@@ -138,6 +139,8 @@ interface AuthenticationService {
     suspend fun isQrLoginSupported(homeServerConnectionConfig: HomeServerConnectionConfig): Boolean
 
     /**
+=======
+>>>>>>> v1.5.18
      * Authenticate using m.login.token method during sign in with QR code.
      * @param homeServerConnectionConfig the information about the homeserver and other configuration
      * @param loginToken the m.login.token

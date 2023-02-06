@@ -126,7 +126,7 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun checkQrCodeLoginCapability(homeServerUrl: String) {
+    private fun checkQrCodeLoginCapability() {
         if (!vectorFeatures.isQrCodeLoginEnabled()) {
             setState {
                 copy(
@@ -141,16 +141,10 @@ class OnboardingViewModel @AssistedInject constructor(
                 )
             }
         } else {
-            viewModelScope.launch {
-                // check if selected server supports MSC3882 first
-                homeServerConnectionConfigFactory.create(homeServerUrl)?.let {
-                    val canLoginWithQrCode = authenticationService.isQrLoginSupported(it)
-                    setState {
-                        copy(
-                                canLoginWithQrCode = canLoginWithQrCode
-                        )
-                    }
-                }
+            setState {
+                copy(
+                        canLoginWithQrCode = selectedHomeserver.isLoginWithQrSupported
+                )
             }
         }
     }
@@ -726,8 +720,10 @@ class OnboardingViewModel @AssistedInject constructor(
             // This is invalid
             _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
         } else {
-            startAuthenticationFlow(action, homeServerConnectionConfig, serverTypeOverride, postAction)
-            checkQrCodeLoginCapability(homeServerConnectionConfig.homeServerUri.toString())
+            startAuthenticationFlow(action, homeServerConnectionConfig, serverTypeOverride, suspend {
+                checkQrCodeLoginCapability()
+                postAction()
+            })
         }
     }
 

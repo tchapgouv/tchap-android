@@ -67,6 +67,7 @@ fun CanSendStatus.boolean(): Boolean {
 
 data class MessageComposerViewState(
         val roomId: String,
+        val isRoomError: Boolean = false,
         val canSendMessage: CanSendStatus = CanSendStatus.Allowed,
         val isSendButtonVisible: Boolean = false,
         val rootThreadEventId: String? = null,
@@ -93,8 +94,13 @@ data class MessageComposerViewState(
 
     val isVoiceMessageIdle = !isVoiceRecording
 
+<<<<<<< HEAD
     val isComposerVisible = canSendMessage.boolean() && !isVoiceRecording
     val isVoiceMessageRecorderVisible = canSendMessage.boolean() && !isSendButtonVisible && Config.SHOW_VOICE_RECORDER
+=======
+    val isComposerVisible = canSendMessage.boolean() && !isVoiceRecording && !isRoomError
+    val isVoiceMessageRecorderVisible = canSendMessage.boolean() && !isSendButtonVisible && !isRoomError
+>>>>>>> v1.5.18
 
     constructor(args: TimelineArgs) : this(
             roomId = args.roomId,

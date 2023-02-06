@@ -44,6 +44,7 @@
     <color name="palette_black_800">#15191E</color>
     <color name="palette_black_950">#21262C</color>
 
+<<<<<<< HEAD
     <!-- For dark themes Tchap -->
     <color name="palette_tchap_light_blue">#2F80ED</color>
 
@@ -63,3 +64,6 @@
     <color name="palette_tchap_greyish_brown">#4F4F4F</color>
 
 </resources>
+=======
+</resources>
+>>>>>>> v1.5.18
