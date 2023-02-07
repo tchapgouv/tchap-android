@@ -23,19 +23,21 @@ import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.BuildConfig
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
+import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.crypto.keys.KeysExporter
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
@@ -51,7 +53,7 @@ data class SignoutCheckViewState(
         val crossSigningSetupAllKeysKnown: Boolean = false,
         val keysBackupState: KeysBackupState = KeysBackupState.Unknown,
         val hasBeenExportedToFile: Async<Boolean> = Uninitialized,
-        val isKeyBackupSupported: Boolean = BuildConfig.IS_KEY_BACKUP_SUPPORTED
+        val isKeyBackupSupported: Boolean = false
 ) : MavericksState
 
 class SignoutCheckViewModel @AssistedInject constructor(
@@ -70,7 +72,13 @@ class SignoutCheckViewModel @AssistedInject constructor(
         override fun create(initialState: SignoutCheckViewState): SignoutCheckViewModel
     }
 
-    companion object : MavericksViewModelFactory<SignoutCheckViewModel, SignoutCheckViewState> by hiltMavericksViewModelFactory()
+    // Tchap: init viewState with key backup
+    companion object : MavericksViewModelFactory<SignoutCheckViewModel, SignoutCheckViewState> by hiltMavericksViewModelFactory() {
+        override fun initialState(viewModelContext: ViewModelContext): SignoutCheckViewState? {
+            val isKeyBackupEnabled = (viewModelContext.activity as? VectorBaseActivity<*>)?.vectorFeatures?.tchapIsKeyBackupEnabled().orFalse()
+            return SignoutCheckViewState(isKeyBackupSupported = isKeyBackupEnabled)
+        }
+    }
 
     init {
         withState { state ->

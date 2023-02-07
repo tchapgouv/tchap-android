@@ -40,15 +40,6 @@ android {
         minSdk versions.minSdk
         targetSdk versions.targetSdk
 
-        // Tchap: Disable Location Sharing
-        resValue "bool", "enable_location_sharing", "false"
-
-        // Tchap: The spaces feature is hidden, show all rooms in the home
-        def showSpaces = false
-        def showAllInHome = !showSpaces
-        resValue "bool", "show_spaces", "${showSpaces}"
-        resValue "bool", "spaces_show_all_in_home", "${showAllInHome}"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // Tchap: Disable universalApk
@@ -82,16 +73,9 @@ android {
 
     buildTypes {
         debug {
-            // Tchap: Show developer mode only in debug
-            resValue "bool", "developer_mode_visible", "true"
-
             if (project.hasProperty("coverage")) {
                 testCoverageEnabled = coverage.enableTestCoverage
             }
-        }
-        release {
-            // Tchap: Show developer mode only in debug
-            resValue "bool", "developer_mode_visible", "false"
         }
     }
 
@@ -110,78 +94,15 @@ android {
             dimension "store"
         }
 
-        withvoip {
-            dimension "voip"
+        withvoip { dimension "voip" }
+        withoutvoip { dimension "voip" }
 
-            buildConfigField "boolean", "IS_VOIP_SUPPORTED", "true"
-            resValue "bool", "is_voip_supported", "true"
-        }
+        withpinning { dimension "pinning" }
+        withoutpinning { dimension "pinning" }
 
-        withoutvoip {
-            dimension "voip"
-
-            buildConfigField "boolean", "IS_VOIP_SUPPORTED", "false"
-            resValue "bool", "is_voip_supported", "false"
-        }
-
-        withpinning {
-            dimension "pinning"
-        }
-
-        withoutpinning {
-            dimension "pinning"
-        }
-
-        devTchap {
-            dimension "target"
-
-            // Tchap: Key Backup is not supported
-            def isKeyBackupSupported = true
-            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "${isKeyBackupSupported}"
-            resValue "bool", "is_key_backup_supported", "${isKeyBackupSupported}"
-
-            // Tchap: CrossSigning initialization is disabled
-            def enableCrossSigning = true
-            buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
-            resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
-
-            // Tchap: Show labs menu item in devTchap
-            resValue "bool", "labs_settings_visible", "true"
-        }
-
-        btchap {
-            dimension "target"
-
-            // Tchap: Key Backup is not supported
-            def isKeyBackupSupported = false
-            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "${isKeyBackupSupported}"
-            resValue "bool", "is_key_backup_supported", "${isKeyBackupSupported}"
-
-            // Tchap: CrossSigning initialization is disabled
-            def enableCrossSigning = false
-            buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
-            resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
-
-            // Tchap: Show labs menu item in btchap
-            resValue "bool", "labs_settings_visible", "true"
-        }
-
-        tchap {
-            dimension "target"
-
-            // Tchap: Key Backup is not supported
-            def isKeyBackupSupported = false
-            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "${isKeyBackupSupported}"
-            resValue "bool", "is_key_backup_supported", "${isKeyBackupSupported}"
-
-            // Tchap: CrossSigning initialization is disabled
-            def enableCrossSigning = false
-            buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
-            resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
-
-            // Tchap: Hide labs menu item in tchap
-            resValue "bool", "labs_settings_visible", "false"
-        }
+        devTchap { dimension "target" }
+        btchap { dimension "target" }
+        tchap { dimension "target" }
     }
 
     compileOptions {

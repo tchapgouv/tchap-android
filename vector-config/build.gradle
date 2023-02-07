@@ -14,9 +14,13 @@ android {
     }
 
     // The 'target' dimension permits to specify which platform are used
-    flavorDimensions "target"
+    // The 'voip' flavor dimension permits to include/exclude jitsi at compilation time
+    flavorDimensions "target", "voip"
 
     productFlavors {
+        withvoip { dimension "voip" }
+        withoutvoip { dimension "voip" }
+
         devTchap { dimension "target" }
         btchap { dimension "target" }
         tchap { dimension "target" }

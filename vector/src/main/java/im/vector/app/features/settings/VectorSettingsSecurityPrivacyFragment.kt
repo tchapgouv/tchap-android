@@ -35,7 +35,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.fragmentViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
@@ -52,6 +51,7 @@ import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.openFileSelection
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogImportE2eKeysBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewActions
@@ -84,6 +84,7 @@ import javax.inject.Inject
 class VectorSettingsSecurityPrivacyFragment :
         VectorSettingsBaseFragment() {
 
+    @Inject lateinit var vectorFeatures: VectorFeatures
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var pinCodeStore: PinCodeStore
     @Inject lateinit var keysExporter: KeysExporter
@@ -211,8 +212,7 @@ class VectorSettingsSecurityPrivacyFragment :
     private fun refresh4SSection(info: SecretsSynchronisationInfo) {
         // it's a lot of if / else if / else
         // But it's not yet clear how to manage all cases
-        val isKeyBackupSupported: Boolean = BuildConfig.IS_KEY_BACKUP_SUPPORTED
-        if (!isKeyBackupSupported || !info.isCrossSigningEnabled) {
+        if (!vectorFeatures.tchapIsKeyBackupEnabled() || !info.isCrossSigningEnabled) {
             // Key backup is not supported or there is not cross signing, so we can remove the section
             secureBackupCategory.isVisible = false
         } else {
@@ -352,7 +352,7 @@ class VectorSettingsSecurityPrivacyFragment :
 
     // Todo this should be refactored and use same state as 4S section
     private fun refreshXSigningStatus() {
-        if (BuildConfig.ENABLE_CROSS_SIGNING) {
+        if (vectorFeatures.tchapIsCrossSigningEnabled()) {
             val crossSigningKeys = session.cryptoService().crossSigningService().getMyCrossSigningKeys()
             val xSigningIsEnableInAccount = crossSigningKeys != null
             val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()

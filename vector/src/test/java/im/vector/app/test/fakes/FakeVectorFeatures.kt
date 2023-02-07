@@ -16,12 +16,11 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.features.DefaultVectorFeatures
 import im.vector.app.features.VectorFeatures
 import io.mockk.every
-import io.mockk.spyk
+import io.mockk.mockk
 
-class FakeVectorFeatures : VectorFeatures by spyk<DefaultVectorFeatures>() {
+class FakeVectorFeatures constructor(vectorFeatures: VectorFeatures = mockk()) : VectorFeatures by vectorFeatures {
 
     fun givenPersonalisationEnabled() {
         every { isOnboardingPersonalizeEnabled() } returns true

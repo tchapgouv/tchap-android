@@ -22,7 +22,6 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.BuildConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
@@ -31,6 +30,7 @@ import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.RegisterUnifiedPushUseCase
 import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsType
@@ -82,6 +82,7 @@ import kotlin.coroutines.resumeWithException
 
 class HomeActivityViewModel @AssistedInject constructor(
         @Assisted private val initialState: HomeActivityViewState,
+        private val vectorFeatures: VectorFeatures,
         private val activeSessionHolder: ActiveSessionHolder,
         private val rawService: RawService,
         private val reAuthHelper: ReAuthHelper,
@@ -116,7 +117,7 @@ class HomeActivityViewModel @AssistedInject constructor(
     private var checkBootstrap = false
 
     // Tchap: Disable cross-signing
-    private var hasCheckedBootstrap = !BuildConfig.ENABLE_CROSS_SIGNING
+    private var hasCheckedBootstrap = !vectorFeatures.tchapIsCrossSigningEnabled()
     private var onceTrusted = false
 
     private fun initialize() {
@@ -236,7 +237,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                     // Tchap: Disable cross-signing
                     val mxCrossSigningInfo = info.getOrNull()
 
-                    if (!BuildConfig.ENABLE_CROSS_SIGNING && mxCrossSigningInfo != null) {
+                    if (!vectorFeatures.tchapIsCrossSigningEnabled() && mxCrossSigningInfo != null) {
                         Timber.i("Cross signing feature is disabled. This account should not have cross signing keys")
                     }
 

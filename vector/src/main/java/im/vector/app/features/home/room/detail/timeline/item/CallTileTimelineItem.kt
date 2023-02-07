@@ -28,7 +28,6 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick
@@ -225,10 +224,9 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
     }
 
     private fun renderCallSupportState(holder: Holder) {
-        val isCallSupported = BuildConfig.IS_VOIP_SUPPORTED
-        val error = if (!isCallSupported) holder.resources.getString(R.string.tchap_call_not_supported) else null
-        holder.acceptView.isEnabled = isCallSupported
-        holder.rejectView.isEnabled = isCallSupported
+        val error = if (!attributes.isVoipSupported) holder.resources.getString(R.string.tchap_call_not_supported) else null
+        holder.acceptView.isEnabled = attributes.isVoipSupported
+        holder.rejectView.isEnabled = attributes.isVoipSupported
         holder.errorView.setTextOrHide(error)
     }
 
@@ -262,6 +260,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
     }
 
     data class Attributes(
+            val isVoipSupported: Boolean,
             val callId: String,
             val callKind: CallKind,
             val callStatus: CallStatus,

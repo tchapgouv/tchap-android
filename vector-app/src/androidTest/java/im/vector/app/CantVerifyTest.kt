@@ -26,7 +26,6 @@ import androidx.test.filters.LargeTest
 import com.adevinta.android.barista.internal.viewaction.SleepViewAction
 import im.vector.app.features.MainActivity
 import im.vector.app.ui.robot.ElementRobot
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -35,7 +34,6 @@ import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-@Ignore("Tchap: Secure Backup is disabled, so this test cannot succeed")
 class CantVerifyTest {
 
     @get:Rule
