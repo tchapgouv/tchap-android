@@ -177,12 +177,15 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     private fun handleAppStarted() {
         if (intent.hasExtra(EXTRA_NEXT_INTENT)) {
             // Start the next Activity
+            startSyncing()
             val nextIntent = intent.getParcelableExtraCompat<Intent>(EXTRA_NEXT_INTENT)
             startIntentAndFinish(nextIntent)
         } else if (intent.hasExtra(EXTRA_INIT_SESSION)) {
+            startSyncing()
             setResult(RESULT_OK)
             finish()
         } else if (intent.action == ACTION_ROOM_DETAILS_FROM_SHORTCUT) {
+            startSyncing()
             val roomId = intent.getStringExtra(EXTRA_ROOM_ID)
             if (roomId?.isNotEmpty() == true) {
                 navigator.openRoom(this, roomId, trigger = ViewRoom.Trigger.Shortcut)
@@ -198,9 +201,14 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             if (args.clearCache || args.clearCredentials || args.isAccountExpired) {
                 doCleanUp()
             } else {
+                startSyncing()
                 startNextActivityAndFinish()
             }
         }
+    }
+
+    private fun startSyncing() {
+        activeSessionHolder.getSafeActiveSession()?.startSyncing(this)
     }
 
     private fun clearNotifications() {

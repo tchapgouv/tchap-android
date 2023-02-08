@@ -19,9 +19,9 @@ package im.vector.app.features.home
 import im.vector.app.core.platform.VectorViewModelAction
 
 sealed interface HomeActivityViewActions : VectorViewModelAction {
-    object ViewStarted : HomeActivityViewActions
-    object PushPromptHasBeenReviewed : HomeActivityViewActions
-
     // Tchap: Use only in Tchap
     object DisclaimerDialogShown : HomeActivityViewActions
+    object ViewStarted : HomeActivityViewActions
+    object PushPromptHasBeenReviewed : HomeActivityViewActions
+    data class RegisterPushDistributor(val distributor: String) : HomeActivityViewActions
 }
