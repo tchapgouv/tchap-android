@@ -63,4 +63,8 @@
     <color name="tchap_message_bubble_outbound_dark">@color/palette_tchap_official_blue</color>
     <color name="tchap_message_bubble_outbound_light">@color/palette_tchap_secondary_blue</color>
     <color name="tchap_message_bubble_inbound_light">@color/palette_tchap_light_grey</color>
+
+    <!-- Tchap filter me color -->
+    <color name="tchap_filter_menu_dark">@color/palette_tchap_new_blue</color>
+    <color name="tchap_filter_menu_light">@color/element_content_primary_light</color>
 </resources>
