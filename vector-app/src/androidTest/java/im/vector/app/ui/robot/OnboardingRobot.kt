@@ -32,15 +32,12 @@ import im.vector.app.R
 import im.vector.app.core.resources.BooleanProvider
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.DefaultVectorFeatures
-import im.vector.app.features.debug.features.DebugFeatureKeys
 import im.vector.app.waitForView
 
 class OnboardingRobot {
 
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
-    private val defaultVectorFeatures = DefaultVectorFeatures(BooleanProvider(context.resources)).apply {
-        override(true, DebugFeatureKeys.tchapIsKeyBackupEnabled)
-    }
+    private val defaultVectorFeatures = DefaultVectorFeatures(BooleanProvider(context.resources))
 
     fun crawl() {
         waitUntilViewVisible(withId(R.id.loginSplashSubmit))
