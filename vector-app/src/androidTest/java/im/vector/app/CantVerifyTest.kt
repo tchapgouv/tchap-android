@@ -26,6 +26,7 @@ import androidx.test.filters.LargeTest
 import com.adevinta.android.barista.internal.viewaction.SleepViewAction
 import im.vector.app.features.MainActivity
 import im.vector.app.ui.robot.ElementRobot
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -45,6 +46,7 @@ class CantVerifyTest {
     var userName: String = "loginTest_${UUID.randomUUID()}"
 
     @Test
+    @Ignore("Tchap: Secure Backup is disabled, so this test cannot succeed")
     fun checkCantVerifyPopup() {
         // Let' create an account
         // This first session will create cross signing keys then logout
