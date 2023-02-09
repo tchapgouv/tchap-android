@@ -96,7 +96,7 @@
             android:persistent="false"
             android:summary="@string/encryption_settings_manage_message_recovery_summary"
             android:title="@string/encryption_message_recovery"
-            app:isPreferenceVisible="@bool/false_tchap_hidden" />
+            app:isPreferenceVisible="@bool/is_key_backup_supported" />
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
