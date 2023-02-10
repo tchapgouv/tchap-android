@@ -38,7 +38,7 @@ import im.vector.app.waitForView
 
 class OnboardingRobot {
 
-    // Tchap: Use different onboarding variant to run the tests
+    // Tchap: Override default feature values for tests
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
     private val defaultVectorFeatures = DebugVectorFeatures(context, DefaultVectorFeatures(BooleanProvider(context.resources))).apply {
         override(true, DebugFeatureKeys.tchapIsKeyBackupEnabled)
