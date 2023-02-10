@@ -12,6 +12,7 @@
 
     <style name="ThemeOverlay.Vector.HomeFilterTabLayout" parent="Theme.Vector.Launcher">
         <item name="colorSurface">?vctr_toolbar_background</item>
+        <item name="colorPrimary">?tchap_filter_menu</item>
         <item name="colorOnSurface">?vctr_content_secondary</item>
     </style>
 

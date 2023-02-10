@@ -54,6 +54,9 @@
     <!-- Used for item separators in list, on surface -->
     <attr name="vctr_list_separator_on_surface" format="color" />
 
+    <!-- Tchap : Used for filter menu -->
+    <attr name="tchap_filter_menu" format="color" />
+
     <!-- Background color used for:
           - unread badge background for a room item in the room list
           - start unread indicator for a room item in the room list
