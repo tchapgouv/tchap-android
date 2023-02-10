@@ -1,3 +1,13 @@
+Changes in Tchap 2.6.1 (2023-02-10)
+===================================
+
+Other changes
+-------------
+ - Remove welcome slide related to spaces ([#821](https://github.com/tchapgouv/tchap-android-v2/issues/821))
+ - Remove the ability to install an app from Tchap ([#832](https://github.com/tchapgouv/tchap-android-v2/issues/832))
+ - [Dark modes] Fix contrast of blue color ([#838](https://github.com/tchapgouv/tchap-android-v2/issues/838))
+
+
 Changes in Tchap 2.6.0 (2023-01-24)
 ===================================
 

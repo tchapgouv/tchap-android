@@ -96,11 +96,12 @@ class ReleaseNotesFragment : VectorBaseFragment<BottomSheetReleaseNotesBinding>(
                                 R.string.onboarding_new_app_layout_welcome_message,
                                 R.drawable.ill_app_layout_onboarding_rooms
                         ),
-                        ReleaseCarouselData.Item(
+                        // Tchap : No space function
+                        /* ReleaseCarouselData.Item(
                                 R.string.onboarding_new_app_layout_spaces_title,
                                 R.string.onboarding_new_app_layout_spaces_message,
                                 R.drawable.ill_app_layout_onboarding_spaces
-                        ),
+                        ), */
                         ReleaseCarouselData.Item(
                                 R.string.onboarding_new_app_layout_feedback_title,
                                 R.string.onboarding_new_app_layout_feedback_message,
