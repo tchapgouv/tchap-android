@@ -35,9 +35,8 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <!-- To be able to install APK from the application -->
-    <!-- Tchap: Remove the ability to install an app from Tchap (https://github.com/tchapgouv/tchap-android/issues/832)
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-    -->
+    <!-- Tchap: Remove the ability to install an app from Tchap (https://github.com/tchapgouv/tchap-android/issues/832)-->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" tools:node="remove" />
 
     <!-- Location Sharing -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
