@@ -18,8 +18,10 @@ package im.vector.app.ui.robot
 
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.platform.app.InstrumentationRegistry
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import im.vector.app.R
+import im.vector.app.core.resources.BooleanProvider
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.DefaultVectorFeatures
 import im.vector.app.features.VectorFeatures
@@ -29,7 +31,8 @@ class NewRoomRobot(
         var createdRoom: Boolean = false,
         private val labsPreferences: LabFeaturesPreferences
 ) {
-    private val features: VectorFeatures = DefaultVectorFeatures()
+    private val context = InstrumentationRegistry.getInstrumentation().targetContext
+    private val features: VectorFeatures = DefaultVectorFeatures(BooleanProvider(context.resources))
 
     fun createNewRoom(block: CreateNewRoomRobot.() -> Unit) {
         clickOn(R.string.create_new_room)

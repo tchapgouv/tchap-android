@@ -50,6 +50,7 @@ import im.vector.app.core.debug.LeakDetector
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.resources.BuildMeta
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
@@ -84,6 +85,7 @@ class VectorApplication :
         WorkConfiguration.Provider {
 
     lateinit var appContext: Context
+    @Inject lateinit var vectorFeatures: VectorFeatures
     @Inject lateinit var legacySessionImporter: LegacySessionImporter
     @Inject lateinit var authenticationService: AuthenticationService
     @Inject lateinit var vectorConfiguration: VectorConfiguration
@@ -134,7 +136,7 @@ class VectorApplication :
         vectorUncaughtExceptionHandler.activate()
 
         // Remove Log handler statically added by Jitsi
-        if (BuildConfig.IS_VOIP_SUPPORTED) {
+        if (vectorFeatures.tchapIsVoipSupported()) {
             Timber.forest()
                     .filter { it::class.java.name == "org.jitsi.meet.sdk.log.JitsiMeetDefaultLogHandler" }
                     .forEach { Timber.uproot(it) }

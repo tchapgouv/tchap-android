@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.factory
 
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.UserPreferencesProvider
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
@@ -32,6 +33,7 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class WidgetItemFactory @Inject constructor(
+        private val vectorFeatures: VectorFeatures,
         private val informationDataFactory: MessageInformationDataFactory,
         private val noticeItemFactory: NoticeItemFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
@@ -76,6 +78,7 @@ class WidgetItemFactory @Inject constructor(
             CallTileTimelineItem.CallStatus.ENDED
         }
         val attributes = CallTileTimelineItem.Attributes(
+                isVoipSupported = vectorFeatures.tchapIsVoipSupported(),
                 callId = jitsiWidgetEventsGroup.callId,
                 callKind = CallTileTimelineItem.CallKind.CONFERENCE,
                 callStatus = callStatus,

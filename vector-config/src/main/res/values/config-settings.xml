@@ -29,9 +29,11 @@
 
     <!-- Level 1: Preferences -->
 
+    <bool name="tchap_settings_spaces_visible">false</bool> <!-- Tchap: Hide spaces -->
+    <bool name="tchap_settings_spaces_show_all_room_in_home_default">true</bool> <!-- Tchap: Show all room in home while spaces are hidden -->
+
     <bool name="settings_interface_bubble_visible">true</bool>
-    <!-- Tchap: Enable message bubbles by default -->
-    <bool name="settings_interface_bubble_default">true</bool>
+    <bool name="settings_interface_bubble_default">true</bool> <!-- Tchap: Enable message bubbles by default -->
     <bool name="settings_presence_visible">false</bool>
     <bool name="settings_presence_user_always_appears_offline_default">false</bool>
 
@@ -42,6 +44,8 @@
     <bool name="settings_ignored_users_visible">true</bool>
 
     <!-- Level 1: Labs -->
+    <bool name="tchap_settings_labs_enable_location_sharing">false</bool> <!-- Tchap: Disable Location Sharing -->
+
     <bool name="settings_labs_deferred_dm_visible">true</bool>
     <bool name="settings_labs_deferred_dm_default">true</bool>
     <bool name="settings_labs_thread_messages_default">true</bool>
@@ -57,6 +61,7 @@
     <bool name="settings_labs_enable_voice_broadcast_visible">true</bool>
     <bool name="settings_labs_enable_voice_broadcast_default">false</bool>
     <!-- Level 1: Advanced settings -->
+    <bool name="tchap_settings_advanced_developer_mode_visible">false</bool> <!-- Tchap: Hide developer mode in release -->
 
     <!-- Level 1: Help and about -->
 

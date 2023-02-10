@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Level 1: Advanced settings -->
+    <bool name="tchap_settings_advanced_developer_mode_visible">true</bool> <!-- Tchap: Show developer mode in debug -->
+
+</resources>
