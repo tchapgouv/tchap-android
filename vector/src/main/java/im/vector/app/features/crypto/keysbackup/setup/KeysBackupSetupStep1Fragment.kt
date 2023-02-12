@@ -52,7 +52,8 @@ class KeysBackupSetupStep1Fragment :
     }
 
     private fun onButtonClick() {
-        viewModel.navigateEvent.value = LiveEvent(KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_2)
+        // viewModel.navigateEvent.value = LiveEvent(KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_2)
+        viewModel.prepareRecoveryKey(requireContext(), null) // Tchap : only recovery key
     }
 
     private fun onManualExportClick() {
