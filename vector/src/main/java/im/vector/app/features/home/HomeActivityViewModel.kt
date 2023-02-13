@@ -16,18 +16,20 @@
 
 package im.vector.app.features.home
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.BuildConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
+import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.pushers.RegisterUnifiedPushUseCase
+import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.AnalyticsTracker
@@ -43,17 +45,16 @@ import im.vector.app.features.raw.wellknown.isSecureBackupRequired
 import im.vector.app.features.raw.wellknown.withElementWellKnown
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.voicebroadcast.recording.usecase.StopOngoingVoiceBroadcastUseCase
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
@@ -62,11 +63,9 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -83,6 +82,7 @@ import kotlin.coroutines.resumeWithException
 
 class HomeActivityViewModel @AssistedInject constructor(
         @Assisted private val initialState: HomeActivityViewState,
+        private val vectorFeatures: VectorFeatures,
         private val activeSessionHolder: ActiveSessionHolder,
         private val rawService: RawService,
         private val reAuthHelper: ReAuthHelper,
@@ -92,7 +92,11 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val analyticsTracker: AnalyticsTracker,
         private val analyticsConfig: AnalyticsConfig,
         private val releaseNotesPreferencesStore: ReleaseNotesPreferencesStore,
-        private val vectorFeatures: VectorFeatures,
+        private val stopOngoingVoiceBroadcastUseCase: StopOngoingVoiceBroadcastUseCase,
+        private val pushersManager: PushersManager,
+        private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
+        private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
+        private val ensureFcmTokenIsRetrievedUseCase: EnsureFcmTokenIsRetrievedUseCase,
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
@@ -113,20 +117,48 @@ class HomeActivityViewModel @AssistedInject constructor(
     private var checkBootstrap = false
 
     // Tchap: Disable cross-signing
-    private var hasCheckedBootstrap = !BuildConfig.ENABLE_CROSS_SIGNING
+    private var hasCheckedBootstrap = !vectorFeatures.tchapIsCrossSigningEnabled()
     private var onceTrusted = false
 
     private fun initialize() {
         if (isInitialized) return
         isInitialized = true
+        registerUnifiedPushIfNeeded()
         cleanupFiles()
         observeInitialSync()
         checkSessionPushIsOn()
         observeCrossSigningReset()
         observeAnalytics()
         observeReleaseNotes()
-        observeLocalNotificationsSilenced()
         initThreadsMigration()
+        viewModelScope.launch { stopOngoingVoiceBroadcastUseCase.execute() }
+    }
+
+    private fun registerUnifiedPushIfNeeded() {
+        if (vectorPreferences.areNotificationEnabledForDevice()) {
+            registerUnifiedPush(distributor = "")
+        } else {
+            unregisterUnifiedPush()
+        }
+    }
+
+    private fun registerUnifiedPush(distributor: String) {
+        viewModelScope.launch {
+            when (registerUnifiedPushUseCase.execute(distributor = distributor)) {
+                is RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.NeedToAskUserForDistributor -> {
+                    _viewEvents.post(HomeActivityViewEvents.AskUserForPushDistributor)
+                }
+                RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.Success -> {
+                    ensureFcmTokenIsRetrievedUseCase.execute(pushersManager, registerPusher = vectorPreferences.areNotificationEnabledForDevice())
+                }
+            }
+        }
+    }
+
+    private fun unregisterUnifiedPush() {
+        viewModelScope.launch {
+            unregisterUnifiedPushUseCase.execute(pushersManager)
+        }
     }
 
     private fun observeReleaseNotes() = withState { state ->
@@ -144,26 +176,6 @@ class HomeActivityViewModel @AssistedInject constructor(
                     releaseNotesPreferencesStore.setAppLayoutOnboardingShown(true)
                 }
             }
-        }
-    }
-
-    fun shouldAddHttpPusher() = if (vectorPreferences.areNotificationEnabledForDevice()) {
-        val currentSession = activeSessionHolder.getActiveSession()
-        val currentPushers = currentSession.pushersService().getPushers()
-        currentPushers.none { it.deviceId == currentSession.sessionParams.deviceId }
-    } else {
-        false
-    }
-
-    fun observeLocalNotificationsSilenced() {
-        val currentSession = activeSessionHolder.getActiveSession()
-        val deviceId = currentSession.cryptoService().getMyDevice().deviceId
-        viewModelScope.launch {
-            currentSession.accountDataService()
-                    .getLiveUserAccountDataEvent(UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId)
-                    .asFlow()
-                    .map { it.getOrNull()?.content?.toModel<LocalNotificationSettingsContent>()?.isSilenced ?: false }
-                    .onEach { setState { copy(areNotificationsSilenced = it) } }
         }
     }
 
@@ -225,7 +237,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                     // Tchap: Disable cross-signing
                     val mxCrossSigningInfo = info.getOrNull()
 
-                    if (!BuildConfig.ENABLE_CROSS_SIGNING && mxCrossSigningInfo != null) {
+                    if (!vectorFeatures.tchapIsCrossSigningEnabled() && mxCrossSigningInfo != null) {
                         Timber.i("Cross signing feature is disabled. This account should not have cross signing keys")
                     }
 
@@ -255,6 +267,12 @@ class HomeActivityViewModel @AssistedInject constructor(
 //        }
 
         when {
+            !vectorPreferences.areThreadMessagesEnabled() && !vectorPreferences.wasThreadFlagChangedManually() -> {
+                vectorPreferences.setThreadMessagesEnabled()
+                lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
+                // Clear Cache
+                _viewEvents.post(HomeActivityViewEvents.MigrateThreads(checkSession = false))
+            }
             // Notify users
             vectorPreferences.shouldNotifyUserAboutThreads() && vectorPreferences.areThreadMessagesEnabled() -> {
                 Timber.i("----> Notify users about threads")
@@ -525,15 +543,18 @@ class HomeActivityViewModel @AssistedInject constructor(
 
     override fun handle(action: HomeActivityViewActions) {
         when (action) {
+            HomeActivityViewActions.DisclaimerDialogShown -> {
+                // Tchap: in case of migration, there is no initial sync, so force the update of the identity server url
+                updateIdentityServer()
+            }
             HomeActivityViewActions.PushPromptHasBeenReviewed -> {
                 vectorPreferences.setDidAskUserToEnableSessionPush()
             }
             HomeActivityViewActions.ViewStarted -> {
                 initialize()
             }
-            HomeActivityViewActions.DisclaimerDialogShown -> {
-                // Tchap: in case of migration, there is no initial sync, so force the update of the identity server url
-                updateIdentityServer()
+            is HomeActivityViewActions.RegisterPushDistributor -> {
+                registerUnifiedPush(distributor = action.distributor)
             }
         }
     }

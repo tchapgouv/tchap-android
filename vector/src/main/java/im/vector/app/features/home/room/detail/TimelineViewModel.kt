@@ -28,7 +28,6 @@ import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
@@ -38,6 +37,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.BehaviorDataSource
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.DecryptionFailureTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
@@ -51,6 +51,7 @@ import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
+import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAction
 import im.vector.app.features.home.room.detail.error.RoomNotFound
 import im.vector.app.features.home.room.detail.location.RedactLiveLocationShareEventUseCase
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
@@ -129,6 +130,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class TimelineViewModel @AssistedInject constructor(
         @Assisted private val initialState: RoomDetailViewState,
+        private val vectorFeatures: VectorFeatures,
         private val vectorPreferences: VectorPreferences,
         private val vectorDataStore: VectorDataStore,
         private val stringProvider: StringProvider,
@@ -217,7 +219,7 @@ class TimelineViewModel @AssistedInject constructor(
         observePowerLevel()
         setupPreviewUrlObservers()
         viewModelScope.launch(Dispatchers.IO) {
-            tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
+            tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, mainTimeLineOnly = true) }
         }
         // Inform the SDK that the room is displayed
         viewModelScope.launch(Dispatchers.IO) {
@@ -479,7 +481,7 @@ class TimelineViewModel @AssistedInject constructor(
             is RoomDetailAction.ReRequestKeys -> handleReRequestKeys(action)
             is RoomDetailAction.TapOnFailedToDecrypt -> handleTapOnFailedToDecrypt(action)
             is RoomDetailAction.SelectStickerAttachment -> handleSelectStickerAttachment()
-            is RoomDetailAction.VoiceBroadcastAction -> handleVoiceBroadcastAction(action)
+            is VoiceBroadcastAction -> handleVoiceBroadcastAction(action)
             is RoomDetailAction.OpenIntegrationManager -> handleOpenIntegrationManager()
             is RoomDetailAction.StartCall -> handleStartCall(action)
             is RoomDetailAction.AcceptCall -> handleAcceptCall(action)
@@ -621,17 +623,24 @@ class TimelineViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleVoiceBroadcastAction(action: RoomDetailAction.VoiceBroadcastAction) {
+    private fun handleVoiceBroadcastAction(action: VoiceBroadcastAction) {
         if (room == null) return
         viewModelScope.launch {
             when (action) {
-                RoomDetailAction.VoiceBroadcastAction.Recording.Start -> voiceBroadcastHelper.startVoiceBroadcast(room.roomId)
-                RoomDetailAction.VoiceBroadcastAction.Recording.Pause -> voiceBroadcastHelper.pauseVoiceBroadcast(room.roomId)
-                RoomDetailAction.VoiceBroadcastAction.Recording.Resume -> voiceBroadcastHelper.resumeVoiceBroadcast(room.roomId)
-                RoomDetailAction.VoiceBroadcastAction.Recording.Stop -> voiceBroadcastHelper.stopVoiceBroadcast(room.roomId)
-                is RoomDetailAction.VoiceBroadcastAction.Listening.PlayOrResume -> voiceBroadcastHelper.playOrResumePlayback(room.roomId, action.eventId)
-                RoomDetailAction.VoiceBroadcastAction.Listening.Pause -> voiceBroadcastHelper.pausePlayback()
-                RoomDetailAction.VoiceBroadcastAction.Listening.Stop -> voiceBroadcastHelper.stopPlayback()
+                VoiceBroadcastAction.Recording.Start -> {
+                    voiceBroadcastHelper.startVoiceBroadcast(room.roomId).fold(
+                            { _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action)) },
+                            { _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, it)) },
+                    )
+                }
+                VoiceBroadcastAction.Recording.Pause -> voiceBroadcastHelper.pauseVoiceBroadcast(room.roomId)
+                VoiceBroadcastAction.Recording.Resume -> voiceBroadcastHelper.resumeVoiceBroadcast(room.roomId)
+                VoiceBroadcastAction.Recording.Stop -> _viewEvents.post(RoomDetailViewEvents.DisplayPromptToStopVoiceBroadcast)
+                VoiceBroadcastAction.Recording.StopConfirmed -> voiceBroadcastHelper.stopVoiceBroadcast(room.roomId)
+                is VoiceBroadcastAction.Listening.PlayOrResume -> voiceBroadcastHelper.playOrResumePlayback(action.voiceBroadcast)
+                VoiceBroadcastAction.Listening.Pause -> voiceBroadcastHelper.pausePlayback()
+                VoiceBroadcastAction.Listening.Stop -> voiceBroadcastHelper.stopPlayback()
+                is VoiceBroadcastAction.Listening.SeekTo -> voiceBroadcastHelper.seekTo(action.voiceBroadcast, action.positionMillis, action.duration)
             }
         }
     }
@@ -827,9 +836,9 @@ class TimelineViewModel @AssistedInject constructor(
                     R.id.invite -> state.canInvite
                     R.id.open_matrix_apps -> false // Tchap: there are no matrix apps
                     // Tchap: check if voip is enabled
-                    R.id.voice_call -> BuildConfig.IS_VOIP_SUPPORTED && (state.isCallOptionAvailable() || state.hasActiveElementCallWidget())
+                    R.id.voice_call -> vectorFeatures.tchapIsVoipSupported() && (state.isCallOptionAvailable() || state.hasActiveElementCallWidget())
                     // Tchap: check if voip is enabled
-                    R.id.video_call -> BuildConfig.IS_VOIP_SUPPORTED &&
+                    R.id.video_call -> vectorFeatures.tchapIsVoipSupported() &&
                             (state.isCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined)
                     // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
                     R.id.join_conference -> !state.isCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
@@ -1104,7 +1113,8 @@ class TimelineViewModel @AssistedInject constructor(
                     }
                     bufferedMostRecentDisplayedEvent.root.eventId?.let { eventId ->
                         session.coroutineScope.launch {
-                            tryOrNull { room.readService().setReadReceipt(eventId) }
+                            val threadId = initialState.rootThreadEventId ?: ReadService.THREAD_ID_MAIN
+                            tryOrNull { room.readService().setReadReceipt(eventId, threadId = threadId) }
                         }
                     }
                 }
@@ -1122,7 +1132,7 @@ class TimelineViewModel @AssistedInject constructor(
         if (room == null) return
         setState { copy(unreadState = UnreadState.HasNoUnread) }
         viewModelScope.launch {
-            tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.BOTH) }
+            tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.BOTH, mainTimeLineOnly = true) }
         }
     }
 

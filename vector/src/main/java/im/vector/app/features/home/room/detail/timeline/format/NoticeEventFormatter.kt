@@ -22,6 +22,9 @@ import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.roomprofile.permissions.RoleFormatter
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
+import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.appendNl
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -67,36 +70,37 @@ class NoticeEventFormatter @Inject constructor(
     private fun Event.isSentByCurrentUser() = senderId != null && senderId == currentUserId
 
     fun format(timelineEvent: TimelineEvent, isDm: Boolean): CharSequence? {
+        val event = timelineEvent.root
         // Tchap: Hide the domain if we are in DM.
         val senderName = if (isDm) {
             TchapUtils.getNameFromDisplayName(timelineEvent.senderInfo.disambiguatedDisplayName)
         } else {
             timelineEvent.senderInfo.disambiguatedDisplayName
         }
-        return when (val type = timelineEvent.root.getClearType()) {
-            EventType.STATE_ROOM_JOIN_RULES -> formatJoinRulesEvent(timelineEvent.root, senderName, isDm)
-            EventType.STATE_ROOM_CREATE -> formatRoomCreateEvent(timelineEvent.root, isDm)
-            EventType.STATE_ROOM_NAME -> formatRoomNameEvent(timelineEvent.root, senderName)
-            EventType.STATE_ROOM_TOPIC -> formatRoomTopicEvent(timelineEvent.root, senderName)
-            EventType.STATE_ROOM_AVATAR -> formatRoomAvatarEvent(timelineEvent.root, senderName)
-            EventType.STATE_ROOM_MEMBER -> formatRoomMemberEvent(timelineEvent.root, senderName, isDm)
-            EventType.STATE_ROOM_THIRD_PARTY_INVITE -> formatRoomThirdPartyInvite(timelineEvent.root, senderName, isDm)
-            EventType.STATE_ROOM_ALIASES -> formatRoomAliasesEvent(timelineEvent.root, senderName)
-            EventType.STATE_ROOM_CANONICAL_ALIAS -> formatRoomCanonicalAliasEvent(timelineEvent.root, senderName)
-            EventType.STATE_ROOM_HISTORY_VISIBILITY ->
-                formatRoomHistoryVisibilityEvent(timelineEvent.root, senderName, isDm)
-            EventType.STATE_ROOM_SERVER_ACL -> formatRoomServerAclEvent(timelineEvent.root, senderName)
-            EventType.STATE_ROOM_GUEST_ACCESS -> formatRoomGuestAccessEvent(timelineEvent.root, senderName, isDm)
-            EventType.STATE_ROOM_ENCRYPTION -> formatRoomEncryptionEvent(timelineEvent.root, senderName)
+        return when (val type = event.getClearType()) {
+            EventType.STATE_ROOM_JOIN_RULES -> formatJoinRulesEvent(event, senderName, isDm)
+            EventType.STATE_ROOM_CREATE -> formatRoomCreateEvent(event, isDm)
+            EventType.STATE_ROOM_NAME -> formatRoomNameEvent(event, senderName)
+            EventType.STATE_ROOM_TOPIC -> formatRoomTopicEvent(event, senderName)
+            EventType.STATE_ROOM_AVATAR -> formatRoomAvatarEvent(event, senderName)
+            EventType.STATE_ROOM_MEMBER -> formatRoomMemberEvent(event, senderName, isDm)
+            EventType.STATE_ROOM_THIRD_PARTY_INVITE -> formatRoomThirdPartyInvite(event, senderName, isDm)
+            EventType.STATE_ROOM_ALIASES -> formatRoomAliasesEvent(event, senderName)
+            EventType.STATE_ROOM_CANONICAL_ALIAS -> formatRoomCanonicalAliasEvent(event, senderName)
+            EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(event, senderName, isDm)
+            EventType.STATE_ROOM_SERVER_ACL -> formatRoomServerAclEvent(event, senderName)
+            EventType.STATE_ROOM_GUEST_ACCESS -> formatRoomGuestAccessEvent(event, senderName, isDm)
+            EventType.STATE_ROOM_ENCRYPTION -> formatRoomEncryptionEvent(event, senderName)
             EventType.STATE_ROOM_WIDGET,
-            EventType.STATE_ROOM_WIDGET_LEGACY -> formatWidgetEvent(timelineEvent.root, senderName)
-            EventType.STATE_ROOM_TOMBSTONE -> formatRoomTombstoneEvent(timelineEvent.root, senderName, isDm)
-            EventType.STATE_ROOM_POWER_LEVELS -> formatRoomPowerLevels(timelineEvent.root, senderName)
+            EventType.STATE_ROOM_WIDGET_LEGACY -> formatWidgetEvent(event, senderName)
+            EventType.STATE_ROOM_TOMBSTONE -> formatRoomTombstoneEvent(event, senderName, isDm)
+            EventType.STATE_ROOM_POWER_LEVELS -> formatRoomPowerLevels(event, senderName)
             EventType.CALL_INVITE,
             EventType.CALL_CANDIDATES,
             EventType.CALL_HANGUP,
             EventType.CALL_REJECT,
-            EventType.CALL_ANSWER -> formatCallEvent(type, timelineEvent.root, senderName)
+            EventType.CALL_ANSWER -> formatCallEvent(type, event, senderName)
+            VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO -> formatVoiceBroadcastEvent(event, senderName)
             EventType.CALL_NEGOTIATE,
             EventType.CALL_SELECT_ANSWER,
             EventType.CALL_REPLACES,
@@ -113,9 +117,9 @@ class NoticeEventFormatter @Inject constructor(
             EventType.STATE_SPACE_PARENT,
             EventType.REDACTION,
             EventType.STICKER,
-            in EventType.POLL_RESPONSE,
-            in EventType.POLL_END,
-            in EventType.BEACON_LOCATION_DATA -> formatDebug(timelineEvent.root)
+            in EventType.POLL_RESPONSE.values,
+            in EventType.POLL_END.values,
+            in EventType.BEACON_LOCATION_DATA.values -> formatDebug(event)
             else -> {
                 Timber.v("Type $type not handled by this formatter")
                 null
@@ -196,6 +200,7 @@ class NoticeEventFormatter @Inject constructor(
             EventType.CALL_REJECT,
             EventType.CALL_ANSWER -> formatCallEvent(type, event, senderName)
             EventType.STATE_ROOM_TOMBSTONE -> formatRoomTombstoneEvent(event, senderName, isDm)
+            VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO -> formatVoiceBroadcastEvent(event, senderName)
             else -> {
                 Timber.v("Type $type not handled by this formatter")
                 null
@@ -905,5 +910,17 @@ class NoticeEventFormatter @Inject constructor(
                         }
                     }
                 }
+    }
+
+    private fun formatVoiceBroadcastEvent(event: Event, senderName: String?): CharSequence {
+        return if (event.asVoiceBroadcastEvent()?.content?.voiceBroadcastState == VoiceBroadcastState.STOPPED) {
+            if (event.isSentByCurrentUser()) {
+                sp.getString(R.string.notice_voice_broadcast_ended_by_you)
+            } else {
+                sp.getString(R.string.notice_voice_broadcast_ended, senderName)
+            }
+        } else {
+            formatDebug(event)
+        }
     }
 }

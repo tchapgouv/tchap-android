@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
@@ -77,13 +78,15 @@ internal class RoomSummaryUpdater @Inject constructor(
         private val roomAvatarResolver: RoomAvatarResolver,
         private val eventDecryptor: EventDecryptor,
         private val crossSigningService: DefaultCrossSigningService,
-        private val roomAccountDataDataSource: RoomAccountDataDataSource
+        private val roomAccountDataDataSource: RoomAccountDataDataSource,
+        private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
+        private val roomSummaryEventsHelper: RoomSummaryEventsHelper,
 ) {
 
     fun refreshLatestPreviewContent(realm: Realm, roomId: String) {
         val roomSummaryEntity = RoomSummaryEntity.getOrNull(realm, roomId)
         if (roomSummaryEntity != null) {
-            val latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
+            val latestPreviewableEvent = roomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
             latestPreviewableEvent?.attemptToDecrypt()
         }
     }
@@ -146,7 +149,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         val encryptionEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_ENCRYPTION, stateKey = "")?.root
         Timber.d("## CRYPTO: currentEncryptionEvent is $encryptionEvent")
 
-        val latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
+        val latestPreviewableEvent = roomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
 
         val lastActivityFromEvent = latestPreviewableEvent?.root?.originServerTs
         if (lastActivityFromEvent != null) {
@@ -154,9 +157,11 @@ internal class RoomSummaryUpdater @Inject constructor(
             latestPreviewableEvent.attemptToDecrypt()
         }
 
+        val shouldCheckIfReadInEventsThread = homeServerCapabilitiesService.getHomeServerCapabilities().canUseThreadReadReceiptsAndNotifications
+
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0 ||
                 // avoid this call if we are sure there are unread events
-                latestPreviewableEvent?.let { !isEventRead(realm.configuration, userId, roomId, it.eventId) } ?: false
+                latestPreviewableEvent?.let { !isEventRead(realm.configuration, userId, roomId, it.eventId, shouldCheckIfReadInEventsThread) } ?: false
 
         roomSummaryEntity.setDisplayName(roomDisplayNameResolver.resolve(realm, roomId))
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(realm, roomId)
@@ -195,6 +200,11 @@ internal class RoomSummaryUpdater @Inject constructor(
 
             roomSummaryEntity.otherMemberIds.clear()
             roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)
+            if (roomSummary?.joinedMembersCount == null) {
+                // in case m.joined_member_count from sync summary was null?
+                // better to use what we know
+                roomSummaryEntity.joinedMembersCount = otherRoomMembers.size + 1
+            }
             if (roomSummaryEntity.isEncrypted && otherRoomMembers.isNotEmpty()) {
                 if (aggregator == null) {
                     // Do it now
@@ -231,7 +241,7 @@ internal class RoomSummaryUpdater @Inject constructor(
     fun updateSendingInformation(realm: Realm, roomId: String) {
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
         roomSummaryEntity.updateHasFailedSending()
-        roomSummaryEntity.latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
+        roomSummaryEntity.latestPreviewableEvent = roomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
     }
 
     /**

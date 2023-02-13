@@ -40,6 +40,12 @@ class DebugVectorFeatures(
 
     private val dataStore = context.dataStore
 
+    override fun tchapIsVoipSupported() = vectorFeatures.tchapIsVoipSupported()
+
+    override fun tchapIsCrossSigningEnabled() = vectorFeatures.tchapIsCrossSigningEnabled()
+
+    override fun tchapIsKeyBackupEnabled() = read(DebugFeatureKeys.tchapIsKeyBackupEnabled) ?: vectorFeatures.tchapIsKeyBackupEnabled()
+
     override fun onboardingVariant(): OnboardingVariant {
         return readPreferences().getEnum<OnboardingVariant>() ?: vectorFeatures.onboardingVariant()
     }
@@ -87,6 +93,9 @@ class DebugVectorFeatures(
 
     override fun isVoiceBroadcastEnabled(): Boolean = read(DebugFeatureKeys.voiceBroadcastEnabled)
             ?: vectorFeatures.isVoiceBroadcastEnabled()
+
+    override fun isUnverifiedSessionsAlertEnabled(): Boolean = read(DebugFeatureKeys.unverifiedSessionsAlertEnabled)
+            ?: vectorFeatures.isUnverifiedSessionsAlertEnabled()
 
     fun <T> override(value: T?, key: Preferences.Key<T>) = updatePreferences {
         if (value == null) {
@@ -136,6 +145,7 @@ private inline fun <reified T : Enum<T>> enumPreferencesKey() = enumPreferencesK
 private fun <T : Enum<T>> enumPreferencesKey(type: KClass<T>) = stringPreferencesKey("enum-${type.simpleName}")
 
 object DebugFeatureKeys {
+    val tchapIsKeyBackupEnabled = booleanPreferencesKey("tchap_is_key_backup_enabled")
     val onboardingAlreadyHaveAnAccount = booleanPreferencesKey("onboarding-already-have-an-account")
     val onboardingSplashCarousel = booleanPreferencesKey("onboarding-splash-carousel")
     val onboardingUseCase = booleanPreferencesKey("onboarding-use-case")
@@ -151,4 +161,5 @@ object DebugFeatureKeys {
     val qrCodeLoginForAllServers = booleanPreferencesKey("qr-code-login-for-all-servers")
     val reciprocateQrCodeLogin = booleanPreferencesKey("reciprocate-qr-code-login")
     val voiceBroadcastEnabled = booleanPreferencesKey("voice-broadcast-enabled")
+    val unverifiedSessionsAlertEnabled = booleanPreferencesKey("unverified-sessions-alert-enabled")
 }

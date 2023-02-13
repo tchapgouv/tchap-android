@@ -2805,7 +2805,7 @@
     <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Teine seade on juba võrku loginud.</string>
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">Turvalise sõnumivahetuse ülesseadmisel tekkis turvaviga. Üks kolmest võib olla sattunud vale osapoole kontrolli alla: sinu koduserver, sinu internetiühendus või sinu seade;</string>
     <string name="qr_code_login_header_failed_other_description">Päring ei õnnestunud.</string>
-    <string name="a11y_voice_broadcast_buffering">Andmed on puhverdamisel</string>
+    <string name="a11y_voice_broadcast_buffering">Andmed on puhverdamisel…</string>
     <string name="a11y_play_voice_broadcast">Alusta või jätka ringhäälingukõne esitamist</string>
     <string name="a11y_stop_voice_broadcast_record">Lõpeta ringhäälingukõne salvestamine</string>
     <string name="a11y_pause_voice_broadcast_record">Peata ringhäälingukõne salvestamine</string>
@@ -2827,4 +2827,36 @@
         <item quantity="one">%1$d valitud</item>
         <item quantity="other">%1$d valitud</item>
     </plurals>
+    <string name="rich_text_editor_full_screen_toggle">Lülita täisekraanivaade sisse/välja</string>
+    <string name="attachment_type_selector_text_formatting">Tekstivorming</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Sa juba salvestad ringhäälingukõnet. Uue alustamiseks palun lõpeta eelmine salvestus.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Keegi juba salvestab ringhäälingukõnet. Uue ringhäälingukõne salvestamiseks palun oota, kuni see teine ringhäälingukõne on lõppenud.</string>
+    <string name="error_voice_broadcast_permission_denied_message">Sul pole piisavalt õigusi selles jututoas ringhäälingukõne algatamiseks. Õiguste lisamiseks palun võta ühendust jututoa haldajaga.</string>
+    <string name="error_voice_broadcast_unauthorized_title">Uue ringhäälingukõne alustamine pole võimalik</string>
+    <string name="a11y_voice_broadcast_fast_backward">Keri tagasi 30 sekundi kaupa</string>
+    <string name="a11y_voice_broadcast_fast_forward">Keri edasi 30 sekundi kaupa</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Verifitseeritud sessioonideks loetakse Element\'is või mõnes muus Matrix\'i rakenduses selliseid sessioone, kus sa kas oled sisestanud oma salafraasi või tuvastanud end mõne teise oma verifitseeritud sessiooni abil.
+\n
+\nSee tähendab, et selles sessioonis on ka kõik vajalikud võtmed krüptitud sõnumite lugemiseks ja teistele kasutajatele kinnitamiseks, et sa usaldad seda sessiooni.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Logi välja %1$d\'st sessioonist</item>
+        <item quantity="other">Logi välja %1$d\'st sessioonist</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Logi välja</string>
+    <string name="voice_broadcast_recording_time_left">jäänud %1$s</string>
+    <string name="editing">Muudan sõnumit</string>
+    <string name="replying_to">Vastan sõnumile %s</string>
+    <string name="quoting">Tsiteerides</string>
+    <string name="device_manager_other_sessions_show_ip_address">Näita IP-aadressi</string>
+    <string name="device_manager_other_sessions_hide_ip_address">Peida IP-aadress</string>
+    <string name="message_reply_to_prefix">Vastuseks kasutajale</string>
+    <string name="message_reply_to_sender_sent_file">saatis faili.</string>
+    <string name="message_reply_to_sender_sent_audio_file">saatis helifaili.</string>
+    <string name="message_reply_to_sender_sent_voice_message">saatis häälsõnumi.</string>
+    <string name="message_reply_to_sender_sent_image">saatis pildi.</string>
+    <string name="message_reply_to_sender_sent_video">saatis video.</string>
+    <string name="message_reply_to_sender_sent_sticker">saatis kleepsu.</string>
+    <string name="message_reply_to_sender_created_poll">koostas küsitluse.</string>
+    <string name="settings_enable_direct_share_title">Kasuta otsejagamist</string>
+    <string name="settings_enable_direct_share_summary">Näita viimaseid vestlusi süsteemses jagamisvaates</string>
 </resources>

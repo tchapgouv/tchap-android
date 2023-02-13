@@ -20,6 +20,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import im.vector.app.core.resources.BooleanProvider
 import im.vector.app.features.DefaultVectorFeatures
 import im.vector.app.features.DefaultVectorOverrides
 import im.vector.app.features.VectorFeatures
@@ -30,8 +31,8 @@ import im.vector.app.features.VectorOverrides
 object FeaturesModule {
 
     @Provides
-    fun providesFeatures(): VectorFeatures {
-        return DefaultVectorFeatures()
+    fun providesFeatures(booleanProvider: BooleanProvider): VectorFeatures {
+        return DefaultVectorFeatures(booleanProvider)
     }
 
     @Provides

@@ -1,3 +1,17 @@
+Changes in Tchap 2.7.0 (2023-02-13)
+===================================
+
+Features ✨
+----------
+ - [Keys Management] Restore "Encrypted Message Recovery" when the key backup is enabled ([#814](https://github.com/tchapgouv/tchap-android-v2/issues/814))
+ - Enable cross signin and secure storage. ([#815](https://github.com/tchapgouv/tchap-android-v2/issues/815))
+
+Improvements 🙌
+--------------
+ - Rebase against Element-Android v1.5.11 ([#825](https://github.com/tchapgouv/tchap-android-v2/issues/825))
+ - Rebase against Element-Android v1.5.18 ([#826](https://github.com/tchapgouv/tchap-android-v2/issues/826))
+
+
 Changes in Tchap 2.6.1 (2023-02-10)
 ===================================
 

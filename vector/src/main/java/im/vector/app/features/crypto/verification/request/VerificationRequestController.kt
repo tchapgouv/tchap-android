@@ -22,12 +22,12 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.colorizeMatchingText
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewState
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetSelfWaitItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
@@ -38,6 +38,7 @@ import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class VerificationRequestController @Inject constructor(
+        private val vectorFeatures: VectorFeatures,
         private val stringProvider: StringProvider,
         private val colorProvider: ColorProvider
 ) : EpoxyController() {
@@ -71,7 +72,7 @@ class VerificationRequestController @Inject constructor(
                 }
             }
 
-            if (BuildConfig.IS_KEY_BACKUP_SUPPORTED && state.quadSContainsSecrets) {
+            if (vectorFeatures.tchapIsKeyBackupEnabled() && state.quadSContainsSecrets) {
                 val subtitle = if (state.hasAnyOtherSession) {
                     stringProvider.getString(R.string.verification_use_passphrase)
                 } else {

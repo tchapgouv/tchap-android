@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2.othersessions
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -32,6 +33,8 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.extensions.registerStartForActivityResult
+import im.vector.app.core.extensions.setTextColor
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment.ResultListener.Companion.RESULT_OK
 import im.vector.app.core.platform.VectorBaseFragment
@@ -39,13 +42,16 @@ import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentOtherSessionsBinding
+import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterBottomSheet
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
 import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomSheet
+import im.vector.app.features.settings.devices.v2.signout.BuildConfirmSignoutDialogUseCase
 import im.vector.app.features.themes.ThemeUtils
+import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
 
@@ -65,6 +71,8 @@ class OtherSessionsFragment :
 
     @Inject lateinit var viewNavigator: OtherSessionsViewNavigator
 
+    @Inject lateinit var buildConfirmSignoutDialogUseCase: BuildConfirmSignoutDialogUseCase
+
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentOtherSessionsBinding {
         return FragmentOtherSessionsBinding.inflate(layoutInflater, container, false)
     }
@@ -77,7 +85,37 @@ class OtherSessionsFragment :
             menu.findItem(R.id.otherSessionsSelectAll).isVisible = isSelectModeEnabled
             menu.findItem(R.id.otherSessionsDeselectAll).isVisible = isSelectModeEnabled
             menu.findItem(R.id.otherSessionsSelect).isVisible = !isSelectModeEnabled && state.devices()?.isNotEmpty().orFalse()
+            menu.findItem(R.id.otherSessionsToggleIpAddress).isVisible = !isSelectModeEnabled
+            menu.findItem(R.id.otherSessionsToggleIpAddress).title = if (state.isShowingIpAddress) {
+                getString(R.string.device_manager_other_sessions_hide_ip_address)
+            } else {
+                getString(R.string.device_manager_other_sessions_show_ip_address)
+            }
+            updateMultiSignoutMenuItem(menu, state)
         }
+    }
+
+    private fun updateMultiSignoutMenuItem(menu: Menu, viewState: OtherSessionsViewState) {
+        val multiSignoutItem = menu.findItem(R.id.otherSessionsMultiSignout)
+        multiSignoutItem.title = if (viewState.isSelectModeEnabled) {
+            getString(R.string.device_manager_other_sessions_multi_signout_selection).uppercase()
+        } else {
+            val nbDevices = viewState.devices()?.size ?: 0
+            stringProvider.getQuantityString(R.plurals.device_manager_other_sessions_multi_signout_all, nbDevices, nbDevices)
+        }
+        multiSignoutItem.isVisible = if (viewState.isSelectModeEnabled) {
+            viewState.devices.invoke()?.any { it.isSelected }.orFalse()
+        } else {
+            viewState.devices.invoke()?.isNotEmpty().orFalse()
+        }
+        val showAsActionFlag = if (viewState.isSelectModeEnabled) MenuItem.SHOW_AS_ACTION_IF_ROOM else MenuItem.SHOW_AS_ACTION_NEVER
+        multiSignoutItem.setShowAsAction(showAsActionFlag or MenuItem.SHOW_AS_ACTION_WITH_TEXT)
+        changeTextColorOfDestructiveAction(multiSignoutItem)
+    }
+
+    private fun changeTextColorOfDestructiveAction(menuItem: MenuItem) {
+        val titleColor = colorProvider.getColorFromAttribute(R.attr.colorError)
+        menuItem.setTextColor(titleColor)
     }
 
     override fun handleMenuItemSelected(item: MenuItem): Boolean {
@@ -94,8 +132,31 @@ class OtherSessionsFragment :
                 viewModel.handle(OtherSessionsAction.DeselectAll)
                 true
             }
+            R.id.otherSessionsMultiSignout -> {
+                confirmMultiSignout()
+                true
+            }
+            R.id.otherSessionsToggleIpAddress -> {
+                toggleIpAddressVisibility()
+                true
+            }
             else -> false
         }
+    }
+
+    private fun toggleIpAddressVisibility() {
+        viewModel.handle(OtherSessionsAction.ToggleIpAddressVisibility)
+    }
+
+    private fun confirmMultiSignout() {
+        activity?.let {
+            buildConfirmSignoutDialogUseCase.execute(it, this::multiSignout)
+                    .show()
+        }
+    }
+
+    private fun multiSignout() {
+        viewModel.handle(OtherSessionsAction.MultiSignout)
     }
 
     private fun enableSelectMode(isEnabled: Boolean, deviceId: String? = null) {
@@ -121,7 +182,9 @@ class OtherSessionsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar(views.otherSessionsToolbar).setTitle(args.titleResourceId).allowBack()
+        setupToolbar(views.otherSessionsToolbar)
+                .setTitle(R.string.device_manager_sessions_other_title)
+                .allowBack()
         observeViewEvents()
         initFilterView()
     }
@@ -129,8 +192,9 @@ class OtherSessionsFragment :
     private fun observeViewEvents() {
         viewModel.observeViewEvents {
             when (it) {
-                is OtherSessionsViewEvents.Loading -> showLoading(it.message)
-                is OtherSessionsViewEvents.Failure -> showFailure(it.throwable)
+                is OtherSessionsViewEvents.SignoutError -> showFailure(it.error)
+                is OtherSessionsViewEvents.RequestReAuth -> askForReAuthentication(it)
+                OtherSessionsViewEvents.SignoutSuccess -> enableSelectMode(false)
             }
         }
     }
@@ -162,11 +226,25 @@ class OtherSessionsFragment :
     }
 
     override fun invalidate() = withState(viewModel) { state ->
+        updateLoading(state.isLoading)
+        updateFilterView(state.isSelectModeEnabled)
         if (state.devices is Success) {
             val devices = state.devices.invoke()
-            renderDevices(devices, state.currentFilter)
+            renderDevices(devices, state.currentFilter, state.isShowingIpAddress)
             updateToolbar(devices, state.isSelectModeEnabled)
         }
+    }
+
+    private fun updateLoading(isLoading: Boolean) {
+        if (isLoading) {
+            showLoading(null)
+        } else {
+            dismissLoadingDialog()
+        }
+    }
+
+    private fun updateFilterView(isSelectModeEnabled: Boolean) {
+        views.otherSessionsFilterFrameLayout.isVisible = isSelectModeEnabled.not()
     }
 
     private fun updateToolbar(devices: List<DeviceFullInfo>, isSelectModeEnabled: Boolean) {
@@ -175,12 +253,12 @@ class OtherSessionsFragment :
             val selection = devices.count { it.isSelected }
             stringProvider.getQuantityString(R.plurals.x_selected, selection, selection)
         } else {
-            getString(args.titleResourceId)
+            getString(R.string.device_manager_sessions_other_title)
         }
         toolbar?.title = title
     }
 
-    private fun renderDevices(devices: List<DeviceFullInfo>, currentFilter: DeviceManagerFilterType) {
+    private fun renderDevices(devices: List<DeviceFullInfo>, currentFilter: DeviceManagerFilterType, isShowingIpAddress: Boolean) {
         views.otherSessionsFilterBadgeImageView.isVisible = currentFilter != DeviceManagerFilterType.ALL_SESSIONS
         views.otherSessionsSecurityRecommendationView.isVisible = currentFilter != DeviceManagerFilterType.ALL_SESSIONS
         views.deviceListHeaderOtherSessions.isVisible = currentFilter == DeviceManagerFilterType.ALL_SESSIONS
@@ -196,7 +274,10 @@ class OtherSessionsFragment :
                         )
                 )
                 views.otherSessionsNotFoundTextView.text = getString(R.string.device_manager_other_sessions_no_verified_sessions_found)
-                updateSecurityLearnMoreButton(R.string.device_manager_learn_more_sessions_verified_title, R.string.device_manager_learn_more_sessions_verified)
+                updateSecurityLearnMoreButton(
+                        R.string.device_manager_learn_more_sessions_verified_title,
+                        R.string.device_manager_learn_more_sessions_verified_description
+                )
             }
             DeviceManagerFilterType.UNVERIFIED -> {
                 views.otherSessionsSecurityRecommendationView.render(
@@ -239,7 +320,8 @@ class OtherSessionsFragment :
         } else {
             views.deviceListOtherSessions.isVisible = true
             views.otherSessionsNotFoundLayout.isVisible = false
-            views.deviceListOtherSessions.render(devices = devices, totalNumberOfDevices = devices.size, showViewAll = false)
+            val mappedDevices = if (isShowingIpAddress) devices else devices.map { it.copy(deviceInfo = it.deviceInfo.copy(lastSeenIp = null)) }
+            views.deviceListOtherSessions.render(devices = mappedDevices, totalNumberOfDevices = mappedDevices.size, showViewAll = false)
         }
     }
 
@@ -266,6 +348,8 @@ class OtherSessionsFragment :
     override fun onOtherSessionLongClicked(deviceId: String) = withState(viewModel) { state ->
         if (!state.isSelectModeEnabled) {
             enableSelectMode(true, deviceId)
+        } else {
+            viewModel.handle(OtherSessionsAction.ToggleSelectionForDevice(deviceId))
         }
     }
 
@@ -282,5 +366,38 @@ class OtherSessionsFragment :
 
     override fun onViewAllOtherSessionsClicked() {
         // NOOP. We don't have this button in this screen
+    }
+
+    private val reAuthActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            when (activityResult.data?.extras?.getString(ReAuthActivity.RESULT_FLOW_TYPE)) {
+                LoginFlowTypes.SSO -> {
+                    viewModel.handle(OtherSessionsAction.SsoAuthDone)
+                }
+                LoginFlowTypes.PASSWORD -> {
+                    val password = activityResult.data?.extras?.getString(ReAuthActivity.RESULT_VALUE) ?: ""
+                    viewModel.handle(OtherSessionsAction.PasswordAuthDone(password))
+                }
+                else -> {
+                    viewModel.handle(OtherSessionsAction.ReAuthCancelled)
+                }
+            }
+        } else {
+            viewModel.handle(OtherSessionsAction.ReAuthCancelled)
+        }
+    }
+
+    /**
+     * Launch the re auth activity to get credentials.
+     */
+    private fun askForReAuthentication(reAuthReq: OtherSessionsViewEvents.RequestReAuth) {
+        ReAuthActivity.newIntent(
+                requireContext(),
+                reAuthReq.registrationFlowResponse,
+                reAuthReq.lastErrorCode,
+                getString(R.string.devices_delete_dialog_title)
+        ).let { intent ->
+            reAuthActivityResultLauncher.launch(intent)
+        }
     }
 }

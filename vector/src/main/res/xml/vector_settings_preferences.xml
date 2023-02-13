@@ -32,11 +32,11 @@
 
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:title="@string/spaces"
-        app:isPreferenceVisible="@bool/show_spaces"
+        app:isPreferenceVisible="@bool/tchap_settings_spaces_visible"
         android:key="SETTINGS_PREF_SPACE_CATEGORY">
 
         <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="@bool/spaces_show_all_in_home"
+            android:defaultValue="@bool/tchap_settings_spaces_show_all_room_in_home_default"
             android:key="SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME"
             android:summary="@string/all_rooms_youre_in_will_be_shown_in_home"
             android:title="@string/preference_show_all_rooms_in_home" />
@@ -150,6 +150,12 @@
             android:key="SETTINGS_VIBRATE_ON_MENTION_KEY"
             android:title="@string/settings_vibrate_on_mention"
             app:isPreferenceVisible="@bool/false_not_implemented" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_ENABLE_DIRECT_SHARE"
+            android:summary="@string/settings_enable_direct_share_summary"
+            android:title="@string/settings_enable_direct_share_title" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 

@@ -22,10 +22,12 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.platform.app.InstrumentationRegistry
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDrawer
 import com.adevinta.android.barista.internal.viewaction.ClickChildAction
 import im.vector.app.R
+import im.vector.app.core.resources.BooleanProvider
 import im.vector.app.espresso.tools.waitUntilDialogVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.DefaultVectorFeatures
@@ -34,7 +36,8 @@ import im.vector.app.ui.robot.settings.labs.LabFeaturesPreferences
 import org.hamcrest.Matchers
 
 class SpaceRobot(private val labsPreferences: LabFeaturesPreferences) {
-    private val features: VectorFeatures = DefaultVectorFeatures()
+    private val context = InstrumentationRegistry.getInstrumentation().targetContext
+    private val features: VectorFeatures = DefaultVectorFeatures(BooleanProvider(context.resources))
 
     fun createSpace(isFirstSpace: Boolean, block: SpaceCreateRobot.() -> Unit) {
         if (labsPreferences.isNewAppLayoutEnabled) {

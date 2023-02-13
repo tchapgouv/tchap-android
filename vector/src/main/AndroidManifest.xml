@@ -73,7 +73,9 @@
     <application android:supportsRtl="true">
 
         <!-- Sentry auto-initialization disable -->
-        <meta-data android:name="io.sentry.auto-init" android:value="false" />
+        <meta-data
+            android:name="io.sentry.auto-init"
+            android:value="false" />
 
         <!-- No limit for screen ratio: avoid black strips -->
         <meta-data
@@ -115,7 +117,7 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize" />
 
-        <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite :/ -->
+        <!-- Add tools:ignore="Instantiatable" for the error reported only by CI :/ -->
         <activity
             android:name=".features.media.VectorAttachmentViewerActivity"
             android:theme="@style/Theme.Vector.Black.Transparent"
@@ -148,7 +150,8 @@
 
         <activity
             android:name=".features.home.room.detail.RoomDetailActivity"
-            android:parentActivityName=".features.home.HomeActivity">
+            android:parentActivityName=".features.home.HomeActivity"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".features.home.HomeActivity" />
@@ -329,6 +332,7 @@
 
         <service
             android:name=".core.services.CallAndroidService"
+            android:foregroundServiceType="phoneCall"
             android:exported="false">
             <!-- in order to get headset button events -->
             <intent-filter>
@@ -336,10 +340,11 @@
             </intent-filter>
         </service>
 
-        <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite and for lintGplayRelease check :/ -->
+        <!-- Add tools:ignore="Instantiatable" for the error reported only by CI and for lintGplayRelease check :/ -->
         <service
             android:name=".core.services.VectorSyncAndroidService"
             android:exported="false"
+            android:foregroundServiceType="dataSync"
             tools:ignore="Instantiatable" />
 
         <service

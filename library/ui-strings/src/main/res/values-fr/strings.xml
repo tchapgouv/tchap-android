@@ -682,9 +682,10 @@
     <string name="passphrase_passphrase_too_weak">La phrase secrète est trop faible</string>
     <string name="keys_backup_passphrase_not_empty_error_message">Veuillez supprimer la phrase secrète si vous voulez que ${app_name} génère une clé de récupération.</string>
     <string name="keys_backup_setup_step1_title">Ne perdez jamais vos messages chiffrés</string>
-    <string name="keys_backup_setup_step1_description">Les messages dans les salons chiffrés sont sécurisés avec un chiffrement de bout en bout. Seuls vous et le(s) destinataire(s) avez les clés pour lire ces messages.
-\n
-\nSauvegardez vos clés de façon sécurisée pour éviter de les perdre.</string>
+    <string name="keys_backup_setup_step1_description">Protection afin d\'éviter de perdre l\'accès aux messages et données chiffrés.
+
+    Générez une clé de sécurité à stocker dans un endroit sûr comme un gestionnaire de mot de passe ou un coffre.
+    </string> <!-- Tchap wordings -->
     <string name="keys_backup_setup_step2_button_title">Définir la phrase secrète</string>
     <string name="keys_backup_setup_step3_button_title">Terminé</string>
     <string name="keys_backup_setup_step3_copy_button_title">Sauvegarder la clé de récupération</string>
@@ -743,7 +744,7 @@
     <string name="action_sign_out_confirmation_simple">Voulez-vous vraiment vous déconnecter ?</string>
     <string name="encryption_message_recovery">Récupération des messages chiffrés</string>
     <string name="error_empty_field_enter_user_name">Veuillez renseigner un nom d’utilisateur.</string>
-    <string name="keys_backup_setup">Commencer à utiliser la sauvegarde de clés</string>
+    <string name="keys_backup_setup">Utiliser une clé de sauvegarde Tchap</string> <!-- Tchap wordings -->
     <string name="keys_backup_setup_step1_advanced">(Avancé)</string>
     <string name="keys_backup_setup_step1_manual_export">Exporter les clés manuellement</string>
     <string name="keys_backup_setup_step2_text_title">Protégez votre sauvegarde avec une phrase secrète.</string>
@@ -754,7 +755,7 @@
     <string name="keys_backup_setup_step1_recovery_key_alternative">Ou protégez votre sauvegarde avec une clé de récupération, en la conservant en lieu sûr.</string>
     <string name="keys_backup_setup_step2_skip_button_title">(Avancé) Configurer une clé de récupération</string>
     <string name="keys_backup_setup_step3_success_title">Bien joué !</string>
-    <string name="keys_backup_setup_step3_text_line1">Vos clés sont en cours de sauvegarde.</string>
+    <string name="keys_backup_setup_step3_text_line1">Stockez votre clé dans un endroit sûr. Elle peut être utilisée pour dévérouiller vos messages et données chiffrés.</string>
     <string name="keys_backup_setup_step3_text_line2">Votre clé de récupération est une mesure de précaution. Vous pouvez l’utiliser pour restaurer l’accès à vos messages chiffrés si vous oubliez votre phrase secrète.
 \nConservez votre clé de récupération en lieu sûr, comme un gestionnaire de mots de passe (ou un coffre-fort)</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Conservez votre clé de récupération dans un endroit sûr, comme un gestionnaire de mots de passe (ou un coffre-fort)</string>
@@ -2814,7 +2815,7 @@
     <string name="device_manager_sessions_sign_in_with_qr_code_description">Vous pouvez utiliser cet appareil pour connecter un appareil mobile ou un client web avec un QR code. Il y a deux façons de le faire :</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_title">Se connecter avec un QR code</string>
     <string name="login_scan_qr_code">Scanner le QR code</string>
-    <string name="a11y_voice_broadcast_buffering">Mise en mémoire tampon</string>
+    <string name="a11y_voice_broadcast_buffering">Mise en mémoire tampon…</string>
     <string name="a11y_pause_voice_broadcast">Mettre en pause la diffusion audio</string>
     <string name="a11y_play_voice_broadcast">Lire ou continuer la diffusion audio</string>
     <string name="a11y_stop_voice_broadcast_record">Arrêter l’enregistrement de la diffusion audio</string>
@@ -2836,4 +2837,36 @@
         <item quantity="one">%1$d sélectionné</item>
         <item quantity="other">%1$d sélectionnés</item>
     </plurals>
+    <string name="rich_text_editor_full_screen_toggle">Basculer en mode plein écran</string>
+    <string name="attachment_type_selector_text_formatting">Formatage de texte</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Vous êtes déjà en train de réaliser une diffusion audio. Veuillez terminer votre diffusion audio actuelle pour en démarrer une nouvelle.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Une autre personne est déjà en train de réaliser une diffusion audio. Attendez que sa diffusion audio soit terminée pour en démarrer une nouvelle.</string>
+    <string name="error_voice_broadcast_permission_denied_message">Vous n’avez pas les permissions requises pour démarrer une nouvelle diffusion audio dans ce salon. Contactez un administrateur du salon pour mettre-à-jour vos permissions.</string>
+    <string name="error_voice_broadcast_unauthorized_title">Impossible de commencer une nouvelle diffusion audio</string>
+    <string name="a11y_voice_broadcast_fast_forward">Avance rapide de 30 secondes</string>
+    <string name="a11y_voice_broadcast_fast_backward">Retour rapide de 30 secondes</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Les sessions vérifiées sont toutes celles qui utilisent ce compte après avoir saisie la phrase de sécurité ou confirmé votre identité à l’aide d’une autre session vérifiée.
+\n
+\nCela veut dire qu’elles disposent de toutes les clés nécessaires pour lire les messages chiffrés, et confirment aux autres utilisateurs que vous faites confiance à cette session.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Déconnecter %1$d session</item>
+        <item quantity="other">Déconnecter %1$d sessions</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Déconnecter</string>
+    <string name="voice_broadcast_recording_time_left">%1$s restant</string>
+    <string name="message_reply_to_sender_created_poll">a créé un sondage.</string>
+    <string name="message_reply_to_sender_sent_sticker">a envoyé un autocollant.</string>
+    <string name="message_reply_to_sender_sent_video">a envoyé une vidéo.</string>
+    <string name="message_reply_to_sender_sent_image">a envoyé une image.</string>
+    <string name="message_reply_to_sender_sent_voice_message">envoyer un message vocal.</string>
+    <string name="message_reply_to_sender_sent_audio_file">a envoyé un fichier audio.</string>
+    <string name="message_reply_to_sender_sent_file">a envoyé un fichier.</string>
+    <string name="message_reply_to_prefix">En réponse à</string>
+    <string name="device_manager_other_sessions_hide_ip_address">Masquer l’adresse IP</string>
+    <string name="device_manager_other_sessions_show_ip_address">Afficher l’adresse IP</string>
+    <string name="quoting">Citation de</string>
+    <string name="replying_to">Réponse à %s</string>
+    <string name="editing">Modification</string>
+    <string name="settings_enable_direct_share_summary">Affiche les conversations récentes dans le menu de partage du système</string>
+    <string name="settings_enable_direct_share_title">Activer le partage direct</string>
 </resources>

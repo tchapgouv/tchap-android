@@ -35,7 +35,6 @@ import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-@Ignore("Tchap: Secure Backup is disabled, so this test cannot succeed")
 class CantVerifyTest {
 
     @get:Rule
@@ -47,6 +46,7 @@ class CantVerifyTest {
     var userName: String = "loginTest_${UUID.randomUUID()}"
 
     @Test
+    @Ignore("Tchap: Secure Backup is disabled, so this test cannot succeed")
     fun checkCantVerifyPopup() {
         // Let' create an account
         // This first session will create cross signing keys then logout
