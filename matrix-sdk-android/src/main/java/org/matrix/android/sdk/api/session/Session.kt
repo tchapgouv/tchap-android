@@ -18,7 +18,6 @@ package org.matrix.android.sdk.api.session
 
 import androidx.annotation.MainThread
 import fr.gouv.tchap.android.sdk.api.auth.AccountValidityService
-import fr.gouv.tchap.android.sdk.api.session.userinfo.UsersInfoService
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
@@ -273,11 +272,6 @@ interface Session {
      * Returns the account data service associated with the session.
      */
     fun accountDataService(): SessionAccountDataService
-
-    /**
-     * Returns the users info service associated with the session.
-     */
-    fun usersInfoService(): UsersInfoService
 
     /**
      * Returns the account validity service associated with the session.
