@@ -15,7 +15,6 @@
  */
 package fr.gouv.tchap.android.sdk.internal.auth
 
-import org.matrix.android.sdk.internal.network.NetworkConstants
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -24,12 +23,12 @@ interface AccountValidityAPI {
     /**
      * Trigger sending a renewal email to the user that made the request.
      */
-    @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "account_validity/send_mail")
+    @POST("_synapse/client/email_account_validity/send_mail")
     suspend fun requestRenewalEmail()
 
     /**
      * Submit a token to renew the account validity.
      */
-    @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "account_validity/renew")
+    @GET("_synapse/client/email_account_validity/renew")
     suspend fun renewAccountValidity(@Query("token") token: String?)
 }
