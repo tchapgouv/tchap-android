@@ -682,9 +682,10 @@
     <string name="passphrase_passphrase_too_weak">La phrase secrète est trop faible</string>
     <string name="keys_backup_passphrase_not_empty_error_message">Veuillez supprimer la phrase secrète si vous voulez que ${app_name} génère une clé de récupération.</string>
     <string name="keys_backup_setup_step1_title">Ne perdez jamais vos messages chiffrés</string>
-    <string name="keys_backup_setup_step1_description">Les messages dans les salons chiffrés sont sécurisés avec un chiffrement de bout en bout. Seuls vous et le(s) destinataire(s) avez les clés pour lire ces messages.
-\n
-\nSauvegardez vos clés de façon sécurisée pour éviter de les perdre.</string>
+    <string name="keys_backup_setup_step1_description">Protection afin d\'éviter de perdre l\'accès aux messages et données chiffrés.
+
+    Générez une clé de sécurité à stocker dans un endroit sûr comme un gestionnaire de mot de passe ou un coffre.
+    </string> <!-- Tchap wordings -->
     <string name="keys_backup_setup_step2_button_title">Définir la phrase secrète</string>
     <string name="keys_backup_setup_step3_button_title">Terminé</string>
     <string name="keys_backup_setup_step3_copy_button_title">Sauvegarder la clé de récupération</string>
@@ -743,7 +744,7 @@
     <string name="action_sign_out_confirmation_simple">Voulez-vous vraiment vous déconnecter ?</string>
     <string name="encryption_message_recovery">Récupération des messages chiffrés</string>
     <string name="error_empty_field_enter_user_name">Veuillez renseigner un nom d’utilisateur.</string>
-    <string name="keys_backup_setup">Commencer à utiliser la sauvegarde de clés</string>
+    <string name="keys_backup_setup">Utiliser une clé de sauvegarde Tchap</string> <!-- Tchap wordings -->
     <string name="keys_backup_setup_step1_advanced">(Avancé)</string>
     <string name="keys_backup_setup_step1_manual_export">Exporter les clés manuellement</string>
     <string name="keys_backup_setup_step2_text_title">Protégez votre sauvegarde avec une phrase secrète.</string>
@@ -754,7 +755,7 @@
     <string name="keys_backup_setup_step1_recovery_key_alternative">Ou protégez votre sauvegarde avec une clé de récupération, en la conservant en lieu sûr.</string>
     <string name="keys_backup_setup_step2_skip_button_title">(Avancé) Configurer une clé de récupération</string>
     <string name="keys_backup_setup_step3_success_title">Bien joué !</string>
-    <string name="keys_backup_setup_step3_text_line1">Vos clés sont en cours de sauvegarde.</string>
+    <string name="keys_backup_setup_step3_text_line1">Stockez votre clé dans un endroit sûr. Elle peut être utilisée pour dévérouiller vos messages et données chiffrés.</string>
     <string name="keys_backup_setup_step3_text_line2">Votre clé de récupération est une mesure de précaution. Vous pouvez l’utiliser pour restaurer l’accès à vos messages chiffrés si vous oubliez votre phrase secrète.
 \nConservez votre clé de récupération en lieu sûr, comme un gestionnaire de mots de passe (ou un coffre-fort)</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Conservez votre clé de récupération dans un endroit sûr, comme un gestionnaire de mots de passe (ou un coffre-fort)</string>
