@@ -28,6 +28,7 @@ interface VectorFeatures {
     fun tchapIsVoipSupported(): Boolean
     fun tchapIsCrossSigningEnabled(): Boolean
     fun tchapIsKeyBackupEnabled(): Boolean
+    fun tchapIsThreadEnabled(): Boolean
     fun onboardingVariant(): OnboardingVariant
     fun isOnboardingAlreadyHaveAccountSplashEnabled(): Boolean
     fun isOnboardingSplashCarouselEnabled(): Boolean
@@ -59,6 +60,7 @@ class DefaultVectorFeatures @Inject constructor(
     override fun tchapIsVoipSupported() = booleanProvider.getBoolean(R.bool.tchap_is_voip_supported)
     override fun tchapIsCrossSigningEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_cross_signing_enabled)
     override fun tchapIsKeyBackupEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_key_backup_enabled)
+    override fun tchapIsThreadEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_thread_enabled)
     override fun onboardingVariant() = Config.ONBOARDING_VARIANT
     override fun isOnboardingAlreadyHaveAccountSplashEnabled() = true
     override fun isOnboardingSplashCarouselEnabled() = false // Tchap: no carousel
