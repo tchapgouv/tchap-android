@@ -266,9 +266,11 @@ class HomeActivityViewModel @AssistedInject constructor(
 //            lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
 //        }
 
+        // Tchap : disable automatic thread migration
+        if (!vectorFeatures.tchapIsThreadEnabled()) return
+
         when {
-            // Tchap : disable automatic thread migration
-            !vectorPreferences.areThreadMessagesEnabled() && !vectorPreferences.wasThreadFlagChangedManually() && vectorFeatures.tchapIsThreadEnabled() -> {
+            !vectorPreferences.areThreadMessagesEnabled() && !vectorPreferences.wasThreadFlagChangedManually() -> {
                 vectorPreferences.setThreadMessagesEnabled()
                 lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
                 // Clear Cache
