@@ -27,14 +27,6 @@ $dokka.location:fr.gouv.tchap.android.sdk.api.session.room.model/RoomAccessRules
 $dokka.location:fr.gouv.tchap.android.sdk.api.session.room.model/RoomAccessRulesContent/RoomAccessRulesContent/#kotlin.String?/PointingToDeclaration/matrix-sdk-android/fr.gouv.tchap.android.sdk.api.session.room.model/-room-access-rules-content/-room-access-rules-content.html
 $dokka.location:fr.gouv.tchap.android.sdk.api.session.room.model/RoomAccessRulesContent/accessRules/#/PointingToDeclaration/matrix-sdk-android/fr.gouv.tchap.android.sdk.api.session.room.model/-room-access-rules-content/access-rules.html
 $dokka.location:fr.gouv.tchap.android.sdk.api.session.room.model/RoomAccessRulesContent/rule/#/PointingToDeclaration/matrix-sdk-android/fr.gouv.tchap.android.sdk.api.session.room.model/-room-access-rules-content/rule.html
-$dokka.location:fr.gouv.tchap.android.sdk.api.session.userinfo.model////PointingToDeclaration/matrix-sdk-android/fr.gouv.tchap.android.sdk.api.session.userinfo.model/index.html
-$dokka.location:fr.gouv.tchap.android.sdk.api.session.userinfo.model/UserInfo///PointingToDeclaration/matrix-sdk-android/fr.gouv.tchap.android.sdk.api.session.userinfo.model/-user-info/index.html
-$dokka.location:fr.gouv.tchap.android.sdk.api.session.userinfo.model/UserInfo/UserInfo/#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/matrix-sdk-android/fr.gouv.tchap.android.sdk.api.session.userinfo.model/-user-info/-user-info.html
-$dokka.location:fr.gouv.tchap.android.sdk.api.session.userinfo.model/UserInfo/deactivated/#/PointingToDeclaration/matrix-sdk-android/fr.gouv.tchap.android.sdk.api.session.userinfo.model/-user-info/deactivated.html
-$dokka.location:fr.gouv.tchap.android.sdk.api.session.userinfo.model/UserInfo/expired/#/PointingToDeclaration/matrix-sdk-android/fr.gouv.tchap.android.sdk.api.session.userinfo.model/-user-info/expired.html
-$dokka.location:fr.gouv.tchap.android.sdk.api.session.userinfo////PointingToDeclaration/matrix-sdk-android/fr.gouv.tchap.android.sdk.api.session.userinfo/index.html
-$dokka.location:fr.gouv.tchap.android.sdk.api.session.userinfo/UsersInfoService///PointingToDeclaration/matrix-sdk-android/fr.gouv.tchap.android.sdk.api.session.userinfo/-users-info-service/index.html
-$dokka.location:fr.gouv.tchap.android.sdk.api.session.userinfo/UsersInfoService/getUsersInfo/#kotlin.collections.List[kotlin.String]/PointingToDeclaration/matrix-sdk-android/fr.gouv.tchap.android.sdk.api.session.userinfo/-users-info-service/get-users-info.html
 $dokka.location:fr.gouv.tchap.android.sdk.internal.auth////PointingToDeclaration/matrix-sdk-android/fr.gouv.tchap.android.sdk.internal.auth/index.html
 $dokka.location:fr.gouv.tchap.android.sdk.internal.auth/AccountValidityAPI///PointingToDeclaration/matrix-sdk-android/fr.gouv.tchap.android.sdk.internal.auth/-account-validity-a-p-i/index.html
 $dokka.location:fr.gouv.tchap.android.sdk.internal.auth/AccountValidityAPI/renewAccountValidity/#kotlin.String?/PointingToDeclaration/matrix-sdk-android/fr.gouv.tchap.android.sdk.internal.auth/-account-validity-a-p-i/renew-account-validity.html
@@ -4794,7 +4786,6 @@ $dokka.location:org.matrix.android.sdk.api.session/Session/thirdPartyService/#/P
 $dokka.location:org.matrix.android.sdk.api.session/Session/toDeviceService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/to-device-service.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/typingUsersTracker/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/typing-users-tracker.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/userService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/user-service.html
-$dokka.location:org.matrix.android.sdk.api.session/Session/usersInfoService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/users-info-service.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/widgetService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/widget-service.html
 $dokka.location:org.matrix.android.sdk.api.session/SessionLifecycleObserver///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session-lifecycle-observer/index.html
 $dokka.location:org.matrix.android.sdk.api.session/SessionLifecycleObserver/onClearCache/#org.matrix.android.sdk.api.session.Session/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session-lifecycle-observer/on-clear-cache.html
@@ -5066,8 +5057,6 @@ fr.gouv.tchap.android.sdk.api.services.threepidplatformdiscover
 fr.gouv.tchap.android.sdk.api.session.accountdata
 fr.gouv.tchap.android.sdk.api.session.events.model
 fr.gouv.tchap.android.sdk.api.session.room.model
-fr.gouv.tchap.android.sdk.api.session.userinfo
-fr.gouv.tchap.android.sdk.api.session.userinfo.model
 fr.gouv.tchap.android.sdk.internal.auth
 fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model
 org.matrix.android.sdk.api
