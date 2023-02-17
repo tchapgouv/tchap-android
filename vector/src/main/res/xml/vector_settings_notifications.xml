@@ -43,7 +43,7 @@
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
-    <!-- Tchap : no email notifications -->
+    <!-- Tchap: no email notifications -->
     <!-- <im.vector.app.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_EMAIL_NOTIFICATION_CATEGORY_PREFERENCE_KEY"
         android:title="@string/settings_notification_emails_category" /> -->
