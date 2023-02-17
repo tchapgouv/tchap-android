@@ -46,6 +46,8 @@ class DebugVectorFeatures(
 
     override fun tchapIsKeyBackupEnabled() = read(DebugFeatureKeys.tchapIsKeyBackupEnabled) ?: vectorFeatures.tchapIsKeyBackupEnabled()
 
+    override fun tchapIsThreadEnabled() = vectorFeatures.tchapIsThreadEnabled()
+
     override fun onboardingVariant(): OnboardingVariant {
         return readPreferences().getEnum<OnboardingVariant>() ?: vectorFeatures.onboardingVariant()
     }

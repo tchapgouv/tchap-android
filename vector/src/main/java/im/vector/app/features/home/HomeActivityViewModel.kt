@@ -266,6 +266,9 @@ class HomeActivityViewModel @AssistedInject constructor(
 //            lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
 //        }
 
+        // Tchap : disable automatic thread migration
+        if (!vectorFeatures.tchapIsThreadEnabled()) return
+
         when {
             !vectorPreferences.areThreadMessagesEnabled() && !vectorPreferences.wasThreadFlagChangedManually() -> {
                 vectorPreferences.setThreadMessagesEnabled()

@@ -2,4 +2,5 @@
 <resources>
     <bool name="tchap_is_cross_signing_enabled">true</bool>
     <bool name="tchap_is_key_backup_enabled">true</bool>
+    <bool name="tchap_is_thread_enabled">false</bool>
 </resources>
