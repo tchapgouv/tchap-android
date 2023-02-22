@@ -103,7 +103,7 @@ class SignOutBottomSheetDialogFragment :
     override fun invalidate() = withState(viewModel) { state ->
         views.signoutExportingLoading.isVisible = false
 
-        if (!state.isKeyBackupSupported) {
+        if (!viewModel.isKeyBackupSupported()) {
             views.bottomSheetSignoutWarningText.text = getString(R.string.tchap_action_sign_out_confirmation)
 
             views.setupRecoveryButton.isVisible = false
