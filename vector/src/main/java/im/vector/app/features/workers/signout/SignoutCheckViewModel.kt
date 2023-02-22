@@ -23,16 +23,15 @@ import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
-import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.crypto.keys.KeysExporter
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -53,12 +52,12 @@ data class SignoutCheckViewState(
         val crossSigningSetupAllKeysKnown: Boolean = false,
         val keysBackupState: KeysBackupState = KeysBackupState.Unknown,
         val hasBeenExportedToFile: Async<Boolean> = Uninitialized,
-        val isKeyBackupSupported: Boolean = false
 ) : MavericksState
 
 class SignoutCheckViewModel @AssistedInject constructor(
         @Assisted initialState: SignoutCheckViewState,
         private val session: Session,
+        private val vectorFeatures: VectorFeatures,
         private val keysExporter: KeysExporter
 ) : VectorViewModel<SignoutCheckViewState, SignoutCheckViewModel.Actions, EmptyViewEvents>(initialState), KeysBackupStateListener {
 
@@ -72,21 +71,16 @@ class SignoutCheckViewModel @AssistedInject constructor(
         override fun create(initialState: SignoutCheckViewState): SignoutCheckViewModel
     }
 
-    // Tchap: init viewState with key backup
-    companion object : MavericksViewModelFactory<SignoutCheckViewModel, SignoutCheckViewState> by hiltMavericksViewModelFactory() {
-        override fun initialState(viewModelContext: ViewModelContext): SignoutCheckViewState? {
-            val isKeyBackupEnabled = (viewModelContext.activity as? VectorBaseActivity<*>)?.vectorFeatures?.tchapIsKeyBackupEnabled().orFalse()
-            return SignoutCheckViewState(isKeyBackupSupported = isKeyBackupEnabled)
+    companion object : MavericksViewModelFactory<SignoutCheckViewModel, SignoutCheckViewState> by hiltMavericksViewModelFactory()
+
+    init {
+        // Tchap: init when key backup is supported
+        if (isKeyBackupSupported()) {
+            init()
         }
     }
 
-    init {
-        withState { state ->
-            if (state.isKeyBackupSupported) {
-                init()
-            }
-        }
-    }
+    fun isKeyBackupSupported() = vectorFeatures.tchapIsKeyBackupEnabled().orFalse()
 
     fun init() {
         session.cryptoService().keysBackupService().addListener(this)
@@ -115,10 +109,8 @@ class SignoutCheckViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        withState { state ->
-            if (state.isKeyBackupSupported) {
-                session.cryptoService().keysBackupService().removeListener(this)
-            }
+        if (isKeyBackupSupported()) {
+            session.cryptoService().keysBackupService().removeListener(this)
         }
         super.onCleared()
     }
@@ -132,7 +124,7 @@ class SignoutCheckViewModel @AssistedInject constructor(
     }
 
     fun refreshRemoteStateIfNeeded() = withState { state ->
-        if (state.isKeyBackupSupported && state.keysBackupState == KeysBackupState.Disabled) {
+        if (isKeyBackupSupported() && state.keysBackupState == KeysBackupState.Disabled) {
             session.cryptoService().keysBackupService().checkAndStartKeysBackup()
         }
     }
