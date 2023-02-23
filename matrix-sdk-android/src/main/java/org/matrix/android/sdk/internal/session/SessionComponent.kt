@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.session
 import dagger.BindsInstance
 import dagger.Component
 import fr.gouv.tchap.android.sdk.internal.auth.TchapAccountValidityModule
-import fr.gouv.tchap.android.sdk.internal.session.users.TchapUsersInfoModule
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.securestorage.SecureStorageModule
@@ -70,7 +69,6 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
 @Component(
         dependencies = [MatrixComponent::class],
         modules = [
-            TchapUsersInfoModule::class,
             TchapAccountValidityModule::class,
             SessionModule::class,
             RoomModule::class,

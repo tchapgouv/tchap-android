@@ -1,3 +1,16 @@
+Changes in Tchap 2.7.1 (2023-02-23)
+===================================
+
+Bugfixes 🐛
+----------
+ - Prevent selecting multiple languages ([#853](https://github.com/tchapgouv/tchap-android-v2/issues/853))
+ - Crash on logout ([#857](https://github.com/tchapgouv/tchap-android-v2/issues/857))
+
+SDK API changes ⚠️
+------------------
+ - [Mainlining] Remove deprecated endpoint /_matrix/client/unstable/users/info ([#811](https://github.com/tchapgouv/tchap-android-v2/issues/811))
+
+
 Changes in Tchap 2.7.0 (2023-02-13)
 ===================================
 

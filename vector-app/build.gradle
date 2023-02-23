@@ -37,7 +37,7 @@ ext.versionMinor = 7
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 0
+ext.versionPatch = 1
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -157,6 +157,9 @@ android {
 //        ndk {
 //            abiFilters "armeabi-v7a", "x86", 'arm64-v8a', 'x86_64'
 //        }
+
+        // Tchap: Use only en and fr
+        resConfigs "en", "fr"
 
         // Ref: https://developer.android.com/studio/build/configure-apk-splits.html
         splits {

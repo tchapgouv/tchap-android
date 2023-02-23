@@ -48,9 +48,6 @@ android {
 //            abiFilters "armeabi-v7a", "x86", 'arm64-v8a', 'x86_64'
 //        }
 
-        // Tchap: Use only en and fr
-        resConfigs "en", "fr"
-
         // Generate a random app task affinity
         manifestPlaceholders = [appTaskAffinitySuffix: "H_${gitRevision()}"]
 
