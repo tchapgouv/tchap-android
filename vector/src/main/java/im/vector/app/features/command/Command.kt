@@ -86,6 +86,7 @@ enum class Command(
             CONFETTI,
             SNOWFALL,
             UPGRADE_ROOM -> true
+            CRASH_APP,
             BAN_USER,
             UNBAN_USER,
             IGNORE_USER,

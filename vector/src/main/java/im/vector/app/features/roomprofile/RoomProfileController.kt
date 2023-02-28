@@ -181,7 +181,7 @@ class RoomProfileController @Inject constructor(
             }
         }
 
-        // Hidden in Tchap
+        // Tchap: Hidden in Tchap
         // buildEncryptionAction(data.actionPermissions, roomSummary)
 
         if (roomSummary.isEncrypted && !encryptionMisconfigured) {
@@ -275,16 +275,14 @@ class RoomProfileController @Inject constructor(
             )
         }
 
-<<<<<<< HEAD
-=======
-        buildProfileAction(
-                id = "poll_history",
-                title = stringProvider.getString(R.string.room_profile_section_more_polls),
-                icon = R.drawable.ic_attachment_poll,
-                action = { callback?.onPollHistoryClicked() }
-        )
+        // Tchap: Hidden in Tchap
+//        buildProfileAction(
+//                id = "poll_history",
+//                title = stringProvider.getString(R.string.room_profile_section_more_polls),
+//                icon = R.drawable.ic_attachment_poll,
+//                action = { callback?.onPollHistoryClicked() }
+//        )
 
->>>>>>> v1.5.26
         buildProfileAction(
                 id = "uploads",
                 title = stringProvider.getString(R.string.room_profile_section_more_uploads),
@@ -320,7 +318,7 @@ class RoomProfileController @Inject constructor(
             // Advanced
             buildProfileSection(stringProvider.getString(R.string.room_settings_category_advanced_title))
 
-            // Hidden in Tchap
+            // Tchap: Hidden in Tchap
 //            buildProfileAction(
 //                    id = "alias",
 //                    title = stringProvider.getString(R.string.room_settings_alias_title),

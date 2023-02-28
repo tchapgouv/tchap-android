@@ -16,12 +16,8 @@
 
 package im.vector.app.features.command
 
-<<<<<<< HEAD
-import org.amshove.kluent.shouldBeIn
-=======
 import im.vector.app.test.fakes.FakeVectorPreferences
-import org.amshove.kluent.shouldBeEqualTo
->>>>>>> v1.5.26
+import org.amshove.kluent.shouldBeIn
 import org.junit.Test
 
 private const val A_SPACE_ID = "!my-space-id"

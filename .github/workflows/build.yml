@@ -58,27 +58,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-<<<<<<< HEAD
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - name: Assemble ${{ matrix.target }} unsigned apk
-        run: ./gradlew clean assemble${{ matrix.target }}Release $CI_GRADLE_ARG_PROPERTIES
-      - name: Upload ${{ matrix.target }} unsigned APKs
-=======
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
       - name: Configure gradle
         uses: gradle/gradle-build-action@v2
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
-      - name: Assemble GPlay unsigned apk
-        run: ./gradlew clean assembleGplayRelease $CI_GRADLE_ARG_PROPERTIES
-      - name: Upload Gplay unsigned APKs
->>>>>>> v1.5.26
+      - name: Assemble ${{ matrix.target }} unsigned apk
+        run: ./gradlew clean assemble${{ matrix.target }}Release $CI_GRADLE_ARG_PROPERTIES
+      - name: Upload ${{ matrix.target }} unsigned APKs
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.target }}-release-unsigned

@@ -30,11 +30,8 @@ import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.RegisterUnifiedPushUseCase
 import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
-<<<<<<< HEAD
-import im.vector.app.features.VectorFeatures
-=======
 import im.vector.app.core.session.EnsureSessionSyncingUseCase
->>>>>>> v1.5.26
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsType
