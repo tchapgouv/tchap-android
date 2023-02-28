@@ -2674,7 +2674,7 @@
     <string name="device_manager_session_details_description">Application, appareil et information sur l’activité.</string>
     <string name="device_manager_session_details_title">Détails de l’appareil</string> <!-- Tchap: Use custom string -->
     <string name="device_manager_other_sessions_clear_filter">Supprimer les filtres</string>
-    <string name="device_manager_other_sessions_no_inactive_sessions_found">Aucun appareil inactive n’a été trouvé.</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_other_sessions_no_inactive_sessions_found">Aucun appareil inactif n’a été trouvé.</string> <!-- Tchap: Use custom string -->
     <string name="device_manager_other_sessions_no_unverified_sessions_found">Aucun appareil non vérifié n’a été trouvé.</string> <!-- Tchap: Use custom string -->
     <string name="device_manager_other_sessions_no_verified_sessions_found">Aucun appareil vérifié n’a été trouvé.</string> <!-- Tchap: Use custom string -->
     <plurals name="device_manager_other_sessions_recommendation_description_inactive">
@@ -2747,10 +2747,10 @@
     <string name="rich_text_editor_format_strikethrough">Barrer le texte</string>
     <string name="rich_text_editor_format_italic">Mettre en italique</string>
     <string name="rich_text_editor_format_bold">Mettre en gras</string>
-    <string name="labs_enable_client_info_recording_summary">Enregistre le nom du client, sa version, et son URL pour retrouvez vos appareils plus facilement dans le gestionnaire des appareils.</string> <!-- Tchap: Use custom string -->
+    <string name="labs_enable_client_info_recording_summary">Enregistre le nom du client, sa version, et son URL pour retrouver vos appareils plus facilement dans le gestionnaire d’appareils.</string> <!-- Tchap: Use custom string -->
     <string name="labs_enable_client_info_recording_title">Activer l’enregistrement des informations du client</string>
     <string name="labs_enable_session_manager_summary">Ayez une meilleur visibilité et plus de contrôle sur tous vos appareils.</string> <!-- Tchap: Use custom string -->
-    <string name="labs_enable_session_manager_title">Activer le nouveau gestionnaire des appareils</string> <!-- Tchap: Use custom string -->
+    <string name="labs_enable_session_manager_title">Activer le nouveau gestionnaire d’appareils</string> <!-- Tchap: Use custom string -->
     <string name="device_manager_session_details_device_operating_system">Système d’exploitation</string>
     <string name="device_manager_session_details_device_model">Modèle</string>
     <string name="device_manager_session_details_device_browser">Navigateur</string>
@@ -2760,7 +2760,7 @@
     <string name="device_manager_session_details_application">Application</string>
     <string name="device_manager_push_notifications_description">Recevoir les notifications push sur cet appareil.</string> <!-- Tchap: Use custom string -->
     <string name="device_manager_push_notifications_title">Notifications push</string>
-    <string name="device_manager_verification_status_detail_other_session_unknown">Vérifiez votre appareil actuel pour découvrir le statut de vérification de cet appareil.</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_verification_status_detail_other_session_unknown">Vérifiez votre appareil actuel pour découvrir son statut de vérification.</string> <!-- Tchap: Use custom string -->
     <string name="device_manager_verification_status_unknown">Status de vérification inconnu</string>
     <string name="push_gateway_item_enabled">Activer :</string>
     <string name="push_gateway_item_device_id">Identifiant de l’appareil :</string> <!-- Tchap: Use custom string -->
