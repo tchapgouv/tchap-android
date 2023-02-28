@@ -17,7 +17,6 @@
 package im.vector.app.features.command
 
 import im.vector.app.test.fakes.FakeVectorPreferences
-import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeIn
 import org.junit.Test
 
