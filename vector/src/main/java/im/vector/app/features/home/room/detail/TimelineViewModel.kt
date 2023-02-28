@@ -32,6 +32,7 @@ import im.vector.app.R
 import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.extensions.isVoiceBroadcast
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.BuildMeta
@@ -54,6 +55,7 @@ import im.vector.app.features.crypto.verification.SupportedVerificationMethodsPr
 import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAction
 import im.vector.app.features.home.room.detail.error.RoomNotFound
 import im.vector.app.features.home.room.detail.location.RedactLiveLocationShareEventUseCase
+import im.vector.app.features.home.room.detail.poll.VoteToPollUseCase
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
@@ -90,7 +92,6 @@ import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
@@ -155,6 +156,7 @@ class TimelineViewModel @AssistedInject constructor(
         timelineFactory: TimelineFactory,
         private val spaceStateHandler: SpaceStateHandler,
         private val voiceBroadcastHelper: VoiceBroadcastHelper,
+        private val voteToPollUseCase: VoteToPollUseCase,
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener, LocationSharingServiceConnection.Callback {
 
@@ -628,13 +630,17 @@ class TimelineViewModel @AssistedInject constructor(
         viewModelScope.launch {
             when (action) {
                 VoiceBroadcastAction.Recording.Start -> {
+                    voiceBroadcastHelper.pausePlayback()
                     voiceBroadcastHelper.startVoiceBroadcast(room.roomId).fold(
                             { _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action)) },
                             { _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, it)) },
                     )
                 }
                 VoiceBroadcastAction.Recording.Pause -> voiceBroadcastHelper.pauseVoiceBroadcast(room.roomId)
-                VoiceBroadcastAction.Recording.Resume -> voiceBroadcastHelper.resumeVoiceBroadcast(room.roomId)
+                VoiceBroadcastAction.Recording.Resume -> {
+                    voiceBroadcastHelper.pausePlayback()
+                    voiceBroadcastHelper.resumeVoiceBroadcast(room.roomId)
+                }
                 VoiceBroadcastAction.Recording.Stop -> _viewEvents.post(RoomDetailViewEvents.DisplayPromptToStopVoiceBroadcast)
                 VoiceBroadcastAction.Recording.StopConfirmed -> voiceBroadcastHelper.stopVoiceBroadcast(room.roomId)
                 is VoiceBroadcastAction.Listening.PlayOrResume -> voiceBroadcastHelper.playOrResumePlayback(action.voiceBroadcast)
@@ -864,12 +870,18 @@ class TimelineViewModel @AssistedInject constructor(
 
     private fun handleRedactEvent(action: RoomDetailAction.RedactAction) {
         val event = room?.getTimelineEvent(action.targetEventId) ?: return
-        if (event.isLiveLocation()) {
-            viewModelScope.launch {
-                redactLiveLocationShareEventUseCase.execute(event.root, room, action.reason)
+        when {
+            event.isLiveLocation() -> {
+                viewModelScope.launch {
+                    redactLiveLocationShareEventUseCase.execute(event.root, room, action.reason)
+                }
             }
-        } else {
-            room.sendService().redactEvent(event.root, action.reason)
+            event.isVoiceBroadcast() -> {
+                room.sendService().redactEvent(event.root, action.reason, listOf(RelationType.REFERENCE))
+            }
+            else -> {
+                room.sendService().redactEvent(event.root, action.reason)
+            }
         }
     }
 
@@ -1233,15 +1245,11 @@ class TimelineViewModel @AssistedInject constructor(
 
     private fun handleVoteToPoll(action: RoomDetailAction.VoteToPoll) {
         if (room == null) return
-        // Do not allow to vote unsent local echo of the poll event
-        if (LocalEcho.isLocalEchoId(action.eventId)) return
-        // Do not allow to vote the same option twice
-        room.getTimelineEvent(action.eventId)?.let { pollTimelineEvent ->
-            val currentVote = pollTimelineEvent.annotations?.pollResponseSummary?.aggregatedContent?.myVote
-            if (currentVote != action.optionKey) {
-                room.sendService().voteToPoll(action.eventId, action.optionKey)
-            }
-        }
+        voteToPollUseCase.execute(
+                roomId = room.roomId,
+                pollEventId = action.eventId,
+                optionId = action.optionKey,
+        )
     }
 
     private fun handleEndPoll(eventId: String) {

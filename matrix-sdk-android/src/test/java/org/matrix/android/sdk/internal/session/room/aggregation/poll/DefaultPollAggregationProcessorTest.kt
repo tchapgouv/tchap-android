@@ -25,6 +25,8 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
+import org.amshove.kluent.shouldContain
+import org.amshove.kluent.shouldNotContain
 import org.junit.Before
 import org.junit.Test
 import org.matrix.android.sdk.api.session.Session
@@ -106,6 +108,24 @@ class DefaultPollAggregationProcessorTest {
     }
 
     @Test
+    fun `given a poll response event with a reference, when processing, then event id is removed from encrypted events list`() {
+        // Given
+        val anotherEventId = "other-event-id"
+        val pollResponseAggregatedSummaryEntity = PollResponseAggregatedSummaryEntity(
+                encryptedRelatedEventIds = RealmList(AN_EVENT_ID, anotherEventId)
+        )
+        every { realm.instance.createObject(PollResponseAggregatedSummaryEntity::class.java) } returns pollResponseAggregatedSummaryEntity
+
+        // When
+        val result = pollAggregationProcessor.handlePollResponseEvent(session, realm.instance, A_POLL_RESPONSE_EVENT)
+
+        // Then
+        result.shouldBeTrue()
+        pollResponseAggregatedSummaryEntity.encryptedRelatedEventIds.shouldNotContain(AN_EVENT_ID)
+        pollResponseAggregatedSummaryEntity.encryptedRelatedEventIds.shouldContain(anotherEventId)
+    }
+
+    @Test
     fun `given a poll response event after poll is closed, when processing, then is ignored and returns false`() {
         every { realm.instance.createObject(PollResponseAggregatedSummaryEntity::class.java) } returns PollResponseAggregatedSummaryEntity().apply {
             closedTime = (A_POLL_RESPONSE_EVENT.originServerTs ?: 0) - 1
@@ -128,16 +148,50 @@ class DefaultPollAggregationProcessorTest {
     }
 
     @Test
+    fun `given a poll response event and no existing poll start event, when processing, then is processed and returns true`() {
+        // Given
+        mockRoom(roomId = A_ROOM_ID, eventId = AN_EVENT_ID, hasExistingTimelineEvent = false)
+        every { realm.instance.createObject(PollResponseAggregatedSummaryEntity::class.java) } returns PollResponseAggregatedSummaryEntity()
+
+        // When
+        val result = pollAggregationProcessor.handlePollResponseEvent(session, realm.instance, A_POLL_RESPONSE_EVENT)
+
+        // Then
+        result.shouldBeTrue()
+    }
+
+    @Test
     fun `given a poll end event, when processing, then is processed and return true`() = runTest {
         // Given
         every { realm.instance.createObject(PollResponseAggregatedSummaryEntity::class.java) } returns PollResponseAggregatedSummaryEntity()
         every { fakeTaskExecutor.instance.executorScope } returns this
-
-        // When
         val powerLevelsHelper = mockRedactionPowerLevels(A_USER_ID_1, true)
 
+        // When
+        val result = pollAggregationProcessor.handlePollEndEvent(session, powerLevelsHelper, realm.instance, A_POLL_END_EVENT)
+
         // Then
-        pollAggregationProcessor.handlePollEndEvent(session, powerLevelsHelper, realm.instance, A_POLL_END_EVENT).shouldBeTrue()
+        result.shouldBeTrue()
+    }
+
+    @Test
+    fun `given a poll end event, when processing, then event id is removed from encrypted events list`() = runTest {
+        // Given
+        val anotherEventId = "other-event-id"
+        val pollResponseAggregatedSummaryEntity = PollResponseAggregatedSummaryEntity(
+                encryptedRelatedEventIds = RealmList(AN_EVENT_ID, anotherEventId)
+        )
+        every { realm.instance.createObject(PollResponseAggregatedSummaryEntity::class.java) } returns pollResponseAggregatedSummaryEntity
+        every { fakeTaskExecutor.instance.executorScope } returns this
+        val powerLevelsHelper = mockRedactionPowerLevels(A_USER_ID_1, true)
+
+        // When
+        val result = pollAggregationProcessor.handlePollEndEvent(session, powerLevelsHelper, realm.instance, A_POLL_END_EVENT)
+
+        // Then
+        result.shouldBeTrue()
+        pollResponseAggregatedSummaryEntity.encryptedRelatedEventIds.shouldNotContain(AN_EVENT_ID)
+        pollResponseAggregatedSummaryEntity.encryptedRelatedEventIds.shouldContain(anotherEventId)
     }
 
     @Test
@@ -145,12 +199,13 @@ class DefaultPollAggregationProcessorTest {
         // Given
         every { realm.instance.createObject(PollResponseAggregatedSummaryEntity::class.java) } returns PollResponseAggregatedSummaryEntity()
         every { fakeTaskExecutor.instance.executorScope } returns this
-
-        // When
         val powerLevelsHelper = mockRedactionPowerLevels(A_USER_ID_1, false)
 
+        // When
+        val result = pollAggregationProcessor.handlePollEndEvent(session, powerLevelsHelper, realm.instance, A_POLL_END_EVENT)
+
         // Then
-        pollAggregationProcessor.handlePollEndEvent(session, powerLevelsHelper, realm.instance, A_POLL_END_EVENT).shouldBeTrue()
+        result.shouldBeTrue()
     }
 
     @Test
@@ -192,11 +247,12 @@ class DefaultPollAggregationProcessorTest {
 
     private fun mockRoom(
             roomId: String,
-            eventId: String
+            eventId: String,
+            hasExistingTimelineEvent: Boolean = true,
     ) {
         val room = mockk<Room>()
         every { session.getRoom(roomId) } returns room
-        every { room.getTimelineEvent(eventId) } returns A_TIMELINE_EVENT
+        every { room.getTimelineEvent(eventId) } returns if (hasExistingTimelineEvent) A_TIMELINE_EVENT else null
     }
 
     private fun mockRedactionPowerLevels(userId: String, isAbleToRedact: Boolean): PowerLevelsHelper {
