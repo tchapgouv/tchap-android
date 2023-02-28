@@ -154,11 +154,7 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleOnTextChanged(action: MessageComposerAction.OnTextChanged) {
-<<<<<<< HEAD
-        val needsSendButtonVisibilityUpdate = currentComposerText.isEmpty() != action.text.isEmpty()
-=======
             val needsSendButtonVisibilityUpdate = currentComposerText.isBlank() != action.text.isBlank()
->>>>>>> v1.5.26
         currentComposerText = SpannableString(action.text)
         if (needsSendButtonVisibilityUpdate) {
             updateIsSendButtonVisibility(true)

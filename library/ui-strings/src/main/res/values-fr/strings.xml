@@ -2863,9 +2863,6 @@
     <string name="editing">Modification</string>
     <string name="settings_enable_direct_share_summary">Affiche les conversations récentes dans le menu de partage du système</string>
     <string name="settings_enable_direct_share_title">Activer le partage direct</string>
-<<<<<<< HEAD
-</resources>
-=======
     <string name="review_unverified_sessions_description">Vérifiez pour assurer la sécurité de votre compte</string>
     <string name="review_unverified_sessions_title">Vous avez des sessions non vérifiées</string>
     <string name="device_manager_learn_more_sessions_encryption_not_supported">Cette session ne prend pas en charge le chiffrement, elle ne peut donc pas être vérifiée.
@@ -2925,4 +2922,3 @@
     <string name="error_voice_broadcast_no_connection_recording">Erreur de connexion – Enregistrement en pause</string>
     <string name="rich_text_editor_inline_code">Appliquer le formatage de code en ligne</string>
 </resources>
->>>>>>> v1.5.26

@@ -24,6 +24,7 @@ import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
@@ -45,6 +46,7 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomSummaryItemFactory @Inject constructor(
+        private val sessionHolder: ActiveSessionHolder,
         private val displayableEventFormatter: DisplayableEventFormatter,
         private val dateFormatter: VectorDateFormatter,
         private val stringProvider: StringProvider,
