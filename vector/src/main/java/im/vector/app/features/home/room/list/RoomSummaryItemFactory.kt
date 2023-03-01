@@ -32,22 +32,16 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
+import im.vector.app.features.home.room.list.usecase.GetLatestPreviewableEventUseCase
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.voicebroadcast.isLive
-import im.vector.app.features.voicebroadcast.isVoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
-import im.vector.app.features.voicebroadcast.usecase.GetRoomLiveVoiceBroadcastsUseCase
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
-import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -59,7 +53,7 @@ class RoomSummaryItemFactory @Inject constructor(
         private val typingHelper: TypingHelper,
         private val avatarRenderer: AvatarRenderer,
         private val errorFormatter: ErrorFormatter,
-        private val getRoomLiveVoiceBroadcastsUseCase: GetRoomLiveVoiceBroadcastsUseCase,
+        private val getLatestPreviewableEventUseCase: GetLatestPreviewableEventUseCase,
 ) {
 
     fun create(
@@ -153,7 +147,7 @@ class RoomSummaryItemFactory @Inject constructor(
         val showSelected = selectedRoomIds.contains(roomSummary.roomId)
         var latestFormattedEvent: CharSequence = ""
         var latestEventTime = ""
-        val latestEvent = roomSummary.getVectorLatestPreviewableEvent()
+        val latestEvent = getLatestPreviewableEventUseCase.execute(roomSummary.roomId)
         if (latestEvent != null) {
             latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect, roomSummary.isDirect.not())
             latestEventTime = dateFormatter.format(latestEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
@@ -161,7 +155,8 @@ class RoomSummaryItemFactory @Inject constructor(
 
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)
                 // Skip typing while there is a live voice broadcast
-                .takeUnless { latestEvent?.root?.asVoiceBroadcastEvent()?.isLive.orFalse() }.orEmpty()
+                .takeUnless { latestEvent?.root?.asVoiceBroadcastEvent()?.isLive.orFalse() }
+                .orEmpty()
 
         return if (subtitle.isBlank() && displayMode == RoomListDisplayMode.FILTERED) {
             createCenteredRoomSummaryItem(roomSummary, displayMode, showSelected, unreadCount, onClick, onLongClick)
@@ -252,15 +247,5 @@ class RoomSummaryItemFactory @Inject constructor(
             2 -> stringProvider.getString(R.string.search_space_two_parents, directParentNames[0], directParentNames[1])
             else -> stringProvider.getQuantityString(R.plurals.search_space_multiple_parents, size - 1, directParentNames[0], size - 1)
         }
-    }
-
-    private fun RoomSummary.getVectorLatestPreviewableEvent(): TimelineEvent? {
-        val room = sessionHolder.getSafeActiveSession()?.getRoom(roomId) ?: return latestPreviewableEvent
-        val liveVoiceBroadcastTimelineEvent = getRoomLiveVoiceBroadcastsUseCase.execute(roomId).lastOrNull()
-                ?.root?.eventId?.let { room.getTimelineEvent(it) }
-        return latestPreviewableEvent?.takeIf { it.root.getClearType() == EventType.CALL_INVITE }
-                ?: liveVoiceBroadcastTimelineEvent
-                ?: latestPreviewableEvent
-                        ?.takeUnless { it.root.asMessageAudioEvent()?.isVoiceBroadcast().orFalse() } // Skip voice messages related to voice broadcast
     }
 }

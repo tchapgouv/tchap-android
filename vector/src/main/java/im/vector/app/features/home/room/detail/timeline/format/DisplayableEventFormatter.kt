@@ -28,6 +28,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.isLive
+import im.vector.app.features.voicebroadcast.isVoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import me.gujun.android.span.image
 import me.gujun.android.span.span
@@ -40,6 +41,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
+import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getTextDisplayableContent
@@ -89,10 +91,16 @@ class DisplayableEventFormatter @Inject constructor(
                             simpleFormat(senderName, stringProvider.getString(R.string.sent_an_image), appendAuthor)
                         }
                         MessageType.MSGTYPE_AUDIO -> {
-                            if ((messageContent as? MessageAudioContent)?.voiceMessageIndicator != null) {
-                                simpleFormat(senderName, stringProvider.getString(R.string.sent_a_voice_message), appendAuthor)
-                            } else {
-                                simpleFormat(senderName, stringProvider.getString(R.string.sent_an_audio_file), appendAuthor)
+                            when {
+                                (messageContent as? MessageAudioContent)?.voiceMessageIndicator == null -> {
+                                    simpleFormat(senderName, stringProvider.getString(R.string.sent_an_audio_file), appendAuthor)
+                                }
+                                timelineEvent.root.asMessageAudioEvent().isVoiceBroadcast() -> {
+                                    simpleFormat(senderName, stringProvider.getString(R.string.started_a_voice_broadcast), appendAuthor)
+                                }
+                                else -> {
+                                    simpleFormat(senderName, stringProvider.getString(R.string.sent_a_voice_message), appendAuthor)
+                                }
                             }
                         }
                         MessageType.MSGTYPE_VIDEO -> {
@@ -133,7 +141,7 @@ class DisplayableEventFormatter @Inject constructor(
                 span { }
             }
             in EventType.POLL_START.values -> {
-                timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)?.getBestPollCreationInfo()?.question?.getBestQuestion()
+                (timelineEvent.getVectorLastMessageContent() as? MessagePollContent)?.getBestPollCreationInfo()?.question?.getBestQuestion()
                         ?: stringProvider.getString(R.string.sent_a_poll)
             }
             in EventType.POLL_RESPONSE.values -> {

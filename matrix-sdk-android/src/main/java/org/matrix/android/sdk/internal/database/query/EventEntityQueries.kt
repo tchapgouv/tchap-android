@@ -20,7 +20,6 @@ import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmQuery
 import io.realm.kotlin.where
-import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.EventInsertEntity
@@ -32,10 +31,9 @@ internal fun EventEntity.copyToRealmOrIgnore(realm: Realm, insertType: EventInse
             .equalTo(EventEntityFields.ROOM_ID, roomId)
             .findFirst()
     return if (eventEntity == null) {
-        val canBeProcessed = type != EventType.ENCRYPTED || decryptionResultJson != null
-        val insertEntity = EventInsertEntity(eventId = eventId, eventType = type, canBeProcessed = canBeProcessed).apply {
-            this.insertType = insertType
-        }
+        val insertEntity = EventInsertEntity(eventId = eventId, eventType = type, canBeProcessed = true)
+        insertEntity.insertType = insertType
+
         realm.insert(insertEntity)
         // copy this event entity and return it
         realm.copyToRealm(this)
@@ -46,6 +44,12 @@ internal fun EventEntity.copyToRealmOrIgnore(realm: Realm, insertType: EventInse
 
 internal fun EventEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<EventEntity> {
     return realm.where<EventEntity>()
+            .equalTo(EventEntityFields.EVENT_ID, eventId)
+}
+
+internal fun EventEntity.Companion.where(realm: Realm, roomId: String, eventId: String): RealmQuery<EventEntity> {
+    return realm.where<EventEntity>()
+            .equalTo(EventEntityFields.ROOM_ID, roomId)
             .equalTo(EventEntityFields.EVENT_ID, eventId)
 }
 

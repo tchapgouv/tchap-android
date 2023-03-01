@@ -16,12 +16,15 @@
 
 package im.vector.app.features.command
 
+import im.vector.app.test.fakes.FakeVectorPreferences
 import org.amshove.kluent.shouldBeIn
 import org.junit.Test
 
 private const val A_SPACE_ID = "!my-space-id"
 
 class CommandParserTest {
+    private val fakeVectorPreferences = FakeVectorPreferences()
+
     @Test
     fun parseSlashCommandEmpty() {
         test("/", ParsedCommand.ErrorEmptySlashCommand)
@@ -70,7 +73,7 @@ class CommandParserTest {
     }
 
     private fun test(message: String, expectedResult: ParsedCommand) {
-        val commandParser = CommandParser()
+        val commandParser = CommandParser(fakeVectorPreferences.instance)
         val result = commandParser.parseSlashCommand(message, null, false)
         // Tchap: some commands are not allowed in Tchap, in this case the resulting command will be ParsedCommand.ErrorNotATchapCommand
         result shouldBeIn arrayOf(expectedResult, ParsedCommand.ErrorNotATchapCommand)

@@ -1,3 +1,141 @@
+Changes in Element v1.5.26 (2023-02-22)
+=======================================
+
+Features ✨
+----------
+ - Adds MSC3824 OIDC-awareness when talking to an OIDC-enabled homeservers ([#6367](https://github.com/vector-im/element-android/issues/6367))
+ - [Poll] Synchronize polls push rules with message push rules ([#8007](https://github.com/vector-im/element-android/issues/8007))
+ - [Rich text editor] Add code block, quote and indentation actions ([#8045](https://github.com/vector-im/element-android/issues/8045))
+ - [Poll] History list: details screen of a poll
+ - [Poll] History list: enable the new settings entry in release mode ([#8056](https://github.com/vector-im/element-android/issues/8056))
+ - [Location sharing] Show own location in map views ([#8110](https://github.com/vector-im/element-android/issues/8110))
+ - Updates to protocol used for Sign in with QR code ([#8123](https://github.com/vector-im/element-android/issues/8123))
+ - [Poll] Synchronize polls and message push rules ([#8130](https://github.com/vector-im/element-android/issues/8130))
+
+Bugfixes 🐛
+----------
+ - Android app does not show correct poll data ([#6121](https://github.com/vector-im/element-android/issues/6121))
+ - Fix timeline always jumps to the bottom when screen goes back to foreground. ([#8090](https://github.com/vector-im/element-android/issues/8090))
+ - [Poll] Improve rendering of poll end message when poll start event isn't available ([#8129](https://github.com/vector-im/element-android/issues/8129))
+ - Replace hardcoded colors by theming colors on send button. ([#8142](https://github.com/vector-im/element-android/issues/8142))
+ - [Timeline]: Editing a reply from iOS breaks the "in reply to" rendering ([#8150](https://github.com/vector-im/element-android/issues/8150))
+
+Other changes
+-------------
+ - Build unmerged APKs on pull request ([#8044](https://github.com/vector-im/element-android/issues/8044))
+ - Replace 'Bots' with 'bots' inside terms_description_for_integration_manager ([#8115](https://github.com/vector-im/element-android/issues/8115))
+ - Fix ktlint issue with fields and a new line. ([#8139](https://github.com/vector-im/element-android/issues/8139))
+
+
+Changes in Element v1.5.25 (2023-02-15)
+=======================================
+
+Bugfixes 🐛
+----------
+ - CountUpTimer - Fix StackOverFlow exception when stop action is called within the tick event ([#8127](https://github.com/vector-im/element-android/issues/8127))
+
+
+Changes in Element v1.5.24 (2023-02-08)
+=======================================
+
+Features ✨
+----------
+ - [Rich text editor] Add inline code to rich text editor ([#8011](https://github.com/vector-im/element-android/issues/8011))
+
+Bugfixes 🐛
+----------
+ - If media cache is large, Settings > General takes a long time to open ([#5918](https://github.com/vector-im/element-android/issues/5918))
+ - Fix that replies to @roomba would be highlighted as a room ping. Contributed by Nico. ([#6457](https://github.com/vector-im/element-android/issues/6457))
+ - Cannot select text properly in plain text mode when using Rich Text Editor. ([#7801](https://github.com/vector-im/element-android/issues/7801))
+ - Fix the next button disabled issue after going to change homeserver screen ([#7928](https://github.com/vector-im/element-android/issues/7928))
+ - Fix extra new lines added to inline code ([#7975](https://github.com/vector-im/element-android/issues/7975))
+ - [Voice Broadcast] Use internal playback timer to compute the current playback position ([#8012](https://github.com/vector-im/element-android/issues/8012))
+ - Do not send any request to Posthog if no consent is provided. ([#8031](https://github.com/vector-im/element-android/issues/8031))
+ - [Voice Broadcast] We should not be able to start broadcasting if there is already a live broadcast in the Room ([#8062](https://github.com/vector-im/element-android/issues/8062))
+
+In development 🚧
+----------------
+ - [Poll] History list: unmock data ([#7864](https://github.com/vector-im/element-android/issues/7864))
+
+SDK API changes ⚠️
+------------------
+ - [Poll] Adding PollHistoryService ([#7864](https://github.com/vector-im/element-android/issues/7864))
+ - [Push rules] Call /actions api before /enabled api ([#8005](https://github.com/vector-im/element-android/issues/8005))
+
+Other changes
+-------------
+ - Let the user know when we are not able to decrypt the voice broadcast chunks ([#7820](https://github.com/vector-im/element-android/issues/7820))
+ - [Voice Broadcast] Show Live broadcast in the room list only if the feature flag is enabled in the lab ([#8042](https://github.com/vector-im/element-android/issues/8042))
+ - Improve the `CountUpTimer` implementation ([#8058](https://github.com/vector-im/element-android/issues/8058))
+
+
+Changes in Element v1.5.22 (2023-01-25)
+=======================================
+
+Features ✨
+----------
+ - [Poll] Warning message on decryption failure of some events ([#7824](https://github.com/vector-im/element-android/issues/7824))
+ - [Poll] Render ended polls ([#7900](https://github.com/vector-im/element-android/issues/7900))
+ - [Rich text editor] Update list item bullet appearance ([#7930](https://github.com/vector-im/element-android/issues/7930))
+ - [Voice Broadcast] Handle connection errors while recording ([#7890](https://github.com/vector-im/element-android/issues/7890))
+ - [Voice Broadcast] Use MSC3912 to delete server side all the related events ([#7967](https://github.com/vector-im/element-android/issues/7967))
+
+Bugfixes 🐛
+----------
+- Fix OOM crashes. ([#7962](https://github.com/vector-im/element-android/issues/7962))
+- Fix can't get out of a verification dialog ([#4025](https://github.com/vector-im/element-android/issues/4025))
+- Fix rendering of edited polls ([#7938](https://github.com/vector-im/element-android/issues/7938))
+- [Voice Broadcast] Fix unexpected "live broadcast" in the room list ([#7832](https://github.com/vector-im/element-android/issues/7832))
+- Send voice message should not be allowed during a voice broadcast recording ([#7895](https://github.com/vector-im/element-android/issues/7895))
+- Voice Broadcast - Fix playback scrubbing not working if the playback is in a stopped state ([#7961](https://github.com/vector-im/element-android/issues/7961))
+- Handle exceptions when listening a voice broadcast ([#7829](https://github.com/vector-im/element-android/issues/7829))
+
+In development 🚧
+----------------
+ - [Voice Broadcast] Only display a notification on the first voice chunk ([#7845](https://github.com/vector-im/element-android/issues/7845))
+ - [Poll] History list: Load more UI mechanism ([#7864](https://github.com/vector-im/element-android/issues/7864))
+
+SDK API changes ⚠️
+------------------
+ - Implement [MSC3912](https://github.com/matrix-org/matrix-spec-proposals/pull/3912): Relation-based redactions ([#7988](https://github.com/vector-im/element-android/issues/7988))
+
+Other changes
+-------------
+ - Upgrade to Kotlin 1.8 ([#7936](https://github.com/vector-im/element-android/issues/7936))
+ - Sentry: Report sync duration and metrics for initial sync and for sync after pause. Not for regular sync. ([#7960](https://github.com/vector-im/element-android/issues/7960))
+ - [Voice Broadcast] Rework internal media players coordination ([#7979](https://github.com/vector-im/element-android/issues/7979))
+ - Support reactions on Voice Broadcast ([#7807](https://github.com/vector-im/element-android/issues/7807))
+ - Pause voice broadcast listening on new VB recording ([#7830](https://github.com/vector-im/element-android/issues/7830))
+ - Tapping slightly left or right of the 30s buttons highlights the whole cell instead of registering as button presses ([#7929](https://github.com/vector-im/element-android/issues/7929))
+
+
+Changes in Element v1.5.20 (2023-01-10)
+=======================================
+
+Features ✨
+----------
+ - "[Rich text editor] Add list formatting buttons to the rich text editor" ([#7887](https://github.com/vector-im/element-android/issues/7887))
+
+Bugfixes 🐛
+----------
+ - ReplyTo are not updated if the original message is edited or deleted. ([#5546](https://github.com/vector-im/element-android/issues/5546))
+ - Observe ViewEvents only when resumed and ensure ViewEvents are not lost. ([#7724](https://github.com/vector-im/element-android/issues/7724))
+ - [Session manager] Missing info when a session does not support encryption ([#7853](https://github.com/vector-im/element-android/issues/7853))
+ - Reduce number of crypto database transactions when handling the sync response ([#7879](https://github.com/vector-im/element-android/issues/7879))
+ - [Voice Broadcast] Stop listening if we reach the last received chunk and there is no last sequence number ([#7899](https://github.com/vector-im/element-android/issues/7899))
+ - Handle network error on API `rooms/{roomId}/threads` ([#7913](https://github.com/vector-im/element-android/issues/7913))
+
+In development 🚧
+----------------
+ - [Poll] Render active polls list of a room
+ - [Poll] Render past polls list of a room ([#7864](https://github.com/vector-im/element-android/issues/7864))
+
+Other changes
+-------------
+ - fix: increase font size for messages ([#5717](https://github.com/vector-im/element-android/issues/5717))
+ - Add trim to username input on the app side and SDK side when sign-in ([#7111](https://github.com/vector-im/element-android/issues/7111))
+
+
 Changes in Element v1.5.18 (2023-01-02)
 =======================================
 

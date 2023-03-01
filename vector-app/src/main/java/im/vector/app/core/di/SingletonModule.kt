@@ -41,8 +41,6 @@ import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.BuildMeta
-import im.vector.app.core.time.Clock
-import im.vector.app.core.time.DefaultClock
 import im.vector.app.core.utils.AndroidSystemSettingsProvider
 import im.vector.app.core.utils.SystemSettingsProvider
 import im.vector.app.features.analytics.AnalyticsTracker
@@ -64,6 +62,8 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
 import im.vector.application.BuildConfig
+import im.vector.lib.core.utils.timer.Clock
+import im.vector.lib.core.utils.timer.DefaultClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -106,9 +106,6 @@ import javax.inject.Singleton
 
     @Binds
     abstract fun bindAutoAcceptInvites(autoAcceptInvites: CompileTimeAutoAcceptInvites): AutoAcceptInvites
-
-    @Binds
-    abstract fun bindDefaultClock(clock: DefaultClock): Clock
 
     @Binds
     abstract fun bindEmojiSpanify(emojiCompatWrapper: EmojiCompatWrapper): EmojiSpanify
@@ -247,4 +244,8 @@ import javax.inject.Singleton
     fun providesDefaultSharedPreferences(context: Context): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
     }
+
+    @Singleton
+    @Provides
+    fun providesDefaultClock(): Clock = DefaultClock()
 }

@@ -30,6 +30,7 @@ import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.RegisterUnifiedPushUseCase
 import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
+import im.vector.app.core.session.EnsureSessionSyncingUseCase
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.AnalyticsTracker
@@ -97,6 +98,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
         private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
         private val ensureFcmTokenIsRetrievedUseCase: EnsureFcmTokenIsRetrievedUseCase,
+        private val ensureSessionSyncingUseCase: EnsureSessionSyncingUseCase,
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
@@ -123,6 +125,8 @@ class HomeActivityViewModel @AssistedInject constructor(
     private fun initialize() {
         if (isInitialized) return
         isInitialized = true
+        // Ensure Session is syncing
+        ensureSessionSyncingUseCase.execute()
         registerUnifiedPushIfNeeded()
         cleanupFiles()
         observeInitialSync()
