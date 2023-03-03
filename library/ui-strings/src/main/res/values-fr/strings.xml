@@ -227,7 +227,7 @@
     <string name="dialog_title_confirmation">Confirmation</string>
     <string name="dialog_title_warning">Attention</string>
     <string name="bottom_action_favourites">Favoris</string>
-    <string name="bottom_action_people">Personnes</string> <!-- Tchap: Custom string -->
+    <string name="bottom_action_people">Directs</string> <!-- Tchap: Custom string -->
     <string name="bottom_action_rooms">Salons</string>
     <string name="home_filter_placeholder_home">Rechercher des conversations</string> <!-- Tchap: Custom string -->
     <string name="invitations_header">Invitations</string>
@@ -742,7 +742,7 @@
     <string name="backup">Sauvegarder</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Vous n’aurez plus accès à vos messages chiffrés, sauf si vous sauvegardez vos clés avant de vous déconnecter.</string>
     <string name="action_sign_out_confirmation_simple">Voulez-vous vraiment vous déconnecter ?</string>
-    <string name="encryption_message_recovery">Récupération des messages chiffrés</string>
+    <string name="encryption_message_recovery">Sauvegarde automatique des messages</string><!-- Tchap wordings -->
     <string name="error_empty_field_enter_user_name">Veuillez renseigner un nom d’utilisateur.</string>
     <string name="keys_backup_setup">Utiliser une clé de sauvegarde Tchap</string> <!-- Tchap wordings -->
     <string name="keys_backup_setup_step1_advanced">(Avancé)</string>
@@ -755,29 +755,29 @@
     <string name="keys_backup_setup_step1_recovery_key_alternative">Ou protégez votre sauvegarde avec une clé de récupération, en la conservant en lieu sûr.</string>
     <string name="keys_backup_setup_step2_skip_button_title">(Avancé) Configurer une clé de récupération</string>
     <string name="keys_backup_setup_step3_success_title">Bien joué !</string>
-    <string name="keys_backup_setup_step3_text_line1">Stockez votre clé dans un endroit sûr. Elle peut être utilisée pour dévérouiller vos messages et données chiffrés.</string>
-    <string name="keys_backup_setup_step3_text_line2">Votre clé de récupération est une mesure de précaution. Vous pouvez l’utiliser pour restaurer l’accès à vos messages chiffrés si vous oubliez votre phrase secrète.
-\nConservez votre clé de récupération en lieu sûr, comme un gestionnaire de mots de passe (ou un coffre-fort)</string>
-    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Conservez votre clé de récupération dans un endroit sûr, comme un gestionnaire de mots de passe (ou un coffre-fort)</string>
+    <string name="keys_backup_setup_step3_text_line1">Stockez votre code dans un endroit sûr. Il peut être utilisé pour dévérouiller vos messages et données chiffrés.</string><!-- Tchap wordings -->
+    <string name="keys_backup_setup_step3_text_line2">Votre code de récupération est une mesure de précaution. Vous pouvez l’utiliser pour restaurer l’accès à vos messages chiffrés si vous oubliez votre phrase secrète.
+\nConservez votre code de récupération en lieu sûr, comme un gestionnaire de mots de passe (ou un coffre-fort)</string><!-- Tchap wordings -->
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Conservez votre code de récupération dans un endroit sûr, comme un gestionnaire de mots de passe (ou un coffre-fort)</string><!-- Tchap wordings -->
     <string name="keys_backup_setup_step3_button_title_no_passphrase">J’ai fait une copie</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Partager</string>
     <string name="keys_backup_banner_recover_line1">Ne perdez jamais vos messages chiffrés</string>
-    <string name="keys_backup_banner_recover_line2">Utiliser la sauvegarde de clés</string>
-    <string name="keys_backup_banner_update_line1">Nouvelles clés de message sécurisé</string>
-    <string name="keys_backup_banner_update_line2">Gérer la sauvegarde de clés</string>
-    <string name="keys_backup_banner_in_progress">Sauvegarde de clés…</string>
-    <string name="keys_backup_info_keys_all_backup_up">Toutes les clés sont sauvegardées</string>
-    <plurals name="keys_backup_info_keys_backing_up">
-        <item quantity="one">Sauvegarde d’%d clé…</item>
-        <item quantity="other">Sauvegarde de %d clés…</item>
+    <string name="keys_backup_banner_recover_line2">Utiliser la sauvegarde de codes</string><!-- Tchap wordings -->
+    <string name="keys_backup_banner_update_line1">Nouveaux codes de message sécurisé</string><!-- Tchap wordings -->
+    <string name="keys_backup_banner_update_line2">Gérer la sauvegarde de codes</string><!-- Tchap wordings -->
+    <string name="keys_backup_banner_in_progress">Sauvegarde de codes…</string><!-- Tchap wordings -->
+    <string name="keys_backup_info_keys_all_backup_up">Tous les codes sont sauvegardés</string><!-- Tchap wordings -->
+    <plurals name="keys_backup_info_keys_backing_up"><!-- Tchap wordings -->
+        <item quantity="one">Sauvegarde d’%d code…</item>
+        <item quantity="other">Sauvegarde de %d codes…</item>
     </plurals>
     <string name="keys_backup_info_title_version">Version</string>
     <string name="keys_backup_info_title_algorithm">Algorithme</string>
     <string name="keys_backup_info_title_signature">Signature</string>
-    <string name="keys_backup_settings_untrusted_backup">Pour utiliser la sauvegarde de clés sur cet appareil, faites une restauration avec votre phrase secrète ou votre clé de récupération.</string> <!-- Tchap: Use custom string -->
-    <string name="keys_backup_restoring_computing_key_waiting_message">Traitement de la clé de récupération…</string>
-    <string name="keys_backup_restoring_downloading_backup_waiting_message">Téléchargement des clés…</string>
-    <string name="keys_backup_restoring_importing_keys_waiting_message">Importation des clés…</string>
+    <string name="keys_backup_settings_untrusted_backup">Pour utiliser la sauvegarde de codes sur cet appareil, faites une restauration avec votre phrase secrète ou votre clé de récupération.</string> <!-- Tchap: Use custom string -->
+    <string name="keys_backup_restoring_computing_key_waiting_message">Traitement du code de récupération…</string><!-- Tchap wordings -->
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">Téléchargement des codes…</string><!-- Tchap wordings -->
+    <string name="keys_backup_restoring_importing_keys_waiting_message">Importation des codes…</string><!-- Tchap wordings -->
     <string name="action_ignore">Ignorer</string>
     <string name="auth_login_sso">Se connecter avec l’authentification unique</string>
     <string name="settings_send_message_with_enter">Envoyer le message avec Entrée</string>
@@ -2597,7 +2597,7 @@
     <string name="location_share_loading_map_error">Impossible de charger la carte
 \nCe serveur d’accueil n’a peut-être pas été configuré pour afficher les cartes.</string>
     <string name="a11y_open_settings">Ouvrir les paramètres</string>
-    <string name="all_chats">Toutes les conversations</string>
+    <string name="all_chats">Accueil</string><!-- Tchap: Use custom string -->
     <string name="device_manager_sessions_other_description">Pour une meilleure sécurité, vérifiez vos appareils et déconnectez tous les appareils que vous ne connaissez pas ou que vous n’utilisez plus.</string> <!-- Tchap: Use custom string -->
     <string name="device_manager_sessions_other_title">Autres appareils</string> <!-- Tchap: Use custom string -->
     <string name="settings_sessions_list">Appareils</string> <!-- Tchap: Use custom string -->
@@ -2615,7 +2615,7 @@
     <string name="home_layout_preferences">Préférences de présentation</string>
     <string name="explore_rooms">Rejoindre un forum</string> <!-- Tchap: Use custom string -->
     <string name="create_room">Créer un salon</string>
-    <string name="start_chat">Commencer une discussion</string>
+    <string name="start_chat">Nouveau message direct</string> <!-- Tchap: Use custom string -->
     <string name="device_manager_other_sessions_description_unverified">Non vérifié · Dernière activité %1$s</string> <!-- Tchap: Use custom string -->
     <string name="device_manager_other_sessions_description_verified">Vérifié · Dernière activité %1$s</string>
     <string name="device_manager_other_sessions_view_all">Tout voir (%1$d)</string>
