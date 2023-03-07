@@ -1291,7 +1291,7 @@
     <string name="login_signup_username_hint">Nom d’utilisateur</string>
     <string name="settings_dev_tools">Outils de développement</string>
     <string name="settings_account_data">Données du compte</string>
-    <string name="verification_cannot_access_other_session">Utiliser une phrase secrète ou une clé de récupération</string>
+    <string name="verification_cannot_access_other_session">Utiliser un code de récupération</string>
     <string name="verification_use_passphrase">Si vous n’avez pas accès à un appareil existant</string> <!-- Tchap: Use custom string -->
     <string name="enter_secret_storage_invalid">Impossible de trouver les secrets dans le stockage</string>
     <string name="message_action_item_redact">Supprimer…</string>

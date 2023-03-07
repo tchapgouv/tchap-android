@@ -51,10 +51,12 @@
         android:layout_height="1dp"
         android:background="?vctr_list_separator_on_surface" />
 
+    <!-- Tchap : ANSI asks to remove this option -->
     <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/recoverySave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:minHeight="50dp"
         app:actionTitle="@string/keys_backup_setup_step3_save_button_title"
         app:leftIcon="@drawable/ic_download"

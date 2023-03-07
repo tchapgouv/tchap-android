@@ -61,10 +61,12 @@
 
     </LinearLayout>
 
+    <!-- Tchap : ANSI asks to remove this option -->
     <LinearLayout
         android:id="@+id/keys_backup_setup_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:clickable="true"
         android:foreground="?attr/selectableItemBackground"
         android:minHeight="50dp"
