@@ -680,7 +680,7 @@
     <string name="notification_silent">Silencieuse</string>
     <string name="passphrase_empty_error_message">Veuillez saisir une phrase secrète</string>
     <string name="passphrase_passphrase_too_weak">La phrase secrète est trop faible</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">Veuillez supprimer la phrase secrète si vous voulez que ${app_name} génère un code de récupération.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Veuillez supprimer la phrase secrète si vous voulez que ${app_name} génère un code de récupération.</string><!-- Tchap: Use custom string -->
     <string name="keys_backup_setup_step1_title">Ne perdez jamais vos messages chiffrés</string>
     <string name="keys_backup_setup_step1_description">Protection afin d\'éviter de perdre l\'accès aux messages et données chiffrés.
 
@@ -688,27 +688,27 @@
     </string> <!-- Tchap wordings -->
     <string name="keys_backup_setup_step2_button_title">Définir la phrase secrète</string>
     <string name="keys_backup_setup_step3_button_title">Terminé</string>
-    <string name="keys_backup_setup_step3_copy_button_title">Sauvegarder le code de récupération</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Sauvegarder le code de récupération</string><!-- Tchap: Use custom string -->
     <string name="keys_backup_setup_step3_save_button_title">Enregistrer dans un fichier</string>
     <string name="keys_backup_setup_step3_please_make_copy">Veuillez en faire une copie</string>
-    <string name="keys_backup_setup_step3_share_intent_chooser_title">Partager le code de récupération avec…</string>
-    <string name="keys_backup_setup_step3_generating_key_status">Génération de le code de récupération utilisant la phrase secrète. Cette opération peut prendre plusieurs secondes.</string>
-    <string name="recovery_key">code de récupération</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">Partager le code de récupération avec…</string><!-- Tchap: Use custom string -->
+    <string name="keys_backup_setup_step3_generating_key_status">Génération de le code de récupération utilisant la phrase secrète. Cette opération peut prendre plusieurs secondes.</string><!-- Tchap: Use custom string -->
+    <string name="recovery_key">code de récupération</string><!-- Tchap: Use custom string -->
     <string name="unexpected_error">Erreur inattendue</string>
     <string name="keys_backup_setup_skip_title">En êtes-vous sûr \?</string>
     <string name="keys_backup_setup_skip_msg">Vous pourriez perdre l’accès vos messages si vous vous déconnectez ou si vous perdez votre appareil.</string>
     <string name="keys_backup_restore_is_getting_backup_version">Récupération de la version de la sauvegarde…</string>
     <string name="keys_backup_restore_with_passphrase">Utilisez votre phrase secrète de récupération pour déverrouiller l’historique de vos messages chiffrés</string>
-    <string name="keys_backup_restore_use_recovery_key">utiliser votre code de récupération</string>
+    <string name="keys_backup_restore_use_recovery_key">utiliser votre code de récupération</string><!-- Tchap: Use custom string -->
     <string name="keys_backup_restore_with_passphrase_helper_with_link">Si vous ne connaissez pas votre phrase secrète de récupération, vous pouvez %s.</string>
-    <string name="keys_backup_restore_with_recovery_key">Utilisez votre code de récupération pour déverrouiller l’historique de vos messages chiffrés</string>
-    <string name="keys_backup_restore_key_enter_hint">Saisir le code de récupération</string>
-    <string name="keys_backup_restore_with_key_helper">Vous avez perdu votre code de récupération \? Vous pouvez en configurer une autre dans les paramètres.</string>
-    <string name="keys_backup_passphrase_error_decrypt">La sauvegarde n’a pas pu être déchiffrée avec cette phrase secrète. Veuillez vérifier que vous avez saisi la bonne phrase secrète de récupération.</string>
+    <string name="keys_backup_restore_with_recovery_key">Utilisez votre code de récupération pour déverrouiller l’historique de vos messages chiffrés</string><!-- Tchap: Use custom string -->
+    <string name="keys_backup_restore_key_enter_hint">Saisir le code de récupération</string><!-- Tchap: Use custom string -->
+    <string name="keys_backup_restore_with_key_helper">Vous avez perdu votre code de récupération \? Vous pouvez en configurer une autre dans les paramètres.</string><!-- Tchap: Use custom string -->
+    <string name="keys_backup_passphrase_error_decrypt">La sauvegarde n’a pas pu être déchiffrée avec ce code de récupération. Veuillez vérifier que vous avez saisi la bonne phrase secrète de récupération.</string>
     <string name="keys_backup_restoring_waiting_message">Restauration de la sauvegarde :</string>
     <string name="keys_backup_unlock_button">Déverrouiller l’historique</string>
-    <string name="keys_backup_recovery_code_empty_error_message">Veuillez saisir un code de récupération</string>
-    <string name="keys_backup_recovery_code_error_decrypt">La sauvegarde n’a pas pu être déchiffrée avec cette code de récupération : veuillez vérifier que vous avez saisi la bonne code de récupération.</string>
+    <string name="keys_backup_recovery_code_empty_error_message">Veuillez saisir un code de récupération</string><!-- Tchap: Use custom string -->
+    <string name="keys_backup_recovery_code_error_decrypt">La sauvegarde n’a pas pu être déchiffrée avec cette code de récupération : veuillez vérifier que vous avez saisi la bonne code de récupération.</string><!-- Tchap: Use custom string -->
     <string name="keys_backup_restore_success_title">Sauvegarde restaurée %s !</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Sauvegarde restaurée avec %d clé.</item>
@@ -753,7 +753,7 @@
 \nPour une sécurité maximale, elle devrait être différente du mot de passe de votre compte.</string>
     <string name="keys_backup_setup_creating_backup">Création de la sauvegarde</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">Ou protégez votre sauvegarde avec un code de récupération, en la conservant en lieu sûr.</string>
-    <string name="keys_backup_setup_step2_skip_button_title">(Avancé) Configurer un code de récupération</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(Avancé) Configurer un code de récupération</string><!-- Tchap: Use custom string -->
     <string name="keys_backup_setup_step3_success_title">Bien joué !</string>
     <string name="keys_backup_setup_step3_text_line1">Stockez votre code dans un endroit sûr. Il peut être utilisé pour dévérouiller vos messages et données chiffrés.</string><!-- Tchap wordings -->
     <string name="keys_backup_setup_step3_text_line2">Votre code de récupération est une mesure de précaution. Vous pouvez l’utiliser pour restaurer l’accès à vos messages chiffrés si vous oubliez votre phrase secrète.
@@ -1291,7 +1291,7 @@
     <string name="login_signup_username_hint">Nom d’utilisateur</string>
     <string name="settings_dev_tools">Outils de développement</string>
     <string name="settings_account_data">Données du compte</string>
-    <string name="verification_cannot_access_other_session">Utiliser un code de récupération</string>
+    <string name="verification_cannot_access_other_session">Utiliser un code de récupération</string><!-- Tchap: Use custom string -->
     <string name="verification_use_passphrase">Si vous n’avez pas accès à un appareil existant</string> <!-- Tchap: Use custom string -->
     <string name="enter_secret_storage_invalid">Impossible de trouver les secrets dans le stockage</string>
     <string name="message_action_item_redact">Supprimer…</string>
@@ -1325,7 +1325,7 @@
 \n- Cet appareil ou l’autre appareil
 \n- La connexion internet utilisée par un des deux appareils
 \n
-\nNous vous recommandons de modifier immédiatement votre mot de passe et votre code de récupération dans les paramètres.</string>
+\nNous vous recommandons de modifier immédiatement votre mot de passe et votre code de récupération dans les paramètres.</string><!-- Tchap: Use custom string -->
     <string name="verify_cancelled_notice">La vérification a été annulée. Vous pouvez redémarrer la vérification.</string>
     <string name="verification_cancelled">Vérification annulée</string>
     <string name="recovery_passphrase">Phrase de récupération</string>
@@ -1371,20 +1371,20 @@
     <string name="upgrade_security">Mise à niveau du chiffrement disponible</string>
     <string name="bootstrap_enter_recovery">Entrez votre %s pour continuer</string>
     <string name="use_file">Utiliser un fichier</string>
-    <string name="bootstrap_invalid_recovery_key">Ce n’est pas un code de récupération valide</string>
-    <string name="recovery_key_empty_error_message">Veuillez entrer un code de récupération</string>
+    <string name="bootstrap_invalid_recovery_key">Ce n’est pas un code de récupération valide</string><!-- Tchap: Use custom string -->
+    <string name="recovery_key_empty_error_message">Veuillez entrer un code de récupération</string><!-- Tchap: Use custom string -->
     <string name="bootstrap_progress_checking_backup">Vérification de la clé de sauvegarde</string>
     <string name="bootstrap_progress_checking_backup_with_info">Vérification de la clé de sauvegarde (%s)</string>
     <string name="bootstrap_progress_generating_ssss">Génération de la clé SSSS à partir de la phrase secrète</string>
     <string name="bootstrap_progress_generating_ssss_with_info">Génération de la clé SSSS à partir de la phrase secrète (%s)</string>
-    <string name="bootstrap_progress_generating_ssss_recovery">Génération de la clé SSSS à partir de le code de récupération</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">Génération de la clé SSSS à partir de le code de récupération</string><!-- Tchap: Use custom string -->
     <string name="bootstrap_progress_storing_in_sss">Stockage du secret de sauvegarde dans le SSSS</string>
     <string name="security_prompt_text">Vérifiez vos appareils et les autres pour garantir la sûreté de vos discussions</string> <!-- Tchap: Use custom string -->
     <string name="bootstrap_progress_compute_curve_key">Récupération de la clé de courbe</string>
     <string name="bootstrap_migration_enter_backup_password">Saisissez votre phrase secrète de sauvegarde de clés pour continuer.</string>
-    <string name="bootstrap_migration_use_recovery_key">utiliser votre code de récupération de sauvegarde de clés</string>
+    <string name="bootstrap_migration_use_recovery_key">utiliser votre code de récupération de sauvegarde de clés</string><!-- Tchap: Use custom string -->
     <string name="bootstrap_migration_with_passphrase_helper_with_link">Vous ne connaissez pas votre phrase secrète de sauvegarde de clés, vous pouvez %s.</string>
-    <string name="bootstrap_migration_backup_recovery_key">Code de récupération de sauvegarde de clés</string>
+    <string name="bootstrap_migration_backup_recovery_key">Code de récupération de sauvegarde de clés</string><!-- Tchap: Use custom string -->
     <string name="settings_security_prevent_screenshots_title">Empêcher les captures d’écran de l’application</string>
     <string name="settings_security_prevent_screenshots_summary">L’activation de ce paramètre ajoute FLAG_SECURE à toutes les activités. Redémarrez l’application pour que la modification soit prise en compte.</string>
     <string name="change_password_summary">Définir un nouveau mot de passe de compte…</string>
@@ -1398,8 +1398,8 @@
     <string name="command_description_discard_session">Force la session de groupe sortante actuelle dans un salon chiffré à être abandonnée</string>
     <string name="command_description_discard_session_not_handled">Seulement pris en charge dans les salons chiffrés</string>
     <string name="enter_secret_storage_passphrase_or_key">Utilisez votre %1$s ou votre %2$s pour continuer.</string>
-    <string name="use_recovery_key">Utiliser le code de récupération</string>
-    <string name="enter_secret_storage_input_key">Sélectionnez votre code de récupération ou saisissez-la manuellement avec le clavier ou en la copiant depuis le presse-papiers</string>
+    <string name="use_recovery_key">Utiliser le code de récupération</string><!-- Tchap: Use custom string -->
+    <string name="enter_secret_storage_input_key">Sélectionnez votre code de récupération ou saisissez-la manuellement avec le clavier ou en la copiant depuis le presse-papiers</string><!-- Tchap: Use custom string -->
     <string name="failed_to_access_secure_storage">Échec d’accès au coffre secret</string>
     <string name="cross_signing_verify_by_text">Vérifier manuellement avec un texte</string>
     <string name="crosssigning_verify_session">Vérifier la connexion</string>
@@ -1516,7 +1516,7 @@
     <string name="contacts_book_title">Carnet d’adresses</string>
     <string name="empty_contact_book">Votre carnet d’adresses est vide</string>
     <string name="loading_contact_book">Récupération de vos contacts…</string>
-    <string name="save_recovery_key_chooser_hint">Enregistrer le code de récupération</string>
+    <string name="save_recovery_key_chooser_hint">Enregistrer le code de récupération</string><!-- Tchap: Use custom string -->
     <string name="disclaimer_positive_button">EN SAVOIR PLUS</string>
     <string name="disclaimer_negative_button">COMPRIS</string>
     <string name="disclaimer_content">L’apparence et l’organisation de votre application évoluent.\nDe nouveaux changements seront introduits progressivement pour faciliter et enrichir votre expérience.</string> <!-- Tchap: Custom string -->
@@ -1534,9 +1534,9 @@
     <string name="set_a_security_phrase_again_notice">Entrez de nouveau votre phrase de sécurité pour la confirmer.</string>
     <string name="set_a_security_phrase_hint">Phrase de sécurité</string>
     <string name="set_a_security_phrase_title">Définir une phrase de sécurité</string>
-    <string name="bottom_sheet_save_your_recovery_key_title">Enregistrer votre code de récupération</string>
+    <string name="bottom_sheet_save_your_recovery_key_title">Enregistrer votre code de récupération</string><!-- Tchap: Use custom string -->
     <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Utiliser une phrase de sécurité</string>
-    <string name="bottom_sheet_setup_secure_backup_security_key_title">Utiliser un code de récupération</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_title">Utiliser un code de récupération</string><!-- Tchap: Use custom string -->
     <string name="a11y_stop_camera">Arrêter la caméra</string>
     <string name="power_level_edit_title">Définir le rôle</string>
     <string name="secure_backup_reset_no_history">Vous redémarrerez sans aucun historique, message, appareil ou utilisateurs connus</string>
@@ -1626,7 +1626,7 @@
     <string name="settings_labs_show_complete_history_in_encrypted_room">Afficher l’historique dans les salons chiffrés</string>
     <string name="secure_backup_setup">Activer la sauvegarde automatique des messages</string> <!-- Tchap: Use custom string -->
     <string name="secure_backup_banner_setup_line1">Sauvegarde automatique des messages</string> <!-- Tchap: Use custom string -->
-    <string name="recovery_key_export_saved">le code de récupération a été enregistrée.</string>
+    <string name="recovery_key_export_saved">le code de récupération a été enregistrée.</string><!-- Tchap: Use custom string -->
     <string name="room_no_active_widgets">Aucun widget n’est activé</string>
     <string name="room_manage_integrations">Gérer les intégrations</string>
     <string name="active_widget_view_action">VUE</string>
@@ -1658,7 +1658,7 @@
     <string name="room_participants_power_level_demote_warning_prompt">Vous ne pourrez pas annuler cette modification car vous vous rétrogradez vous-même, il ne vous sera pas possible de regagner ces privilèges si vous êtes le dernier utilisateur privilégié de ce salon.</string>
     <string name="room_participants_power_level_demote">Rétrograder</string>
     <string name="reset_secure_backup_warning">Ceci remplacera votre clé ou phrase actuelle.</string>
-    <string name="reset_secure_backup_title">Générer un nouveau code de récupération ou définir une nouvelle phrase de sécurité pour votre sauvegarde existante.</string>
+    <string name="reset_secure_backup_title">Générer un nouveau code de récupération ou définir une nouvelle phrase de sécurité pour votre sauvegarde existante.</string><!-- Tchap: Use custom string -->
     <string name="settings_secure_backup_section_info">Protection contre la perte d’accès aux messages et données chiffrées en sauvegardant les clés de chiffrage sur votre serveur.</string>
     <string name="settings_secure_backup_enter_to_setup">Activer sur cet appareil</string>
     <plurals name="seconds">
@@ -1688,8 +1688,8 @@
     <string name="action_reset">Réinitialiser</string>
     <string name="failed_to_unban">Échec de la révocation du bannissement de l’utilisateur</string>
     <string name="alert_push_are_disabled_description">Vérifiez vos paramètres pour activer les notifications push</string>
-    <string name="bottom_sheet_save_your_recovery_key_content">Stockez votre code de récupération en lieu sûr comme un gestionnaire de mots de passe ou un coffre-fort.</string>
-    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Générez un code de récupération à stocker en lieu sûr comme un gestionnaire de mots de passe ou un coffre-fort.</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">Stockez votre code de récupération en lieu sûr comme un gestionnaire de mots de passe ou un coffre-fort.</string><!-- Tchap: Use custom string -->
+    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Générez un code de récupération à stocker en lieu sûr comme un gestionnaire de mots de passe ou un coffre-fort.</string><!-- Tchap: Use custom string -->
     <string name="settings_troubleshoot_test_push_loop_failed">Erreur de réception du push. La solution pourrait être de réinstaller l’application.</string>
     <string name="settings_troubleshoot_test_push_loop_success">L’application reçoit le PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">L’application attend le PUSH</string>
