@@ -61,7 +61,7 @@
 
     </LinearLayout>
 
-    <!-- Tchap : ANSI asks to remove this option -->
+    <!-- Tchap : ANSSI asks to remove this option -->
     <LinearLayout
         android:id="@+id/keys_backup_setup_save"
         android:layout_width="match_parent"
