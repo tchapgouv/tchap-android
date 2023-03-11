@@ -2635,7 +2635,7 @@
     <string name="onboarding_new_app_layout_feedback_title">Donner mon avis</string>
     <string name="onboarding_new_app_layout_spaces_message">Accédez à vos espaces (en bas à droite) plus rapidement et facilement qu’avant.</string>
     <string name="onboarding_new_app_layout_spaces_title">Accéder aux espaces</string>
-    <string name="onboarding_new_app_layout_welcome_message">Pour simplifier Tchap, les onglets ont été modifié. Gérez les depuis le menu en haut à droite.</string>
+    <string name="onboarding_new_app_layout_welcome_message">Pour simplifier Tchap, les onglets ont été modifié. Gérez les depuis le menu en haut à droite.</string><!-- Tchap: Use custom string -->
     <string name="onboarding_new_app_layout_welcome_title">Bienvenu dans une nouvelle vue !</string>
     <string name="home_empty_no_unreads_message">C\'est ici que vos messages non-lus s’afficheront lorsque vous en aurez.</string>
     <string name="home_empty_no_unreads_title">Rien à signaler.</string>
