@@ -1,3 +1,16 @@
+Changes in Tchap 2.7.2 (2023-03-13)
+===================================
+
+Bugfixes 🐛
+----------
+ - Fix Error 500 when inviting external email in a DM ([#856](https://github.com/tchapgouv/tchap-android-v2/issues/856))
+
+Other changes
+-------------
+ - [New Layout] Change wording and icons of the New Layout pages and menus ([#869](https://github.com/tchapgouv/tchap-android-v2/issues/869))
+ - [Secure Storage] New wording for beta v1 is not consistent with iOS ([#870](https://github.com/tchapgouv/tchap-android-v2/issues/870))
+
+
 Changes in Tchap 2.7.1 (2023-02-23)
 ===================================
 
