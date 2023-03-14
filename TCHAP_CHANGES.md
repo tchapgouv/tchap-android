@@ -1,3 +1,11 @@
+Changes in Tchap 2.6.3 (2023-03-14)
+===================================
+
+Bugfixes 🐛
+----------
+ - Fix Error 500 when inviting external email in a DM ([#856](https://github.com/tchapgouv/tchap-android-v2/issues/856))
+
+
 Changes in Tchap 2.6.1 (2023-02-10)
 ===================================
 
