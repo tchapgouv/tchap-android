@@ -260,6 +260,7 @@ class BugReporter @Inject constructor(
                 var deviceId = "undefined"
                 var userId = "undefined"
                 var olmVersion = "undefined"
+                var email = "undefined"
                 var bugReportURL = buildString {
                     append(context.getString(R.string.server_url_prefix))
                     append(context.getString(R.string.bug_report_default_host))
@@ -271,6 +272,7 @@ class BugReporter @Inject constructor(
                     deviceId = session.sessionParams.deviceId ?: "undefined"
                     olmVersion = session.cryptoService().getCryptoVersion(context, true)
                     bugReportURL = session.sessionParams.homeServerUrl.removeSuffix("/") + BUG_REPORT_URL_SUFFIX
+                    email = session.profileService().getThreePids().filterIsInstance<ThreePid.Email>().firstOrNull()?.email ?: "undefined" // TCHAP Add Email
                 }
 
                 if (!mIsCancelled) {
@@ -290,6 +292,7 @@ class BugReporter @Inject constructor(
                             .addFormDataPart("app", rageShakeAppNameForReport(reportType))
                             .addFormDataPart("user_agent", matrix.getUserAgent())
                             .addFormDataPart("user_id", userId)
+                            .addFormDataPart("email", email) // TCHAP Add Email
                             .addFormDataPart("can_contact", canContact.toString())
                             .addFormDataPart("device_id", deviceId)
                             .addFormDataPart("version", versionProvider.getVersion(longFormat = true))
