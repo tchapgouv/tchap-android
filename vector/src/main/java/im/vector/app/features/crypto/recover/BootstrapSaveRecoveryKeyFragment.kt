@@ -110,6 +110,7 @@ class BootstrapSaveRecoveryKeyFragment :
                 context?.getString(R.string.recovery_key)
         )
 
+        // Tchap : Fix issue due to no download possible
         sharedViewModel.handle(BootstrapActions.RecoveryKeySaved)
     }
 
