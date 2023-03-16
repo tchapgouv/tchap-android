@@ -109,6 +109,8 @@ class BootstrapSaveRecoveryKeyFragment :
                 recoveryKey,
                 context?.getString(R.string.recovery_key)
         )
+
+        sharedViewModel.handle(BootstrapActions.RecoveryKeySaved)
     }
 
     override fun invalidate() = withState(sharedViewModel) { state ->
