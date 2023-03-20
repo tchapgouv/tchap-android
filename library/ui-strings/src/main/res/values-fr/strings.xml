@@ -227,7 +227,7 @@
     <string name="dialog_title_confirmation">Confirmation</string>
     <string name="dialog_title_warning">Attention</string>
     <string name="bottom_action_favourites">Favoris</string>
-    <string name="bottom_action_people">Personnes</string> <!-- Tchap: Custom string -->
+    <string name="bottom_action_people">Directs</string> <!-- Tchap: Custom string -->
     <string name="bottom_action_rooms">Salons</string>
     <string name="home_filter_placeholder_home">Rechercher des conversations</string> <!-- Tchap: Custom string -->
     <string name="invitations_header">Invitations</string>
@@ -293,7 +293,7 @@
     <string name="settings_app_info_link_summary">Affiche les informations de l’application dans les paramètres système.</string>
     <string name="settings_app_info_link_title">Informations sur l’application</string>
     <string name="settings_enable_all_notif">Activer les notifications pour ce compte</string>
-    <string name="settings_enable_this_device">Activer les notifications pour cette session</string>
+    <string name="settings_enable_this_device">Activer les notifications pour cet appareil</string> <!-- Tchap: Use custom string -->
     <string name="settings_messages_in_one_to_one">Messages dans les discussions</string> <!-- Tchap: Use custom string -->
     <string name="settings_messages_in_group_chat">Messages dans les salons</string> <!-- Tchap: Use custom string -->
     <string name="settings_call_invitations">Demandes d’appel</string> <!-- Tchap: Use custom string -->
@@ -346,17 +346,17 @@
     <string name="room_settings_unset_main_address">Désactiver comme adresse principale</string>
     <string name="encryption_information_decryption_error">Erreur de déchiffrement</string>
     <string name="encryption_information_device_name">Nom public</string>
-    <string name="device_manager_session_details_session_id">Identifiant de session</string>
-    <string name="encryption_information_device_key">Clé de la session</string>
+    <string name="device_manager_session_details_session_id">Identifiant de l’appareil</string> <!-- Tchap: Use custom string -->
+    <string name="encryption_information_device_key">Clé de l’appareil</string> <!-- Tchap: Use custom string -->
     <string name="encryption_export_e2e_room_keys">Exporter les clés des conversations</string> <!-- Tchap: Custom string -->
     <string name="encryption_export_room_keys">Exporter les clés des conversations</string> <!-- Tchap: Custom string -->
     <string name="encryption_export_export">Exporter</string>
     <string name="passphrase_enter_passphrase">Saisir la phrase secrète</string>
     <string name="passphrase_confirm_passphrase">Confirmer la phrase secrète</string>
-    <string name="encryption_import_e2e_room_keys">Importer les clés de chiffrement des conversations</string> <!-- Tchap: Use custom string -->
+    <string name="encryption_import_e2e_room_keys">Importer les clés Tchap des conversations</string> <!-- Tchap: Use custom string -->
     <string name="encryption_import_room_keys">Importer les clés des conversations</string> <!-- Tchap: Use custom string -->
     <string name="encryption_import_import">Importer</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Chiffrer uniquement vers les sessions vérifiées</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Chiffrer uniquement vers les appareils vérifiés</string> <!-- Tchap: Use custom string -->
     <string name="encryption_information_not_verified">Non vérifié</string>
     <string name="encryption_information_verified">Vérifié</string>
     <string name="encryption_information_verify">Vérifier</string>
@@ -411,8 +411,8 @@
     <string name="room_settings_labs_warning_message">Ce sont des fonctionnalités expérimentales qui peuvent se comporter de façon inattendue. À utiliser avec précaution.</string>
     <string name="encryption_export_room_keys_summary">Exporter les clés vers un fichier local</string>
     <string name="encryption_import_room_keys_summary">Importer les clés à partir d’un fichier local</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Ne jamais envoyer de messages chiffrés aux sessions non vérifiées depuis cette session.</string>
-    <string name="encryption_information_verify_device_warning">Confirmez en comparant les informations suivantes avec les paramètres utilisateur dans votre autre session :</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Ne jamais envoyer de messages chiffrés aux appareils non vérifiés depuis cet appareil.</string> <!-- Tchap: Use custom string -->
+    <string name="encryption_information_verify_device_warning">Confirmez en comparant les informations suivantes avec les paramètres utilisateur dans votre autre appareil :</string> <!-- Tchap: Use custom string -->
     <string name="encryption_information_verify_device_warning2">Si elles ne correspondent pas, la sécurité de votre communication est peut-être compromise.</string>
     <string name="settings_user_interface">Interface utilisateur</string>
     <string name="settings_interface_language">Langue</string>
@@ -455,8 +455,8 @@
     <string name="call">Appel</string>
     <string name="settings_containing_my_display_name">Messages contenant mon nom affiché</string>
     <string name="settings_containing_my_user_name">Messages contenant mon nom d’utilisateur</string>
-    <string name="you_added_a_new_device">Vous avez ajouté une nouvelle session « %s », qui demande les clés de chiffrement.</string>
-    <string name="your_unverified_device_requesting">Votre session non vérifiée « %s » demande les clés de chiffrement.</string>
+    <string name="you_added_a_new_device">Vous avez ajouté un nouvel appareil « %s », qui demande les clés Tchap.</string> <!-- Tchap: Use custom string -->
+    <string name="your_unverified_device_requesting">Votre appareil non vérifié « %s » demande les clés Tchap.</string> <!-- Tchap: Use custom string -->
     <string name="start_verification">Commencer la vérification</string>
     <string name="notification_noisy_notifications">Notifications sonores</string>
     <string name="notification_silent_notifications">Notifications muettes</string>
@@ -619,8 +619,8 @@
     <string name="settings_troubleshoot_test_account_settings_failed">Les notifications sont désactivées pour votre compte.
 \nVeuillez vérifier les paramètres du compte.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Activer</string>
-    <string name="settings_troubleshoot_test_device_settings_title">Paramètres de la session.</string>
-    <string name="settings_troubleshoot_test_device_settings_success">Les notifications sont activées pour cette session.</string>
+    <string name="settings_troubleshoot_test_device_settings_title">Paramètres de l’appareil.</string> <!-- Tchap: Use custom string -->
+    <string name="settings_troubleshoot_test_device_settings_success">Les notifications sont activées pour cet appareil.</string> <!-- Tchap: Use custom string -->
     <string name="settings_troubleshoot_test_device_settings_failed">Les notifications ne sont pas activées pour cet appareil.
 \nVeuillez vérifier les paramètres de ${app_name}.</string> <!-- Tchap: Custom string -->
     <string name="settings_troubleshoot_test_device_settings_quickfix">Activer</string>
@@ -680,69 +680,69 @@
     <string name="notification_silent">Silencieuse</string>
     <string name="passphrase_empty_error_message">Veuillez saisir une phrase secrète</string>
     <string name="passphrase_passphrase_too_weak">La phrase secrète est trop faible</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">Veuillez supprimer la phrase secrète si vous voulez que ${app_name} génère une clé de récupération.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Veuillez supprimer la phrase secrète si vous voulez que ${app_name} génère un code de récupération.</string><!-- Tchap: Use custom string -->
     <string name="keys_backup_setup_step1_title">Ne perdez jamais vos messages chiffrés</string>
     <string name="keys_backup_setup_step1_description">Protection afin d\'éviter de perdre l\'accès aux messages et données chiffrés.
 
-    Générez une clé de sécurité à stocker dans un endroit sûr comme un gestionnaire de mot de passe ou un coffre.
+    Générez un code de récupération à stocker dans un endroit sûr comme un gestionnaire de mot de passe ou un coffre.
     </string> <!-- Tchap wordings -->
     <string name="keys_backup_setup_step2_button_title">Définir la phrase secrète</string>
     <string name="keys_backup_setup_step3_button_title">Terminé</string>
-    <string name="keys_backup_setup_step3_copy_button_title">Sauvegarder la clé de récupération</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Sauvegarder le code de récupération</string><!-- Tchap: Use custom string -->
     <string name="keys_backup_setup_step3_save_button_title">Enregistrer dans un fichier</string>
     <string name="keys_backup_setup_step3_please_make_copy">Veuillez en faire une copie</string>
-    <string name="keys_backup_setup_step3_share_intent_chooser_title">Partager la clé de récupération avec…</string>
-    <string name="keys_backup_setup_step3_generating_key_status">Génération de la clé de récupération utilisant la phrase secrète. Cette opération peut prendre plusieurs secondes.</string>
-    <string name="recovery_key">Clé de récupération</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">Partager le code de récupération avec…</string><!-- Tchap: Use custom string -->
+    <string name="keys_backup_setup_step3_generating_key_status">Génération du code de récupération utilisant la phrase secrète. Cette opération peut prendre plusieurs secondes.</string><!-- Tchap: Use custom string -->
+    <string name="recovery_key">code de récupération</string><!-- Tchap: Use custom string -->
     <string name="unexpected_error">Erreur inattendue</string>
     <string name="keys_backup_setup_skip_title">En êtes-vous sûr \?</string>
     <string name="keys_backup_setup_skip_msg">Vous pourriez perdre l’accès vos messages si vous vous déconnectez ou si vous perdez votre appareil.</string>
     <string name="keys_backup_restore_is_getting_backup_version">Récupération de la version de la sauvegarde…</string>
     <string name="keys_backup_restore_with_passphrase">Utilisez votre phrase secrète de récupération pour déverrouiller l’historique de vos messages chiffrés</string>
-    <string name="keys_backup_restore_use_recovery_key">utiliser votre clé de récupération</string>
+    <string name="keys_backup_restore_use_recovery_key">utiliser votre code de récupération</string><!-- Tchap: Use custom string -->
     <string name="keys_backup_restore_with_passphrase_helper_with_link">Si vous ne connaissez pas votre phrase secrète de récupération, vous pouvez %s.</string>
-    <string name="keys_backup_restore_with_recovery_key">Utilisez votre clé de récupération pour déverrouiller l’historique de vos messages chiffrés</string>
-    <string name="keys_backup_restore_key_enter_hint">Saisir la clé de récupération</string>
-    <string name="keys_backup_restore_with_key_helper">Vous avez perdu votre clé de récupération \? Vous pouvez en configurer une autre dans les paramètres.</string>
-    <string name="keys_backup_passphrase_error_decrypt">La sauvegarde n’a pas pu être déchiffrée avec cette phrase secrète. Veuillez vérifier que vous avez saisi la bonne phrase secrète de récupération.</string>
+    <string name="keys_backup_restore_with_recovery_key">Utilisez votre code de récupération pour déverrouiller l’historique de vos messages chiffrés</string><!-- Tchap: Use custom string -->
+    <string name="keys_backup_restore_key_enter_hint">Saisir le code de récupération</string><!-- Tchap: Use custom string -->
+    <string name="keys_backup_restore_with_key_helper">Vous avez perdu votre code de récupération \? Vous pouvez en configurer une autre dans les paramètres.</string><!-- Tchap: Use custom string -->
+    <string name="keys_backup_passphrase_error_decrypt">La sauvegarde n’a pas pu être déchiffrée avec ce code de récupération. Veuillez vérifier que vous avez saisi la bonne phrase secrète de récupération.</string>
     <string name="keys_backup_restoring_waiting_message">Restauration de la sauvegarde :</string>
     <string name="keys_backup_unlock_button">Déverrouiller l’historique</string>
-    <string name="keys_backup_recovery_code_empty_error_message">Veuillez saisir une clé de récupération</string>
-    <string name="keys_backup_recovery_code_error_decrypt">La sauvegarde n’a pas pu être déchiffrée avec cette clé de récupération : veuillez vérifier que vous avez saisi la bonne clé de récupération.</string>
+    <string name="keys_backup_recovery_code_empty_error_message">Veuillez saisir un code de récupération</string><!-- Tchap: Use custom string -->
+    <string name="keys_backup_recovery_code_error_decrypt">La sauvegarde n’a pas pu être déchiffrée avec cette code de récupération : veuillez vérifier que vous avez saisi la bonne code de récupération.</string><!-- Tchap: Use custom string -->
     <string name="keys_backup_restore_success_title">Sauvegarde restaurée %s !</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Sauvegarde restaurée avec %d clé.</item>
         <item quantity="other">Sauvegarde restaurée avec %d clés.</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-        <item quantity="one">%d nouvelle clé a été ajoutée à cette session.</item>
-        <item quantity="other">%d nouvelles clés ont été ajoutées à cette session.</item>
+        <item quantity="one">%d nouvelle clé a été ajoutée à cet appareil.</item> <!-- Tchap: Use custom string -->
+        <item quantity="other">%d nouvelles clés ont été ajoutées à cet appareil.</item> <!-- Tchap: Use custom string -->
     </plurals>
     <string name="keys_backup_get_version_error">Échec de récupération de la dernière version des clés de récupération (%s).</string>
     <string name="keys_backup_settings_restore_backup_button">Restaurer depuis la sauvegarde</string>
     <string name="keys_backup_settings_delete_backup_button">Supprimer la sauvegarde</string>
-    <string name="keys_backup_settings_status_ok">La sauvegarde de clés a été correctement configurée pour cette session.</string>
-    <string name="keys_backup_settings_status_ko">La sauvegarde de clés n’est pas activée sur cette session.</string>
-    <string name="keys_backup_settings_status_not_setup">Vos clés ne sont pas sauvegardées depuis cette session.</string>
-    <string name="keys_backup_settings_signature_from_unknown_device">La sauvegarde a une signature d’une session inconnue ayant pour identifiant %s.</string>
-    <string name="keys_backup_settings_valid_signature_from_this_device">La sauvegarde a une signature valide de cette session.</string>
-    <string name="keys_backup_settings_valid_signature_from_verified_device">La sauvegarde a une signature valide de la session vérifiée %s.</string>
-    <string name="keys_backup_settings_valid_signature_from_unverified_device">La sauvegarde a une signature valide de la session non vérifiée %s</string>
-    <string name="keys_backup_settings_invalid_signature_from_verified_device">La sauvegarde a une signature non valide de la session vérifiée %s</string>
-    <string name="keys_backup_settings_invalid_signature_from_unverified_device">La sauvegarde a une signature non valide de la session non vérifiée %s</string>
+    <string name="keys_backup_settings_status_ok">La sauvegarde de clés a été correctement configurée pour cet appareil.</string> <!-- Tchap: Use custom string -->
+    <string name="keys_backup_settings_status_ko">La sauvegarde de clés n’est pas activée sur cet appareil.</string> <!-- Tchap: Use custom string -->
+    <string name="keys_backup_settings_status_not_setup">Vos clés ne sont pas sauvegardées depuis cet appareil.</string> <!-- Tchap: Use custom string -->
+    <string name="keys_backup_settings_signature_from_unknown_device">La sauvegarde a une signature d’un appareil inconnu ayant pour identifiant %s.</string> <!-- Tchap: Use custom string -->
+    <string name="keys_backup_settings_valid_signature_from_this_device">La sauvegarde a une signature valide de cet appareil.</string> <!-- Tchap: Use custom string -->
+    <string name="keys_backup_settings_valid_signature_from_verified_device">La sauvegarde a une signature valide de l’appareil vérifié %s.</string> <!-- Tchap: Use custom string -->
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">La sauvegarde a une signature valide de l’appareil non vérifié %s</string> <!-- Tchap: Use custom string -->
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">La sauvegarde a une signature non valide de l’appareil vérifié %s</string> <!-- Tchap: Use custom string -->
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">La sauvegarde a une signature non valide de l’appareil non vérifié %s</string> <!-- Tchap: Use custom string -->
     <string name="keys_backup_settings_deleting_backup">Suppression de la sauvegarde…</string>
     <string name="keys_backup_settings_delete_confirm_title">Supprimer la sauvegarde</string>
-    <string name="keys_backup_settings_delete_confirm_message">Supprimer les clés de chiffrement sauvegardées sur le serveur \? Vous ne pourrez plus utiliser votre clé de récupération pour lire l’historique des messages chiffrés.</string>
+    <string name="keys_backup_settings_delete_confirm_message">Supprimer les clés Tchap sauvegardées sur le serveur \? Vous ne pourrez plus utiliser votre code de récupération pour lire l’historique des messages chiffrés.</string> <!-- Tchap: Use custom string -->
     <string name="sign_out_bottom_sheet_warning_no_backup">Vous perdrez vos messages chiffrés si vous vous déconnectez maintenant</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Sauvegarde de clés en cours. Si vous vous déconnectez maintenant, vous perdrez accès à vos messages chiffrés.</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">La sauvegarde de clés sécurisées devrait être activée pour toutes vos sessions afin d’éviter de perdre l’accès à vos messages chiffrés.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">La sauvegarde de clés sécurisées devrait être activée pour tous vos appareils afin d’éviter de perdre l’accès à vos messages chiffrés.</string> <!-- Tchap: Use custom string -->
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Je ne veux pas de mes messages chiffrés</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Sauvegarde de clés…</string>
     <string name="are_you_sure">En êtes-vous sûr \?</string>
     <string name="backup">Sauvegarder</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Vous n’aurez plus accès à vos messages chiffrés, sauf si vous sauvegardez vos clés avant de vous déconnecter.</string>
     <string name="action_sign_out_confirmation_simple">Voulez-vous vraiment vous déconnecter ?</string>
-    <string name="encryption_message_recovery">Récupération des messages chiffrés</string>
+    <string name="encryption_message_recovery">Sauvegarde automatique des messages</string><!-- Tchap wordings -->
     <string name="error_empty_field_enter_user_name">Veuillez renseigner un nom d’utilisateur.</string>
     <string name="keys_backup_setup">Utiliser une clé de sauvegarde Tchap</string> <!-- Tchap wordings -->
     <string name="keys_backup_setup_step1_advanced">(Avancé)</string>
@@ -752,32 +752,32 @@
 \n
 \nPour une sécurité maximale, elle devrait être différente du mot de passe de votre compte.</string>
     <string name="keys_backup_setup_creating_backup">Création de la sauvegarde</string>
-    <string name="keys_backup_setup_step1_recovery_key_alternative">Ou protégez votre sauvegarde avec une clé de récupération, en la conservant en lieu sûr.</string>
-    <string name="keys_backup_setup_step2_skip_button_title">(Avancé) Configurer une clé de récupération</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">Ou protégez votre sauvegarde avec un code de récupération, en la conservant en lieu sûr.</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(Avancé) Configurer un code de récupération</string><!-- Tchap: Use custom string -->
     <string name="keys_backup_setup_step3_success_title">Bien joué !</string>
-    <string name="keys_backup_setup_step3_text_line1">Stockez votre clé dans un endroit sûr. Elle peut être utilisée pour dévérouiller vos messages et données chiffrés.</string>
-    <string name="keys_backup_setup_step3_text_line2">Votre clé de récupération est une mesure de précaution. Vous pouvez l’utiliser pour restaurer l’accès à vos messages chiffrés si vous oubliez votre phrase secrète.
-\nConservez votre clé de récupération en lieu sûr, comme un gestionnaire de mots de passe (ou un coffre-fort)</string>
-    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Conservez votre clé de récupération dans un endroit sûr, comme un gestionnaire de mots de passe (ou un coffre-fort)</string>
+    <string name="keys_backup_setup_step3_text_line1">Stockez votre code dans un endroit sûr. Il peut être utilisé pour dévérouiller vos messages et données chiffrés.</string><!-- Tchap wordings -->
+    <string name="keys_backup_setup_step3_text_line2">Votre code de récupération est une mesure de précaution. Vous pouvez l’utiliser pour restaurer l’accès à vos messages chiffrés si vous oubliez votre phrase secrète.
+\nConservez votre code de récupération en lieu sûr, comme un gestionnaire de mots de passe (ou un coffre-fort)</string><!-- Tchap wordings -->
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Conservez votre code de récupération dans un endroit sûr, comme un gestionnaire de mots de passe (ou un coffre-fort)</string><!-- Tchap wordings -->
     <string name="keys_backup_setup_step3_button_title_no_passphrase">J’ai fait une copie</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Partager</string>
     <string name="keys_backup_banner_recover_line1">Ne perdez jamais vos messages chiffrés</string>
-    <string name="keys_backup_banner_recover_line2">Utiliser la sauvegarde de clés</string>
-    <string name="keys_backup_banner_update_line1">Nouvelles clés de message sécurisé</string>
-    <string name="keys_backup_banner_update_line2">Gérer la sauvegarde de clés</string>
-    <string name="keys_backup_banner_in_progress">Sauvegarde de clés…</string>
-    <string name="keys_backup_info_keys_all_backup_up">Toutes les clés sont sauvegardées</string>
-    <plurals name="keys_backup_info_keys_backing_up">
-        <item quantity="one">Sauvegarde d’%d clé…</item>
-        <item quantity="other">Sauvegarde de %d clés…</item>
+    <string name="keys_backup_banner_recover_line2">Utiliser la sauvegarde de codes</string><!-- Tchap wordings -->
+    <string name="keys_backup_banner_update_line1">Nouveaux codes de message sécurisé</string><!-- Tchap wordings -->
+    <string name="keys_backup_banner_update_line2">Gérer la sauvegarde de codes</string><!-- Tchap wordings -->
+    <string name="keys_backup_banner_in_progress">Sauvegarde de codes…</string><!-- Tchap wordings -->
+    <string name="keys_backup_info_keys_all_backup_up">Tous les codes sont sauvegardés</string><!-- Tchap wordings -->
+    <plurals name="keys_backup_info_keys_backing_up"><!-- Tchap wordings -->
+        <item quantity="one">Sauvegarde d’%d code…</item>
+        <item quantity="other">Sauvegarde de %d codes…</item>
     </plurals>
     <string name="keys_backup_info_title_version">Version</string>
     <string name="keys_backup_info_title_algorithm">Algorithme</string>
     <string name="keys_backup_info_title_signature">Signature</string>
-    <string name="keys_backup_settings_untrusted_backup">Pour utiliser la sauvegarde de clés sur cette session, faites une restauration avec votre phrase secrète ou votre clé de récupération.</string>
-    <string name="keys_backup_restoring_computing_key_waiting_message">Traitement de la clé de récupération…</string>
-    <string name="keys_backup_restoring_downloading_backup_waiting_message">Téléchargement des clés…</string>
-    <string name="keys_backup_restoring_importing_keys_waiting_message">Importation des clés…</string>
+    <string name="keys_backup_settings_untrusted_backup">Pour utiliser la sauvegarde de clés sur cet appareil, faites une restauration avec votre phrase secrète ou votre code de récupération.</string> <!-- Tchap: Use custom string -->
+    <string name="keys_backup_restoring_computing_key_waiting_message">Traitement du code de récupération…</string><!-- Tchap wordings -->
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">Téléchargement des clés…</string><!-- Tchap wordings -->
+    <string name="keys_backup_restoring_importing_keys_waiting_message">Importation des clés…</string><!-- Tchap wordings -->
     <string name="action_ignore">Ignorer</string>
     <string name="auth_login_sso">Se connecter avec l’authentification unique</string>
     <string name="settings_send_message_with_enter">Envoyer le message avec Entrée</string>
@@ -806,21 +806,21 @@
     <string name="notification_inline_reply_failed">** Échec de l’envoi − veuillez ouvrir le salon</string>
     <string name="error_jitsi_not_supported_on_old_device">Désolé, les appels en visioconférence avec Jitsi ne sont pas pris en charge sur les anciens appareils (avec une version d\'Android antérieure à 6.0)</string>
     <string name="encryption_information_unknown_ip">adresse IP inconnue</string>
-    <string name="you_added_a_new_device_with_info">Une nouvelle session demande les clés de chiffrement.
-\nNom de la session : %1$s
+    <string name="you_added_a_new_device_with_info">Un nouvel appareil demande les clés Tchap.
+\nNom de l’appareil : %1$s
 \nVu : %2$s
-\nSi vous ne vous êtes pas connecté à une autre session, ignorez cette demande.</string>
-    <string name="your_unverified_device_requesting_with_info">Une session non vérifiée demande les clés de chiffrement.
-\nNom de la session : %1$s
+\nSi vous ne vous êtes pas connecté à un autre appareil, ignorez cette demande.</string> <!-- Tchap: Use custom string -->
+    <string name="your_unverified_device_requesting_with_info">Un appareil non vérifié demande les clés Tchap.
+\nNom de l’appareil : %1$s
 \nVu : %2$s
-\nSi vous ne vous êtes pas connecté à une autre session, ignorez cette demande.</string>
+\nSi vous ne vous êtes pas connecté à un autre appareil, ignorez cette demande.</string> <!-- Tchap: Use custom string -->
     <string name="share_without_verifying_short_label">Partager</string>
     <string name="key_share_request">Demande de partage de clé</string>
     <string name="ignore_request_short_label">Ignorer</string>
     <string name="sas_verified">Vérifié !</string>
     <string name="sas_got_it">Compris</string>
     <string name="sas_incoming_request_notif_title">Demande de vérification</string>
-    <string name="sas_incoming_request_notif_content">%s veut vérifier votre session</string>
+    <string name="sas_incoming_request_notif_content">%s veut vérifier votre appareil</string> <!-- Tchap: Use custom string -->
     <string name="sas_error_unknown">Erreur inconnue</string>
     <string name="keys_backup_setup_override_backup_prompt_tile">Une sauvegarde est déjà disponible sur votre serveur d’accueil</string>
     <string name="keys_backup_setup_override_replace">Remplacer</string>
@@ -836,7 +836,7 @@
     <string name="room_list_people_empty_title">Discussions</string>
     <string name="change_room_directory_network">Changer de réseau</string>
     <string name="please_wait">Veuillez patienter…</string>
-    <string name="keys_backup_setup_override_backup_prompt_description">On dirait que vous avez déjà configuré une sauvegarde de clé depuis une autre session. Voulez-vous la remplacer par celle que vous êtes en train de créer \?</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">On dirait que vous avez déjà configuré une sauvegarde de clé depuis un autre appareil. Voulez-vous la remplacer par celle que vous êtes en train de créer \?</string> <!-- Tchap: Use custom string -->
     <string name="room_list_people_empty_body">Vos conversations privées seront affichées ici. Appuyez sur « + » en bas à droite pour en démarrer une.</string>
     <string name="room_list_rooms_empty_title">Salons</string>
     <string name="room_list_rooms_empty_body">Vos salons seront affichés ici. Appuyez sur le « + » en bas à droite pour trouver ceux existant ou en créer de nouveaux.</string>
@@ -860,7 +860,7 @@
     <string name="create_room_public_description">Tout le monde pourra rejoindre ce salon</string>
     <string name="keys_backup_unable_to_get_trust_info">Une erreur est survenue lors de la récupération des informations de confiance</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Une erreur est survenue lors de la récupération des données de sauvegarde de clés</string>
-    <string name="import_e2e_keys_from_file">Importer les clés de chiffrement depuis le fichier « %1$s ».</string>
+    <string name="import_e2e_keys_from_file">Importer les clés Tchap depuis le fichier « %1$s ».</string> <!-- Tchap: Use custom string -->
     <string name="settings_sdk_version">Version du SDK de Matrix</string>
     <string name="settings_other_third_party_notices">Licences tierces</string>
     <string name="navigate_to_room_when_already_in_the_room">Vous êtes déjà en train de visualiser ce salon !</string>
@@ -873,7 +873,7 @@
     <string name="push_gateway_item_app_id">App ID :</string>
     <string name="push_gateway_item_push_key">Clé Push :</string>
     <string name="push_gateway_item_app_display_name">Nom d’affichage de l’application :</string>
-    <string name="push_gateway_item_device_name">Nom d’affichage de la session :</string>
+    <string name="push_gateway_item_device_name">Nom d’affichage de l’appareil :</string> <!-- Tchap: Use custom string -->
     <string name="push_gateway_item_url">URL :</string>
     <string name="push_gateway_item_format">Format :</string>
     <string name="preference_voice_and_video">Voix et vidéo</string>
@@ -1074,7 +1074,7 @@
     <string name="login_reset_password_email_hint">Courriel</string>
     <string name="login_reset_password_password_hint">Nouveau mot de passe</string>
     <string name="login_reset_password_warning_title">Attention !</string>
-    <string name="login_reset_password_warning_content">Le changement de mot de passe réinitialisera toutes les clés de chiffrement sur toutes vos sessions, rendant l’historique des discussions chiffrées illisible. Exportez vos clés de salon depuis une autre session avant de réinitialiser votre mot de passe.</string> <!-- Tchap: Custom string -->
+    <string name="login_reset_password_warning_content">Le changement de mot de passe réinitialisera toutes les clés Tchap sur tous vos appareils, rendant l’historique des discussions chiffrées illisible. Exportez vos clés de salon depuis un autre appareil avant de réinitialiser votre mot de passe.</string> <!-- Tchap: Custom string -->
     <string name="login_reset_password_warning_submit">Poursuivre</string>
     <string name="login_reset_password_error_not_found">Ce adresse de courriel n’est liée à aucun compte</string>
     <string name="login_reset_password_mail_confirmation_title">Vérifiez votre boîte de réception</string>
@@ -1083,7 +1083,7 @@
     <string name="login_reset_password_mail_confirmation_submit">J’ai vérifié mon adresse électronique</string>
     <string name="login_reset_password_success_title">Succès !</string>
     <string name="login_reset_password_success_notice">Votre mot de passe a été réinitialisé.</string>
-    <string name="login_reset_password_success_notice_2">Vous avez été déconnecté de toutes les sessions et ne recevrez plus de notification. Pour réactiver les notifications, reconnectez-vous sur chaque appareil.</string>
+    <string name="login_reset_password_success_notice_2">Vous avez été déconnecté de tous les appareils et ne recevrez plus de notification. Pour réactiver les notifications, reconnectez-vous sur chaque appareil.</string> <!-- Tchap: Use custom string -->
     <string name="login_reset_password_success_submit">Retourner à l’authentification</string>
     <string name="login_reset_password_cancel_confirmation_title">Attention</string>
     <string name="login_reset_password_cancel_confirmation_content">Votre mot de passe n’a pas encore été changé.
@@ -1132,27 +1132,27 @@
     <string name="signed_out_title">Vous êtes déconnecté</string>
     <string name="signed_out_notice">Cela peut être dû à plusieurs raisons :
 \n
-\n• Vous avez changé votre mot de passe sur une autre session.
+\n• Vous avez changé votre mot de passe sur un autre appareil.
 \n
-\n• Vous avez supprimé cette session depuis une autre session.
+\n• Vous avez supprimé cet appareil depuis un autre appareil.
 \n
-\n• L’administrateur de votre serveur a invalidé votre accès pour des raisons de sécurité.</string>
+\n• L’administrateur de votre serveur a invalidé votre accès pour des raisons de sécurité.</string> <!-- Tchap: Use custom string -->
     <string name="signed_out_submit">Se reconnecter</string>
     <string name="soft_logout_title">Vous êtes déconnecté</string>
     <string name="soft_logout_signin_title">Se connecter</string>
     <string name="soft_logout_signin_notice">L’administrateur de votre serveur d’accueil (%1$s) vous a déconnecté de votre compte %2$s (%3$s).</string>
-    <string name="soft_logout_signin_e2e_warning_notice">Connectez-vous pour récupérer les clés de chiffrement stockées uniquement sur cet appareil. Vous en avez besoin pour lire tous vos messages sécurisés sur n’importe quel appareil.</string>
+    <string name="soft_logout_signin_e2e_warning_notice">Connectez-vous pour récupérer les clés Tchap stockées uniquement sur cet appareil. Vous en avez besoin pour lire tous vos messages sécurisés sur n’importe quel appareil.</string> <!-- Tchap: Use custom string -->
     <string name="soft_logout_signin_submit">Se connecter</string>
     <string name="soft_logout_signin_password_hint">Mot de passe</string>
     <string name="soft_logout_clear_data_title">Effacer les données personnelles</string>
-    <string name="soft_logout_clear_data_notice">Attention : Vos données personnelles (y compris les clés de chiffrement) sont toujours stockées sur cet appareil.
+    <string name="soft_logout_clear_data_notice">Attention : Vos données personnelles (y compris les clés Tchap) sont toujours stockées sur cet appareil.
 \n
-\nEffacez-les si vous n’utilisez plus cet appareil ou si vous voulez vous connecter à un autre compte.</string>
+\nEffacez-les si vous n’utilisez plus cet appareil ou si vous voulez vous connecter à un autre compte.</string> <!-- Tchap: Use custom string -->
     <string name="soft_logout_clear_data_submit">Effacer toutes les données</string>
     <string name="soft_logout_clear_data_dialog_title">Effacer les données</string>
     <string name="soft_logout_clear_data_dialog_content">Effacer toutes les données stockées sur cet appareil \?
 \nReconnectez-vous pour accéder aux données et aux messages de votre compte.</string>
-    <string name="soft_logout_clear_data_dialog_e2e_warning_content">Vous perdrez l’accès à vos messages sécurisés sauf si vous vous connectez pour récupérer vos clés de chiffrement.</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">Vous perdrez l’accès à vos messages sécurisés sauf si vous vous connectez pour récupérer vos clés Tchap.</string> <!-- Tchap: Use custom string -->
     <string name="soft_logout_sso_not_same_user_error">L’appareil en cours est celle de l’utilisateur %1$s et vous fournissez des identifiants pour l’utilisateur %2$s. Ce n’est pas pris en charge par Element.
 \nEffacez d’abord les données, puis reconnectez-vous avec un autre compte.</string> <!-- Tchap: Custom string -->
     <string name="permalink_malformed">Votre lien matrix.to était malformé</string>
@@ -1166,8 +1166,8 @@
     <string name="settings_rageshake_detection_threshold_summary">Secouez votre téléphone pour tester le seuil de détection</string>
     <string name="rageshake_detected">Secousse détectée !</string>
     <string name="settings">Paramètres</string>
-    <string name="devices_current_device">Cette session</string>
-    <string name="devices_other_devices">Autres sessions</string>
+    <string name="devices_current_device">Cet appareil</string> <!-- Tchap: Use custom string -->
+    <string name="devices_other_devices">Autres appareils</string> <!-- Tchap: Use custom string -->
     <string name="autocomplete_limited_results">Seuls les premiers résultats sont affichés, saisissez plus de lettres…</string>
     <string name="settings_developer_mode_fail_fast_title">Défaillance rapide</string>
     <string name="settings_developer_mode_fail_fast_summary">${app_name} peut planter plus souvent quand une erreur inattendue survient</string>
@@ -1196,7 +1196,7 @@
     <string name="verification_request_you_accepted">Vous avez accepté</string>
     <string name="verification_sent">Vérification envoyée</string>
     <string name="verification_request">Demande de vérification</string>
-    <string name="verification_verify_device">Vérifier cette session</string>
+    <string name="verification_verify_device">Vérifier cet appareil</string> <!-- Tchap: Use custom string -->
     <string name="verification_scan_notice">Scanner le code avec l’appareil de l’autre utilisateurs pour vous vérifier réciproquement de façon sécurisée</string>
     <string name="verification_scan_their_code">Scanner leur code</string>
     <string name="verification_scan_emoji_title">Impossible de scanner</string>
@@ -1233,8 +1233,8 @@
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} ne gère pas les évènements de type « %1$s »</string>
     <string name="rendering_event_error_exception">${app_name} a rencontré un problème lors de l’affichage du contenu de l’évènement ayant pour identifiant « %1$s »</string>
     <string name="unignore">Ne plus ignorer</string>
-    <string name="verify_cannot_cross_sign">Cette session est incapable de partager cette vérification avec vos autres sessions.
-\nLa vérification sera sauvegardée localement et partagée dans une version future de l’application.</string>
+    <string name="verify_cannot_cross_sign">Cet appareil est incapable de partager cette vérification avec vos autres appareils.
+\nLa vérification sera sauvegardée localement et partagée dans une version future de l’application.</string> <!-- Tchap: Use custom string -->
     <string name="command_description_rainbow">Envoie le message fourni coloré comme un arc-en-ciel</string>
     <string name="command_description_rainbow_emote">Envoie la réaction fournie colorée comme un arc-en-ciel</string>
     <string name="settings_category_timeline">Fil de discussion</string>
@@ -1248,7 +1248,7 @@
     <string name="verification_emoji_notice">Comparez les émojis uniques, en vous assurant qu’ils apparaissent dans le même ordre.</string>
     <string name="verification_code_notice">Comparez le code avec celui qui s’affiche sur l’écran de l’autre utilisateur.</string>
     <string name="verification_conclusion_ok_notice">Les messages avec cet utilisateur sont chiffrés de bout en bout et ne peuvent pas être lus par des tiers.</string>
-    <string name="verification_conclusion_ok_self_notice">À présent, votre nouvelle session est vérifiée. Elle a accès à vos messages chiffrés et les autre utilisateurs la verront comme fiable.</string>
+    <string name="verification_conclusion_ok_self_notice">À présent, votre nouvel appareil est vérifié. Il a accès à vos messages chiffrés et les autre utilisateurs le verront comme fiable.</string> <!-- Tchap: Use custom string -->
     <string name="encryption_information_cross_signing_state">Signature croisée</string>
     <string name="encryption_information_dg_xsigning_complete">La signature croisée est activée
 \nLes clés privées sont sur l’appareil.</string>
@@ -1258,29 +1258,29 @@
     <string name="encryption_information_dg_xsigning_not_trusted">La signature croisée est activée.
 \nLes clés ne sont pas fiables</string>
     <string name="encryption_information_dg_xsigning_disabled">La signature croisée n’est pas activée</string>
-    <string name="settings_active_sessions_list">Sessions actives</string>
-    <string name="settings_active_sessions_show_all">Afficher toutes les sessions</string>
-    <string name="settings_active_sessions_manage">Gérer les sessions</string>
-    <string name="settings_active_sessions_signout_device">Se déconnecter de cette session</string>
+    <string name="settings_active_sessions_list">Appareils actifs</string> <!-- Tchap: Use custom string -->
+    <string name="settings_active_sessions_show_all">Afficher tous les appareils</string> <!-- Tchap: Use custom string -->
+    <string name="settings_active_sessions_manage">Gérer les appareils</string> <!-- Tchap: Use custom string -->
+    <string name="settings_active_sessions_signout_device">Se déconnecter de cet appareil</string> <!-- Tchap: Use custom string -->
     <string name="settings_failed_to_get_crypto_device_info">Aucune information cryptographique n’est disponible</string>
-    <string name="settings_active_sessions_verified_device_desc">Cette session est fiable pour la messagerie sécurisée car vous l’avez vérifiée :</string>
-    <string name="settings_active_sessions_unverified_device_desc">Vérifiez cette session pour la marquer comme fiable et lui permettre d’accéder aux messages chiffrés. Si vous ne vous êtes pas connecté à cette session, votre compte est peut-être compromis :</string>
+    <string name="settings_active_sessions_verified_device_desc">Cet appareil est fiable pour la messagerie sécurisée car vous l’avez vérifié :</string> <!-- Tchap: Use custom string -->
+    <string name="settings_active_sessions_unverified_device_desc">Vérifiez cet appareil pour le marquer comme fiable et lui permettre d’accéder aux messages chiffrés. Si vous ne vous êtes pas connecté à cet appareil, votre compte est peut-être compromis :</string> <!-- Tchap: Use custom string -->
     <plurals name="settings_active_sessions_count">
-        <item quantity="one">%d session active</item>
-        <item quantity="other">%d sessions actives</item>
+        <item quantity="one">%d appareil actif</item> <!-- Tchap: Use custom string -->
+        <item quantity="other">%d appareils actifs</item> <!-- Tchap: Use custom string -->
     </plurals>
     <string name="crosssigning_verify_this_session">Vérifier cet appareil</string>
-    <string name="verification_open_other_to_verify">Utilisez une session existante pour vérifier celle-ci, ce qui lui permettra d’avoir accès aux messages chiffrés.</string>
+    <string name="verification_open_other_to_verify">Utilisez un appareil existant pour vérifier celui-ci, ce qui lui permettra d’avoir accès aux messages chiffrés.</string> <!-- Tchap: Use custom string -->
     <string name="verification_profile_verify">Vérifier</string>
     <string name="verification_profile_verified">Vérifié</string>
     <string name="verification_profile_warning">Attention</string>
-    <string name="room_member_profile_failed_to_get_devices">Échec lors de la récupération des sessions</string>
-    <string name="room_member_profile_sessions_section_title">Sessions</string>
+    <string name="room_member_profile_failed_to_get_devices">Échec lors de la récupération des appareils</string> <!-- Tchap: Use custom string -->
+    <string name="room_member_profile_sessions_section_title">Appareils</string> <!-- Tchap: Use custom string -->
     <string name="trusted">Fiable</string>
     <string name="not_trusted">Non fiable</string>
-    <string name="verification_profile_device_verified_because">Cette session est fiable pour la messagerie sécurisée car %1$s (%2$s) l’a vérifiée :</string>
-    <string name="verification_profile_device_new_signing">%1$s (%2$s) s’est connecté en utilisant une nouvelle session :</string>
-    <string name="verification_profile_device_untrust_info">Tant que cet utilisateur ne fera pas confiance à cette session, les messages qu’elle envoie et qui lui sont envoyés seront affichés avec des avertissements. Sinon, vous pouvez la vérifier manuellement.</string>
+    <string name="verification_profile_device_verified_because">Cet appareil est fiable pour la messagerie sécurisée car %1$s (%2$s) l’a vérifié :</string> <!-- Tchap: Use custom string -->
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) s’est connecté en utilisant un nouvel appareil :</string> <!-- Tchap: Use custom string -->
+    <string name="verification_profile_device_untrust_info">Tant que cet utilisateur ne fera pas confiance à cet appareil, les messages qu’il envoie et qui lui sont envoyés seront affichés avec des avertissements. Sinon, vous pouvez le vérifier manuellement.</string> <!-- Tchap: Use custom string -->
     <string name="initialize_cross_signing">Initialiser la signature croisée</string>
     <string name="reset_cross_signing">Réinitialiser les clés</string>
     <string name="a11y_qr_code_for_verification">Code QR</string>
@@ -1291,8 +1291,8 @@
     <string name="login_signup_username_hint">Nom d’utilisateur</string>
     <string name="settings_dev_tools">Outils de développement</string>
     <string name="settings_account_data">Données du compte</string>
-    <string name="verification_cannot_access_other_session">Utiliser une phrase secrète ou une clé de récupération</string>
-    <string name="verification_use_passphrase">Si vous n’avez pas accès à une session existante</string>
+    <string name="verification_cannot_access_other_session">Utiliser un code de récupération</string><!-- Tchap: Use custom string -->
+    <string name="verification_use_passphrase">Si vous n’avez pas accès à un appareil existant</string> <!-- Tchap: Use custom string -->
     <string name="enter_secret_storage_invalid">Impossible de trouver les secrets dans le stockage</string>
     <string name="message_action_item_redact">Supprimer…</string>
     <string name="share_confirm_room">Voulez-vous envoyer cette pièce jointe à %1$s \?</string>
@@ -1312,7 +1312,7 @@
     <string name="e2e_use_keybackup">Déverrouiller l’historique des messages chiffrés</string>
     <string name="refresh">Actualiser</string>
     <string name="new_session">Nouvelle connexion. Était-ce vous \?</string>
-    <string name="verify_new_session_notice">Utilisez cette session pour vérifiez la nouvelle, ce qui lui permettra d’avoir accès aux messages chiffrés.</string>
+    <string name="verify_new_session_notice">Utilisez cet appareil pour vérifiez le nouveau, ce qui lui permettra d’avoir accès aux messages chiffrés.</string> <!-- Tchap: Use custom string -->
     <string name="verify_new_session_was_not_me">Ce n’était pas moi</string>
     <string name="verify_new_session_compromized">Votre compte est peut-être compromis</string>
     <string name="verify_cancel_self_verification_from_untrusted">Si vous annulez, vous ne pourrez pas lire les anciens messages chiffrés sur cet appareil</string> <!-- Tchap: Custom string -->
@@ -1325,7 +1325,7 @@
 \n- Cet appareil ou l’autre appareil
 \n- La connexion internet utilisée par un des deux appareils
 \n
-\nNous vous recommandons de modifier immédiatement votre mot de passe et votre clé de récupération dans les paramètres.</string>
+\nNous vous recommandons de modifier immédiatement votre mot de passe et votre code de récupération dans les paramètres.</string><!-- Tchap: Use custom string -->
     <string name="verify_cancelled_notice">La vérification a été annulée. Vous pouvez redémarrer la vérification.</string>
     <string name="verification_cancelled">Vérification annulée</string>
     <string name="recovery_passphrase">Phrase de récupération</string>
@@ -1346,7 +1346,7 @@
     <string name="bootstrap_crosssigning_progress_key_backup">Configuration de la sauvegarde de clés</string>
     <string name="bootstrap_cross_signing_success">Votre %2$s et votre %1$s sont bien réglés.
 \n
-\nConservez-les en lieu sûr ! Vous en aurez besoin pour accéder aux messages chiffrés et à vos informations sécurisées si vous perdez toutes vos sessions actives.</string>
+\nConservez-les en lieu sûr ! Vous en aurez besoin pour accéder aux messages chiffrés et à vos informations sécurisées si vous perdez tous vos appareils actifs.</string> <!-- Tchap: Use custom string -->
     <string name="bootstrap_crosssigning_print_it">Imprimez-le et conservez-le en lieu sûr</string>
     <string name="bootstrap_crosssigning_save_usb">Sauvegardez-le sur une clé USB ou un disque de sauvegarde</string>
     <string name="bootstrap_crosssigning_save_cloud">Copiez-le sur votre stockage dans le cloud personnel</string>
@@ -1371,20 +1371,20 @@
     <string name="upgrade_security">Mise à niveau du chiffrement disponible</string>
     <string name="bootstrap_enter_recovery">Entrez votre %s pour continuer</string>
     <string name="use_file">Utiliser un fichier</string>
-    <string name="bootstrap_invalid_recovery_key">Ce n’est pas une clé de récupération valide</string>
-    <string name="recovery_key_empty_error_message">Veuillez entrer une clé de récupération</string>
+    <string name="bootstrap_invalid_recovery_key">Ce n’est pas un code de récupération valide</string><!-- Tchap: Use custom string -->
+    <string name="recovery_key_empty_error_message">Veuillez entrer un code de récupération</string><!-- Tchap: Use custom string -->
     <string name="bootstrap_progress_checking_backup">Vérification de la clé de sauvegarde</string>
     <string name="bootstrap_progress_checking_backup_with_info">Vérification de la clé de sauvegarde (%s)</string>
     <string name="bootstrap_progress_generating_ssss">Génération de la clé SSSS à partir de la phrase secrète</string>
     <string name="bootstrap_progress_generating_ssss_with_info">Génération de la clé SSSS à partir de la phrase secrète (%s)</string>
-    <string name="bootstrap_progress_generating_ssss_recovery">Génération de la clé SSSS à partir de la clé de récupération</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">Génération de la clé SSSS à partir du code de récupération</string><!-- Tchap: Use custom string -->
     <string name="bootstrap_progress_storing_in_sss">Stockage du secret de sauvegarde dans le SSSS</string>
-    <string name="security_prompt_text">Vérifiez vos sessions et les autres pour garantir la sûreté de vos discussions</string>
+    <string name="security_prompt_text">Vérifiez vos appareils et les autres pour garantir la sûreté de vos discussions</string> <!-- Tchap: Use custom string -->
     <string name="bootstrap_progress_compute_curve_key">Récupération de la clé de courbe</string>
     <string name="bootstrap_migration_enter_backup_password">Saisissez votre phrase secrète de sauvegarde de clés pour continuer.</string>
-    <string name="bootstrap_migration_use_recovery_key">utiliser votre clé de récupération de sauvegarde de clés</string>
+    <string name="bootstrap_migration_use_recovery_key">utiliser votre code de récupération de sauvegarde de clés</string><!-- Tchap: Use custom string -->
     <string name="bootstrap_migration_with_passphrase_helper_with_link">Vous ne connaissez pas votre phrase secrète de sauvegarde de clés, vous pouvez %s.</string>
-    <string name="bootstrap_migration_backup_recovery_key">Clé de récupération de sauvegarde de clés</string>
+    <string name="bootstrap_migration_backup_recovery_key">Code de récupération de sauvegarde de clés</string><!-- Tchap: Use custom string -->
     <string name="settings_security_prevent_screenshots_title">Empêcher les captures d’écran de l’application</string>
     <string name="settings_security_prevent_screenshots_summary">L’activation de ce paramètre ajoute FLAG_SECURE à toutes les activités. Redémarrez l’application pour que la modification soit prise en compte.</string>
     <string name="change_password_summary">Définir un nouveau mot de passe de compte…</string>
@@ -1398,13 +1398,13 @@
     <string name="command_description_discard_session">Force la session de groupe sortante actuelle dans un salon chiffré à être abandonnée</string>
     <string name="command_description_discard_session_not_handled">Seulement pris en charge dans les salons chiffrés</string>
     <string name="enter_secret_storage_passphrase_or_key">Utilisez votre %1$s ou votre %2$s pour continuer.</string>
-    <string name="use_recovery_key">Utiliser la clé de récupération</string>
-    <string name="enter_secret_storage_input_key">Sélectionnez votre clé de récupération ou saisissez-la manuellement avec le clavier ou en la copiant depuis le presse-papiers</string>
+    <string name="use_recovery_key">Utiliser le code de récupération</string><!-- Tchap: Use custom string -->
+    <string name="enter_secret_storage_input_key">Sélectionnez votre code de récupération ou saisissez-la manuellement avec le clavier ou en la copiant depuis le presse-papiers</string><!-- Tchap: Use custom string -->
     <string name="failed_to_access_secure_storage">Échec d’accès au coffre secret</string>
     <string name="cross_signing_verify_by_text">Vérifier manuellement avec un texte</string>
     <string name="crosssigning_verify_session">Vérifier la connexion</string>
     <string name="cross_signing_verify_by_emoji">Vérifier de façon interactive avec des émojis</string>
-    <string name="confirm_your_identity">Confirmez votre identité en vérifiant cette connexion depuis une de vos autres sessions, ce qui lui permettra d’avoir accès à vos messages chiffrés.</string>
+    <string name="confirm_your_identity">Confirmez votre identité en vérifiant cette connexion depuis un de vos autres appareils, ce qui lui permettra d’avoir accès à vos messages chiffrés.</string> <!-- Tchap: Use custom string -->
     <string name="error_empty_field_choose_user_name">Veuillez choisir un nom d’utilisateur.</string>
     <string name="error_empty_field_choose_password">Veuillez choisir un mot de passe.</string>
     <string name="external_link_confirmation_title">Vérifiez ce lien</string>
@@ -1414,8 +1414,6 @@
     <string name="create_room_dm_failure">Nous n’avons pas pu créer votre conversation privée. Vérifiez les utilisateurs que vous souhaitez inviter et réessayez.</string>
     <string name="unencrypted">Non chiffré</string>
     <string name="encrypted_unverified">Chiffré par un appareil non vérifié</string>
-    <string name="review_logins">Vérifiez où vous vous êtes connecté</string>
-    <string name="verify_other_sessions">Vérifiez toutes les sessions pour vous assurer que votre compte et vos messages sont en sécurité</string>
     <string name="verify_this_session">Vérifiez la nouvelle connexion accédant à votre compte : %1$s</string>
     <string name="notification_ticker_text_dm">%1$s : %2$s</string>
     <string name="notification_ticker_text_group">%1$s : %2$s %3$s</string>
@@ -1518,16 +1516,16 @@
     <string name="contacts_book_title">Carnet d’adresses</string>
     <string name="empty_contact_book">Votre carnet d’adresses est vide</string>
     <string name="loading_contact_book">Récupération de vos contacts…</string>
-    <string name="save_recovery_key_chooser_hint">Enregistrer la clé de récupération</string>
+    <string name="save_recovery_key_chooser_hint">Enregistrer le code de récupération</string><!-- Tchap: Use custom string -->
     <string name="disclaimer_positive_button">EN SAVOIR PLUS</string>
     <string name="disclaimer_negative_button">COMPRIS</string>
     <string name="disclaimer_content">L’apparence et l’organisation de votre application évoluent.\nDe nouveaux changements seront introduits progressivement pour faciliter et enrichir votre expérience.</string> <!-- Tchap: Custom string -->
     <string name="disclaimer_title">Bienvenue dans la nouvelle version de Tchap !</string> <!-- Tchap: Custom string -->
     <string name="notice_crypto_unable_to_decrypt_merged">Attente de l’historique du chiffrement</string>
     <string name="crypto_error_withheld_generic">Impossible d’accéder à ce message car l’envoyeur n’a intentionnellement pas envoyé les clés</string>
-    <string name="crypto_error_withheld_unverified">Vous ne pouvez pas accéder à ce message car l’envoyeur n’a pas confiance en votre session</string>
+    <string name="crypto_error_withheld_unverified">Vous ne pouvez pas accéder à ce message car l’envoyeur n’a pas confiance en votre appareil</string> <!-- Tchap: Use custom string -->
     <string name="crypto_error_withheld_blacklisted">Impossible d’accéder à ce message car vous avez été bloqué par l’envoyeur</string>
-    <string name="notice_crypto_unable_to_decrypt_friendly_desc">À cause du chiffrement de bout en bout, vous pouvez avoir besoin d’attendre l’arrivée du message de quelqu’un car les clés de chiffrement ne vous ont pas été correctement envoyées.</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">À cause du chiffrement de bout en bout, vous pouvez avoir besoin d’attendre l’arrivée du message de quelqu’un car les clés Tchap ne vous ont pas été correctement envoyées.</string> <!-- Tchap: Use custom string -->
     <string name="notice_crypto_unable_to_decrypt_friendly">Echec de déchiffrement : veuillez ouvrir ${app_name} sur vos autres appareils afin d’autoriser le partage de clés</string> <!-- Tchap: Use custom string -->
     <string name="notice_crypto_unable_to_decrypt_final">Vous n’avez pas accès à ce message</string>
     <string name="room_settings_save_success">Vous avez bien changé les paramètres du salon</string>
@@ -1536,9 +1534,9 @@
     <string name="set_a_security_phrase_again_notice">Entrez de nouveau votre phrase de sécurité pour la confirmer.</string>
     <string name="set_a_security_phrase_hint">Phrase de sécurité</string>
     <string name="set_a_security_phrase_title">Définir une phrase de sécurité</string>
-    <string name="bottom_sheet_save_your_recovery_key_title">Enregistrer votre clé de sécurité</string>
+    <string name="bottom_sheet_save_your_recovery_key_title">Enregistrer votre code de récupération</string><!-- Tchap: Use custom string -->
     <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Utiliser une phrase de sécurité</string>
-    <string name="bottom_sheet_setup_secure_backup_security_key_title">Utiliser une clé de sécurité</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_title">Utiliser un code de récupération</string><!-- Tchap: Use custom string -->
     <string name="a11y_stop_camera">Arrêter la caméra</string>
     <string name="power_level_edit_title">Définir le rôle</string>
     <string name="secure_backup_reset_no_history">Vous redémarrerez sans aucun historique, message, appareil ou utilisateurs connus</string>
@@ -1550,7 +1548,7 @@
     <string name="auth_invalid_login_deactivated_account">Ce compte a été désactivé.</string>
     <string name="bootstrap_cancel_text">Si vous annulez maintenant, vous pourrez perdre les messages et données chiffrés si vous perdez accès à vos identifiants.
 \n
-\nVous pouvez aussi activer la sauvegarde sécurisée et gérer vos clés dans les paramètres.</string>
+\nVous pouvez aussi activer la sauvegarde automatique des messages et gérer vos clés dans les paramètres.</string> <!-- Tchap: Use custom string -->
     <string name="bootstrap_info_text_2">Entrez une phrase de sécurité que seul vous connaissez, celle-ci est utilisée pour sécuriser les mots de passe sur le serveur.</string>
     <string name="settings_hs_admin_e2e_disabled">L\'administrateur de votre serveur a désactivé le chiffrement de bout en bout par défaut dans les salons et conversations privés.</string>
     <string name="room_member_power_level_default_in">Par défaut dans %1$s</string>
@@ -1626,9 +1624,9 @@
     <string name="room_list_quick_actions_favorite_add">Ajouter aux favoris</string>
     <string name="settings_text_message_sent_hint">Code</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">Afficher l’historique dans les salons chiffrés</string>
-    <string name="secure_backup_setup">Activer la sauvegarde sécurisée</string>
-    <string name="secure_backup_banner_setup_line1">Sauvegarde sécurisée</string>
-    <string name="recovery_key_export_saved">La clé de récupération a été enregistrée.</string>
+    <string name="secure_backup_setup">Activer la sauvegarde automatique des messages</string> <!-- Tchap: Use custom string -->
+    <string name="secure_backup_banner_setup_line1">Sauvegarde automatique des messages</string> <!-- Tchap: Use custom string -->
+    <string name="recovery_key_export_saved">le code de récupération a été enregistrée.</string><!-- Tchap: Use custom string -->
     <string name="room_no_active_widgets">Aucun widget n’est activé</string>
     <string name="room_manage_integrations">Gérer les intégrations</string>
     <string name="active_widget_view_action">VUE</string>
@@ -1645,22 +1643,22 @@
     </plurals>
     <string name="settings_emails_and_phone_numbers_summary">Gérer les courriels et numéros de téléphone liés à votre compte Matrix</string>
     <string name="settings_emails_and_phone_numbers_title">Courriels et numéros de téléphone</string>
-    <string name="bottom_sheet_setup_secure_backup_title">Sauvegarde sécurisée</string>
+    <string name="bottom_sheet_setup_secure_backup_title">Sauvegarde automatique des messages</string> <!-- Tchap: Use custom string -->
     <string name="a11y_start_camera">Démarrer la caméra</string>
     <string name="a11y_open_chat">Ouvrir la discussion</string>
     <string name="power_level_title">Rôle</string>
     <string name="direct_room_created_summary_item_by_you">Vous avez rejoint la conversation.</string>
     <string name="direct_room_created_summary_item">%s a rejoint la conversation.</string>
     <string name="disabled_integration_dialog_title">Les intégrations sont désactivées</string>
-    <string name="settings_secure_backup_reset">Réinitialiser la sauvegarde sécurisée</string>
-    <string name="settings_secure_backup_setup">Activer la sauvegarde sécurisée</string>
-    <string name="settings_secure_backup_section_title">Sauvegarde sécurisée</string>
+    <string name="settings_secure_backup_reset">Réinitialiser la sauvegarde automatique des messages</string> <!-- Tchap: Use custom string -->
+    <string name="settings_secure_backup_setup">Activer la sauvegarde automatique des messages</string> <!-- Tchap: Use custom string -->
+    <string name="settings_secure_backup_section_title">Sauvegarde automatique des messages</string> <!-- Tchap: Use custom string -->
     <string name="room_participants_unban_prompt_msg">Révoquer le bannissement de l’utilisateur lui permettra de rejoindre le salon.</string>
     <string name="room_participants_power_level_demote_warning_title">Vous rétrograder vous-même \?</string>
     <string name="room_participants_power_level_demote_warning_prompt">Vous ne pourrez pas annuler cette modification car vous vous rétrogradez vous-même, il ne vous sera pas possible de regagner ces privilèges si vous êtes le dernier utilisateur privilégié de ce salon.</string>
     <string name="room_participants_power_level_demote">Rétrograder</string>
     <string name="reset_secure_backup_warning">Ceci remplacera votre clé ou phrase actuelle.</string>
-    <string name="reset_secure_backup_title">Générer une nouvelle clé de sécurité ou définir une nouvelle phrase de sécurité pour votre sauvegarde existante.</string>
+    <string name="reset_secure_backup_title">Générer un nouveau code de récupération ou définir une nouvelle phrase de sécurité pour votre sauvegarde existante.</string><!-- Tchap: Use custom string -->
     <string name="settings_secure_backup_section_info">Protection contre la perte d’accès aux messages et données chiffrées en sauvegardant les clés de chiffrage sur votre serveur.</string>
     <string name="settings_secure_backup_enter_to_setup">Activer sur cet appareil</string>
     <plurals name="seconds">
@@ -1690,8 +1688,8 @@
     <string name="action_reset">Réinitialiser</string>
     <string name="failed_to_unban">Échec de la révocation du bannissement de l’utilisateur</string>
     <string name="alert_push_are_disabled_description">Vérifiez vos paramètres pour activer les notifications push</string>
-    <string name="bottom_sheet_save_your_recovery_key_content">Stockez votre clé de sécurité en lieu sûr comme un gestionnaire de mots de passe ou un coffre-fort.</string>
-    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Générez une clé de sécurité à stocker en lieu sûr comme un gestionnaire de mots de passe ou un coffre-fort.</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">Stockez votre code de récupération en lieu sûr comme un gestionnaire de mots de passe ou un coffre-fort.</string><!-- Tchap: Use custom string -->
+    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Générez un code de récupération à stocker en lieu sûr comme un gestionnaire de mots de passe ou un coffre-fort.</string><!-- Tchap: Use custom string -->
     <string name="settings_troubleshoot_test_push_loop_failed">Erreur de réception du push. La solution pourrait être de réinstaller l’application.</string>
     <string name="settings_troubleshoot_test_push_loop_success">L’application reçoit le PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">L’application attend le PUSH</string>
@@ -1699,7 +1697,7 @@
     <string name="alert_push_are_disabled_title">Les notifications push sont désactivées</string>
     <string name="set_a_security_phrase_notice">Entrez une phrase de sécurité que seul vous connaissez, celle-ci est utilisée pour sécuriser les mots de passe sur le serveur.</string>
     <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Entrez une phrase secrète que seul vous connaissez, et générez une clé de sauvegarde.</string>
-    <string name="bottom_sheet_setup_secure_backup_subtitle">Protection contre la perte d’accès aux messages et données chiffrées en sauvegardant les clés de chiffrement sur votre serveur.</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">Protection contre la perte d’accès aux messages et données chiffrées en sauvegardant les clés Tchap sur votre serveur.</string> <!-- Tchap: Use custom string -->
     <plurals name="secure_backup_reset_devices_you_can_verify">
         <item quantity="one">Afficher le périphérique avec lequel vous pouvez vérifier</item>
         <item quantity="other">Afficher les %d périphériques avec lesquels vous pouvez vérifier</item>
@@ -2026,7 +2024,7 @@
     <string name="space_settings_manage_rooms">Gérer les salons</string>
     <string name="looking_for_someone_not_in_space">Vous cherchez quelqu’un qui n’est pas dans %s \?</string>
     <string name="user_invites_you">%s vous invite</string>
-    <string name="a11y_public_room">Salon public</string>
+    <string name="a11y_public_room">Forum</string> <!-- Tchap: Use custom string -->
     <string name="send_images_and_video_with_original_size">Envoyer le média en taille d’origine</string>
     <plurals name="send_videos_with_original_size">
         <item quantity="one">Envoyer la vidéo en taille originale</item>
@@ -2261,7 +2259,7 @@
     <string name="attachment_type_poll">Sondage</string>
     <string name="identity_server_consent_dialog_title_2">Envoyer des adresses de courriel et des numéros de téléphone à %s</string>
     <string name="settings_discovery_consent_notice_off_2">Vos contacts sont personnels et privés. Pour découvrir des utilisateurs à partir de vos contacts, nous avons besoin de votre permission pour envoyer les informations des contacts à votre serveur d’identité.</string>
-    <string name="shortcut_disabled_reason_sign_out">La session a été déconnectée !</string>
+    <string name="shortcut_disabled_reason_sign_out">L’appareil a été déconnecté !</string> <!-- Tchap: Use custom string -->
     <string name="shortcut_disabled_reason_room_left">Le salon a été quitté !</string>
     <string name="identity_server_consent_dialog_content_question">Êtes vous d’accord d’envoyer ces informations \?</string>
     <string name="identity_server_consent_dialog_content_3">Pour découvrir des contacts existants, il vous faut envoyer les informations de contact (adresses de courriel et numéros de téléphone) à votre serveur d’identité. Les données seront condensées avant l’envoi pour respecter la vie privée.</string>
@@ -2273,7 +2271,6 @@
     <string name="end_poll_confirmation_approve_button">Terminer le sondage</string>
     <string name="end_poll_confirmation_description">Cela empêchera les gens de voter et affichera le résultat final du sondage.</string>
     <string name="end_poll_confirmation_title">Terminer ce sondage \?</string>
-    <string name="a11y_poll_winner_option">option gagnante</string>
     <string name="poll_end_action">Terminer le sondage</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="one">Résultat final sur la base de %1$d vote</item>
@@ -2586,7 +2583,7 @@
     <string name="labs_enable_element_call_permission_shortcuts">Activer les raccourcis de permission de Element Call</string>
     <string name="live_location_description">Position en direct</string>
     <string name="verify_invalid_qr_notice">Ce QR code semble incorrect. Veuillez réessayer la vérification avec une autre méthode.</string>
-    <string name="crosssigning_cannot_verify_this_session_desc">Vous ne pourrez plus accéder à l’historique des messages chiffrés. Réinitialiser votre sauvegarde sécurisée des messages et vos clés de récupération pour un nouveau départ.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">Vous ne pourrez plus accéder à l’historique des messages chiffrés. Réinitialiser votre sauvegarde automatique des messages et vos clés de récupération pour un nouveau départ.</string> <!-- Tchap: Use custom string -->
     <string name="crosssigning_cannot_verify_this_session">Impossible de vérifier cet appareil</string>
     <string name="ftue_auth_choose_server_sign_in_subtitle">Quelle est l’adresse de votre serveur \?</string>
     <string name="ftue_auth_sign_in_choose_server_header">Où seront vos conversations</string>
@@ -2600,10 +2597,10 @@
     <string name="location_share_loading_map_error">Impossible de charger la carte
 \nCe serveur d’accueil n’a peut-être pas été configuré pour afficher les cartes.</string>
     <string name="a11y_open_settings">Ouvrir les paramètres</string>
-    <string name="all_chats">Toutes les conversations</string>
-    <string name="device_manager_sessions_other_description">Pour une meilleure sécurité, vérifiez vos sessions et déconnectez toutes les sessions que vous ne connaissez pas ou que vous n’utilisez plus.</string>
-    <string name="device_manager_sessions_other_title">Autres sessions</string>
-    <string name="settings_sessions_list">Sessions</string>
+    <string name="all_chats">Accueil</string><!-- Tchap: Use custom string -->
+    <string name="device_manager_sessions_other_description">Pour une meilleure sécurité, vérifiez vos appareils et déconnectez tous les appareils que vous ne connaissez pas ou que vous n’utilisez plus.</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_sessions_other_title">Autres appareils</string> <!-- Tchap: Use custom string -->
+    <string name="settings_sessions_list">Appareils</string> <!-- Tchap: Use custom string -->
     <string name="a11y_open_spaces">Ouvrir la liste des espaces</string>
     <string name="a11y_create_message">Créer une nouvelle conversation ou salon</string>
     <string name="room_list_filter_people">Personnes</string>
@@ -2616,16 +2613,16 @@
     <string name="home_layout_preferences_recents">Afficher les récents</string>
     <string name="home_layout_preferences_filters">Afficher les filtres</string>
     <string name="home_layout_preferences">Préférences de présentation</string>
-    <string name="explore_rooms">Parcourir les salons</string>
+    <string name="explore_rooms">Rejoindre un forum</string> <!-- Tchap: Use custom string -->
     <string name="create_room">Créer un salon</string>
-    <string name="start_chat">Commencer une discussion</string>
-    <string name="device_manager_other_sessions_description_unverified">Non vérifiée · Dernière activité %1$s</string>
+    <string name="start_chat">Nouveau message direct</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_other_sessions_description_unverified">Non vérifié · Dernière activité %1$s</string> <!-- Tchap: Use custom string -->
     <string name="device_manager_other_sessions_description_verified">Vérifié · Dernière activité %1$s</string>
     <string name="device_manager_other_sessions_view_all">Tout voir (%1$d)</string>
     <string name="device_manager_view_details">Voir les détails</string>
-    <string name="device_manager_verify_session">Vérifier la session</string>
-    <string name="device_manager_verification_status_unverified">Session non vérifiée</string>
-    <string name="device_manager_verification_status_verified">Session vérifiée</string>
+    <string name="device_manager_verify_session">Vérifier l’appareil</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_verification_status_unverified">Appareil non vérifié</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_verification_status_verified">Appareil vérifié</string> <!-- Tchap: Use custom string -->
     <string name="a11y_device_manager_device_type_unknown">Type de périphérique inconnu</string>
     <string name="a11y_device_manager_device_type_desktop">Ordinateur</string>
     <string name="a11y_device_manager_device_type_web">Web</string>
@@ -2649,12 +2646,12 @@
     <string name="home_empty_space_no_rooms_title">%s
 \na l’air un peu vide.</string>
     <plurals name="device_manager_inactive_sessions_description">
-        <item quantity="one">Pensez à vous déconnecter des anciennes sessions (%1$d jour ou plus) que vous n’utilisez plus.</item>
-        <item quantity="other">Pensez à vous déconnecter des anciennes sessions (%1$d jours ou plus) que vous n’utilisez plus.</item>
+        <item quantity="one">Pensez à vous déconnecter des anciens appareils (%1$d jour ou plus) que vous n’utilisez plus.</item> <!-- Tchap: Use custom string -->
+        <item quantity="other">Pensez à vous déconnecter des anciens appareils (%1$d jours ou plus) que vous n’utilisez plus.</item> <!-- Tchap: Use custom string -->
     </plurals>
-    <string name="device_manager_inactive_sessions_title">Sessions inactives</string>
-    <string name="device_manager_unverified_sessions_description">Vérifier ou déconnecter les sessions non vérifiées.</string>
-    <string name="device_manager_unverified_sessions_title">Sessions non vérifiées</string>
+    <string name="device_manager_inactive_sessions_title">Appareils inactifs</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_unverified_sessions_description">Vérifier ou déconnecter les appareils non vérifiés.</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_unverified_sessions_title">Appareils non vérifiés</string> <!-- Tchap: Use custom string -->
     <string name="device_manager_header_section_security_recommendations_description">Améliorez la sécurité de votre compte à l’aide de ces recommandations.</string>
     <string name="device_manager_header_section_security_recommendations_title">Recommandations de sécurité</string>
     <plurals name="device_manager_other_sessions_description_inactive">
@@ -2670,21 +2667,21 @@
     <string name="change_space">Changer d’espace</string>
     <string name="device_manager_session_details_device_ip_address">Adresse IP</string>
     <string name="device_manager_session_details_session_last_activity">Dernière activité</string>
-    <string name="device_manager_session_details_session_name">Nom de la session</string>
+    <string name="device_manager_session_details_session_name">Nom de l’appareil</string> <!-- Tchap: Use custom string -->
     <string name="device_manager_session_details_description">Application, appareil et information sur l’activité.</string>
-    <string name="device_manager_session_details_title">Détails de session</string>
+    <string name="device_manager_session_details_title">Détails de l’appareil</string> <!-- Tchap: Use custom string -->
     <string name="device_manager_other_sessions_clear_filter">Supprimer les filtres</string>
-    <string name="device_manager_other_sessions_no_inactive_sessions_found">Aucune session inactive n’a été trouvée.</string>
-    <string name="device_manager_other_sessions_no_unverified_sessions_found">Aucune session non vérifiée n’a été trouvée.</string>
-    <string name="device_manager_other_sessions_no_verified_sessions_found">Aucune session vérifiée n’a été trouvée.</string>
+    <string name="device_manager_other_sessions_no_inactive_sessions_found">Aucun appareil inactif n’a été trouvé.</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_other_sessions_no_unverified_sessions_found">Aucun appareil non vérifié n’a été trouvé.</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_other_sessions_no_verified_sessions_found">Aucun appareil vérifié n’a été trouvé.</string> <!-- Tchap: Use custom string -->
     <plurals name="device_manager_other_sessions_recommendation_description_inactive">
-        <item quantity="one">Pensez à vous déconnecter des anciennes sessions (%1$d jour ou plus) que vous n’utilisez plus.</item>
-        <item quantity="other">Pensez à vous déconnecter des anciennes sessions (%1$d jours ou plus) que vous n’utilisez plus.</item>
+        <item quantity="one">Pensez à vous déconnecter des anciens appareils (%1$d jour ou plus) que vous n’utilisez plus.</item> <!-- Tchap: Use custom string -->
+        <item quantity="other">Pensez à vous déconnecter des anciens appareils (%1$d jours ou plus) que vous n’utilisez plus.</item> <!-- Tchap: Use custom string -->
     </plurals>
     <string name="device_manager_other_sessions_recommendation_title_inactive">Inactif</string>
-    <string name="device_manager_other_sessions_recommendation_description_unverified">Vérifiez vos sessions pour améliorer la sécurité de votre messagerie, ou déconnectez celles que vous ne connaissez pas ou n’utilisez plus.</string>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">Vérifiez vos appareils pour améliorer la sécurité de votre messagerie, ou déconnectez ceux que vous ne connaissez pas ou n’utilisez plus.</string> <!-- Tchap: Use custom string -->
     <string name="device_manager_other_sessions_recommendation_title_unverified">Non vérifié</string>
-    <string name="device_manager_other_sessions_recommendation_description_verified">Pour une meilleure sécurité, déconnectez toutes les sessions que vous ne connaissez pas ou que vous n’utilisez plus.</string>
+    <string name="device_manager_other_sessions_recommendation_description_verified">Pour une meilleure sécurité, déconnectez tous les appareils que vous ne connaissez pas ou que vous n’utilisez plus.</string> <!-- Tchap: Use custom string -->
     <string name="device_manager_other_sessions_recommendation_title_verified">Vérifié</string>
     <string name="a11y_device_manager_filter">Filtrer</string>
     <plurals name="device_manager_filter_option_inactive_description">
@@ -2696,42 +2693,39 @@
     <string name="device_manager_filter_option_unverified">Non vérifié</string>
     <string name="device_manager_filter_option_verified_description">Prêt pour une messagerie sécurisée</string>
     <string name="device_manager_filter_option_verified">Vérifié</string>
-    <string name="device_manager_filter_option_all_sessions">Toutes les sessions</string>
+    <string name="device_manager_filter_option_all_sessions">Tous les appareils</string> <!-- Tchap: Use custom string -->
     <string name="device_manager_filter_bottom_sheet_title">Filtrer</string>
     <string name="device_manager_session_last_activity">Dernière activité %1$s</string>
     <string name="device_manager_device_title">Appareil</string>
     <string name="device_manager_session_title">Session</string>
-    <string name="device_manager_current_session_title">Cette session</string>
-    <string name="device_manager_verification_status_detail_other_session_unverified">Vérifiez ou déconnectez cette session pour une meilleure sécurité et fiabilité.</string>
-    <string name="device_manager_verification_status_detail_current_session_unverified">Vérifiez votre session pour une sécurité accrue de votre messagerie.</string>
-    <string name="device_manager_verification_status_detail_other_session_verified">Cette session est prête pour l’envoi de messages sécurisés.</string>
-    <string name="device_manager_verification_status_detail_current_session_verified">Votre session est prête pour l’envoi de messages sécurisés.</string>
+    <string name="device_manager_current_session_title">Cet appareil</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_verification_status_detail_other_session_unverified">Vérifiez ou déconnectez cet appareil pour une meilleure sécurité et fiabilité.</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_verification_status_detail_current_session_unverified">Vérifiez votre appareil pour une sécurité accrue de votre messagerie.</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_verification_status_detail_other_session_verified">Cet appareil est prêt pour l’envoi de messages sécurisés.</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_verification_status_detail_current_session_verified">Votre appareil est prêt pour l’envoi de messages sécurisés.</string> <!-- Tchap: Use custom string -->
     <string name="labs_enable_deferred_dm_summary">Créer la conversation seulement lors du premier message</string>
     <string name="labs_enable_deferred_dm_title">Activer les conversations privées différées</string>
     <string name="labs_enable_new_app_layout_summary">Un Element simplifié avec des onglets optionnels</string>
     <string name="labs_enable_new_app_layout_title">Activer la nouvelle présentation</string>
-    <string name="device_manager_learn_more_session_rename">Les autres utilisateurs en conversations privées ou salons qui peuvent vous parler sont capables de voir la liste complète de vos sessions.
+    <string name="device_manager_learn_more_session_rename">Les autres utilisateurs en conversations privées ou salons qui peuvent vous parler sont capables de voir la liste complète de vos appareils.
 \n
-\nCela leur fournit une preuve de confiance que c’est bien avec vous qu\'ils communiquent, mais cela veut également dire qu’ils peuvent voir le nom de la session que vous saisissez ici.</string>
-    <string name="device_manager_learn_more_session_rename_title">Renommer les sessions</string>
-    <string name="device_manager_learn_more_sessions_verified">Les sessions vérifiées sont celles qui sont identifiées avec votre mot de passe puis vérifiée, soit à l’aide de votre phrase de sécurité, ou bien par la vérification croisée.
+\nCela leur fournit une preuve de confiance que c’est bien avec vous qu\'ils communiquent, mais cela veut également dire qu’ils peuvent voir le nom de l’appareil que vous saisissez ici.</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_learn_more_session_rename_title">Renommer les appareils</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_learn_more_sessions_verified_title">Appareils vérifiés</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_learn_more_sessions_unverified">Les appareils non vérifiés sont ceux qui sont identifiés avec votre mot de passe sans avoir fait de vérification croisée.
 \n
-\nCela signifie qu’elles possèdent les clés de chiffrement de vos messages passés, et certifient aux autres utilisateurs avec qui vous communiquez que ces sessions viennent vraiment de vous.</string>
-    <string name="device_manager_learn_more_sessions_verified_title">Sessions vérifiées</string>
-    <string name="device_manager_learn_more_sessions_unverified">Les sessions non vérifiées sont celles qui sont identifiées avec votre mot de passe sans avoir fait de vérification croisée.
+\nVous devriez tout particulièrement vous assurer de reconnaître ces appareils, car ils pourraient être la preuve d’un usage non autorisé de votre compte.</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_learn_more_sessions_unverified_title">Appareils non vérifiés</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_learn_more_sessions_inactive">Les appareils inactifs sont ceux que vous n’avez pas utilisés depuis un certain temps, mais qui continue de recevoir les clés Tchaps.
 \n
-\nVous devriez tout particulièrement vous assurer de reconnaître ces sessions, car elles pourraient être la preuve d’un usage non autorisé de votre compte.</string>
-    <string name="device_manager_learn_more_sessions_unverified_title">Sessions non vérifiées</string>
-    <string name="device_manager_learn_more_sessions_inactive">Les sessions inactives sont celles que vous n’avez pas utilisées depuis un certain temps, mais qui continue de recevoir les clés de chiffrements.
-\n
-\nLa suppression des sessions inactives améliore la sécurité et la performance, et vous aide à identifier si une nouvelle session est douteuse.</string>
-    <string name="device_manager_learn_more_sessions_inactive_title">Sessions inactives</string>
-    <string name="device_manager_session_rename_warning">Soyez conscient que les noms de sessions sont également visibles pour les personnes avec lesquelles vous communiquez.</string>
-    <string name="device_manager_session_rename_description">Les noms de sessions personnalisés peuvent vous aider à reconnaître vos appareils plus facilement.</string>
-    <string name="device_manager_session_rename_edit_hint">Nom de la session</string>
-    <string name="device_manager_session_rename">Renommer la session</string>
-    <string name="device_manager_session_overview_signout">Se déconnecter de cette session</string>
-    <string name="device_manager_other_sessions_description_unverified_current_session">Non vérifiée · Votre session actuelle</string>
+\nLa suppression des appareils inactifs améliore la sécurité et la performance, et vous aide à identifier si un nouvel appareil est douteux.</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_learn_more_sessions_inactive_title">Appareils inactifs</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_session_rename_warning">Soyez conscient que les noms des appareils sont également visibles pour les personnes avec lesquelles vous communiquez.</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_session_rename_description">Les noms des appareils personnalisés peuvent vous aider à reconnaître vos appareils plus facilement.</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_session_rename_edit_hint">Nom de l’appareil</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_session_rename">Renommer l’appareil</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_session_overview_signout">Se déconnecter de cet appareil</string> <!-- Tchap: Use custom string -->
+    <string name="device_manager_other_sessions_description_unverified_current_session">Non vérifié · Votre appareil actuel</string> <!-- Tchap: Use custom string -->
     <string name="tooltip_attachment_voice_broadcast">Démarrer une diffusion audio</string>
     <string name="key_authenticity_not_guaranteed">L’authenticité de ce message chiffré ne peut pas être garantie sur cet appareil.</string>
     <string name="settings_security_incognito_keyboard_summary">Demande au clavier de ne pas mettre à jour les données personnalisées, comme l’historique de la frappe et le dictionnaire composé de ce que vous avez tapé dans vos conversations. Il est possible que certains claviers ne respectent pas ce paramètre.</string>
@@ -2739,18 +2733,18 @@
     <string name="command_description_table_flip">Préfixe le message par (╯°□°）╯︵ ┻━┻</string>
     <string name="attachment_type_voice_broadcast">Diffusion audio</string>
     <string name="command_description_devtools">Ouvrir l’écran des outils développeurs</string>
-    <string name="room_settings_global_block_unverified_info_text">🔒 Vous avez activé le chiffrement vers les sessions vérifiées uniquement, pour tous les salons, dans les paramètres Sécurité.</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 Vous avez activé le chiffrement vers les appareils vérifiés uniquement, pour tous les salons, dans les paramètres Sécurité.</string> <!-- Tchap: Use custom string -->
     <string name="some_devices_will_not_be_able_to_decrypt">⚠ Il y a des appareils non vérifiés dans ce salon, ils ne pourront pas déchiffrer vos messages envoyés.</string>
-    <string name="encryption_never_send_to_unverified_devices_in_room">Ne jamais envoyer de messages chiffrés aux sessions non vérifiées dans ce salon.</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">Ne jamais envoyer de messages chiffrés aux appareils non vérifiés dans ce salon.</string> <!-- Tchap: Use custom string -->
     <string name="action_got_it">Compris</string>
     <string name="rich_text_editor_format_underline">Souligner le texte</string>
     <string name="rich_text_editor_format_strikethrough">Barrer le texte</string>
     <string name="rich_text_editor_format_italic">Mettre en italique</string>
     <string name="rich_text_editor_format_bold">Mettre en gras</string>
-    <string name="labs_enable_client_info_recording_summary">Enregistre le nom du client, sa version, et son URL pour retrouvez vos sessions plus facilement dans le gestionnaire de sessions.</string>
+    <string name="labs_enable_client_info_recording_summary">Enregistre le nom du client, sa version, et son URL pour retrouver vos appareils plus facilement dans le gestionnaire d’appareils.</string> <!-- Tchap: Use custom string -->
     <string name="labs_enable_client_info_recording_title">Activer l’enregistrement des informations du client</string>
-    <string name="labs_enable_session_manager_summary">Ayez une meilleur visibilité et plus de contrôle sur toutes vos sessions.</string>
-    <string name="labs_enable_session_manager_title">Activer le nouveau gestionnaire de session</string>
+    <string name="labs_enable_session_manager_summary">Ayez une meilleur visibilité et plus de contrôle sur tous vos appareils.</string> <!-- Tchap: Use custom string -->
+    <string name="labs_enable_session_manager_title">Activer le nouveau gestionnaire d’appareils</string> <!-- Tchap: Use custom string -->
     <string name="device_manager_session_details_device_operating_system">Système d’exploitation</string>
     <string name="device_manager_session_details_device_model">Modèle</string>
     <string name="device_manager_session_details_device_browser">Navigateur</string>
@@ -2758,12 +2752,12 @@
     <string name="device_manager_session_details_application_version">Version</string>
     <string name="device_manager_session_details_application_name">Nom</string>
     <string name="device_manager_session_details_application">Application</string>
-    <string name="device_manager_push_notifications_description">Recevoir les notifications push sur cette session.</string>
+    <string name="device_manager_push_notifications_description">Recevoir les notifications push sur cet appareil.</string> <!-- Tchap: Use custom string -->
     <string name="device_manager_push_notifications_title">Notifications push</string>
-    <string name="device_manager_verification_status_detail_other_session_unknown">Vérifiez votre session actuelle pour découvrir le statut de vérification de cette session.</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Vérifiez votre appareil actuel pour découvrir son statut de vérification.</string> <!-- Tchap: Use custom string -->
     <string name="device_manager_verification_status_unknown">Status de vérification inconnu</string>
     <string name="push_gateway_item_enabled">Activer :</string>
-    <string name="push_gateway_item_device_id">Identifiant de session :</string>
+    <string name="push_gateway_item_device_id">Identifiant de l’appareil :</string> <!-- Tchap: Use custom string -->
     <string name="error_check_network">Quelque chose s’est mal passé. Vérifiez votre connexion réseau et réessayez.</string>
     <string name="grant_permission">Accorder la permission</string>
     <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} a besoin d’une permission pour afficher les notifications.
@@ -2811,18 +2805,18 @@
     <string name="two">2</string>
     <string name="one">1</string>
     <string name="labs_enable_voice_broadcast_summary">Pouvoir enregistrer et envoyer une diffusion audio dans l’historique du salon.</string>
-    <string name="labs_enable_voice_broadcast_title">Activer la diffusion audio (en cours de développement)</string>
+    <string name="labs_enable_voice_broadcast_title">Activer la diffusion audio</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_description">Vous pouvez utiliser cet appareil pour connecter un appareil mobile ou un client web avec un QR code. Il y a deux façons de le faire :</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_title">Se connecter avec un QR code</string>
     <string name="login_scan_qr_code">Scanner le QR code</string>
-    <string name="a11y_voice_broadcast_buffering">Mise en mémoire tampon…</string>
+    <string name="voice_broadcast_buffering">Mise en mémoire tampon…</string>
     <string name="a11y_pause_voice_broadcast">Mettre en pause la diffusion audio</string>
     <string name="a11y_play_voice_broadcast">Lire ou continuer la diffusion audio</string>
     <string name="a11y_stop_voice_broadcast_record">Arrêter l’enregistrement de la diffusion audio</string>
     <string name="a11y_pause_voice_broadcast_record">Mettre en pause l’enregistrement de la diffusion audio</string>
     <string name="a11y_resume_voice_broadcast_record">Continuer l’enregistrement de la diffusion audio</string>
     <string name="voice_broadcast_live">Direct</string>
-    <string name="device_manager_other_sessions_select">Sélectionner des sessions</string>
+    <string name="device_manager_other_sessions_select">Sélectionner des appareils</string> <!-- Tchap: Use custom string -->
     <string name="attachment_type_selector_contact">Contact</string>
     <string name="attachment_type_selector_camera">Appareil photo</string>
     <string name="attachment_type_selector_location">Position</string>
@@ -2845,12 +2839,12 @@
     <string name="error_voice_broadcast_unauthorized_title">Impossible de commencer une nouvelle diffusion audio</string>
     <string name="a11y_voice_broadcast_fast_forward">Avance rapide de 30 secondes</string>
     <string name="a11y_voice_broadcast_fast_backward">Retour rapide de 30 secondes</string>
-    <string name="device_manager_learn_more_sessions_verified_description">Les sessions vérifiées sont toutes celles qui utilisent ce compte après avoir saisie la phrase de sécurité ou confirmé votre identité à l’aide d’une autre session vérifiée.
+    <string name="device_manager_learn_more_sessions_verified_description">Les appareils vérifiés sont tous ceux qui utilisent ce compte après avoir saisie la phrase de sécurité ou confirmé votre identité à l’aide d’un autre appareil vérifié.
 \n
-\nCela veut dire qu’elles disposent de toutes les clés nécessaires pour lire les messages chiffrés, et confirment aux autres utilisateurs que vous faites confiance à cette session.</string>
+\nCela veut dire qu’elles disposent de toutes les clés nécessaires pour lire les messages chiffrés, et confirment aux autres utilisateurs que vous faites confiance à cet appareil.</string> <!-- Tchap: Use custom string -->
     <plurals name="device_manager_other_sessions_multi_signout_all">
-        <item quantity="one">Déconnecter %1$d session</item>
-        <item quantity="other">Déconnecter %1$d sessions</item>
+        <item quantity="one">Déconnecter %1$d appareil</item> <!-- Tchap: Use custom string -->
+        <item quantity="other">Déconnecter %1$d appareils</item> <!-- Tchap: Use custom string -->
     </plurals>
     <string name="device_manager_other_sessions_multi_signout_selection">Déconnecter</string>
     <string name="voice_broadcast_recording_time_left">%1$s restant</string>
@@ -2869,4 +2863,62 @@
     <string name="editing">Modification</string>
     <string name="settings_enable_direct_share_summary">Affiche les conversations récentes dans le menu de partage du système</string>
     <string name="settings_enable_direct_share_title">Activer le partage direct</string>
+    <string name="review_unverified_sessions_description">Vérifiez pour assurer la sécurité de votre compte</string>
+    <string name="review_unverified_sessions_title">Vous avez des sessions non vérifiées</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Cette session ne prend pas en charge le chiffrement, elle ne peut donc pas être vérifiée.
+\n
+\nVous ne pourrez pas participer dans les salons où le chiffrement est activé en utilisant cette session.
+\n
+\nPour de meilleures sécurité et confidentialité, il est recommandé d’utiliser des clients Matrix qui prennent en charge le chiffrement.</string>
+    <string name="device_manager_signout_all_other_sessions">Déconnecter toutes les autres sessions</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Cette session ne prend pas en charge le chiffrement, elle ne peut donc pas être vérifiée.</string>
+    <string name="voice_broadcast_live_broadcast">Diffusion en direct</string>
+    <string name="settings_nightly_build_update">Obtenir la toute dernière version (note : vous pourriez avoir des problèmes pour vous connecter)</string>
+    <string name="settings_nightly_build">Version Nightly</string>
+    <string name="notice_voice_broadcast_ended_by_you">Vous avez terminé une diffusion audio.</string>
+    <string name="notice_voice_broadcast_ended">%1$s a terminé une diffusion audio.</string>
+    <string name="stop_voice_broadcast_content">Êtes-vous sûr de vouloir arrêter votre diffusion en direct \? Cela terminera la diffusion et l’enregistrement complet sera disponible dans le salon.</string>
+    <string name="stop_voice_broadcast_dialog_title">Arrêter la diffusion en direct \?</string>
+    <string name="action_stop">Oui, arrêter</string>
+    <string name="set_link_edit">Éditer le lien</string>
+    <string name="set_link_create">Crée un lien</string>
+    <string name="set_link_link">Lien</string>
+    <string name="set_link_text">Texte</string>
+    <string name="rich_text_editor_link">Définir un lien</string>
+    <string name="settings_access_token_summary">Votre jeton d’accès donne un accès intégral à votre compte. Ne le partagez avec personne.</string>
+    <string name="settings_access_token">Jeton d’accès</string>
+    <string name="rich_text_editor_bullet_list">(Dés)activer la liste à puce</string>
+    <string name="rich_text_editor_numbered_list">(Dés)activer la liste numérotée</string>
+    <string name="room_polls_ended_no_item">Il n’y a aucun ancien sondage dans ce salon</string>
+    <string name="room_polls_ended">Anciens sondages</string>
+    <string name="room_polls_active_no_item">Il n’y a aucun sondage en cours dans ce salon</string>
+    <string name="room_polls_active">Sondages actifs</string>
+    <string name="room_profile_section_more_polls">Historique des sondages</string>
+    <string name="message_reply_to_ended_poll_preview">Sondage terminé</string>
+    <string name="message_reply_to_poll_preview">Sondage</string>
+    <string name="message_reply_to_sender_ended_poll">a terminé un sondage.</string>
+    <string name="ended_poll_indicator">A terminé le sondage.</string>
+    <string name="thread_list_not_available">Votre serveur d’accueil ne prend pas encore en charge l’affichage de la liste des fils de discussion.</string>
+    <string name="error_voice_broadcast_unable_to_play">Impossible de lire cette diffusion audio.</string>
+    <string name="started_a_voice_broadcast">A démarré une diffusion audio</string>
+    <string name="unable_to_decrypt_some_events_in_poll">À cause d’erreurs de déchiffrement, certains votes pourraient ne pas avoir été pris en compte</string>
+    <string name="room_polls_loading_error">Erreur lors de la récupération des sondages.</string>
+    <string name="room_polls_load_more">Charger plus de sondages</string>
+    <string name="room_polls_wait_for_display">Affichage des sondages</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">Il n’y a aucun sondage terminé depuis hier.
+\nChargez plus de sondages pour voir les sondages des jours précédents.</item>
+        <item quantity="other">Il n’y a aucun sondage terminé depuis %1$d jours.
+\nChargez plus de sondages pour voir les sondages des jours précédents.</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">Il n’y a aucun sondage actif depuis hier.
+\nChargez plus de sondages pour voir les sondages des jours précédents.</item>
+        <item quantity="other">Il n’y a aucun sondage actif depuis %1$d jours.
+\nChargez plus de sondages pour voir les sondages des jours précédents.</item>
+    </plurals>
+    <string name="error_voice_message_broadcast_in_progress_message">Vous ne pouvez pas commencer un message vocal car vous êtes en train d’enregistrer une diffusion en direct. Veuillez terminer cette diffusion pour commencer un message vocal</string>
+    <string name="error_voice_message_broadcast_in_progress">Impossible de démarrer un message vocal</string>
+    <string name="error_voice_broadcast_no_connection_recording">Erreur de connexion – Enregistrement en pause</string>
+    <string name="rich_text_editor_inline_code">Appliquer le formatage de code en ligne</string>
 </resources>

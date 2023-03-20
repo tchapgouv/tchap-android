@@ -21,10 +21,10 @@ import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.extensions.takeAs
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.time.Clock
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.detail.timeline.format.NoticeEventFormatter
+import im.vector.lib.core.utils.timer.Clock
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
@@ -67,7 +67,7 @@ class NotifiableEventResolver @Inject constructor(
 ) {
 
     private val nonEncryptedNotifiableEventTypes: List<String> =
-            listOf(EventType.MESSAGE) + EventType.POLL_START.values + EventType.STATE_ROOM_BEACON_INFO.values
+            listOf(EventType.MESSAGE) + EventType.POLL_START.values + EventType.POLL_END.values + EventType.STATE_ROOM_BEACON_INFO.values
 
     suspend fun resolveEvent(event: Event, session: Session, isNoisy: Boolean): NotifiableEvent? {
         val roomID = event.roomId ?: return null

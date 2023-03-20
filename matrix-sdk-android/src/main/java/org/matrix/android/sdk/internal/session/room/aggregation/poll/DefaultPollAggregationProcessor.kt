@@ -84,7 +84,6 @@ internal class DefaultPollAggregationProcessor @Inject constructor(
         val roomId = event.roomId ?: return false
         val senderId = event.senderId ?: return false
         val targetEventId = event.getRelationContent()?.eventId ?: return false
-        val targetPollContent = getPollContent(session, roomId, targetEventId) ?: return false
 
         val annotationsSummaryEntity = getAnnotationsSummaryEntity(realm, roomId, targetEventId)
         val aggregatedPollSummaryEntity = getAggregatedPollSummaryEntity(realm, annotationsSummaryEntity)
@@ -108,7 +107,8 @@ internal class DefaultPollAggregationProcessor @Inject constructor(
         }
 
         val vote = content.getBestResponse()?.answers?.first() ?: return false
-        if (!targetPollContent.getBestPollCreationInfo()?.answers?.map { it.id }?.contains(vote).orFalse()) {
+        val targetPollContent = getPollContent(session, roomId, targetEventId)
+        if (targetPollContent != null && !targetPollContent.getBestPollCreationInfo()?.answers?.map { it.id }?.contains(vote).orFalse()) {
             return false
         }
 
@@ -155,6 +155,8 @@ internal class DefaultPollAggregationProcessor @Inject constructor(
         )
         aggregatedPollSummaryEntity.aggregatedContent = ContentMapper.map(newSumModel.toContent())
 
+        event.eventId?.let { removeEncryptedRelatedEventIdIfNeeded(aggregatedPollSummaryEntity, it) }
+
         return true
     }
 
@@ -179,6 +181,8 @@ internal class DefaultPollAggregationProcessor @Inject constructor(
             aggregatedPollSummaryEntity.sourceLocalEchoEvents.remove(txId)
             aggregatedPollSummaryEntity.sourceEvents.add(event.eventId)
         }
+
+        event.eventId?.let { removeEncryptedRelatedEventIdIfNeeded(aggregatedPollSummaryEntity, it) }
 
         if (!isLocalEcho) {
             ensurePollIsFullyAggregated(roomId, pollEventId)
@@ -224,6 +228,12 @@ internal class DefaultPollAggregationProcessor @Inject constructor(
                     startPollEventId = pollEventId,
             )
             fetchPollResponseEventsTask.execute(params)
+        }
+    }
+
+    private fun removeEncryptedRelatedEventIdIfNeeded(aggregatedPollSummaryEntity: PollResponseAggregatedSummaryEntity, eventId: String) {
+        if (aggregatedPollSummaryEntity.encryptedRelatedEventIds.contains(eventId)) {
+            aggregatedPollSummaryEntity.encryptedRelatedEventIds.remove(eventId)
         }
     }
 }

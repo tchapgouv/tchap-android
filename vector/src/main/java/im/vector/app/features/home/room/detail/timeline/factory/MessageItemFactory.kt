@@ -32,7 +32,6 @@ import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.containsOnlyEmojis
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -84,6 +83,7 @@ import im.vector.app.features.voice.AudioWaveformView
 import im.vector.app.features.voicebroadcast.isVoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.core.utils.timer.Clock
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.session.Session
@@ -92,11 +92,13 @@ import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
 import org.matrix.android.sdk.api.session.room.model.message.MessageEmoteContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
@@ -110,6 +112,7 @@ import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
 import org.matrix.android.sdk.api.session.room.model.relation.ReplyToContent
+import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.api.util.MimeTypes
 import javax.inject.Inject
@@ -158,6 +161,9 @@ class MessageItemFactory @Inject constructor(
         textRendererFactory.create(roomId)
     }
 
+    private val useRichTextEditorStyle: Boolean
+        get() = vectorPreferences.isRichTextEditorEnabled()
+
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event
         val highlight = params.isHighlighted
@@ -204,7 +210,8 @@ class MessageItemFactory @Inject constructor(
             is MessageFileContent -> buildFileMessageItem(messageContent, highlight, attributes)
             is MessageAudioContent -> buildAudioContent(params, messageContent, informationData, highlight, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessagePollContent -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
+            is MessagePollContent -> buildPollItem(messageContent, informationData, highlight, callback, attributes, isEnded = false)
+            is MessageEndPollContent -> buildEndedPollItem(event.getRelationContent()?.eventId, informationData, highlight, callback, attributes)
             is MessageLocationContent -> buildLocationItem(messageContent, informationData, highlight, attributes)
             is MessageBeaconInfoContent -> liveLocationShareMessageItemFactory.create(event, highlight, attributes)
             is MessageVoiceBroadcastInfoContent -> voiceBroadcastItemFactory.create(params, messageContent, highlight, attributes)
@@ -247,20 +254,65 @@ class MessageItemFactory @Inject constructor(
             highlight: Boolean,
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
+            isEnded: Boolean,
     ): PollItem {
-        val pollViewState = pollItemViewStateFactory.create(pollContent, informationData)
+        val pollViewState = pollItemViewStateFactory.create(
+                pollContent = pollContent,
+                pollResponseData = informationData.pollResponseAggregatedSummary,
+                isSent = informationData.sendState.isSent(),
+        )
 
         return PollItem_()
                 .attributes(attributes)
                 .eventId(informationData.eventId)
-                .pollQuestion(createPollQuestion(informationData, pollViewState.question, callback))
+                .pollTitle(createPollQuestion(informationData, pollViewState.question, callback))
                 .canVote(pollViewState.canVote)
                 .votesStatus(pollViewState.votesStatus)
                 .optionViewStates(pollViewState.optionViewStates.orEmpty())
                 .edited(informationData.hasBeenEdited)
+                .ended(isEnded)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .callback(callback)
+    }
+
+    private fun buildEndedPollItem(
+            pollStartEventId: String?,
+            informationData: MessageInformationData,
+            highlight: Boolean,
+            callback: TimelineEventController.Callback?,
+            attributes: AbsMessageItem.Attributes,
+    ): PollItem {
+        val pollStartEvent = if (pollStartEventId?.isNotEmpty() == true) {
+            session.roomService().getRoom(roomId)?.getTimelineEvent(pollStartEventId)
+        } else {
+            null
+        }
+        val pollContent = pollStartEvent?.root?.getClearContent()?.toModel<MessagePollContent>()
+
+        return if (pollContent == null) {
+            val title = stringProvider.getString(R.string.message_reply_to_ended_poll_preview).toEpoxyCharSequence()
+            PollItem_()
+                    .attributes(attributes)
+                    .eventId(informationData.eventId)
+                    .pollTitle(title)
+                    .optionViewStates(emptyList())
+                    .edited(informationData.hasBeenEdited)
+                    .ended(true)
+                    .hasContent(false)
+                    .highlighted(highlight)
+                    .leftGuideline(avatarSizeProvider.leftGuideline)
+                    .callback(callback)
+        } else {
+            buildPollItem(
+                    pollContent,
+                    informationData,
+                    highlight,
+                    callback,
+                    attributes,
+                    isEnded = true,
+            )
+        }
     }
 
     private fun createPollQuestion(
@@ -624,6 +676,7 @@ class MessageItemFactory @Inject constructor(
                 .previewUrlRetriever(callback?.getPreviewUrlRetriever())
                 .imageContentRenderer(imageContentRenderer)
                 .previewUrlCallback(callback)
+                .useRichTextEditorStyle(useRichTextEditorStyle)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)

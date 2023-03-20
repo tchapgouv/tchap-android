@@ -49,6 +49,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import org.matrix.android.sdk.api.auth.SSOAction
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.failure.isInvalidUsername
 import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
@@ -234,11 +235,12 @@ class FtueAuthLoginFragment :
 
             if (state.selectedHomeserver.preferredLoginMode is LoginMode.SsoAndPassword) {
                 views.loginSocialLoginContainer.isVisible = true
-                views.loginSocialLoginButtons.render(state.selectedHomeserver.preferredLoginMode.ssoState, ssoMode(state)) { provider ->
+                views.loginSocialLoginButtons.render(state.selectedHomeserver.preferredLoginMode, ssoMode(state)) { provider ->
                     viewModel.fetchSsoUrl(
                             redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                             deviceId = state.deviceId,
-                            provider = provider
+                            provider = provider,
+                            action = if (state.signMode == SignMode.SignUp) SSOAction.REGISTER else SSOAction.LOGIN
                     )
                             ?.let { openInCustomTab(it) }
                 }
