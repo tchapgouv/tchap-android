@@ -70,9 +70,9 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
-      - name: Assemble ${{ matrix.target }} unsigned apk
-        run: ./gradlew clean assemble${{ matrix.target }}Release $CI_GRADLE_ARG_PROPERTIES
-      - name: Upload ${{ matrix.target }} unsigned APKs
+      - name: Assemble GPlay unsigned apk
+        run: ./gradlew clean assembleGplayRelease $CI_GRADLE_ARG_PROPERTIES
+      - name: Upload Gplay unsigned APKs
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.target }}-release-unsigned
