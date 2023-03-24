@@ -264,7 +264,9 @@ class HomeActivity :
 
         homeActivityViewModel.observeViewEvents {
             when (it) {
-                is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning(it)
+                // Tchap - deactivate push cross signin
+                // is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning(it)
+                is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> {}
                 is HomeActivityViewEvents.CurrentSessionNotVerified -> handleOnNewSession(it)
                 is HomeActivityViewEvents.CurrentSessionCannotBeVerified -> handleCantVerify(it)
                 HomeActivityViewEvents.PromptToEnableSessionPush -> handlePromptToEnablePush()
