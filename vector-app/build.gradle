@@ -86,7 +86,7 @@ static def getGplayVersionSuffix() {
     if (gitBranchName() == "main" || gitTag().startsWith("tchap_v")) {
         return ""
     } else {
-        return "-dev"
+        return "-toto"
     }
 }
 
