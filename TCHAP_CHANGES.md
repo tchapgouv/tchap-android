@@ -1,3 +1,11 @@
+Changes in Tchap 2.7.3 (2023-03-24)
+===================================
+
+Bugfixes 🐛
+----------
+ - 2.7.0 Infinite loading wheel on XS activation ([#858](https://github.com/tchapgouv/tchap-android-v2/issues/858))
+
+
 Changes in Tchap 2.7.2 (2023-03-13)
 ===================================
 
