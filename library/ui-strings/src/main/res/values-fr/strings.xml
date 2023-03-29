@@ -2639,7 +2639,7 @@
     <string name="onboarding_new_app_layout_welcome_title">Bienvenu dans une nouvelle vue !</string>
     <string name="home_empty_no_unreads_message">C\'est ici que vos messages non-lus s’afficheront lorsque vous en aurez.</string>
     <string name="home_empty_no_unreads_title">Rien à signaler.</string>
-    <string name="home_empty_no_rooms_message">La messagerie sécurisée tout-en-un pour les équipes, les collègues, et les organisations. Créez une discussion ou rejoignez un salon pour démarrer.</string> <!-- Tchap: Custom string -->
+    <string name="home_empty_no_rooms_message">La messagerie instantanée de confiance de l\'Administration. Conçue pour les agents des trois fonctions publiques, pour communiquer facilement en toute sécurité.</string> <!-- Tchap: Custom string -->
     <string name="home_empty_no_rooms_title">Bienvenue dans ${app_name},
 \n%s.</string>
     <string name="home_empty_space_no_rooms_message">Les espaces sont un nouveau moyen de grouper les salons et les gens. Ajoutez un salon, ou créez en un nouveau à l’aide du bouton en bas à droite.</string>
