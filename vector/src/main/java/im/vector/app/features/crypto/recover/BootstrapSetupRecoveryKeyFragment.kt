@@ -42,18 +42,21 @@ class BootstrapSetupRecoveryKeyFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Tchap : we directly send user to Security Key
         // Actions when a key backup exist
-        views.bootstrapSetupSecureSubmit.views.bottomSheetActionClickableZone.debouncedClicks {
-            sharedViewModel.handle(BootstrapActions.StartKeyBackupMigration)
-        }
+        // views.bootstrapSetupSecureSubmit.views.bottomSheetActionClickableZone.debouncedClicks {
+        //     sharedViewModel.handle(BootstrapActions.StartKeyBackupMigration)
+        // }
 
         // Actions when there is no key backup
-        views.bootstrapSetupSecureUseSecurityKey.views.bottomSheetActionClickableZone.debouncedClicks {
-            sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = false))
-        }
-        views.bootstrapSetupSecureUseSecurityPassphrase.views.bottomSheetActionClickableZone.debouncedClicks {
-            sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = true))
-        }
+        // views.bootstrapSetupSecureUseSecurityKey.views.bottomSheetActionClickableZone.debouncedClicks {
+        //     sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = false))
+        // }
+        // views.bootstrapSetupSecureUseSecurityPassphrase.views.bottomSheetActionClickableZone.debouncedClicks {
+        //     sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = true))
+        // }
+
+        sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = false))
     }
 
     override fun invalidate() = withState(sharedViewModel) { state ->
