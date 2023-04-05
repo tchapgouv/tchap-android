@@ -1,3 +1,11 @@
+Changes in Tchap 2.7.4 (2023-04-04)
+===================================
+
+Bugfixes 🐛
+----------
+ - Replace hardcoded colors by theming colors on save button. ([#874](https://github.com/tchapgouv/tchap-android-v2/issues/874))
+
+
 Changes in Tchap 2.7.3 (2023-03-24)
 ===================================
 
