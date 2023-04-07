@@ -27,8 +27,7 @@ object Config {
     const val SHOW_SPACES = false
     const val SPACES_SHOW_ALL_IN_HOME = !SHOW_SPACES
 
-    // Tchap: Hide voice message recorder button
-    const val SHOW_VOICE_RECORDER = false
+    const val SHOW_VOICE_RECORDER = true
 
     /**
      * Flag to allow external UnifiedPush distributors to be chosen by the user.
