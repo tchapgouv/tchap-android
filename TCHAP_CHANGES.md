@@ -1,3 +1,11 @@
+Changes in Tchap 2.7.4 (2023-04-07)
+===================================
+
+Features ✨
+----------
+ - Sending a voice message ([#609](https://github.com/tchapgouv/tchap-android-v2/issues/609))
+
+
 Changes in Tchap 2.7.4 (2023-04-04)
 ===================================
 
