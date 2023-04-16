@@ -48,8 +48,12 @@ import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.dialpad.PstnDialActivity
 import im.vector.app.features.call.webrtc.WebRtcCallManager
+<<<<<<< HEAD
 import im.vector.app.features.createdirect.CreateDirectRoomAction
 import im.vector.app.features.createdirect.CreateDirectRoomViewModel
+=======
+import im.vector.app.features.home.room.list.UnreadCounterBadgeView
+>>>>>>> v1.5.28
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import im.vector.app.features.home.room.list.home.HomeRoomListFragment
@@ -85,6 +89,7 @@ class NewHomeDetailFragment :
     @Inject lateinit var buildMeta: BuildMeta
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
+    private val newHomeDetailViewModel: NewHomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
     private val createDirectRoomViewModel: CreateDirectRoomViewModel by activityViewModel() // Tchap : for managing invite
@@ -195,6 +200,10 @@ class NewHomeDetailFragment :
                     currentCallsViewPresenter.updateCall(callManager.getCurrentCall(), callManager.getCalls())
                     invalidateOptionsMenu()
                 }
+
+        newHomeDetailViewModel.onEach { viewState ->
+            refreshUnreadCounterBadge(viewState.spacesNotificationCounterBadgeState)
+        }
     }
 
     private fun setupObservers() {
@@ -396,6 +405,10 @@ class NewHomeDetailFragment :
         state.myMatrixItem?.let { user ->
             avatarRenderer.render(user, views.avatar)
         }
+    }
+
+    private fun refreshUnreadCounterBadge(badgeState: UnreadCounterBadgeView.State) {
+        views.spacesUnreadCounterBadge.render(badgeState)
     }
 
     override fun onTapToReturnToCall() {

@@ -100,11 +100,75 @@ class RoomMemberProfileController @Inject constructor(
         val host = this
 
         if (state.isRoomEncrypted) {
+<<<<<<< HEAD
             // Tchap: Hide the security part, we keep the footer.
             genericFooterItem {
                 id("verify_footer")
                 text(host.stringProvider.getString(R.string.room_profile_encrypted_subtitle).toEpoxyCharSequence())
                 centered(false)
+=======
+            if (!state.isAlgorithmSupported) {
+                // TODO find sensible message to display here
+                // For now we just remove the verify actions as well as the Security status
+            } else if (state.userMXCrossSigningInfo != null) {
+                buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
+                // Cross signing is enabled for this user
+                if (state.userMXCrossSigningInfo.isTrusted()) {
+                    // User is trusted
+                    val (icon, titleRes) = if (state.allDevicesAreCrossSignedTrusted) {
+                        Pair(R.drawable.ic_shield_trusted, R.string.verification_profile_verified)
+                    } else {
+                        Pair(R.drawable.ic_shield_warning, R.string.verification_profile_warning)
+                    }
+
+                    buildProfileAction(
+                            id = "learn_more",
+                            title = stringProvider.getString(titleRes),
+                            editable = true,
+                            icon = icon,
+                            tintIcon = false,
+                            divider = false,
+                            action = { callback?.onShowDeviceList() }
+                    )
+                } else {
+                    // Not trusted, propose to verify
+                    if (!state.isMine) {
+                        buildProfileAction(
+                                id = "learn_more",
+                                title = stringProvider.getString(R.string.verification_profile_verify),
+                                editable = true,
+                                icon = R.drawable.ic_shield_black,
+                                divider = false,
+                                action = { callback?.onTapVerify() }
+                        )
+                    } else {
+                        buildProfileAction(
+                                id = "learn_more",
+                                title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
+                                editable = false,
+                                divider = false,
+                                action = { callback?.onShowDeviceListNoCrossSigning() }
+                        )
+                    }
+
+                    genericFooterItem {
+                        id("verify_footer")
+                        text(host.stringProvider.getString(R.string.room_profile_encrypted_subtitle).toEpoxyCharSequence())
+                        centered(false)
+                    }
+                }
+            } else {
+                buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
+
+                buildProfileAction(
+                        id = "learn_more",
+                        title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
+                        editable = false,
+                        divider = false,
+                        subtitle = stringProvider.getString(R.string.room_profile_encrypted_subtitle),
+                        action = { callback?.onShowDeviceListNoCrossSigning() }
+                )
+>>>>>>> v1.5.28
             }
 
 //            if (!state.isAlgorithmSupported) {

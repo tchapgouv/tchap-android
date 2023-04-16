@@ -60,7 +60,11 @@ jobs:
         # Tchap : stay on current branch
         # with:
           # https://github.com/actions/checkout/issues/881
+<<<<<<< HEAD
           # ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+=======
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
+>>>>>>> v1.5.28
       - name: Configure gradle
         uses: gradle/gradle-build-action@v2
         with:
