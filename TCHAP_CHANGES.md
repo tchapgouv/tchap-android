@@ -1,3 +1,11 @@
+Changes in Tchap 2.8.1 (2023-04-18)
+===================================
+
+Improvements 🙌
+--------------
+ -  Rebase depuis Element 1.5.28 ([#901](https://github.com/tchapgouv/tchap-android-v2/issues/901))
+
+
 Changes in Tchap 2.7.4 (2023-04-07)
 ===================================
 
