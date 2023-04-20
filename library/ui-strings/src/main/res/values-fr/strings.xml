@@ -2290,8 +2290,8 @@
     </plurals>
     <string name="preference_system_settings">Paramètres système</string>
     <string name="preference_versions">Versions</string>
-    <string name="preference_help_summary">Obtenir de l’aide pour utiliser ${app_name}</string>
-    <string name="preference_help_title">Aide et support</string>
+    <string name="preference_help_summary">Accéder à la Foire Aux Questions (FAQ)</string> <!-- Tchap custom string -->
+    <string name="preference_help_title">Foire aux questions</string> <!-- Tchap custom string -->
     <string name="preference_help">Aide</string>
     <string name="preference_root_legals">Mentions légales</string>
     <string name="legals_no_policy_provided">Ce serveur ne fournit aucune politique.</string>
