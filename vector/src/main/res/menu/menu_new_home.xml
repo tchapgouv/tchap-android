@@ -17,6 +17,12 @@
         android:title="@string/add_by_qr_code"
         app:showAsAction="never" />
 
+    <!-- Tchap : add a FAQ access -->
+    <item
+        android:id="@+id/menu_home_faq"
+        android:title="@string/preference_help_title"
+        app:showAsAction="never" />
+
     <item
         android:id="@+id/menu_home_suggestion"
         android:icon="@drawable/ic_material_bug_report"

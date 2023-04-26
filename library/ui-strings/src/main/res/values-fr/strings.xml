@@ -877,7 +877,7 @@
     <string name="push_gateway_item_url">URL :</string>
     <string name="push_gateway_item_format">Format :</string>
     <string name="preference_voice_and_video">Voix et vidéo</string>
-    <string name="preference_root_help_about">Aide et à propos</string>
+    <string name="preference_root_help_about">À propos</string> <!-- Tchap: Custom string -->
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Inscrire le jeton</string>
     <string name="send_suggestion">Faire une suggestion</string>
     <string name="send_suggestion_content">Saisissez votre suggestion ci-dessous.</string>
