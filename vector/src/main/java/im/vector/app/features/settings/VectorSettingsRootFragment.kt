@@ -17,9 +17,12 @@
 package im.vector.app.features.settings
 
 import android.os.Bundle
+import androidx.preference.Preference
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.preference.VectorPreference
+import im.vector.app.core.utils.FirstThrottler
+import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.analytics.plan.MobileScreen
 
 @AndroidEntryPoint
@@ -29,6 +32,8 @@ class VectorSettingsRootFragment :
     override var titleRes: Int = R.string.title_activity_settings
     override val preferenceXmlRes = R.xml.vector_settings_root
 
+    private val firstThrottler = FirstThrottler(1000)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         analyticsScreenName = MobileScreen.ScreenName.Settings
@@ -36,6 +41,15 @@ class VectorSettingsRootFragment :
 
     override fun bindPref() {
         tintIcons()
+
+        // Tchap : Manage new FAQ entry
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_HELP_PREFERENCE_KEY)!!
+                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
+                openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.HELP)
+            }
+            false
+        }
     }
 
     private fun tintIcons() {
