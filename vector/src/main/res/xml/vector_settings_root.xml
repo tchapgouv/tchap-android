@@ -44,8 +44,14 @@
         app:fragment="im.vector.app.features.settings.VectorSettingsAdvancedSettingsFragment"
         app:isPreferenceVisible="@bool/settings_root_advanced_visible" />
 
+    <!-- Tchap : independent access for faq -->
     <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_help_about"
+        android:key="SETTINGS_HELP_PREFERENCE_KEY"
+        android:title="@string/preference_help_title" />
+
+    <im.vector.app.core.preference.VectorPreference
+        android:icon="@drawable/ic_settings_root_help_info"
         android:title="@string/preference_root_help_about"
         app:fragment="im.vector.app.features.settings.VectorSettingsHelpAboutFragment"
         app:isPreferenceVisible="@bool/settings_root_help_about_visible" />

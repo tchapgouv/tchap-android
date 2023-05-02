@@ -1,3 +1,12 @@
+Changes in Tchap 2.8.2 (2023-04-28)
+===================================
+
+Other changes
+-------------
+ - Rendre la FAQ plus visible et accessible ([#913](https://github.com/tchapgouv/tchap-android-v2/issues/913))
+ - Masquer la pastille de non lus au dessus du bouton nouveau message ([#917](https://github.com/tchapgouv/tchap-android-v2/issues/917))
+
+
 Changes in Tchap 2.8.1 (2023-04-18)
 ===================================
 

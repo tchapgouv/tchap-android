@@ -46,6 +46,7 @@ import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.pushers.UnifiedPushHelper
+import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.ActivityHomeBinding
@@ -674,6 +675,11 @@ class HomeActivity :
             }
             R.id.menu_home_qr -> {
                 launchQrCode()
+                true
+            }
+            // Tchap : new faq entry
+            R.id.menu_home_faq -> {
+                openUrlInChromeCustomTab(this, null, VectorSettingsUrls.HELP)
                 true
             }
             else -> false
