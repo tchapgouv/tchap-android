@@ -20,7 +20,11 @@ object VectorSettingsUrls {
     // Tchap: Redirect to Tchap FAQ
     const val HELP = "https://www.tchap.gouv.fr/faq"
     const val COPYRIGHT = "https://element.io/copyright"
+<<<<<<< HEAD
     const val TAC = "https://www.tchap.gouv.fr/tac.html"
+=======
+    const val ACCEPTABLE_USE_POLICY = "https://element.io/acceptable-use-policy-terms"
+>>>>>>> v1.5.32
     const val PRIVACY_POLICY = "https://element.io/privacy"
     const val DISCLAIMER_URL = "https://element.io/previously-riot"
     const val THIRD_PARTY_LICENSES = "file:///android_asset/open_source_licenses.html"
