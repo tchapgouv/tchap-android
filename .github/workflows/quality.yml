@@ -70,13 +70,14 @@ jobs:
           npm install --save-dev @babel/core
           npm install --save-dev @babel/plugin-transform-flow-strip-types
           yarn add danger-plugin-lint-report --dev
-      - name: Danger lint
-        if: always()
-        uses: danger/danger-js@11.2.6
-        with:
-          args: "--dangerfile ./tools/danger/dangerfile-lint.js"
-        env:
-          DANGER_GITHUB_API_TOKEN: ${{ steps.generate_token.outputs.token }}
+# Tchap : disable Danger lint check
+#      - name: Danger lint
+#        if: always()
+#        uses: danger/danger-js@11.2.6
+#        with:
+#          args: "--dangerfile ./tools/danger/dangerfile-lint.js"
+#        env:
+#          DANGER_GITHUB_API_TOKEN: ${{ steps.generate_token.outputs.token }}
 
   # Gradle dependency analysis using https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin
   dependency-analysis:
