@@ -77,6 +77,7 @@ const allowList = [
     "yostyle",
     "jdauphant",
     "appndigital",
+    "NicolasBuquet"
 ]
 
 const requiresSignOff = !allowList.includes(user)
@@ -109,8 +110,9 @@ if (github.requested_reviewers.users.length == 0 && !pr.draft) {
 }
 
 // Check that translations have not been modified by developers
-if (user != "RiotTranslateBot") {
-   if (editedFiles.some(file => file.endsWith("strings.xml") && !file.endsWith("values/strings.xml"))) {
-       fail("Some translation files have been edited. Only user `RiotTranslateBot` (i.e. translations coming from Weblate) is allowed to do that.\nPlease read more about translations management [in the doc](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#internationalisation).")
-   }
-}
+// Tchap ; deactivate translation file checking.
+// if (user != "RiotTranslateBot") {
+//    if (editedFiles.some(file => file.endsWith("strings.xml") && !file.endsWith("values/strings.xml"))) {
+//        fail("Some translation files have been edited. Only user `RiotTranslateBot` (i.e. translations coming from Weblate) is allowed to do that.\nPlease read more about translations management [in the doc](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#internationalisation).")
+//    }
+// }
