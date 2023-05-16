@@ -21,7 +21,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.distinctUntilChanged
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.home.room.detail.timeline.item.ScannableHolder
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
@@ -34,7 +34,11 @@ import javax.inject.Inject
 
 class ContentScannerStateTracker @Inject constructor(private val activeSessionHolder: ActiveSessionHolder) {
 
-    private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
+    private val lifecycleOwner = object : LifecycleOwner {
+        override val lifecycle: Lifecycle
+            get() = lifecycleRegistry
+    }
+
     private val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(lifecycleOwner)
 
     private val trackedStatus = mutableMapOf<String, LiveData<Optional<ScanStatusInfo>>>()
@@ -54,7 +58,7 @@ class ContentScannerStateTracker @Inject constructor(private val activeSessionHo
 
             updateStateOnBind(holder, session.contentScannerService().getCachedScanResultForFile(mxcURL))
 
-            Transformations.distinctUntilChanged(ld)
+            ld.distinctUntilChanged()
                     .observe(lifecycleOwner, Observer {
                         val scanStatusInfo = it.getOrNull()
                         Timber.v("SCAN STATUS ${scanStatusInfo?.state} for url $mxcURL")
