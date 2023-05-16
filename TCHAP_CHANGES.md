@@ -1,3 +1,11 @@
+Changes in Tchap 2.8.3 (2023-05-16)
+===================================
+
+Other changes
+-------------
+ - Android Rebase Element 1.5.32 (#919) ([#919](https://github.com/tchapgouv/tchap-android-v2/issues/919))
+
+
 Changes in Tchap 2.8.2 (2023-04-28)
 ===================================
 
