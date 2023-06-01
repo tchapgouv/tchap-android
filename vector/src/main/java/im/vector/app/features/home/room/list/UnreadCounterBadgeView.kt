@@ -43,8 +43,7 @@ class UnreadCounterBadgeView : MaterialTextView {
             if (count == 0) {
                 visibility = View.INVISIBLE
             } else {
-                // Tcahp : count remains invisible
-                visibility = View.INVISIBLE
+                visibility = View.VISIBLE
                 val bgRes = if (highlighted) {
                     R.drawable.bg_unread_highlight
                 } else {
