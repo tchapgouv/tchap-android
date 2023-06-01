@@ -198,9 +198,10 @@ class NewHomeDetailFragment :
                     invalidateOptionsMenu()
                 }
 
-        newHomeDetailViewModel.onEach { viewState ->
-            refreshUnreadCounterBadge(viewState.spacesNotificationCounterBadgeState)
-        }
+        // Tchap : hide unread count for space (shown above "+" button on main view)
+//        newHomeDetailViewModel.onEach { viewState ->
+//            refreshUnreadCounterBadge(viewState.spacesNotificationCounterBadgeState)
+//        }
     }
 
     private fun setupObservers() {
