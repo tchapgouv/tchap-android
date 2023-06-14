@@ -1,15 +1,26 @@
-Changes in Tchap 2.8.1 (2023-06-01)
+Changes in Tchap 2.8.4 (2023-06-14)
 ===================================
 
 Bugfixes 🐛
 ----------
  - [Badge messages non lus] Les badges de messages non-lus n'apparaissent plus en v2.8.3 #924 ([#924](https://github.com/tchapgouv/tchap-android-v2/issues/924))
 
+
+Changes in Tchap 2.8.3 (2023-06-01)
+===================================
+
 Other changes
 -------------
+ - Android Rebase Element 1.5.32 (#919) ([#919](https://github.com/tchapgouv/tchap-android-v2/issues/919))
+
+
+Changes in Tchap 2.8.2 (2023-05-09)
+===================================
+
+Improvements 🙌
+--------------
  - Rendre la FAQ plus visible et accessible ([#913](https://github.com/tchapgouv/tchap-android-v2/issues/913))
  - Masquer la pastille de non lus au dessus du bouton nouveau message ([#917](https://github.com/tchapgouv/tchap-android-v2/issues/917))
- - Android Rebase Element 1.5.32 (#919) ([#919](https://github.com/tchapgouv/tchap-android-v2/issues/919))
 
 
 Changes in Tchap 2.8.1 (2023-04-18)
@@ -20,7 +31,7 @@ Improvements 🙌
  -  Rebase depuis Element 1.5.28 ([#901](https://github.com/tchapgouv/tchap-android-v2/issues/901))
 
 
-Changes in Tchap 2.7.4 (2023-04-07)
+Changes in Tchap 2.8.0 (2023-04-07)
 ===================================
 
 Features ✨
