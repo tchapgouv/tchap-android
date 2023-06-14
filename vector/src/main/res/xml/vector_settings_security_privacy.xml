@@ -3,15 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <im.vector.app.core.preference.VectorPreference
-        android:icon="@drawable/ic_notification_privacy_warning"
-        android:key="SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT"
-        android:persistent="false"
-        app:isPreferenceVisible="false"
-        tools:isPreferenceVisible="true"
-        tools:summary="@string/settings_hs_admin_e2e_disabled">
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_CRYPTOGRAPHY_MANAGE_4S_CATEGORY_KEY"
+        android:title="@string/settings_secure_backup_section_title">
 
-    </im.vector.app.core.preference.VectorPreference>
+        <im.vector.app.core.preference.VectorPreference
+            android:focusable="false"
+            android:persistent="false"
+            android:summary="@string/settings_secure_backup_section_info" />
+
+        <im.vector.app.core.preference.VectorPreference
+            android:icon="@drawable/ic_secure_backup"
+            android:key="SETTINGS_SECURE_BACKUP_RECOVERY_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_secure_backup_setup" />
+    </im.vector.app.core.preference.VectorPreferenceCategory>
+
+    <!-- devices list entry point -->
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_DEVICES_LIST_PREFERENCE_KEY"
+        android:title="@string/settings_active_sessions_list">
+
+        <im.vector.app.core.preference.VectorPreference
+            android:key="SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY"
+            android:title="@string/settings_active_sessions_show_all"
+            app:fragment="im.vector.app.features.settings.devices.VectorSettingsDevicesFragment" />
+
+        <im.vector.app.core.preference.VectorPreference
+            android:key="SETTINGS_SHOW_DEVICES_LIST_V2_PREFERENCE_KEY"
+            android:title="@string/settings_active_sessions_show_all"
+            app:fragment="im.vector.app.features.settings.devices.v2.VectorSettingsDevicesFragment" />
+
+    </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <!-- ************ Cryptography section ************ -->
     <im.vector.app.core.preference.VectorPreferenceCategory
@@ -52,39 +75,6 @@
             android:title="@string/encryption_never_send_to_unverified_devices_title"
             app:isPreferenceVisible="@bool/false_tchap_hidden" />
 
-    </im.vector.app.core.preference.VectorPreferenceCategory>
-
-    <!-- devices list entry point -->
-    <im.vector.app.core.preference.VectorPreferenceCategory
-        android:key="SETTINGS_DEVICES_LIST_PREFERENCE_KEY"
-        android:title="@string/settings_active_sessions_list">
-
-        <im.vector.app.core.preference.VectorPreference
-            android:key="SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY"
-            android:title="@string/settings_active_sessions_show_all"
-            app:fragment="im.vector.app.features.settings.devices.VectorSettingsDevicesFragment" />
-
-        <im.vector.app.core.preference.VectorPreference
-            android:key="SETTINGS_SHOW_DEVICES_LIST_V2_PREFERENCE_KEY"
-            android:title="@string/settings_active_sessions_show_all"
-            app:fragment="im.vector.app.features.settings.devices.v2.VectorSettingsDevicesFragment" />
-
-    </im.vector.app.core.preference.VectorPreferenceCategory>
-
-    <im.vector.app.core.preference.VectorPreferenceCategory
-        android:key="SETTINGS_CRYPTOGRAPHY_MANAGE_4S_CATEGORY_KEY"
-        android:title="@string/settings_secure_backup_section_title">
-
-        <im.vector.app.core.preference.VectorPreference
-            android:icon="@drawable/ic_secure_backup"
-            android:key="SETTINGS_SECURE_BACKUP_RECOVERY_PREFERENCE_KEY"
-            android:persistent="false"
-            android:title="@string/settings_secure_backup_setup" />
-
-        <im.vector.app.core.preference.VectorPreference
-            android:focusable="false"
-            android:persistent="false"
-            android:summary="@string/settings_secure_backup_section_info" />
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory
@@ -134,6 +124,16 @@
             android:title="@string/settings_opt_in_of_analytics" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
+
+    <im.vector.app.core.preference.VectorPreference
+        android:icon="@drawable/ic_notification_privacy_warning"
+        android:key="SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT"
+        android:persistent="false"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true"
+        tools:summary="@string/settings_hs_admin_e2e_disabled">
+
+    </im.vector.app.core.preference.VectorPreference>
 
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_SECURITY_OTHER_CATEGORY"
