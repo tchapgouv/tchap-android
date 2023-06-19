@@ -19,6 +19,7 @@ package im.vector.app.core.preference
 import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.preference.PreferenceCategory
@@ -39,7 +40,9 @@ class VectorPreferenceCategory : PreferenceCategory {
 
     init {
         // Set to false to remove the space when there is no icon
-        isIconSpaceReserved = true
+        // Tchap : no space when no icon
+        // isIconSpaceReserved = true
+        isIconSpaceReserved = false
     }
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
@@ -49,6 +52,8 @@ class VectorPreferenceCategory : PreferenceCategory {
 
         titleTextView?.setTypeface(null, Typeface.BOLD)
         titleTextView?.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_primary))
+        // Tchap : bigger title size for Preference Categories
+        titleTextView?.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18.0f)
 
         // "isIconSpaceReserved = false" does not work for preference category, so remove the padding
         if (!isIconSpaceReserved) {
