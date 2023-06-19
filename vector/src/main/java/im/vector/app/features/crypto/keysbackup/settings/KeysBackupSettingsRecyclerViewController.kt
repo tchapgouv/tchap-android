@@ -148,18 +148,19 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
         }
 
         if (isBackupAlreadySetup) {
-            // Add infos
-            genericItem {
-                id("version")
-                title(host.stringProvider.getString(R.string.keys_backup_info_title_version).toEpoxyCharSequence())
-                description(keyVersionResult?.version.orEmpty().toEpoxyCharSequence())
-            }
-
-            genericItem {
-                id("algorithm")
-                title(host.stringProvider.getString(R.string.keys_backup_info_title_algorithm).toEpoxyCharSequence())
-                description(keyVersionResult?.algorithm.orEmpty().toEpoxyCharSequence())
-            }
+            // Tchap : no technical info
+//            // Add infos
+//            genericItem {
+//                id("version")
+//                title(host.stringProvider.getString(R.string.keys_backup_info_title_version).toEpoxyCharSequence())
+//                description(keyVersionResult?.version.orEmpty().toEpoxyCharSequence())
+//            }
+//
+//            genericItem {
+//                id("algorithm")
+//                title(host.stringProvider.getString(R.string.keys_backup_info_title_algorithm).toEpoxyCharSequence())
+//                description(keyVersionResult?.algorithm.orEmpty().toEpoxyCharSequence())
+//            }
 
             if (vectorPreferences.developerMode()) {
                 buildKeysBackupTrust(data.keysBackupVersionTrust)
