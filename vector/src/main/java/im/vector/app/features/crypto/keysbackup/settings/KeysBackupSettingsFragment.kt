@@ -85,6 +85,13 @@ class KeysBackupSettingsFragment :
         }
     }
 
+    // Tchap
+    override fun didDeleteBackupSuccessfully() {
+        activity?.let {
+            it.finish()
+        }
+    }
+
     override fun loadTrustData() {
         viewModel.handle(KeyBackupSettingsAction.GetKeyBackupTrust)
     }
