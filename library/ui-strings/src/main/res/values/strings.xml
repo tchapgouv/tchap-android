@@ -2452,8 +2452,8 @@
     <string name="verification_profile_device_untrust_info">Until this user trusts this session, messages sent to and from it are labeled with warnings. Alternatively, you can manually verify it.</string>
 
 
-    <string name="initialize_cross_signing">Initialize CrossSigning</string>
-    <string name="reset_cross_signing">Reset cross-signing</string><!-- Tchap: Use custom string -->
+    <string name="initialize_cross_signing">Activate on this device</string><!-- Tchap: Use custom string -->
+    <string name="reset_cross_signing">Cross-signing activated on this device</string><!-- Tchap: Use custom string -->
 
     <string name="a11y_qr_code_for_verification">QR code</string>
 

@@ -84,7 +84,7 @@ class CrossSigningSettingsController @Inject constructor(
                 }
                 genericButtonItem {
                     id("Reset")
-                    text(host.stringProvider.getString(R.string.reset_cross_signing))
+                    text(host.stringProvider.getString(R.string.initialize_cross_signing))
                     textColor(host.colorProvider.getColor(R.color.palette_tchap_coral)) // Tchap
                     buttonClickAction {
                         host.interactionListener?.didTapInitializeCrossSigning()
