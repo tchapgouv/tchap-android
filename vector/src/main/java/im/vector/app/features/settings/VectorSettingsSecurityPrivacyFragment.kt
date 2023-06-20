@@ -227,6 +227,8 @@ class VectorSettingsSecurityPrivacyFragment :
                         BootstrapBottomSheet.show(parentFragmentManager, SetupMode.NORMAL)
                         true
                     }
+                    // Tchap : remove "Manage backup" button because Secure backup is not activated
+                    manageBackupPref.isVisible = false
                 } else {
                     // just hide all, you can't setup from here
                     // you should synchronize to get gossips

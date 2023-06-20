@@ -2453,7 +2453,7 @@
 
 
     <string name="initialize_cross_signing">Initialize CrossSigning</string>
-    <string name="reset_cross_signing">Activate on this device</string><!-- Tchap: Use custom string -->
+    <string name="reset_cross_signing">Reset cross-signing</string><!-- Tchap: Use custom string -->
 
     <string name="a11y_qr_code_for_verification">QR code</string>
 

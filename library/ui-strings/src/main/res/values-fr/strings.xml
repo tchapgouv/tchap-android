@@ -1282,7 +1282,7 @@
     <string name="verification_profile_device_new_signing">%1$s (%2$s) s’est connecté en utilisant un nouvel appareil :</string> <!-- Tchap: Use custom string -->
     <string name="verification_profile_device_untrust_info">Tant que cet utilisateur ne fera pas confiance à cet appareil, les messages qu’il envoie et qui lui sont envoyés seront affichés avec des avertissements. Sinon, vous pouvez le vérifier manuellement.</string> <!-- Tchap: Use custom string -->
     <string name="initialize_cross_signing">Initialiser la signature croisée</string>
-    <string name="reset_cross_signing">Activer sur cet appareil</string><!-- Tchap: Use custom string -->
+    <string name="reset_cross_signing">Réinitialiser la signature croisée</string><!-- Tchap: Use custom string -->
     <string name="a11y_qr_code_for_verification">Code QR</string>
     <string name="qr_code_scanned_by_other_notice">On y est presque ! Est-ce que %s affiche une marque cochée \?</string>
     <string name="qr_code_scanned_by_other_yes">Oui</string>
