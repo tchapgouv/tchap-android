@@ -15,6 +15,7 @@
  */
 package im.vector.app.features.settings.crosssigning
 
+import android.graphics.Color
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
@@ -53,10 +54,12 @@ class CrossSigningSettingsController @Inject constructor(
                 genericButtonItem {
                     id("Reset")
                     text(host.stringProvider.getString(R.string.reset_cross_signing))
+                    textColor(host.colorProvider.getColor(R.color.palette_tchap_coral)) // Tchap
                     buttonClickAction {
                         host.interactionListener?.didTapInitializeCrossSigning()
                     }
                 }
+                add()
             }
             data.xSigningKeysAreTrusted -> {
                 genericItem {
@@ -67,6 +70,7 @@ class CrossSigningSettingsController @Inject constructor(
                 genericButtonItem {
                     id("Reset")
                     text(host.stringProvider.getString(R.string.reset_cross_signing))
+                    textColor(host.colorProvider.getColor(R.color.palette_tchap_coral)) // Tchap
                     buttonClickAction {
                         host.interactionListener?.didTapInitializeCrossSigning()
                     }
@@ -81,6 +85,7 @@ class CrossSigningSettingsController @Inject constructor(
                 genericButtonItem {
                     id("Reset")
                     text(host.stringProvider.getString(R.string.reset_cross_signing))
+                    textColor(host.colorProvider.getColor(R.color.palette_tchap_coral)) // Tchap
                     buttonClickAction {
                         host.interactionListener?.didTapInitializeCrossSigning()
                     }
