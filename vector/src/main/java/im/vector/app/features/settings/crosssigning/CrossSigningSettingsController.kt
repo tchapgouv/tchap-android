@@ -59,7 +59,6 @@ class CrossSigningSettingsController @Inject constructor(
                         host.interactionListener?.didTapInitializeCrossSigning()
                     }
                 }
-                add()
             }
             data.xSigningKeysAreTrusted -> {
                 genericItem {
