@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.settings.crosssigning
 
-import android.graphics.Color
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
