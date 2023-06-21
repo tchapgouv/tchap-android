@@ -1004,7 +1004,7 @@ class VectorPreferences @Inject constructor(
      * It is not allowed for Tchap GPlay Tchap (Production) version.
      */
     fun tchapAllowedScreenshot(): Boolean {
-        return when(BuildConfig.FLAVOR_store.lowercase()) {
+        return when (BuildConfig.FLAVOR_store.lowercase()) {
             "fdroid" -> false
             "gplay" -> {
                 when(BuildConfig.FLAVOR_target.lowercase()) {
