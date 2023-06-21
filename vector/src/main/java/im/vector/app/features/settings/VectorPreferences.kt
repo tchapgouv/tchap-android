@@ -23,6 +23,7 @@ import android.provider.MediaStore
 import androidx.annotation.BoolRes
 import androidx.core.content.edit
 import com.squareup.seismic.ShakeDetector
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.config.Config
 import im.vector.app.core.di.DefaultPreferences
@@ -994,6 +995,26 @@ class VectorPreferences @Inject constructor(
      */
     fun useFlagSecure(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_FLAG_SECURE, true)
+    }
+
+    // Tchap
+    /**
+     * Screenshot is not allowed for Tchap F-droid version.
+     * It is allowed for Tchap GPlay version only for DEV and Pre-Prod versions.
+     * It is not allowed for Tchap GPlay Tchap (Production) version.
+     */
+    fun tchapAllowedScreenshot(): Boolean {
+        return when(BuildConfig.FLAVOR_store.lowercase()) {
+            "fdroid" -> false
+            "gplay" -> {
+                when(BuildConfig.FLAVOR_target.lowercase()) {
+                    "devtchap" -> true
+                    "btchap" -> true
+                    else -> false
+                }
+            }
+            else -> false
+        }
     }
 
     /** Whether the keyboard should disable personalized learning. */
