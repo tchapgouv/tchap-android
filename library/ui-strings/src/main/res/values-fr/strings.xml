@@ -719,7 +719,7 @@
         <item quantity="other">%d nouvelles clés ont été ajoutées à cet appareil.</item> <!-- Tchap: Use custom string -->
     </plurals>
     <string name="keys_backup_get_version_error">Échec de récupération de la dernière version des clés de récupération (%s).</string>
-    <string name="keys_backup_settings_restore_backup_button">Restaurer depuis la sauvegarde</string>
+    <string name="keys_backup_settings_restore_backup_button">Récupérer mes messages</string><!-- Tchap: Use custom string -->
     <string name="keys_backup_settings_delete_backup_button">Supprimer la sauvegarde</string>
     <string name="keys_backup_settings_status_ok">Sauvegarde activée</string> <!-- Tchap: Use custom string -->
     <string name="keys_backup_settings_status_ko">La sauvegarde de clés n’est pas activée sur cet appareil.</string> <!-- Tchap: Use custom string -->
@@ -1348,7 +1348,7 @@
 \n
 \nConservez-les en lieu sûr ! Vous en aurez besoin pour accéder aux messages chiffrés et à vos informations sécurisées si vous perdez tous vos appareils actifs.</string> <!-- Tchap: Use custom string -->
     <string name="bootstrap_crosssigning_print_it">Dans votre gestionnaire de mot de passe</string><!-- Tchap: Use custom string -->
-    <string name="bootstrap_crosssigning_save_usb">Sur une clé USB ou un disque de sauvegarde</string><!-- Tchap: Use custom string -->
+    <string name="bootstrap_crosssigning_save_usb">Dans un document protégé sur votre ordinateur</string><!-- Tchap: Use custom string -->
     <string name="bootstrap_crosssigning_save_cloud">Sur votre ordinateur ou cloud</string><!-- Tchap: Use custom string -->
     <string name="encryption_enabled">Chiffrement activé</string>
     <string name="encryption_enabled_tile_description">Les messages de ce salon sont chiffrés de bout en bout. Apprenez-en plus et vérifiez les utilisateurs sur leur profil.</string>
