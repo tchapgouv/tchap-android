@@ -718,7 +718,7 @@
         <item quantity="one">%d nouvelle clé a été ajoutée à cet appareil.</item> <!-- Tchap: Use custom string -->
         <item quantity="other">%d nouvelles clés ont été ajoutées à cet appareil.</item> <!-- Tchap: Use custom string -->
     </plurals>
-    <string name="keys_backup_get_version_error">Échec de récupération de la dernière version des clés de récupération (%s).</string>
+    <string name="keys_backup_get_version_error">Échec de récupération de la dernière version du Code de Récupération (%s).</string><!-- Tchap: Use custom string -->
     <string name="keys_backup_settings_restore_backup_button">Récupérer mes messages</string><!-- Tchap: Use custom string -->
     <string name="keys_backup_settings_delete_backup_button">Supprimer la sauvegarde</string>
     <string name="keys_backup_settings_status_ok">Sauvegarde activée</string> <!-- Tchap: Use custom string -->

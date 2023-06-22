@@ -1590,7 +1590,7 @@
         <item quantity="other">%d new keys have been added to this session.</item>
     </plurals>
 
-    <string name="keys_backup_get_version_error">Failed to get latest restore keys version (%s).</string>
+    <string name="keys_backup_get_version_error">Failed to get latest Recovery Code version (%s).</string><!-- Tchap: Use custom string -->
 
     <string name="keys_backup_settings_restore_backup_button">Recover my messages</string><!-- Tchap: Use custom string -->
     <string name="keys_backup_settings_delete_backup_button">Delete Backup</string>
