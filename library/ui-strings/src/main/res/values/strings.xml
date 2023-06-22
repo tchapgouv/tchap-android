@@ -314,7 +314,7 @@
     <string name="title_activity_bug_report">Bug report</string>
     <string name="title_activity_choose_sticker">Send a sticker</string>
     <string name="title_activity_keys_backup_setup">Key Backup</string>
-    <string name="title_activity_keys_backup_restore">Use Key Backup</string>
+    <string name="title_activity_keys_backup_restore">Recovering messages</string><!-- Tchap: Use custom string -->
 
     <!-- Signing out screen -->
     <string name="sign_out_bottom_sheet_warning_no_backup">You’ll lose your encrypted messages if you sign out now</string>
@@ -1018,7 +1018,7 @@
     <string name="settings_integrations">Integrations</string>
     <string name="settings_integrations_summary">Use an integration manager to manage bots, bridges, widgets and sticker packs.\nIntegration managers receive configuration data, and can modify widgets, send room invites and set power levels on your behalf.</string>
     <string name="settings_cryptography">Cryptography</string>
-    <string name="settings_cryptography_manage_keys">Cryptography Keys Management</string>
+    <string name="settings_cryptography_manage_keys">Tchap Keys</string><!-- Tchap: Use custom string -->
     <string name="settings_notifications_targets">Notification Targets</string>
     <string name="settings_contact">Local contacts</string>
     <string name="settings_contacts_app_permission">Contacts permission</string>
@@ -1055,7 +1055,7 @@
 
     <string name="settings_secure_backup_section_title">Secure Backup</string>
     <string name="settings_secure_backup_setup">Set up Secure Backup</string>
-    <string name="settings_secure_backup_reset">Reset Secure Backup</string>
+    <string name="settings_secure_backup_reset">Generate a new code</string><!-- Tchap: Use custom string -->
     <string name="settings_secure_backup_enter_to_setup">Set up on this device</string>
     <string name="settings_secure_backup_section_info">Safeguard against losing access to encrypted messages &amp; data by backing up encryption keys on your server.</string>
     <string name="reset_secure_backup_title">Generate a new Security Key or set a new Security Phrase for your existing backup.</string>
@@ -1256,7 +1256,7 @@
     <string name="encryption_exported_successfully">Keys successfully exported</string>
 
     <string name="encryption_message_recovery">Encrypted Messages Recovery</string>
-    <string name="encryption_settings_manage_message_recovery_summary">Manage Key Backup</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Manage Backup</string><!-- Tchap: Use custom string -->
 
     <string name="encryption_import_e2e_room_keys">Import E2E room keys</string>
     <string name="encryption_import_room_keys">Import room keys</string>
@@ -1552,7 +1552,7 @@
     <string name="keys_backup_setup_step3_please_make_copy">Please make a copy</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Share recovery key with…</string>
     <string name="keys_backup_setup_step3_generating_key_status">Generating Recovery Key using passphrase, this process can take several seconds.</string>
-    <string name="recovery_key">Recovery Key</string>
+    <string name="recovery_key">Recovery Code</string><!-- Tchap: Use custom string -->
     <string name="unexpected_error">Unexpected error</string>
 
     <string name="keys_backup_setup_skip_title">Are you sure?</string>
@@ -1590,12 +1590,12 @@
         <item quantity="other">%d new keys have been added to this session.</item>
     </plurals>
 
-    <string name="keys_backup_get_version_error">Failed to get latest restore keys version (%s).</string>
+    <string name="keys_backup_get_version_error">Failed to get latest Recovery Code version (%s).</string><!-- Tchap: Use custom string -->
 
-    <string name="keys_backup_settings_restore_backup_button">Restore from Backup</string>
+    <string name="keys_backup_settings_restore_backup_button">Recover my messages</string><!-- Tchap: Use custom string -->
     <string name="keys_backup_settings_delete_backup_button">Delete Backup</string>
 
-    <string name="keys_backup_settings_status_ok">Key Backup has been correctly set up for this session.</string>
+    <string name="keys_backup_settings_status_ok">Backup activated</string><!-- Tchap: Use custom string -->
     <string name="keys_backup_settings_status_ko">Key Backup is not active on this session.</string>
     <string name="keys_backup_settings_status_not_setup">Your keys are not being backed up from this session.</string>
 
@@ -1613,7 +1613,7 @@
 
     <string name="keys_backup_settings_checking_backup_state">Checking backup state</string>
     <string name="keys_backup_settings_delete_confirm_title">Delete Backup</string>
-    <string name="keys_backup_settings_delete_confirm_message">Delete your backed up encryption keys from the server? You will no longer be able to use your recovery key to read encrypted message history.</string>
+    <string name="keys_backup_settings_delete_confirm_message">By deleting the automatic backup, you risk losing your messages.</string> <!-- Tchap: Use custom string -->
 
     <!-- Keys backup banner -->
     <string name="secure_backup_banner_setup_line1">Secure Backup</string>
@@ -1631,7 +1631,7 @@
     <string name="secure_backup_setup">Set Up Secure Backup</string>
 
     <!-- Keys backup info -->
-    <string name="keys_backup_info_keys_all_backup_up">All keys backed up</string>
+    <string name="keys_backup_info_keys_all_backup_up">This device backs up your messages.</string><!-- Tchap: Use custom string -->
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="one">Backing up %d key…</item>
         <item quantity="other">Backing up %d keys…</item>
@@ -2452,8 +2452,8 @@
     <string name="verification_profile_device_untrust_info">Until this user trusts this session, messages sent to and from it are labeled with warnings. Alternatively, you can manually verify it.</string>
 
 
-    <string name="initialize_cross_signing">Initialize CrossSigning</string>
-    <string name="reset_cross_signing">Reset Keys</string>
+    <string name="initialize_cross_signing">Activate on this device</string><!-- Tchap: Use custom string -->
+    <string name="reset_cross_signing">Cross-signing activated on this device</string><!-- Tchap: Use custom string -->
 
     <string name="a11y_qr_code_for_verification">QR code</string>
 
@@ -2468,7 +2468,7 @@
     <string name="settings_account_data">Account Data</string>
     <string name="delete_account_data_warning">Delete the account data of type %1$s?\n\nUse with caution, it may lead to unexpected behavior.</string>
 
-    <string name="verification_cannot_access_other_session">Use a Recovery Passphrase or Key</string>
+    <string name="verification_cannot_access_other_session">Use your Recovery Code</string><!-- Tchap: Use custom string -->
     <string name="verification_use_passphrase">If you can’t access an existing session</string>
 
     <string name="enter_secret_storage_invalid">Cannot find secrets in storage</string>
@@ -2554,9 +2554,9 @@
     <string name="bootstrap_cross_signing_success">Your %2$s &amp; %1$s are now set.\n\nKeep them safe! You’ll need them to unlock encrypted messages and secure information if you lose all of your active sessions.</string>
 
     <!-- the %s will be replaced by a check mark on screen-->
-    <string name="bootstrap_crosssigning_print_it">Print it and store it somewhere safe</string>
-    <string name="bootstrap_crosssigning_save_usb">Save it on a USB key or backup drive</string>
-    <string name="bootstrap_crosssigning_save_cloud">Copy it to your personal cloud storage</string>
+    <string name="bootstrap_crosssigning_print_it">In your password manager</string><!-- Tchap: Use custom string -->
+    <string name="bootstrap_crosssigning_save_usb">In a protected document on your computer</string><!-- Tchap: Use custom string -->
+    <string name="bootstrap_crosssigning_save_cloud">On your computer or your personal cloud storage</string><!-- Tchap: Use custom string -->
 
     <string name="bootstrap_cancel_text">If you cancel now, you may lose encrypted messages &amp; data if you lose access to your logins.\n\nYou can also set up Secure Backup &amp; manage your keys in Settings.</string>
 
@@ -2606,7 +2606,7 @@
     <string name="bootstrap_enter_recovery">Enter your %s to continue</string>
     <string name="use_file">Use File</string>
 
-    <string name="bootstrap_invalid_recovery_key">"It's not a valid recovery key"</string>
+    <string name="bootstrap_invalid_recovery_key">"Wrong Code"</string><!-- Tchap: Use custom string -->
     <string name="recovery_key_empty_error_message">Please enter a recovery key</string>
 
     <string name="bootstrap_progress_checking_backup">Checking backup Key</string>
@@ -2645,10 +2645,10 @@
     <string name="command_description_discard_session_not_handled">Only supported in encrypted rooms</string>
     <!-- first will be replaced by recovery_passphrase, second will be replaced by recovery_key-->
     <string name="enter_secret_storage_passphrase_or_key">Use your %1$s or use your %2$s to continue.</string>
-    <string name="use_recovery_key">Use Recovery Key</string>
-    <string name="enter_secret_storage_input_key">Select your Recovery Key, or input it manually by typing it or pasting from your clipboard</string>
+    <string name="use_recovery_key">Use your Recovery Code</string><!-- Tchap: Use custom string -->
+    <string name="enter_secret_storage_input_key">Insert your Recovery Code to verify this device</string><!-- Tchap: Use custom string -->
     <string name="failed_to_access_secure_storage">Failed to access secure storage</string>
-    <string name="bad_passphrase_key_reset_all_action">Forgot or lost all recovery options? Reset everything</string>
+    <string name="bad_passphrase_key_reset_all_action">Lost your Recovery Code? Generate a new one.</string><!-- Tchap: Use custom string -->
     <string name="secure_backup_reset_all">Reset everything</string>
     <string name="secure_backup_reset_all_no_other_devices">Only do this if you have no other device you can verify this device with.</string>
     <string name="secure_backup_reset_if_you_reset_all">If you reset everything</string>
@@ -2676,7 +2676,7 @@
     <string name="cross_signing_verify_by_text">Manually Verify by Text</string>
     <string name="crosssigning_verify_session">Verify login</string>
     <string name="cross_signing_verify_by_emoji">Interactively Verify by Emoji</string>
-    <string name="confirm_your_identity">Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.</string>
+    <string name="confirm_your_identity">Once your device has been verified, you can retrieve your messages.</string><!-- Tchap: Use custom string -->
     <string name="confirm_your_identity_quad_s">Confirm your identity by verifying this login, granting it access to encrypted messages.</string>
 
     <string name="failed_to_initialize_cross_signing">Failed to set up Cross Signing</string>
@@ -2744,15 +2744,15 @@
     <string name="a11y_start_camera">Start the camera</string>
 
     <string name="bottom_sheet_setup_secure_backup_title">Secure backup</string>
-    <string name="bottom_sheet_setup_secure_backup_subtitle">Safeguard against losing access to encrypted messages &amp; data by backing up encryption keys on your server.</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">Automatically save your messages and retrieve them at any time using your Recovery Code.</string><!-- Tchap: Use custom string -->
     <string name="bottom_sheet_setup_secure_backup_submit">Set up</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_title">Use a Security Key</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Generate a security key to store somewhere safe like a password manager or a safe.</string>
     <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Use a Security Phrase</string>
     <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Enter a secret phrase only you know, and generate a key for backup.</string>
 
-    <string name="bottom_sheet_save_your_recovery_key_title">Save your Security Key</string>
-    <string name="bottom_sheet_save_your_recovery_key_content">Store your Security Key somewhere safe, like a password manager or a safe.</string>
+    <string name="bottom_sheet_save_your_recovery_key_title">Write down your Recovery Code</string><!-- Tchap: Use custom string -->
+    <string name="bottom_sheet_save_your_recovery_key_content">Write this code down in a safe place.\nYou\'ll have to copy and paste it to retrieve your messages, so avoid screenshots.\nWarning: this is the only time your code will be displayed!</string><!-- Tchap: Use custom string -->
 
     <string name="set_a_security_phrase_title">Set a Security Phrase</string>
     <string name="set_a_security_phrase_notice">Enter a security phrase only you know, used to secure secrets on your server.</string>

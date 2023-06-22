@@ -94,7 +94,8 @@ class BootstrapSaveRecoveryKeyFragment :
 
     private val copyStartForActivityResult = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
-            sharedViewModel.handle(BootstrapActions.RecoveryKeySaved)
+            // Tchap : Close the dialog without having to tap "Continue"
+            sharedViewModel.handle(BootstrapActions.Completed)
         }
     }
 
@@ -118,7 +119,7 @@ class BootstrapSaveRecoveryKeyFragment :
         val step = state.step
         if (step !is BootstrapStep.SaveRecoveryKey) return@withState
 
-        views.recoveryContinue.isVisible = step.isSaved
+        views.recoveryContinue.isVisible = false // Tchap : don't display "Continue" button
         views.bootstrapRecoveryKeyText.text = state.recoveryKeyCreationInfo?.recoveryKey?.formatRecoveryKey()
     }
 }

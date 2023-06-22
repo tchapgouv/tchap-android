@@ -227,6 +227,8 @@ class VectorSettingsSecurityPrivacyFragment :
                         BootstrapBottomSheet.show(parentFragmentManager, SetupMode.NORMAL)
                         true
                     }
+                    // Tchap : remove "Manage backup" button because Secure backup is not activated
+                    manageBackupPref.isVisible = false
                 } else {
                     // just hide all, you can't setup from here
                     // you should synchronize to get gossips
@@ -301,12 +303,13 @@ class VectorSettingsSecurityPrivacyFragment :
             )
         }
 
-        ignoredUsersPreference.icon = activity?.let {
-            ThemeUtils.tintDrawable(
-                    it,
-                    ContextCompat.getDrawable(it, R.drawable.ic_settings_root_ignored_users)!!, R.attr.vctr_content_primary
-            )
-        }
+        // Tchap : don't modify ignored users icon
+//        ignoredUsersPreference.icon = activity?.let {
+//            ThemeUtils.tintDrawable(
+//                    it,
+//                    ContextCompat.getDrawable(it, R.drawable.ic_settings_root_ignored_users)!!, R.attr.vctr_content_primary
+//            )
+//        }
 
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.let {
             it.icon = ThemeUtils.tintDrawableWithColor(

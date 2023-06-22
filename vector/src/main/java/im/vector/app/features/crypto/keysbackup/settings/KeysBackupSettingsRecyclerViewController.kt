@@ -53,8 +53,14 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
         val host = this
         var isBackupAlreadySetup = false
 
+        // Tchap : back to previous activity after deleting backup successfully.
+        if (data.backupSuccessfullyDeleted) {
+            host.listener?.didDeleteBackupSuccessfully()
+            return
+        }
+
         val keyBackupState = data.keysBackupState
-        val keyVersionResult = data.keysBackupVersion
+//        val keyVersionResult = data.keysBackupVersion // Tchap : no more used
 
         when (keyBackupState) {
             KeysBackupState.Unknown -> {
@@ -148,18 +154,19 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
         }
 
         if (isBackupAlreadySetup) {
-            // Add infos
-            genericItem {
-                id("version")
-                title(host.stringProvider.getString(R.string.keys_backup_info_title_version).toEpoxyCharSequence())
-                description(keyVersionResult?.version.orEmpty().toEpoxyCharSequence())
-            }
-
-            genericItem {
-                id("algorithm")
-                title(host.stringProvider.getString(R.string.keys_backup_info_title_algorithm).toEpoxyCharSequence())
-                description(keyVersionResult?.algorithm.orEmpty().toEpoxyCharSequence())
-            }
+            // Tchap : no technical info
+//            // Add infos
+//            genericItem {
+//                id("version")
+//                title(host.stringProvider.getString(R.string.keys_backup_info_title_version).toEpoxyCharSequence())
+//                description(keyVersionResult?.version.orEmpty().toEpoxyCharSequence())
+//            }
+//
+//            genericItem {
+//                id("algorithm")
+//                title(host.stringProvider.getString(R.string.keys_backup_info_title_algorithm).toEpoxyCharSequence())
+//                description(keyVersionResult?.algorithm.orEmpty().toEpoxyCharSequence())
+//            }
 
             if (vectorPreferences.developerMode()) {
                 buildKeysBackupTrust(data.keysBackupVersionTrust)
@@ -309,5 +316,6 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
         fun didSelectDeleteSetupMessageRecovery()
         fun loadTrustData()
         fun loadKeysBackupState()
+        fun didDeleteBackupSuccessfully() // Tchap
     }
 }
