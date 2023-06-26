@@ -1,3 +1,19 @@
+Changes in Tchap 2.8.5 (2023-06-26)
+===================================
+
+Features ✨
+----------
+ - Permettre les captures d'écran en mode développement #819 ([#819](https://github.com/tchapgouv/tchap-android-v2/issues/819))
+
+Improvements 🙌
+--------------
+ - Amélioration UX, wording et organisation des settings sécurité. #926 ([#926](https://github.com/tchapgouv/tchap-android-v2/issues/926))
+
+Other changes
+-------------
+ - [Strings] Supprimer les fichiers de langues autres que FR et default #928 ([#928](https://github.com/tchapgouv/tchap-android-v2/issues/928))
+
+
 Changes in Tchap 2.8.4 (2023-06-14)
 ===================================
 
