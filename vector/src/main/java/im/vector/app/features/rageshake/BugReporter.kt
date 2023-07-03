@@ -245,6 +245,9 @@ class BugReporter @Inject constructor(
                 activeSessionHolder.getSafeActiveSession()
                         ?.takeIf { !mIsCancelled && withKeyRequestHistory }
                         ?.cryptoService()
+                        ?.takeIf {
+                            it.supportKeyRequestInspection()
+                        }
                         ?.getGossipingEvents()
                         ?.let { GossipingEventsSerializer().serialize(it) }
                         ?.toByteArray()
@@ -270,7 +273,7 @@ class BugReporter @Inject constructor(
 
                 activeSessionHolder.getSafeActiveSession()?.let { session ->
                     userId = session.myUserId
-                    deviceId = session.sessionParams.deviceId ?: "undefined"
+                    deviceId = session.sessionParams.deviceId
                     olmVersion = session.cryptoService().getCryptoVersion(context, true)
                     bugReportURL = session.sessionParams.homeServerUrl.removeSuffix("/") + BUG_REPORT_URL_SUFFIX
                     email = session.profileService().getThreePids().filterIsInstance<ThreePid.Email>().firstOrNull()?.email ?: "undefined" // Tchap : Add Email

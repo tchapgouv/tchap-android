@@ -20,9 +20,7 @@ import fr.gouv.tchap.android.sdk.api.session.events.model.TchapEventType
 import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRulesContent
 import io.realm.Realm
 import io.realm.kotlin.createObject
-import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -43,8 +41,6 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncUnreadNotifications
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncUnreadThreadNotifications
-import org.matrix.android.sdk.internal.crypto.EventDecryptor
-import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
@@ -67,6 +63,7 @@ import org.matrix.android.sdk.internal.session.room.accountdata.RoomAccountDataD
 import org.matrix.android.sdk.internal.session.room.membership.RoomDisplayNameResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.relationship.RoomChildRelationInfo
+import org.matrix.android.sdk.internal.session.room.timeline.RoomSummaryEventDecryptor
 import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
 import timber.log.Timber
 import javax.inject.Inject
@@ -76,10 +73,9 @@ internal class RoomSummaryUpdater @Inject constructor(
         @UserId private val userId: String,
         private val roomDisplayNameResolver: RoomDisplayNameResolver,
         private val roomAvatarResolver: RoomAvatarResolver,
-        private val eventDecryptor: EventDecryptor,
-        private val crossSigningService: DefaultCrossSigningService,
         private val roomAccountDataDataSource: RoomAccountDataDataSource,
         private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
+        private val roomSummaryEventDecryptor: RoomSummaryEventDecryptor,
         private val roomSummaryEventsHelper: RoomSummaryEventsHelper,
 ) {
 
@@ -209,7 +205,9 @@ internal class RoomSummaryUpdater @Inject constructor(
                 if (aggregator == null) {
                     // Do it now
                     // mmm maybe we could only refresh shield instead of checking trust also?
-                    crossSigningService.checkTrustAndAffectedRoomShields(otherRoomMembers)
+                    // XXX why doing this here? we don't show shield anymore and it will be refreshed
+                    // by the sdk
+                    // crossSigningService.checkTrustAndAffectedRoomShields(otherRoomMembers)
                 } else {
                     // Schedule it
                     aggregator.userIdsForCheckingTrustAndAffectedRoomShields.addAll(otherRoomMembers)
@@ -224,12 +222,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                 Timber.v("Decryption skipped due to missing root event $eventId")
             }
             else -> {
-                if (root.type == EventType.ENCRYPTED && root.decryptionResultJson == null) {
-                    Timber.v("Should decrypt $eventId")
-                    tryOrNull {
-                        runBlocking { eventDecryptor.decryptEvent(root.asDomain(), "") }
-                    }?.let { root.setDecryptionResult(it) }
-                }
+                roomSummaryEventDecryptor.requestDecryption(root.asDomain())
             }
         }
     }

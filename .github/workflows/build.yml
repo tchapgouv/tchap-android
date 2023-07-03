@@ -34,7 +34,7 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Assemble ${{ matrix.target }} debug apk
-        run: ./gradlew assemble${{ matrix.target }}Debug $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew assemble${{ matrix.target }}RustCryptoDebug $CI_GRADLE_ARG_PROPERTIES
       - name: Upload ${{ matrix.target }} debug APKs
         uses: actions/upload-artifact@v3
         with:
@@ -65,9 +65,15 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
+<<<<<<< HEAD
       - name: Assemble ${{ matrix.target }} unsigned apk
         run: ./gradlew clean assemble${{ matrix.target }}Release $CI_GRADLE_ARG_PROPERTIES
       - name: Upload ${{ matrix.target }} unsigned APKs
+=======
+      - name: Assemble GPlay unsigned apk
+        run: ./gradlew clean assembleGplayRustCryptoRelease $CI_GRADLE_ARG_PROPERTIES
+      - name: Upload Gplay unsigned APKs
+>>>>>>> v1.6.2
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.target }}-release-unsigned
@@ -96,7 +102,11 @@ jobs:
       - name: Execute exodus-standalone
         uses: docker://exodusprivacy/exodus-standalone:latest
         with:
+<<<<<<< HEAD
           args: /github/workspace/${{ env.TARGET_FOLDER }}/release/${{ steps.list-apks.outputs.FIRST_APK_NAME }} -j -o /github/workspace/exodus.json
+=======
+          args: /github/workspace/gplayRustCrypto/release/vector-gplay-rustCrypto-universal-release-unsigned.apk -j -o /github/workspace/exodus.json
+>>>>>>> v1.6.2
       - name: Upload exodus json report
         uses: actions/upload-artifact@v3
         with:
