@@ -27,6 +27,8 @@ project.android.buildTypes.all { buildType ->
 
 initScreenshotTests(project)
 
+apply from: '../flavor.gradle'
+
 android {
     namespace "im.vector.app"
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
@@ -80,7 +82,7 @@ android {
     // The 'target' dimension permits to specify which platform are used
     // The 'voip' flavor dimension permits to include/exclude jitsi at compilation time
     // The 'pinning' flavor dimension permits to enable/disable certificate pinning with fingerprint check
-    flavorDimensions "store", "target", "voip", "pinning"
+    flavorDimensions "store", "target", "crypto", "voip", "pinning"
 
     productFlavors {
         gplay {
@@ -275,10 +277,9 @@ dependencies {
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
     // implementation 'org.webrtc:google-webrtc:1.0.+'
-    implementation('com.facebook.react:react-native-webrtc:1.106.1-jitsi-12039821@aar')
+    implementation('com.facebook.react:react-native-webrtc:111.0.0-jitsi-13672566@aar')
     // Jitsi
-    // Note: version is 6.2.0, but built from the tag `android-sdk-6.2.2`.
-    withvoipApi('org.jitsi.react:jitsi-meet-sdk:6.2.0') {
+    api('org.jitsi.react:jitsi-meet-sdk:8.1.1') { // Tchap : always compile with jsitsi-meet else webrtc is unresolved.
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'
@@ -341,7 +342,7 @@ dependencies {
     // Fix issue with Jitsi. Inspired from https://github.com/android/android-test/issues/861#issuecomment-872067868
     // Error was lots of `Duplicate class org.checkerframework.common.reflection.qual.MethodVal found in modules jetified-checker-3.1 (org.checkerframework:checker:3.1.1) and jetified-checker-qual-3.12.0 (org.checkerframework:checker-qual:3.12.0)
     //noinspection GradleDependency Cannot use latest 3.15.0 since it required min API 26.
-    implementation "org.checkerframework:checker:3.33.0"
+    implementation "org.checkerframework:checker:3.35.0"
 
     androidTestImplementation libs.androidx.testCore
     androidTestImplementation libs.androidx.testRunner
@@ -365,5 +366,5 @@ dependencies {
     androidTestUtil libs.androidx.orchestrator
     debugImplementation libs.androidx.fragmentTestingManifest
     androidTestImplementation libs.androidx.fragmentTesting
-    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.8.10"
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.8.21"
 }

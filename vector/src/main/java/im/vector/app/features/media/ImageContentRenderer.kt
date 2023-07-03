@@ -165,7 +165,7 @@ class ImageContentRenderer @Inject constructor(
                     if (mode == Mode.ANIMATED_THUMBNAIL) it
                     else it.dontAnimate()
                 }
-                .transform(cornerTransformation)
+                .optionalTransform(cornerTransformation)
                 .into(imageView)
     }
 
@@ -197,7 +197,7 @@ class ImageContentRenderer @Inject constructor(
         }
 
         req
-                .fitCenter()
+                .optionalFitCenter()
                 .into(target)
     }
 
@@ -242,7 +242,7 @@ class ImageContentRenderer @Inject constructor(
                 return false
             }
         })
-                .fitCenter()
+                .optionalFitCenter()
                 .into(imageView)
     }
 
