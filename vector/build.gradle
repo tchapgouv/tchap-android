@@ -27,6 +27,8 @@ project.android.buildTypes.all { buildType ->
 
 initScreenshotTests(project)
 
+apply from: '../flavor.gradle'
+
 android {
     namespace "im.vector.app"
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
@@ -80,7 +82,7 @@ android {
     // The 'target' dimension permits to specify which platform are used
     // The 'voip' flavor dimension permits to include/exclude jitsi at compilation time
     // The 'pinning' flavor dimension permits to enable/disable certificate pinning with fingerprint check
-    flavorDimensions "store", "target", "voip", "pinning"
+    flavorDimensions "store", "target", "crypto", "voip", "pinning"
 
     productFlavors {
         gplay {
@@ -134,8 +136,6 @@ android {
         viewBinding true
     }
 }
-
-apply from: '../flavor.gradle'
 
 dependencies {
 

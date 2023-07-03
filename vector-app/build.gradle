@@ -329,7 +329,7 @@ android {
     // The 'target' dimension permits to specify which platform are used
     // The 'voip' flavor dimension permits to include/exclude jitsi at compilation time
     // The 'pinning' flavor dimension permits to enable/disable certificate pinning with fingerprint check
-    flavorDimensions "store", "target", "voip", "pinning"
+    flavorDimensions "store", "target", "crypto", "voip", "pinning"
 
     productFlavors {
         gplay {
@@ -350,6 +350,25 @@ android {
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
+        }
+
+        kotlinCrypto {
+            dimension "crypto"
+            // versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
+            buildConfigField "String", "CRYPTO_FLAVOR_DESCRIPTION", "\"olm-crypto\""
+//            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"KotlinCrypto\""
+        }
+
+        rustCrypto {
+            dimension "crypto"
+            isDefault = true
+            // applicationIdSuffix ".corroded"
+            // versionNameSuffix "-R"
+            // resValue "string", "app_name", "ER"
+
+//            // versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
+            buildConfigField "String", "CRYPTO_FLAVOR_DESCRIPTION", "\"rust-crypto\""
+//            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"RustCrypto\""
         }
 
         withvoip {
