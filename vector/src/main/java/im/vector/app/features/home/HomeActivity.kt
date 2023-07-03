@@ -616,12 +616,6 @@ class HomeActivity :
                     .setPositiveButton(R.string.yes) { _, _ -> bugReporter.openBugReportScreen(this) }
                     .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile() }
                     .show()
-<<<<<<< HEAD
-        } else if (disclaimerDialog.shouldShowDisclaimerDialog()) {
-            disclaimerDialog.showDisclaimerDialog(this)
-            homeActivityViewModel.handle(HomeActivityViewActions.DisclaimerDialogShown)
-=======
->>>>>>> v1.6.2
         }
 
         // Force remote backup state update to update the banner if needed

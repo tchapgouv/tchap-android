@@ -97,16 +97,9 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(
                 session.flow().liveUserCryptoDevices(session.myUserId),
                 session.flow().liveMyDevicesInfo(),
                 session.flow().liveCrossSigningPrivateKeys(),
-<<<<<<< HEAD
-                session.flow().liveCrossSigningInfo(session.myUserId),
-        ) { cryptoList, infoList, pInfo, xInfo ->
-            //                    Timber.v("## Detector trigger ${cryptoList.map { "${it.deviceId} ${it.trustLevel}" }}")
-//                    Timber.v("## Detector trigger canCrossSign ${pInfo.get().selfSigned != null}")
-=======
         ) { cryptoList, infoList, pInfo ->
             Timber.v("## Detector trigger ${cryptoList.map { "${it.deviceId} ${it.trustLevel}" }}")
             Timber.v("## Detector trigger canCrossSign ${pInfo.get().selfSigned != null}")
->>>>>>> v1.6.2
 
             deleteUnusedClientInformation(infoList)
 

@@ -2713,12 +2713,9 @@
     <!-- TODO TO BE REMOVED -->
     <string tools:ignore="UnusedResources" name="crosssigning_verify_session">Verify login</string>
     <string name="cross_signing_verify_by_emoji">Interactively Verify by Emoji</string>
-<<<<<<< HEAD
     <string name="confirm_your_identity">Once your device has been verified, you can retrieve your messages.</string><!-- Tchap: Use custom string -->
-=======
-    <string name="confirm_your_identity">Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.</string>
     <string name="confirm_your_identity_after_update">Secure messaging has been improved with the latest update. Please re-verify your device.</string>
->>>>>>> v1.6.2
+
     <string name="confirm_your_identity_quad_s">Confirm your identity by verifying this login, granting it access to encrypted messages.</string>
 
     <string name="failed_to_initialize_cross_signing">Failed to set up Cross Signing</string>
@@ -2815,21 +2812,10 @@
     <string name="crypto_error_withheld_generic">You cannot access this message because the sender purposely did not send the keys</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Waiting for encryption history</string>
 
-<<<<<<< HEAD
     <string name="disclaimer_title">Welcome in the new Tchap version !</string> <!-- Tchap: Use custom string -->
     <string name="disclaimer_content">The appearance and organization of your application is changing.\nNew changes will be introduced gradually to facilitate and enrich your experience.</string> <!-- Tchap: Use custom string -->
     <string name="disclaimer_negative_button">GOT IT</string>
     <string name="disclaimer_positive_button">LEARN MORE</string>
-=======
-    <!-- TODO TO BE REMOVED -->
-    <string tools:ignore="UnusedResources" name="disclaimer_title">Riot is now Element!</string>
-    <!-- TODO TO BE REMOVED -->
-    <string tools:ignore="UnusedResources" name="disclaimer_content">We’re excited to announce we’ve changed name! Your app is up to date and you’re signed in to your account.</string>
-    <!-- TODO TO BE REMOVED -->
-    <string tools:ignore="UnusedResources" name="disclaimer_negative_button">GOT IT</string>
-    <!-- TODO TO BE REMOVED -->
-    <string tools:ignore="UnusedResources" name="disclaimer_positive_button">LEARN MORE</string>
->>>>>>> v1.6.2
 
     <string name="save_recovery_key_chooser_hint">Save recovery key in</string>
 

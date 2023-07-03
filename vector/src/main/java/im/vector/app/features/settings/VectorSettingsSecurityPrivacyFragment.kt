@@ -355,15 +355,6 @@ class VectorSettingsSecurityPrivacyFragment :
     }
 
     // Todo this should be refactored and use same state as 4S section
-<<<<<<< HEAD
-    private fun refreshXSigningStatus() {
-        if (vectorFeatures.tchapIsCrossSigningEnabled()) {
-            val crossSigningKeys = session.cryptoService().crossSigningService().getMyCrossSigningKeys()
-            val xSigningIsEnableInAccount = crossSigningKeys != null
-            val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()
-            val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
-
-=======
     private suspend fun refreshXSigningStatus() {
         val crossSigningKeys = session.cryptoService().crossSigningService().getMyCrossSigningKeys()
         val xSigningIsEnableInAccount = crossSigningKeys != null
@@ -371,7 +362,6 @@ class VectorSettingsSecurityPrivacyFragment :
         val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
 
         withContext(Dispatchers.Main) {
->>>>>>> v1.6.2
             when {
                 xSigningKeyCanSign -> {
                     mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_trusted)

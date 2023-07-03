@@ -148,29 +148,11 @@ class KeyRequestHandler @Inject constructor(
                     return@launch
                 }
 
-<<<<<<< HEAD
-                if (vectorFeatures.tchapIsCrossSigningEnabled()) {
-                    if (deviceInfo.isUnknown) {
-                        session?.cryptoService()?.setDeviceVerification(
-                                DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false), userId, deviceId)
-=======
                 if (deviceInfo.isUnknown) {
                     session?.cryptoService()?.verificationService()?.markedLocallyAsManuallyVerified(userId, deviceId)
->>>>>>> v1.6.2
 
-                        deviceInfo.trustLevel = DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false)
+                    deviceInfo.trustLevel = DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false)
 
-<<<<<<< HEAD
-                        // can we get more info on this device?
-                        session?.cryptoService()?.getMyDevicesInfo()?.firstOrNull { it.deviceId == deviceId }?.let {
-                            postAlert(context, userId, deviceId, true, deviceInfo, it)
-                        } ?: run {
-                            postAlert(context, userId, deviceId, true, deviceInfo)
-                        }
-                    } else {
-                        postAlert(context, userId, deviceId, false, deviceInfo)
-                    }
-=======
                     // can we get more info on this device?
                     session?.cryptoService()?.getMyDevicesInfo()?.firstOrNull { it.deviceId == deviceId }?.let {
                         withContext(Dispatchers.Main) {
@@ -185,7 +167,6 @@ class KeyRequestHandler @Inject constructor(
                     withContext(Dispatchers.Main) {
                         postAlert(context, userId, deviceId, false, deviceInfo)
                     }
->>>>>>> v1.6.2
                 }
             } catch (failure: Throwable) {
                 Timber.e(failure, "## displayKeyShareDialog : downloadKeys")

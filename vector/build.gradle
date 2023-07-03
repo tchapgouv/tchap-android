@@ -135,11 +135,8 @@ android {
     }
 }
 
-<<<<<<< HEAD
-=======
 apply from: '../flavor.gradle'
 
->>>>>>> v1.6.2
 dependencies {
 
     implementation project(":vector-config")
@@ -282,12 +279,7 @@ dependencies {
     // implementation 'org.webrtc:google-webrtc:1.0.+'
     implementation('com.facebook.react:react-native-webrtc:111.0.0-jitsi-13672566@aar')
     // Jitsi
-<<<<<<< HEAD
-    // Note: version is 6.2.0, but built from the tag `android-sdk-6.2.2`.
-    withvoipApi('org.jitsi.react:jitsi-meet-sdk:6.2.0') {
-=======
-    api('org.jitsi.react:jitsi-meet-sdk:8.1.1') {
->>>>>>> v1.6.2
+    api('org.jitsi.react:jitsi-meet-sdk:8.1.1') { // Tchap : always compile with jsitsi-meet else webrtc is unresolved.
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'

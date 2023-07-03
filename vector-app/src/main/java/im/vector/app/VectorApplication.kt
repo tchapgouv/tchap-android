@@ -84,11 +84,7 @@ class VectorApplication :
         WorkConfiguration.Provider {
 
     lateinit var appContext: Context
-<<<<<<< HEAD
     @Inject lateinit var vectorFeatures: VectorFeatures
-    @Inject lateinit var legacySessionImporter: LegacySessionImporter
-=======
->>>>>>> v1.6.2
     @Inject lateinit var authenticationService: AuthenticationService
     @Inject lateinit var vectorConfiguration: VectorConfiguration
     @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider

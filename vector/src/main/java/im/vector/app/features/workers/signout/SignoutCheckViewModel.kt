@@ -126,15 +126,10 @@ class SignoutCheckViewModel @AssistedInject constructor(
     }
 
     fun refreshRemoteStateIfNeeded() = withState { state ->
-<<<<<<< HEAD
-        if (isKeyBackupSupported() && state.keysBackupState == KeysBackupState.Disabled) {
-            session.cryptoService().keysBackupService().checkAndStartKeysBackup()
-=======
         if (state.keysBackupState == KeysBackupState.Disabled) {
             viewModelScope.launch {
                 session.cryptoService().keysBackupService().checkAndStartKeysBackup()
             }
->>>>>>> v1.6.2
         }
     }
 

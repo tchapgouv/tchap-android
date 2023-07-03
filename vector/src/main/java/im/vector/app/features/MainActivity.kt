@@ -29,11 +29,8 @@ import com.airbnb.mvrx.viewModel
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-<<<<<<< HEAD
 import fr.gouv.tchap.features.expired.ExpiredAccountActivity
-=======
 import im.vector.app.BuildConfig
->>>>>>> v1.6.2
 import im.vector.app.R
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.extensions.vectorStore

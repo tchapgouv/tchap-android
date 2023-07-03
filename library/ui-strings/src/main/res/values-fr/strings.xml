@@ -2933,9 +2933,6 @@
     <string name="direct_room_encryption_enabled_waiting_users_tile_description">Une fois que les utilisateurs invités seront connectés sur ${app_name}, vous pourrez discuter et le salon sera chiffré de bout en bout</string>
     <string name="direct_room_encryption_enabled_waiting_users">En attente de la connexion des utilisateurs sur ${app_name}</string>
     <string name="direct_room_user_list_only_invite_one_email">Vous ne pouvez envoyer qu’une seule invitation par e-mail à la fois</string>
-<<<<<<< HEAD
-</resources>
-=======
     <string name="pill_message_unknown_room_or_space">Salon/Espace</string>
     <string name="pill_message_in_unknown_room">Message dans le salon</string>
     <string name="pill_message_in_room">Message dans %s</string>
@@ -2954,4 +2951,3 @@
     <string name="settings_crypto_version">Version de cryptographie</string>
     <string name="action_proceed_to_reset">Faire la réinitialisation</string>
 </resources>
->>>>>>> v1.6.2

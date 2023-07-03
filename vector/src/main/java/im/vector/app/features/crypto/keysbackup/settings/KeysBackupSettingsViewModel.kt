@@ -179,19 +179,6 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(
                 )
             }
 
-<<<<<<< HEAD
-            keysBackupService.deleteBackup(keysBackupService.currentBackupVersion!!, object : MatrixCallback<Unit> {
-                override fun onSuccess(data: Unit) {
-                    setState {
-                        copy(
-                                keysBackupVersion = null,
-                                keysBackupVersionTrust = Uninitialized,
-                                // We do not care about the success data
-                                deleteBackupRequest = Uninitialized,
-                                backupSuccessfullyDeleted = true // Tchap
-                        )
-                    }
-=======
             try {
                 keysBackupService.deleteBackup(keysBackupService.currentBackupVersion!!)
                 setState {
@@ -200,8 +187,8 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(
                             keysBackupVersionTrust = Uninitialized,
                             // We do not care about the success data
                             deleteBackupRequest = Uninitialized
+							backupSuccessfullyDeleted = true // Tchap
                     )
->>>>>>> v1.6.2
                 }
             } catch (failure: Throwable) {
                 setState {
