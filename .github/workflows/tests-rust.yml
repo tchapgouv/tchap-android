@@ -60,22 +60,22 @@ jobs:
           disableRateLimiting: true
           public_baseurl: "http://10.0.2.2:8080/"
 
-      - name: Run all the codecoverage tests at once
-        uses: reactivecircus/android-emulator-runner@v2
-        # continue-on-error: true
-        with:
-          api-level: ${{ matrix.api-level }}
-          arch: x86
-          profile: Nexus 5X
-          target: playstore
-          force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: true
-          # emulator-build: 7425822
-          script: |
-            # ./gradlew gatherGplayRustCryptoDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
-            # ./gradlew instrumentationTestsRustWithCoverage $CI_GRADLE_ARG_PROPERTIES
-            # ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
+      ###- name: Run all the codecoverage tests at once
+      ###  uses: reactivecircus/android-emulator-runner@v2
+      ###  # continue-on-error: true
+      ###  with:
+      ###    api-level: ${{ matrix.api-level }}
+      ###    arch: x86
+      ###    profile: Nexus 5X
+      ###    target: playstore
+      ###    force-avd-creation: false
+      ###    emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+      ###    disable-animations: true
+      ###    # emulator-build: 7425822
+      ###    script: |
+      ###      # ./gradlew gatherGplayRustCryptoDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
+      ###      # ./gradlew instrumentationTestsRustWithCoverage $CI_GRADLE_ARG_PROPERTIES
+      ###      # ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
 
       - name: Upload Rust Integration Test Report Log
         uses: actions/upload-artifact@v3
