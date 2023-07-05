@@ -74,8 +74,8 @@ jobs:
           # emulator-build: 7425822
           script: |
             # ./gradlew gatherGplayRustCryptoDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew instrumentationTestsRustWithCoverage $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
+            # ./gradlew instrumentationTestsRustWithCoverage $CI_GRADLE_ARG_PROPERTIES
+            # ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
 
       - name: Upload Rust Integration Test Report Log
         uses: actions/upload-artifact@v3

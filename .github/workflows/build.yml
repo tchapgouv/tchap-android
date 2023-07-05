@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ GplayDevTchapRustCryptoWithoutvoipWithoutpinning, FdroidDevTchaRustCryptopWithoutvoipWithoutpinning, GplayBtchapRustCryptoWithvoipWithpinning ]
+        target: [ GplayDevTchapRustCryptoWithoutvoipWithoutpinning, FdroidDevTchapRustCryptoWithoutvoipWithoutpinning, GplayBtchapRustCryptoWithvoipWithpinning ]
     # Allow all jobs on develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/develop' && format('integration-tests-develop-{0}-{1}', matrix.target, github.sha) || format('build-debug-{0}-{1}', matrix.target, github.ref)  }}
@@ -34,7 +34,7 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Assemble ${{ matrix.target }} debug apk
-        run: ./gradlew assemble${{ matrix.target }}RustCryptoDebug $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew assemble${{ matrix.target }}Debug $CI_GRADLE_ARG_PROPERTIES
       - name: Upload ${{ matrix.target }} debug APKs
         uses: actions/upload-artifact@v3
         with:
