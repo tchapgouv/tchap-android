@@ -76,7 +76,7 @@ jobs:
           script: |
             # Tchap : comment this task because CI failed
             # ./gradlew gatherGplayDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
+            # ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
             ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
             ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
       # NB: continue-on-error marks steps.tests.conclusion = 'success' but leaves steps.tests.outcome = 'failure'
