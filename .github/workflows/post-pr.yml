@@ -76,7 +76,7 @@ jobs:
             touch emulator.log
             chmod 777 emulator.log
             adb logcat >> emulator.log &
-            ./gradlew $CI_GRADLE_ARG_PROPERTIES connectedGplayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest || (adb pull storage/emulated/0/Pictures/failure_screenshots && exit 1 )
+            ./gradlew $CI_GRADLE_ARG_PROPERTIES connectedGplayRustCryptoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest || (adb pull storage/emulated/0/Pictures/failure_screenshots && exit 1 )
       - name: Upload Test Report Log
         uses: actions/upload-artifact@v3
         if: always()

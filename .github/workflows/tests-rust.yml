@@ -73,7 +73,7 @@ jobs:
           disable-animations: true
           # emulator-build: 7425822
           script: |
-            ./gradlew gatherGplayRustCryptoDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
+            # ./gradlew gatherGplayRustCryptoDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
             ./gradlew instrumentationTestsRustWithCoverage $CI_GRADLE_ARG_PROPERTIES
             ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
 

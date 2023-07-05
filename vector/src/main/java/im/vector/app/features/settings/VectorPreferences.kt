@@ -1006,7 +1006,7 @@ class VectorPreferences @Inject constructor(
         return when (BuildConfig.FLAVOR_store.lowercase()) {
             "fdroid" -> false
             "gplay" -> {
-                when(BuildConfig.FLAVOR_target.lowercase()) {
+                when (BuildConfig.FLAVOR_target.lowercase()) {
                     "devtchap" -> true
                     "btchap" -> true
                     else -> false

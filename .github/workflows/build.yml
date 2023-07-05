@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ GplayDevTchapWithoutvoipWithoutpinning, FdroidDevTchapWithoutvoipWithoutpinning, GplayBtchapWithvoipWithpinning ]
+        target: [ GplayDevTchapRustCryptoWithoutvoipWithoutpinning, FdroidDevTchaRustCryptopWithoutvoipWithoutpinning, GplayBtchapRustCryptoWithvoipWithpinning ]
     # Allow all jobs on develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/develop' && format('integration-tests-develop-{0}-{1}', matrix.target, github.sha) || format('build-debug-{0}-{1}', matrix.target, github.ref)  }}
@@ -79,8 +79,8 @@ jobs:
     needs: release
     env:
       # Tchap: only generate exodus report for the following target
-      TARGET_NAME: "GplayTchapWithoutvoipWithpinning"
-      TARGET_FOLDER: "gplayTchapWithoutvoipWithpinning"
+      TARGET_NAME: "GplayTchapRustCryptoWithoutvoipWithpinning"
+      TARGET_FOLDER: "gplayTchapRustCryptoWithoutvoipWithpinning"
     steps:
       - name: Obtain apk from artifact
         id: download
