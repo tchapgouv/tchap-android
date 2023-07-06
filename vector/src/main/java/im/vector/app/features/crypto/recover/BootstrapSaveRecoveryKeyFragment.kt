@@ -121,5 +121,6 @@ class BootstrapSaveRecoveryKeyFragment :
 
         views.recoveryContinue.isVisible = false // Tchap : don't display "Continue" button
         views.bootstrapRecoveryKeyText.text = state.recoveryKeyCreationInfo?.recoveryKey?.formatRecoveryKey()
+        views.bootstrapSaveText.giveAccessibilityFocusOnce()
     }
 }

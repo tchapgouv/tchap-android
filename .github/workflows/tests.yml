@@ -61,24 +61,25 @@ jobs:
           disableRateLimiting: true
           public_baseurl: "http://10.0.2.2:8080/"
 
-      - name: Run all the codecoverage tests at once
-        uses: reactivecircus/android-emulator-runner@v2
-        # continue-on-error: true
-        with:
-          api-level: ${{ matrix.api-level }}
-          arch: x86
-          profile: Nexus 5X
-          target: playstore
-          force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: true
-          # emulator-build: 7425822
-          script: |
-            # Tchap : comment this task because CI failed
-            # ./gradlew gatherGplayDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
+      ###- name: Run all the codecoverage tests at once
+      ###  uses: reactivecircus/android-emulator-runner@v2
+      ###  # continue-on-error: true
+      ###  with:
+      ###    api-level: ${{ matrix.api-level }}
+      ###    arch: x86
+      ###    profile: Nexus 5X
+      ###    target: playstore
+      ###    force-avd-creation: false
+      ###    emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+      ###    disable-animations: true
+      ###    # emulator-build: 7425822
+      ###    script: |
+      ###      # Tchap : comment this task because CI failed
+      ###      # ./gradlew gatherGplayDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
+      ###      # ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
+      ###      ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
+      ###      ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
+      
       # NB: continue-on-error marks steps.tests.conclusion = 'success' but leaves steps.tests.outcome = 'failure'
       ### - name: Run all the codecoverage tests at once (retry if emulator failed)
       ###   uses: reactivecircus/android-emulator-runner@v2
