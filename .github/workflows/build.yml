@@ -50,7 +50,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ GplayBtchapWithoutvoipWithpinning, GplayTchapWithoutvoipWithpinning, FdroidBtchapWithoutvoipWithoutpinning, FdroidTchapWithoutvoipWithoutpinning, GplayBtchapWithvoipWithpinning ]
+        target: [ GplayBtchapRustCryptWithoutvoipWithpinning, GplayTchapRustCryptWithoutvoipWithpinning, FdroidBtchapRustCryptWithoutvoipWithoutpinning, FdroidTchapRustCryptWithoutvoipWithoutpinning, GplayBtchapRustCryptWithvoipWithpinning ]
     concurrency:
       # Tchap: custom group
       group: ${{ github.ref == 'refs/head/main' && format('build-release-apk-main-{0}-{1}', github.sha, matrix.target) || startsWith(github.ref, 'refs/tags/tchap_v') && format('build-release-apk-tag-{0}-{1}', github.sha, matrix.target) }}
