@@ -1,3 +1,11 @@
+Changes in Tchap 2.9.0 (2023-07-06)
+===================================
+
+Improvements 🙌
+--------------
+ - Android rebase 1.6.2 pour introduire la Crypto Rust (#943) ([#943](https://github.com/tchapgouv/tchap-android-v2/issues/943))
+
+
 Changes in Tchap 2.8.5 (2023-06-26)
 ===================================
 
