@@ -27,7 +27,6 @@ import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.Thre
 import io.realm.RealmConfiguration
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
-import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.internal.auth.db.AuthRealmMigration
 import org.matrix.android.sdk.internal.auth.db.AuthRealmModule
 import org.matrix.android.sdk.internal.auth.db.RealmPendingSessionStore
@@ -38,7 +37,6 @@ import org.matrix.android.sdk.internal.auth.login.DirectLoginTask
 import org.matrix.android.sdk.internal.auth.login.QrLoginTokenTask
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.di.AuthDatabase
-import org.matrix.android.sdk.internal.legacy.DefaultLegacySessionImporter
 import org.matrix.android.sdk.internal.wellknown.WellknownModule
 import java.io.File
 
@@ -73,9 +71,6 @@ internal abstract class AuthModule {
                     .build()
         }
     }
-
-    @Binds
-    abstract fun bindLegacySessionImporter(importer: DefaultLegacySessionImporter): LegacySessionImporter
 
     @Binds
     abstract fun bindSessionParamsStore(store: RealmSessionParamsStore): SessionParamsStore
