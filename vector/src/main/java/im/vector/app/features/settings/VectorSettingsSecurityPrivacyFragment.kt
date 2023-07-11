@@ -233,7 +233,18 @@ class VectorSettingsSecurityPrivacyFragment :
                 } else {
                     // just hide all, you can't setup from here
                     // you should synchronize to get gossips
-                    secureBackupCategory.isVisible = false
+                    // Tchap : here, the section is hidden on Element.
+                    // In Tchap, we want to show it.
+                    secureBackupCategory.isVisible = true
+                    secureBackupPreference.title = getString(R.string.settings_secure_backup_enter_to_setup)
+                    secureBackupPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                        vectorActivity.let {
+                            it.navigator.requestSelfSessionVerification(it)
+                        }
+                        true
+                    }
+                    // Tchap : remove "Manage backup" button because Secure backup is not activated
+                    manageBackupPref.isVisible = false
                 }
             } else {
                 // so here we know that 4S is setup
@@ -372,7 +383,7 @@ class VectorSettingsSecurityPrivacyFragment :
                     mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_trusted)
                 }
                 xSigningIsEnableInAccount -> {
-                    mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_black)
+                    mCrossSigningStatePreference.setIcon(R.drawable.ic_tchap_cancel) // Tchpa icon
                     mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_not_trusted)
                 }
                 else -> {

@@ -676,7 +676,7 @@
     <string name="settings_silent_notifications_preferences">Configurer les notifications silencieuses</string>
     <string name="settings_system_preferences_summary">Choisir la couleur de la LED, les vibrations, le son…</string>
     <string name="settings_cryptography_manage_keys">Clés Tchap</string><!-- Tchap: Use custom string -->
-    <string name="encryption_settings_manage_message_recovery_summary">Gérer la sauvegarde</string><!-- Tchap: Use custom string -->
+    <string name="encryption_settings_manage_message_recovery_summary">Récupérer mes messages</string><!-- Tchap: Use custom string -->
     <string name="notification_silent">Silencieuse</string>
     <string name="passphrase_empty_error_message">Veuillez saisir une phrase secrète</string>
     <string name="passphrase_passphrase_too_weak">La phrase secrète est trop faible</string>
