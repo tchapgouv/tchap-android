@@ -1,0 +1,1 @@
+IdentityServerUrl comporte un "/" terminal en fin d'URL qui pose problème

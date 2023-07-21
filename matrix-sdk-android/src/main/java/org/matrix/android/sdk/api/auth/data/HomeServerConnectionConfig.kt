@@ -77,7 +77,7 @@ data class HomeServerConnectionConfig(
                 throw RuntimeException("Invalid homeserver URI: $hsUri")
             }
             // ensure trailing /
-            val hsString = hsUri.toString().ensureTrailingSlash()
+            val hsString = hsUri.toString() // .ensureTrailingSlash() // Tchap : remove
             homeServerUri = try {
                 Uri.parse(hsString)
             } catch (e: Exception) {
