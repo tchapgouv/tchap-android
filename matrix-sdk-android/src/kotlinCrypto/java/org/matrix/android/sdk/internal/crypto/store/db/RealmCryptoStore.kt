@@ -1158,7 +1158,9 @@ internal class RealmCryptoStore @Inject constructor(
                 }
         )
         return Transformations.map(liveData) {
-            it.firstOrNull() ?: false
+            // Tchap : force to false to avoid "Never send messages to non verified devices"
+            // it.firstOrNull() ?: false
+            false
         }
     }
 
