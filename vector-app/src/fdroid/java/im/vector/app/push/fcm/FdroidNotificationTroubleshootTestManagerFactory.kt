@@ -29,7 +29,7 @@ import im.vector.app.features.settings.troubleshoot.TestCurrentUnifiedPushDistri
 import im.vector.app.features.settings.troubleshoot.TestDeviceSettings
 import im.vector.app.features.settings.troubleshoot.TestEndpointAsTokenRegistration
 import im.vector.app.features.settings.troubleshoot.TestNotification
-import im.vector.app.features.settings.troubleshoot.TestPushFromPushGateway
+// import im.vector.app.features.settings.troubleshoot.TestPushFromPushGateway // Tchap : remove
 import im.vector.app.features.settings.troubleshoot.TestPushRulesSettings
 import im.vector.app.features.settings.troubleshoot.TestSystemSettings
 import im.vector.app.features.settings.troubleshoot.TestUnifiedPushEndpoint
@@ -47,7 +47,7 @@ class FdroidNotificationTroubleshootTestManagerFactory @Inject constructor(
         private val testUnifiedPushEndpoint: TestUnifiedPushEndpoint,
         private val testAvailableUnifiedPushDistributors: TestAvailableUnifiedPushDistributors,
         private val testEndpointAsTokenRegistration: TestEndpointAsTokenRegistration,
-        private val testPushFromPushGateway: TestPushFromPushGateway,
+        // private val testPushFromPushGateway: TestPushFromPushGateway, // Tchap : remove
         private val testAutoStartBoot: TestAutoStartBoot,
         private val testBackgroundRestrictions: TestBackgroundRestrictions,
         private val testBatteryOptimization: TestBatteryOptimization,
@@ -73,7 +73,7 @@ class FdroidNotificationTroubleshootTestManagerFactory @Inject constructor(
             mgr.addTest(testUnifiedPushGateway)
             mgr.addTest(testUnifiedPushEndpoint)
             mgr.addTest(testEndpointAsTokenRegistration)
-            mgr.addTest(testPushFromPushGateway)
+//            mgr.addTest(testPushFromPushGateway) // Tchap : remove
         }
         mgr.addTest(testNotification)
         return mgr

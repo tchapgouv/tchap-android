@@ -50,14 +50,15 @@ class CrossSigningSettingsController @Inject constructor(
                     titleIconResourceId(R.drawable.ic_shield_trusted)
                     title(host.stringProvider.getString(R.string.encryption_information_dg_xsigning_complete).toEpoxyCharSequence())
                 }
-                genericButtonItem {
-                    id("Reset")
-                    text(host.stringProvider.getString(R.string.reset_cross_signing))
-                    textColor(host.colorProvider.getColor(R.color.palette_tchap_coral)) // Tchap
-                    buttonClickAction {
-                        host.interactionListener?.didTapInitializeCrossSigning()
-                    }
-                }
+                // Tchap : don't display "Reset cross-signing" button
+//                genericButtonItem {
+//                    id("Reset")
+//                    text(host.stringProvider.getString(R.string.reset_cross_signing))
+//                    textColor(host.colorProvider.getColor(R.color.palette_tchap_coral)) // Tchap
+//                    buttonClickAction {
+//                        host.interactionListener?.didTapInitializeCrossSigning()
+//                    }
+//                }
             }
             data.xSigningKeysAreTrusted -> {
                 genericItem {
@@ -77,7 +78,7 @@ class CrossSigningSettingsController @Inject constructor(
             data.xSigningIsEnableInAccount -> {
                 genericItem {
                     id("enable")
-                    titleIconResourceId(R.drawable.ic_shield_black)
+                    titleIconResourceId(R.drawable.ic_tchap_cancel) // Tchap icon
                     title(host.stringProvider.getString(R.string.encryption_information_dg_xsigning_not_trusted).toEpoxyCharSequence())
                 }
                 genericButtonItem {

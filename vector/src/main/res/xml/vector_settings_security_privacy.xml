@@ -11,19 +11,18 @@
             android:focusable="false"
             android:persistent="false"
             android:summary="@string/settings_secure_backup_section_info" />
+       <im.vector.app.core.preference.VectorPreference
+            app:icon="@drawable/ic_shield_trusted"
+            android:key="SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/encryption_settings_manage_message_recovery_summary"
+            app:isPreferenceVisible="@bool/tchap_is_key_backup_enabled" />
 
         <im.vector.app.core.preference.VectorPreference
             android:icon="@drawable/ic_secure_backup"
             android:key="SETTINGS_SECURE_BACKUP_RECOVERY_PREFERENCE_KEY"
             android:persistent="false"
             android:title="@string/settings_secure_backup_setup" />
-
-        <im.vector.app.core.preference.VectorPreference
-            app:icon="@drawable/ic_shield_trusted"
-            android:key="SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
-            android:persistent="false"
-            android:title="@string/encryption_settings_manage_message_recovery_summary"
-            app:isPreferenceVisible="@bool/tchap_is_key_backup_enabled" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 

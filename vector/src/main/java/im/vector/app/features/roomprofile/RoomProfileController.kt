@@ -205,30 +205,32 @@ class RoomProfileController @Inject constructor(
                             host.callback?.openGlobalBlockSettings()
                         }
                     }
-                } else {
-                    // per room setting is available
-                    val shouldBlockUnverified = data.encryptToVerifiedDeviceOnly.invoke()
-                    formSwitchItem {
-                        id("send_to_unverified")
-                        enabled(shouldBlockUnverified != null)
-                        title(host.stringProvider.getString(R.string.encryption_never_send_to_unverified_devices_in_room))
-
-                        switchChecked(shouldBlockUnverified ?: false)
-
-                        apply {
-                            if (shouldBlockUnverified == true && data.unverifiedDevicesInTheRoom.invoke() == true) {
-                                summary(
-                                        host.stringProvider.getString(R.string.some_devices_will_not_be_able_to_decrypt)
-                                )
-                            } else {
-                                summary(null)
-                            }
-                        }
-                        listener { value ->
-                            host.callback?.setEncryptedToVerifiedDevicesOnly(value)
-                        }
-                    }
                 }
+                // Tchap : don't display option "Never send messages to unverified devices in room"
+//                else {
+//                    // per room setting is available
+//                    val shouldBlockUnverified = data.encryptToVerifiedDeviceOnly.invoke()
+//                    formSwitchItem {
+//                        id("send_to_unverified")
+//                        enabled(shouldBlockUnverified != null)
+//                        title(host.stringProvider.getString(R.string.encryption_never_send_to_unverified_devices_in_room))
+//
+//                        switchChecked(shouldBlockUnverified ?: false)
+//
+//                        apply {
+//                            if (shouldBlockUnverified == true && data.unverifiedDevicesInTheRoom.invoke() == true) {
+//                                summary(
+//                                        host.stringProvider.getString(R.string.some_devices_will_not_be_able_to_decrypt)
+//                                )
+//                            } else {
+//                                summary(null)
+//                            }
+//                        }
+//                        listener { value ->
+//                            host.callback?.setEncryptedToVerifiedDevicesOnly(value)
+//                        }
+//                    }
+//                }
             }
         }
         // More
