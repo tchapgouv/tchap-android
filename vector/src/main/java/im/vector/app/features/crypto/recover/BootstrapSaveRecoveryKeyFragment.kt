@@ -20,12 +20,12 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.getSystemService
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.parentFragmentViewModel
@@ -108,9 +108,8 @@ class BootstrapSaveRecoveryKeyFragment :
                 ?: return@withState
 
         // Tchap : copy recovery key to clipboard right now after "Copy" button is tapped.
-        val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("", recoveryKey)
-        clipboard.setPrimaryClip(clip)
+        val clipService = requireContext().getSystemService<ClipboardManager>()
+        clipService?.setPrimaryClip(ClipData.newPlainText("", recoveryKey))
 
         startSharePlainTextIntent(
                 requireContext(),
