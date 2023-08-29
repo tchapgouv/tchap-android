@@ -29,7 +29,6 @@ import im.vector.app.features.settings.troubleshoot.TestCurrentUnifiedPushDistri
 import im.vector.app.features.settings.troubleshoot.TestDeviceSettings
 import im.vector.app.features.settings.troubleshoot.TestEndpointAsTokenRegistration
 import im.vector.app.features.settings.troubleshoot.TestNotification
-// import im.vector.app.features.settings.troubleshoot.TestPushFromPushGateway // Tchap : remove
 import im.vector.app.features.settings.troubleshoot.TestPushRulesSettings
 import im.vector.app.features.settings.troubleshoot.TestSystemSettings
 import im.vector.app.features.settings.troubleshoot.TestUnifiedPushEndpoint

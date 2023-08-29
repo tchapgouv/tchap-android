@@ -292,7 +292,8 @@ class RoomProfileViewModel @AssistedInject constructor(
 
     private fun setEncryptToVerifiedDeviceOnly(enabled: Boolean) {
         session.coroutineScope.launch {
-            session.cryptoService().setRoomBlockUnverifiedDevices(room.roomId, enabled and false) // Tchap : force to false to deactivate "Never send messages to unverified devices in room"
+            // Tchap : force to false to deactivate "Never send messages to unverified devices in room"
+            session.cryptoService().setRoomBlockUnverifiedDevices(room.roomId, enabled and false)
         }
     }
 
