@@ -190,7 +190,7 @@ fun BaseEpoxyVerificationController.renderCancel(cancelCode: CancelCode) {
         CancelCode.MismatchedKeys -> {
             bottomSheetVerificationNoticeItem {
                 id("notice")
-                notice(host.stringProvider.getString(R.string.verification_conclusion_not_secure).toEpoxyCharSequence())
+                notice(host.stringProvider.getString(R.string.tchap_verification_conclusion_not_secure).toEpoxyCharSequence())
             }
 
             bottomSheetVerificationBigImageItem {
