@@ -178,8 +178,9 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                 textButton1(host.stringProvider.getString(R.string.keys_backup_settings_restore_backup_button))
                 clickOnButton1 { host.listener?.didSelectRestoreMessageRecovery() }
 
-                textButton2(host.stringProvider.getString(R.string.keys_backup_settings_delete_backup_button))
-                clickOnButton2 { host.listener?.didSelectDeleteSetupMessageRecovery() }
+                // Tchap : hide "Suppress backup" button
+//                textButton2(host.stringProvider.getString(R.string.keys_backup_settings_delete_backup_button))
+//                clickOnButton2 { host.listener?.didSelectDeleteSetupMessageRecovery() }
             } else {
                 textButton1(host.stringProvider.getString(R.string.keys_backup_setup))
                 clickOnButton1 { host.listener?.didSelectSetupMessageRecovery() }

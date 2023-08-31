@@ -1,3 +1,17 @@
+Changes in Tchap 2.9.1 (2023-07-27)
+===================================
+
+Improvements 🙌
+--------------
+ - Amélioration UX, wording et organisation des settings sécurité (partie II, multidevice) (#940) ([#940](https://github.com/tchapgouv/tchap-android-v2/issues/940))
+ - Supprimer le blocage d'envoi de messages chiffrés aux appareils non vérifiés (945) ([#945](https://github.com/tchapgouv/tchap-android-v2/issues/945))
+
+Bugfixes 🐛
+----------
+ - Correction du test de Push Notification non adapté à Tchap #950 ([#950](https://github.com/tchapgouv/tchap-android-v2/issues/950))
+ - Problème de copie du code de récupération après génération ([#953](https://github.com/tchapgouv/tchap-android-v2/issues/953))
+
+
 Changes in Tchap 2.9.0 (2023-07-06)
 ===================================
 

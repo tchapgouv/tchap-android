@@ -18,6 +18,9 @@ package im.vector.app.features.crypto.recover
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -93,7 +96,8 @@ class BootstrapSaveRecoveryKeyFragment :
     }
 
     private val copyStartForActivityResult = registerStartForActivityResult { activityResult ->
-        if (activityResult.resultCode == Activity.RESULT_OK) {
+        // Tchap : accept to close sheet even if result is RESULT_CANCELED. The Recovery code is in the clipboard.
+        if (activityResult.resultCode == Activity.RESULT_OK || activityResult.resultCode == Activity.RESULT_CANCELED) {
             // Tchap : Close the dialog without having to tap "Continue"
             sharedViewModel.handle(BootstrapActions.Completed)
         }
@@ -102,6 +106,11 @@ class BootstrapSaveRecoveryKeyFragment :
     private fun shareRecoveryKey() = withState(sharedViewModel) { state ->
         val recoveryKey = state.recoveryKeyCreationInfo?.recoveryKey?.formatRecoveryKey()
                 ?: return@withState
+
+        // Tchap : copy recovery key to clipboard right now after "Copy" button is tapped.
+        val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("", recoveryKey)
+        clipboard.setPrimaryClip(clip)
 
         startSharePlainTextIntent(
                 requireContext(),
