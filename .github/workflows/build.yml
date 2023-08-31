@@ -8,8 +8,8 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  # Tchap : up Xmx TO 4096 to achieve build in CI
-  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx4096m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options="-Xmx4096m" -Dkotlin.incremental=false
+  # Tchap: increase Xmx to 4g to achieve build in CI and adding default -XX:MaxMetaspaceSize jvmargs parameter https://github.com/gradle/gradle-build-action/issues/122
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx4g -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -XX:MaxMetaspaceSize=1g" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
   CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
 
 jobs:
