@@ -29,7 +29,6 @@ import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericPositiveButtonItem
-import im.vector.app.features.form.formSwitchItem
 import im.vector.app.features.home.ShortcutCreator
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod

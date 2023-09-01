@@ -8,14 +8,15 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  # Tchap : up Xmx TO 4096 to achieve build in CI
-  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx4096m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options="-Xmx4096m" -Dkotlin.incremental=false
+  # Tchap: increase Xmx to 4g to achieve build in CI and adding default -XX:MaxMetaspaceSize jvmargs parameter https://github.com/gradle/gradle-build-action/issues/122
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx4g -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -XX:MaxMetaspaceSize=1g" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
   CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
 
 jobs:
   debug:
     name: Build debug APKs (${{ matrix.target }})
-    runs-on: ubuntu-latest
+    # Tchap: use ubuntu-20.04 instead of latest version according to https://github.com/actions/runner-images/issues/6709
+    runs-on: ubuntu-20.04
     if: github.ref != 'refs/heads/main'
     strategy:
       fail-fast: false
@@ -45,7 +46,8 @@ jobs:
 
   release:
     name: Build unsigned ${{ matrix.target }} APKs
-    runs-on: ubuntu-latest
+    # Tchap: use ubuntu-20.04 instead of latest version according to https://github.com/actions/runner-images/issues/6709
+    runs-on: ubuntu-20.04
     # Tchap: Generate apks on new tchap release
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/tchap_v')
     strategy:
@@ -58,7 +60,7 @@ jobs:
       cancel-in-progress: ${{ github.ref != 'refs/head/main' && !startsWith(github.ref, 'refs/tags/tchap_v') }}
     steps:
       - uses: actions/checkout@v3
-        # Tchap : stay on current branch
+        # Tchap: stay on current branch
         # with:
           # https://github.com/actions/checkout/issues/881
           # ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}

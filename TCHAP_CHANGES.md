@@ -1,3 +1,11 @@
+Changes in Tchap 2.9.2 (2023-09-01)
+===================================
+
+Other changes
+-------------
+ - Remove calendar permissions added by Jitsi meet lib ([#959](https://github.com/tchapgouv/tchap-android/issues/959))
+
+
 Changes in Tchap 2.9.1 (2023-07-27)
 ===================================
 
