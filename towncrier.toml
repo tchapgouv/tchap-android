@@ -1,10 +1,10 @@
 [tool.towncrier]
-    version = "2.9.1"
+    version = "2.9.2"
     directory = "changelog.d"
     filename = "TCHAP_CHANGES.md"
     name = "Changes in Tchap"
     template = "tools/towncrier/template.md"
-    issue_format = "[#{issue}](https://github.com/tchapgouv/tchap-android-v2/issues/{issue})"
+    issue_format = "[#{issue}](https://github.com/tchapgouv/tchap-android/issues/{issue})"
 
     [[tool.towncrier.type]]
         directory = "feature"
