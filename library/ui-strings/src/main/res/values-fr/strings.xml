@@ -1287,7 +1287,8 @@
     <string name="qr_code_scanned_by_other_notice">On y est presque ! Est-ce que %s affiche une marque cochée \?</string>
     <string name="qr_code_scanned_by_other_yes">Oui</string>
     <string name="qr_code_scanned_by_other_no">Non</string>
-    <string name="no_connectivity_to_the_server_indicator">La connexion avec le serveur a été perdue</string>
+    <string name="no_connectivity_to_the_server_indicator">La connexion à ${app_name} n’est pas disponible
+\npour le moment. <b><u>Voir l’état du service</u></b></string> <!-- Tchap: Use custom string -->
     <string name="login_signup_username_hint">Nom d’utilisateur</string>
     <string name="settings_dev_tools">Outils de développement</string>
     <string name="settings_account_data">Données du compte</string>

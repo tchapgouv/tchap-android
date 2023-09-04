@@ -22,7 +22,9 @@ import android.util.AttributeSet
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.utils.isAirplaneModeOn
+import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.ViewSyncStateBinding
 import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.api.session.sync.SyncState
@@ -56,6 +58,10 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
 
         if (newState == SyncState.NoNetwork) {
             val isAirplaneModeOn = context.isAirplaneModeOn()
+            // Tchap: Add service status URL
+            views.syncStateNoNetwork.onClick {
+                openUrlInExternalBrowser(context, TCHAP_SERVICE_STATUS_URL)
+            }
             views.syncStateNoNetwork.isVisible = isAirplaneModeOn.not()
             views.syncStateNoNetworkAirplane.isVisible = isAirplaneModeOn
         } else {
@@ -86,5 +92,9 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
             SyncRequestState.IncrementalSyncDone -> "Done"
             else -> "?"
         }
+    }
+
+    companion object {
+        private const val TCHAP_SERVICE_STATUS_URL = "https://status.tchap.numerique.gouv.fr/"
     }
 }
