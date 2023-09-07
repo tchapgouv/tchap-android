@@ -541,8 +541,12 @@ class HomeActivityViewModel @AssistedInject constructor(
                 val currentIdentityServiceUrl = getCurrentIdentityServerUrl()
                 val slash = '/'
                 if (currentIdentityServiceUrl.isNullOrBlank() || currentIdentityServiceUrl.last() == slash) {
-                    setNewIdentityServer(session.sessionParams.homeServerUrl.dropLastWhile { it == slash})
-                    Timber.d("## updateIdentityServer succeeded ($currentIdentityServiceUrl)")
+                    try {
+                        val data = setNewIdentityServer(session.sessionParams.homeServerUrl.dropLastWhile { it == slash})
+                        Timber.d("## updateIdentityServer succeeded ($data)")
+                    } catch (failure: Throwable) {
+                        Timber.e(failure,"## updateIdentityServer failed")
+                    }
                 }
 
                 // Tchap: Force user consent as it should have been already accepted in TAC
