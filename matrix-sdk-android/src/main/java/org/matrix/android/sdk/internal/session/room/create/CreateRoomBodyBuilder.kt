@@ -60,12 +60,8 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                     // This can throw an exception if identity server is not configured
                     ensureIdentityTokenTask.execute(Unit)
 
-                    var identityServerUrlWithoutProtocol = identityStore.getIdentityServerUrlWithoutProtocol()
+                    val identityServerUrlWithoutProtocol = identityStore.getIdentityServerUrlWithoutProtocol()
                             ?: throw IdentityServiceError.NoIdentityServerConfigured
-                    // Tchap : remove last char if it is a '/' else server will respond with a 500 error.
-                    if (identityServerUrlWithoutProtocol.endsWith(char = '/')) {
-                        identityServerUrlWithoutProtocol = identityServerUrlWithoutProtocol.dropLast(1)
-                    }
                     val identityServerAccessToken = accessTokenProvider.getToken() ?: throw IdentityServiceError.NoIdentityServerConfigured
 
                     invites.map {
