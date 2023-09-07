@@ -48,12 +48,9 @@ import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.dialpad.PstnDialActivity
 import im.vector.app.features.call.webrtc.WebRtcCallManager
-<<<<<<< HEAD
 import im.vector.app.features.createdirect.CreateDirectRoomAction
 import im.vector.app.features.createdirect.CreateDirectRoomViewModel
-=======
 import im.vector.app.features.crypto.verification.self.SelfVerificationBottomSheet
->>>>>>> v1.6.5
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel

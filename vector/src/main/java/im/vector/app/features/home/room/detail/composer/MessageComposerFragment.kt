@@ -277,21 +277,17 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         if (mainState.tombstoneEvent != null) return@withState
 
         (composer as? View)?.isVisible = messageComposerState.isComposerVisible
-<<<<<<< HEAD
         if (Config.SHOW_VOICE_RECORDER) {
             composer.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
         } else {
             // Tchap: set visibility to gone if there is no voice recorder button
             composer.sendButton.isGone = !messageComposerState.isSendButtonVisible
-            (composer as? RichTextComposerLayout)?.isTextFormattingEnabled = attachmentState.isTextFormattingEnabled
-=======
-        composer.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
-        (composer as? RichTextComposerLayout)?.also {
-            val isTextFormattingEnabled = attachmentState.isTextFormattingEnabled
-            it.isTextFormattingEnabled = isTextFormattingEnabled
-            autoCompleters[it.richTextEditText]?.setEnabled(isTextFormattingEnabled)
-            autoCompleters[it.plainTextEditText]?.setEnabled(!isTextFormattingEnabled)
->>>>>>> v1.6.5
+            (composer as? RichTextComposerLayout)?.also {
+                val isTextFormattingEnabled = attachmentState.isTextFormattingEnabled
+                it.isTextFormattingEnabled = isTextFormattingEnabled
+                autoCompleters[it.richTextEditText]?.setEnabled(isTextFormattingEnabled)
+                autoCompleters[it.plainTextEditText]?.setEnabled(!isTextFormattingEnabled)
+            }
         }
     }
 

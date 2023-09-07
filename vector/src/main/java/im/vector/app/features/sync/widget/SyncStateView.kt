@@ -67,7 +67,7 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
             val statusLink = context.getString(R.string.tchap_no_connection_service_status)
             val spannable = SpannableString("${context.getString(R.string.no_connectivity_to_the_server_indicator)} $statusLink")
             spannable.setSpan(StyleSpan(Typeface.BOLD), spannable.length - statusLink.length, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            spannable.setSpan(UnderlineSpan(),spannable.length - statusLink.length, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannable.setSpan(UnderlineSpan(), spannable.length - statusLink.length, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             views.syncStateNoNetwork.text = spannable
             views.syncStateNoNetwork.onClick {
                 openUrlInExternalBrowser(context, TCHAP_SERVICE_STATUS_URL)
