@@ -315,7 +315,8 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .onEach { status ->
                     when (status) {
                         is SyncRequestState.Idle -> {
-                            // Tchap: Force Identity server definition
+                            // Tchap: Force Identity server definition even in case the user is already logged and initial Sync already occured.
+                            // This is to force fix IdentityServerUrl if needed.
                             updateIdentityServer()
 
                             maybeVerifyOrBootstrapCrossSigning()
