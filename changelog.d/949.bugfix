@@ -1,0 +1,1 @@
+Problème d'invitation : IdentityServerUrl comporte un "/" terminal en fin d'URL qui pose problème

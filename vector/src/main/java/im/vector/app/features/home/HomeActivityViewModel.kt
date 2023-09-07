@@ -315,8 +315,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .onEach { status ->
                     when (status) {
                         is SyncRequestState.Idle -> {
-                            // Tchap: Force Identity server definition even in case the user is already logged and initial Sync already occured.
-                            // This is to force fix IdentityServerUrl if needed.
+                            // Tchap: Force Identity server definition
                             updateIdentityServer()
 
                             maybeVerifyOrBootstrapCrossSigning()
@@ -333,7 +332,8 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .launchIn(viewModelScope)
 
         if (session.syncService().hasAlreadySynced()) {
-            // Tchap: Force Identity server definition
+            // Tchap: Force Identity server definition even in case the user is already logged and initial Sync already occured.
+            // This is to force fix IdentityServerUrl if needed.
             updateIdentityServer()
 
             maybeVerifyOrBootstrapCrossSigning()
@@ -543,10 +543,10 @@ class HomeActivityViewModel @AssistedInject constructor(
                 val slash = '/'
                 if (currentIdentityServiceUrl.isNullOrBlank() || currentIdentityServiceUrl.last() == slash) {
                     try {
-                        val data = setNewIdentityServer(session.sessionParams.homeServerUrl.dropLastWhile { it == slash})
+                        val data = setNewIdentityServer(session.sessionParams.homeServerUrl.dropLastWhile { it == slash })
                         Timber.d("## updateIdentityServer succeeded ($data)")
                     } catch (failure: Throwable) {
-                        Timber.e(failure,"## updateIdentityServer failed")
+                        Timber.e(failure, "## updateIdentityServer failed")
                     }
                 }
 
