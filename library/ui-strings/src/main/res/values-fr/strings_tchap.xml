@@ -112,4 +112,7 @@
 
     <!-- Verification -->
     <string name="tchap_verification_conclusion_not_secure">La vérification de votre nouvelle session a échoué.</string>
+
+    <!-- Connectivity -->
+    <string name="tchap_no_connection_service_status">Voir l’état du service</string>
 </resources>
