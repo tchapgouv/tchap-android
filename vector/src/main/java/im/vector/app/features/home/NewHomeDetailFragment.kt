@@ -48,8 +48,12 @@ import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.dialpad.PstnDialActivity
 import im.vector.app.features.call.webrtc.WebRtcCallManager
+<<<<<<< HEAD
 import im.vector.app.features.createdirect.CreateDirectRoomAction
 import im.vector.app.features.createdirect.CreateDirectRoomViewModel
+=======
+import im.vector.app.features.crypto.verification.self.SelfVerificationBottomSheet
+>>>>>>> v1.6.5
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
@@ -57,6 +61,7 @@ import im.vector.app.features.home.room.list.home.HomeRoomListFragment
 import im.vector.app.features.home.room.list.home.NewChatBottomSheet
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
+import im.vector.app.features.qrcode.QrCodeScannerActivity
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
 import im.vector.app.features.spaces.SpaceListBottomSheet
@@ -165,8 +170,8 @@ class NewHomeDetailFragment :
 
         unknownDeviceDetectorSharedViewModel.onEach { state ->
             state.unknownSessions.invoke()?.let { unknownDevices ->
+                val uid = PopupAlertManager.REVIEW_LOGIN_UID
                 if (unknownDevices.firstOrNull()?.currentSessionTrust == true) {
-                    val uid = PopupAlertManager.REVIEW_LOGIN_UID
                     alertManager.cancelAlert(uid)
                     val olderUnverified = unknownDevices.filter { !it.isNew }
                     val newest = unknownDevices.firstOrNull { it.isNew }?.deviceInfo
@@ -176,6 +181,9 @@ class NewHomeDetailFragment :
                         // In this case we prompt to go to settings to review logins
                         promptToReviewChanges(uid, state, olderUnverified.map { it.deviceInfo })
                     }
+                } else {
+                    // cancel as there are not anymore untrusted devices
+                    alertManager.cancelAlert(uid)
                 }
             }
         }
@@ -298,7 +306,14 @@ class NewHomeDetailFragment :
                         uid = uid,
                         title = getString(R.string.review_unverified_sessions_title),
                         description = getString(R.string.review_unverified_sessions_description),
-                        iconId = R.drawable.ic_shield_warning
+                        iconId = R.drawable.ic_shield_warning,
+                        shouldBeDisplayedIn = { activity ->
+                            // do not show when there is an ongoing verification flow
+                            if (activity is VectorBaseActivity<*>) {
+                                activity.supportFragmentManager.findFragmentByTag(SelfVerificationBottomSheet.TAG) == null &&
+                                        activity !is QrCodeScannerActivity
+                            } else true
+                        }
                 ).apply {
                     viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer)
                     colorInt = colorProvider.getColorFromAttribute(R.attr.colorPrimary)
@@ -371,9 +386,9 @@ class NewHomeDetailFragment :
         })
     }
 
-    /* ==========================================================================================
-     * KeysBackupBanner Listener
-     * ========================================================================================== */
+/* ==========================================================================================
+ * KeysBackupBanner Listener
+ * ========================================================================================== */
 
     override fun onCloseClicked() {
         serverBackupStatusViewModel.handle(ServerBackupStatusAction.OnBannerClosed)
