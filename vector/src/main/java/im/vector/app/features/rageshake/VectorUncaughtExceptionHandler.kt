@@ -74,7 +74,7 @@ class VectorUncaughtExceptionHandler @Inject constructor(
         b.append("$appName Build : ${versionCodeProvider.getVersionCode()}\n")
         b.append("$appName Version : ${versionProvider.getVersion(longFormat = true)}\n")
         b.append("SDK Version : ${Matrix.getSdkVersion()}\n")
-        b.append("Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n")
+        b.append("Phone : ${Build.MODEL.trim()} (${Build.VERSION.INCREMENTAL} ${Build.VERSION.RELEASE} ${Build.VERSION.CODENAME})\n")
 
         b.append("Memory statuses \n")
 
