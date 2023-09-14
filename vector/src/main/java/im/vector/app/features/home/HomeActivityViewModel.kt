@@ -332,6 +332,10 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .launchIn(viewModelScope)
 
         if (session.syncService().hasAlreadySynced()) {
+            // Tchap: Force Identity server definition even in case the user is already logged and initial Sync already occured.
+            // This is to force fix IdentityServerUrl if needed.
+            updateIdentityServer()
+
             maybeVerifyOrBootstrapCrossSigning()
         }
     }
@@ -535,9 +539,15 @@ class HomeActivityViewModel @AssistedInject constructor(
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         session.coroutineScope.launch {
             with(session.identityService()) {
-                if (getCurrentIdentityServerUrl() == null) {
-                    setNewIdentityServer(session.sessionParams.homeServerUrl)
-                    Timber.d("## updateIdentityServer succeeded (${getCurrentIdentityServerUrl()})")
+                val currentIdentityServiceUrl = getCurrentIdentityServerUrl()
+                val slash = '/'
+                if (currentIdentityServiceUrl.isNullOrBlank() || currentIdentityServiceUrl.last() == slash) {
+                    try {
+                        val data = setNewIdentityServer(session.sessionParams.homeServerUrl.dropLastWhile { it == slash })
+                        Timber.d("## updateIdentityServer succeeded ($data)")
+                    } catch (failure: Throwable) {
+                        Timber.e(failure, "## updateIdentityServer failed")
+                    }
                 }
 
                 // Tchap: Force user consent as it should have been already accepted in TAC
