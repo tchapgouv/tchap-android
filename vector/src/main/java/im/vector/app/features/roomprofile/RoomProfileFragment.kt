@@ -360,9 +360,10 @@ class RoomProfileFragment :
         )
     }
 
-    override fun setEncryptedToVerifiedDevicesOnly(enabled: Boolean) {
-        roomProfileViewModel.handle(RoomProfileAction.SetEncryptToVerifiedDeviceOnly(enabled))
-    }
+    // Tchap: force to false to deactivate "Never send messages to unverified devices in room"
+//    override fun setEncryptedToVerifiedDevicesOnly(enabled: Boolean) {
+//        roomProfileViewModel.handle(RoomProfileAction.SetEncryptToVerifiedDeviceOnly(enabled))
+//    }
 
     override fun openGlobalBlockSettings() {
         navigator.openSettings(requireContext(), SettingsActivityPayload.SecurityPrivacy)
