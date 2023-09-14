@@ -1,3 +1,22 @@
+Changes in Tchap 2.9.3 (2023-09-14)
+===================================
+
+Improvements 🙌
+--------------
+ - Le message d'erreur de connexion affiche un lien vers la page de status des services ([#955](https://github.com/tchapgouv/tchap-android/issues/955))
+ - Rebase against Element-Android v1.6.5 ([#966](https://github.com/tchapgouv/tchap-android/issues/966))
+
+Bugfixes 🐛
+----------
+ - Problème d'invitation : IdentityServerUrl comporte un "/" terminal en fin d'URL qui pose problème ([#949](https://github.com/tchapgouv/tchap-android/issues/949))
+ - Crash avec erreur "Max number of dynamic shortcuts exceeded" ([#964](https://github.com/tchapgouv/tchap-android/issues/964))
+ - La recherche ne fonctionne pas. Le serveur d'identité n'est pas configuré ([#965](https://github.com/tchapgouv/tchap-android/issues/965))
+
+Other changes
+-------------
+ - Update appname in crash logs ([#969](https://github.com/tchapgouv/tchap-android/issues/969))
+
+
 Changes in Tchap 2.9.2 (2023-09-01)
 ===================================
 
