@@ -40,7 +40,7 @@ class DefaultAppNameProvider @Inject constructor(private val context: Context) :
             appName
         } catch (e: Exception) {
             Timber.e(e, "## AppNameProvider() : failed")
-            "ElementAndroid"
+            "TchapAndroid"
         }
     }
 }
