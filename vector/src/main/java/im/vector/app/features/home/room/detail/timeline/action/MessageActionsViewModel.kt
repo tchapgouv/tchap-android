@@ -29,6 +29,7 @@ import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillsPostProcessor
@@ -81,6 +82,7 @@ class MessageActionsViewModel @AssistedInject constructor(
         private val stringProvider: StringProvider,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val vectorPreferences: VectorPreferences,
+        private val vectorFeatures: VectorFeatures,
         private val checkIfCanReplyEventUseCase: CheckIfCanReplyEventUseCase,
         private val checkIfCanRedactEventUseCase: CheckIfCanRedactEventUseCase,
 ) : VectorViewModel<MessageActionState, MessageActionsAction, EmptyViewEvents>(initialState) {
@@ -456,7 +458,7 @@ class MessageActionsViewModel @AssistedInject constructor(
         // We let reply in thread visible even if threads are not enabled, with an enhanced flow to attract users
 
         // Tchap: don't show the canReplyInThread quick action if it's not enable in the labs
-        if (!vectorPreferences.areThreadMessagesEnabled()) return false
+        if (!vectorFeatures.tchapIsThreadEnabled()) return false
 
         // Disable beta prompt if the homeserver do not support threads
         if (!vectorPreferences.areThreadMessagesEnabled() &&
