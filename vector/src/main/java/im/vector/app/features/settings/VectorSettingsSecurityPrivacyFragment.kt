@@ -228,12 +228,12 @@ class VectorSettingsSecurityPrivacyFragment :
                         BootstrapBottomSheet.show(parentFragmentManager, SetupMode.NORMAL)
                         true
                     }
-                    // Tchap : remove "Manage backup" button because Secure backup is not activated
+                    // Tchap: remove "Manage backup" button because Secure backup is not activated
                     manageBackupPref.isVisible = false
                 } else {
                     // just hide all, you can't setup from here
                     // you should synchronize to get gossips
-                    // Tchap : here, the section is hidden on Element.
+                    // Tchap: here, the section is hidden on Element.
                     // In Tchap, we want to show it.
                     secureBackupCategory.isVisible = true
                     secureBackupPreference.title = getString(R.string.settings_secure_backup_enter_to_setup)
@@ -243,7 +243,7 @@ class VectorSettingsSecurityPrivacyFragment :
                         }
                         true
                     }
-                    // Tchap : remove "Manage backup" button because Secure backup is not activated
+                    // Tchap: remove "Manage backup" button because Secure backup is not activated
                     manageBackupPref.isVisible = false
                 }
             } else {
@@ -313,7 +313,7 @@ class VectorSettingsSecurityPrivacyFragment :
             )
         }
 
-        // Tchap : don't modify ignored users icon
+        // Tchap: don't modify ignored users icon
 //        ignoredUsersPreference.icon = activity?.let {
 //            ThemeUtils.tintDrawable(
 //                    it,

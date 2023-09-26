@@ -267,7 +267,7 @@ class HomeActivity :
 
         homeActivityViewModel.observeViewEvents {
             when (it) {
-                // Tchap : hide promote Xsss
+                // Tchap: hide promote Xsss
                 // is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning(it)
                 is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> {}
                 is HomeActivityViewEvents.CurrentSessionNotVerified -> handleOnNewSession(it)
@@ -680,7 +680,7 @@ class HomeActivity :
                 true
             }
             R.id.menu_home_invite_friends -> {
-                // Tchap : change for invite by email
+                // Tchap: change for invite by email
                 // launchInviteFriends()
                 inviteByEmail()
                 true
@@ -689,7 +689,7 @@ class HomeActivity :
                 launchQrCode()
                 true
             }
-            // Tchap : new faq entry
+            // Tchap: new faq entry
             R.id.menu_home_faq -> {
                 openUrlInChromeCustomTab(this, null, VectorSettingsUrls.HELP)
                 true

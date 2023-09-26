@@ -53,14 +53,14 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
         val host = this
         var isBackupAlreadySetup = false
 
-        // Tchap : back to previous activity after deleting backup successfully.
+        // Tchap: back to previous activity after deleting backup successfully.
         if (data.backupSuccessfullyDeleted) {
             host.listener?.didDeleteBackupSuccessfully()
             return
         }
 
         val keyBackupState = data.keysBackupState
-//        val keyVersionResult = data.keysBackupVersion // Tchap : no more used
+//        val keyVersionResult = data.keysBackupVersion // Tchap: no more used
 
         when (keyBackupState) {
             KeysBackupState.Unknown -> {
@@ -151,7 +151,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
         }
 
         if (isBackupAlreadySetup) {
-            // Tchap : no technical info
+            // Tchap: no technical info
 //            // Add infos
 //            genericItem {
 //                id("version")
@@ -178,7 +178,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                 textButton1(host.stringProvider.getString(R.string.keys_backup_settings_restore_backup_button))
                 clickOnButton1 { host.listener?.didSelectRestoreMessageRecovery() }
 
-                // Tchap : hide "Suppress backup" button
+                // Tchap: hide "Suppress backup" button
 //                textButton2(host.stringProvider.getString(R.string.keys_backup_settings_delete_backup_button))
 //                clickOnButton2 { host.listener?.didSelectDeleteSetupMessageRecovery() }
             } else {

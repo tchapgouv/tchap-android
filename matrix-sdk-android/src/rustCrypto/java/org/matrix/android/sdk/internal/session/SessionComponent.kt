@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.session
 
 import dagger.BindsInstance
 import dagger.Component
-import fr.gouv.tchap.android.sdk.internal.auth.TchapAccountValidityModule // Tchap : forgotten module in Element. Made Variant with RustCrypto to fail.
+import fr.gouv.tchap.android.sdk.internal.auth.TchapAccountValidityModule // Tchap: forgotten module in Element. Made Variant with RustCrypto to fail.
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.securestorage.SecureStorageModule
@@ -70,7 +70,7 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
 @Component(
         dependencies = [MatrixComponent::class],
         modules = [
-            TchapAccountValidityModule::class, // Tchap : forgotten module in Element. Made Variant with RustCrypto to fail.
+            TchapAccountValidityModule::class, // Tchap: forgotten module in Element. Made Variant with RustCrypto to fail.
             SessionModule::class,
             RoomModule::class,
             SyncModule::class,

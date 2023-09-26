@@ -233,7 +233,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         }
 
         // Set flag FLAG_SECURE
-        // Tchap : handle differently screenshot authorization not relying on Preferences flag SETTINGS_SECURITY_USE_FLAG_SECURE
+        // Tchap: handle differently screenshot authorization not relying on Preferences flag SETTINGS_SECURITY_USE_FLAG_SECURE
         // if (vectorPreferences.useFlagSecure()) {
         if (!vectorPreferences.tchapAllowedScreenshot()) {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)

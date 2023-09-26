@@ -276,7 +276,7 @@ dependencies {
     // implementation 'org.webrtc:google-webrtc:1.0.+'
     implementation('com.facebook.react:react-native-webrtc:111.0.0-jitsi-13672566@aar')
     // Jitsi
-    api('org.jitsi.react:jitsi-meet-sdk:8.1.1') { // Tchap : always compile with jsitsi-meet else webrtc is unresolved.
+    api('org.jitsi.react:jitsi-meet-sdk:8.1.1') { // Tchap: always compile with jsitsi-meet else webrtc is unresolved.
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'
@@ -287,7 +287,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
-    // tchap
+    // Tchap
     // Fix issue on okhttp3 import
     api 'com.squareup.okhttp3:okhttp'
 

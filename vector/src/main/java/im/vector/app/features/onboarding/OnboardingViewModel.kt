@@ -150,7 +150,7 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    // tchap
+    // Tchap
     private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
 
     private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
@@ -737,7 +737,7 @@ class OnboardingViewModel @AssistedInject constructor(
             serverTypeOverride: ServerType?,
             postAction: suspend () -> Unit = {},
     ) {
-        // tchap
+        // Tchap
         currentHomeServerConnectionConfig = homeServerConnectionConfig
 
         currentJob = viewModelScope.launch {
@@ -772,7 +772,7 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun canEditServerSelectionError(@Suppress("UNUSED_PARAMETER") state: OnboardingViewState) = false
-            // tchap : we should not be able to edit server
+            // Tchap: we should not be able to edit server
             // (state.onboardingFlow == OnboardingFlow.SignIn && vectorFeatures.isOnboardingCombinedLoginEnabled()) ||
             //         (state.onboardingFlow == OnboardingFlow.SignUp && vectorFeatures.isOnboardingCombinedRegisterEnabled())
 

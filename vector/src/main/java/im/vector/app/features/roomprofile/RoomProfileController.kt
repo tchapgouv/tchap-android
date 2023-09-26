@@ -205,7 +205,7 @@ class RoomProfileController @Inject constructor(
                         }
                     }
                 }
-                // Tchap : don't display option "Never send messages to unverified devices in room"
+                // Tchap: don't display option "Never send messages to unverified devices in room"
 //                else {
 //                    // per room setting is available
 //                    val shouldBlockUnverified = data.encryptToVerifiedDeviceOnly.invoke()
