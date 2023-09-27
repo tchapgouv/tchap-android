@@ -136,6 +136,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         observeAnalytics()
         observeReleaseNotes()
         initThreadsMigration()
+        // Tchap: force to false to deactivate "Never send messages to unverified devices"
         disableGlobalBlacklistUnverifiedDevices()
         viewModelScope.launch { stopOngoingVoiceBroadcastUseCase.execute() }
     }
