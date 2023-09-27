@@ -249,7 +249,6 @@ class TimelineViewModel @AssistedInject constructor(
                     }
                 }
             }
-
         }
 
         // If the user had already accepted the invitation in the room list

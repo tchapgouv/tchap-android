@@ -69,6 +69,7 @@ class RoomProfileController @Inject constructor(
         fun onUrlInTopicLongClicked(url: String)
         fun doMigrateToVersion(newVersion: String)
         fun restoreEncryptionState()
+
         // Tchap: force to false to deactivate "Never send messages to unverified devices in room"
 //        fun setEncryptedToVerifiedDevicesOnly(enabled: Boolean)
         fun openGlobalBlockSettings()
