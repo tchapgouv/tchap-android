@@ -82,7 +82,7 @@ android {
     // The 'target' dimension permits to specify which platform are used
     // The 'voip' flavor dimension permits to include/exclude jitsi at compilation time
     // The 'pinning' flavor dimension permits to enable/disable certificate pinning with fingerprint check
-    flavorDimensions "store", "target", "crypto", "voip", "pinning"
+    flavorDimensions = ["store", "target", "crypto", "voip", "pinning"]
 
     productFlavors {
         gplay {
@@ -271,12 +271,11 @@ dependencies {
 
     implementation "androidx.emoji2:emoji2:1.3.0"
 
+    // Tchap: Manage jitsi lib
     // WebRTC
-    // org.webrtc:google-webrtc is for development purposes only
-    // implementation 'org.webrtc:google-webrtc:1.0.+'
-    implementation('com.facebook.react:react-native-webrtc:111.0.0-jitsi-13672566@aar')
+    withoutvoipImplementation('org.jitsi:webrtc:111.0.1')
     // Jitsi
-    api('org.jitsi.react:jitsi-meet-sdk:8.1.1') { // Tchap: always compile with jsitsi-meet else webrtc is unresolved.
+    withvoipApi('org.jitsi.react:jitsi-meet-sdk:8.1.1') {
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'
@@ -287,8 +286,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
-    // Tchap
-    // Fix issue on okhttp3 import
+    // Tchap: Fix issue on okhttp3 import
     api 'com.squareup.okhttp3:okhttp'
 
     // QR-code
