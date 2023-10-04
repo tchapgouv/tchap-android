@@ -80,12 +80,14 @@ enum class Command(
             MARKDOWN,
             RAINBOW,
             RAINBOW_EMOTE,
+            SPOILER,
             SHRUG,
             LENNY,
             PLAIN,
             CONFETTI,
             SNOWFALL,
-            UPGRADE_ROOM -> true
+            UPGRADE_ROOM,
+            TABLE_FLIP -> true
             CRASH_APP,
             BAN_USER,
             UNBAN_USER,
@@ -104,14 +106,12 @@ enum class Command(
             ROOM_AVATAR,
             CHANGE_AVATAR_FOR_ROOM,
             CLEAR_SCALAR_TOKEN,
-            SPOILER,
             WHOIS,
             CREATE_SPACE,
             ADD_TO_SPACE,
             JOIN_SPACE,
             LEAVE_ROOM,
-            DEVTOOLS,
-            TABLE_FLIP -> false
+            DEVTOOLS -> false
         }
 
     val allAliases = arrayOf(command, *aliases.orEmpty())
