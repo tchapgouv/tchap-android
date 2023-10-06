@@ -1,3 +1,11 @@
+Changes in Tchap 2.9.5 (2023-10-06)
+===================================
+
+Bugfixes 🐛
+----------
+ - Correction des messages chiffrés quand il existe qu'une seule session ([#979](https://github.com/tchapgouv/tchap-android/issues/979))
+
+
 Changes in Tchap 2.9.4 (2023-10-06)
 ===================================
 
