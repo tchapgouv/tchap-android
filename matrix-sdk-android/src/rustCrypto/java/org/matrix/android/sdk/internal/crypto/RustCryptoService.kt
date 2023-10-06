@@ -498,6 +498,7 @@ internal class RustCryptoService @Inject constructor(
         return try {
             olmMachine.decryptRoomEvent(event)
         } catch (mxCryptoError: MXCryptoError) {
+            // Tchap: try to perform a lazy migration from legacy store if there is no other session.
             if (mxCryptoError is MXCryptoError.Base && mxCryptoError.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
                 Timber.v("Try to perform a lazy migration from legacy store")
                 /**
@@ -508,7 +509,6 @@ internal class RustCryptoService @Inject constructor(
                 val sessionId = content.sessionId
                 val senderKey = content.senderKey
                 if (roomId != null && sessionId != null) {
-                    // try to perform a lazy migration from legacy store
                     val legacy = tryOrNull("Failed to access legacy crypto store") {
                         cryptoStore.getInboundGroupSession(sessionId, senderKey.orEmpty())
                     }
