@@ -372,9 +372,7 @@ internal class RustCryptoStore @Inject constructor(
                 }
         )
         return Transformations.map(liveData) {
-            // Tchap : force to false to avoid "Never send messages to non verified devices"
-            // it.firstOrNull() ?: false
-            false
+            it.firstOrNull() ?: false
         }
     }
 

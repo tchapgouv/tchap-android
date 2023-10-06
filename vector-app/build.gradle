@@ -37,7 +37,7 @@ ext.versionMinor = 9
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 3
+ext.versionPatch = 4
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -206,7 +206,7 @@ android {
 
         applicationVariants.all { variant ->
             // assign different version code for each output
-            // Tchap : Increase the factor from 10 to 100 due to Neo users integration
+            // Tchap: Increase the factor from 10 to 100 due to Neo users integration
             def baseVariantVersion = variant.versionCode * 100
             variant.outputs.each { output ->
                 def baseAbiVersionCode = project.ext.abiVersionCodes.get(output.getFilter(OutputFile.ABI))
@@ -318,7 +318,7 @@ android {
 //        }
     }
 
-    // Tchap : no night mode
+    // Tchap: no night mode
 //    sourceSets {
 //        nightly {
 //            java.srcDirs += "src/release/java"
@@ -329,7 +329,7 @@ android {
     // The 'target' dimension permits to specify which platform are used
     // The 'voip' flavor dimension permits to include/exclude jitsi at compilation time
     // The 'pinning' flavor dimension permits to enable/disable certificate pinning with fingerprint check
-    flavorDimensions "store", "target", "crypto", "voip", "pinning"
+    flavorDimensions = ["store", "target", "crypto", "voip", "pinning"]
 
     productFlavors {
         gplay {
@@ -457,40 +457,40 @@ android {
 
 // Tchap: Use custom configuration for Flipper library
 configurations {
-    fdroidBtchapWithvoipWithoutpinningDebugImplementation
-    fdroidDevTchapWithvoipWithoutpinningDebugImplementation
-    fdroidTchapWithvoipWithoutpinningDebugImplementation
+    fdroidBtchapRustCryptoWithvoipWithoutpinningDebugImplementation
+    fdroidDevTchapRustCryptoWithvoipWithoutpinningDebugImplementation
+    fdroidTchapRustCryptoWithvoipWithoutpinningDebugImplementation
 
-    gplayBtchapWithvoipWithoutpinningDebugImplementation
-    gplayDevTchapWithvoipWithoutpinningDebugImplementation
-    gplayTchapWithvoipWithoutpinningDebugImplementation
-
-
-    fdroidBtchapWithvoipWithpinningDebugImplementation
-    fdroidDevTchapWithvoipWithpinningDebugImplementation
-    fdroidTchapWithvoipWithpinningDebugImplementation
-
-    gplayBtchapWithvoipWithpinningDebugImplementation
-    gplayDevTchapWithvoipWithpinningDebugImplementation
-    gplayTchapWithvoipWithpinningDebugImplementation
+    gplayBtchapRustCryptoWithvoipWithoutpinningDebugImplementation
+    gplayDevTchapRustCryptoWithvoipWithoutpinningDebugImplementation
+    gplayTchapRustCryptoWithvoipWithoutpinningDebugImplementation
 
 
-    fdroidBtchapWithoutvoipWithpinningDebugImplementation
-    fdroidDevTchapWithoutvoipWithpinningDebugImplementation
-    fdroidTchapWithoutvoipWithpinningDebugImplementation
+    fdroidBtchapRustCryptoWithvoipWithpinningDebugImplementation
+    fdroidDevTchapRustCryptoWithvoipWithpinningDebugImplementation
+    fdroidTchapRustCryptoWithvoipWithpinningDebugImplementation
 
-    gplayBtchapWithoutvoipWithpinningDebugImplementation
-    gplayDevTchapWithoutvoipWithpinningDebugImplementation
-    gplayTchapWithoutvoipWithpinningDebugImplementation
+    gplayBtchapRustCryptoWithvoipWithpinningDebugImplementation
+    gplayDevTchapRustCryptoWithvoipWithpinningDebugImplementation
+    gplayTchapRustCryptoWithvoipWithpinningDebugImplementation
 
 
-    fdroidBtchapWithoutvoipWithoutpinningDebugImplementation
-    fdroidDevTchapWithoutvoipWithoutpinningDebugImplementation
-    fdroidTchapWithoutvoipWithoutpinningDebugImplementation
+    fdroidBtchapRustCryptoWithoutvoipWithpinningDebugImplementation
+    fdroidDevTchapRustCryptoWithoutvoipWithpinningDebugImplementation
+    fdroidTchapRustCryptoWithoutvoipWithpinningDebugImplementation
 
-    gplayBtchapWithoutvoipWithoutpinningDebugImplementation
-    gplayDevTchapWithoutvoipWithoutpinningDebugImplementation
-    gplayTchapWithoutvoipWithoutpinningDebugImplementation
+    gplayBtchapRustCryptoWithoutvoipWithpinningDebugImplementation
+    gplayDevTchapRustCryptoWithoutvoipWithpinningDebugImplementation
+    gplayTchapRustCryptoWithoutvoipWithpinningDebugImplementation
+
+
+    fdroidBtchapRustCryptoWithoutvoipWithoutpinningDebugImplementation
+    fdroidDevTchapRustCryptoWithoutvoipWithoutpinningDebugImplementation
+    fdroidTchapRustCryptoWithoutvoipWithoutpinningDebugImplementation
+
+    gplayBtchapRustCryptoWithoutvoipWithoutpinningDebugImplementation
+    gplayDevTchapRustCryptoWithoutvoipWithoutpinningDebugImplementation
+    gplayTchapRustCryptoWithoutvoipWithoutpinningDebugImplementation
 }
 
 dependencies {
@@ -536,82 +536,82 @@ dependencies {
 
     // Tchap: We had to exclude fbjni for withVoip, the library is already include in jitsi library
     // Flipper, debug builds only
-    gplayBtchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    gplayBtchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    gplayBtchapRustCryptoWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    gplayBtchapRustCryptoWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
-    gplayTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    gplayTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    gplayTchapRustCryptoWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    gplayTchapRustCryptoWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
-    gplayDevTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    gplayDevTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-
-    fdroidBtchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    fdroidBtchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-    fdroidTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    fdroidTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-    fdroidDevTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    fdroidDevTchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    gplayDevTchapRustCryptoWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    gplayDevTchapRustCryptoWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
 
-    gplayBtchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    gplayBtchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    fdroidBtchapRustCryptoWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    fdroidBtchapRustCryptoWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
-    gplayDevTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    gplayDevTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    fdroidTchapRustCryptoWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    fdroidTchapRustCryptoWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
-    gplayTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    gplayTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-
-    fdroidBtchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    fdroidBtchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-    fdroidDevTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    fdroidDevTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-    fdroidTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-    fdroidTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-    gplayBtchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
-    gplayBtchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    gplayTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
-    gplayTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    gplayDevTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
-    gplayDevTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+    fdroidDevTchapRustCryptoWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    fdroidDevTchapRustCryptoWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
 
-    fdroidBtchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
-    fdroidBtchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+    gplayBtchapRustCryptoWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    gplayBtchapRustCryptoWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
-    fdroidTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
-    fdroidTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+    gplayDevTchapRustCryptoWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    gplayDevTchapRustCryptoWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
-    fdroidDevTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
-    fdroidDevTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+    gplayTchapRustCryptoWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    gplayTchapRustCryptoWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
 
-    gplayBtchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
-    gplayBtchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+    fdroidBtchapRustCryptoWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    fdroidBtchapRustCryptoWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
-    gplayTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
-    gplayTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+    fdroidDevTchapRustCryptoWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    fdroidDevTchapRustCryptoWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
-    gplayDevTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
-    gplayDevTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+    fdroidTchapRustCryptoWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
+    fdroidTchapRustCryptoWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
 
-    fdroidBtchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
-    fdroidBtchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+    gplayBtchapRustCryptoWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
+    gplayBtchapRustCryptoWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
 
-    fdroidTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
-    fdroidTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+    gplayTchapRustCryptoWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
+    gplayTchapRustCryptoWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
 
-    fdroidDevTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
-    fdroidDevTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+    gplayDevTchapRustCryptoWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
+    gplayDevTchapRustCryptoWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+
+    fdroidBtchapRustCryptoWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
+    fdroidBtchapRustCryptoWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+    fdroidTchapRustCryptoWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
+    fdroidTchapRustCryptoWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+    fdroidDevTchapRustCryptoWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
+    fdroidDevTchapRustCryptoWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+
+    gplayBtchapRustCryptoWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
+    gplayBtchapRustCryptoWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+    gplayTchapRustCryptoWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
+    gplayTchapRustCryptoWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+    gplayDevTchapRustCryptoWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
+    gplayDevTchapRustCryptoWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+    fdroidBtchapRustCryptoWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
+    fdroidBtchapRustCryptoWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+    fdroidTchapRustCryptoWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
+    fdroidTchapRustCryptoWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+    fdroidDevTchapRustCryptoWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
+    fdroidDevTchapRustCryptoWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
 
     debugImplementation 'com.facebook.soloader:soloader:0.10.4'
     debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"

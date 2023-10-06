@@ -136,7 +136,18 @@ class HomeActivityViewModel @AssistedInject constructor(
         observeAnalytics()
         observeReleaseNotes()
         initThreadsMigration()
+        // Tchap: force to false to deactivate "Never send messages to unverified devices"
+        disableGlobalBlacklistUnverifiedDevices()
         viewModelScope.launch { stopOngoingVoiceBroadcastUseCase.execute() }
+    }
+
+    // Tchap: force to false to deactivate "Never send messages to unverified devices"
+    private fun disableGlobalBlacklistUnverifiedDevices() {
+        val session = activeSessionHolder.getSafeActiveSession() ?: return
+
+        if (session.cryptoService().getGlobalBlacklistUnverifiedDevices()) {
+            session.cryptoService().setGlobalBlacklistUnverifiedDevices(false)
+        }
     }
 
     private fun registerUnifiedPushIfNeeded() {
@@ -272,7 +283,7 @@ class HomeActivityViewModel @AssistedInject constructor(
 //            lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
 //        }
 
-        // Tchap : disable automatic thread migration
+        // Tchap: disable automatic thread migration
         if (!vectorFeatures.tchapIsThreadEnabled()) return
 
         when {

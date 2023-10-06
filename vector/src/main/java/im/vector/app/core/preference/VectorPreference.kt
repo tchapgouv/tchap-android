@@ -71,7 +71,7 @@ open class VectorPreference : Preference {
 
     init {
         // Set to false to remove the space when there is no icon
-        // Tchap : no space when no icon
+        // Tchap: no space when no icon
         // isIconSpaceReserved = true
         isIconSpaceReserved = false
     }

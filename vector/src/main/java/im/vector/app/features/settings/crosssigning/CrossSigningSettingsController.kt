@@ -50,7 +50,7 @@ class CrossSigningSettingsController @Inject constructor(
                     titleIconResourceId(R.drawable.ic_shield_trusted)
                     title(host.stringProvider.getString(R.string.encryption_information_dg_xsigning_complete).toEpoxyCharSequence())
                 }
-                // Tchap : don't display "Reset cross-signing" button
+                // Tchap: don't display "Reset cross-signing" button
 //                genericButtonItem {
 //                    id("Reset")
 //                    text(host.stringProvider.getString(R.string.reset_cross_signing))

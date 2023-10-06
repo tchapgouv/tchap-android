@@ -377,10 +377,8 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                                 AttachmentType.LOCATION,
                                 vectorFeatures.isLocationSharingEnabled(),
                         )
-
-                        // Tchap: Disable Polls
                         attachmentTypeSelector.setAttachmentVisibility(
-                                AttachmentType.POLL, isVisible = false
+                                AttachmentType.POLL, !isThreadTimeLine()
                         )
 
                         // Tchap: Disable Stickers

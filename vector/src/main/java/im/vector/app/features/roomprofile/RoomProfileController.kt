@@ -69,7 +69,9 @@ class RoomProfileController @Inject constructor(
         fun onUrlInTopicLongClicked(url: String)
         fun doMigrateToVersion(newVersion: String)
         fun restoreEncryptionState()
-        fun setEncryptedToVerifiedDevicesOnly(enabled: Boolean)
+
+        // Tchap: force to false to deactivate "Never send messages to unverified devices in room"
+//        fun setEncryptedToVerifiedDevicesOnly(enabled: Boolean)
         fun openGlobalBlockSettings()
     }
 
@@ -205,7 +207,7 @@ class RoomProfileController @Inject constructor(
                         }
                     }
                 }
-                // Tchap : don't display option "Never send messages to unverified devices in room"
+                // Tchap: don't display option "Never send messages to unverified devices in room"
 //                else {
 //                    // per room setting is available
 //                    val shouldBlockUnverified = data.encryptToVerifiedDeviceOnly.invoke()

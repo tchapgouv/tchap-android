@@ -240,6 +240,15 @@ class TimelineViewModel @AssistedInject constructor(
                     prepareForEncryption()
                 }
             }
+
+            // Tchap: force to false to deactivate "Never send messages to unverified devices in room"
+            session.cryptoService().getLiveBlockUnverifiedDevices(room.roomId).asFlow().map {
+                if (it) {
+                    session.coroutineScope.launch {
+                        session.cryptoService().setRoomBlockUnverifiedDevices(room.roomId, false)
+                    }
+                }
+            }
         }
 
         // If the user had already accepted the invitation in the room list

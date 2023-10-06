@@ -91,7 +91,7 @@ class NewHomeDetailFragment :
     private val newHomeDetailViewModel: NewHomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
-    private val createDirectRoomViewModel: CreateDirectRoomViewModel by activityViewModel() // Tchap : for managing invite
+    private val createDirectRoomViewModel: CreateDirectRoomViewModel by activityViewModel() // Tchap: for managing invite
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private lateinit var sharedRoomListActionViewModel: RoomListSharedActionViewModel
@@ -185,7 +185,7 @@ class NewHomeDetailFragment :
             }
         }
 
-        // Tchap : observe invite action
+        // Tchap: observe invite action
         sharedActionViewModel
                 .stream()
                 .onEach { action ->
@@ -203,7 +203,7 @@ class NewHomeDetailFragment :
                     invalidateOptionsMenu()
                 }
 
-        // Tchap : hide unread count for space (shown above "+" button on main view)
+        // Tchap: hide unread count for space (shown above "+" button on main view)
 //        newHomeDetailViewModel.onEach { viewState ->
 //            refreshUnreadCounterBadge(viewState.spacesNotificationCounterBadgeState)
 //        }
@@ -239,7 +239,7 @@ class NewHomeDetailFragment :
     private fun showFABs() {
         views.newLayoutCreateChatButton.show()
 
-        // Tchap : hide space button
+        // Tchap: hide space button
         if (Config.SHOW_SPACES) {
             views.newLayoutOpenSpacesButton.show()
         }
@@ -437,7 +437,7 @@ class NewHomeDetailFragment :
         }
     }
 
-    // Tchap : action for invite
+    // Tchap: action for invite
     private fun onInviteByEmail(email: String) {
         createDirectRoomViewModel.handle(CreateDirectRoomAction.InviteByEmail(email))
     }

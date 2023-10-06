@@ -218,7 +218,8 @@ class RoomProfileViewModel @AssistedInject constructor(
             is RoomProfileAction.ShareRoomProfile -> handleShareRoomProfile()
             RoomProfileAction.CreateShortcut -> handleCreateShortcut()
             RoomProfileAction.RestoreEncryptionState -> restoreEncryptionState()
-            is RoomProfileAction.SetEncryptToVerifiedDeviceOnly -> setEncryptToVerifiedDeviceOnly(action.enabled)
+            // Tchap: force to false to deactivate "Never send messages to unverified devices in room"
+//            is RoomProfileAction.SetEncryptToVerifiedDeviceOnly -> setEncryptToVerifiedDeviceOnly(action.enabled)
         }
     }
 
@@ -290,12 +291,12 @@ class RoomProfileViewModel @AssistedInject constructor(
                 }
     }
 
-    private fun setEncryptToVerifiedDeviceOnly(enabled: Boolean) {
-        session.coroutineScope.launch {
-            // Tchap : force to false to deactivate "Never send messages to unverified devices in room"
-            session.cryptoService().setRoomBlockUnverifiedDevices(room.roomId, enabled and false)
-        }
-    }
+    // Tchap: force to false to deactivate "Never send messages to unverified devices in room"
+//    private fun setEncryptToVerifiedDeviceOnly(enabled: Boolean) {
+//        session.coroutineScope.launch {
+//            session.cryptoService().setRoomBlockUnverifiedDevices(room.roomId, enabled)
+//        }
+//    }
 
     private fun restoreEncryptionState() {
         _viewEvents.post(RoomProfileViewEvents.Loading())

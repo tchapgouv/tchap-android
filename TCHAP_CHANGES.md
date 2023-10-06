@@ -1,3 +1,17 @@
+Changes in Tchap 2.9.4 (2023-10-06)
+===================================
+
+Features ✨
+----------
+ - Ajout du paramètre de notifications par email ([#971](https://github.com/tchapgouv/tchap-android/issues/971))
+ - Ajout des sondages ([#977](https://github.com/tchapgouv/tchap-android/issues/977))
+
+Improvements 🙌
+--------------
+ - Ajout des commandes /spoiler et /tableflip ([#975](https://github.com/tchapgouv/tchap-android/issues/975))
+ - Suppression de la dépendance à Jisti ([#976](https://github.com/tchapgouv/tchap-android/issues/976))
+
+
 Changes in Tchap 2.9.3 (2023-09-14)
 ===================================
 

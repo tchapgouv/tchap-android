@@ -42,7 +42,7 @@ class VectorSettingsRootFragment :
     override fun bindPref() {
         tintIcons()
 
-        // Tchap : Manage new FAQ entry
+        // Tchap: Manage new FAQ entry
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_HELP_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
