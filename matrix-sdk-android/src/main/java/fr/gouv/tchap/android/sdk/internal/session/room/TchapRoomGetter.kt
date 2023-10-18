@@ -16,7 +16,6 @@
 
 package fr.gouv.tchap.android.sdk.internal.session.room
 
-import android.util.Patterns
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.EventType.STATE_ROOM_CREATE
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -27,6 +26,7 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.room.DefaultRoomGetter
 import org.matrix.android.sdk.internal.session.room.RoomFactory
+import java.util.regex.Pattern
 import javax.inject.Inject
 
 @SessionScope
@@ -34,6 +34,10 @@ internal class TchapRoomGetter @Inject constructor(
         private val realmSessionProvider: RealmSessionProvider,
         private val roomFactory: RoomFactory
 ) : DefaultRoomGetter(realmSessionProvider, roomFactory) {
+
+    // Regular expression in accordance with RFC 5322 for restricting consecutive, leading and trailing dots
+    private val emailPattern = "^[a-zA-Z0-9_!#\$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#\$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*\$"
+    private val emailAddress = Pattern.compile(emailPattern)
 
     override fun getDirectRoomWith(otherUserId: String): String? {
         val directRoomMemberships = realmSessionProvider.withRealm { realm ->
@@ -63,7 +67,7 @@ internal class TchapRoomGetter @Inject constructor(
                 ?: directRoomMemberships.firstOrNull { it.first == Membership.INVITE && it.second == Membership.JOIN }?.roomId // invite - join
                 ?: directRoomMemberships.firstOrNull { it.first == Membership.JOIN && it.second == Membership.INVITE }?.roomId // join - invite
                 ?: directRoomMemberships // otherUserId is an email
-                        .takeIf { Patterns.EMAIL_ADDRESS.matcher(otherUserId).matches() }
+                        .takeIf { emailAddress.matcher(otherUserId).matches() }
                         ?.firstOrNull { it.first == Membership.JOIN }
                         ?.roomId
     }
