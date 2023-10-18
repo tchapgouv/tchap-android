@@ -993,27 +993,8 @@ class VectorPreferences @Inject constructor(
      * The user does not allow screenshots of the application.
      */
     fun useFlagSecure(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_FLAG_SECURE, true)
-    }
-
-    // Tchap
-    /**
-     * Screenshot is not allowed for Tchap F-droid version.
-     * It is allowed for Tchap GPlay version only for DEV and Pre-Prod versions.
-     * It is not allowed for Tchap GPlay Tchap (Production) version.
-     */
-    fun tchapAllowedScreenshot(): Boolean {
-        return when (BuildConfig.FLAVOR_store.lowercase()) {
-            "fdroid" -> false
-            "gplay" -> {
-                when (BuildConfig.FLAVOR_target.lowercase()) {
-                    "devtchap" -> true
-                    "btchap" -> true
-                    else -> false
-                }
-            }
-            else -> false
-        }
+        // Tchap: Screenshot is allowed for Gplay Pre-prod and Dev versions only.
+        return !(BuildConfig.FLAVOR_store == "gplay" && BuildConfig.FLAVOR_target != "tchap")
     }
 
     /** Whether the keyboard should disable personalized learning. */
