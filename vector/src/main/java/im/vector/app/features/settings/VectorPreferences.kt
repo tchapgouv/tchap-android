@@ -994,7 +994,7 @@ class VectorPreferences @Inject constructor(
      */
     fun useFlagSecure(): Boolean {
         // Tchap: Screenshot is allowed for Gplay Pre-prod and Dev versions only.
-        return !(BuildConfig.FLAVOR_store == "gplay" && BuildConfig.FLAVOR_target != "tchap")
+        return BuildConfig.FLAVOR_store != "gplay" || BuildConfig.FLAVOR_target == "tchap"
     }
 
     /** Whether the keyboard should disable personalized learning. */
