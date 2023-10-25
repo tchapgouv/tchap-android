@@ -138,6 +138,6 @@ class EncryptedItemFactory @Inject constructor(
 
     companion object {
         private const val TCHAP_FAQ_UTD_URL =
-                "https://aide.tchap.beta.gouv.fr/fr/article/dechiffrement-impossible-de-mes-messages-comment-y-remedier-iphone-xotgv1"
+                "https://aide.tchap.beta.gouv.fr/fr/article/dechiffrement-impossible-de-mes-messages-comment-y-remedier-android-m6e371/"
     }
 }
