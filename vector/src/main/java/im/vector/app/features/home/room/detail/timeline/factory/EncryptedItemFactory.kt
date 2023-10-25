@@ -16,11 +16,16 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
+import android.text.style.ClickableSpan
+import android.view.View
+import androidx.core.text.toSpannable
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.openUrlInExternalBrowser
+import im.vector.app.core.utils.tappableMatchingText
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
@@ -92,15 +97,18 @@ class EncryptedItemFactory @Inject constructor(
                                 }
                             }
                             else -> {
+                                // Tchap: Add faq link in unable to decrypt error
                                 span {
-                                    drawableProvider.getDrawable(R.drawable.ic_clock, colorFromAttribute)?.let {
-                                        image(it, "baseline")
-                                        +" "
-                                    }
-                                    span(stringProvider.getString(R.string.notice_crypto_unable_to_decrypt_friendly)) {
-                                        textStyle = "italic"
-                                        textColor = colorFromAttribute
-                                    }
+                                    val faq = stringProvider.getString(R.string.tchap_notice_crypto_unable_to_decrypt_faq)
+                                    text = "${stringProvider.getString(R.string.notice_crypto_unable_to_decrypt_friendly)} $faq"
+                                            .toSpannable()
+                                            .tappableMatchingText(faq, object : ClickableSpan() {
+                                                override fun onClick(widget: View) {
+                                                    openUrlInExternalBrowser(widget.context, TCHAP_FAQ_UTD_URL)
+                                                }
+                                            })
+                                    textStyle = "italic"
+                                    textColor = colorFromAttribute
                                 }
                             }
                         }
@@ -126,5 +134,10 @@ class EncryptedItemFactory @Inject constructor(
             }
             else -> null
         }
+    }
+
+    companion object {
+        private const val TCHAP_FAQ_UTD_URL =
+                "https://aide.tchap.beta.gouv.fr/fr/article/dechiffrement-impossible-de-mes-messages-comment-y-remedier-android-m6e371/"
     }
 }
