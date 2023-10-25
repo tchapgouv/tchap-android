@@ -110,13 +110,11 @@ class VectorSettingsGeneralFragment :
     private val mPasswordPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)!!
     }
-<<<<<<< HEAD
     private val hideFromUsersDirectoryPreference by lazy {
         findPreference<VectorSwitchPreference>(VectorPreferences.TCHAP_SETTINGS_HIDE_FROM_USERS_DIRECTORY_PREFERENCE_KEY)!!
-=======
+    }
     private val mManage3pidsPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_EMAILS_AND_PHONE_NUMBERS_PREFERENCE_KEY)!!
->>>>>>> v1.6.6
     }
     private val mIdentityServerPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)!!
@@ -242,19 +240,16 @@ class VectorSettingsGeneralFragment :
             mPasswordPreference.isVisible = false
         }
 
-<<<<<<< HEAD
-        // User directory visibility
+        // Tchap: User directory visibility
         hideFromUsersDirectoryPreference.let {
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
                 onHideFromUsersDirectoryClick()
                 true
             }
         }
-=======
         // Manage 3Pid
         // Hide the preference if 3pids can not be updated
         mManage3pidsPreference.isVisible = homeServerCapabilities.canChange3pid
->>>>>>> v1.6.6
 
         val openDiscoveryScreenPreferenceClickListener = Preference.OnPreferenceClickListener {
             (requireActivity() as VectorSettingsActivity).navigateTo(
