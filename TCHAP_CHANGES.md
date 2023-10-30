@@ -1,3 +1,16 @@
+Changes in Tchap 2.9.6 (2023-10-30)
+===================================
+
+Improvements 🙌
+--------------
+ - Modification du message d'information quand les messages sont verrouillés ([#984](https://github.com/tchapgouv/tchap-android/issues/984))
+ - Rebase against Element-Android v1.6.6 ([#985](https://github.com/tchapgouv/tchap-android/issues/985))
+
+Bugfixes 🐛
+----------
+ - Support des apostrophes dans les emails ([#982](https://github.com/tchapgouv/tchap-android/issues/982))
+
+
 Changes in Tchap 2.9.5 (2023-10-06)
 ===================================
 
