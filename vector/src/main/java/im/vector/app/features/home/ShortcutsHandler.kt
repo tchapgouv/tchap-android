@@ -139,7 +139,6 @@ class ShortcutsHandler @Inject constructor(
     }
 
     private fun createShortcuts(rooms: List<RoomSummary>) {
-        // Tchap: remove all shortcuts before add others to avoid exceeding max shortcuts count per activity.
         ShortcutManagerCompat.removeAllDynamicShortcuts(context)
 
         // No shortcut in this case (privacy)

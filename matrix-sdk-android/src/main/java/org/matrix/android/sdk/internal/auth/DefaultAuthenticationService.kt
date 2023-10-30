@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.auth
 
 import android.net.Uri
 import dagger.Lazy
+import fr.gouv.tchap.android.sdk.api.auth.login.TchapLoginWizard
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.MatrixPatterns.getServerName
@@ -39,7 +40,6 @@ import org.matrix.android.sdk.api.util.appendParamToUrl
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.auth.data.WebClientConfig
 import org.matrix.android.sdk.internal.auth.db.PendingSessionData
-import org.matrix.android.sdk.internal.auth.login.DefaultLoginWizard
 import org.matrix.android.sdk.internal.auth.login.DirectLoginTask
 import org.matrix.android.sdk.internal.auth.login.QrLoginTokenTask
 import org.matrix.android.sdk.internal.auth.registration.DefaultRegistrationWizard
@@ -299,7 +299,7 @@ internal class DefaultAuthenticationService @Inject constructor(
         }
 
         // If an m.login.sso flow is present that is flagged as being for MSC3824 OIDC compatibility then we only return that flow
-        val oidcCompatibilityFlow = loginFlowResponse.flows.orEmpty().firstOrNull { it.type == "m.login.sso" && it.delegatedOidcCompatibilty == true }
+        val oidcCompatibilityFlow = loginFlowResponse.flows.orEmpty().firstOrNull { it.type == "m.login.sso" && it.delegatedOidcCompatibility == true }
         val flows = if (oidcCompatibilityFlow != null) listOf(oidcCompatibilityFlow) else loginFlowResponse.flows
 
         val supportsGetLoginTokenFlow = loginFlowResponse.flows.orEmpty().firstOrNull { it.type == "m.login.token" && it.getLoginToken == true } != null
@@ -338,7 +338,7 @@ internal class DefaultAuthenticationService @Inject constructor(
         return currentLoginWizard
                 ?: let {
                     pendingSessionData?.homeServerConnectionConfig?.let {
-                        DefaultLoginWizard(
+                        TchapLoginWizard(
                                 buildAuthAPI(it),
                                 sessionCreator,
                                 pendingSessionStore

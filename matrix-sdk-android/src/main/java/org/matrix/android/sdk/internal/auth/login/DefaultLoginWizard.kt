@@ -36,7 +36,7 @@ import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.content.DefaultContentUrlResolver
 import org.matrix.android.sdk.internal.session.contentscanner.DisabledContentScannerService
 
-internal class DefaultLoginWizard(
+internal open class DefaultLoginWizard(
         private val authAPI: AuthAPI,
         private val sessionCreator: SessionCreator,
         private val pendingSessionStore: PendingSessionStore
