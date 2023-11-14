@@ -63,6 +63,7 @@ import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
+import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
@@ -391,7 +392,7 @@ class HomeActivityViewModel @AssistedInject constructor(
 
     private fun sessionHasBeenUnverified(elementWellKnown: ElementWellKnown?) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
-        val isSecureBackupRequired = elementWellKnown?.isSecureBackupRequired() ?: false
+        val isSecureBackupRequired = elementWellKnown?.isSecureBackupRequired().orTrue() // Tchap: force to configure secure backup even if well-known is null
         if (isSecureBackupRequired) {
             // If 4S is forced, force verification
             // for stability cancel all pending verifications?
@@ -425,7 +426,7 @@ class HomeActivityViewModel @AssistedInject constructor(
             }
 
             val elementWellKnown = rawService.getElementWellknown(session.sessionParams)
-            val isSecureBackupRequired = elementWellKnown?.isSecureBackupRequired() ?: false
+            val isSecureBackupRequired = elementWellKnown?.isSecureBackupRequired().orTrue() // Tchap: force to configure secure backup even if well-known is null
 
             // In case of account creation, it is already done before
             if (initialState.authenticationDescription is AuthenticationDescription.Register) {

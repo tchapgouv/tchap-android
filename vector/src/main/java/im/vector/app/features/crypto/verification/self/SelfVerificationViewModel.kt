@@ -46,7 +46,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.Matrix
-import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
@@ -142,7 +142,7 @@ class SelfVerificationViewModel @AssistedInject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val wellKnown = rawService.getElementWellknown(session.sessionParams)
             setState {
-                copy(isVerificationRequired = wellKnown?.isSecureBackupRequired().orFalse())
+                copy(isVerificationRequired = wellKnown?.isSecureBackupRequired().orTrue()) // Tchap: force to configure secure backup even if well-known is null
             }
         }
 

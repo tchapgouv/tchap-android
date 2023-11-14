@@ -45,7 +45,7 @@ import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
-import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.raw.RawService
@@ -92,8 +92,9 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             val wellKnown = rawService.getElementWellknown(session.sessionParams)
             setState {
                 copy(
-                        isSecureBackupRequired = wellKnown?.isSecureBackupRequired().orFalse(),
-                        secureBackupMethod = wellKnown?.secureBackupMethod() ?: SecureBackupMethod.KEY_OR_PASSPHRASE,
+                        // Tchap: force to configure secure backup key even if well-known is null
+                        isSecureBackupRequired = wellKnown?.isSecureBackupRequired().orTrue(),
+                        secureBackupMethod = wellKnown?.secureBackupMethod() ?: SecureBackupMethod.KEY,
                 )
             }
         }

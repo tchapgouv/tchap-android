@@ -94,8 +94,7 @@ class BootstrapSetupRecoveryKeyFragment :
 
     private fun renderBackupMethodActions(method: SecureBackupMethod) = with(views) {
         bootstrapSetupSecureUseSecurityKey.isVisible = method.isKeyAvailable
-        // Tchap: Hide Security Passphrase
-//                views.bootstrapSetupSecureUseSecurityPassphrase.isVisible = method.isPassphraseAvailable
-//                views.bootstrapSetupSecureUseSecurityPassphraseSeparator.isVisible = method.isPassphraseAvailable
+        bootstrapSetupSecureUseSecurityPassphrase.isVisible = method.isPassphraseAvailable
+        bootstrapSetupSecureUseSecurityPassphraseSeparator.isVisible = method.isPassphraseAvailable
     }
 }
