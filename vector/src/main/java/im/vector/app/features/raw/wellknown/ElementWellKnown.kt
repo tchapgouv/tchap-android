@@ -56,7 +56,7 @@ data class E2EWellKnownConfig(
         val e2eDefault: Boolean? = null,
 
         @Json(name = "secure_backup_required")
-        val secureBackupRequired: Boolean? = null,
+        val secureBackupRequired: Boolean? = true, // Tchap: force to configure secure backup even if well-known is empty
 
         /**
          * The new field secure_backup_setup_methods is an array listing the methods the client should display.
@@ -65,7 +65,7 @@ data class E2EWellKnownConfig(
          * clients should fallback to the default value of: ["key", "passphrase"].
          */
         @Json(name = "secure_backup_setup_methods")
-        val secureBackupSetupMethods: List<String>? = null,
+        val secureBackupSetupMethods: List<String>? = listOf("key"), // Tchap: force to configure secure backup even if well-known is empty
 
         /**
          * Configuration for sharing keys strategy which should be used instead of [im.vector.app.config.Config.KEY_SHARING_STRATEGY].
