@@ -18,7 +18,6 @@ package fr.gouv.tchap.features.home.roomdirectory.createroom
 import android.net.Uri
 import android.text.Editable
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -81,9 +80,6 @@ abstract class TchapRoomAvatarWithNameItem : EpoxyModelWithHolder<TchapRoomAvata
     var singleLine: Boolean = true
 
     @EpoxyAttribute
-    var imeOptions: Int? = null
-
-    @EpoxyAttribute
     var endIconMode: Int? = null
 
     // FIXME restore EpoxyAttribute.Option.DoNotHash and fix that properly
@@ -141,7 +137,6 @@ abstract class TchapRoomAvatarWithNameItem : EpoxyModelWithHolder<TchapRoomAvata
         holder.textInputEditText.isEnabled = enabled
         inputType?.let { holder.textInputEditText.inputType = it }
         holder.textInputEditText.isSingleLine = singleLine
-        holder.textInputEditText.imeOptions = imeOptions ?: EditorInfo.IME_ACTION_NONE
 
         holder.textInputEditText.addTextChangedListener(onTextChangeListener)
         holder.textInputEditText.setOnEditorActionListener(editorActionListener)
