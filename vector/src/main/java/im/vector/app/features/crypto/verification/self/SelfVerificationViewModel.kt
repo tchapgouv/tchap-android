@@ -32,13 +32,12 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.app.features.crypto.verification.VerificationAction
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewEvents
 import im.vector.app.features.crypto.verification.user.VerificationTransactionData
 import im.vector.app.features.crypto.verification.user.toDataClass
-import im.vector.app.features.raw.wellknown.getElementWellknown
-import im.vector.app.features.raw.wellknown.isSecureBackupRequired
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filter
@@ -46,7 +45,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.Matrix
-import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
@@ -98,6 +96,7 @@ data class SelfVerificationViewState(
 class SelfVerificationViewModel @AssistedInject constructor(
         @Assisted private val initialState: SelfVerificationViewState,
         private val session: Session,
+        private val vectorFeatures: VectorFeatures,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val rawService: RawService,
         private val stringProvider: StringProvider,
@@ -140,9 +139,9 @@ class SelfVerificationViewModel @AssistedInject constructor(
         // This is async, but at this point should be in cache
         // so it's ok to not wait until result
         viewModelScope.launch(Dispatchers.IO) {
-            val wellKnown = rawService.getElementWellknown(session.sessionParams)
+            // Tchap: force verification when recovery is setup
             setState {
-                copy(isVerificationRequired = wellKnown?.isSecureBackupRequired().orTrue()) // Tchap: force to configure secure backup even if well-known is null
+                copy(isVerificationRequired = session.sharedSecretStorageService().isRecoverySetup())
             }
         }
 

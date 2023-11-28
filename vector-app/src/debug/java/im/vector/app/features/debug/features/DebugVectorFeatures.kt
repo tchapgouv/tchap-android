@@ -50,6 +50,8 @@ class DebugVectorFeatures(
 
     override fun tchapIsLabsVisible(domain: String) = vectorFeatures.tchapIsLabsVisible(domain)
 
+    override fun tchapIsSecureBackupRequired() = vectorFeatures.tchapIsSecureBackupRequired()
+
     override fun onboardingVariant(): OnboardingVariant {
         return readPreferences().getEnum<OnboardingVariant>() ?: vectorFeatures.onboardingVariant()
     }

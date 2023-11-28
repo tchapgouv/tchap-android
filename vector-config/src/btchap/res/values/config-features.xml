@@ -3,6 +3,7 @@
     <bool name="tchap_is_cross_signing_enabled">true</bool>
     <bool name="tchap_is_key_backup_enabled">true</bool>
     <bool name="tchap_is_thread_enabled">false</bool>
+    <bool name="tchap_is_secure_backup_required">false</bool>
 
     <string-array name="tchap_is_voip_supported_homeservers" translatable="false" />
 </resources>
