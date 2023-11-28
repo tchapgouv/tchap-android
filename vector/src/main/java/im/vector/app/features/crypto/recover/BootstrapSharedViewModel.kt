@@ -32,6 +32,7 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.auth.PendingAuthHandler
 import im.vector.app.features.raw.wellknown.SecureBackupMethod
 import im.vector.app.features.raw.wellknown.getElementWellknown
@@ -45,7 +46,6 @@ import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
-import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.raw.RawService
@@ -63,6 +63,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
         @Assisted initialState: BootstrapViewState,
         private val stringProvider: StringProvider,
         private val errorFormatter: ErrorFormatter,
+        private val vectorFeatures: VectorFeatures,
         private val session: Session,
         private val rawService: RawService,
         private val bootstrapTask: BootstrapCrossSigningTask,
@@ -93,7 +94,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             setState {
                 copy(
                         // Tchap: force to configure secure backup key even if well-known is null
-                        isSecureBackupRequired = wellKnown?.isSecureBackupRequired().orTrue(),
+                        isSecureBackupRequired = wellKnown?.isSecureBackupRequired() ?: vectorFeatures.tchapIsSecureBackupRequired(),
                         secureBackupMethod = wellKnown?.secureBackupMethod() ?: SecureBackupMethod.KEY,
                 )
             }
@@ -434,7 +435,8 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                             progressListener = progressListener,
                             passphrase = state.passphrase,
                             keySpec = state.migrationRecoveryKey?.let { extractCurveKeyFromRecoveryKey(it)?.let { RawBytesKeySpec(it) } },
-                            forceResetIfSomeSecretsAreMissing = state.isSecureBackupRequired,
+                            // Tchap: do not reset cross signing
+//                            forceResetIfSomeSecretsAreMissing = state.isSecureBackupRequired,
                             setupMode = state.setupMode
                     )
             ) { bootstrapResult ->
@@ -604,4 +606,4 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     }
 }
 
-private val BootstrapViewState.canLeave: Boolean get() = !isSecureBackupRequired || isRecoverySetup
+private val BootstrapViewState.canLeave: Boolean get() = isRecoverySetup // Tchap: can leave even if secure backup is required

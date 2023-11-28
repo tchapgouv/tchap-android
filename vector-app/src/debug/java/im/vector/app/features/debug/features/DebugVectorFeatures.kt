@@ -48,6 +48,8 @@ class DebugVectorFeatures(
 
     override fun tchapIsThreadEnabled() = vectorFeatures.tchapIsThreadEnabled()
 
+    override fun tchapIsSecureBackupRequired() = vectorFeatures.tchapIsSecureBackupRequired()
+
     override fun onboardingVariant(): OnboardingVariant {
         return readPreferences().getEnum<OnboardingVariant>() ?: vectorFeatures.onboardingVariant()
     }
