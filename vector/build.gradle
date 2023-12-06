@@ -92,6 +92,7 @@ android {
         }
 
         withvoip { dimension "voip" }
+        withdmvoip { dimension "voip" }
         withoutvoip { dimension "voip" }
 
         withpinning { dimension "pinning" }
@@ -272,6 +273,7 @@ dependencies {
     // Tchap: Manage jitsi lib
     // WebRTC
     withoutvoipImplementation('org.jitsi:webrtc:111.0.1')
+    withdmvoipImplementation('org.jitsi:webrtc:111.0.1')
     // Jitsi
     withvoipApi('org.jitsi.react:jitsi-meet-sdk:8.1.1') {
         exclude group: 'com.google.firebase'

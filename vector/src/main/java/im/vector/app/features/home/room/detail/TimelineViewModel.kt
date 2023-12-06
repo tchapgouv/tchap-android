@@ -855,12 +855,11 @@ class TimelineViewModel @AssistedInject constructor(
                     R.id.invite -> state.canInvite
                     R.id.open_matrix_apps -> false // Tchap: there are no matrix apps
                     // Tchap: check if voip is enabled
-                    R.id.voice_call -> vectorFeatures.tchapIsVoipSupported() && (state.isCallOptionAvailable() || state.hasActiveElementCallWidget())
-                    // Tchap: check if voip is enabled
-                    R.id.video_call -> vectorFeatures.tchapIsVoipSupported() &&
-                            (state.isCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined)
+                    R.id.video_call,
+                    R.id.voice_call -> session.sessionParams.homeServerUrl.contains( "agent.dinum.tchap.gouv.fr") && vectorFeatures.tchapIsVoipSupported()
+                            && (state.isCallOptionAvailable() || state.hasActiveElementCallWidget())
                     // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
-                    R.id.join_conference -> !state.isCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
+                    R.id.join_conference -> vectorFeatures.tchapIsVoipSupported() && !state.isCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
                     R.id.search -> state.isSearchAvailable()
                     R.id.menu_timeline_thread_list -> vectorPreferences.areThreadMessagesEnabled()
                     R.id.dev_tools -> vectorPreferences.developerMode()
