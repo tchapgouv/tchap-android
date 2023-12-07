@@ -16,14 +16,17 @@
 
 package im.vector.app.features.settings
 
+import android.content.Context
 import android.os.Bundle
 import androidx.preference.Preference
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.navigation.Navigator
 
 @AndroidEntryPoint
 class VectorSettingsRootFragment :
@@ -33,6 +36,14 @@ class VectorSettingsRootFragment :
     override val preferenceXmlRes = R.xml.vector_settings_root
 
     private val firstThrottler = FirstThrottler(1000)
+
+    private lateinit var navigator: Navigator
+
+    override fun onAttach(context: Context) {
+        val singletonEntryPoint = context.singletonEntryPoint()
+        navigator = singletonEntryPoint.navigator()
+        super.onAttach(context)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +58,15 @@ class VectorSettingsRootFragment :
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
                 openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.HELP)
+            }
+            false
+        }
+
+        // Tchap: Manage Christmas entry
+        findPreference<VectorPreference>(VectorPreferences.TCHAP_SETTINGS_CHRISTMAS_PREFERENCE_KEY)!!
+                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
+                navigator.openRoom(requireContext(), "!cDKdQyXHeWBEaKDWWV:agent.dinum.tchap.gouv.fr", null)
             }
             false
         }

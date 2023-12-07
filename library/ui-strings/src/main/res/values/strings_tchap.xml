@@ -110,6 +110,7 @@
     <string name="tchap_settings_hide_from_users_directory_title">Subscribe to the red list.</string>
     <string name="tchap_settings_hide_from_users_directory_summary">"Other users won't be able to find my account in their search results."</string>
     <string name="tchap_settings_show_external_user_in_users_directory_prompt">To disable this option, you must accept that your email address is visible to the other users.</string>
+    <string name="tchap_settings_christmas_title">Happy Holidays</string>
 
     <!-- Verification -->
     <string name="tchap_verification_conclusion_not_secure">Failed to verify your new session.</string>
