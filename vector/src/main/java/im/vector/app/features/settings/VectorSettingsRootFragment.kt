@@ -27,6 +27,7 @@ import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.navigation.Navigator
+import java.util.Calendar
 
 @AndroidEntryPoint
 class VectorSettingsRootFragment :
@@ -63,12 +64,16 @@ class VectorSettingsRootFragment :
         }
 
         // Tchap: Manage Christmas entry
-        findPreference<VectorPreference>(VectorPreferences.TCHAP_SETTINGS_CHRISTMAS_PREFERENCE_KEY)!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
-                navigator.openRoom(requireContext(), "!cDKdQyXHeWBEaKDWWV:agent.dinum.tchap.gouv.fr", null)
+        if (Calendar.getInstance().before(Calendar.getInstance().apply { set(2024, 1, 10) })) {
+            findPreference<VectorPreference>(VectorPreferences.TCHAP_SETTINGS_CHRISTMAS_PREFERENCE_KEY)!!.let {
+                it.isVisible = true
+                it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
+                        navigator.openRoom(requireContext(), "!cDKdQyXHeWBEaKDWWV:agent.dinum.tchap.gouv.fr", null)
+                    }
+                    false
+                }
             }
-            false
         }
     }
 
