@@ -628,11 +628,21 @@ class TimelineFragment :
     }
 
     private fun startOpenFileIntent(action: RoomDetailViewEvents.OpenFile) {
-        if (action.mimeType == MimeTypes.Apk) {
-            installApk(action)
+        // Tchap: Remove the ability to install an app from Tchap (https://github.com/tchapgouv/tchap-android/issues/832)
+        if (action.mimeType in listOf(MimeTypes.Apk, "application/x-authorware-bin")) {
+            showApkAlert()
         } else {
             openFile(action)
         }
+    }
+
+    private fun showApkAlert() {
+        MaterialAlertDialogBuilder(requireContext())
+                .setTitle(getString(R.string.dialog_title_warning))
+                .setMessage(getString(R.string.tchap_scan_media_warning_apk))
+                .setCancelable(false)
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     private fun openFile(action: RoomDetailViewEvents.OpenFile) {
