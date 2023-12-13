@@ -30,7 +30,6 @@ import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import fr.gouv.tchap.features.expired.ExpiredAccountActivity
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.extensions.vectorStore
@@ -184,9 +183,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             }
         }
 
-        if (BuildConfig.FLAVOR == "rustCrypto") {
-            vectorPreferences.setIsOnRustCrypto(true)
-        }
+        vectorPreferences.setIsOnRustCrypto(true)
 
         if (intent.hasExtra(EXTRA_NEXT_INTENT)) {
             // Start the next Activity
