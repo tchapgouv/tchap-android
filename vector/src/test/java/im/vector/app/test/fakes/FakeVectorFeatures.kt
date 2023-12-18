@@ -22,7 +22,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 
-class FakeVectorFeatures : VectorFeatures by spyk(DefaultVectorFeatures(mockk())) {
+class FakeVectorFeatures : VectorFeatures by spyk(DefaultVectorFeatures(mockk(), mockk())) {
 
     fun givenPersonalisationEnabled() {
         every { isOnboardingPersonalizeEnabled() } returns true
