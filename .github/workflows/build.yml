@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ GplayDevTchapRustCryptoWithoutvoipWithoutpinning, FdroidDevTchapRustCryptoWithoutvoipWithoutpinning, GplayBtchapRustCryptoWithvoipWithpinning ]
+        target: [ GplayDevTchapWithoutvoipWithoutpinning, FdroidDevTchapWithoutvoipWithoutpinning, GplayBtchapWithvoipWithpinning ]
     # Allow all jobs on develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/develop' && format('integration-tests-develop-{0}-{1}', matrix.target, github.sha) || format('build-debug-{0}-{1}', matrix.target, github.ref)  }}
@@ -53,7 +53,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ GplayBtchapRustCryptoWithoutvoipWithpinning, GplayTchapRustCryptoWithoutvoipWithpinning, FdroidBtchapRustCryptoWithoutvoipWithoutpinning, FdroidTchapRustCryptoWithoutvoipWithoutpinning, GplayBtchapRustCryptoWithvoipWithpinning ]
+        target: [ GplayBtchapWithoutvoipWithpinning, GplayTchapWithoutvoipWithpinning, FdroidBtchapWithoutvoipWithoutpinning, FdroidTchapWithoutvoipWithoutpinning, GplayBtchapWithvoipWithpinning ]
     concurrency:
       # Tchap: custom group
       group: ${{ github.ref == 'refs/head/main' && format('build-release-apk-main-{0}-{1}', github.sha, matrix.target) || startsWith(github.ref, 'refs/tags/tchap_v') && format('build-release-apk-tag-{0}-{1}', github.sha, matrix.target) }}
@@ -82,8 +82,8 @@ jobs:
     needs: release
     env:
       # Tchap: only generate exodus report for the following target
-      TARGET_NAME: "GplayTchapRustCryptoWithoutvoipWithpinning"
-      TARGET_FOLDER: "gplayTchapRustCryptoWithoutvoipWithpinning"
+      TARGET_NAME: "GplayTchapWithoutvoipWithpinning"
+      TARGET_FOLDER: "gplayTchapWithoutvoipWithpinning"
     steps:
       - name: Obtain apk from artifact
         id: download

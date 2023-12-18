@@ -26,6 +26,7 @@ import im.vector.app.test.fakes.FakeVectorFeatures
 import im.vector.app.test.fakes.FakeVectorPreferences
 import im.vector.app.test.fakes.FakeWidgetArgsBuilder
 import im.vector.app.test.fixtures.RoomSummaryFixture.aRoomSummary
+import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.junit.Test
