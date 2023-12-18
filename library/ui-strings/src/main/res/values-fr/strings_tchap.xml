@@ -50,6 +50,7 @@
     <!-- tchap scan media -->
     <string name="tchap_scan_media_untrusted_content_message">Le document (%s) a été filtré par la politique de sécurité</string>
     <string name="tchap_scan_media_error_file_is_infected">Le fichier est infecté, impossible de le télécharger.</string>
+    <string name="tchap_scan_media_warning_apk">Pour des raisons de sécurité l’installation d’application à partir de ${app_name} n’est pas autorisée.</string>
 
     <!-- tchap room settings -->
     <string name="tchap_room_settings_convert_to_private">Convertir en salon privé (irréversible)</string>
@@ -110,6 +111,7 @@
     <string name="tchap_settings_hide_from_users_directory_title">Inscrire mon compte sur liste rouge</string>
     <string name="tchap_settings_hide_from_users_directory_summary">Les autres utilisateurs ne pourront pas découvrir mon compte lors de leurs recherches</string>
     <string name="tchap_settings_show_external_user_in_users_directory_prompt">Pour désactiver cette option, vous devez accepter que votre adresse e\u2011mail soit visible des autres utilisateurs lors de leurs recherches.</string>
+    <string name="tchap_settings_christmas_title">🎄 Joyeuses Fêtes 🎄</string>
 
     <!-- Verification -->
     <string name="tchap_verification_conclusion_not_secure">La vérification de votre nouvelle session a échoué.</string>

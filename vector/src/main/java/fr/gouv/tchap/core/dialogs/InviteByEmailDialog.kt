@@ -22,8 +22,8 @@ import androidx.core.widget.doOnTextChanged
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
-import im.vector.app.core.extensions.isEmail
 import im.vector.app.databinding.DialogInviteByIdBinding
+import org.matrix.android.sdk.api.extensions.isEmail
 
 class InviteByEmailDialog(
         private val activity: Activity

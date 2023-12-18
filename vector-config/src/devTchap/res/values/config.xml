@@ -3,22 +3,22 @@
 
     <!-- Identity server names -->
     <string-array name="preferred_identity_server_names" translatable="false">
-        <item>agent1.tchap.incubateur.net</item>
-        <item>agent2.tchap.incubateur.net</item>
+        <item>dev01.tchap.incubateur.net</item>
+        <item>dev02.tchap.incubateur.net</item>
     </string-array>
 
     <string-array name="identity_server_names" translatable="false">
-        <item>externe.tchap.incubateur.net</item>
+        <item>ext01.tchap.incubateur.net</item>
     </string-array>
 
     <!-- Default list of federated server names -->
     <string-array name="room_directory_servers" translatable="false">
-        <item>agent1.tchap.incubateur.net</item>
-        <item>agent2.tchap.incubateur.net</item>
+        <item>dev01.tchap.incubateur.net</item>
+        <item>dev02.tchap.incubateur.net</item>
     </string-array>
 
     <!-- Bug report config -->
-    <string name="bug_report_default_host" translatable="false">agent1.tchap.incubateur.net</string>
+    <string name="bug_report_default_host" translatable="false">dev01.tchap.incubateur.net</string>
 
     <!--
     Pusher config for the application

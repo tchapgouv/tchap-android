@@ -50,6 +50,7 @@
     <!-- tchap scan media -->
     <string name="tchap_scan_media_untrusted_content_message">The file (%s) has been blocked</string>
     <string name="tchap_scan_media_error_file_is_infected">We have detected that this file is infected, so it cannot be downloaded.</string>
+    <string name="tchap_scan_media_warning_apk">For security reasons, installing applications from ${app_name} is not allowed.</string>
 
     <!-- tchap room settings -->
     <string name="tchap_room_settings_convert_to_private">Convert to private room (irreversible)</string>
@@ -110,6 +111,7 @@
     <string name="tchap_settings_hide_from_users_directory_title">Subscribe to the red list.</string>
     <string name="tchap_settings_hide_from_users_directory_summary">"Other users won't be able to find my account in their search results."</string>
     <string name="tchap_settings_show_external_user_in_users_directory_prompt">To disable this option, you must accept that your email address is visible to the other users.</string>
+    <string name="tchap_settings_christmas_title">🎄 Happy Holidays 🎄</string>
 
     <!-- Verification -->
     <string name="tchap_verification_conclusion_not_secure">Failed to verify your new session.</string>
