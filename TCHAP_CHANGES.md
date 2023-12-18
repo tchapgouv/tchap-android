@@ -1,3 +1,17 @@
+Changes in Tchap 2.9.7 (2023-12-18)
+===================================
+
+Improvements 🙌
+--------------
+ - Mise à jour des endpoints pour la version de dev ([#991](https://github.com/tchapgouv/tchap-android/issues/991))
+ - Rebase against Element-Android v1.6.8 ([#998](https://github.com/tchapgouv/tchap-android/issues/998))
+
+Bugfixes 🐛
+----------
+ - Correction du crash du nommage du salon lors de sa création. ([#885](https://github.com/tchapgouv/tchap-android/issues/885))
+ - L'ouverture d'une pièce jointe (fichier. apk) entraîne la fermeture de l'application. ([#995](https://github.com/tchapgouv/tchap-android/issues/995))
+
+
 Changes in Tchap 2.9.6 (2023-10-30)
 ===================================
 
