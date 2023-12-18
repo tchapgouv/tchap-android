@@ -50,6 +50,7 @@
     <!-- tchap scan media -->
     <string name="tchap_scan_media_untrusted_content_message">Le document (%s) a été filtré par la politique de sécurité</string>
     <string name="tchap_scan_media_error_file_is_infected">Le fichier est infecté, impossible de le télécharger.</string>
+    <string name="tchap_scan_media_warning_apk">Pour des raisons de sécurité l’installation d’application à partir de ${app_name} n’est pas autorisée.</string>
 
     <!-- tchap room settings -->
     <string name="tchap_room_settings_convert_to_private">Convertir en salon privé (irréversible)</string>
