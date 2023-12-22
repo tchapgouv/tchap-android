@@ -350,6 +350,7 @@ class FtueAuthLoginFragment :
                 views.loginFieldTil.isHelperTextEnabled = false
                 views.passwordFieldTil.isHelperTextEnabled = false
                 views.tchapPasswordConfirmationFieldTil.isVisible = false
+                views.passwordField.imeOptions = EditorInfo.IME_ACTION_DONE
             }
         }
     }
