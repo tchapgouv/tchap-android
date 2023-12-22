@@ -224,20 +224,13 @@ class CreateRoomViewModel @AssistedInject constructor(
     }
 
     private fun setTchapRoomType(action: CreateRoomAction.SetTchapRoomType) = setState {
-        if (action.roomType == TchapRoomType.FORUM) {
-            val userHSDomain = TchapUtils.getHomeServerDisplayNameFromMXIdentifier(session.myUserId)
-            val isAgentServerDomain = userHSDomain.equals(AGENT_SERVER_DOMAIN, ignoreCase = true)
-            copy(
-                    roomType = action.roomType,
-                    disableFederation = !isAgentServerDomain,
-                    isFederationSettingAvailable = !isAgentServerDomain
-            )
-        } else {
-            copy(
-                    roomType = action.roomType,
-                    disableFederation = false
-            )
-        }
+        val isFederationSettingAvailable = action.roomType == TchapRoomType.FORUM &&
+                !TchapUtils.getHomeServerDisplayNameFromMXIdentifier(session.myUserId).equals(AGENT_SERVER_DOMAIN, ignoreCase = true)
+        copy(
+                roomType = action.roomType,
+                disableFederation = false,
+                isFederationSettingAvailable = isFederationSettingAvailable
+        )
     }
 
     private fun setRoomAliasLocalPart(action: CreateRoomAction.SetRoomAliasLocalPart) {
