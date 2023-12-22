@@ -1,3 +1,12 @@
+Changes in Tchap 2.9.8 (2023-12-22)
+===================================
+
+Improvements 🙌
+--------------
+ - Improve on-screen keyboard interaction when logging in. ([#948](https://github.com/tchapgouv/tchap-android/issues/948))
+ - Les forums sont fédérés par défaut à la création. ([#999](https://github.com/tchapgouv/tchap-android/issues/999))
+
+
 Changes in Tchap 2.9.7 (2023-12-18)
 ===================================
 
