@@ -29,7 +29,10 @@ import im.vector.app.R
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityVectorSettingsBinding
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.discovery.DiscoverySettingsFragment
+import im.vector.app.features.matrixto.MatrixToBottomSheet
+import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.app.features.settings.notifications.VectorSettingsNotificationFragment
@@ -48,8 +51,32 @@ private const val KEY_ACTIVITY_PAYLOAD = "settings-activity-payload"
 @AndroidEntryPoint
 class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>(),
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
+        MatrixToBottomSheet.InteractionListener,
         FragmentManager.OnBackStackChangedListener,
         VectorSettingsFragmentInteractionListener {
+
+    // Tchap: Manage Christmas entry
+    private val fragmentLifecycleCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
+        override fun onFragmentResumed(fm: FragmentManager, f: Fragment) {
+            if (f is MatrixToBottomSheet) {
+                f.interactionListener = this@VectorSettingsActivity
+            }
+            super.onFragmentResumed(fm, f)
+        }
+
+        override fun onFragmentPaused(fm: FragmentManager, f: Fragment) {
+            if (f is MatrixToBottomSheet) {
+                f.interactionListener = null
+            }
+            super.onFragmentPaused(fm, f)
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
+    }
 
     override fun getBinding() = ActivityVectorSettingsBinding.inflate(layoutInflater)
 
@@ -106,6 +133,7 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
     }
 
     override fun onDestroy() {
+        supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks)
         supportFragmentManager.removeOnBackStackChangedListener(this)
         super.onDestroy()
     }
@@ -159,6 +187,14 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
         } else {
             super.handleInvalidToken(globalError)
         }
+    }
+
+    // Tchap: Manage Christmas entry
+    override fun mxToBottomSheetNavigateToRoom(roomId: String, trigger: ViewRoom.Trigger?) {
+        navigator.openRoom(this, roomId, trigger = trigger)
+    }
+    override fun mxToBottomSheetSwitchToSpace(spaceId: String) {
+        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.None)
     }
 
     fun <T : Fragment> navigateTo(fragmentClass: Class<T>, arguments: Bundle? = null) {

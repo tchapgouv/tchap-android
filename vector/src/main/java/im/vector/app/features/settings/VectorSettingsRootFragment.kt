@@ -26,7 +26,10 @@ import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
+import org.matrix.android.sdk.api.session.getRoomSummary
+import org.matrix.android.sdk.api.session.room.model.Membership
 import java.util.Calendar
 
 @AndroidEntryPoint
@@ -69,7 +72,18 @@ class VectorSettingsRootFragment :
                 it.isVisible = true
                 it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                     if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
-                        navigator.openRoom(requireContext(), "!cDKdQyXHeWBEaKDWWV:agent.dinum.tchap.gouv.fr", null)
+                        val roomAlias = "#JoyeusesFtesdelapartdelquipeTchapGl2gFYK2OD:agent.dinum.tchap.gouv.fr"
+                        val eventId = "\$xW9f1eJGxQ1xstdPCVReUKQO_sFU4242SfaMIfNh3NU"
+
+                        session.getRoomSummary(roomAlias).let { roomSummary ->
+                            if (roomSummary?.membership == Membership.JOIN) {
+                                navigator.openRoom(requireContext(), roomSummary.roomId)
+                            } else {
+                                session.permalinkService().createPermalink(roomAlias, eventId).let { link ->
+                                    navigator.openMatrixToBottomSheet(requireActivity(), link, OriginOfMatrixTo.LINK)
+                                }
+                            }
+                        }
                     }
                     false
                 }
