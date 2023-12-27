@@ -41,6 +41,7 @@ data class VectorCallViewState(
         val otherKnownCallInfo: CallInfo? = null,
         val callInfo: CallInfo? = null,
         val formattedDuration: String = "",
+        val canOpenDialPad: Boolean = false, // Tchap: DialPad is not available
         val canOpponentBeTransferred: Boolean = false,
         val transferee: TransfereeState = TransfereeState.NoTransferee,
         val isSharingScreen: Boolean = false
