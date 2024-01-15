@@ -26,6 +26,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.JitsiWidgetEvents
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem_
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.widgets.model.WidgetContent
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
@@ -34,6 +35,7 @@ import javax.inject.Inject
 
 class WidgetItemFactory @Inject constructor(
         private val vectorFeatures: VectorFeatures,
+        private val session: Session,
         private val informationDataFactory: MessageInformationDataFactory,
         private val noticeItemFactory: NoticeItemFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
@@ -78,7 +80,7 @@ class WidgetItemFactory @Inject constructor(
             CallTileTimelineItem.CallStatus.ENDED
         }
         val attributes = CallTileTimelineItem.Attributes(
-                isVoipSupported = vectorFeatures.tchapIsVoipSupported(),
+                isVoipSupported = vectorFeatures.tchapIsVoipSupported(session.sessionParams.homeServerUrl),
                 callId = jitsiWidgetEventsGroup.callId,
                 callKind = CallTileTimelineItem.CallKind.CONFERENCE,
                 callStatus = callStatus,

@@ -1,3 +1,11 @@
+Changes in Tchap 2.10.0 (2024-01-15)
+====================================
+
+Features ✨
+----------
+ - Activation des appels audios dans les DM. ([#993](https://github.com/tchapgouv/tchap-android/issues/993))
+
+
 Changes in Tchap 2.9.8 (2023-12-22)
 ===================================
 

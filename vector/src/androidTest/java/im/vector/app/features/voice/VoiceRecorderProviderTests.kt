@@ -20,6 +20,7 @@ import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry
 import im.vector.app.TestBuildVersionSdkIntProvider
 import im.vector.app.core.resources.BooleanProvider
+import im.vector.app.core.resources.StringArrayProvider
 import im.vector.app.features.DefaultVectorFeatures
 import io.mockk.every
 import io.mockk.spyk
@@ -30,7 +31,13 @@ class VoiceRecorderProviderTests {
 
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
     private val buildVersionSdkIntProvider = TestBuildVersionSdkIntProvider()
-    private val provider = spyk(VoiceRecorderProvider(context, DefaultVectorFeatures(BooleanProvider(context.resources)), buildVersionSdkIntProvider))
+    private val provider = spyk(
+            VoiceRecorderProvider(
+                    context,
+                    DefaultVectorFeatures(StringArrayProvider(context.resources), BooleanProvider(context.resources)),
+                    buildVersionSdkIntProvider
+            )
+    )
 
     @Test
     fun provideVoiceRecorderOnAndroidQAndCodecReturnsQRecorder() {

@@ -23,6 +23,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import im.vector.app.core.resources.BooleanProvider
+import im.vector.app.core.resources.StringArrayProvider
 import im.vector.app.features.DefaultVectorFeatures
 import im.vector.app.features.DefaultVectorOverrides
 import im.vector.app.features.VectorFeatures
@@ -43,8 +44,8 @@ interface FeaturesModule {
     companion object {
 
         @Provides
-        fun providesDefaultVectorFeatures(booleanProvider: BooleanProvider): DefaultVectorFeatures {
-            return DefaultVectorFeatures(booleanProvider)
+        fun providesDefaultVectorFeatures(stringArrayProvider: StringArrayProvider, booleanProvider: BooleanProvider): DefaultVectorFeatures {
+            return DefaultVectorFeatures(stringArrayProvider, booleanProvider)
         }
 
         @Provides

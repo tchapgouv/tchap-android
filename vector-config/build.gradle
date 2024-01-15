@@ -19,6 +19,7 @@ android {
 
     productFlavors {
         withvoip { dimension "voip" }
+        withdmvoip { dimension "voip" }
         withoutvoip { dimension "voip" }
 
         devTchap { dimension "target" }
