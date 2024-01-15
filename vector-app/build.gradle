@@ -33,11 +33,11 @@ knit {
 
 // Note: 2 digits max for each value
 ext.versionMajor = 2
-ext.versionMinor = 9
+ext.versionMinor = 10
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 8
+ext.versionPatch = 0
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -350,21 +350,12 @@ android {
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
         }
 
-        withvoip {
-            dimension "voip"
-        }
+        withvoip { dimension "voip" }
+        withdmvoip { dimension "voip" }
+        withoutvoip { dimension "voip" }
 
-        withoutvoip {
-            dimension "voip"
-        }
-
-        withpinning {
-            dimension "pinning"
-        }
-
-        withoutpinning {
-            dimension "pinning"
-        }
+        withpinning { dimension "pinning" }
+        withoutpinning { dimension "pinning" }
 
         devTchap {
             dimension "target"
@@ -470,6 +461,24 @@ configurations {
     gplayBtchapWithoutvoipWithoutpinningDebugImplementation
     gplayDevTchapWithoutvoipWithoutpinningDebugImplementation
     gplayTchapWithoutvoipWithoutpinningDebugImplementation
+
+
+    fdroidBtchapWithdmvoipWithpinningDebugImplementation
+    fdroidDevTchapWithdmvoipWithpinningDebugImplementation
+    fdroidTchapWithdmvoipWithpinningDebugImplementation
+
+    gplayBtchapWithdmvoipWithpinningDebugImplementation
+    gplayDevTchapWithdmvoipWithpinningDebugImplementation
+    gplayTchapWithdmvoipWithpinningDebugImplementation
+
+
+    fdroidBtchapWithdmvoipWithoutpinningDebugImplementation
+    fdroidDevTchapWithdmvoipWithoutpinningDebugImplementation
+    fdroidTchapWithdmvoipWithoutpinningDebugImplementation
+
+    gplayBtchapWithdmvoipWithoutpinningDebugImplementation
+    gplayDevTchapWithdmvoipWithoutpinningDebugImplementation
+    gplayTchapWithdmvoipWithoutpinningDebugImplementation
 }
 
 dependencies {
@@ -591,6 +600,45 @@ dependencies {
 
     fdroidDevTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
     fdroidDevTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+
+    gplayBtchapWithdmvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
+    gplayBtchapWithdmvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+    gplayTchapWithdmvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
+    gplayTchapWithdmvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+    gplayDevTchapWithdmvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
+    gplayDevTchapWithdmvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+
+    fdroidBtchapWithdmvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
+    fdroidBtchapWithdmvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+    fdroidTchapWithdmvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
+    fdroidTchapWithdmvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+    fdroidDevTchapWithdmvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
+    fdroidDevTchapWithdmvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+
+    gplayBtchapWithdmvoipWithpinningDebugImplementation(libs.flipper.flipper)
+    gplayBtchapWithdmvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+    gplayTchapWithdmvoipWithpinningDebugImplementation(libs.flipper.flipper)
+    gplayTchapWithdmvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+    gplayDevTchapWithdmvoipWithpinningDebugImplementation(libs.flipper.flipper)
+    gplayDevTchapWithdmvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+    fdroidBtchapWithdmvoipWithpinningDebugImplementation(libs.flipper.flipper)
+    fdroidBtchapWithdmvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+    fdroidTchapWithdmvoipWithpinningDebugImplementation(libs.flipper.flipper)
+    fdroidTchapWithdmvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
+
+    fdroidDevTchapWithdmvoipWithpinningDebugImplementation(libs.flipper.flipper)
+    fdroidDevTchapWithdmvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
 
     debugImplementation 'com.facebook.soloader:soloader:0.10.4'
     debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"

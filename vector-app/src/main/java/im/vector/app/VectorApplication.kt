@@ -134,11 +134,9 @@ class VectorApplication :
         vectorUncaughtExceptionHandler.activate()
 
         // Remove Log handler statically added by Jitsi
-        if (vectorFeatures.tchapIsVoipSupported()) {
-            Timber.forest()
-                    .filter { it::class.java.name == "org.jitsi.meet.sdk.log.JitsiMeetDefaultLogHandler" }
-                    .forEach { Timber.uproot(it) }
-        }
+        Timber.forest()
+                .filter { it::class.java.name == "org.jitsi.meet.sdk.log.JitsiMeetDefaultLogHandler" }
+                .forEach { Timber.uproot(it) }
 
         if (buildMeta.isDebug) {
             Timber.plant(Timber.DebugTree())

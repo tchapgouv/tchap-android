@@ -20,12 +20,13 @@ import im.vector.app.R
 import im.vector.app.config.Config
 import im.vector.app.config.OnboardingVariant
 import im.vector.app.core.resources.BooleanProvider
+import im.vector.app.core.resources.StringArrayProvider
 import im.vector.app.features.settings.VectorPreferences
 import javax.inject.Inject
 
 interface VectorFeatures {
 
-    fun tchapIsVoipSupported(): Boolean
+    fun tchapIsVoipSupported(homeServerUrl: String): Boolean
     fun tchapIsCrossSigningEnabled(): Boolean
     fun tchapIsKeyBackupEnabled(): Boolean
     fun tchapIsThreadEnabled(): Boolean
@@ -55,9 +56,13 @@ interface VectorFeatures {
 }
 
 class DefaultVectorFeatures @Inject constructor(
+        private val stringArrayProvider: StringArrayProvider,
         private val booleanProvider: BooleanProvider
 ) : VectorFeatures {
-    override fun tchapIsVoipSupported() = booleanProvider.getBoolean(R.bool.tchap_is_voip_supported)
+    override fun tchapIsVoipSupported(homeServerUrl: String) = booleanProvider.getBoolean(R.bool.tchap_is_voip_supported) &&
+        stringArrayProvider.getStringArray(R.array.tchap_is_voip_supported_homeservers).let { homeServerUrls ->
+            homeServerUrls.isEmpty() || homeServerUrls.any { homeServerUrl.contains(it) }
+        }
     override fun tchapIsCrossSigningEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_cross_signing_enabled)
     override fun tchapIsKeyBackupEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_key_backup_enabled)
     override fun tchapIsThreadEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_thread_enabled)

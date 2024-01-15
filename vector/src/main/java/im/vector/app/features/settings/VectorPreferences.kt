@@ -994,8 +994,8 @@ class VectorPreferences @Inject constructor(
      * The user does not allow screenshots of the application.
      */
     fun useFlagSecure(): Boolean {
-        // Tchap: Screenshot is allowed for Gplay Pre-prod and Dev versions only.
-        return BuildConfig.FLAVOR_store != "gplay" || BuildConfig.FLAVOR_target == "tchap"
+        // Tchap: Screenshot is allowed when developer mode is enabled or for Gplay Pre-prod and Dev versions only.
+        return (!developerMode() && (BuildConfig.FLAVOR_store != "gplay" || BuildConfig.FLAVOR_target == "tchap"))
     }
 
     /** Whether the keyboard should disable personalized learning. */
