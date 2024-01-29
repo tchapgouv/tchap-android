@@ -23,7 +23,6 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
-import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.verticalMarginItem
 import im.vector.app.core.utils.DimensionConverter
@@ -32,7 +31,6 @@ import im.vector.app.features.form.formEditableAvatarItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
 import im.vector.app.features.settings.VectorPreferences
-import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -41,7 +39,6 @@ class RoomSettingsController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val dimensionConverter: DimensionConverter,
         private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
-        private val errorFormatter: ErrorFormatter,
         private val vectorPreferences: VectorPreferences
 ) : TypedEpoxyController<RoomSettingsViewState>() {
 
@@ -54,7 +51,6 @@ class RoomSettingsController @Inject constructor(
         fun onHistoryVisibilityClicked()
         fun onJoinRuleClicked()
         fun onToggleGuestAccess()
-        fun onRemoveFromRoomsDirectory()
         fun onAccessByLinkClicked()
         fun onAllowExternalUsersToJoin()
     }
@@ -153,12 +149,6 @@ class RoomSettingsController @Inject constructor(
 
         buildRoomAccessRules(data, roomType)
 
-        if (data.actionPermissions.canRemoveFromRoomsDirectory &&
-                (roomType == TchapRoomType.FORUM ||
-                        (roomType == TchapRoomType.UNKNOWN && data.roomDirectoryVisibility() == RoomDirectoryVisibility.PUBLIC))) {
-            buildRemoveFromRoomsDirectory()
-        }
-
         // Tchap: Disable "Allow guest to join" switch
 //        val isPublic = (data.newRoomJoinRules.newJoinRules ?: data.currentRoomJoinRules) == RoomJoinRules.PUBLIC
 //        if (vectorPreferences.developerMode() && isPublic) {
@@ -176,18 +166,6 @@ class RoomSettingsController @Inject constructor(
 //                id("guestAccessDivider")
 //            }
 //        }
-    }
-
-    private fun buildRemoveFromRoomsDirectory() {
-        val host = this
-        buildProfileAction(
-                id = "removeFromRoomsDirectory",
-                title = stringProvider.getString(R.string.tchap_room_settings_convert_to_private),
-                divider = true,
-                destructive = true,
-                editable = false,
-                action = { host.callback?.onRemoveFromRoomsDirectory() }
-        )
     }
 
     private fun buildRoomAccessRules(data: RoomSettingsViewState, roomType: TchapRoomType) {
