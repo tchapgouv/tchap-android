@@ -13,7 +13,7 @@ updates:
     # Tchap: Disable this script for Tchap
     open-pull-requests-limit: 0
     reviewers:
-      - "vector-im/element-android-reviewers"
+      - "element-hq/element-android-reviewers"
     ignore:
       - dependency-name: "*"
   # Updates for Gradle dependencies used in the app
@@ -24,7 +24,7 @@ updates:
     # Tchap: Disable this script for Tchap
     open-pull-requests-limit: 0
     reviewers:
-      - "vector-im/element-android-reviewers"
+      - "element-hq/element-android-reviewers"
     allow:
       - dependency-name: "io.element.android:wysiwyg"
       - dependency-name: "org.matrix.rustcomponents:crypto-android"
