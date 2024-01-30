@@ -135,7 +135,7 @@ internal class RustCryptoService @Inject constructor(
         private val getRoomUserIds: GetRoomUserIdsUseCase,
         private val outgoingRequestsProcessor: OutgoingRequestsProcessor,
         private val matrixConfiguration: MatrixConfiguration,
-        private val rateLimiter: PerSessionBackupQueryRateLimiter,
+        private val perSessionBackupQueryRateLimiter: PerSessionBackupQueryRateLimiter,
 ) : CryptoService {
 
     private val isStarting = AtomicBoolean(false)
@@ -499,8 +499,9 @@ internal class RustCryptoService @Inject constructor(
         return try {
             olmMachine.decryptRoomEvent(event)
         } catch (mxCryptoError: MXCryptoError) {
-            // Tchap: try to perform a lazy migration from legacy store if there is no other session.
-            if (mxCryptoError is MXCryptoError.Base && mxCryptoError.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
+            if (mxCryptoError is MXCryptoError.Base && (
+                            mxCryptoError.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID ||
+                                    mxCryptoError.errorType == MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX)) {
                 Timber.v("Try to perform a lazy migration from legacy store")
                 /**
                  * It's a bit hacky, check how this can be better integrated with rust?
@@ -510,11 +511,12 @@ internal class RustCryptoService @Inject constructor(
                 val sessionId = content.sessionId
                 val senderKey = content.senderKey
                 if (roomId != null && sessionId != null) {
+                    // try to perform a lazy migration from legacy store
                     val legacy = tryOrNull("Failed to access legacy crypto store") {
                         cryptoStore.getInboundGroupSession(sessionId, senderKey.orEmpty())
                     }
                     if (legacy == null || olmMachine.importRoomKey(legacy).isFailure) {
-                        rateLimiter.tryFromBackupIfPossible(sessionId, roomId)
+                        perSessionBackupQueryRateLimiter.tryFromBackupIfPossible(sessionId, roomId)
                     }
                 }
             }
