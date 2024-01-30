@@ -17,18 +17,13 @@
 package im.vector.app.features.roomprofile.settings
 
 import androidx.core.net.toFile
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import fr.gouv.tchap.android.sdk.api.session.events.model.TchapEventType
 import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRules
 import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRulesContent
-import fr.gouv.tchap.core.utils.RoomUtils
-import fr.gouv.tchap.core.utils.TchapRoomType
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
@@ -48,9 +43,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
-import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
-import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
@@ -97,34 +90,6 @@ class RoomSettingsViewModel @AssistedInject constructor(
         }
     }
 
-    private fun fetchRoomDirectoryVisibility() {
-        setState {
-            copy(
-                    roomDirectoryVisibility = Loading()
-            )
-        }
-        viewModelScope.launch {
-            runCatching {
-                session.roomDirectoryService().getRoomDirectoryVisibility(room.roomId)
-            }.fold(
-                    {
-                        setState {
-                            copy(
-                                    roomDirectoryVisibility = Success(it)
-                            )
-                        }
-                    },
-                    {
-                        setState {
-                            copy(
-                                    roomDirectoryVisibility = Fail(it)
-                            )
-                        }
-                    }
-            )
-        }
-    }
-
     private fun observeState() {
         onEach(
                 RoomSettingsViewState::avatarAction,
@@ -157,9 +122,6 @@ class RoomSettingsViewModel @AssistedInject constructor(
                 .unwrap()
                 .execute { async ->
                     val roomSummary = async.invoke()
-
-                    if (roomSummary?.let { RoomUtils.getRoomType(it) } == TchapRoomType.UNKNOWN) fetchRoomDirectoryVisibility()
-
                     copy(
                             roomSummary = async,
                             newName = roomSummary?.name,
@@ -199,12 +161,7 @@ class RoomSettingsViewModel @AssistedInject constructor(
                             canChangeRoomAccessRules = powerLevelsHelper.isUserAllowedToSend(
                                     session.myUserId, true,
                                     TchapEventType.STATE_ROOM_ACCESS_RULES
-                            ),
-                            // Tchap: Custom parameter
-                            canRemoveFromRoomsDirectory = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_JOIN_RULES) &&
-                                    powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_CANONICAL_ALIAS) &&
-                                    powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION) &&
-                                    powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_HISTORY_VISIBILITY)
+                            )
                     )
                     setState {
                         copy(actionPermissions = permissions)
@@ -266,7 +223,6 @@ class RoomSettingsViewModel @AssistedInject constructor(
             is RoomSettingsAction.SetRoomHistoryVisibility -> setState { copy(newHistoryVisibility = action.visibility) }
             is RoomSettingsAction.SetRoomJoinRule -> handleSetRoomJoinRule(action)
             is RoomSettingsAction.SetRoomGuestAccess -> handleSetGuestAccess(action)
-            RoomSettingsAction.RemoveFromRoomsDirectory -> handleRemoveFromRoomsDirectory()
             RoomSettingsAction.AllowExternalUsersToJoin -> handleAllowExternalUsersToJoin()
             is RoomSettingsAction.Save -> saveSettings()
             is RoomSettingsAction.Cancel -> cancel()
@@ -295,33 +251,6 @@ class RoomSettingsViewModel @AssistedInject constructor(
         setState {
             deletePendingAvatar(this)
             copy(avatarAction = action.avatarAction)
-        }
-    }
-
-    /**
-     * Several changes are required:
-     * The new members can access only on invite.
-     * The encryption has to be enabled by default.
-     * The room will become private.
-     * The history visibility value is replaced with invited.
-     */
-    private fun handleRemoveFromRoomsDirectory() {
-        session.coroutineScope.launch {
-            updateLoadingState(isLoading = true)
-            try {
-                // Update first the joinrule to INVITE.
-                room.stateService().setJoinRuleInviteOnly()
-                // Turn on the encryption in this room (if this is not already done).
-                if (!room.roomCryptoService().isEncrypted()) room.roomCryptoService().enableEncryption()
-                // Remove the room from the room directory.
-                session.roomDirectoryService().setRoomDirectoryVisibility(room.roomId, RoomDirectoryVisibility.PRIVATE)
-            } catch (failure: Throwable) {
-                updateLoadingState(isLoading = false)
-                _viewEvents.post(RoomSettingsViewEvents.Failure(failure))
-            }
-            // Update history visibility.
-            tryOrNull { room.stateService().updateHistoryReadability(RoomHistoryVisibility.INVITED) }
-            updateLoadingState(isLoading = false)
         }
     }
 

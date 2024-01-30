@@ -53,8 +53,6 @@
     <string name="tchap_scan_media_warning_apk">Pour des raisons de sécurité l’installation d’application à partir de ${app_name} n’est pas autorisée.</string>
 
     <!-- tchap room settings -->
-    <string name="tchap_room_settings_convert_to_private">Convertir en salon privé (irréversible)</string>
-    <string name="tchap_room_settings_convert_to_private_prompt_msg"><b>Cette action est irréversible.</b>\nVoulez-vous vraiment convertir ce forum en salon privé ?</string>
     <string name="tchap_room_settings_room_access_title">Gestion des comptes externes</string>
     <string name="tchap_room_settings_room_access_restricted">Les externes ne sont pas autorisés à rejoindre ce salon</string>
     <string name="tchap_room_settings_room_access_unrestricted">Les externes sont autorisés à rejoindre ce salon</string>
