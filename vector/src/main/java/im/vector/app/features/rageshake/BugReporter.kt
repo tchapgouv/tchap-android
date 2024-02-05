@@ -561,7 +561,7 @@ class BugReporter @Inject constructor(
     }
 
     // Tchap: add connection type in VoIP report
-    private fun getConnectionType():String {
+    private fun getConnectionType(): String {
         val connectivityManager = context.getSystemService<ConnectivityManager>()!!
         return if (sdkIntProvider.isAtLeast(Build.VERSION_CODES.M)) {
             val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
