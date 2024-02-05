@@ -498,6 +498,7 @@ class TimelineViewModel @AssistedInject constructor(
             is RoomDetailAction.StartCall -> handleStartCall(action)
             is RoomDetailAction.AcceptCall -> handleAcceptCall(action)
             is RoomDetailAction.EndCall -> handleEndCall()
+            is RoomDetailAction.SendCallFeedback -> handleSendCallFeedback()
             is RoomDetailAction.ManageIntegrations -> handleManageIntegrations()
             is RoomDetailAction.AddJitsiWidget -> handleAddJitsiConference(action)
             is RoomDetailAction.UpdateJoinJitsiCallStatus -> handleJitsiCallJoinStatus(action)
@@ -626,6 +627,10 @@ class TimelineViewModel @AssistedInject constructor(
 
     private fun handleEndCall() {
         callManager.endCallForRoom(initialState.roomId)
+    }
+
+    private fun handleSendCallFeedback() {
+        _viewEvents.post(RoomDetailViewEvents.SendCallFeedback)
     }
 
     private fun handleSelectStickerAttachment() {

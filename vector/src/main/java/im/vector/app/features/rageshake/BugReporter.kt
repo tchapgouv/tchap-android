@@ -17,11 +17,17 @@
 package im.vector.app.features.rageshake
 
 import android.annotation.SuppressLint
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothHeadset
+import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.view.View
+import androidx.core.content.getSystemService
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.squareup.moshi.Types
@@ -165,7 +171,7 @@ class BugReporter @Inject constructor(
     /**
      * Send a bug report.
      *
-     * @param reportType The report type (bug, suggestion, feedback)
+     * @param reportType The report type (bug, suggestion, feedback, voip)
      * @param withDevicesLogs true to include the device log
      * @param withCrashLogs true to include the crash logs
      * @param withKeyRequestHistory true to include the crash logs
@@ -283,6 +289,7 @@ class BugReporter @Inject constructor(
                     val text = when (reportType) {
                         // Tchap: Use BuildConfig.FLAVOR_target instead of Element
                         ReportType.BUG_REPORT -> "[${BuildConfig.FLAVOR_target}] $bugDescription"
+                        ReportType.VOIP -> "[${BuildConfig.FLAVOR_target}] [voip-feedback] $bugDescription" // Tchap: add VoIP report type
                         ReportType.SUGGESTION -> "[${BuildConfig.FLAVOR_target}] [Suggestion] $bugDescription"
                         ReportType.SPACE_BETA_FEEDBACK -> "[${BuildConfig.FLAVOR_target}] [spaces-feedback] $bugDescription"
                         ReportType.THREADS_BETA_FEEDBACK -> "[${BuildConfig.FLAVOR_target}] [threads-feedback] $bugDescription"
@@ -369,6 +376,13 @@ class BugReporter @Inject constructor(
                     when (reportType) {
                         ReportType.BUG_REPORT -> {
                             /* nop */
+                        }
+                        // Tchap: add VoIP report type
+                        ReportType.VOIP -> {
+                            builder.addFormDataPart("label", "voip-feedback")
+                            builder.addFormDataPart("context", "voip")
+                            builder.addFormDataPart("connection", getConnectionType())
+                            if (isBluetoothHeadsetConnected()) builder.addFormDataPart("audio_input", "headset_bluetooth")
                         }
                         ReportType.SUGGESTION -> builder.addFormDataPart("label", "[Suggestion]")
                         ReportType.SPACE_BETA_FEEDBACK -> builder.addFormDataPart("label", "spaces-feedback")
@@ -544,6 +558,36 @@ class BugReporter @Inject constructor(
                     else -> R.string.bug_report_app_name
                 }
         )
+    }
+
+    // Tchap: add connection type in VoIP report
+    private fun getConnectionType():String {
+        val connectivityManager = context.getSystemService<ConnectivityManager>()!!
+        return if (sdkIntProvider.isAtLeast(Build.VERSION_CODES.M)) {
+            val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            when {
+                networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_VPN) == true -> "vpn"
+                networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true -> "wifi"
+                networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true -> "mobile"
+                else -> "unknown"
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            when (connectivityManager.activeNetworkInfo?.type) {
+                ConnectivityManager.TYPE_VPN -> "vpn"
+                ConnectivityManager.TYPE_WIFI -> "wifi"
+                ConnectivityManager.TYPE_MOBILE -> "mobile"
+                else -> "unknown"
+            }
+        }
+    }
+
+    // Tchap: check if a headset is connected
+    private fun isBluetoothHeadsetConnected(): Boolean {
+        val bm: BluetoothManager? = context.getSystemService()
+        return bm?.adapter?.let {
+            it.isEnabled && it.getProfileConnectionState(BluetoothHeadset.HEADSET) == BluetoothAdapter.STATE_CONNECTED
+        } ?: false
     }
 // ==============================================================================================================
 // crash report management

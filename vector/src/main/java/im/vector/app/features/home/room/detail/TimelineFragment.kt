@@ -174,6 +174,8 @@ import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkFactory
 import im.vector.app.features.permalink.PermalinkHandler
 import im.vector.app.features.poll.PollMode
+import im.vector.app.features.rageshake.BugReporter
+import im.vector.app.features.rageshake.ReportType
 import im.vector.app.features.reactions.EmojiReactionPickerActivity
 import im.vector.app.features.roomprofile.RoomProfileActivity
 import im.vector.app.features.session.coroutineScope
@@ -230,6 +232,7 @@ class TimelineFragment :
         CurrentCallsView.Callback,
         VectorMenuProvider {
 
+    @Inject lateinit var bugReporter: BugReporter
     @Inject lateinit var session: Session
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var timelineEventController: TimelineEventController
@@ -380,6 +383,7 @@ class TimelineFragment :
 
         timelineViewModel.observeViewEvents {
             when (it) {
+                is RoomDetailViewEvents.SendCallFeedback -> bugReporter.openBugReportScreen(requireActivity(), ReportType.VOIP)
                 is RoomDetailViewEvents.Failure -> displayErrorMessage(it)
                 is RoomDetailViewEvents.OnNewTimelineEvents -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
                 is RoomDetailViewEvents.ActionSuccess -> displayRoomDetailActionSuccess(it)
