@@ -100,7 +100,7 @@
 
     <!-- Call -->
     <string name="tchap_call_not_supported">${app_name} does not support calls</string>
-    <string name="tchap_call_tile_reported">Report an issue?</string>
+    <string name="tchap_call_tile_reported">Report an issue</string>
 
     <!-- Home drawer -->
     <string name="tchap_invite_to">Invite to join ${app_name}</string>
