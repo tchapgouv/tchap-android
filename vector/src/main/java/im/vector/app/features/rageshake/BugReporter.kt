@@ -382,7 +382,7 @@ class BugReporter @Inject constructor(
                             builder.addFormDataPart("label", "voip-feedback")
                             builder.addFormDataPart("context", "voip")
                             builder.addFormDataPart("connection", getConnectionType())
-                            if (isBluetoothHeadsetConnected()) builder.addFormDataPart("audio_input", "headset_bluetooth")
+                            builder.addFormDataPart("audio_input", getAudioInterface())
                         }
                         ReportType.SUGGESTION -> builder.addFormDataPart("label", "[Suggestion]")
                         ReportType.SPACE_BETA_FEEDBACK -> builder.addFormDataPart("label", "spaces-feedback")
@@ -583,6 +583,8 @@ class BugReporter @Inject constructor(
     }
 
     // Tchap: check if a headset is connected
+    private fun getAudioInterface() = if (isBluetoothHeadsetConnected()) "headset_bluetooth" else "device"
+
     private fun isBluetoothHeadsetConnected(): Boolean {
         val bm: BluetoothManager? = context.getSystemService()
         return bm?.adapter?.let {
