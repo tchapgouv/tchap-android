@@ -1,3 +1,16 @@
+Changes in Tchap 2.10.1 (2024-02-07)
+====================================
+
+Improvements 🙌
+--------------
+ - Remove the option "Convertir en salon privé (irréversible)" ([#1007](https://github.com/tchapgouv/tchap-android/issues/1007))
+ - Rebase against Element-Android v1.6.10 ([#1009](https://github.com/tchapgouv/tchap-android/issues/1009))
+
+Other changes
+-------------
+ - Add VoIP bug report button ([#1010](https://github.com/tchapgouv/tchap-android/issues/1010))
+
+
 Changes in Tchap 2.10.0 (2024-01-15)
 ====================================
 

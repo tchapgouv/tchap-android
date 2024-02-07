@@ -53,8 +53,6 @@
     <string name="tchap_scan_media_warning_apk">For security reasons, installing applications from ${app_name} is not allowed.</string>
 
     <!-- tchap room settings -->
-    <string name="tchap_room_settings_convert_to_private">Convert to private room (irreversible)</string>
-    <string name="tchap_room_settings_convert_to_private_prompt_msg"><b>This action is irreversible.</b>\nAre you sure you want to convert this forum into a private room?</string>
     <string name="tchap_room_settings_room_access_title">External accounts handling</string>
     <string name="tchap_room_settings_room_access_restricted">The externals are not allowed to join this room</string>
     <string name="tchap_room_settings_room_access_unrestricted">The externals are allowed to join this room</string>
@@ -102,6 +100,7 @@
 
     <!-- Call -->
     <string name="tchap_call_not_supported">${app_name} does not support calls</string>
+    <string name="tchap_call_tile_reported">Report an issue</string>
 
     <!-- Home drawer -->
     <string name="tchap_invite_to">Invite to join ${app_name}</string>

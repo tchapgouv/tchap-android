@@ -31,6 +31,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.extensions.clearDrawables
 import im.vector.app.core.extensions.setLeftDrawable
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.displayname.getBestName
@@ -97,7 +98,15 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
     }
 
     private fun renderEndedStatus(holder: Holder) {
-        holder.acceptRejectViewGroup.isVisible = false
+        // Tchap: Add button to report issues about voip
+        holder.acceptRejectViewGroup.isVisible = true
+        holder.rejectView.isVisible = false
+        holder.acceptView.setText(R.string.tchap_call_tile_reported)
+        holder.acceptView.clearDrawables()
+        holder.acceptView.onClick {
+            val callbackAction = RoomDetailAction.SendCallFeedback
+            attributes.callback?.onTimelineItemAction(callbackAction)
+        }
         when (attributes.callKind) {
             CallKind.VIDEO -> {
                 val endCallStatus = holder.resources.getString(R.string.call_tile_video_call_has_ended, attributes.formattedDuration)

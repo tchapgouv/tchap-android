@@ -6,7 +6,7 @@ Tchap Android is an Android Matrix Client provided by [DINUM](https://tchap.beta
 
 # New Android SDK
 
-Tchap is based on [Element](https://github.com/vector-im/element-android) with a new Android [SDK](https://github.com/matrix-org/matrix-android-sdk2) fully written in Kotlin. In order to make the early development as fast as possible, Tchap and the new SDK currently share the same git repository.
+Tchap is based on [Element](https://github.com/element-hq/element-android) with a new Android [SDK](https://github.com/matrix-org/matrix-android-sdk2) fully written in Kotlin. In order to make the early development as fast as possible, Tchap and the new SDK currently share the same git repository.
 
 # Releases to app stores
 
@@ -30,6 +30,7 @@ Also [this documentation](./docs/_developer_onboarding.md) can hopefully help de
 
 ## Triaging issues
 
-Issues are triaged by community members and the Android App Team, following the [triage process](https://github.com/vector-im/element-meta/wiki/Triage-process).
+Issues are triaged by community members and the Android App Team, following the [triage process](https://github.com/element-hq/element-meta/wiki/Triage-process).
 
-We use [issue labels](https://github.com/vector-im/element-meta/wiki/Issue-labelling) to sort all incoming issues.
+We use [issue labels](https://github.com/element-hq/element-meta/wiki/Issue-labelling) to sort all incoming issues.
+
