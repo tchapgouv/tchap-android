@@ -45,6 +45,7 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     data class JoinJitsiConference(val widget: Widget, val withVideo: Boolean) : RoomDetailViewEvents()
     object LeaveJitsiConference : RoomDetailViewEvents()
 
+    object SendCallFeedback : RoomDetailViewEvents()
     object OpenInvitePeople : RoomDetailViewEvents()
     object OpenSetRoomAvatarDialog : RoomDetailViewEvents()
     object OpenRoomSettings : RoomDetailViewEvents()

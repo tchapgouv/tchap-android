@@ -23,4 +23,5 @@ enum class ReportType {
     THREADS_BETA_FEEDBACK,
     AUTO_UISI,
     AUTO_UISI_SENDER,
+    VOIP,
 }

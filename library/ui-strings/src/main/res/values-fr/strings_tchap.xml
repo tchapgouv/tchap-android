@@ -57,7 +57,7 @@
     <string name="tchap_room_settings_room_access_restricted">Les externes ne sont pas autorisés à rejoindre ce salon</string>
     <string name="tchap_room_settings_room_access_unrestricted">Les externes sont autorisés à rejoindre ce salon</string>
     <string name="tchap_room_settings_allow_external_users_to_join">Autoriser l’accès aux externes à ce salon</string>
-    <string name="tchap_room_settings_allow_external_users_to_join_prompt_msg"><b>Cette action est irréversible.</b>\nVoulez-vous vraiment autoriser les externes à rejoindre ce salon ?</string>
+    <string name="tchap_room_settings_allow_external_users_to_join_prompt_msg"><b>Cette action est irréversible.</b>\nVoulez-vous vraiment autoriser les externes à rejoindre ce salon ?</string>
     <string name="tchap_room_settings_room_access_by_link_title">Accès par lien</string>
     <string name="tchap_room_settings_room_access_by_link_disabled">Ce salon n’est pas accessible par lien</string>
     <string name="tchap_room_settings_room_access_by_link_enabled">Ce salon est accessible par lien</string>
@@ -100,6 +100,7 @@
 
     <!-- Call -->
     <string name="tchap_call_not_supported">${app_name} ne supporte pas les appels</string>
+    <string name="tchap_call_tile_reported">Signaler un problème</string>
 
     <!-- Home drawer -->
     <string name="tchap_invite_to">Inviter à rejoindre ${app_name}</string>
