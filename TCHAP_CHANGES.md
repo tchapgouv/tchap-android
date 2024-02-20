@@ -1,3 +1,11 @@
+Changes in Tchap 2.10.2 (2024-02-20)
+====================================
+
+Improvements 🙌
+--------------
+ - Rebase against Element-Android v1.6.12 ([#1011](https://github.com/tchapgouv/tchap-android/issues/1011))
+
+
 Changes in Tchap 2.10.1 (2024-02-07)
 ====================================
 
