@@ -16,17 +16,14 @@
 
 package im.vector.app.features.settings
 
-import android.content.Context
 import android.os.Bundle
 import androidx.preference.Preference
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.analytics.plan.MobileScreen
-import im.vector.app.features.navigation.Navigator
 
 @AndroidEntryPoint
 class VectorSettingsRootFragment :
