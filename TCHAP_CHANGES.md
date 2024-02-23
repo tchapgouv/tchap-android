@@ -1,3 +1,11 @@
+Changes in Tchap 2.10.3 (2024-02-23)
+====================================
+
+Bugfixes 🐛
+----------
+ - Restore rust crypto migration. ([#1013](https://github.com/tchapgouv/tchap-android/issues/1013))
+
+
 Changes in Tchap 2.10.2 (2024-02-20)
 ====================================
 
