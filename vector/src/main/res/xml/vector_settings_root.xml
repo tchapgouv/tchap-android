@@ -62,10 +62,4 @@
         app:fragment="im.vector.app.features.settings.legals.LegalsFragment"
         app:isPreferenceVisible="@bool/settings_root_legals_visible" />
 
-    <im.vector.app.core.preference.VectorPreference
-        android:icon="@drawable/ic_notification"
-        android:key="TCHAP_SETTINGS_CHRISTMAS_PREFERENCE_KEY"
-        android:title="@string/tchap_settings_christmas_title"
-        app:isPreferenceVisible="@bool/false_tchap_hidden" />
-
 </androidx.preference.PreferenceScreen>
