@@ -110,7 +110,6 @@
     <string name="tchap_settings_hide_from_users_directory_title">Inscrire mon compte sur liste rouge</string>
     <string name="tchap_settings_hide_from_users_directory_summary">Les autres utilisateurs ne pourront pas découvrir mon compte lors de leurs recherches</string>
     <string name="tchap_settings_show_external_user_in_users_directory_prompt">Pour désactiver cette option, vous devez accepter que votre adresse e\u2011mail soit visible des autres utilisateurs lors de leurs recherches.</string>
-    <string name="tchap_settings_christmas_title">🎄 Joyeuses Fêtes 🎄</string>
 
     <!-- Verification -->
     <string name="tchap_verification_conclusion_not_secure">La vérification de votre nouvelle session a échoué.</string>
