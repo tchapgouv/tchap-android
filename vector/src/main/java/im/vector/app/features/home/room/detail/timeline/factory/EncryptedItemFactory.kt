@@ -99,10 +99,10 @@ class EncryptedItemFactory @Inject constructor(
                             else -> {
                                 // Tchap: Add faq link in unable to decrypt error
                                 span {
-                                    val faq = stringProvider.getString(R.string.tchap_notice_crypto_unable_to_decrypt_faq)
-                                    text = "${stringProvider.getString(R.string.notice_crypto_unable_to_decrypt_friendly)} $faq"
+                                    val learnMore = stringProvider.getString(R.string.action_learn_more)
+                                    text = "${stringProvider.getString(R.string.notice_crypto_unable_to_decrypt_friendly)} $learnMore"
                                             .toSpannable()
-                                            .tappableMatchingText(faq, object : ClickableSpan() {
+                                            .tappableMatchingText(learnMore, object : ClickableSpan() {
                                                 override fun onClick(widget: View) {
                                                     openUrlInExternalBrowser(widget.context, TCHAP_FAQ_UTD_URL)
                                                 }
