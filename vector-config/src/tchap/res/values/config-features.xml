@@ -4,5 +4,7 @@
     <bool name="tchap_is_key_backup_enabled">true</bool>
     <bool name="tchap_is_thread_enabled">false</bool>
 
-    <string-array name="tchap_is_voip_supported_homeservers" translatable="false" />
+    <string-array name="tchap_is_voip_supported_homeservers" translatable="false">
+        <item>agent.dinum.tchap.gouv.fr</item>
+    </string-array>
 </resources>
