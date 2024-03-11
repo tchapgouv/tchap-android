@@ -1,3 +1,15 @@
+Changes in Tchap 2.10.4 (2024-03-12)
+====================================
+
+Features ✨
+----------
+ - Activation des appels vocaux pour les agents de la DINUM. ([#1016](https://github.com/tchapgouv/tchap-android/issues/1016))
+
+Improvements 🙌
+--------------
+ - Changer le message d'erreur en cas de message non déchiffré. ([#1014](https://github.com/tchapgouv/tchap-android/issues/1014))
+
+
 Changes in Tchap 2.10.3 (2024-02-23)
 ====================================
 
