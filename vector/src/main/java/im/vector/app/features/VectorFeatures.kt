@@ -69,8 +69,8 @@ class DefaultVectorFeatures @Inject constructor(
     override fun tchapIsCrossSigningEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_cross_signing_enabled)
     override fun tchapIsKeyBackupEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_key_backup_enabled)
     override fun tchapIsThreadEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_thread_enabled)
-    override fun tchapIsLabsVisible(domain: String) = booleanProvider.getBoolean(R.bool.settings_root_labs_visible)
-            || domain == appNameProvider.getAppName()
+    override fun tchapIsLabsVisible(domain: String) = booleanProvider.getBoolean(R.bool.settings_root_labs_visible) ||
+            domain == appNameProvider.getAppName()
     override fun onboardingVariant() = Config.ONBOARDING_VARIANT
     override fun isOnboardingAlreadyHaveAccountSplashEnabled() = true
     override fun isOnboardingSplashCarouselEnabled() = false // Tchap: no carousel
