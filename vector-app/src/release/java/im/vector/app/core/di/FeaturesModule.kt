@@ -32,8 +32,8 @@ import im.vector.app.features.VectorOverrides
 object FeaturesModule {
 
     @Provides
-    fun providesFeatures(stringArrayProvider: StringArrayProvider, booleanProvider: BooleanProvider): VectorFeatures {
-        return DefaultVectorFeatures(stringArrayProvider, booleanProvider)
+    fun providesFeatures(appNameProvider: AppNameProvider, stringArrayProvider: StringArrayProvider, booleanProvider: BooleanProvider): VectorFeatures {
+        return DefaultVectorFeatures(appNameProvider, stringArrayProvider, booleanProvider)
     }
 
     @Provides

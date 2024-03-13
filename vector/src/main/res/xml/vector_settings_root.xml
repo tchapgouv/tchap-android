@@ -34,9 +34,10 @@
 
     <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_labs"
+        android:key="SETTINGS_LABS_PREFERENCE_KEY"
         android:title="@string/room_settings_labs_pref_title"
         app:fragment="im.vector.app.features.settings.labs.VectorSettingsLabsFragment"
-        app:isPreferenceVisible="@bool/tchap_settings_root_labs_visible" />
+        app:isPreferenceVisible="@bool/settings_root_labs_visible" />
 
     <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_advanced"

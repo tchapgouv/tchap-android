@@ -19,6 +19,7 @@ package im.vector.app.features
 import im.vector.app.R
 import im.vector.app.config.Config
 import im.vector.app.config.OnboardingVariant
+import im.vector.app.core.resources.AppNameProvider
 import im.vector.app.core.resources.BooleanProvider
 import im.vector.app.core.resources.StringArrayProvider
 import im.vector.app.features.settings.VectorPreferences
@@ -30,6 +31,7 @@ interface VectorFeatures {
     fun tchapIsCrossSigningEnabled(): Boolean
     fun tchapIsKeyBackupEnabled(): Boolean
     fun tchapIsThreadEnabled(): Boolean
+    fun tchapIsLabsVisible(domain: String): Boolean
     fun onboardingVariant(): OnboardingVariant
     fun isOnboardingAlreadyHaveAccountSplashEnabled(): Boolean
     fun isOnboardingSplashCarouselEnabled(): Boolean
@@ -56,6 +58,7 @@ interface VectorFeatures {
 }
 
 class DefaultVectorFeatures @Inject constructor(
+        private val appNameProvider: AppNameProvider,
         private val stringArrayProvider: StringArrayProvider,
         private val booleanProvider: BooleanProvider
 ) : VectorFeatures {
@@ -66,6 +69,8 @@ class DefaultVectorFeatures @Inject constructor(
     override fun tchapIsCrossSigningEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_cross_signing_enabled)
     override fun tchapIsKeyBackupEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_key_backup_enabled)
     override fun tchapIsThreadEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_thread_enabled)
+    override fun tchapIsLabsVisible(domain: String) = booleanProvider.getBoolean(R.bool.settings_root_labs_visible)
+            || domain == appNameProvider.getAppName()
     override fun onboardingVariant() = Config.ONBOARDING_VARIANT
     override fun isOnboardingAlreadyHaveAccountSplashEnabled() = true
     override fun isOnboardingSplashCarouselEnabled() = false // Tchap: no carousel
