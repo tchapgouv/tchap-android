@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <bool name="tchap_settings_root_labs_visible">true</bool>
+    <!-- Level 0: Root -->
+    <bool name="settings_root_labs_visible">true</bool>
 </resources>

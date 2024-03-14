@@ -30,6 +30,7 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import im.vector.app.R
 import im.vector.app.core.resources.BooleanProvider
+import im.vector.app.core.resources.DefaultAppNameProvider
 import im.vector.app.core.resources.StringArrayProvider
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.DefaultVectorFeatures
@@ -42,7 +43,10 @@ class OnboardingRobot {
     // Tchap: Override default feature values for tests
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
     private val defaultVectorFeatures =
-            DebugVectorFeatures(context, DefaultVectorFeatures(StringArrayProvider(context.resources), BooleanProvider(context.resources))).apply {
+            DebugVectorFeatures(
+                    context,
+                    DefaultVectorFeatures(DefaultAppNameProvider(context), StringArrayProvider(context.resources), BooleanProvider(context.resources))
+            ).apply {
                 override(true, DebugFeatureKeys.tchapIsKeyBackupEnabled)
             }
 

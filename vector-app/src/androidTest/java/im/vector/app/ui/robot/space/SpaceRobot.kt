@@ -28,6 +28,7 @@ import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDr
 import com.adevinta.android.barista.internal.viewaction.ClickChildAction
 import im.vector.app.R
 import im.vector.app.core.resources.BooleanProvider
+import im.vector.app.core.resources.DefaultAppNameProvider
 import im.vector.app.core.resources.StringArrayProvider
 import im.vector.app.espresso.tools.waitUntilDialogVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
@@ -38,7 +39,8 @@ import org.hamcrest.Matchers
 
 class SpaceRobot(private val labsPreferences: LabFeaturesPreferences) {
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
-    private val features: VectorFeatures = DefaultVectorFeatures(StringArrayProvider(context.resources), BooleanProvider(context.resources))
+    private val features: VectorFeatures =
+            DefaultVectorFeatures(DefaultAppNameProvider(context), StringArrayProvider(context.resources), BooleanProvider(context.resources))
 
     fun createSpace(isFirstSpace: Boolean, block: SpaceCreateRobot.() -> Unit) {
         if (labsPreferences.isNewAppLayoutEnabled) {
