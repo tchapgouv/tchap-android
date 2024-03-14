@@ -35,7 +35,7 @@ class VoiceRecorderProviderTests {
     private val provider = spyk(
             VoiceRecorderProvider(
                     context,
-                    DefaultVectorFeatures(DefaultAppNameProvider(context),StringArrayProvider(context.resources), BooleanProvider(context.resources)),
+                    DefaultVectorFeatures(DefaultAppNameProvider(context), StringArrayProvider(context.resources), BooleanProvider(context.resources)),
                     buildVersionSdkIntProvider
             )
     )
