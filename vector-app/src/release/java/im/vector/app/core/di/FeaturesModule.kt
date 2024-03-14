@@ -20,6 +20,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import im.vector.app.core.resources.AppNameProvider
 import im.vector.app.core.resources.BooleanProvider
 import im.vector.app.core.resources.StringArrayProvider
 import im.vector.app.features.DefaultVectorFeatures
