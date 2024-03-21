@@ -16,8 +16,8 @@
 
 package im.vector.app.features.location
 
-const val MAP_BASE_URL = "https://api.maptiler.com/maps/streets/style.json"
-const val STATIC_MAP_BASE_URL = "https://api.maptiler.com/maps/basic/static/"
+const val MAP_BASE_URL = "https://openmaptiles.geo.data.gouv.fr/styles/osm-bright/style.json"
+const val STATIC_MAP_BASE_URL = "https://openmaptiles.geo.data.gouv.fr/styles/osm-bright/#"
 const val DEFAULT_PIN_ID = "DEFAULT_PIN_ID"
 
 const val INITIAL_MAP_ZOOM_IN_PREVIEW = 15.0
