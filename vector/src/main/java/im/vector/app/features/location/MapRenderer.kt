@@ -17,6 +17,7 @@
 package im.vector.app.features.location
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.util.Size
 import android.widget.ImageView
@@ -31,6 +32,7 @@ import com.mapbox.mapboxsdk.snapshotter.MapSnapshotter
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.room.detail.timeline.action.LocationUiData
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import java.io.File
 import javax.inject.Inject
 
 class MapRenderer @Inject constructor() {
@@ -65,18 +67,25 @@ class MapRenderer @Inject constructor() {
             listener: RequestListener<Drawable>,
             errorHandler: MapSnapshotter.ErrorHandler? = null,
     ) {
-        val mapSnapshotter = getMapSnapshotter(imageView.context, locationData, zoom, size)
-        mapSnapshotter.start(
-                {
-                    GlideApp.with(imageView)
-                            .load(it.bitmap)
-                            .apply(RequestOptions.centerCropTransform())
-                            .placeholder(imageView.drawable)
-                            .listener(listener)
-                            .transform(imageCornerTransformation)
-                            .into(imageView)
-                }, errorHandler
+        val context = imageView.context
+        val mapSnapshotFile = File(
+                context.cacheDir.absolutePath,
+                "${locationData.latitude}${locationData.longitude}${zoom}${size.width}${size.height}"
         )
+
+        if (mapSnapshotFile.exists()) {
+            loadMap(imageView, mapSnapshotFile, imageCornerTransformation, listener)
+        } else {
+            val mapSnapshotter = getMapSnapshotter(context, locationData, zoom, size)
+            mapSnapshotter.start(
+                    { mapSnapshot ->
+                        mapSnapshotFile.outputStream().use {
+                            mapSnapshot.bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+                        }
+                        loadMap(imageView, mapSnapshotFile, imageCornerTransformation, listener)
+                    }, errorHandler
+            )
+        }
     }
 
     fun clear(mapView: ImageView, pinView: ImageView) {
@@ -100,4 +109,19 @@ class MapRenderer @Inject constructor() {
                             .target(LatLng(locationData.latitude, locationData.longitude))
                             .build()
             ).let { MapSnapshotter(context, it) }
+
+    private fun loadMap(
+            imageView: ImageView,
+            mapSnapshotFile: File,
+            imageCornerTransformation: BitmapTransformation,
+            listener: RequestListener<Drawable>,
+    ) {
+        GlideApp.with(imageView)
+                .load(mapSnapshotFile)
+                .apply(RequestOptions.centerCropTransform())
+                .placeholder(imageView.drawable)
+                .listener(listener)
+                .transform(imageCornerTransformation)
+                .into(imageView)
+    }
 }
