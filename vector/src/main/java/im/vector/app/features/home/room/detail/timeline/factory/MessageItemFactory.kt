@@ -23,6 +23,7 @@ import android.text.TextPaint
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
+import android.util.Size
 import android.view.View
 import dagger.Lazy
 import im.vector.app.R
@@ -74,6 +75,7 @@ import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.SpanUtils
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
+import im.vector.app.features.location.MapRenderer
 import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.toLocationData
 import im.vector.app.features.media.ImageContentRenderer
@@ -127,6 +129,7 @@ class MessageItemFactory @Inject constructor(
         private val textRendererFactory: EventTextRenderer.Factory,
         private val stringProvider: StringProvider,
         private val imageContentRenderer: ImageContentRenderer,
+        private val mapRenderer: MapRenderer,
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
@@ -228,20 +231,16 @@ class MessageItemFactory @Inject constructor(
             highlight: Boolean,
             attributes: AbsMessageItem.Attributes,
     ): MessageLocationItem? {
-        val width = timelineMediaSizeProvider.getMaxSize().first
-        val height = dimensionConverter.dpToPx(MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP)
-
-        val locationUrl = locationContent.toLocationData()?.let {
-            urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, width, height)
-        }
+        val size = Size(timelineMediaSizeProvider.getMaxSize().first, dimensionConverter.dpToPx(MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP))
 
         val pinMatrixItem = if (locationContent.isSelfLocation()) informationData.matrixItem else null
 
         return MessageLocationItem_()
                 .attributes(attributes)
-                .locationUrl(locationUrl)
-                .mapWidth(width)
-                .mapHeight(height)
+                .locationData(locationContent.toLocationData())
+                .mapRenderer(mapRenderer)
+                .mapSize(size)
+                .mapZoom(INITIAL_MAP_ZOOM_IN_TIMELINE)
                 .pinMatrixItem(pinMatrixItem)
                 .locationPinProvider(locationPinProvider)
                 .highlighted(highlight)

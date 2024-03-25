@@ -23,19 +23,18 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.bumptech.glide.request.RequestOptions
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.action.LocationUiData
 import im.vector.app.features.home.room.detail.timeline.item.BindingOptions
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
+import im.vector.app.features.location.MapRenderer
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -48,6 +47,9 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
 
     @EpoxyAttribute
     lateinit var avatarRenderer: AvatarRenderer
+
+    @EpoxyAttribute
+    lateinit var mapRenderer: MapRenderer
 
     @EpoxyAttribute
     lateinit var matrixItem: MatrixItem
@@ -98,10 +100,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         holder.body.isVisible = locationUiData == null
         holder.mapViewContainer.isVisible = locationUiData != null
         locationUiData?.let { safeLocationUiData ->
-            GlideApp.with(holder.staticMapImageView)
-                    .load(safeLocationUiData.locationUrl)
-                    .apply(RequestOptions.centerCropTransform())
-                    .into(holder.staticMapImageView)
+            mapRenderer.render(safeLocationUiData, holder.staticMapImageView)
 
             val pinMatrixItem = matrixItem.takeIf { safeLocationUiData.locationOwnerId != null }
             safeLocationUiData.locationPinProvider.create(pinMatrixItem) { pinDrawable ->
@@ -113,6 +112,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
 
     override fun unbind(holder: Holder) {
         imageContentRenderer?.clear(holder.imagePreview)
+        mapRenderer.clear(holder.staticMapImageView, holder.staticMapPinImageView)
         super.unbind(holder)
     }
 

@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
+import android.util.Size
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.DateProvider
@@ -31,6 +32,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocation
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem_
 import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
+import im.vector.app.features.location.MapRenderer
 import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.toLocationData
 import org.matrix.android.sdk.api.session.Session
@@ -46,6 +48,7 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
         private val urlMapProvider: UrlMapProvider,
         private val locationPinProvider: LocationPinProvider,
         private val vectorDateFormatter: VectorDateFormatter,
+        private val mapRenderer: MapRenderer,
 ) {
 
     fun create(
@@ -102,18 +105,14 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
             attributes: AbsMessageItem.Attributes,
             runningState: LiveLocationShareViewState.Running,
     ): MessageLiveLocationItem {
-        val width = timelineMediaSizeProvider.getMaxSize().first
-        val height = dimensionConverter.dpToPx(MessageItemFactory.MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP)
-
-        val locationUrl = runningState.lastGeoUri.toLocationData()?.let {
-            urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, width, height)
-        }
+        val size = Size(timelineMediaSizeProvider.getMaxSize().first, dimensionConverter.dpToPx(MessageItemFactory.MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP))
 
         return MessageLiveLocationItem_()
                 .attributes(attributes)
-                .locationUrl(locationUrl)
-                .mapWidth(width)
-                .mapHeight(height)
+                .locationData(runningState.lastGeoUri.toLocationData())
+                .mapRenderer(mapRenderer)
+                .mapSize(size)
+                .mapZoom(INITIAL_MAP_ZOOM_IN_TIMELINE)
                 .pinMatrixItem(attributes.informationData.matrixItem)
                 .locationPinProvider(locationPinProvider)
                 .highlighted(highlight)
