@@ -100,6 +100,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         holder.body.isVisible = locationUiData == null
         holder.mapViewContainer.isVisible = locationUiData != null
         locationUiData?.let { safeLocationUiData ->
+            // Tchap: Generate and load map on device
             mapRenderer.render(safeLocationUiData, holder.staticMapImageView)
 
             val pinMatrixItem = matrixItem.takeIf { safeLocationUiData.locationOwnerId != null }

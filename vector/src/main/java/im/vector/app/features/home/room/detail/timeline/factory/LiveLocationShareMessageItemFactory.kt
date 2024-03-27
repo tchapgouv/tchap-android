@@ -33,7 +33,6 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocation
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem_
 import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
 import im.vector.app.features.location.MapRenderer
-import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.toLocationData
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -45,7 +44,6 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
         private val dimensionConverter: DimensionConverter,
         private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
         private val avatarSizeProvider: AvatarSizeProvider,
-        private val urlMapProvider: UrlMapProvider,
         private val locationPinProvider: LocationPinProvider,
         private val vectorDateFormatter: VectorDateFormatter,
         private val mapRenderer: MapRenderer,
@@ -107,6 +105,7 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
     ): MessageLiveLocationItem {
         val size = Size(timelineMediaSizeProvider.getMaxSize().first, dimensionConverter.dpToPx(MessageItemFactory.MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP))
 
+        // Tchap: Generate and load map on device
         return MessageLiveLocationItem_()
                 .attributes(attributes)
                 .locationData(runningState.lastGeoUri.toLocationData())

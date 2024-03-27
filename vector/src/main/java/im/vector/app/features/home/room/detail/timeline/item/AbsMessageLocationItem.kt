@@ -56,7 +56,7 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
     var mapZoom: Double = 0.0
 
     @EpoxyAttribute
-    var mapSize: Size = Size(0,0)
+    var mapSize: Size = Size(0, 0)
 
     @EpoxyAttribute
     lateinit var mapRenderer: MapRenderer
@@ -89,6 +89,7 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
             height = mapSize.height
         }
 
+        // Tchap: Generate and load map on device
         mapRenderer.render(
                 location,
                 mapZoom,

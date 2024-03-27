@@ -42,7 +42,6 @@ import im.vector.app.features.home.room.detail.timeline.tools.linkify
 import im.vector.app.features.html.SpanUtils
 import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
 import im.vector.app.features.location.MapRenderer
-import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.toLocationData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.settings.VectorPreferences
@@ -70,7 +69,7 @@ class MessageActionsEpoxyController @Inject constructor(
         private val eventDetailsFormatter: EventDetailsFormatter,
         private val vectorPreferences: VectorPreferences,
         private val dateFormatter: VectorDateFormatter,
-        private val urlMapProvider: UrlMapProvider,
+//        private val urlMapProvider: UrlMapProvider,
         private val locationPinProvider: LocationPinProvider
 ) : TypedEpoxyController<MessageActionState>() {
 
@@ -236,7 +235,7 @@ class MessageActionsEpoxyController @Inject constructor(
 
     private fun buildLocationUiData(state: MessageActionState): LocationUiData? {
         if (state.timelineEvent()?.root?.isLocationMessage() != true) return null
-
+        // Tchap: Generate and load map on device
         val locationContent = state.timelineEvent()?.root?.getClearContent().toModel<MessageLocationContent>(catchError = true) ?: return null
         val locationData = locationContent.toLocationData() ?: return null
         val locationOwnerId = if (locationContent.isSelfLocation()) state.informationData.senderId else null

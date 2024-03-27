@@ -76,7 +76,6 @@ import im.vector.app.features.html.SpanUtils
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
 import im.vector.app.features.location.MapRenderer
-import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.toLocationData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
@@ -146,7 +145,7 @@ class MessageItemFactory @Inject constructor(
         private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
         private val locationPinProvider: LocationPinProvider,
         private val vectorPreferences: VectorPreferences,
-        private val urlMapProvider: UrlMapProvider,
+ //       private val urlMapProvider: UrlMapProvider,
         private val liveLocationShareMessageItemFactory: LiveLocationShareMessageItemFactory,
         private val pollItemViewStateFactory: PollItemViewStateFactory,
         private val voiceBroadcastItemFactory: VoiceBroadcastItemFactory,
@@ -234,7 +233,7 @@ class MessageItemFactory @Inject constructor(
         val size = Size(timelineMediaSizeProvider.getMaxSize().first, dimensionConverter.dpToPx(MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP))
 
         val pinMatrixItem = if (locationContent.isSelfLocation()) informationData.matrixItem else null
-
+        // Tchap: Generate and load map on device
         return MessageLocationItem_()
                 .attributes(attributes)
                 .locationData(locationContent.toLocationData())
