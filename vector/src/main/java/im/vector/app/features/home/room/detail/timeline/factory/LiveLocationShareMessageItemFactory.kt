@@ -46,7 +46,7 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
         private val avatarSizeProvider: AvatarSizeProvider,
         private val locationPinProvider: LocationPinProvider,
         private val vectorDateFormatter: VectorDateFormatter,
-        private val mapRenderer: MapRenderer,
+        private val mapRenderer: MapRenderer, // Tchap: Generate and load map on device
 ) {
 
     fun create(

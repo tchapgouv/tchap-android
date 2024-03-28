@@ -60,7 +60,7 @@ import javax.inject.Inject
 class MessageActionsEpoxyController @Inject constructor(
         private val stringProvider: StringProvider,
         private val avatarRenderer: AvatarRenderer,
-        private val mapRenderer: MapRenderer,
+        private val mapRenderer: MapRenderer, // Tchap: Generate and load map on device
         private val fontProvider: EmojiCompatFontProvider,
         private val imageContentRenderer: ImageContentRenderer,
         private val dimensionConverter: DimensionConverter,
@@ -69,7 +69,7 @@ class MessageActionsEpoxyController @Inject constructor(
         private val eventDetailsFormatter: EventDetailsFormatter,
         private val vectorPreferences: VectorPreferences,
         private val dateFormatter: VectorDateFormatter,
-//        private val urlMapProvider: UrlMapProvider,
+//        private val urlMapProvider: UrlMapProvider, // Tchap: remove
         private val locationPinProvider: LocationPinProvider
 ) : TypedEpoxyController<MessageActionState>() {
 

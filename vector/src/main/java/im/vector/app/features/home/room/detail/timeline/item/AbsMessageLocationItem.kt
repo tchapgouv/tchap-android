@@ -59,7 +59,7 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
     var mapSize: Size = Size(0, 0)
 
     @EpoxyAttribute
-    lateinit var mapRenderer: MapRenderer
+    lateinit var mapRenderer: MapRenderer // Tchap: Generate and load map on device
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var locationPinProvider: LocationPinProvider? = null
@@ -71,6 +71,7 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
     }
 
     override fun unbind(holder: H) {
+        // Tchap: Generate and load map on device
         mapRenderer.clear(holder.staticMapImageView, holder.staticMapPinImageView)
         super.unbind(holder)
     }

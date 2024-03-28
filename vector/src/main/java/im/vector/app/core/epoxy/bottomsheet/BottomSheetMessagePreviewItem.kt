@@ -49,7 +49,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
     lateinit var avatarRenderer: AvatarRenderer
 
     @EpoxyAttribute
-    lateinit var mapRenderer: MapRenderer
+    lateinit var mapRenderer: MapRenderer // Tchap: Generate and load map on device
 
     @EpoxyAttribute
     lateinit var matrixItem: MatrixItem
@@ -113,6 +113,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
 
     override fun unbind(holder: Holder) {
         imageContentRenderer?.clear(holder.imagePreview)
+        // Tchap: Generate and load map on device
         mapRenderer.clear(holder.staticMapImageView, holder.staticMapPinImageView)
         super.unbind(holder)
     }

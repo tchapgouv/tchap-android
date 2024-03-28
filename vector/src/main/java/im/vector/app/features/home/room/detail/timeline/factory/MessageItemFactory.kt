@@ -128,7 +128,7 @@ class MessageItemFactory @Inject constructor(
         private val textRendererFactory: EventTextRenderer.Factory,
         private val stringProvider: StringProvider,
         private val imageContentRenderer: ImageContentRenderer,
-        private val mapRenderer: MapRenderer,
+        private val mapRenderer: MapRenderer, // Tchap: Generate and load map on device
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
@@ -145,7 +145,7 @@ class MessageItemFactory @Inject constructor(
         private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
         private val locationPinProvider: LocationPinProvider,
         private val vectorPreferences: VectorPreferences,
- //       private val urlMapProvider: UrlMapProvider,
+ //       private val urlMapProvider: UrlMapProvider, // Tchap: remove
         private val liveLocationShareMessageItemFactory: LiveLocationShareMessageItemFactory,
         private val pollItemViewStateFactory: PollItemViewStateFactory,
         private val voiceBroadcastItemFactory: VoiceBroadcastItemFactory,
