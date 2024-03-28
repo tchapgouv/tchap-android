@@ -39,7 +39,7 @@ import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
-class MapRenderer @Inject constructor() {
+class TchapMapRenderer @Inject constructor() {
     companion object {
         // TODO Tchap: should be replaced by getMapUrl()
         private val styleBuilder = Style.Builder().fromUri(MAP_BASE_URL)
@@ -88,7 +88,6 @@ class MapRenderer @Inject constructor() {
                         loadMap(imageView, mapSnapshot.bitmap, imageCornerTransformation, listener)
 
                         runCatching {
-                            Timber.d(filename)
                             mapSnapshotFile.outputStream().use {
                                 mapSnapshot.bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
                             }

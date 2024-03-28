@@ -39,7 +39,7 @@ import im.vector.app.features.home.room.detail.timeline.style.granularRoundedCor
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.MapLoadingErrorView
 import im.vector.app.features.location.MapLoadingErrorViewState
-import im.vector.app.features.location.MapRenderer
+import im.vector.app.features.location.TchapMapRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
 abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
@@ -53,13 +53,13 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
     var pinMatrixItem: MatrixItem? = null
 
     @EpoxyAttribute
-    var mapZoom: Double = 0.0
+    var mapZoom: Double = 0.0 // Tchap: Generate and load map on device
 
     @EpoxyAttribute
-    var mapSize: Size = Size(0, 0)
+    var mapSize: Size = Size(0, 0) // Tchap: Replace width and height by a size object
 
     @EpoxyAttribute
-    lateinit var mapRenderer: MapRenderer // Tchap: Generate and load map on device
+    lateinit var tchapMapRenderer: TchapMapRenderer // Tchap: Generate and load map on device
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var locationPinProvider: LocationPinProvider? = null
@@ -72,7 +72,7 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
 
     override fun unbind(holder: H) {
         // Tchap: Generate and load map on device
-        mapRenderer.clear(holder.staticMapImageView, holder.staticMapPinImageView)
+        tchapMapRenderer.clear(holder.staticMapImageView, holder.staticMapPinImageView)
         super.unbind(holder)
     }
 
@@ -91,7 +91,7 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
         }
 
         // Tchap: Generate and load map on device
-        mapRenderer.render(
+        tchapMapRenderer.render(
                 location,
                 mapZoom,
                 mapSize,

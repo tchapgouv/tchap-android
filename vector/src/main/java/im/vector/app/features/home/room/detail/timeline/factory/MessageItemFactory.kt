@@ -75,7 +75,7 @@ import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.SpanUtils
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
-import im.vector.app.features.location.MapRenderer
+import im.vector.app.features.location.TchapMapRenderer
 import im.vector.app.features.location.toLocationData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
@@ -128,7 +128,7 @@ class MessageItemFactory @Inject constructor(
         private val textRendererFactory: EventTextRenderer.Factory,
         private val stringProvider: StringProvider,
         private val imageContentRenderer: ImageContentRenderer,
-        private val mapRenderer: MapRenderer, // Tchap: Generate and load map on device
+        private val tchapMapRenderer: TchapMapRenderer, // Tchap: Generate and load map on device
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
@@ -230,6 +230,7 @@ class MessageItemFactory @Inject constructor(
             highlight: Boolean,
             attributes: AbsMessageItem.Attributes,
     ): MessageLocationItem? {
+        // Tchap: Replace width and height by a size object
         val size = Size(timelineMediaSizeProvider.getMaxSize().first, dimensionConverter.dpToPx(MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP))
 
         val pinMatrixItem = if (locationContent.isSelfLocation()) informationData.matrixItem else null
@@ -237,7 +238,7 @@ class MessageItemFactory @Inject constructor(
         return MessageLocationItem_()
                 .attributes(attributes)
                 .locationData(locationContent.toLocationData())
-                .mapRenderer(mapRenderer)
+                .mapRenderer(tchapMapRenderer)
                 .mapSize(size)
                 .mapZoom(INITIAL_MAP_ZOOM_IN_TIMELINE)
                 .pinMatrixItem(pinMatrixItem)

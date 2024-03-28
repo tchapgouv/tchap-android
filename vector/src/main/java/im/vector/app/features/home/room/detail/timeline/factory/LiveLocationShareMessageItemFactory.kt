@@ -32,7 +32,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocation
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem_
 import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
-import im.vector.app.features.location.MapRenderer
+import im.vector.app.features.location.TchapMapRenderer
 import im.vector.app.features.location.toLocationData
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -46,7 +46,7 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
         private val avatarSizeProvider: AvatarSizeProvider,
         private val locationPinProvider: LocationPinProvider,
         private val vectorDateFormatter: VectorDateFormatter,
-        private val mapRenderer: MapRenderer, // Tchap: Generate and load map on device
+        private val tchapMapRenderer: TchapMapRenderer, // Tchap: Generate and load map on device
 ) {
 
     fun create(
@@ -103,13 +103,14 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
             attributes: AbsMessageItem.Attributes,
             runningState: LiveLocationShareViewState.Running,
     ): MessageLiveLocationItem {
+        // Tchap: Replace width and height by a size object
         val size = Size(timelineMediaSizeProvider.getMaxSize().first, dimensionConverter.dpToPx(MessageItemFactory.MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP))
 
         // Tchap: Generate and load map on device
         return MessageLiveLocationItem_()
                 .attributes(attributes)
                 .locationData(runningState.lastGeoUri.toLocationData())
-                .mapRenderer(mapRenderer)
+                .mapRenderer(tchapMapRenderer)
                 .mapSize(size)
                 .mapZoom(INITIAL_MAP_ZOOM_IN_TIMELINE)
                 .pinMatrixItem(attributes.informationData.matrixItem)

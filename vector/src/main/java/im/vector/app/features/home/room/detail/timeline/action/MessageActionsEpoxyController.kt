@@ -41,7 +41,7 @@ import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovement
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
 import im.vector.app.features.html.SpanUtils
 import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
-import im.vector.app.features.location.MapRenderer
+import im.vector.app.features.location.TchapMapRenderer
 import im.vector.app.features.location.toLocationData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.settings.VectorPreferences
@@ -60,7 +60,7 @@ import javax.inject.Inject
 class MessageActionsEpoxyController @Inject constructor(
         private val stringProvider: StringProvider,
         private val avatarRenderer: AvatarRenderer,
-        private val mapRenderer: MapRenderer, // Tchap: Generate and load map on device
+        private val tchapMapRenderer: TchapMapRenderer, // Tchap: Generate and load map on device
         private val fontProvider: EmojiCompatFontProvider,
         private val imageContentRenderer: ImageContentRenderer,
         private val dimensionConverter: DimensionConverter,
@@ -87,7 +87,7 @@ class MessageActionsEpoxyController @Inject constructor(
         bottomSheetMessagePreviewItem {
             id("preview")
             avatarRenderer(host.avatarRenderer)
-            mapRenderer(host.mapRenderer)
+            mapRenderer(host.tchapMapRenderer) // Tchap: Generate and load map on device
             matrixItem(state.informationData.matrixItem)
             movementMethod(createLinkMovementMethod(host.listener))
             imageContentRenderer(host.imageContentRenderer)
