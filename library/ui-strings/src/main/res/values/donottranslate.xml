@@ -13,5 +13,5 @@
     <string name="command_description_crash_application" translatable="false">Crash the application.</string>
 
     <!--  WIP -->
-    <string name="location_map_view_copyright" translatable="false">© MapTiler © OpenStreetMap contributors</string>
+    <string name="location_map_view_copyright" translatable="false">© IGN</string> <!-- Tchap: Custom string -->
 </resources>

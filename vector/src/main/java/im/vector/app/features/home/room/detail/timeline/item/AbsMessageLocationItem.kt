@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.detail.timeline.item
 
 import android.graphics.drawable.Drawable
+import android.util.Size
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.IdRes
@@ -26,18 +27,19 @@ import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import im.vector.app.R
-import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.home.room.detail.timeline.style.granularRoundedCorners
+import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.MapLoadingErrorView
 import im.vector.app.features.location.MapLoadingErrorViewState
+import im.vector.app.features.location.TchapMapRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
 abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
@@ -45,16 +47,19 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
 ) : AbsMessageItem<H>(layoutId) {
 
     @EpoxyAttribute
-    var locationUrl: String? = null
+    var locationData: LocationData? = null
 
     @EpoxyAttribute
     var pinMatrixItem: MatrixItem? = null
 
     @EpoxyAttribute
-    var mapWidth: Int = 0
+    var mapZoom: Double = 0.0 // Tchap: Generate and load map on device
 
     @EpoxyAttribute
-    var mapHeight: Int = 0
+    var mapSize: Size = Size(0, 0) // Tchap: Replace width and height by a size object
+
+    @EpoxyAttribute
+    lateinit var tchapMapRenderer: TchapMapRenderer // Tchap: Generate and load map on device
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var locationPinProvider: LocationPinProvider? = null
@@ -65,8 +70,14 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
         bindMap(holder)
     }
 
+    override fun unbind(holder: H) {
+        // Tchap: Generate and load map on device
+        tchapMapRenderer.clear(holder.staticMapImageView, holder.staticMapPinImageView)
+        super.unbind(holder)
+    }
+
     private fun bindMap(holder: Holder) {
-        val location = locationUrl ?: return
+        val location = locationData ?: return
         val messageLayout = attributes.informationData.messageLayout
         val imageCornerTransformation = if (messageLayout is TimelineMessageLayout.Bubble) {
             messageLayout.cornersRadius.granularRoundedCorners()
@@ -75,25 +86,25 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
             RoundedCorners(dimensionConverter.dpToPx(8))
         }
         holder.staticMapImageView.updateLayoutParams {
-            width = mapWidth
-            height = mapHeight
+            width = mapSize.width
+            height = mapSize.height
         }
-        GlideApp.with(holder.staticMapImageView)
-                .load(location)
-                .apply(RequestOptions.centerCropTransform())
-                .placeholder(holder.staticMapImageView.drawable)
-                .listener(object : RequestListener<Drawable> {
+
+        // Tchap: Generate and load map on device
+        tchapMapRenderer.render(
+                location,
+                mapZoom,
+                mapSize,
+                holder.staticMapImageView,
+                imageCornerTransformation,
+                object : RequestListener<Drawable> {
                     override fun onLoadFailed(
                             e: GlideException?,
                             model: Any?,
                             target: Target<Drawable>?,
                             isFirstResource: Boolean
                     ): Boolean {
-                        holder.staticMapPinImageView.setImageDrawable(null)
-                        holder.staticMapLoadingErrorView.isVisible = true
-                        val mapErrorViewState = MapLoadingErrorViewState(imageCornerTransformation)
-                        holder.staticMapLoadingErrorView.render(mapErrorViewState)
-                        holder.staticMapCopyrightTextView.isVisible = false
+                        mapLoadFailed(holder, imageCornerTransformation)
                         return false
                     }
 
@@ -112,9 +123,18 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
                         holder.staticMapCopyrightTextView.isVisible = true
                         return false
                     }
-                })
-                .transform(imageCornerTransformation)
-                .into(holder.staticMapImageView)
+                }
+        ) {
+            mapLoadFailed(holder, imageCornerTransformation)
+        }
+    }
+
+    private fun mapLoadFailed(holder: Holder, imageCornerTransformation: BitmapTransformation) {
+        holder.staticMapPinImageView.setImageDrawable(null)
+        holder.staticMapLoadingErrorView.isVisible = true
+        val mapErrorViewState = MapLoadingErrorViewState(imageCornerTransformation)
+        holder.staticMapLoadingErrorView.render(mapErrorViewState)
+        holder.staticMapCopyrightTextView.isVisible = false
     }
 
     abstract class Holder(@IdRes stubId: Int) : AbsMessageItem.Holder(stubId) {

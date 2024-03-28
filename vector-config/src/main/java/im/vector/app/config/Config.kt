@@ -46,7 +46,7 @@ object Config {
      */
     const val ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS = false // Tchap: Disable UnifiedPush (use Firebase/background sync)
 
-    const val ENABLE_LOCATION_SHARING = false // Tchap: Disable Location Sharing
+    const val ENABLE_LOCATION_SHARING = true
     const val LOCATION_MAP_TILER_KEY = "" // Tchap: Disable Location Sharing
 
     /**
