@@ -1,3 +1,15 @@
+Changes in Tchap 2.11.0 (2024-03-29)
+====================================
+
+Features ✨
+----------
+ - Activation du partage de la localisation. ([#1020](https://github.com/tchapgouv/tchap-android/issues/1020))
+
+Other changes
+-------------
+ - Update labs visibility. ([#1019](https://github.com/tchapgouv/tchap-android/issues/1019))
+
+
 Changes in Tchap 2.10.4 (2024-03-12)
 ====================================
 

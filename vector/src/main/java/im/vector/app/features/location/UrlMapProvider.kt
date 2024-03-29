@@ -40,28 +40,28 @@ class UrlMapProvider @Inject constructor(
                 ?.mapStyleUrl
         return upstreamMapUrl ?: fallbackMapUrl
     }
-
-    fun buildStaticMapUrl(
-            locationData: LocationData,
-            zoom: Double,
-            width: Int,
-            height: Int
-    ): String {
-        return buildString {
-            append(STATIC_MAP_BASE_URL)
-            append(locationData.longitude)
-            append(",")
-            append(locationData.latitude)
-            append(",")
-            append(zoom)
-            append("/")
-            append(width)
-            append("x")
-            append(height)
-            append(".png")
-            append(keyParam)
-            // Since the default copyright font is too small we put a custom one on map
-            append("&attribution=false")
-        }
-    }
+// Tchap: Generate and load map on device
+//    fun buildStaticMapUrl(
+//            locationData: LocationData,
+//            zoom: Double,
+//            width: Int,
+//            height: Int
+//    ): String {
+//        return buildString {
+//            append(STATIC_MAP_BASE_URL)
+//            append(locationData.longitude)
+//            append(",")
+//            append(locationData.latitude)
+//            append(",")
+//            append(zoom)
+//            append("/")
+//            append(width)
+//            append("x")
+//            append(height)
+//            append(".png")
+//            append(keyParam)
+//            // Since the default copyright font is too small we put a custom one on map
+//            append("&attribution=false")
+//        }
+//    }
 }

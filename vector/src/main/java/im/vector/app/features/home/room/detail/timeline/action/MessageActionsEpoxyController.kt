@@ -15,6 +15,7 @@
  */
 package im.vector.app.features.home.room.detail.timeline.action
 
+import android.util.Size
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Success
 import im.vector.app.EmojiCompatFontProvider
@@ -40,7 +41,7 @@ import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovement
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
 import im.vector.app.features.html.SpanUtils
 import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
-import im.vector.app.features.location.UrlMapProvider
+import im.vector.app.features.location.TchapMapRenderer
 import im.vector.app.features.location.toLocationData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.settings.VectorPreferences
@@ -59,6 +60,7 @@ import javax.inject.Inject
 class MessageActionsEpoxyController @Inject constructor(
         private val stringProvider: StringProvider,
         private val avatarRenderer: AvatarRenderer,
+        private val tchapMapRenderer: TchapMapRenderer, // Tchap: Generate and load map on device
         private val fontProvider: EmojiCompatFontProvider,
         private val imageContentRenderer: ImageContentRenderer,
         private val dimensionConverter: DimensionConverter,
@@ -67,7 +69,7 @@ class MessageActionsEpoxyController @Inject constructor(
         private val eventDetailsFormatter: EventDetailsFormatter,
         private val vectorPreferences: VectorPreferences,
         private val dateFormatter: VectorDateFormatter,
-        private val urlMapProvider: UrlMapProvider,
+//        private val urlMapProvider: UrlMapProvider, // Tchap: remove
         private val locationPinProvider: LocationPinProvider
 ) : TypedEpoxyController<MessageActionState>() {
 
@@ -85,6 +87,7 @@ class MessageActionsEpoxyController @Inject constructor(
         bottomSheetMessagePreviewItem {
             id("preview")
             avatarRenderer(host.avatarRenderer)
+            tchapMapRenderer(host.tchapMapRenderer) // Tchap: Generate and load map on device
             matrixItem(state.informationData.matrixItem)
             movementMethod(createLinkMovementMethod(host.listener))
             imageContentRenderer(host.imageContentRenderer)
@@ -232,16 +235,15 @@ class MessageActionsEpoxyController @Inject constructor(
 
     private fun buildLocationUiData(state: MessageActionState): LocationUiData? {
         if (state.timelineEvent()?.root?.isLocationMessage() != true) return null
-
-        val locationContent = state.timelineEvent()?.root?.getClearContent().toModel<MessageLocationContent>(catchError = true)
-                ?: return null
-        val locationUrl = locationContent.toLocationData()
-                ?.let { urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, 1200, 800) }
-                ?: return null
+        // Tchap: Generate and load map on device
+        val locationContent = state.timelineEvent()?.root?.getClearContent().toModel<MessageLocationContent>(catchError = true) ?: return null
+        val locationData = locationContent.toLocationData() ?: return null
         val locationOwnerId = if (locationContent.isSelfLocation()) state.informationData.senderId else null
 
         return LocationUiData(
-                locationUrl = locationUrl,
+                locationData = locationData,
+                mapZoom = INITIAL_MAP_ZOOM_IN_TIMELINE,
+                mapSize = Size(1200, 800),
                 locationOwnerId = locationOwnerId,
                 locationPinProvider = locationPinProvider,
         )
