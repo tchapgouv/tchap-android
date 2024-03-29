@@ -238,7 +238,7 @@ class MessageItemFactory @Inject constructor(
         return MessageLocationItem_()
                 .attributes(attributes)
                 .locationData(locationContent.toLocationData())
-                .mapRenderer(tchapMapRenderer)
+                .tchapMapRenderer(tchapMapRenderer)
                 .mapSize(size)
                 .mapZoom(INITIAL_MAP_ZOOM_IN_TIMELINE)
                 .pinMatrixItem(pinMatrixItem)

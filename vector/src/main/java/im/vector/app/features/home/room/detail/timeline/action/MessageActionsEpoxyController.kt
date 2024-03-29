@@ -87,7 +87,7 @@ class MessageActionsEpoxyController @Inject constructor(
         bottomSheetMessagePreviewItem {
             id("preview")
             avatarRenderer(host.avatarRenderer)
-            mapRenderer(host.tchapMapRenderer) // Tchap: Generate and load map on device
+            tchapMapRenderer(host.tchapMapRenderer) // Tchap: Generate and load map on device
             matrixItem(state.informationData.matrixItem)
             movementMethod(createLinkMovementMethod(host.listener))
             imageContentRenderer(host.imageContentRenderer)
