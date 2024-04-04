@@ -32,6 +32,8 @@ class VideoPicker : Picker<MultiPickerVideoType>() {
      */
     override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerVideoType> {
         return getSelectedUriList(data).mapNotNull { selectedUri ->
+            // Tchap: Grant permission to access the selected file.
+            context.grantUriPermission(context.applicationContext.packageName, selectedUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
             selectedUri.toMultiPickerVideoType(context)
         }
     }

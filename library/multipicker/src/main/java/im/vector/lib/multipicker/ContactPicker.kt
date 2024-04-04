@@ -40,6 +40,9 @@ class ContactPicker : Picker<MultiPickerContactType>() {
         val contactList = mutableListOf<MultiPickerContactType>()
 
         data?.data?.let { selectedUri ->
+            // Tchap: Grant permission to access the selected URI.
+            context.grantUriPermission(context.applicationContext.packageName, selectedUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
             val projection = arrayOf(
                     ContactsContract.Contacts.DISPLAY_NAME,
                     ContactsContract.Contacts.PHOTO_URI,

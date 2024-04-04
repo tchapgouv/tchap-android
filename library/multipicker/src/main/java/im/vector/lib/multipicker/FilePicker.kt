@@ -42,6 +42,9 @@ class FilePicker : Picker<MultiPickerBaseType>() {
      */
     override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerBaseType> {
         return getSelectedUriList(data).mapNotNull { selectedUri ->
+            // Tchap: Grant permission to access the selected file.
+            context.grantUriPermission(context.applicationContext.packageName, selectedUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
             val type = context.contentResolver.getType(selectedUri)
 
             when {
