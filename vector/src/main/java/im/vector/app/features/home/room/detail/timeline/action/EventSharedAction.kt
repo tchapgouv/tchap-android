@@ -72,7 +72,6 @@ sealed class EventSharedAction(
     data class Redact(val eventId: String, val askForReason: Boolean, val dialogTitleRes: Int, val dialogDescriptionRes: Int) :
             EventSharedAction(R.string.message_action_item_redact, R.drawable.ic_delete, true)
 
-    // Tchap: Revoke read permission to the local file.
     data class Cancel(val event: TimelineEvent, val force: Boolean) :
             EventSharedAction(R.string.action_cancel, R.drawable.ic_close_round)
 
