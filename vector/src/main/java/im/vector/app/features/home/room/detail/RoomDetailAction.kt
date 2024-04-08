@@ -52,7 +52,8 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     data class ResendMessage(val eventId: String) : RoomDetailAction()
     data class RemoveFailedEcho(val eventId: String) : RoomDetailAction()
-    data class CancelSend(val eventId: String, val force: Boolean) : RoomDetailAction()
+    // Tchap: Revoke read permission to the local file.
+    data class CancelSend(val event: TimelineEvent, val force: Boolean) : RoomDetailAction()
 
     data class VoteToPoll(val eventId: String, val optionKey: String) : RoomDetailAction()
 
