@@ -40,6 +40,7 @@ class CameraPicker {
         val photoUri = createPhotoUri(context)
         val intent = createIntent().apply {
             putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
         activityResultLauncher.launch(intent)
         return photoUri
