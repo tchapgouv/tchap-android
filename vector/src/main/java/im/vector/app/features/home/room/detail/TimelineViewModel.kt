@@ -1103,7 +1103,7 @@ class TimelineViewModel @AssistedInject constructor(
         if (room == null) return
         // Tchap: Revoke read permission to the local file.
         // State must be in one of the sending states
-        if (action.force || action.event.root.sendState.isSending().orFalse()) {
+        if (action.force || action.event.root.sendState.isSending()) {
             room.sendService().cancelSend(action.event.eventId)
 
             val clearContent = action.event.root.getClearContent()
