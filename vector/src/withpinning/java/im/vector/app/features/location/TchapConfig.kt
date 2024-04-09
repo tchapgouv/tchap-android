@@ -16,5 +16,5 @@
 
 package im.vector.app.features.location
 
-// Tchap: Tiles from geo.data.gouv.fr
+// Tchap: Tiles from IGN
 const val MAP_BASE_URL = "https://data.geopf.fr/annexes/ressources/vectorTiles/styles/PLAN.IGN/standard.json"
