@@ -110,7 +110,7 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
         return MessageLiveLocationItem_()
                 .attributes(attributes)
                 .locationData(runningState.lastGeoUri.toLocationData())
-                .mapRenderer(tchapMapRenderer)
+                .tchapMapRenderer(tchapMapRenderer)
                 .mapSize(size)
                 .mapZoom(INITIAL_MAP_ZOOM_IN_TIMELINE)
                 .pinMatrixItem(attributes.informationData.matrixItem)

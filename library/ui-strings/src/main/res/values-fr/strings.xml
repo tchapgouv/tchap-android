@@ -562,7 +562,7 @@
         <item quantity="one">%d sélectionné</item>
         <item quantity="other">%d sélectionnés</item>
     </plurals>
-    <string name="system_alerts_header">Alertes système</string>
+    <string name="system_alerts_header">Annonces ${app_name}</string> <!-- Tchap: Custom string -->
     <string name="resource_limit_contact_admin">contacter l’administrateur de votre service</string>
     <string name="resource_limit_soft_default">Ce serveur d’accueil a dépassé une de ses limites de ressources donc <b>certains utilisateurs ne pourront pas se connecter</b>.</string>
     <string name="resource_limit_hard_default">Ce serveur d’accueil a dépassé une de ses limites de ressources.</string>

@@ -472,7 +472,7 @@
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
     <string name="low_priority_header">Low priority</string>
-    <string name="system_alerts_header">"System Alerts"</string>
+    <string name="system_alerts_header">${app_name} Alerts"</string> <!-- Tchap: Custom string -->
     <string name="suggested_header">Suggested Rooms</string>
 
     <!-- Space List fragment -->
