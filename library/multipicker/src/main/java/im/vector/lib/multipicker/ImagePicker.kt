@@ -31,9 +31,8 @@ class ImagePicker : Picker<MultiPickerImageType>() {
      * Returns selected image files or empty list if user did not select any files.
      */
     override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerImageType> {
-        return getSelectedUriList(data).mapNotNull { selectedUri ->
-            // Tchap: Grant permission to access the selected file.
-            context.grantUriPermission(context.applicationContext.packageName, selectedUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        // Tchap: Grant permission to access the selected file.
+        return getSelectedUriList(context, data).mapNotNull { selectedUri ->
             selectedUri.toMultiPickerImageType(context)
         }
     }

@@ -91,7 +91,7 @@ abstract class Picker<T> {
         activityResultLauncher.launch(createIntent().apply { addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) })
     }
 
-    protected fun getSelectedUriList(data: Intent?): List<Uri> {
+    protected fun getSelectedUriList(context: Context, data: Intent?): List<Uri> {
         val selectedUriList = mutableListOf<Uri>()
         val dataUri = data?.data
         val clipData = data?.clipData
@@ -113,6 +113,7 @@ abstract class Picker<T> {
                 }
             }
         }
-        return selectedUriList
+        // Tchap: Grant permission to access the selected file.
+        return selectedUriList.onEach { context.grantUriPermission(context.applicationContext.packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
     }
 }
