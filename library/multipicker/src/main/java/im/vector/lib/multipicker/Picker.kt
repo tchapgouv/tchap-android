@@ -114,6 +114,7 @@ abstract class Picker<T> {
             }
         }
         // Tchap: Grant permission to access the selected file.
-        return selectedUriList.onEach { context.grantUriPermission(context.applicationContext.packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
+        val packageName = context.applicationContext.packageName
+        return selectedUriList.onEach { context.grantUriPermission(packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
     }
 }
