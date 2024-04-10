@@ -518,8 +518,8 @@
     <string name="no_sticker_application_dialog_content">Vous n’avez aucun jeu d\'autocollants activé pour le moment.
 \n
 \nVoulez-vous en ajouter \?</string>
-    <string name="settings_deactivate_account_section">Désactiver le compte</string>
-    <string name="settings_deactivate_my_account">Désactiver mon compte</string>
+    <string name="settings_deactivate_account_section">Fermer le compte</string> <!-- Tchap: Custom string -->
+    <string name="settings_deactivate_my_account">Fermer mon compte</string> <!-- Tchap: Custom string -->
     <string name="settings_opt_in_of_analytics">Envoyer des statistiques d’utilisation</string>
     <string name="settings_opt_in_of_analytics_summary">${app_name} collecte des données statistiques anonymes pour nous permettre d’améliorer l’application.</string>
     <string name="widget_integration_missing_parameter">Un paramètre requis est manquant.</string>
