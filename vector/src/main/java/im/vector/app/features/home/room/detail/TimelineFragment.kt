@@ -1379,6 +1379,16 @@ class TimelineFragment :
                                 }
                                 .show()
                     }
+                    data.user -> {
+                        MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive)
+                                .setTitle(R.string.user_reported_as_inappropriate_title)
+                                .setMessage(R.string.user_reported_as_inappropriate_content)
+                                .setPositiveButton(R.string.ok, null)
+                                .setNegativeButton(R.string.block_user) { _, _ ->
+                                    timelineViewModel.handle(RoomDetailAction.IgnoreUser(data.senderId))
+                                }
+                                .show()
+                    }
                     else -> {
                         MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive)
                                 .setTitle(R.string.content_reported_title)
@@ -1895,6 +1905,13 @@ class TimelineFragment :
             }
             is EventSharedAction.IgnoreUser -> {
                 action.senderId?.let { askConfirmationToIgnoreUser(it) }
+            }
+            is EventSharedAction.ReportUser -> {
+                timelineViewModel.handle(
+                        RoomDetailAction.ReportContent(
+                                action.eventId, action.senderId, "Reporting user ${action.senderId}", user = true
+                        )
+                )
             }
             is EventSharedAction.OnUrlClicked -> {
                 onUrlClicked(action.url, action.title)
