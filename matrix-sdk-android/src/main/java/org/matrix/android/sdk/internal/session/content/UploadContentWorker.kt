@@ -17,8 +17,10 @@
 package org.matrix.android.sdk.internal.session.content
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
+import android.os.Build
 import androidx.core.net.toUri
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
@@ -115,7 +117,16 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
         if (allCancelled) {
             // there is no point in uploading the image!
             return Result.success(inputData)
-                    .also { Timber.e("## Send: Work cancelled by user") }
+                    .also {
+                        Timber.e("## Send: Work cancelled by user")
+
+                        // Tchap: Revoke read permission to the local file.
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            context.revokeUriPermission(context.packageName, params.attachment.queryUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        } else {
+                            context.revokeUriPermission(params.attachment.queryUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        }
+                    }
         }
 
         val attachment = params.attachment
@@ -396,6 +407,13 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
         )
         return Result.success(WorkerParamsFactory.toData(sendParams)).also {
             Timber.v("## handleSuccess $attachmentUrl, work is stopped $isStopped")
+
+            // Tchap: Revoke read permission to the local file.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.revokeUriPermission(context.packageName, params.attachment.queryUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            } else {
+                context.revokeUriPermission(params.attachment.queryUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
         }
     }
 

@@ -383,6 +383,7 @@ class TimelineFragment :
 
         timelineViewModel.observeViewEvents {
             when (it) {
+                is RoomDetailViewEvents.RevokeFilePermission -> revokeFilePermission(it)
                 is RoomDetailViewEvents.SendCallFeedback -> bugReporter.openBugReportScreen(requireActivity(), ReportType.VOIP)
                 is RoomDetailViewEvents.Failure -> displayErrorMessage(it)
                 is RoomDetailViewEvents.OnNewTimelineEvents -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
@@ -545,6 +546,22 @@ class TimelineFragment :
                 context = requireContext(),
                 roomId = timelineArgs.roomId
         )
+    }
+
+    // Tchap: Revoke read permission to the local file.
+    private fun revokeFilePermission(revokeFilePermission: RoomDetailViewEvents.RevokeFilePermission) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            requireContext().revokeUriPermission(
+                    requireContext().applicationContext.packageName,
+                    revokeFilePermission.uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+        } else {
+            requireContext().revokeUriPermission(
+                    revokeFilePermission.uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+        }
     }
 
     private fun displayErrorMessage(error: RoomDetailViewEvents.Failure) {
@@ -1578,14 +1595,16 @@ class TimelineFragment :
 
     private fun handleCancelSend(action: EventSharedAction.Cancel) {
         if (action.force) {
-            timelineViewModel.handle(RoomDetailAction.CancelSend(action.eventId, true))
+            // Tchap: Revoke read permission to the local file.
+            timelineViewModel.handle(RoomDetailAction.CancelSend(action.event, true))
         } else {
             MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.dialog_title_confirmation)
                     .setMessage(getString(R.string.event_status_cancel_sending_dialog_message))
                     .setNegativeButton(R.string.no, null)
                     .setPositiveButton(R.string.yes) { _, _ ->
-                        timelineViewModel.handle(RoomDetailAction.CancelSend(action.eventId, false))
+                        // Tchap: Revoke read permission to the local file.
+                        timelineViewModel.handle(RoomDetailAction.CancelSend(action.event, false))
                     }
                     .show()
         }

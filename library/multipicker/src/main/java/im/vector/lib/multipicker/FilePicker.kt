@@ -41,7 +41,8 @@ class FilePicker : Picker<MultiPickerBaseType>() {
      * Returns selected files or empty list if user did not select any files.
      */
     override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerBaseType> {
-        return getSelectedUriList(data).mapNotNull { selectedUri ->
+        // Tchap: Grant permission to access the selected file.
+        return getSelectedUriList(context, data).mapNotNull { selectedUri ->
             val type = context.contentResolver.getType(selectedUri)
 
             when {

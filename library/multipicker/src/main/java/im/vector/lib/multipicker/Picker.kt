@@ -16,6 +16,7 @@
 
 package im.vector.lib.multipicker
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -58,7 +59,15 @@ abstract class Picker<T> {
         uriList.forEach {
             for (resolveInfo in resInfoList) {
                 val packageName: String = resolveInfo.activityInfo.packageName
-                context.grantUriPermission(packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                // Tchap: Replace implicit intent by an explicit to fix crash on some devices like Xiaomi.
+                try {
+                    context.grantUriPermission(packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                } catch (e: Exception) {
+                    continue
+                }
+                data.action = null
+                data.component = ComponentName(packageName, resolveInfo.activityInfo.name)
+                break
             }
         }
         return getSelectedFiles(context, data)
@@ -82,7 +91,7 @@ abstract class Picker<T> {
         activityResultLauncher.launch(createIntent().apply { addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) })
     }
 
-    protected fun getSelectedUriList(data: Intent?): List<Uri> {
+    protected fun getSelectedUriList(context: Context, data: Intent?): List<Uri> {
         val selectedUriList = mutableListOf<Uri>()
         val dataUri = data?.data
         val clipData = data?.clipData
@@ -104,6 +113,8 @@ abstract class Picker<T> {
                 }
             }
         }
-        return selectedUriList
+        // Tchap: Grant permission to access the selected file.
+        val packageName = context.applicationContext.packageName
+        return selectedUriList.onEach { context.grantUriPermission(packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
     }
 }
