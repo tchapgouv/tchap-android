@@ -1507,7 +1507,6 @@ class TimelineViewModel @AssistedInject constructor(
     override fun onCleared() {
         timeline?.dispose()
         timeline?.removeAllListeners()
-        decryptionFailureTracker.onTimeLineDisposed(initialState.roomId)
         if (vectorPreferences.sendTypingNotifs()) {
             room?.typingService()?.userStopsTyping()
         }
