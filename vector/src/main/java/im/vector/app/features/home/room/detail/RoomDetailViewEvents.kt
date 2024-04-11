@@ -66,6 +66,11 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
             val mimeType: String?
     ) : RoomDetailViewEvents()
 
+    // Tchap: Revoke read permission to the local file.
+    data class RevokeFilePermission(
+            val uri: Uri
+    ) : RoomDetailViewEvents()
+
     data class DisplayAndAcceptCall(val call: WebRtcCall) : RoomDetailViewEvents()
 
     object DisplayPromptForIntegrationManager : RoomDetailViewEvents()
