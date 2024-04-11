@@ -1,3 +1,20 @@
+Changes in Tchap 2.11.1 (2024-04-11)
+====================================
+
+Improvements 🙌
+--------------
+ - Rebase against Element-Android v1.6.14 ([#1025](https://github.com/tchapgouv/tchap-android/issues/1025))
+
+Bugfixes 🐛
+----------
+ - Correction des crashs à l'ouverture des fichiers locaux. ([#642](https://github.com/tchapgouv/tchap-android/issues/642), [#766](https://github.com/tchapgouv/tchap-android/issues/766), [#851](https://github.com/tchapgouv/tchap-android/issues/851), [#911](https://github.com/tchapgouv/tchap-android/issues/911))
+ - Partage d'écran lors d'un appel VoIP. ([#1021](https://github.com/tchapgouv/tchap-android/issues/1021))
+
+Other changes
+-------------
+ - Mise à jour des styles de cartes pour fdroid. ([#1024](https://github.com/tchapgouv/tchap-android/issues/1024))
+
+
 Changes in Tchap 2.11.0 (2024-03-29)
 ====================================
 
