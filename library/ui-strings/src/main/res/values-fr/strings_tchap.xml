@@ -72,7 +72,7 @@
     <string name="tchap_expired_account_msg">Un e\u2011mail vous a été envoyé pour \"Renouveler votre compte ${app_name}\". Une fois que vous aurez suivi le lien qu’il contient, cliquez ci-dessous.</string>
     <string name="tchap_expired_account_resume_button">Continuer</string>
     <string name="tchap_request_renewal_email_button">Envoyer un nouvel email</string>
-    <string name="tchap_expired_account_on_new_sent_email_msg">Un nouvel e\u2011mail vous a été envoyé pour renouveler la validité de votre compte. Une fois que vous aurez suivi le lien qu’il contient, cliquez ci-dessous.</string>
+    <string name="tchap_expired_account_on_new_sent_email_msg">Un nouvel e\u2011mail vous a été envoyé pour \"Renouveler votre compte ${app_name}\". Une fois que vous aurez suivi le lien qu’il contient, cliquez ci-dessous.</string>
     <string name="tchap_expired_account_on_new_sent_email_title">Nouvel e\u2011mail envoyé</string>
 
     <!-- Login/Register Tchap -->
