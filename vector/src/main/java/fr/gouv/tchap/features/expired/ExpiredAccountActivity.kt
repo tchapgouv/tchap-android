@@ -65,10 +65,12 @@ class ExpiredAccountActivity : VectorBaseActivity<ActivityTchapExpiredBinding>()
     private fun renderState(state: ExpiredAccountViewState) {
         with(views) {
             if (state.isRenewalEmailSent) {
-                titleView.setText(R.string.tchap_expired_account_on_new_sent_email_msg)
+                titleView.setText(R.string.tchap_expired_account_on_new_sent_email_title)
+                msgView.setText(R.string.tchap_expired_account_on_new_sent_email_msg)
                 renewalEmailButton.isVisible = false
             } else {
-                titleView.setText(R.string.tchap_expired_account_msg)
+                titleView.setText(R.string.tchap_expired_account_title)
+                msgView.setText(R.string.tchap_expired_account_msg)
                 renewalEmailButton.isVisible = true
             }
         }

@@ -18,9 +18,20 @@
 
             <TextView
                 android:id="@+id/titleView"
+                style="@style/Widget.Vector.TextView.Title.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/tchap_expired_account_title"
+                android:textColor="?colorPrimary" />
+
+            <TextView
+                android:id="@+id/msgView"
                 style="@style/Widget.Vector.TextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:layout_marginBottom="22dp"
                 android:gravity="start"
                 android:text="@string/tchap_expired_account_msg"
                 android:textColor="?vctr_content_primary" />
@@ -30,8 +41,7 @@
                 style="@style/Widget.Vector.Button.Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="22dp"
+                android:layout_gravity="center_horizontal"
                 android:text="@string/tchap_expired_account_resume_button" />
 
             <Button
@@ -39,7 +49,7 @@
                 style="@style/Widget.Vector.Button.Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:layout_gravity="center_horizontal"
                 android:text="@string/tchap_request_renewal_email_button" />
 
         </LinearLayout>
