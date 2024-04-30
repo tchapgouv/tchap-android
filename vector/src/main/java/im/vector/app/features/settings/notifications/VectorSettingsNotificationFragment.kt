@@ -269,6 +269,8 @@ class VectorSettingsNotificationFragment :
                 emails.forEach { (emailPid, isEnabled) ->
                     val pref = VectorSwitchPreference(requireContext())
                     pref.title = resources.getString(R.string.settings_notification_emails_enable_for_email, emailPid.email)
+                    // Tchap: Add notification email description
+                    pref.summary = resources.getString(R.string.tchap_settings_notification_emails_summary)
                     pref.isChecked = isEnabled
                     pref.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
                         if (isChecked) {
