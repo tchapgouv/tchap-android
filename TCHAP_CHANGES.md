@@ -1,3 +1,16 @@
+Changes in Tchap 2.11.2 (2024-04-30)
+====================================
+
+Features ✨
+----------
+ - Activation des appels vocaux pour les instances Diplomatie et Finances ([#1038](https://github.com/tchapgouv/tchap-android/issues/1038))
+
+Improvements 🙌
+--------------
+ - Mise à jour de l'écran de compte expiré. ([#1035](https://github.com/tchapgouv/tchap-android/issues/1035))
+ - Améliorer la compréhension de la fonctionnalité notification par courriel. ([#1037](https://github.com/tchapgouv/tchap-android/issues/1037))
+
+
 Changes in Tchap 2.11.1 (2024-04-11)
 ====================================
 
