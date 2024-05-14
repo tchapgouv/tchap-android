@@ -50,22 +50,16 @@ unzip ${PARAM_DIRECTORY}/GplayTchapWithdmvoipWithpinning-release-unsigned.zip -d
 mv ${PARAM_DIRECTORY}/gplayTchapWithdmvoipWithpinning/release/* ${PARAM_DIRECTORY}
 rm -rf ${PARAM_DIRECTORY}/gplayTchapWithdmvoipWithpinning
 
+read -s -p "Enter your PIN: " pin
+
 printf "\n================================================================================\n"
 printf "Signing the APKs...\n"
 
-read -s -p "Enter your PIN: " pin
-
-# Sign all the apks in the directory PARAM_DIRECTORY
+# Sign, Rename and Hash all the apks in the directory PARAM_DIRECTORY
 for file in ${PARAM_DIRECTORY}/*.apk
 do
   sh ./tools/release/sign_apk_yubi.sh "${PARAM_PKCS11_CONFIG_PATH}" "${file}" "${pin}"
-done
-
-unset pin
-
-# Rename and Hash all the apks in the directory PARAM_DIRECTORY
-for file in ${PARAM_DIRECTORY}/*.apk
-do
+  
   # Rename Apk: remove unsigned by signed
   apkName="$(echo ${file} | sed -e 's/\-unsigned/-signed/')" ;
   mv "${file}" "${apkName}" ;
@@ -79,5 +73,7 @@ do
   newName="$(echo ${resultSplit[1]} | sed 's/.*\///')"
   echo "SHA256(${newName})=${resultSplit[0]}" >> ${PARAM_DIRECTORY}/${CHECKSUM_FILE}
 done
+
+unset pin
 
 echo "done !! :)"
