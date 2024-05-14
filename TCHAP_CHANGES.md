@@ -1,3 +1,15 @@
+Changes in Tchap 2.11.3 (2024-05-14)
+====================================
+
+Features ✨
+----------
+ - Activation des appels vocaux pour toutes les instances. ([#1043](https://github.com/tchapgouv/tchap-android/issues/1043))
+
+Other changes
+-------------
+ - Mise à jour du lien du serveur de notification sur dev ([#1041](https://github.com/tchapgouv/tchap-android/issues/1041))
+
+
 Changes in Tchap 2.11.2 (2024-04-30)
 ====================================
 
