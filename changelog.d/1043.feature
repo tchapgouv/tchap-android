@@ -1,0 +1,1 @@
+Activation des appels vocaux pour toutes les instances.
