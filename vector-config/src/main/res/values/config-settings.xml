@@ -43,7 +43,7 @@
     <bool name="settings_ignored_users_visible">true</bool>
 
     <!-- Level 1: Labs -->
-    <bool name="tchap_settings_labs_enable_location_sharing">false</bool> <!-- Tchap: Disable Location Sharing -->
+    <bool name="tchap_settings_labs_enable_location_sharing">true</bool> <!-- Tchap: Enable Location Sharing -->
 
     <bool name="settings_labs_deferred_dm_visible">true</bool>
     <bool name="settings_labs_deferred_dm_default">true</bool>

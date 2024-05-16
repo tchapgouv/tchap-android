@@ -23,7 +23,8 @@ then
     exit 1
 fi
 
-read -p "Please enter the artifact URL: " artifactUrl
+read -p "Please enter the artifact URL for Gplay: " artifactGplayUrl
+read -p "Please enter the artifact URL for F-Droid: " artifactFdroidUrl
 read -s -p "Please enter your GitHub token: " gitHubToken
 
 printf "\n================================================================================\n"
@@ -34,7 +35,13 @@ set +e
 
 python3 ./tools/release/download_github_artifacts.py \
     --token ${gitHubToken} \
-    --artifactUrl ${artifactUrl} \
+    --artifactUrl ${artifactGplayUrl} \
+    --directory ${PARAM_DIRECTORY} \
+    --ignoreErrors
+
+python3 ./tools/release/download_github_artifacts.py \
+    --token ${gitHubToken} \
+    --artifactUrl ${artifactFdroidUrl} \
     --directory ${PARAM_DIRECTORY} \
     --ignoreErrors
 
@@ -45,10 +52,12 @@ printf "\n======================================================================
 printf "Unzipping the artifact...\n"
 
 unzip ${PARAM_DIRECTORY}/GplayTchapWithdmvoipWithpinning-release-unsigned.zip -d ${PARAM_DIRECTORY}
+unzip ${PARAM_DIRECTORY}/FdroidTchapWithdmvoipWithoutpinning-release-unsigned.zip -d ${PARAM_DIRECTORY}
 
 # Flatten folder hierarchy
 mv ${PARAM_DIRECTORY}/gplayTchapWithdmvoipWithpinning/release/* ${PARAM_DIRECTORY}
-rm -rf ${PARAM_DIRECTORY}/gplayTchapWithdmvoipWithpinning
+mv ${PARAM_DIRECTORY}/fdroidTchapWithdmvoipWithoutpinning/release/* ${PARAM_DIRECTORY}
+rm -rf ${PARAM_DIRECTORY}/gplayTchapWithdmvoipWithpinning ${PARAM_DIRECTORY}/fdroidTchapWithdmvoipWithoutpinning
 
 read -s -p "Enter your PIN: " pin
 
