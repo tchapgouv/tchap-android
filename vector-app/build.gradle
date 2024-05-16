@@ -352,7 +352,6 @@ android {
 
         withvoip { dimension "voip" }
         withdmvoip { dimension "voip" }
-        withoutvoip { dimension "voip" }
 
         withpinning { dimension "pinning" }
         withoutpinning { dimension "pinning" }
@@ -443,24 +442,6 @@ configurations {
     gplayBtchapWithvoipWithpinningDebugImplementation
     gplayDevTchapWithvoipWithpinningDebugImplementation
     gplayTchapWithvoipWithpinningDebugImplementation
-
-
-    fdroidBtchapWithoutvoipWithpinningDebugImplementation
-    fdroidDevTchapWithoutvoipWithpinningDebugImplementation
-    fdroidTchapWithoutvoipWithpinningDebugImplementation
-
-    gplayBtchapWithoutvoipWithpinningDebugImplementation
-    gplayDevTchapWithoutvoipWithpinningDebugImplementation
-    gplayTchapWithoutvoipWithpinningDebugImplementation
-
-
-    fdroidBtchapWithoutvoipWithoutpinningDebugImplementation
-    fdroidDevTchapWithoutvoipWithoutpinningDebugImplementation
-    fdroidTchapWithoutvoipWithoutpinningDebugImplementation
-
-    gplayBtchapWithoutvoipWithoutpinningDebugImplementation
-    gplayDevTchapWithoutvoipWithoutpinningDebugImplementation
-    gplayTchapWithoutvoipWithoutpinningDebugImplementation
 
 
     fdroidBtchapWithdmvoipWithpinningDebugImplementation
@@ -562,45 +543,6 @@ dependencies {
 
     fdroidTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
     fdroidTchapWithvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
-
-    gplayBtchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
-    gplayBtchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    gplayTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
-    gplayTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    gplayDevTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
-    gplayDevTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-
-    fdroidBtchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
-    fdroidBtchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    fdroidTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
-    fdroidTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    fdroidDevTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
-    fdroidDevTchapWithoutvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-
-    gplayBtchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
-    gplayBtchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    gplayTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
-    gplayTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    gplayDevTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
-    gplayDevTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    fdroidBtchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
-    fdroidBtchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    fdroidTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
-    fdroidTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
-    fdroidDevTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipper)
-    fdroidDevTchapWithoutvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
-
 
     gplayBtchapWithdmvoipWithoutpinningDebugImplementation(libs.flipper.flipper)
     gplayBtchapWithdmvoipWithoutpinningDebugImplementation(libs.flipper.flipperNetworkPlugin)
