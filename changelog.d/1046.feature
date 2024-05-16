@@ -1,1 +1,0 @@
-Activation de la fonction de partage de localisation.
