@@ -1,3 +1,15 @@
+Changes in Tchap 2.11.5 (2024-05-22)
+====================================
+
+Bugfixes 🐛
+----------
+ - Ajout d'une exception de sécurité pour le domaine openmaptiles.github.io ([#1049](https://github.com/tchapgouv/tchap-android/issues/1049))
+
+Other changes
+-------------
+ - Suppression du variant sans VoIP. ([#1047](https://github.com/tchapgouv/tchap-android/issues/1047))
+
+
 Changes in Tchap 2.11.4 (2024-05-16)
 ====================================
 
