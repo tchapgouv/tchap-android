@@ -13,6 +13,7 @@
     <!-- Allow system certificates for firebase if used. No effect on FDroid variant -->
     <domain-config cleartextTrafficPermitted="false">
         <domain includeSubdomains="false">firebaseinstallations.googleapis.com</domain>
+        <domain includeSubdomains="false">openmaptiles.github.io</domain>
         <trust-anchors>
             <certificates src="system" />
         </trust-anchors>
