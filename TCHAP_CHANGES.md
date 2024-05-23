@@ -1,3 +1,11 @@
+Changes in Tchap 2.11.5 (2024-05-23)
+====================================
+
+Other changes
+-------------
+ - Suppression du variant sans VoIP. ([#1047](https://github.com/tchapgouv/tchap-android/issues/1047))
+
+
 Changes in Tchap 2.11.4 (2024-05-16)
 ====================================
 
@@ -11,7 +19,7 @@ Changes in Tchap 2.11.3 (2024-05-14)
 
 Features ✨
 ----------
- - Activation des appels vocaux pour toutes les instances. ([#1043](https://github.com/tchapgouv/tchap-android/issues/1043))
+ - Activation des appels vocaux pour toutes les instances en beta externe. ([#1043](https://github.com/tchapgouv/tchap-android/issues/1043))
 
 Other changes
 -------------
@@ -23,7 +31,7 @@ Changes in Tchap 2.11.2 (2024-04-30)
 
 Features ✨
 ----------
- - Activation des appels vocaux pour les instances Diplomatie et Finances ([#1038](https://github.com/tchapgouv/tchap-android/issues/1038))
+ - Activation des appels vocaux pour les instances Diplomatie et Finances en beta externe ([#1038](https://github.com/tchapgouv/tchap-android/issues/1038))
 
 Improvements 🙌
 --------------
