@@ -1,3 +1,11 @@
+Changes in Tchap 2.11.5 (2024-05-23)
+====================================
+
+Other changes
+-------------
+ - Suppression du variant sans VoIP. ([#1047](https://github.com/tchapgouv/tchap-android/issues/1047))
+
+
 Changes in Tchap 2.11.4 (2024-05-16)
 ====================================
 
