@@ -747,7 +747,7 @@ class VectorPreferences @Inject constructor(
      * @return true if the markdown is enabled
      */
     fun isMarkdownEnabled(): Boolean {
-        // Tchap: Enable markdown by default
+        // TCHAP Enable markdown by default
         return defaultPrefs.getBoolean(SETTINGS_ENABLE_MARKDOWN_KEY, true)
     }
 
@@ -993,7 +993,7 @@ class VectorPreferences @Inject constructor(
      * The user does not allow screenshots of the application.
      */
     fun useFlagSecure(): Boolean {
-        // Tchap: Screenshot is allowed when developer mode is enabled or for Gplay Pre-prod and Dev versions only.
+        // TCHAP Screenshot is allowed when developer mode is enabled or for Gplay Pre-prod and Dev versions only.
         return (!developerMode() && (BuildConfig.FLAVOR_store != "gplay" || BuildConfig.FLAVOR_target == "tchap"))
     }
 
@@ -1098,7 +1098,7 @@ class VectorPreferences @Inject constructor(
     }
 
     fun prefSpacesShowAllRoomInHome(): Boolean {
-        // Tchap: Show all rooms in the home while the spaces are hidden
+        // TCHAP Show all rooms in the home while the spaces are hidden
         return defaultPrefs.getBoolean(SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME, Config.SPACES_SHOW_ALL_IN_HOME)
     }
 

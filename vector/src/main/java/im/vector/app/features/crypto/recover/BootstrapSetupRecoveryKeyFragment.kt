@@ -42,7 +42,7 @@ class BootstrapSetupRecoveryKeyFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Tchap: we directly send user to Security Key
+        // TCHAP we directly send user to Security Key
         // Actions when a key backup exist
         // views.bootstrapSetupSecureSubmit.views.bottomSheetActionClickableZone.debouncedClicks {
         //     sharedViewModel.handle(BootstrapActions.StartKeyBackupMigration)
@@ -94,7 +94,7 @@ class BootstrapSetupRecoveryKeyFragment :
 
     private fun renderBackupMethodActions(method: SecureBackupMethod) = with(views) {
         bootstrapSetupSecureUseSecurityKey.isVisible = method.isKeyAvailable
-        // Tchap: Hide Security Passphrase
+        // TCHAP Hide Security Passphrase
 //                views.bootstrapSetupSecureUseSecurityPassphrase.isVisible = method.isPassphraseAvailable
 //                views.bootstrapSetupSecureUseSecurityPassphraseSeparator.isVisible = method.isPassphraseAvailable
     }

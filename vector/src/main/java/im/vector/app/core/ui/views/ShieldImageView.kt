@@ -36,7 +36,7 @@ class ShieldImageView @JvmOverloads constructor(
         if (isInEditMode) {
             render(RoomEncryptionTrustLevel.Trusted)
         }
-        // Tchap: Hide the shield
+        // TCHAP Hide the shield
         isVisible = false
     }
 
@@ -66,7 +66,7 @@ class ShieldImageView @JvmOverloads constructor(
     }
 
     fun render(roomEncryptionTrustLevel: RoomEncryptionTrustLevel?, borderLess: Boolean = false) {
-        // Tchap: Hide the shield
+        // TCHAP Hide the shield
         isVisible = false
 
         when (roomEncryptionTrustLevel) {

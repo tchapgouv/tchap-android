@@ -29,6 +29,6 @@ data class KeysBackupSettingViewState(
         val keysBackupVersion: KeysVersionResult? = null,
         val remainingKeysToBackup: Int = 0,
         val deleteBackupRequest: Async<Unit> = Uninitialized,
-        val backupSuccessfullyDeleted: Boolean = false // Tchap
+        val backupSuccessfullyDeleted: Boolean = false // TCHAP
 ) :
         MavericksState

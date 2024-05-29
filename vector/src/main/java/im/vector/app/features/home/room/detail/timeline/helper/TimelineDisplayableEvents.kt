@@ -44,7 +44,7 @@ object TimelineDisplayableEvents {
             EventType.CALL_REJECT,
             EventType.ENCRYPTED,
             EventType.STATE_ROOM_ENCRYPTION,
-            // Tchap: Unused in Tchap
+            // TCHAP Unused in Tchap
 //            EventType.STATE_ROOM_GUEST_ACCESS,
             EventType.STATE_ROOM_THIRD_PARTY_INVITE,
             EventType.STICKER,
@@ -63,7 +63,7 @@ object TimelineDisplayableEvents {
 
 fun TimelineEvent.isRoomConfiguration(roomCreatorUserId: String?): Boolean {
     return root.isStateEvent() && when (root.getClearType()) {
-        // Tchap: Unused in Tchap
+        // TCHAP Unused in Tchap
 //        EventType.STATE_ROOM_GUEST_ACCESS,
         EventType.STATE_ROOM_HISTORY_VISIBILITY,
         EventType.STATE_ROOM_JOIN_RULES,

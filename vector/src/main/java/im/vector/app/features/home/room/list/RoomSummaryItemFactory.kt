@@ -106,7 +106,7 @@ class RoomSummaryItemFactory @Inject constructor(
             changeMembershipState: ChangeMembershipState,
             listener: RoomListListener?
     ): VectorEpoxyModel<*> {
-        // Tchap: userXXX invited you
+        // TCHAP userXXX invited you
         val secondLine = roomSummary.inviterId?.let { userId ->
             val displayName = sessionHolder.getSafeActiveSession()?.userService()?.getUser(userId)?.toMatrixItem()?.getBestName()
                     ?.let { displayName ->
@@ -129,7 +129,7 @@ class RoomSummaryItemFactory @Inject constructor(
                 .changeMembershipState(changeMembershipState)
                 .acceptListener { listener?.onAcceptRoomInvitation(roomSummary) }
                 .rejectListener { listener?.onRejectRoomInvitation(roomSummary) }
-        // Tchap: There is no preview for invites
+        // TCHAP There is no preview for invites
 //                .listener { listener?.onRoomClicked(roomSummary) }
     }
 
@@ -204,7 +204,7 @@ class RoomSummaryItemFactory @Inject constructor(
             .useSingleLineForLastEvent(singleLineLastEvent)
             .itemLongClickListener { _ -> onLongClick?.invoke(roomSummary) ?: false }
             .itemClickListener { onClick?.invoke(roomSummary) }
-            // Tchap: Used only for Tchap
+            // TCHAP Used only for Tchap
             .roomType(RoomUtils.getRoomType(roomSummary))
 
     private fun createCenteredRoomSummaryItem(

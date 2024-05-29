@@ -105,7 +105,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>(R.layo
     @EpoxyAttribute
     var showSelected: Boolean = false
 
-    // Tchap items
+    // TCHAP items
     @EpoxyAttribute
     lateinit var roomType: TchapRoomType
 
@@ -121,22 +121,22 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>(R.layo
             it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             itemLongClickListener?.onLongClick(it) ?: false
         }
-        // Tchap: remove domain from the display name
+        // TCHAP remove domain from the display name
         holder.titleView.text = TchapUtils.getRoomNameFromDisplayName(matrixItem.getBestName(), roomType)
 
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State.Count(unreadNotificationCount, showHighlighted))
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         holder.draftView.isVisible = hasDraft
         avatarRenderer.render(matrixItem, holder.avatarImageView)
-        // Tchap: deleted in Tchap layout
+        // TCHAP deleted in Tchap layout
 //        holder.roomAvatarDecorationImageView.render(encryptionTrustLevel)
 //        holder.roomAvatarPublicDecorationImageView.isVisible = izPublic
-        // Tchap: Set invisible instead of gone to keep view size
+        // TCHAP Set invisible instead of gone to keep view size
         holder.roomAvatarFailSendingImageView.isInvisible = !hasFailedSending
         renderSelection(holder, showSelected)
         holder.roomAvatarPresenceImageView.render(showPresence, userPresence)
 
-        // Tchap items
+        // TCHAP items
         renderTchapRoomType(holder)
 
         if (useSingleLineForLastEvent) {
@@ -213,14 +213,14 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>(R.layo
         val avatarCheckedImageView by bind<ImageView>(R.id.roomAvatarCheckedImageView)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
 
-        // Tchap: deleted in Tchap layout
+        // TCHAP deleted in Tchap layout
         // val roomAvatarDecorationImageView by bind<ShieldImageView>(R.id.roomAvatarDecorationImageView)
         // val roomAvatarPublicDecorationImageView by bind<ImageView>(R.id.roomAvatarPublicDecorationImageView)
         val roomAvatarFailSendingImageView by bind<ImageView>(R.id.roomAvatarFailSendingImageView)
         val roomAvatarPresenceImageView by bind<PresenceStateImageView>(R.id.roomAvatarPresenceImageView)
         val rootView by bind<ConstraintLayout>(R.id.itemRoomLayout)
 
-        // Tchap items
+        // TCHAP items
         val domainNameView by bind<TextView>(R.id.tchapRoomDomainNameView)
         val avatarRoomTypeImageView by bind<ImageView>(R.id.tchapRoomTypeImageView)
     }

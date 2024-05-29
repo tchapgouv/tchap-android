@@ -27,7 +27,7 @@ knit {
         exclude '**/build/**'
         exclude '**/.gradle/**'
         exclude '**/towncrier/template.md'
-        exclude '**/*_CHANGES.md' // Tchap: Exclude all changes files
+        exclude '**/*_CHANGES.md' // TCHAP Exclude all changes files
     }
 }
 
@@ -101,7 +101,7 @@ static def gitBranchName() {
 
 // For Google Play build, build on any other branch than main will have a "-dev" suffix
 static def getGplayVersionSuffix() {
-    // Tchap: No suffix for tagged release
+    // TCHAP No suffix for tagged release
     if (gitBranchName() == "main" || gitTag().startsWith("tchap_v")) {
         return ""
     } else {
@@ -115,7 +115,7 @@ static def gitTag() {
 }
 
 // For F-Droid build, build on a not tagged commit will have a "-dev" suffix
-// Tchap: unused
+// TCHAP unused
 @SuppressWarnings('unused')
 static def getFdroidVersionSuffix() {
     if (gitTag() == "") {
@@ -171,13 +171,13 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        // Tchap: Disable universalApk
+        // TCHAP Disable universalApk
         // Keep abiFilter for the universalApk
 //        ndk {
 //            abiFilters "armeabi-v7a", "x86", 'arm64-v8a', 'x86_64'
 //        }
 
-        // Tchap: Use only en and fr
+        // TCHAP Use only en and fr
         resConfigs "en", "fr"
 
         // Ref: https://developer.android.com/studio/build/configure-apk-splits.html
@@ -196,7 +196,7 @@ android {
                 // Specifies a list of ABIs that Gradle should create APKs for.
                 include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
 
-                // Tchap: Disable universalApk
+                // TCHAP Disable universalApk
                 // Generate a universal APK that includes all ABIs, so user who install from CI tool can use this one by default.
                 universalApk false
             }
@@ -204,7 +204,7 @@ android {
 
         applicationVariants.all { variant ->
             // assign different version code for each output
-            // Tchap: Increase the factor from 10 to 100 due to Neo users integration
+            // TCHAP Increase the factor from 10 to 100 due to Neo users integration
             def baseVariantVersion = variant.versionCode * 100
             variant.outputs.each { output ->
                 def baseAbiVersionCode = project.ext.abiVersionCodes.get(output.getFilter(OutputFile.ABI))
@@ -238,24 +238,24 @@ android {
             storeFile file('./signature/debug.keystore')
             storePassword 'android'
         }
-        // TODO Tchap: Update
-        /* nightly {
-            keyAlias System.env.ELEMENT_ANDROID_NIGHTLY_KEYID ?: project.property("signing.element.nightly.keyId")
-            keyPassword System.env.ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD ?: project.property("signing.element.nightly.keyPassword")
-            storeFile file('./signature/nightly.keystore')
-            storePassword System.env.ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD ?: project.property("signing.element.nightly.storePassword")
-        }
-        release {
-            keyAlias project.property("signing.element.keyId")
-            keyPassword project.property("signing.element.keyPassword")
-            storeFile file(project.property("signing.element.storePath"))
-            storePassword project.property("signing.element.storePassword")
-        } */
+        // TCHAP no nightly and release signing configurations
+//        nightly {
+//            keyAlias System.env.ELEMENT_ANDROID_NIGHTLY_KEYID ?: project.property("signing.element.nightly.keyId")
+//            keyPassword System.env.ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD ?: project.property("signing.element.nightly.keyPassword")
+//            storeFile file('./signature/nightly.keystore')
+//            storePassword System.env.ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD ?: project.property("signing.element.nightly.storePassword")
+//        }
+//        release {
+//            keyAlias project.property("signing.element.keyId")
+//            keyPassword project.property("signing.element.keyPassword")
+//            storeFile file(project.property("signing.element.storePath"))
+//            storePassword project.property("signing.element.storePassword")
+//        }
     }
 
     buildTypes {
         debug {
-            // Tchap: no debug version
+            // TCHAP no debug version
 //            applicationIdSuffix ".debug"
 //            resValue "string", "app_name", "Element dbg"
 //            resValue "color", "launcher_background", "#0DBD8B"
@@ -282,7 +282,7 @@ android {
             // signingConfig signingConfigs.release
         }
 
-        // Tchap: No nightly
+        // TCHAP no nightly version
 //        nightly {
 //            initWith release
 //            applicationIdSuffix ".nightly"
@@ -316,7 +316,7 @@ android {
 //        }
     }
 
-    // Tchap: no night mode
+    // TCHAP no nightly version
 //    sourceSets {
 //        nightly {
 //            java.srcDirs += "src/release/java"
@@ -384,7 +384,7 @@ android {
         }
     }
 
-    // Tchap: Rename unsigned apk
+    // TCHAP Rename unsigned apk
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
             outputFileName = outputFileName
@@ -424,7 +424,7 @@ android {
     }
 }
 
-// Tchap: Use custom configuration for Flipper library
+// TCHAP Use custom configuration for Flipper library
 configurations {
     fdroidBtchapWithvoipWithoutpinningDebugImplementation
     fdroidDevTchapWithvoipWithoutpinningDebugImplementation
@@ -495,7 +495,7 @@ dependencies {
     // API-only library
     gplayImplementation libs.google.appdistributionApi
     // Full SDK implementation
-    // Tchap: No nightly
+    // TCHAP No nightly
 //    nightlyImplementation libs.google.appdistribution
 
     // OSS License, gplay flavor only
@@ -503,7 +503,7 @@ dependencies {
     kapt libs.dagger.hiltCompiler
     ksp libs.airbnb.epoxyProcessor
 
-    // Tchap: We had to exclude fbjni for withVoip, the library is already include in jitsi library
+    // TCHAP We had to exclude fbjni for withVoip, the library is already include in jitsi library
     // Flipper, debug builds only
     gplayBtchapWithvoipWithpinningDebugImplementation(libs.flipper.flipper) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }
     gplayBtchapWithvoipWithpinningDebugImplementation(libs.flipper.flipperNetworkPlugin) { exclude group: 'com.facebook.fbjni', module: 'fbjni' }

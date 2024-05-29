@@ -67,7 +67,7 @@ class FtueAuthWaitForEmailFragment :
         views.emailVerificationGradientContainer.setBackgroundResource(themeProvider.ftueBreakerBackground())
         views.emailVerificationTitle.text = getString(R.string.ftue_auth_email_verification_title)
                 .colorTerminatingFullStop(ThemeUtils.getColor(requireContext(), R.attr.colorSecondary))
-        views.emailVerificationSubtitle.text = params.email // Tchap: email only
+        views.emailVerificationSubtitle.text = params.email // TCHAP email only
         views.emailVerificationResendEmail.debouncedClicks {
             hideWaitingForVerificationLoading()
             viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.SendAgainThreePid))

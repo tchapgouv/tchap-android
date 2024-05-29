@@ -96,9 +96,9 @@ class BootstrapSaveRecoveryKeyFragment :
     }
 
     private val copyStartForActivityResult = registerStartForActivityResult { activityResult ->
-        // Tchap: accept to close sheet even if result is RESULT_CANCELED. The Recovery code is in the clipboard.
+        // TCHAP accept to close sheet even if result is RESULT_CANCELED. The Recovery code is in the clipboard.
         if (activityResult.resultCode == Activity.RESULT_OK || activityResult.resultCode == Activity.RESULT_CANCELED) {
-            // Tchap: Close the dialog without having to tap "Continue"
+            // TCHAP Close the dialog without having to tap "Continue"
             sharedViewModel.handle(BootstrapActions.Completed)
         }
     }
@@ -107,7 +107,7 @@ class BootstrapSaveRecoveryKeyFragment :
         val recoveryKey = state.recoveryKeyCreationInfo?.recoveryKey?.formatRecoveryKey()
                 ?: return@withState
 
-        // Tchap: copy recovery key to clipboard right now after "Copy" button is tapped.
+        // TCHAP copy recovery key to clipboard right now after "Copy" button is tapped.
         val clipService = requireContext().getSystemService<ClipboardManager>()
         clipService?.setPrimaryClip(ClipData.newPlainText("", recoveryKey))
 
@@ -119,7 +119,7 @@ class BootstrapSaveRecoveryKeyFragment :
                 context?.getString(R.string.recovery_key)
         )
 
-        // Tchap: Fix issue due to no download possible
+        // TCHAP Fix issue due to no download possible
         sharedViewModel.handle(BootstrapActions.RecoveryKeySaved)
     }
 
@@ -127,7 +127,7 @@ class BootstrapSaveRecoveryKeyFragment :
         val step = state.step
         if (step !is BootstrapStep.SaveRecoveryKey) return@withState
 
-        views.recoveryContinue.isVisible = false // Tchap: don't display "Continue" button
+        views.recoveryContinue.isVisible = false // TCHAP don't display "Continue" button
         views.bootstrapRecoveryKeyText.text = state.recoveryKeyCreationInfo?.recoveryKey?.formatRecoveryKey()
         views.bootstrapSaveText.giveAccessibilityFocusOnce()
     }

@@ -151,7 +151,7 @@ class OnboardingViewModelTest {
                 .finish()
     }
 
-    // Tchap unit test
+    // TCHAP unit test
     @Test
     fun `given usecase screen enabled, when handling sign up splash action, then emits Tchap sign up`() = runTest {
         val test = viewModel.test()
@@ -191,7 +191,7 @@ class OnboardingViewModelTest {
                 .finish()
     }
 
-    // Tchap unit test
+    // TCHAP unit test
     @Test
     fun `given combined login enabled, when handling sign in splash action, then emits Tchap sign in`() = runTest {
         val test = viewModel.test()
@@ -520,7 +520,7 @@ class OnboardingViewModelTest {
                         { copy(isLoading = true) },
                         { copy(isLoading = false) }
                 )
-                // Tchap: display error instead of server selection
+                // TCHAP display error instead of server selection
                 .assertEvent { it is OnboardingViewEvents.Failure && it.throwable is Failure.NetworkConnection }
 //                .assertEvents(OnboardingViewEvents.EditServerSelection)
                 .finish()
@@ -541,7 +541,7 @@ class OnboardingViewModelTest {
                         { copy(isLoading = true) },
                         { copy(isLoading = false) }
                 )
-                // Tchap: display error instead of server selection
+                // TCHAP display error instead of server selection
                 .assertEvent { it is OnboardingViewEvents.Failure && it.throwable is Failure.NetworkConnection }
 //                .assertEvents(OnboardingViewEvents.EditServerSelection)
                 .finish()
@@ -957,7 +957,7 @@ class OnboardingViewModelTest {
 
     @Test
     fun `given can successfully start password reset, when resetting password, then emits confirmation email sent`() = runTest {
-        // Tchap: add get platform step
+        // TCHAP add get platform step
         viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignIn))
         val test = viewModel.test()
         fakeLoginWizard.givenResetPasswordSuccess(AN_EMAIL)
@@ -983,7 +983,7 @@ class OnboardingViewModelTest {
 
     @Test
     fun `given existing reset state, when resending reset password email, then triggers reset password and emits nothing`() = runTest {
-        // Tchap: add get platform step
+        // TCHAP add get platform step
         viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignIn, resetState = ResetState(AN_EMAIL, A_PASSWORD)))
         val test = viewModel.test()
         fakeLoginWizard.givenResetPasswordSuccess(AN_EMAIL)
@@ -1040,7 +1040,7 @@ class OnboardingViewModelTest {
                         { copy(isLoading = true) },
                         { copy(isLoading = false, resetState = ResetState()) }
                 )
-                .assertEvents(OnboardingViewEvents.OpenResetPasswordComplete) // Tchap: display a new screen
+                .assertEvents(OnboardingViewEvents.OpenResetPasswordComplete) // TCHAP display a new screen
                 .finish()
     }
 

@@ -245,7 +245,7 @@ class TimelineViewModel @AssistedInject constructor(
                 }
             }
 
-            // Tchap: force to false to deactivate "Never send messages to unverified devices in room"
+            // TCHAP force to false to deactivate "Never send messages to unverified devices in room"
             session.cryptoService().getLiveBlockUnverifiedDevices(room.roomId).asFlow().map {
                 if (it) {
                     session.coroutineScope.launch {
@@ -862,8 +862,8 @@ class TimelineViewModel @AssistedInject constructor(
                 when (itemId) {
                     R.id.timeline_setting -> true
                     R.id.invite -> state.canInvite
-                    R.id.open_matrix_apps -> false // Tchap: there are no matrix apps
-                    // Tchap: check if voip is enabled
+                    R.id.open_matrix_apps -> false // TCHAP there are no matrix apps
+                    // TCHAP check if voip is enabled
                     R.id.video_call -> vectorPreferences.developerMode() && vectorFeatures.tchapIsVoipSupported(session.sessionParams.homeServerUrl)
                     R.id.voice_call -> vectorFeatures.tchapIsVoipSupported(session.sessionParams.homeServerUrl) &&
                             (state.isCallOptionAvailable() || state.hasActiveElementCallWidget())
@@ -1101,7 +1101,7 @@ class TimelineViewModel @AssistedInject constructor(
 
     private fun handleCancel(action: RoomDetailAction.CancelSend) {
         if (room == null) return
-        // Tchap: Revoke read permission to the local file.
+        // TCHAP Revoke read permission to the local file.
         // State must be in one of the sending states
         if (action.force || action.event.root.sendState.isSending()) {
             room.sendService().cancelSend(action.event.eventId)

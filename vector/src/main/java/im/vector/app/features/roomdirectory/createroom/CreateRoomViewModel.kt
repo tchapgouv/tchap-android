@@ -272,7 +272,7 @@ class CreateRoomViewModel @AssistedInject constructor(
                         )
                     }
 
-                    // Tchap: We use a custom configuration
+                    // TCHAP We use a custom configuration
 //                    when (state.roomJoinRules) {
 //                        RoomJoinRules.PUBLIC -> {
 //                            // Directory visibility

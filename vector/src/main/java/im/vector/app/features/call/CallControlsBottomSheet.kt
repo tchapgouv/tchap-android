@@ -104,7 +104,7 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
             views.callControlsToggleHoldResume.subTitle = null
             views.callControlsToggleHoldResume.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_call_hold_action)
         }
-        views.callControlsOpenDialPad.isVisible = state.canOpenDialPad // Tchap: DialPad is not available
+        views.callControlsOpenDialPad.isVisible = state.canOpenDialPad // TCHAP DialPad is not available
         views.callControlsTransfer.isVisible = state.canOpponentBeTransferred
         views.callControlsShareScreen.title = getString(if (state.isSharingScreen) R.string.call_stop_screen_sharing else R.string.call_start_screen_sharing)
     }

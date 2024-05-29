@@ -46,7 +46,7 @@ class LegalsController @Inject constructor(
 
     override fun buildModels(data: LegalsState) {
         buildAppSection()
-        // Tchap: Hide these sections until there is nothing to display (no specific HS / IS policies)
+        // TCHAP Hide these sections until there is nothing to display (no specific HS / IS policies)
 //        buildHomeserverSection(data)
 //        buildIdentityServerSection(data)
         buildThirdPartyNotices()

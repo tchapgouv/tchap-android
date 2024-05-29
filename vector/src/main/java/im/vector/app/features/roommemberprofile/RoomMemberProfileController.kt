@@ -101,7 +101,7 @@ class RoomMemberProfileController @Inject constructor(
         val host = this
 
         if (state.isRoomEncrypted) {
-            // Tchap: Hide the security part, we keep the footer.
+            // TCHAP Hide the security part, we keep the footer.
             genericFooterItem {
                 id("verify_footer")
                 text(host.stringProvider.getString(R.string.room_profile_encrypted_subtitle).toEpoxyCharSequence())
@@ -192,7 +192,7 @@ class RoomMemberProfileController @Inject constructor(
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
 
         if (!state.isMine) {
-            // Tchap: Both myUserId and otherUserId are not external
+            // TCHAP Both myUserId and otherUserId are not external
             if (!TchapUtils.isExternalTchapUser(session.myUserId) || !TchapUtils.isExternalTchapUser(state.userId)) {
                 buildProfileAction(
                         id = "direct",
@@ -203,7 +203,7 @@ class RoomMemberProfileController @Inject constructor(
             }
         }
 
-        // Tchap: Hidden in Tchap
+        // TCHAP Hidden in Tchap
 //        buildProfileAction(
 //                id = "overrideColor",
 //                editable = false,

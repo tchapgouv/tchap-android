@@ -40,7 +40,7 @@ class UrlMapProvider @Inject constructor(
                 ?.mapStyleUrl
         return upstreamMapUrl ?: fallbackMapUrl
     }
-// Tchap: Generate and load map on device
+// TCHAP Generate and load map on device
 //    fun buildStaticMapUrl(
 //            locationData: LocationData,
 //            zoom: Double,

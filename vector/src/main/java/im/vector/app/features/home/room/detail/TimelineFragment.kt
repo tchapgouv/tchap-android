@@ -548,7 +548,7 @@ class TimelineFragment :
         )
     }
 
-    // Tchap: Revoke read permission to the local file.
+    // TCHAP Revoke read permission to the local file.
     private fun revokeFilePermission(revokeFilePermission: RoomDetailViewEvents.RevokeFilePermission) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             requireContext().revokeUriPermission(
@@ -649,7 +649,7 @@ class TimelineFragment :
     }
 
     private fun startOpenFileIntent(action: RoomDetailViewEvents.OpenFile) {
-        // Tchap: Remove the ability to install an app from Tchap (https://github.com/tchapgouv/tchap-android/issues/832)
+        // TCHAP Remove the ability to install an app from Tchap (https://github.com/tchapgouv/tchap-android/issues/832)
         if (action.mimeType in listOf(MimeTypes.Apk, "application/x-authorware-bin")) {
             showApkAlert()
         } else {
@@ -1292,7 +1292,7 @@ class TimelineFragment :
                     val showPresence = roomSummary.isDirect
                     views.includeRoomToolbar.roomToolbarPresenceImageView.render(showPresence, roomSummary.directUserPresence)
                     val shieldView = if (showPresence) views.includeRoomToolbar.roomToolbarTitleShield else views.includeRoomToolbar.roomToolbarAvatarShield
-                    shieldView.render(null) // Tchap does not display encryption trust level
+                    shieldView.render(null) // TCHAP does not display encryption trust level
                     views.includeRoomToolbar.roomToolbarPublicImageView.isVisible = roomSummary.isPublic && !roomSummary.isDirect
                 }
             }
@@ -1605,7 +1605,7 @@ class TimelineFragment :
 
     private fun handleCancelSend(action: EventSharedAction.Cancel) {
         if (action.force) {
-            // Tchap: Revoke read permission to the local file.
+            // TCHAP Revoke read permission to the local file.
             timelineViewModel.handle(RoomDetailAction.CancelSend(action.event, true))
         } else {
             MaterialAlertDialogBuilder(requireContext())
@@ -1613,7 +1613,7 @@ class TimelineFragment :
                     .setMessage(getString(R.string.event_status_cancel_sending_dialog_message))
                     .setNegativeButton(R.string.no, null)
                     .setPositiveButton(R.string.yes) { _, _ ->
-                        // Tchap: Revoke read permission to the local file.
+                        // TCHAP Revoke read permission to the local file.
                         timelineViewModel.handle(RoomDetailAction.CancelSend(action.event, false))
                     }
                     .show()
@@ -1631,7 +1631,7 @@ class TimelineFragment :
 
     override fun onAvatarClicked(informationData: MessageInformationData) {
         // roomDetailViewModel.handle(RoomDetailAction.RequestVerification(informationData.userId))
-        // Tchap: Disable click on avatar in DM
+        // TCHAP Disable click on avatar in DM
         if (!timelineViewModel.isDirect()) {
             openRoomMemberProfile(informationData.senderId)
         }

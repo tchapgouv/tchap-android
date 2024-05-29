@@ -68,7 +68,7 @@ internal class DefaultNavigatorTest {
 
         navigator.switchToSpace(FakeContext().instance, spaceId, Navigator.PostSwitchSpaceAction.None)
 
-        // Tchap: Spaces are disabled
+        // TCHAP Spaces are disabled
         verify(exactly = 0) { spaceStateHandler.setCurrentSpace(spaceId) }
 //        spaceStateHandler.verifySetCurrentSpace(spaceId)
     }

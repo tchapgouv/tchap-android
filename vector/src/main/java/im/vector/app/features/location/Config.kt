@@ -16,12 +16,12 @@
 
 package im.vector.app.features.location
 
-// Tchap: Generate and load map on device
+// TCHAP Generate and load map on device
 // const val MAP_BASE_URL = "https://api.maptiler.com/maps/streets/style.json"
 // const val STATIC_MAP_BASE_URL = "https://api.maptiler.com/maps/basic/static/"
-// Tchap: Tiles from IGN
+// TCHAP Tiles from IGN
 // const val MAP_BASE_URL = "https://data.geopf.fr/annexes/ressources/vectorTiles/styles/PLAN.IGN/standard.json"
-// Tchap: Tiles from geo.data.gouv.fr
+// TCHAP Tiles from geo.data.gouv.fr
 const val MAP_BASE_URL = "https://openmaptiles.geo.data.gouv.fr/styles/osm-bright/style.json"
 const val DEFAULT_PIN_ID = "DEFAULT_PIN_ID"
 

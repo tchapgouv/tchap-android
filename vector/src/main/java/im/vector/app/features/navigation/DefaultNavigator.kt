@@ -195,7 +195,7 @@ class DefaultNavigator @Inject constructor(
             fatalError("Trying to open an unknown space $spaceId", vectorPreferences.failFast())
             return
         }
-        // Tchap: feature flag
+        // TCHAP feature flag
         if (!Config.SHOW_SPACES) {
             Timber.w("Spaces are not available in this version, navigation aborted")
             return

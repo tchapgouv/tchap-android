@@ -153,7 +153,7 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    // Tchap
+    // TCHAP
     private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
 
     private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
@@ -411,7 +411,7 @@ class OnboardingViewModel @AssistedInject constructor(
             copy(selectedAuthenticationState = SelectedAuthenticationState(authDescription))
         }
         reAuthHelper.data = password
-        // Tchap: Need to override next stage to verify the email which is mandatory before creating a Tchap account
+        // TCHAP Need to override next stage to verify the email which is mandatory before creating a Tchap account
         val overrideNextStage = email?.let { { handleRegisterAction(RegisterAction.AddThreePid(RegisterThreePid.Email(email))) } }
         handleRegisterAction(
                 RegisterAction.CreateAccount(
@@ -596,7 +596,7 @@ class OnboardingViewModel @AssistedInject constructor(
         runCatching { loginWizard.resetPasswordMailConfirmed(newPassword, logoutAllDevices = logoutAllDevices) }.fold(
                 onSuccess = {
                     setState { copy(isLoading = false, resetState = ResetState()) }
-                    val nextEvent = OnboardingViewEvents.OpenResetPasswordComplete // Tchap: always redirect to this screen
+                    val nextEvent = OnboardingViewEvents.OpenResetPasswordComplete // TCHAP always redirect to this screen
                     _viewEvents.post(nextEvent)
                 },
                 onFailure = {
@@ -740,7 +740,7 @@ class OnboardingViewModel @AssistedInject constructor(
             serverTypeOverride: ServerType?,
             postAction: suspend () -> Unit = {},
     ) {
-        // Tchap
+        // TCHAP
         currentHomeServerConnectionConfig = homeServerConnectionConfig
 
         currentJob = viewModelScope.launch {
@@ -775,7 +775,7 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun canEditServerSelectionError(@Suppress("UNUSED_PARAMETER") state: OnboardingViewState) = false
-            // Tchap: we should not be able to edit server
+            // TCHAP we should not be able to edit server
             // (state.onboardingFlow == OnboardingFlow.SignIn && vectorFeatures.isOnboardingCombinedLoginEnabled()) ||
             //         (state.onboardingFlow == OnboardingFlow.SignUp && vectorFeatures.isOnboardingCombinedRegisterEnabled())
 
@@ -981,7 +981,7 @@ class OnboardingViewModel @AssistedInject constructor(
         fun handleRegisterWith(action: AuthenticateAction.TchapRegister) {
             // TODO Tchap: restore the warning dialog for the external emails
             startTchapAuthenticationFlow(action.email) {
-                // Tchap registration doesn't require userName.
+                // TCHAP registration doesn't require userName.
                 // The initialDeviceDisplayName is useless because the account will be created after the email validation (eventually on another device).
                 // This first register request will link the account password with the returned session id (used in the following steps).
                 checkPasswordPolicy(action.password) {

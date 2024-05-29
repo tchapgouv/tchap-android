@@ -282,14 +282,14 @@ class BugReporter @Inject constructor(
                     deviceId = session.sessionParams.deviceId
                     olmVersion = session.cryptoService().getCryptoVersion(context, true)
                     bugReportURL = session.sessionParams.homeServerUrl.removeSuffix("/") + BUG_REPORT_URL_SUFFIX
-                    email = session.profileService().getThreePids().filterIsInstance<ThreePid.Email>().firstOrNull()?.email ?: "undefined" // Tchap: Add Email
+                    email = session.profileService().getThreePids().filterIsInstance<ThreePid.Email>().firstOrNull()?.email ?: "undefined" // TCHAP Add Email
                 }
 
                 if (!mIsCancelled) {
                     val text = when (reportType) {
-                        // Tchap: Use BuildConfig.FLAVOR_target instead of Element
+                        // TCHAP Use BuildConfig.FLAVOR_target instead of Element
                         ReportType.BUG_REPORT -> "[${BuildConfig.FLAVOR_target}] $bugDescription"
-                        ReportType.VOIP -> "[${BuildConfig.FLAVOR_target}] [voip-feedback] $bugDescription" // Tchap: add VoIP report type
+                        ReportType.VOIP -> "[${BuildConfig.FLAVOR_target}] [voip-feedback] $bugDescription" // TCHAP add VoIP report type
                         ReportType.SUGGESTION -> "[${BuildConfig.FLAVOR_target}] [Suggestion] $bugDescription"
                         ReportType.SPACE_BETA_FEEDBACK -> "[${BuildConfig.FLAVOR_target}] [spaces-feedback] $bugDescription"
                         ReportType.THREADS_BETA_FEEDBACK -> "[${BuildConfig.FLAVOR_target}] [threads-feedback] $bugDescription"
@@ -303,7 +303,7 @@ class BugReporter @Inject constructor(
                             .addFormDataPart("app", rageShakeAppNameForReport(reportType))
                             .addFormDataPart("user_agent", matrix.getUserAgent())
                             .addFormDataPart("user_id", userId)
-                            .addFormDataPart("email", email) // Tchap: Add Email
+                            .addFormDataPart("email", email) // TCHAP Add Email
                             .addFormDataPart("can_contact", canContact.toString())
                             .addFormDataPart("device_id", deviceId)
                             .addFormDataPart("version", versionProvider.getVersion(longFormat = true))
@@ -377,7 +377,7 @@ class BugReporter @Inject constructor(
                         ReportType.BUG_REPORT -> {
                             /* nop */
                         }
-                        // Tchap: add VoIP report type
+                        // TCHAP add VoIP report type
                         ReportType.VOIP -> {
                             builder.addFormDataPart("label", "voip-feedback")
                             builder.addFormDataPart("context", "voip")
@@ -560,7 +560,7 @@ class BugReporter @Inject constructor(
         )
     }
 
-    // Tchap: add connection type in VoIP report
+    // TCHAP add connection type in VoIP report
     private fun getConnectionType(): String {
         val connectivityManager = context.getSystemService<ConnectivityManager>()!!
         return if (sdkIntProvider.isAtLeast(Build.VERSION_CODES.M)) {
@@ -582,7 +582,7 @@ class BugReporter @Inject constructor(
         }
     }
 
-    // Tchap: check if a headset is connected
+    // TCHAP check if a headset is connected
     private fun getAudioInterface() = if (isBluetoothHeadsetConnected()) "headset_bluetooth" else "device"
 
     private fun isBluetoothHeadsetConnected(): Boolean {

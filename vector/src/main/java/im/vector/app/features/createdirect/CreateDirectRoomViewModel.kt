@@ -103,7 +103,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
     /**
      * If users already have a DM room then navigate to it instead of creating a new room.
      */
-    // Tchap: unused, replaced by Tchap.onSubmitInvitees
+    // TCHAP unused, replaced by Tchap.onSubmitInvitees
     private fun onSubmitInvitees(selections: Set<PendingSelection>) {
         val existingRoomId = selections.singleOrNull()?.getMxId()?.let { userId ->
             session.roomService().getExistingDirectRoomWithUser(userId)
@@ -166,10 +166,10 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
          * If users already have a DM room then navigate to it instead of creating a new room.
          */
         fun onSubmitInvitees(selections: Set<PendingSelection>) {
-            // Tchap: All the user invite and DM creation process has been reworked
-            // Tchap: - multi-selection is forbidden, DM are restricted to 1:1
-            // Tchap: - invites by email might expire for external accounts so we have to cancel pending invites to send a new ones
-            // Tchap: - invites by msisdn are not supported yet
+            // TCHAP All the user invite and DM creation process has been reworked
+            // TCHAP - multi-selection is forbidden, DM are restricted to 1:1
+            // TCHAP - invites by email might expire for external accounts so we have to cancel pending invites to send a new ones
+            // TCHAP - invites by msisdn are not supported yet
             val selection = selections.singleOrNull() ?: return
             setState { copy(isLoading = true) }
             when (selection) {

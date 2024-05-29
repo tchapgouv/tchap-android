@@ -43,7 +43,7 @@ abstract class BaseProfileMatrixItem<T : ProfileMatrixItem.Holder>(@LayoutRes la
     override fun bind(holder: T) {
         super.bind(holder)
         val bestName = matrixItem.getBestName()
-        // Tchap: Hide the Matrix Id
+        // TCHAP Hide the Matrix Id
 //        val matrixId = matrixItem.id
 //                .takeIf { it != bestName }
 //                // Special case for ThreePid fake matrix item

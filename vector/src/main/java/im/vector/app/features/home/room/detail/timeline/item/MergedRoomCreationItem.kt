@@ -104,7 +104,7 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
             }
         } else {
             if (isDirectRoom) {
-                // Tchap: Hide the domain if we are in DM.
+                // TCHAP Hide the domain if we are in DM.
                 resources.getString(R.string.direct_room_created_summary_item, TchapUtils.getNameFromDisplayName(data?.memberName.orEmpty()))
             } else {
                 resources.getString(R.string.room_created_summary_item, data?.memberName.orEmpty())
@@ -175,7 +175,7 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
     }
 
     private fun bindCreationSummaryTile(holder: Holder) {
-        // Tchap: Hide the domain if we are in DM.
+        // TCHAP Hide the domain if we are in DM.
         val roomDisplayName = roomSummary?.displayName?.let { if (isDirectRoom) TchapUtils.getNameFromDisplayName(it) else it }
         val membersCount = roomSummary?.otherMemberIds?.size ?: 0
 
@@ -218,7 +218,7 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
     }
 
     private fun renderRoomDescription(holder: Holder) {
-        // Tchap: Hide the domain if we are in DM.
+        // TCHAP Hide the domain if we are in DM.
         val roomDisplayName = roomSummary?.displayName?.let { if (isDirectRoom) TchapUtils.getNameFromDisplayName(it) else it }
 
         val resources = holder.roomDescriptionText.resources

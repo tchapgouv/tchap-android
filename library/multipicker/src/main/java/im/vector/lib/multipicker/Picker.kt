@@ -59,7 +59,7 @@ abstract class Picker<T> {
         uriList.forEach {
             for (resolveInfo in resInfoList) {
                 val packageName: String = resolveInfo.activityInfo.packageName
-                // Tchap: Replace implicit intent by an explicit to fix crash on some devices like Xiaomi.
+                // TCHAP Replace implicit intent by an explicit to fix crash on some devices like Xiaomi.
                 try {
                     context.grantUriPermission(packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 } catch (e: Exception) {
@@ -113,7 +113,7 @@ abstract class Picker<T> {
                 }
             }
         }
-        // Tchap: Grant permission to access the selected file.
+        // TCHAP Grant permission to access the selected file.
         val packageName = context.applicationContext.packageName
         return selectedUriList.onEach { context.grantUriPermission(packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
     }

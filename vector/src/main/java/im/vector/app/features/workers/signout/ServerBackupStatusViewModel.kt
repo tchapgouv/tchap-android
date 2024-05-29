@@ -112,7 +112,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(
     private val keyBackupFlow = MutableSharedFlow<KeysBackupState>(0)
 
     init {
-        // Tchap: if key backup is not supported, do nothing
+        // TCHAP if key backup is not supported, do nothing
         if (vectorFeatures.tchapIsKeyBackupEnabled()) {
             init()
         }

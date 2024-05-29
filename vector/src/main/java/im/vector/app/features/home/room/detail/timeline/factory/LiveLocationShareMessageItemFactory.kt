@@ -46,7 +46,7 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
         private val avatarSizeProvider: AvatarSizeProvider,
         private val locationPinProvider: LocationPinProvider,
         private val vectorDateFormatter: VectorDateFormatter,
-        private val tchapMapRenderer: TchapMapRenderer, // Tchap: Generate and load map on device
+        private val tchapMapRenderer: TchapMapRenderer, // TCHAP Generate and load map on device
 ) {
 
     fun create(
@@ -103,10 +103,10 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
             attributes: AbsMessageItem.Attributes,
             runningState: LiveLocationShareViewState.Running,
     ): MessageLiveLocationItem {
-        // Tchap: Replace width and height by a size object
+        // TCHAP Replace width and height by a size object
         val size = Size(timelineMediaSizeProvider.getMaxSize().first, dimensionConverter.dpToPx(MessageItemFactory.MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP))
 
-        // Tchap: Generate and load map on device
+        // TCHAP Generate and load map on device
         return MessageLiveLocationItem_()
                 .attributes(attributes)
                 .locationData(runningState.lastGeoUri.toLocationData())

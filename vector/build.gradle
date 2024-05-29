@@ -42,7 +42,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        // Tchap: Disable universalApk
+        // TCHAP Disable universalApk
         // Keep abiFilter for the universalApk
 //        ndk {
 //            abiFilters "armeabi-v7a", "x86", 'arm64-v8a', 'x86_64'
@@ -269,7 +269,7 @@ dependencies {
 
     implementation "androidx.emoji2:emoji2:1.3.0"
 
-    // Tchap: Manage jitsi lib
+    // TCHAP Manage jitsi lib
     // WebRTC
     withdmvoipImplementation('org.jitsi:webrtc:111.0.1')
     // Jitsi
@@ -284,7 +284,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
-    // Tchap: Fix issue on okhttp3 import
+    // TCHAP Fix issue on okhttp3 import
     api 'com.squareup.okhttp3:okhttp'
 
     // QR-code
