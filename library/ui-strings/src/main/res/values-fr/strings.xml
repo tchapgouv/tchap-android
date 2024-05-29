@@ -2492,7 +2492,7 @@
     <string name="time_unit_minute_short">min</string>
     <string name="time_unit_hour_short">h</string>
     <string name="live_location_labs_promotion_switch_title">Activer le partage de localisation</string>
-    <string name="live_location_labs_promotion_description">Attention : c\'est une fonctionnalité expérimentale qui utilise une implémentation temporaire. Cela implique que vous ne pourrez pas supprimer votre historique de positions, et les utilisateurs avancés pourront voir votre historique de positions même après avoir arrêter le partage de votre position en continu dans ce salon.</string>
+    <string name="live_location_labs_promotion_description">Attention : l’historique des positions partagées sera accessible aux autres membres du salon même après avoir arrêter le partage.</string> <!-- Tchap: Custom string -->
     <string name="live_location_labs_promotion_title">Partage de position en continu</string>
     <string name="settings_troubleshoot_test_current_gateway">Passerelle actuelle : %s</string>
     <string name="settings_troubleshoot_test_current_gateway_title">Passerelle</string>
