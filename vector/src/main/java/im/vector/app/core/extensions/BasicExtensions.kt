@@ -22,7 +22,7 @@ import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.ensurePrefix
 import java.util.regex.Pattern
 
-// Tchap: regular expression in accordance with RFC 5322 for restricting consecutive, leading and trailing dots
+// TCHAP regular expression in accordance with RFC 5322 for restricting consecutive, leading and trailing dots
 const val emailPattern = "^[a-zA-Z0-9_!#\$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#\$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*\$"
 val emailAddress: Pattern = Pattern.compile(emailPattern)
 

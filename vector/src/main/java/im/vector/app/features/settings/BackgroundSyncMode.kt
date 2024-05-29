@@ -39,11 +39,11 @@ enum class BackgroundSyncMode {
     FDROID_BACKGROUND_SYNC_MODE_DISABLED;
 
     companion object {
-        // Tchap: Force a default value: 120 sec
+        // TCHAP Force a default value: 120 sec
         const val DEFAULT_SYNC_DELAY_SECONDS = 120
         const val DEFAULT_SYNC_TIMEOUT_SECONDS = 6
 
-        // Tchap: Force a minimum value: 10 sec
+        // TCHAP Force a minimum value: 10 sec
         const val MINIMUM_SYNC_DELAY_SECONDS = 10
 
         fun fromString(value: String?): BackgroundSyncMode = values().firstOrNull { it.name == value }

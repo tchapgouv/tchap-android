@@ -128,7 +128,7 @@ class MessageItemFactory @Inject constructor(
         private val textRendererFactory: EventTextRenderer.Factory,
         private val stringProvider: StringProvider,
         private val imageContentRenderer: ImageContentRenderer,
-        private val tchapMapRenderer: TchapMapRenderer, // Tchap: Generate and load map on device
+        private val tchapMapRenderer: TchapMapRenderer, // TCHAP Generate and load map on device
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
@@ -145,7 +145,7 @@ class MessageItemFactory @Inject constructor(
         private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
         private val locationPinProvider: LocationPinProvider,
         private val vectorPreferences: VectorPreferences,
- //       private val urlMapProvider: UrlMapProvider, // Tchap: remove
+ //       private val urlMapProvider: UrlMapProvider, // TCHAP remove
         private val liveLocationShareMessageItemFactory: LiveLocationShareMessageItemFactory,
         private val pollItemViewStateFactory: PollItemViewStateFactory,
         private val voiceBroadcastItemFactory: VoiceBroadcastItemFactory,
@@ -230,11 +230,11 @@ class MessageItemFactory @Inject constructor(
             highlight: Boolean,
             attributes: AbsMessageItem.Attributes,
     ): MessageLocationItem? {
-        // Tchap: Replace width and height by a size object
+        // TCHAP Replace width and height by a size object
         val size = Size(timelineMediaSizeProvider.getMaxSize().first, dimensionConverter.dpToPx(MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP))
 
         val pinMatrixItem = if (locationContent.isSelfLocation()) informationData.matrixItem else null
-        // Tchap: Generate and load map on device
+        // TCHAP Generate and load map on device
         return MessageLocationItem_()
                 .attributes(attributes)
                 .locationData(locationContent.toLocationData())
@@ -352,7 +352,7 @@ class MessageItemFactory @Inject constructor(
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
-                // Tchap: Use for the Antivirus
+                // TCHAP Use for the Antivirus
                 .elementToDecrypt(messageContent.encryptedFileInfo?.toElementToDecrypt())
                 .contentScannerStateTracker(contentScannerStateTracker)
     }
@@ -418,7 +418,7 @@ class MessageItemFactory @Inject constructor(
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
-                // Tchap: Use for the Antivirus
+                // TCHAP Use for the Antivirus
                 .elementToDecrypt(messageContent.encryptedFileInfo?.toElementToDecrypt())
                 .contentScannerStateTracker(contentScannerStateTracker)
     }
@@ -483,7 +483,7 @@ class MessageItemFactory @Inject constructor(
                 .highlighted(highlight)
                 .filename(messageContent.body)
                 .iconRes(R.drawable.ic_paperclip)
-                // Tchap: Use for the Antivirus
+                // TCHAP Use for the Antivirus
                 .contentScannerStateTracker(contentScannerStateTracker)
                 .encryptedFileInfo(messageContent.encryptedFileInfo?.toElementToDecrypt())
     }
@@ -550,7 +550,7 @@ class MessageItemFactory @Inject constructor(
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .playable(playable)
-                // Tchap: Use for the Antivirus
+                // TCHAP Use for the Antivirus
                 .contentScannerStateTracker(contentScannerStateTracker)
                 .highlighted(highlight)
                 .mediaData(data)

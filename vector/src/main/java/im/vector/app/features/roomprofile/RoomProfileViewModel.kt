@@ -182,7 +182,7 @@ class RoomProfileViewModel @AssistedInject constructor(
                 }
     }
 
-    // Tchap: Observe the admin members to know if the user is the last admin of the room
+    // TCHAP Observe the admin members to know if the user is the last admin of the room
     private fun observeAdminMembers() {
         val roomMemberQueryParams = roomMemberQueryParams {
             displayName = QueryStringValue.IsNotEmpty
@@ -218,7 +218,7 @@ class RoomProfileViewModel @AssistedInject constructor(
             is RoomProfileAction.ShareRoomProfile -> handleShareRoomProfile()
             RoomProfileAction.CreateShortcut -> handleCreateShortcut()
             RoomProfileAction.RestoreEncryptionState -> restoreEncryptionState()
-            // Tchap: force to false to deactivate "Never send messages to unverified devices in room"
+            // TCHAP force to false to deactivate "Never send messages to unverified devices in room"
 //            is RoomProfileAction.SetEncryptToVerifiedDeviceOnly -> setEncryptToVerifiedDeviceOnly(action.enabled)
         }
     }
@@ -291,7 +291,7 @@ class RoomProfileViewModel @AssistedInject constructor(
                 }
     }
 
-    // Tchap: force to false to deactivate "Never send messages to unverified devices in room"
+    // TCHAP force to false to deactivate "Never send messages to unverified devices in room"
 //    private fun setEncryptToVerifiedDeviceOnly(enabled: Boolean) {
 //        session.coroutineScope.launch {
 //            session.cryptoService().setRoomBlockUnverifiedDevices(room.roomId, enabled)

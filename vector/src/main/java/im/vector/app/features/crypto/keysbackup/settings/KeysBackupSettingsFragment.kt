@@ -85,7 +85,7 @@ class KeysBackupSettingsFragment :
         }
     }
 
-    // Tchap
+    // TCHAP
     override fun didDeleteBackupSuccessfully() {
         activity?.let {
             it.finish()

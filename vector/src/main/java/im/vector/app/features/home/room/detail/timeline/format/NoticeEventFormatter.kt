@@ -71,7 +71,7 @@ class NoticeEventFormatter @Inject constructor(
 
     fun format(timelineEvent: TimelineEvent, isDm: Boolean): CharSequence? {
         val event = timelineEvent.root
-        // Tchap: Hide the domain if we are in DM.
+        // TCHAP Hide the domain if we are in DM.
         val senderName = if (isDm) {
             TchapUtils.getNameFromDisplayName(timelineEvent.senderInfo.disambiguatedDisplayName)
         } else {
@@ -690,7 +690,7 @@ class NoticeEventFormatter @Inject constructor(
             prevEventContent: RoomMemberContent?,
             isDm: Boolean
     ): String? {
-        // Tchap: Remove domain name in case of DM.
+        // TCHAP Remove domain name in case of DM.
         val senderDisplayName = senderName ?: event.senderId ?: ""
 
         val targetDisplayName: String = if (isDm) {

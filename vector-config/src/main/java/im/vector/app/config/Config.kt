@@ -23,7 +23,7 @@ import kotlin.time.Duration.Companion.days
  */
 object Config {
 
-    // Tchap: The spaces feature is hidden, show all rooms in the home
+    // TCHAP The spaces feature is hidden, show all rooms in the home
     const val SHOW_SPACES = false
     const val SPACES_SHOW_ALL_IN_HOME = !SHOW_SPACES
 
@@ -44,10 +44,10 @@ object Config {
      * - Changing the value from `false` to `true` will let the user be able to select an external UnifiedPush distributor;
      * - Changing the value from `true` to `false` will force the app to return to the background sync / Firebase Push.
      */
-    const val ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS = false // Tchap: Disable UnifiedPush (use Firebase/background sync)
+    const val ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS = false // TCHAP Disable UnifiedPush (use Firebase/background sync)
 
     const val ENABLE_LOCATION_SHARING = true
-    const val LOCATION_MAP_TILER_KEY = "" // Tchap: No key for map is needed
+    const val LOCATION_MAP_TILER_KEY = "" // TCHAP No key for map is needed
 
     /**
      * Whether to read the `io.element.functional_members` state event
@@ -83,22 +83,22 @@ object Config {
      * The analytics configuration to use for the Debug build type.
      * Can be disabled by providing Analytics.Disabled
      */
-    val DEBUG_ANALYTICS_CONFIG = Analytics.Disabled // Tchap: No analytics
+    val DEBUG_ANALYTICS_CONFIG = Analytics.Disabled // TCHAP No analytics
 
     /**
      * The analytics configuration to use for the Release build type.
      * Can be disabled by providing Analytics.Disabled
      */
-    val RELEASE_ANALYTICS_CONFIG = Analytics.Disabled // Tchap: No analytics
+    val RELEASE_ANALYTICS_CONFIG = Analytics.Disabled // TCHAP No analytics
 
     /**
      * The analytics configuration to use for the Nightly build type.
      * Can be disabled by providing Analytics.Disabled
      */
-    val NIGHTLY_ANALYTICS_CONFIG = Analytics.Disabled // Tchap: No analytics
-    val RELEASE_R_ANALYTICS_CONFIG = Analytics.Disabled // Tchap: No analytics
-    val ER_NIGHTLY_ANALYTICS_CONFIG = Analytics.Disabled // Tchap: No analytics
-    val ER_DEBUG_ANALYTICS_CONFIG = Analytics.Disabled // Tchap: No analytics
+    val NIGHTLY_ANALYTICS_CONFIG = Analytics.Disabled // TCHAP No analytics
+    val RELEASE_R_ANALYTICS_CONFIG = Analytics.Disabled // TCHAP No analytics
+    val ER_NIGHTLY_ANALYTICS_CONFIG = Analytics.Disabled // TCHAP No analytics
+    val ER_DEBUG_ANALYTICS_CONFIG = Analytics.Disabled // TCHAP No analytics
 
     val SHOW_UNVERIFIED_SESSIONS_ALERT_AFTER_MILLIS = 7.days.inWholeMilliseconds // 1 Week
 }

@@ -55,7 +55,7 @@ class RealmSessionStoreMigration43Test {
         realm?.close()
     }
 
-    // Tchap: Use custom realm database
+    // TCHAP Use custom realm database
     @Test
     fun migrationShouldBeNeeed() {
         val realmName = "tchap_session_41.realm"
@@ -76,7 +76,7 @@ class RealmSessionStoreMigration43Test {
         }
     }
 
-    // Tchap: Use custom realm database
+    // TCHAP Use custom realm database
     //  Database key for alias `session_db_feb3823dd11e8b4b0b19d5d1d9e3b864`: 2948ff8106ad80ca8aeba7ef59775075258d8805f9f6eb306add6c3097154bf5c99bbc965931a29e4512f0b3981d3a562c4c86b860846bac2312e1ab61026762
     // $167541532417nKwjC:agent2.tchap.incubateur.net
     // $167541543920SxkBP:agent2.tchap.incubateur.net

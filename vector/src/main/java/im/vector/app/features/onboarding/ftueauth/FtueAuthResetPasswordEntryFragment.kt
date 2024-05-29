@@ -91,7 +91,7 @@ class FtueAuthResetPasswordEntryFragment :
 
         private var showWarning: Boolean = true
 
-        // Tchap: Show warning once before changing the password
+        // TCHAP Show warning once before changing the password
         fun resetPassword() {
             if (showWarning) {
                 showWarning = false

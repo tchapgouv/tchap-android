@@ -230,10 +230,10 @@ class HomeActivity :
                 .stream()
                 .onEach { sharedAction ->
                     when (sharedAction) {
-                        // Tchap: Custom implementation
+                        // TCHAP Custom implementation
                         is HomeActivitySharedAction.InviteByEmail -> Unit // no-op
                         HomeActivitySharedAction.OpenTermAndConditions -> {
-                            // Tchap: the Term And Conditions url is detected as a permalink (same prefix), which make the application fail to open it from
+                            // TCHAP the Term And Conditions url is detected as a permalink (same prefix), which make the application fail to open it from
                             // ChromeCustomTab, so we open it here directly in a WebView
                             val intent = VectorWebViewActivity.getIntent(this, VectorSettingsUrls.TAC, getString(R.string.settings_app_term_conditions))
                             startActivity(intent)
@@ -267,7 +267,7 @@ class HomeActivity :
 
         homeActivityViewModel.observeViewEvents {
             when (it) {
-                // Tchap: hide promote Xsss
+                // TCHAP hide promote Xsss
                 // is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning(it)
                 is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> {}
                 is HomeActivityViewEvents.CurrentSessionNotVerified -> handleOnNewSession(it)
@@ -649,7 +649,7 @@ class HomeActivity :
                 true
             }
             R.id.menu_home_report_bug -> {
-                // Tchap: Disable default value for screenshot
+                // TCHAP Disable default value for screenshot
                 bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT, withScreenshot = false)
                 true
             }
@@ -680,7 +680,7 @@ class HomeActivity :
                 true
             }
             R.id.menu_home_invite_friends -> {
-                // Tchap: change for invite by email
+                // TCHAP change for invite by email
                 // launchInviteFriends()
                 inviteByEmail()
                 true
@@ -689,7 +689,7 @@ class HomeActivity :
                 launchQrCode()
                 true
             }
-            // Tchap: new faq entry
+            // TCHAP new faq entry
             R.id.menu_home_faq -> {
                 openUrlInChromeCustomTab(this, null, VectorSettingsUrls.HELP)
                 true

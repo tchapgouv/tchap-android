@@ -46,7 +46,7 @@ class FdroidNotificationTroubleshootTestManagerFactory @Inject constructor(
         private val testUnifiedPushEndpoint: TestUnifiedPushEndpoint,
         private val testAvailableUnifiedPushDistributors: TestAvailableUnifiedPushDistributors,
         private val testEndpointAsTokenRegistration: TestEndpointAsTokenRegistration,
-        // private val testPushFromPushGateway: TestPushFromPushGateway, // Tchap: remove
+        // private val testPushFromPushGateway: TestPushFromPushGateway, // TCHAP remove
         private val testAutoStartBoot: TestAutoStartBoot,
         private val testBackgroundRestrictions: TestBackgroundRestrictions,
         private val testBatteryOptimization: TestBatteryOptimization,
@@ -72,7 +72,7 @@ class FdroidNotificationTroubleshootTestManagerFactory @Inject constructor(
             mgr.addTest(testUnifiedPushGateway)
             mgr.addTest(testUnifiedPushEndpoint)
             mgr.addTest(testEndpointAsTokenRegistration)
-//            mgr.addTest(testPushFromPushGateway) // Tchap: remove
+//            mgr.addTest(testPushFromPushGateway) // TCHAP remove
         }
         mgr.addTest(testNotification)
         return mgr

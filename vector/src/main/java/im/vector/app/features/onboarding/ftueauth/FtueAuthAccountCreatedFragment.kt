@@ -52,7 +52,7 @@ class FtueAuthAccountCreatedFragment :
     }
 
     override fun updateWithState(state: OnboardingViewState) {
-        // Tchap: custom string
+        // TCHAP custom string
         val subtitle = getString(R.string.tchap_ftue_account_created_subtitle)
         views.accountCreatedSubtitle.text = subtitle
         val canPersonalize = state.personalizationState.supportsPersonalization()

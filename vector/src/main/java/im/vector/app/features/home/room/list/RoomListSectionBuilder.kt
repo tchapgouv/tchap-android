@@ -221,7 +221,7 @@ class RoomListSectionBuilder(
             liveSuggestedRooms.postValue(it)
         }.launchIn(viewModelScope)
 
-        // Tchap: bypass temporarily live suggested rooms to prevent infinite load
+        // TCHAP bypass temporarily live suggested rooms to prevent infinite load
 //        sections.add(
 //                RoomsSection(
 //                        sectionName = stringProvider.getString(R.string.suggested_header),

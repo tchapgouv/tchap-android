@@ -40,7 +40,7 @@ import im.vector.app.waitForView
 
 class OnboardingRobot {
 
-    // Tchap: Override default feature values for tests
+    // TCHAP Override default feature values for tests
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
     private val defaultVectorFeatures =
             DebugVectorFeatures(

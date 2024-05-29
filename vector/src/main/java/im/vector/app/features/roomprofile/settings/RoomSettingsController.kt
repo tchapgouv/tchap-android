@@ -149,7 +149,7 @@ class RoomSettingsController @Inject constructor(
 
         buildRoomAccessRules(data, roomType)
 
-        // Tchap: Disable "Allow guest to join" switch
+        // TCHAP Disable "Allow guest to join" switch
 //        val isPublic = (data.newRoomJoinRules.newJoinRules ?: data.currentRoomJoinRules) == RoomJoinRules.PUBLIC
 //        if (vectorPreferences.developerMode() && isPublic) {
 //            val guestAccess = data.newRoomJoinRules.newGuestAccess ?: data.currentGuestAccess

@@ -202,7 +202,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                 room.flow().liveRoomSummary().unwrap(),
                 room.flow().liveRoomMembers(roomMemberQueryParams)
         ) { pl, sum, members ->
-            // Tchap: We disable sending messages when the DM is empty or if powerLevel doesn't authorize the sending message action.
+            // TCHAP We disable sending messages when the DM is empty or if powerLevel doesn't authorize the sending message action.
             val isLastMember = members.none { it.userId != session.myUserId }
             val roomType = room.roomSummary()?.let { RoomUtils.getRoomType(it) } ?: TchapRoomType.UNKNOWN
             val isLastMemberInDm = isLastMember && roomType == TchapRoomType.DIRECT

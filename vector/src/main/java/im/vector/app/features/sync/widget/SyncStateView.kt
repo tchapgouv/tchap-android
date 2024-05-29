@@ -63,7 +63,7 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
 
         if (newState == SyncState.NoNetwork) {
             val isAirplaneModeOn = context.isAirplaneModeOn()
-            // Tchap: Add service status URL
+            // TCHAP Add service status URL
             val statusLink = context.getString(R.string.tchap_no_connection_service_status)
             val spannable = SpannableString("${context.getString(R.string.no_connectivity_to_the_server_indicator)} $statusLink")
             spannable.setSpan(StyleSpan(Typeface.BOLD), spannable.length - statusLink.length, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

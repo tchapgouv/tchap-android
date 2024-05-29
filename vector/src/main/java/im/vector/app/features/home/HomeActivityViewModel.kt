@@ -117,7 +117,7 @@ class HomeActivityViewModel @AssistedInject constructor(
     private var isInitialized = false
     private var checkBootstrap = false
 
-    // Tchap: Disable cross-signing
+    // TCHAP Disable cross-signing
     private var hasCheckedBootstrap = !vectorFeatures.tchapIsCrossSigningEnabled()
     private var onceTrusted = false
 
@@ -136,12 +136,12 @@ class HomeActivityViewModel @AssistedInject constructor(
         observeAnalytics()
         observeReleaseNotes()
         initThreadsMigration()
-        // Tchap: force to false to deactivate "Never send messages to unverified devices"
+        // TCHAP force to false to deactivate "Never send messages to unverified devices"
         disableGlobalBlacklistUnverifiedDevices()
         viewModelScope.launch { stopOngoingVoiceBroadcastUseCase.execute() }
     }
 
-    // Tchap: force to false to deactivate "Never send messages to unverified devices"
+    // TCHAP force to false to deactivate "Never send messages to unverified devices"
     private fun disableGlobalBlacklistUnverifiedDevices() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
@@ -251,7 +251,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .flow()
                 .liveCrossSigningInfo(safeActiveSession.myUserId)
                 .onEach { info ->
-                    // Tchap: Disable cross-signing
+                    // TCHAP Disable cross-signing
                     val mxCrossSigningInfo = info.getOrNull()
 
                     if (!vectorFeatures.tchapIsCrossSigningEnabled() && mxCrossSigningInfo != null) {
@@ -283,7 +283,7 @@ class HomeActivityViewModel @AssistedInject constructor(
 //            lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
 //        }
 
-        // Tchap: disable automatic thread migration
+        // TCHAP disable automatic thread migration
         if (!vectorFeatures.tchapIsThreadEnabled()) return
 
         when {
@@ -326,7 +326,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .onEach { status ->
                     when (status) {
                         is SyncRequestState.Idle -> {
-                            // Tchap: Force Identity server definition
+                            // TCHAP Force Identity server definition
                             updateIdentityServer()
 
                             maybeVerifyOrBootstrapCrossSigning()
@@ -343,7 +343,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .launchIn(viewModelScope)
 
         if (session.syncService().hasAlreadySynced()) {
-            // Tchap: Force Identity server definition even in case the user is already logged and initial Sync already occured.
+            // TCHAP Force Identity server definition even in case the user is already logged and initial Sync already occured.
             // This is to force fix IdentityServerUrl if needed.
             updateIdentityServer()
 
@@ -561,7 +561,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                     }
                 }
 
-                // Tchap: Force user consent as it should have been already accepted in TAC
+                // TCHAP Force user consent as it should have been already accepted in TAC
                 if (!getUserConsent()) {
                     setUserConsent(true)
                     Timber.d("## updateIdentityServer user consent succeeded")
@@ -573,7 +573,7 @@ class HomeActivityViewModel @AssistedInject constructor(
     override fun handle(action: HomeActivityViewActions) {
         when (action) {
             HomeActivityViewActions.DisclaimerDialogShown -> {
-                // Tchap: in case of migration, there is no initial sync, so force the update of the identity server url
+                // TCHAP in case of migration, there is no initial sync, so force the update of the identity server url
                 updateIdentityServer()
             }
             HomeActivityViewActions.PushPromptHasBeenReviewed -> {

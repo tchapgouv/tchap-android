@@ -74,7 +74,7 @@ class DisplayReadReceiptsBottomSheet :
     }
 
     override fun didSelectUser(userId: String) {
-        // Tchap: Disable click on avatar in DM
+        // TCHAP Disable click on avatar in DM
         if (!displayReadReceiptArgs.isDirect) {
             sharedActionViewModel.post(EventSharedAction.OpenUserProfile(userId))
         }

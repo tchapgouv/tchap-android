@@ -73,9 +73,9 @@ class DefaultVectorFeatures @Inject constructor(
             domain == appNameProvider.getAppName()
     override fun onboardingVariant() = Config.ONBOARDING_VARIANT
     override fun isOnboardingAlreadyHaveAccountSplashEnabled() = true
-    override fun isOnboardingSplashCarouselEnabled() = false // Tchap: no carousel
+    override fun isOnboardingSplashCarouselEnabled() = false // TCHAP no carousel
     override fun isOnboardingUseCaseEnabled() = true
-    override fun isOnboardingPersonalizeEnabled() = false // Tchap: no personalization
+    override fun isOnboardingPersonalizeEnabled() = false // TCHAP no personalization
     override fun isOnboardingCombinedRegisterEnabled() = true
     override fun isOnboardingCombinedLoginEnabled() = true
     override fun allowExternalUnifiedPushDistributors(): Boolean = Config.ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS
@@ -83,7 +83,7 @@ class DefaultVectorFeatures @Inject constructor(
     override fun isLocationSharingEnabled() = Config.ENABLE_LOCATION_SHARING
     override fun forceUsageOfOpusEncoder(): Boolean = false
     override fun isNewAppLayoutFeatureEnabled(): Boolean = true
-    override fun isQrCodeLoginEnabled(): Boolean = false // Tchap: disable QrCode login for now
+    override fun isQrCodeLoginEnabled(): Boolean = false // TCHAP disable QrCode login for now
     override fun isQrCodeLoginForAllServers(): Boolean = false
     override fun isReciprocateQrCodeLogin(): Boolean = false
     override fun isVoiceBroadcastEnabled(): Boolean = true

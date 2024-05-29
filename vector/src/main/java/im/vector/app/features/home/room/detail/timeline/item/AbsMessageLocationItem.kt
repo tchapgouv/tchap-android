@@ -53,13 +53,13 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
     var pinMatrixItem: MatrixItem? = null
 
     @EpoxyAttribute
-    var mapZoom: Double = 0.0 // Tchap: Generate and load map on device
+    var mapZoom: Double = 0.0 // TCHAP Generate and load map on device
 
     @EpoxyAttribute
-    var mapSize: Size = Size(0, 0) // Tchap: Replace width and height by a size object
+    var mapSize: Size = Size(0, 0) // TCHAP Replace width and height by a size object
 
     @EpoxyAttribute
-    lateinit var tchapMapRenderer: TchapMapRenderer // Tchap: Generate and load map on device
+    lateinit var tchapMapRenderer: TchapMapRenderer // TCHAP Generate and load map on device
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var locationPinProvider: LocationPinProvider? = null
@@ -71,7 +71,7 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
     }
 
     override fun unbind(holder: H) {
-        // Tchap: Generate and load map on device
+        // TCHAP Generate and load map on device
         tchapMapRenderer.clear(holder.staticMapImageView, holder.staticMapPinImageView)
         super.unbind(holder)
     }
@@ -90,7 +90,7 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
             height = mapSize.height
         }
 
-        // Tchap: Generate and load map on device
+        // TCHAP Generate and load map on device
         tchapMapRenderer.render(
                 location,
                 mapZoom,

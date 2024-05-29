@@ -138,7 +138,7 @@ class FtueAuthLoginFragment :
 
             // This can be called by the IME action, so deal with empty cases
             var error = 0
-            // Tchap: custom error policy
+            // TCHAP custom error policy
             if (login.isEmpty() || !login.isEmail()) {
                 views.loginFieldTil.error = getString(R.string.auth_invalid_email)
                 error++
@@ -158,7 +158,7 @@ class FtueAuthLoginFragment :
                 error++
             }
 
-            // Tchap: password confirmation
+            // TCHAP password confirmation
             if (state.signMode == SignMode.TchapSignUp && password != views.tchapPasswordConfirmationField.text.toString()) {
                 views.passwordFieldTil.error = getString(R.string.tchap_auth_password_dont_match)
                 error++
@@ -225,7 +225,7 @@ class FtueAuthLoginFragment :
                     views.loginNotice.text = getString(R.string.login_server_other_text)
                 }
                 ServerType.Unknown -> {
-                    // Tchap: Hide views if empty
+                    // TCHAP Hide views if empty
                     views.loginServerIcon.isVisible = false
                     views.loginTitle.isVisible = false
                     views.loginNotice.isVisible = false

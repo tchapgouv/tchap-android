@@ -73,7 +73,7 @@ class NotificationAreaView @JvmOverloads constructor(
             State.Initial -> Unit
             is State.Default -> renderDefault()
             is State.Hidden -> renderHidden()
-            // Tchap: custom error message
+            // TCHAP custom error message
             is State.NoPermissionToPost -> renderNoPermissionToPost(newState.message)
             is State.UnsupportedAlgorithm -> renderUnsupportedAlgorithm(newState)
             is State.Tombstone -> renderTombstone()
@@ -182,7 +182,7 @@ class NotificationAreaView @JvmOverloads constructor(
         // View will be Invisible
         object Default : State()
 
-        // Tchap: User can't post messages to room because his power level doesn't allow it or he is alone in the DM.
+        // TCHAP User can't post messages to room because his power level doesn't allow it or he is alone in the DM.
         data class NoPermissionToPost(@StringRes val message: Int) : State()
         data class UnsupportedAlgorithm(val canRestore: Boolean) : State()
 

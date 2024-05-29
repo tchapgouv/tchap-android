@@ -310,7 +310,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
             is GlobalError.InvalidToken -> handleInvalidToken(globalError)
             is GlobalError.ConsentNotGivenError -> displayConsentNotGivenDialog(globalError)
             is GlobalError.CertificateError -> handleCertificateError(globalError)
-            GlobalError.ExpiredAccount -> handleExpiredAccount() // Tchap: Custom expired account
+            GlobalError.ExpiredAccount -> handleExpiredAccount() // TCHAP Custom expired account
             is GlobalError.InitialSyncRequest -> handleInitialSyncRequest(globalError)
         }
     }

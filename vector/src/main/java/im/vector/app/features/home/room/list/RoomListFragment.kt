@@ -480,7 +480,7 @@ class RoomListFragment :
                 roomListViewModel.handle(RoomListAction.ToggleTag(quickAction.roomId, RoomTag.ROOM_TAG_FAVOURITE))
             }
             is RoomListQuickActionsSharedAction.LowPriority -> {
-                // Tchap: Not used in Tchap
+                // TCHAP Not used in Tchap
 //                roomListViewModel.handle(RoomListAction.ToggleTag(quickAction.roomId, RoomTag.ROOM_TAG_LOW_PRIORITY))
             }
             is RoomListQuickActionsSharedAction.Leave -> {
