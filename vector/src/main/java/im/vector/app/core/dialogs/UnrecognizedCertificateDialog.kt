@@ -167,7 +167,7 @@ class UnrecognizedCertificateDialog @Inject constructor(
 //            builder.setNegativeButton(R.string.action_cancel) { _, _ -> callback.onReject() }
 //        }
 
-        // Tchap: user can only ignore unknown certificate
+        // TCHAP user can only ignore unknown certificate
         builder.setPositiveButton(R.string.ok) { _, _ ->
             callback.onIgnore()
         }

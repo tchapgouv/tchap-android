@@ -217,7 +217,7 @@ class VectorSettingsGeneralFragment :
             }
         }
 
-        // Tchap: Displayname cannot change
+        // TCHAP Displayname cannot change
 //        // Display name
 //        mDisplayNamePreference.let {
 //            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
@@ -240,7 +240,7 @@ class VectorSettingsGeneralFragment :
             mPasswordPreference.isVisible = false
         }
 
-        // Tchap: User directory visibility
+        // TCHAP User directory visibility
         hideFromUsersDirectoryPreference.let {
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
                 onHideFromUsersDirectoryClick()
@@ -617,7 +617,7 @@ class VectorSettingsGeneralFragment :
         }
     }
 
-    // Tchap: Displayname cannot change
+    // TCHAP Displayname cannot change
 //    /**
 //     * Update the displayname.
 //     */

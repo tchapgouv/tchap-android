@@ -313,7 +313,7 @@ class MessageActionsViewModel @AssistedInject constructor(
     private fun ArrayList<EventSharedAction>.addActionsForSendingState(timelineEvent: TimelineEvent) {
         // TODO is uploading attachment?
         if (canCancel(timelineEvent)) {
-            // Tchap: Revoke read permission to the local file.
+            // TCHAP Revoke read permission to the local file.
             add(EventSharedAction.Cancel(timelineEvent, false))
         }
     }
@@ -322,7 +322,7 @@ class MessageActionsViewModel @AssistedInject constructor(
         // If sent but not synced (synapse stuck at bottom bug)
         // Still offer action to cancel (will only remove local echo)
         timelineEvent.root.eventId?.let {
-            // Tchap: Revoke read permission to the local file.
+            // TCHAP Revoke read permission to the local file.
             add(EventSharedAction.Cancel(timelineEvent, true))
         }
 
@@ -459,7 +459,7 @@ class MessageActionsViewModel @AssistedInject constructor(
     ): Boolean {
         // We let reply in thread visible even if threads are not enabled, with an enhanced flow to attract users
 
-        // Tchap: don't show the canReplyInThread quick action if it's not enable in the labs
+        // TCHAP don't show the canReplyInThread quick action if it's not enable in the labs
         if (!vectorPreferences.areThreadMessagesEnabled()) return false
 
         // Disable beta prompt if the homeserver do not support threads

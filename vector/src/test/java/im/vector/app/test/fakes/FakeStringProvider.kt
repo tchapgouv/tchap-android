@@ -37,7 +37,7 @@ class FakeStringProvider {
         }
     }
 
-    // Tchap: returns the given string for any resource
+    // TCHAP returns the given string for any resource
     fun givenResult(result: String) {
         every { instance.getString(any()) } returns result
 

@@ -52,7 +52,7 @@ sealed interface CanSendStatus {
     object NoPermission : CanSendStatus
     data class UnSupportedE2eAlgorithm(val algorithm: String?) : CanSendStatus
 
-    // Tchap: Disable the sending message in a direct room if the recipient has left the room.
+    // TCHAP Disable the sending message in a direct room if the recipient has left the room.
     object EmptyDM : CanSendStatus
 }
 

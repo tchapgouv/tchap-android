@@ -59,7 +59,7 @@ class FtueAuthResetPasswordEmailEntryFragment :
     override fun updateWithState(state: OnboardingViewState) {
         views.emailEntryHeaderSubtitle.text = getString(
                 R.string.ftue_auth_reset_password_email_subtitle,
-                getString(R.string.app_name) // Tchap: do not show the server url
+                getString(R.string.app_name) // TCHAP do not show the server url
         )
     }
 

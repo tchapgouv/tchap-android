@@ -43,7 +43,7 @@ data class MessageInformationData(
         val sendStateDecoration: SendStateDecoration = SendStateDecoration.NONE,
         val isFirstFromThisSender: Boolean = false,
         val isLastFromThisSender: Boolean = false,
-        // Tchap: Used to hide domain in DM.
+        // TCHAP Used to hide domain in DM.
         val isDirect: Boolean = false,
         val messageType: String? = null
 ) : Parcelable {

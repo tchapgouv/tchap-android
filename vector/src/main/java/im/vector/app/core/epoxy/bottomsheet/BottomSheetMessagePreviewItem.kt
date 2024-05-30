@@ -49,7 +49,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
     lateinit var avatarRenderer: AvatarRenderer
 
     @EpoxyAttribute
-    lateinit var tchapMapRenderer: TchapMapRenderer // Tchap: Generate and load map on device
+    lateinit var tchapMapRenderer: TchapMapRenderer // TCHAP Generate and load map on device
 
     @EpoxyAttribute
     lateinit var matrixItem: MatrixItem
@@ -100,7 +100,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         holder.body.isVisible = locationUiData == null
         holder.mapViewContainer.isVisible = locationUiData != null
         locationUiData?.let { safeLocationUiData ->
-            // Tchap: Generate and load map on device
+            // TCHAP Generate and load map on device
             tchapMapRenderer.render(safeLocationUiData, holder.staticMapImageView)
 
             val pinMatrixItem = matrixItem.takeIf { safeLocationUiData.locationOwnerId != null }
@@ -113,7 +113,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
 
     override fun unbind(holder: Holder) {
         imageContentRenderer?.clear(holder.imagePreview)
-        // Tchap: Generate and load map on device
+        // TCHAP Generate and load map on device
         tchapMapRenderer.clear(holder.staticMapImageView, holder.staticMapPinImageView)
         super.unbind(holder)
     }

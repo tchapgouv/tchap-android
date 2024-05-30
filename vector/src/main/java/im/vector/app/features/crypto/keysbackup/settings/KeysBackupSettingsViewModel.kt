@@ -187,7 +187,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(
                             keysBackupVersionTrust = Uninitialized,
                             // We do not care about the success data
                             deleteBackupRequest = Uninitialized,
-                            backupSuccessfullyDeleted = true // Tchap
+                            backupSuccessfullyDeleted = true // TCHAP
                     )
                 }
             } catch (failure: Throwable) {

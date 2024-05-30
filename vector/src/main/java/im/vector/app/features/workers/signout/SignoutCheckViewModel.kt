@@ -74,7 +74,7 @@ class SignoutCheckViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<SignoutCheckViewModel, SignoutCheckViewState> by hiltMavericksViewModelFactory()
 
     init {
-        // Tchap: init when key backup is supported
+        // TCHAP init when key backup is supported
         if (isKeyBackupSupported()) {
             init()
         }

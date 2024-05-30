@@ -44,7 +44,7 @@ class HomeLayoutPreferencesStore @Inject constructor(
             .distinctUntilChanged()
 
     val areFiltersEnabledFlow: Flow<Boolean> = context.dataStore.data
-            .map { preferences -> preferences[areFiltersEnabled].orTrue() } // Tchap: filter activate by default
+            .map { preferences -> preferences[areFiltersEnabled].orTrue() } // TCHAP filter activate by default
             .distinctUntilChanged()
 
     val isAZOrderingEnabledFlow: Flow<Boolean> = context.dataStore.data

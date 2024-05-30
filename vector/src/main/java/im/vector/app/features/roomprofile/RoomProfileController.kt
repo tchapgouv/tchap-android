@@ -70,7 +70,7 @@ class RoomProfileController @Inject constructor(
         fun doMigrateToVersion(newVersion: String)
         fun restoreEncryptionState()
 
-        // Tchap: force to false to deactivate "Never send messages to unverified devices in room"
+        // TCHAP force to false to deactivate "Never send messages to unverified devices in room"
 //        fun setEncryptedToVerifiedDevicesOnly(enabled: Boolean)
         fun openGlobalBlockSettings()
     }
@@ -182,7 +182,7 @@ class RoomProfileController @Inject constructor(
             }
         }
 
-        // Tchap: Hidden in Tchap
+        // TCHAP Hidden in Tchap
         // buildEncryptionAction(data.actionPermissions, roomSummary)
 
         if (roomSummary.isEncrypted && !encryptionMisconfigured) {
@@ -207,7 +207,7 @@ class RoomProfileController @Inject constructor(
                         }
                     }
                 }
-                // Tchap: don't display option "Never send messages to unverified devices in room"
+                // TCHAP don't display option "Never send messages to unverified devices in room"
 //                else {
 //                    // per room setting is available
 //                    val shouldBlockUnverified = data.encryptToVerifiedDeviceOnly.invoke()
@@ -278,7 +278,7 @@ class RoomProfileController @Inject constructor(
             )
         }
 
-        // Tchap: Hidden in Tchap
+        // TCHAP Hidden in Tchap
 //        buildProfileAction(
 //                id = "poll_history",
 //                title = stringProvider.getString(R.string.room_profile_section_more_polls),
@@ -321,7 +321,7 @@ class RoomProfileController @Inject constructor(
             // Advanced
             buildProfileSection(stringProvider.getString(R.string.room_settings_category_advanced_title))
 
-            // Tchap: Hidden in Tchap
+            // TCHAP Hidden in Tchap
 //            buildProfileAction(
 //                    id = "alias",
 //                    title = stringProvider.getString(R.string.room_settings_alias_title),

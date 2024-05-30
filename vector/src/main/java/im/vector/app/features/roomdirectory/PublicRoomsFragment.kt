@@ -54,7 +54,7 @@ import javax.inject.Inject
 class PublicRoomsFragment :
         VectorBaseFragment<FragmentPublicRoomsBinding>(),
         PublicRoomsController.Callback {
-        // Tchap: No menu
+        // TCHAP No menu
         // VectorMenuProvider {
 
     @Inject lateinit var publicRoomsController: PublicRoomsController
@@ -68,7 +68,7 @@ class PublicRoomsFragment :
         return FragmentPublicRoomsBinding.inflate(inflater, container, false)
     }
 
-    // Tchap: Not displayed in Tchap
+    // TCHAP Not displayed in Tchap
 //     override fun getMenuRes() = R.menu.menu_room_directory
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -110,7 +110,7 @@ class PublicRoomsFragment :
         super.onDestroyView()
     }
 
-    // Tchap: Not used in Tchap
+    // TCHAP Not used in Tchap
 //    override fun handleMenuItemSelected(item: MenuItem): Boolean {
 //        return when (item.itemId) {
 //            R.id.menu_room_directory_change_protocol -> {

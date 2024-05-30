@@ -98,7 +98,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
     }
 
     private fun renderEndedStatus(holder: Holder) {
-        // Tchap: Add button to report issues about voip
+        // TCHAP Add button to report issues about voip
         holder.acceptRejectViewGroup.isVisible = true
         holder.rejectView.isVisible = false
         holder.acceptView.setText(R.string.tchap_call_tile_reported)

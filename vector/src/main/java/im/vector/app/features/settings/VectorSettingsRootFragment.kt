@@ -50,7 +50,7 @@ class VectorSettingsRootFragment :
     override fun bindPref() {
         tintIcons()
 
-        // Tchap: Manage new FAQ entry
+        // TCHAP Manage new FAQ entry
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_HELP_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
@@ -59,7 +59,7 @@ class VectorSettingsRootFragment :
             false
         }
 
-        // Tchap: Manage labs entry.
+        // TCHAP Manage labs entry.
         val myUserDisplayName = session.getUserOrDefault(session.myUserId).toMatrixItem().getBestName()
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_LABS_PREFERENCE_KEY)!!
                 .isVisible = vectorFeatures.tchapIsLabsVisible(TchapUtils.getDomainFromDisplayName(myUserDisplayName))

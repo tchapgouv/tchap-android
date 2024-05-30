@@ -120,7 +120,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     .also {
                         Timber.e("## Send: Work cancelled by user")
 
-                        // Tchap: Revoke read permission to the local file.
+                        // TCHAP Revoke read permission to the local file.
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             context.revokeUriPermission(context.packageName, params.attachment.queryUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         } else {
@@ -408,7 +408,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
         return Result.success(WorkerParamsFactory.toData(sendParams)).also {
             Timber.v("## handleSuccess $attachmentUrl, work is stopped $isStopped")
 
-            // Tchap: Revoke read permission to the local file.
+            // TCHAP Revoke read permission to the local file.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 context.revokeUriPermission(context.packageName, params.attachment.queryUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
             } else {

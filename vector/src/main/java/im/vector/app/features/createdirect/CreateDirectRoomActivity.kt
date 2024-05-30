@@ -88,9 +88,9 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     views.container,
                     UserListFragment::class.java,
                     UserListFragmentArgs(
-                            singleSelection = true, // Tchap: disable multi selection
-                            showContactBookAction = false, // Tchap: hide contact book action
-                            showInviteActions = false, // Tchap: hide invite action
+                            singleSelection = true, // TCHAP disable multi selection
+                            showContactBookAction = false, // TCHAP hide contact book action
+                            showInviteActions = false, // TCHAP hide invite action
                             title = getString(R.string.fab_menu_create_chat),
                             menuResId = R.menu.vector_create_direct_room,
                             submitMenuItemId = R.id.action_create_direct_room,
@@ -98,7 +98,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     )
             )
         }
-        // Tchap: Not used in Tchap
+        // TCHAP Not used in Tchap
 //        viewModel.onEach(CreateDirectRoomViewState::createAndInviteState) {
 //            renderCreateAndInviteState(it)
 //        }
@@ -203,7 +203,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         }
     }
 
-    // Tchap: Not used in Tchap
+    // TCHAP Not used in Tchap
 //    private fun renderCreateAndInviteState(state: Async<String>) {
 //        when (state) {
 //            is Loading -> renderCreationLoading()

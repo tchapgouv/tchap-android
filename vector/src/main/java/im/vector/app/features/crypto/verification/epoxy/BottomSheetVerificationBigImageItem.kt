@@ -37,7 +37,7 @@ abstract class BottomSheetVerificationBigImageItem : VectorEpoxyModel<BottomShee
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.image.render(roomEncryptionTrustLevel, borderLess = true)
-        // Tchap: Force the visibility to visible
+        // TCHAP Force the visibility to visible
         holder.image.visibility = View.VISIBLE
     }
 

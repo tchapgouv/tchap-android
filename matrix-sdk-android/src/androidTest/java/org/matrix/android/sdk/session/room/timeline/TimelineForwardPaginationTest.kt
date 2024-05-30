@@ -148,7 +148,7 @@ class TimelineForwardPaginationTest : InstrumentedTest {
             snapshot.groupingBy { it -> it.root.type }.eachCountTo(snapshotTypes)
             // Some state events on room creation
             assertEquals("m.room.name", 1, snapshotTypes.remove("m.room.name"))
-            // Tchap: guest_access don't used (TimelineDisplayableEvents.kt)
+            // TCHAP guest_access don't used (TimelineDisplayableEvents.kt)
 //            assertEquals("m.room.guest_access", 1, snapshotTypes.remove("m.room.guest_access"))
             assertEquals("m.room.history_visibility", 1, snapshotTypes.remove("m.room.history_visibility"))
             assertEquals("m.room.join_rules", 1, snapshotTypes.remove("m.room.join_rules"))

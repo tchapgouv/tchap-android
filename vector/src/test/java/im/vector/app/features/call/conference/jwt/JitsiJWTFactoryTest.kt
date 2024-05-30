@@ -27,7 +27,7 @@ class JitsiJWTFactoryTest {
     private val moshi = Moshi.Builder().build()
     private val stringToString = Types.newParameterizedType(Map::class.java, String::class.java, String::class.java)
     private val stringToAny = Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java)
-// Tchap: Disable Jitsi Tests
+// TCHAP Disable Jitsi Tests
 //    private lateinit var factory: JitsiJWTFactory
 //
 //    @Before

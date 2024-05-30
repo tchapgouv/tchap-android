@@ -1,3 +1,11 @@
+Changes in Tchap 2.11.6 (2024-05-30)
+====================================
+
+Other changes
+-------------
+ - Changement du texte d'alerte affiché lors de la première utilisation du partage de position en temps réel. ([#1057](https://github.com/tchapgouv/tchap-android/issues/1057))
+
+
 Changes in Tchap 2.11.5 (2024-05-23)
 ====================================
 

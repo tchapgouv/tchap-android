@@ -280,7 +280,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         if (Config.SHOW_VOICE_RECORDER) {
             composer.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
         } else {
-            // Tchap: set visibility to gone if there is no voice recorder button
+            // TCHAP set visibility to gone if there is no voice recorder button
             composer.sendButton.isGone = !messageComposerState.isSendButtonVisible
             (composer as? RichTextComposerLayout)?.also {
                 val isTextFormattingEnabled = attachmentState.isTextFormattingEnabled
@@ -381,7 +381,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                                 AttachmentType.POLL, !isThreadTimeLine()
                         )
 
-                        // Tchap: Disable Stickers
+                        // TCHAP Disable Stickers
                         attachmentTypeSelector.setAttachmentVisibility(
                                 AttachmentType.STICKER, isVisible = false
                         )

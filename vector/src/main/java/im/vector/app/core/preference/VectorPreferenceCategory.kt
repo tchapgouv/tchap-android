@@ -40,7 +40,7 @@ class VectorPreferenceCategory : PreferenceCategory {
 
     init {
         // Set to false to remove the space when there is no icon
-        // Tchap: no space when no icon
+        // TCHAP no space when no icon
         // isIconSpaceReserved = true
         isIconSpaceReserved = false
     }
@@ -52,7 +52,7 @@ class VectorPreferenceCategory : PreferenceCategory {
 
         titleTextView?.setTypeface(null, Typeface.BOLD)
         titleTextView?.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_primary))
-        // Tchap: bigger title size for Preference Categories
+        // TCHAP bigger title size for Preference Categories
         titleTextView?.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18.0f)
 
         // "isIconSpaceReserved = false" does not work for preference category, so remove the padding

@@ -30,7 +30,7 @@ class DebugJitsiActivity : VectorBaseActivity<ActivityDebugJitsiBinding>() {
 
     @SuppressLint("SetTextI18n")
     override fun initUiAndData() {
-        // Tchap: Jitsi is only available on withvoip flavor, just comment the following lines to remove the dependency
+        // TCHAP Jitsi is only available on withvoip flavor, just comment the following lines to remove the dependency
 //        val isCrashReportingDisabled = JitsiMeet.isCrashReportingDisabled(this)
 //        views.status.text = "Jitsi crash reporting is disabled: $isCrashReportingDisabled"
 //

@@ -118,7 +118,7 @@ internal class DefaultRegistrationWizard(
     private suspend fun sendThreePid(threePid: RegisterThreePid): RegistrationResult {
         val safeSession = pendingSessionData.currentSession ?: throw IllegalStateException("developer error, call createAccount() method first")
 
-        // Tchap: add a specific nextLink requires by Tchap registration process.
+        // TCHAP add a specific nextLink requires by Tchap registration process.
         val hsUri = pendingSessionData.homeServerConnectionConfig.homeServerUri
         val isUri = pendingSessionData.homeServerConnectionConfig.identityServerUri
         val nextLink = "$hsUri#/register?client_secret=${pendingSessionData.clientSecret}" +

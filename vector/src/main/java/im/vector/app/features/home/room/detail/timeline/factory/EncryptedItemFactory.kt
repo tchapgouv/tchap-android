@@ -97,7 +97,7 @@ class EncryptedItemFactory @Inject constructor(
                                 }
                             }
                             else -> {
-                                // Tchap: Add faq link in unable to decrypt error
+                                // TCHAP Add faq link in unable to decrypt error
                                 span {
                                     val learnMore = stringProvider.getString(R.string.action_learn_more)
                                     text = "${stringProvider.getString(R.string.notice_crypto_unable_to_decrypt_friendly)} $learnMore"

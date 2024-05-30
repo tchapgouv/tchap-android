@@ -540,7 +540,7 @@ class HomeDetailFragment :
         return this
     }
 
-    // Tchap: Used for the invitation by email
+    // TCHAP Used for the invitation by email
     private fun openRoom(roomId: String) {
         navigator.openRoom(requireActivity(), roomId)
     }

@@ -148,7 +148,7 @@ class RoomProfileFragment :
 
     private fun setupClicks() {
         // Shortcut to room settings
-        // Tchap: Disable the room settings access
+        // TCHAP Disable the room settings access
 //        setOf(
 //                headerViews.roomProfileNameView,
 //                views.matrixProfileToolbarTitleView
@@ -301,7 +301,7 @@ class RoomProfileFragment :
         val isPublicRoom = roomProfileViewModel.isPublicRoom()
         val message = buildString {
             append(getString(R.string.room_participants_leave_prompt_msg))
-            // Tchap: Add custom string when the user is the last admin of the room
+            // TCHAP Add custom string when the user is the last admin of the room
             if (!isLastAdmin) {
                 if (!isPublicRoom) {
                     append("\n\n")
@@ -360,7 +360,7 @@ class RoomProfileFragment :
         )
     }
 
-    // Tchap: force to false to deactivate "Never send messages to unverified devices in room"
+    // TCHAP force to false to deactivate "Never send messages to unverified devices in room"
 //    override fun setEncryptedToVerifiedDevicesOnly(enabled: Boolean) {
 //        roomProfileViewModel.handle(RoomProfileAction.SetEncryptToVerifiedDeviceOnly(enabled))
 //    }

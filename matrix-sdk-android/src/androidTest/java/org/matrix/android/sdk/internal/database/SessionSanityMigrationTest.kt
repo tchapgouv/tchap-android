@@ -46,7 +46,7 @@ class SessionSanityMigrationTest {
         realm?.close()
     }
 
-    // Tchap: use custom realm database
+    // TCHAP use custom realm database
     @Test
     fun sessionDatabaseShouldMigrateGracefully() {
         val realmName = "tchap_session_41.realm"

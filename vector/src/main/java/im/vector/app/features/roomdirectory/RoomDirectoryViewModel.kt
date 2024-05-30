@@ -194,7 +194,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
         val mutex = Mutex()
 
         currentJob = viewModelScope.launch {
-            // Tchap: Add forums list from all instances
+            // TCHAP Add forums list from all instances
             roomDirectories.map { roomDirectoryServer ->
                 val roomDirectoryData = roomDirectoryServer.protocols.first()
                 async {
@@ -240,7 +240,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
 
             currentJob = null
 
-            // Tchap: Move setState outside of the map
+            // TCHAP Move setState outside of the map
             setState {
                 copy(
                         asyncPublicRoomsRequest = Success(Unit),

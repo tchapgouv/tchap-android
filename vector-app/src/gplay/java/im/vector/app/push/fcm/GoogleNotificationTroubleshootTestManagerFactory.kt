@@ -49,7 +49,7 @@ class GoogleNotificationTroubleshootTestManagerFactory @Inject constructor(
         private val testUnifiedPushEndpoint: TestUnifiedPushEndpoint,
         private val testAvailableUnifiedPushDistributors: TestAvailableUnifiedPushDistributors,
         private val testEndpointAsTokenRegistration: TestEndpointAsTokenRegistration,
-        // private val testPushFromPushGateway: TestPushFromPushGateway, // Tchap: remove
+        // private val testPushFromPushGateway: TestPushFromPushGateway, // TCHAP remove
         private val testNotification: TestNotification,
         private val vectorFeatures: VectorFeatures,
 ) : NotificationTroubleshootTestManagerFactory {
@@ -74,7 +74,7 @@ class GoogleNotificationTroubleshootTestManagerFactory @Inject constructor(
             mgr.addTest(testUnifiedPushEndpoint)
             mgr.addTest(testEndpointAsTokenRegistration)
         }
-       // mgr.addTest(testPushFromPushGateway) // Tchap: remove
+       // mgr.addTest(testPushFromPushGateway) // TCHAP remove
         mgr.addTest(testNotification)
         return mgr
     }

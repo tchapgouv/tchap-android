@@ -34,7 +34,7 @@ class MessageColorProvider @Inject constructor(
     @Suppress("UNUSED_PARAMETER")
     @ColorInt
     fun getMemberNameTextColor(matrixItem: MatrixItem): Int {
-        // Tchap: Use primary color for member name.
+        // TCHAP Use primary color for member name.
         return colorProvider.getColorFromAttribute(R.attr.colorPrimary)
     }
 

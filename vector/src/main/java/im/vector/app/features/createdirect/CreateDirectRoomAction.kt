@@ -20,7 +20,7 @@ import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.userdirectory.PendingSelection
 
 sealed class CreateDirectRoomAction : VectorViewModelAction {
-    // Tchap: custom actions
+    // TCHAP custom actions
     data class InviteByEmail(val email: String) : CreateDirectRoomAction()
     data class CreateDirectMessageByUserId(val userId: String) : CreateDirectRoomAction()
 

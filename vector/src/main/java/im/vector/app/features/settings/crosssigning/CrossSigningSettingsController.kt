@@ -50,11 +50,11 @@ class CrossSigningSettingsController @Inject constructor(
                     titleIconResourceId(R.drawable.ic_shield_trusted)
                     title(host.stringProvider.getString(R.string.encryption_information_dg_xsigning_complete).toEpoxyCharSequence())
                 }
-                // Tchap: don't display "Reset cross-signing" button
+                // TCHAP don't display "Reset cross-signing" button
 //                genericButtonItem {
 //                    id("Reset")
 //                    text(host.stringProvider.getString(R.string.reset_cross_signing))
-//                    textColor(host.colorProvider.getColor(R.color.palette_tchap_coral)) // Tchap
+//                    textColor(host.colorProvider.getColor(R.color.palette_tchap_coral)) // TCHAP
 //                    buttonClickAction {
 //                        host.interactionListener?.didTapInitializeCrossSigning()
 //                    }
@@ -69,7 +69,7 @@ class CrossSigningSettingsController @Inject constructor(
                 genericButtonItem {
                     id("Reset")
                     text(host.stringProvider.getString(R.string.reset_cross_signing))
-                    textColor(host.colorProvider.getColor(R.color.palette_tchap_coral)) // Tchap
+                    textColor(host.colorProvider.getColor(R.color.palette_tchap_coral)) // TCHAP
                     buttonClickAction {
                         host.interactionListener?.didTapInitializeCrossSigning()
                     }
@@ -78,13 +78,13 @@ class CrossSigningSettingsController @Inject constructor(
             data.xSigningIsEnableInAccount -> {
                 genericItem {
                     id("enable")
-                    titleIconResourceId(R.drawable.ic_tchap_cancel) // Tchap icon
+                    titleIconResourceId(R.drawable.ic_tchap_cancel) // TCHAP icon
                     title(host.stringProvider.getString(R.string.encryption_information_dg_xsigning_not_trusted).toEpoxyCharSequence())
                 }
                 genericButtonItem {
                     id("Reset")
                     text(host.stringProvider.getString(R.string.initialize_cross_signing))
-                    textColor(host.colorProvider.getColor(R.color.palette_tchap_coral)) // Tchap
+                    textColor(host.colorProvider.getColor(R.color.palette_tchap_coral)) // TCHAP
                     buttonClickAction {
                         host.interactionListener?.didTapInitializeCrossSigning()
                     }

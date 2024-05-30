@@ -26,7 +26,7 @@ sealed interface ParsedCommand {
     // This is not a Slash command
     object ErrorNotACommand : ParsedCommand
 
-    // Tchap: Not a command in tchap
+    // TCHAP Not a command in tchap
     object ErrorNotATchapCommand : ParsedCommand
 
     object ErrorEmptySlashCommand : ParsedCommand

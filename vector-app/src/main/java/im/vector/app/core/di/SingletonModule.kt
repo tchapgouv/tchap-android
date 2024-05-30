@@ -165,7 +165,7 @@ import javax.inject.Singleton
                 metricPlugins = vectorPlugins.plugins(),
                 cryptoAnalyticsPlugin = vectorPlugins.cryptoMetricPlugin,
                 customEventTypesProvider = vectorCustomEventTypesProvider,
-                // Tchap: Use custom permalink prefix
+                // TCHAP Use custom permalink prefix
                 clientPermalinkBaseUrl = mdmService.getData(MdmData.PermalinkBaseUrl) ?: context.getString(R.string.permalink_prefix),
                 syncConfig = SyncConfig(
                         syncFilterParams = SyncFilterParams(lazyLoadMembersForStateEvents = true, useThreadNotifications = true)
