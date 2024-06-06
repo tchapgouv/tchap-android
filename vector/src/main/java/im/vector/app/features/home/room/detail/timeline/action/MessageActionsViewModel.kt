@@ -313,7 +313,6 @@ class MessageActionsViewModel @AssistedInject constructor(
     private fun ArrayList<EventSharedAction>.addActionsForSendingState(timelineEvent: TimelineEvent) {
         // TODO is uploading attachment?
         if (canCancel(timelineEvent)) {
-            // TCHAP Revoke read permission to the local file.
             add(EventSharedAction.Cancel(timelineEvent, false))
         }
     }
@@ -322,7 +321,6 @@ class MessageActionsViewModel @AssistedInject constructor(
         // If sent but not synced (synapse stuck at bottom bug)
         // Still offer action to cancel (will only remove local echo)
         timelineEvent.root.eventId?.let {
-            // TCHAP Revoke read permission to the local file.
             add(EventSharedAction.Cancel(timelineEvent, true))
         }
 

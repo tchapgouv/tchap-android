@@ -383,7 +383,6 @@ class TimelineFragment :
 
         timelineViewModel.observeViewEvents {
             when (it) {
-                is RoomDetailViewEvents.RevokeFilePermission -> revokeFilePermission(it)
                 is RoomDetailViewEvents.SendCallFeedback -> bugReporter.openBugReportScreen(requireActivity(), ReportType.VOIP)
                 is RoomDetailViewEvents.Failure -> displayErrorMessage(it)
                 is RoomDetailViewEvents.OnNewTimelineEvents -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
@@ -419,6 +418,7 @@ class TimelineFragment :
                 RoomDetailViewEvents.RoomReplacementStarted -> handleRoomReplacement()
                 RoomDetailViewEvents.OpenElementCallWidget -> handleOpenElementCallWidget()
                 RoomDetailViewEvents.DisplayPromptToStopVoiceBroadcast -> displayPromptToStopVoiceBroadcast()
+                is RoomDetailViewEvents.RevokeFilePermission -> revokeFilePermission(it)
             }
         }
 
@@ -546,22 +546,6 @@ class TimelineFragment :
                 context = requireContext(),
                 roomId = timelineArgs.roomId
         )
-    }
-
-    // TCHAP Revoke read permission to the local file.
-    private fun revokeFilePermission(revokeFilePermission: RoomDetailViewEvents.RevokeFilePermission) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            requireContext().revokeUriPermission(
-                    requireContext().applicationContext.packageName,
-                    revokeFilePermission.uri,
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION
-            )
-        } else {
-            requireContext().revokeUriPermission(
-                    revokeFilePermission.uri,
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION
-            )
-        }
     }
 
     private fun displayErrorMessage(error: RoomDetailViewEvents.Failure) {
@@ -1605,7 +1589,6 @@ class TimelineFragment :
 
     private fun handleCancelSend(action: EventSharedAction.Cancel) {
         if (action.force) {
-            // TCHAP Revoke read permission to the local file.
             timelineViewModel.handle(RoomDetailAction.CancelSend(action.event, true))
         } else {
             MaterialAlertDialogBuilder(requireContext())
@@ -1613,7 +1596,6 @@ class TimelineFragment :
                     .setMessage(getString(R.string.event_status_cancel_sending_dialog_message))
                     .setNegativeButton(R.string.no, null)
                     .setPositiveButton(R.string.yes) { _, _ ->
-                        // TCHAP Revoke read permission to the local file.
                         timelineViewModel.handle(RoomDetailAction.CancelSend(action.event, false))
                     }
                     .show()
@@ -2088,6 +2070,21 @@ class TimelineFragment :
                 ) {
                     timelineViewModel.handle(RoomDetailAction.VoiceBroadcastAction.Recording.StopConfirmed)
                 }
+    }
+
+    private fun revokeFilePermission(revokeFilePermission: RoomDetailViewEvents.RevokeFilePermission) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            requireContext().revokeUriPermission(
+                    requireContext().applicationContext.packageName,
+                    revokeFilePermission.uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+        } else {
+            requireContext().revokeUriPermission(
+                    revokeFilePermission.uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+        }
     }
 
     override fun onTapToReturnToCall() {
