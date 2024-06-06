@@ -33,7 +33,6 @@ class MediaPicker : Picker<MultiPickerBaseMediaType>() {
      * Returns selected image/video files or empty list if user did not select any files.
      */
     override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerBaseMediaType> {
-        // TCHAP Grant permission to access the selected file.
         return getSelectedUriList(context, data).mapNotNull { selectedUri ->
             val mimeType = context.contentResolver.getType(selectedUri)
 

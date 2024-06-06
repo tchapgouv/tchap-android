@@ -786,7 +786,7 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     fun getRoom(roomId: String): RoomSummary? =
-        session.roomService().getRoomSummary(roomId)
+            session.roomService().getRoomSummary(roomId)
 
     private fun handleComposerFocusChange(action: RoomDetailAction.ComposerFocusChange) {
         if (room == null) return
@@ -1101,7 +1101,6 @@ class TimelineViewModel @AssistedInject constructor(
 
     private fun handleCancel(action: RoomDetailAction.CancelSend) {
         if (room == null) return
-        // TCHAP Revoke read permission to the local file.
         // State must be in one of the sending states
         if (action.force || action.event.root.sendState.isSending()) {
             room.sendService().cancelSend(action.event.eventId)
@@ -1174,7 +1173,22 @@ class TimelineViewModel @AssistedInject constructor(
         if (room == null) return
         viewModelScope.launch {
             val event = try {
-                room.reportingService().reportContent(action.eventId, -100, action.reason)
+                if (action.user && action.senderId != null) {
+                    // When reporting a user, use the user state event if available (it should always be available)
+                    val userStateEventId = room.stateService()
+                            .getStateEvent(EventType.STATE_ROOM_MEMBER, QueryStringValue.Equals(action.senderId))
+                            ?.eventId
+                    // If not found fallback to the provided event
+                    val eventId = userStateEventId ?: action.eventId
+                    room.reportingService()
+                            .reportContent(
+                                    eventId = eventId,
+                                    score = -100,
+                                    reason = action.reason
+                            )
+                } else {
+                    room.reportingService().reportContent(action.eventId, -100, action.reason)
+                }
                 RoomDetailViewEvents.ActionSuccess(action)
             } catch (failure: Throwable) {
                 RoomDetailViewEvents.ActionFailure(action, failure)
