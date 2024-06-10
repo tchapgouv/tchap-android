@@ -272,7 +272,7 @@ dependencies {
 
     // TCHAP Manage jitsi lib
     // WebRTC
-    withdmvoipImplementation('org.jitsi:webrtc:111.0.1')
+    withdmvoipImplementation('com.github.tchapgouv:webrtc:124.1.0')
     // Jitsi
     withvoipApi('org.jitsi.react:jitsi-meet-sdk:8.1.1') {
         exclude group: 'com.google.firebase'
