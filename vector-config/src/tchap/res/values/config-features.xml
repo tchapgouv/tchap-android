@@ -4,5 +4,23 @@
     <bool name="tchap_is_key_backup_enabled">true</bool>
     <bool name="tchap_is_thread_enabled">false</bool>
 
-    <string-array name="tchap_is_voip_supported_homeservers" translatable="false" />
+    <string-array name="tchap_is_voip_supported_homeservers" translatable="false">
+        <item>agent.agriculture.tchap.gouv.fr</item>
+        <item>agent.culture.tchap.gouv.fr</item>
+        <item>agent.dev-durable.tchap.gouv.fr</item>
+        <item>agent.dinum.tchap.gouv.fr</item>
+        <item>agent.diplomatie.tchap.gouv.fr</item>
+        <item>agent.education.tchap.gouv.fr</item>
+        <item>agent.elysee.tchap.gouv.fr</item>
+<!--        <item>agent.finances.tchap.gouv.fr</item>-->
+        <item>agent.interieur.tchap.gouv.fr</item>
+        <item>agent.intradef.tchap.gouv.fr</item>
+        <item>agent.justice.tchap.gouv.fr</item>
+        <item>agent.pm.tchap.gouv.fr</item>
+        <item>agent.social.tchap.gouv.fr</item>
+        <item>agent.ssi.tchap.gouv.fr</item>
+        <item>agent.tchap.gouv.fr</item>
+        <item>agent.collectivites.tchap.gouv.fr</item>
+        <item>agent.externe.tchap.gouv.fr</item>
+    </string-array>
 </resources>

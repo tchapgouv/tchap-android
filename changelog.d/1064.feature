@@ -1,0 +1,1 @@
+Activation des appels audio pour toutes les instances sauf finances.
