@@ -45,6 +45,11 @@ jobs:
           app_id: ${{ secrets.APP_ID_DANGERBOT }}
           private_key: ${{ secrets.APP_PEM_DANGERBOT }}
       - uses: actions/checkout@v3
+      - name: Use JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
       - name: Run ktlint
         run: |
           ./gradlew ktlintCheck $CI_GRADLE_ARG_PROPERTIES --continue
