@@ -37,7 +37,7 @@ jobs:
       fail-fast: false
       matrix:
         api-level: [ 28 ]
-    # Tchap: Disabled for now
+    # TCHAP Disabled for now
     if: github.repository == 'element-hq/element-android'
     # No concurrency required, runs every time on a schedule.
     steps:
@@ -93,7 +93,7 @@ jobs:
     needs:
       - should-i-run
       - ui-tests
-    # Tchap: Disabled for now
+    # TCHAP Disabled for now
     if: github.repository == 'element-hq/element-android' && always() && (needs.should-i-run.result == 'success' ) && (needs.ui-tests.result != 'success')
     # No concurrency required, runs every time on a schedule.
     steps:

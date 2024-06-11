@@ -45,7 +45,7 @@ jobs:
           app_id: ${{ secrets.APP_ID_DANGERBOT }}
           private_key: ${{ secrets.APP_PEM_DANGERBOT }}
       - uses: actions/checkout@v3
-      - name: Use JDK 17
+      - name: Use JDK 17 # TCHAP Migrate to Java version 17 to support the new version of webrtc library
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
@@ -75,7 +75,7 @@ jobs:
           npm install --save-dev @babel/core
           npm install --save-dev @babel/plugin-transform-flow-strip-types
           yarn add danger-plugin-lint-report --dev
-# Tchap : disable Danger lint check
+# TCHAP disable Danger lint check
 #      - name: Danger lint
 #        if: always()
 #        uses: danger/danger-js@11.2.6

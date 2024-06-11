@@ -2,6 +2,7 @@ ext.versions = [
         'minSdk'            : 21,
         'compileSdk'        : 33,
         'targetSdk'         : 33,
+        // TCHAP Migrate to Java version 17 to support the new version of webrtc library
         'sourceCompat'      : JavaVersion.VERSION_17,
         'targetCompat'      : JavaVersion.VERSION_17,
 ]

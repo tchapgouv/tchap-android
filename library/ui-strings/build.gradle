@@ -19,7 +19,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "17" // TCHAP Migrate to Java version 17 to support the new version of webrtc library
     }
 }
 
