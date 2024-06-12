@@ -1,3 +1,14 @@
+Changes in Tchap 2.11.8 (2024-06-12)
+====================================
+
+Features ✨
+----------
+ - Activation des appels vocaux pour finances. ([#1068](https://github.com/tchapgouv/tchap-android/issues/1068))
+
+Improvements 🙌
+--------------
+ - Support d'un proxy dans les paramètres de la librairie webrtc. ([#1055](https://github.com/tchapgouv/tchap-android/issues/1055))
+
 Changes in Tchap 2.11.7 (2024-06-12)
 ====================================
 
