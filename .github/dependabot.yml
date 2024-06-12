@@ -10,7 +10,7 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    # Tchap: Disable this script for Tchap
+    # TCHAP Disable this script for Tchap
     open-pull-requests-limit: 0
     reviewers:
       - "element-hq/element-android-reviewers"
@@ -21,7 +21,7 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    # Tchap: Disable this script for Tchap
+    # TCHAP Disable this script for Tchap
     open-pull-requests-limit: 0
     reviewers:
       - "element-hq/element-android-reviewers"

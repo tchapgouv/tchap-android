@@ -12,7 +12,7 @@ env:
 
 jobs:
   nightly:
-    # Tchap: Skip nightly
+    # TCHAP Skip nightly
     if: github.repository == 'element-hq/element-android'
     name: Build and publish nightly Gplay APK to Firebase
     runs-on: ubuntu-latest

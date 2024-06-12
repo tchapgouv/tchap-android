@@ -231,12 +231,18 @@ class WebRtcCallManager @Inject constructor(
                 true
         )
         val defaultVideoDecoderFactory = DefaultVideoDecoderFactory(eglBaseContext)
+        // TCHAP Add proxy settings in webrtc
+        val proxyHost = System.getProperty("http.proxyHost")
+        val proxyPort = System.getProperty("http.proxyPort")?.toInt()
         Timber.tag(loggerTag.value).v("PeerConnectionFactory.createPeerConnectionFactory ...")
-        peerConnectionFactory = PeerConnectionFactory.builder()
+        val builder = PeerConnectionFactory.builder()
                 .setOptions(options)
                 .setVideoEncoderFactory(defaultVideoEncoderFactory)
                 .setVideoDecoderFactory(defaultVideoDecoderFactory)
-                .createPeerConnectionFactory()
+        if (!proxyHost.isNullOrBlank() && proxyPort != null) {
+            builder.setHttpsProxy(proxyHost, proxyPort)
+        }
+        peerConnectionFactory = builder.createPeerConnectionFactory()
     }
 
     private fun onCallActive(call: WebRtcCall) {
