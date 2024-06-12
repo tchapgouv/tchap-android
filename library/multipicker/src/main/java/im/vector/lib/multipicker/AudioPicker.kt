@@ -31,7 +31,6 @@ class AudioPicker : Picker<MultiPickerAudioType>() {
      * Returns selected audio files or empty list if user did not select any files.
      */
     override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerAudioType> {
-        // TCHAP Grant permission to access the selected file.
         return getSelectedUriList(context, data).mapNotNull { selectedUri ->
             selectedUri.toMultiPickerAudioType(context)
         }

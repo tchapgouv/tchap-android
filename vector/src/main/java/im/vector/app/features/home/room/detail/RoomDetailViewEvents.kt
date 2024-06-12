@@ -66,7 +66,6 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
             val mimeType: String?
     ) : RoomDetailViewEvents()
 
-    // TCHAP Revoke read permission to the local file.
     data class RevokeFilePermission(
             val uri: Uri
     ) : RoomDetailViewEvents()
