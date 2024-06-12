@@ -1,3 +1,18 @@
+Changes in Tchap 2.11.7 (2024-06-12)
+====================================
+
+Features ✨
+----------
+ - Activation des appels audio pour toutes les instances sauf finances. ([#1064](https://github.com/tchapgouv/tchap-android/issues/1064))
+
+Improvements 🙌
+--------------
+ - Rebase against Element-Android v1.6.16 ([#1060](https://github.com/tchapgouv/tchap-android/issues/1060))
+
+Bugfixes 🐛
+----------
+ - Mise à jour de l'URL vers l'aide. ([#906](https://github.com/tchapgouv/tchap-android/issues/906))
+
 Changes in Tchap 2.11.6 (2024-05-30)
 ====================================
 
