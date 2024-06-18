@@ -240,6 +240,7 @@ class WebRtcCallManager @Inject constructor(
                 .setVideoEncoderFactory(defaultVideoEncoderFactory)
                 .setVideoDecoderFactory(defaultVideoDecoderFactory)
         if (!proxyHost.isNullOrBlank() && proxyPort != null) {
+            Timber.d("proxy settings are configured")
             builder.setHttpsProxy(proxyHost, proxyPort)
         }
         peerConnectionFactory = builder.createPeerConnectionFactory()
