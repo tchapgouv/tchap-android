@@ -5,7 +5,7 @@ Features ✨
 ----------
  - Activation des appels vocaux pour finances. ([#1068](https://github.com/tchapgouv/tchap-android/issues/1068))
 
-Improvements 🙌
+In development 🚧
 --------------
  - Support d'un proxy dans les paramètres de la librairie webrtc. ([#1055](https://github.com/tchapgouv/tchap-android/issues/1055))
 
