@@ -1,3 +1,10 @@
+Changes in Tchap 2.11.9 (2024-06-18)
+====================================
+
+In development 🚧
+----------------
+ - Activation du mode debug pour les appels audio. ([#1070](https://github.com/tchapgouv/tchap-android/issues/1070))
+
 Changes in Tchap 2.11.8 (2024-06-12)
 ====================================
 
