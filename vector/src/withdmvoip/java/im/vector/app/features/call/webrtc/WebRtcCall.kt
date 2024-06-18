@@ -295,6 +295,8 @@ class WebRtcCall(
                                     .builder(uri)
                                     .setUsername(server.username)
                                     .setPassword(server.password)
+                                    // TCHAP bypass SSL verification. See https://groups.google.com/g/discuss-webrtc/c/4MmARU0XYqc/m/QppVNJiEAAAJ
+                                    .setTlsCertPolicy(PeerConnection.TlsCertPolicy.TLS_CERT_POLICY_INSECURE_NO_CHECK)
                                     .createIceServer()
                     )
                 }
