@@ -39,7 +39,7 @@ class TchapRoomLinkAccessController @Inject constructor(
 
     interface InteractionListener {
         fun setLinkAccessEnabled(isEnabled: Boolean)
-        fun openAliasDetail(alias: String)
+        fun openAliasDetail(roomIdOrAlias: String)
     }
 
     var interactionListener: InteractionListener? = null
@@ -84,18 +84,19 @@ class TchapRoomLinkAccessController @Inject constructor(
             id("LinkAccessInfo")
             helperTextResId(
                     when {
-                        !state.isLinkAccessEnabled         -> R.string.tchap_room_settings_enable_room_access_by_link_info_off
+                        !state.isLinkAccessEnabled -> R.string.tchap_room_settings_enable_room_access_by_link_info_off
                         roomType == TchapRoomType.EXTERNAL -> R.string.tchap_room_settings_enable_room_access_by_link_info_on_with_limitation
-                        else                               -> R.string.tchap_room_settings_enable_room_access_by_link_info_on
+                        else -> R.string.tchap_room_settings_enable_room_access_by_link_info_on
                     }
             )
         }
 
-        if (state.isLinkAccessEnabled && !state.canonicalAlias.isNullOrEmpty()) {
+        if (state.isLinkAccessEnabled) {
+            val roomIdOrAlias = state.canonicalAlias ?: state.roomId
             profileActionItem {
                 id("canonicalAlias")
-                title(state.canonicalAlias)
-                listener { host.interactionListener?.openAliasDetail(state.canonicalAlias) }
+                title(roomIdOrAlias)
+                listener { host.interactionListener?.openAliasDetail(roomIdOrAlias) }
             }
         }
     }
