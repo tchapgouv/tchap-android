@@ -5,10 +5,6 @@ In development 🚧
 ----------------
  - Fix webrtc SSL connection ([#1071](https://github.com/tchapgouv/tchap-android/issues/1071))
 
-Changes in Tchap 2.11.10 (2024-06-18)
-=====================================
-
-No significant changes.
 Changes in Tchap 2.11.9 (2024-06-18)
 ====================================
 
