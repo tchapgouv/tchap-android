@@ -1,3 +1,14 @@
+Changes in Tchap 2.11.11 (2024-06-24)
+=====================================
+
+Improvements 🙌
+--------------
+ - Support des appels audio sur les appareils Néo. ([#1055](https://github.com/tchapgouv/tchap-android/issues/1055))
+
+Bugfixes 🐛
+----------
+ - Ajout d'un lien par défaut pour les salons sans alias accessibles par lien. ([#1040](https://github.com/tchapgouv/tchap-android/issues/1040))
+
 Changes in Tchap 2.11.10 (2024-06-18)
 =====================================
 
