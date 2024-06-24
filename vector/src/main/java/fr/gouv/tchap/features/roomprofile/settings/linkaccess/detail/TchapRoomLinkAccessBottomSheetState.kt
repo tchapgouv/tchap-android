@@ -19,9 +19,9 @@ package fr.gouv.tchap.features.roomprofile.settings.linkaccess.detail
 import com.airbnb.mvrx.MavericksState
 
 data class TchapRoomLinkAccessBottomSheetState(
-        val alias: String,
+        val roomIdOrAlias: String,
         val matrixToLink: String? = null
 ) : MavericksState {
 
-    constructor(args: RoomAliasBottomSheetArgs) : this(alias = args.alias)
+    constructor(args: RoomAliasBottomSheetArgs) : this(roomIdOrAlias = args.roomIdOrAlias)
 }
