@@ -32,7 +32,7 @@ class TchapRoomLinkAccessBottomSheetController @Inject constructor() : TypedEpox
     override fun buildModels(state: TchapRoomLinkAccessBottomSheetState) {
         bottomSheetTitleItem {
             id("alias")
-            title(state.alias)
+            title(state.roomIdOrAlias)
             subTitle(state.matrixToLink)
         }
 

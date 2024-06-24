@@ -34,7 +34,7 @@ import javax.inject.Inject
 
 @Parcelize
 data class RoomAliasBottomSheetArgs(
-        val alias: String
+        val roomIdOrAlias: String
 ) : Parcelable
 
 /**
@@ -83,9 +83,9 @@ class TchapRoomLinkAccessBottomSheet :
     }
 
     companion object {
-        fun newInstance(alias: String): TchapRoomLinkAccessBottomSheet {
+        fun newInstance(roomIdOrAlias: String): TchapRoomLinkAccessBottomSheet {
             return TchapRoomLinkAccessBottomSheet().apply {
-                setArguments(RoomAliasBottomSheetArgs(alias = alias))
+                setArguments(RoomAliasBottomSheetArgs(roomIdOrAlias = roomIdOrAlias))
             }
         }
     }

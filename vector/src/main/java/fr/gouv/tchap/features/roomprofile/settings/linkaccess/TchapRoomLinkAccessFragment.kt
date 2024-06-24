@@ -97,9 +97,9 @@ class TchapRoomLinkAccessFragment : VectorBaseFragment<FragmentRoomSettingGeneri
 
     private fun handleLinkAccessAction(action: TchapRoomLinkAccessBottomSheetSharedAction) {
         when (action) {
-            is TchapRoomLinkAccessBottomSheetSharedAction.CopyLink    -> handleCopy(action.permalink)
+            is TchapRoomLinkAccessBottomSheetSharedAction.CopyLink -> handleCopy(action.permalink)
             is TchapRoomLinkAccessBottomSheetSharedAction.ForwardLink -> handleForward(action.permalink)
-            is TchapRoomLinkAccessBottomSheetSharedAction.ShareLink   -> handleShare(action.permalink)
+            is TchapRoomLinkAccessBottomSheetSharedAction.ShareLink -> handleShare(action.permalink)
         }
     }
 
@@ -107,9 +107,9 @@ class TchapRoomLinkAccessFragment : VectorBaseFragment<FragmentRoomSettingGeneri
         viewModel.handle(TchapRoomLinkAccessAction.SetIsEnabled(isEnabled))
     }
 
-    override fun openAliasDetail(alias: String) {
+    override fun openAliasDetail(roomIdOrAlias: String) {
         TchapRoomLinkAccessBottomSheet
-                .newInstance(alias = alias)
+                .newInstance(roomIdOrAlias = roomIdOrAlias)
                 .show(childFragmentManager, "TCHAP_ROOM_LINK_ACCESS_ACTIONS")
     }
 
