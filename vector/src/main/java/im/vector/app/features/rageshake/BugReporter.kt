@@ -280,7 +280,7 @@ class BugReporter @Inject constructor(
                 activeSessionHolder.getSafeActiveSession()?.let { session ->
                     userId = session.myUserId
                     deviceId = session.sessionParams.deviceId
-                    olmVersion = session.cryptoService().getCryptoVersion(context, true)
+                    olmVersion = Matrix.getCryptoVersion(true)
                     bugReportURL = session.sessionParams.homeServerUrl.removeSuffix("/") + BUG_REPORT_URL_SUFFIX
                     email = session.profileService().getThreePids().filterIsInstance<ThreePid.Email>().firstOrNull()?.email ?: "undefined" // TCHAP Add Email
                 }
