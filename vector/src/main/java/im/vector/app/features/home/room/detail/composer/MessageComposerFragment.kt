@@ -432,7 +432,8 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 getRoom = timelineViewModel::getRoom,
                 getMember = timelineViewModel::getMember,
         ) { matrixItem: MatrixItem ->
-            PillImageSpan(glideRequests, avatarRenderer, requireContext(), matrixItem)
+            // TCHAP set pill background color when the user is mentioned
+            PillImageSpan(session, glideRequests, avatarRenderer, requireContext(), matrixItem)
         }
     }
 
@@ -820,6 +821,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                     append(displayName)
                     setSpan(
                             PillImageSpan(
+                                    session, // TCHAP set pill background color when the user is mentioned
                                     glideRequests,
                                     avatarRenderer,
                                     requireContext(),

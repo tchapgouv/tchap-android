@@ -39,6 +39,7 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.extensions.orTrue
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.send.MatrixItemSpan
 import org.matrix.android.sdk.api.util.MatrixItem
 import java.lang.ref.WeakReference
@@ -49,6 +50,7 @@ import java.lang.ref.WeakReference
  * Implements MatrixItemSpan so that it could be automatically transformed in matrix links and displayed as pills.
  */
 class PillImageSpan(
+        private val session: Session,
         private val glideRequests: GlideRequests,
         private val avatarRenderer: AvatarRenderer,
         private val context: Context,
@@ -156,10 +158,17 @@ class PillImageSpan(
             setChipMinHeightResource(R.dimen.pill_min_height)
             setChipIconSizeResource(R.dimen.pill_avatar_size)
             chipIcon = icon
-            if (matrixItem is MatrixItem.EveryoneInRoomItem) {
-                chipBackgroundColor = ColorStateList.valueOf(ThemeUtils.getColor(context, R.attr.colorError))
-                // setTextColor API does not exist right now for ChipDrawable, use textAppearance
-                setTextAppearanceResource(R.style.TextAppearance_Vector_Body_OnError)
+            // TCHAP set pill background color when the user is mentioned
+            when {
+                matrixItem is MatrixItem.UserItem && matrixItem.id == session.myUserId -> {
+                    chipBackgroundColor = ColorStateList.valueOf(ThemeUtils.getColor(context, R.attr.colorSecondary))
+                    setTextColor(ThemeUtils.getColor(context, R.attr.colorOnSecondary))
+                }
+                matrixItem is MatrixItem.EveryoneInRoomItem -> {
+                    chipBackgroundColor = ColorStateList.valueOf(ThemeUtils.getColor(context, R.attr.colorError))
+                    // setTextColor API does not exist right now for ChipDrawable, use textAppearance
+                    setTextAppearanceResource(R.style.TextAppearance_Vector_Body_OnError)
+                }
             }
             setBounds(0, 0, intrinsicWidth, intrinsicHeight)
         }
