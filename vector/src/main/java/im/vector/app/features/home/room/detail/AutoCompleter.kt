@@ -285,6 +285,7 @@ class AutoCompleter @AssistedInject constructor(
 
         // Add the span
         val span = PillImageSpan(
+                session, // TCHAP set pill background color when the user is mentioned
                 glideRequests,
                 avatarRenderer,
                 editText.context,
