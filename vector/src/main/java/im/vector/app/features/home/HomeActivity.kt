@@ -689,9 +689,12 @@ class HomeActivity :
                 launchQrCode()
                 true
             }
-            // TCHAP new faq entry
+            // TCHAP new faq entry.
+            // the FAQ url is detected as a permalink (same prefix), which make the application fail to open it from
+            // ChromeCustomTab, so we open it here directly in a WebView
             R.id.menu_home_faq -> {
-                openUrlInChromeCustomTab(this, null, VectorSettingsUrls.HELP)
+                val intent = VectorWebViewActivity.getIntent(this, VectorSettingsUrls.HELP, getString(R.string.preference_help))
+                startActivity(intent)
                 true
             }
             else -> false

@@ -27,6 +27,7 @@ import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.displayname.getBestName
+import im.vector.app.features.webview.VectorWebViewActivity
 import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -54,7 +55,8 @@ class VectorSettingsRootFragment :
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_HELP_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
-                openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.HELP)
+                val intent = VectorWebViewActivity.getIntent(requireContext(), VectorSettingsUrls.HELP, getString(R.string.preference_help))
+                startActivity(intent)
             }
             false
         }
