@@ -93,7 +93,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             val wellKnown = rawService.getElementWellknown(session.sessionParams)
             setState {
                 copy(
-                        // Tchap: force to configure secure backup key even if well-known is null
+                        // TCHAP force to configure secure backup key even if well-known is null
                         isSecureBackupRequired = wellKnown?.isSecureBackupRequired() ?: vectorFeatures.tchapIsSecureBackupRequired(),
                         secureBackupMethod = wellKnown?.secureBackupMethod() ?: SecureBackupMethod.KEY,
                 )
@@ -214,7 +214,10 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             }
             is BootstrapActions.DoInitialize -> {
                 if (state.passphrase == state.passphraseRepeat) {
-                    startInitializeFlow(state)
+                    // TCHAP do not ask user password multiple times
+                    if (state.step !is BootstrapStep.AccountReAuth) {
+                        startInitializeFlow(state)
+                    }
                 } else {
                     setState {
                         copy(
@@ -224,7 +227,10 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 }
             }
             is BootstrapActions.DoInitializeGeneratedKey -> {
-                startInitializeFlow(state)
+                // TCHAP do not ask user password multiple times
+                if (state.step !is BootstrapStep.AccountReAuth) {
+                    startInitializeFlow(state)
+                }
             }
             BootstrapActions.RecoveryKeySaved -> {
                 _viewEvents.post(BootstrapViewEvents.RecoveryKeySaved)
@@ -435,8 +441,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                             progressListener = progressListener,
                             passphrase = state.passphrase,
                             keySpec = state.migrationRecoveryKey?.let { extractCurveKeyFromRecoveryKey(it)?.let { RawBytesKeySpec(it) } },
-                            // Tchap: do not reset cross signing
-//                            forceResetIfSomeSecretsAreMissing = state.isSecureBackupRequired,
+                            forceResetIfSomeSecretsAreMissing = state.isSecureBackupRequired,
                             setupMode = state.setupMode
                     )
             ) { bootstrapResult ->
@@ -606,4 +611,4 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     }
 }
 
-private val BootstrapViewState.canLeave: Boolean get() = isRecoverySetup // Tchap: can leave even if secure backup is required
+private val BootstrapViewState.canLeave: Boolean get() = isRecoverySetup // TCHAP can leave even if secure backup is required

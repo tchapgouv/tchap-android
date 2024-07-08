@@ -47,6 +47,7 @@ import im.vector.app.features.raw.wellknown.isSecureBackupRequired
 import im.vector.app.features.raw.wellknown.withElementWellKnown
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import im.vector.app.features.voicebroadcast.recording.usecase.StopOngoingVoiceBroadcastUseCase
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.Dispatchers
@@ -97,6 +98,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
         private val ensureFcmTokenIsRetrievedUseCase: EnsureFcmTokenIsRetrievedUseCase,
         private val ensureSessionSyncingUseCase: EnsureSessionSyncingUseCase,
+        private val checkIfCurrentSessionCanBeVerifiedUseCase: CheckIfCurrentSessionCanBeVerifiedUseCase,
         private val coroutineDispatchers: CoroutineDispatchers,
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
@@ -391,7 +393,8 @@ class HomeActivityViewModel @AssistedInject constructor(
 
     private fun sessionHasBeenUnverified(elementWellKnown: ElementWellKnown?) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
-        val isSecureBackupRequired = elementWellKnown?.isSecureBackupRequired() ?: vectorFeatures.tchapIsSecureBackupRequired() // Tchap: force to configure secure backup even if well-known is null
+        val isSecureBackupRequired = elementWellKnown?.isSecureBackupRequired()
+                ?: vectorFeatures.tchapIsSecureBackupRequired() // TCHAP force to configure secure backup even if well-known is null
         if (isSecureBackupRequired) {
             // If 4S is forced, force verification
             // for stability cancel all pending verifications?
@@ -425,7 +428,8 @@ class HomeActivityViewModel @AssistedInject constructor(
             }
 
             val elementWellKnown = rawService.getElementWellknown(session.sessionParams)
-            val isSecureBackupRequired = elementWellKnown?.isSecureBackupRequired() ?: vectorFeatures.tchapIsSecureBackupRequired() // Tchap: force to configure secure backup even if well-known is null
+            val isSecureBackupRequired = elementWellKnown?.isSecureBackupRequired()
+                    ?: vectorFeatures.tchapIsSecureBackupRequired() // TCHAP force to configure secure backup even if well-known is null
 
             // In case of account creation, it is already done before
             if (initialState.authenticationDescription is AuthenticationDescription.Register) {
@@ -464,15 +468,24 @@ class HomeActivityViewModel @AssistedInject constructor(
             // Is there already cross signing keys here?
             val mxCrossSigningInfo = session.cryptoService().crossSigningService().getMyCrossSigningKeys()
             if (mxCrossSigningInfo != null) {
-//                if (isSecureBackupRequired && !session.sharedSecretStorageService().isRecoverySetup()) {
-//                    // If 4S is forced, start the full interactive setup flow
-//                    _viewEvents.post(HomeActivityViewEvents.StartRecoverySetupFlow)
-//                } else {
+                // TCHAP Setup 4S and cross-signing if needed
+                if (isSecureBackupRequired && !session.sharedSecretStorageService().isRecoverySetup() && mxCrossSigningInfo.isTrusted()) {
+                    // If 4S is forced, start the full interactive setup flow
+                    _viewEvents.post(HomeActivityViewEvents.StartRecoverySetupFlow)
+                } else {
                     // Cross-signing is already set up for this user, is it trusted?
                     if (!mxCrossSigningInfo.isTrusted()) {
                         if (isSecureBackupRequired) {
-                            // If 4S is forced, force verification
-                            _viewEvents.post(HomeActivityViewEvents.ForceVerification(true))
+                            // TCHAP Setup 4S and cross-signing if needed
+                            viewModelScope.launch {
+                                val currentSessionCanBeVerified = checkIfCurrentSessionCanBeVerifiedUseCase.execute()
+                                if (currentSessionCanBeVerified) {
+                                    // If 4S is forced, force verification
+                                    _viewEvents.post(HomeActivityViewEvents.ForceVerification(true))
+                                } else {
+                                    _viewEvents.post(HomeActivityViewEvents.StartRecoverySetupFlow)
+                                }
+                            }
                         } else {
                             // we wan't to check if there is a way to actually verify this session,
                             // that means that there is another session to verify against, or
@@ -499,7 +512,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                             }
                         }
                     }
-//                }
+                }
             } else {
                 // Cross signing is not initialized
                 if (isSecureBackupRequired) {
@@ -592,11 +605,11 @@ class HomeActivityViewModel @AssistedInject constructor(
 private suspend fun CrossSigningService.awaitCrossSigninInitialization(
         block: Continuation<UIABaseAuth>.(response: RegistrationFlowResponse, errCode: String?) -> Unit
 ) {
-        initializeCrossSigning(
-                object : UserInteractiveAuthInterceptor {
-                    override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                        promise.block(flowResponse, errCode)
-                    }
+    initializeCrossSigning(
+            object : UserInteractiveAuthInterceptor {
+                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                    promise.block(flowResponse, errCode)
                 }
-        )
+            }
+    )
 }

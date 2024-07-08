@@ -44,18 +44,17 @@ class BootstrapSetupRecoveryKeyFragment :
 
         // TCHAP we directly send user to Security Key
         // Actions when a key backup exist
-        // views.bootstrapSetupSecureSubmit.views.bottomSheetActionClickableZone.debouncedClicks {
-        //     sharedViewModel.handle(BootstrapActions.StartKeyBackupMigration)
-        // }
-
-        // Actions when there is no key backup
-        // views.bootstrapSetupSecureUseSecurityKey.views.bottomSheetActionClickableZone.debouncedClicks {
-        //     sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = false))
-        // }
-        // views.bootstrapSetupSecureUseSecurityPassphrase.views.bottomSheetActionClickableZone.debouncedClicks {
-        //     sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = true))
-        // }
-
+//        views.bootstrapSetupSecureSubmit.views.bottomSheetActionClickableZone.debouncedClicks {
+//            sharedViewModel.handle(BootstrapActions.StartKeyBackupMigration)
+//        }
+//
+//        // Actions when there is no key backup
+//        views.bootstrapSetupSecureUseSecurityKey.views.bottomSheetActionClickableZone.debouncedClicks {
+//            sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = false))
+//        }
+//        views.bootstrapSetupSecureUseSecurityPassphrase.views.bottomSheetActionClickableZone.debouncedClicks {
+//            sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = true))
+//        }
         sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = false))
     }
 
