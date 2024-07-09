@@ -32,6 +32,7 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.auth.PendingAuthHandler
 import im.vector.app.features.raw.wellknown.SecureBackupMethod
 import im.vector.app.features.raw.wellknown.getElementWellknown
@@ -45,7 +46,6 @@ import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.raw.RawService
@@ -63,6 +63,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
         @Assisted initialState: BootstrapViewState,
         private val stringProvider: StringProvider,
         private val errorFormatter: ErrorFormatter,
+        private val vectorFeatures: VectorFeatures,
         private val session: Session,
         private val rawService: RawService,
         private val bootstrapTask: BootstrapCrossSigningTask,
@@ -92,8 +93,9 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             val wellKnown = rawService.getElementWellknown(session.sessionParams)
             setState {
                 copy(
-                        isSecureBackupRequired = wellKnown?.isSecureBackupRequired().orFalse(),
-                        secureBackupMethod = wellKnown?.secureBackupMethod() ?: SecureBackupMethod.KEY_OR_PASSPHRASE,
+                        // TCHAP force to configure secure backup key even if well-known is null
+                        isSecureBackupRequired = wellKnown?.isSecureBackupRequired() ?: vectorFeatures.tchapIsSecureBackupRequired(),
+                        secureBackupMethod = wellKnown?.secureBackupMethod() ?: SecureBackupMethod.KEY,
                 )
             }
         }
@@ -212,7 +214,10 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             }
             is BootstrapActions.DoInitialize -> {
                 if (state.passphrase == state.passphraseRepeat) {
-                    startInitializeFlow(state)
+                    // TCHAP do not ask user password multiple times
+                    if (state.step !is BootstrapStep.AccountReAuth) {
+                        startInitializeFlow(state)
+                    }
                 } else {
                     setState {
                         copy(
@@ -222,7 +227,10 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 }
             }
             is BootstrapActions.DoInitializeGeneratedKey -> {
-                startInitializeFlow(state)
+                // TCHAP do not ask user password multiple times
+                if (state.step !is BootstrapStep.AccountReAuth) {
+                    startInitializeFlow(state)
+                }
             }
             BootstrapActions.RecoveryKeySaved -> {
                 _viewEvents.post(BootstrapViewEvents.RecoveryKeySaved)
@@ -603,4 +611,4 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     }
 }
 
-private val BootstrapViewState.canLeave: Boolean get() = !isSecureBackupRequired || isRecoverySetup
+private val BootstrapViewState.canLeave: Boolean get() = !isSecureBackupRequired || isRecoverySetup // TCHAP add a reminder instead ?

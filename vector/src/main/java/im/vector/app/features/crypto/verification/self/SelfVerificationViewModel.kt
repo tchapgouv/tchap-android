@@ -37,8 +37,6 @@ import im.vector.app.features.crypto.verification.VerificationAction
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewEvents
 import im.vector.app.features.crypto.verification.user.VerificationTransactionData
 import im.vector.app.features.crypto.verification.user.toDataClass
-import im.vector.app.features.raw.wellknown.getElementWellknown
-import im.vector.app.features.raw.wellknown.isSecureBackupRequired
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filter
@@ -46,7 +44,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.Matrix
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
@@ -140,9 +137,9 @@ class SelfVerificationViewModel @AssistedInject constructor(
         // This is async, but at this point should be in cache
         // so it's ok to not wait until result
         viewModelScope.launch(Dispatchers.IO) {
-            val wellKnown = rawService.getElementWellknown(session.sessionParams)
+            // TCHAP force verification when recovery is setup
             setState {
-                copy(isVerificationRequired = wellKnown?.isSecureBackupRequired().orFalse())
+                copy(isVerificationRequired = session.sharedSecretStorageService().isRecoverySetup())
             }
         }
 
