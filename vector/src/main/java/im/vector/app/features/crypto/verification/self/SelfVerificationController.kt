@@ -296,7 +296,8 @@ class SelfVerificationController @Inject constructor(
                 id("passphrase")
                 title(host.stringProvider.getString(R.string.verification_cannot_access_other_session))
                 titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
-                subTitle(host.stringProvider.getString(R.string.verification_use_passphrase))
+                // TCHAP use recovery key with no restriction
+//                subTitle(host.stringProvider.getString(R.string.verification_use_passphrase))
                 iconRes(R.drawable.ic_arrow_right)
                 iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
                 listener { host.selfVerificationListener?.onClickRecoverFromPassphrase() }

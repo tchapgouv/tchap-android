@@ -611,4 +611,4 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     }
 }
 
-private val BootstrapViewState.canLeave: Boolean get() = isRecoverySetup // TCHAP can leave even if secure backup is required
+private val BootstrapViewState.canLeave: Boolean get() = !isSecureBackupRequired || isRecoverySetup // TCHAP add a reminder instead ?

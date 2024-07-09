@@ -1292,7 +1292,7 @@
     <string name="login_signup_username_hint">Nom d’utilisateur</string>
     <string name="settings_dev_tools">Outils de développement</string>
     <string name="settings_account_data">Données du compte</string>
-    <string name="verification_cannot_access_other_session">Utiliser le Code de Récupération</string><!-- Tchap: Use custom string -->
+    <string name="verification_cannot_access_other_session">Vérifier avec le Code de Récupération</string><!-- Tchap: Use custom string -->
     <string name="verification_use_passphrase">Si vous n’avez pas accès à un appareil existant</string> <!-- Tchap: Use custom string -->
     <string name="enter_secret_storage_invalid">Impossible de trouver les secrets dans le stockage</string>
     <string name="message_action_item_redact">Supprimer…</string>
@@ -1521,7 +1521,7 @@
     <string name="disclaimer_positive_button">EN SAVOIR PLUS</string>
     <string name="disclaimer_negative_button">COMPRIS</string>
     <string name="disclaimer_content">L’apparence et l’organisation de votre application évoluent.\nDe nouveaux changements seront introduits progressivement pour faciliter et enrichir votre expérience.</string> <!-- Tchap: Custom string -->
-    <string name="disclaimer_title">Bienvenue dans la nouvelle version de Tchap !</string> <!-- Tchap: Custom string -->
+    <string name="disclaimer_title">Bienvenue dans la nouvelle version de ${app_name} !</string> <!-- Tchap: Custom string -->
     <string name="notice_crypto_unable_to_decrypt_merged">Attente de l’historique du chiffrement</string>
     <string name="crypto_error_withheld_generic">Impossible d’accéder à ce message car l’envoyeur n’a intentionnellement pas envoyé les clés</string>
     <string name="crypto_error_withheld_unverified">Vous ne pouvez pas accéder à ce message car l’envoyeur n’a pas confiance en votre appareil</string> <!-- Tchap: Use custom string -->
@@ -1542,9 +1542,9 @@
     <string name="power_level_edit_title">Définir le rôle</string>
     <string name="secure_backup_reset_no_history">Vous redémarrerez sans aucun historique, message, appareil ou utilisateurs connus</string>
     <string name="secure_backup_reset_if_you_reset_all">Si vous réinitialisez tout</string>
-    <string name="secure_backup_reset_all_no_other_devices">Faites uniquement ceci si vous n\'avez aucun autre appareil pouvant vérifier celui-ci.</string>
+    <string name="secure_backup_reset_all_no_other_devices">Uniquement si vous avez perdu votre Code et n\'avez aucun autre appareil connecté à ${app_name}.</string> <!-- Tchap: Use custom string -->
     <string name="secure_backup_reset_all">Réinitialiser tout</string>
-    <string name="bad_passphrase_key_reset_all_action">Vous avez perdu votre Code de Récupération ? Générez-en un nouveau.</string><!-- Tchap: Use custom string -->
+    <string name="bad_passphrase_key_reset_all_action">Générer un nouveau Code de Récupération</string> <!-- Tchap: Use custom string -->
     <string name="error_saving_media_file">Impossible d’enregistrer le fichier multimédia</string>
     <string name="auth_invalid_login_deactivated_account">Ce compte a été désactivé.</string>
     <string name="bootstrap_cancel_text">Si vous annulez maintenant, vous pourrez perdre les messages et données chiffrés si vous perdez accès à vos identifiants.
@@ -2940,12 +2940,12 @@
     <string name="pill_message_from_unknown_user">Message</string>
     <string name="pill_message_from_user">Message de %s</string>
     <string name="encrypted_by_deleted">Chiffré par un appareil supprimé</string>
-    <string name="secure_backup_reset_danger_warning">Veuillez ne continuer que si vous êtes certain d’avoir perdu tous vos autres appareils et votre clé de sécurité.</string>
-    <string name="secure_backup_reset_all_no_other_devices_long">La réinitialisation de vos clés de vérification ne peut pas être annulé. Après la réinitialisation, vous n’aurez plus accès à vos anciens messages chiffrés, et tous les amis que vous aviez précédemment vérifiés verront des avertissement de sécurité jusqu\'à ce vous les vérifiiez à nouveau.</string>
+    <string name="secure_backup_reset_danger_warning">Veuillez ne continuer que si vous êtes certain d’avoir perdu tous vos autres appareils et votre Code de Récupération.</string> <!-- Tchap: Use custom string -->
+    <string name="secure_backup_reset_all_no_other_devices_long">La réinitialisation ne peut pas être annulée. Vous n’aurez plus accès à vos anciens messages chiffrés.</string> <!-- Tchap: Use custom string -->
     <string name="verification_not_found">La demande de vérification n’a pas été trouvée. Elle a peut-être été annulée, ou prise en charge dans une autre session.</string>
-    <string name="verification_request_was_sent">Une demande de vérification a été envoyée. Ouvrez l’une de vos autres sessions pour accepter et commencer la vérification.</string>
+    <string name="verification_request_was_sent">Une demande de vérification a été envoyée. Ouvrez ${app_name} sur l’un de vos autres appareils pour accepter et commencer la vérification.</string> <!-- Tchap: Use custom string -->
     <string name="_resume">Reprendre</string>
-    <string name="verification_verify_identity">Vérifiez votre identité pour accéder aux messages chiffrés et prouver votre identité aux autres.</string>
+    <string name="verification_verify_identity">Vérifiez cet appareil pour accéder à vos messages.</string> <!-- Tchap: Use custom string -->
     <string name="verification_verify_with_another_device">Vérifier avec un autre appareil</string>
     <string name="verification_request_waiting_for_recovery">Vérification depuis la clé ou phrase de sécurité…</string>
     <string name="settings_acceptable_use_policy">Politique d’utilisation acceptable</string>
