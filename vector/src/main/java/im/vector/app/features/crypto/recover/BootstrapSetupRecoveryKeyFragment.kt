@@ -44,18 +44,17 @@ class BootstrapSetupRecoveryKeyFragment :
 
         // TCHAP we directly send user to Security Key
         // Actions when a key backup exist
-        // views.bootstrapSetupSecureSubmit.views.bottomSheetActionClickableZone.debouncedClicks {
-        //     sharedViewModel.handle(BootstrapActions.StartKeyBackupMigration)
-        // }
-
-        // Actions when there is no key backup
-        // views.bootstrapSetupSecureUseSecurityKey.views.bottomSheetActionClickableZone.debouncedClicks {
-        //     sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = false))
-        // }
-        // views.bootstrapSetupSecureUseSecurityPassphrase.views.bottomSheetActionClickableZone.debouncedClicks {
-        //     sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = true))
-        // }
-
+//        views.bootstrapSetupSecureSubmit.views.bottomSheetActionClickableZone.debouncedClicks {
+//            sharedViewModel.handle(BootstrapActions.StartKeyBackupMigration)
+//        }
+//
+//        // Actions when there is no key backup
+//        views.bootstrapSetupSecureUseSecurityKey.views.bottomSheetActionClickableZone.debouncedClicks {
+//            sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = false))
+//        }
+//        views.bootstrapSetupSecureUseSecurityPassphrase.views.bottomSheetActionClickableZone.debouncedClicks {
+//            sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = true))
+//        }
         sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = false))
     }
 
@@ -95,7 +94,7 @@ class BootstrapSetupRecoveryKeyFragment :
     private fun renderBackupMethodActions(method: SecureBackupMethod) = with(views) {
         bootstrapSetupSecureUseSecurityKey.isVisible = method.isKeyAvailable
         // TCHAP Hide Security Passphrase
-//                views.bootstrapSetupSecureUseSecurityPassphrase.isVisible = method.isPassphraseAvailable
-//                views.bootstrapSetupSecureUseSecurityPassphraseSeparator.isVisible = method.isPassphraseAvailable
+//        bootstrapSetupSecureUseSecurityPassphrase.isVisible = method.isPassphraseAvailable
+//        bootstrapSetupSecureUseSecurityPassphraseSeparator.isVisible = method.isPassphraseAvailable
     }
 }

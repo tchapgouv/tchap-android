@@ -116,7 +116,8 @@ class EventTextRenderer @AssistedInject constructor(
     }
 
     private fun createPillImageSpan(matrixItem: MatrixItem) =
-            PillImageSpan(GlideApp.with(context), avatarRenderer, context, matrixItem)
+            // TCHAP set pill background color when the user is mentioned
+            PillImageSpan(sessionHolder.getActiveSession(), GlideApp.with(context), avatarRenderer, context, matrixItem)
 
     private fun addPillSpan(
             renderedText: Spannable,

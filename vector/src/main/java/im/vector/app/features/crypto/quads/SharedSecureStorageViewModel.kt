@@ -32,12 +32,16 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.VectorFeatures
+import im.vector.app.features.raw.wellknown.getElementWellknown
+import im.vector.app.features.raw.wellknown.isSecureBackupRequired
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.listeners.ProgressListener
+import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.securestorage.IntegrityResult
 import org.matrix.android.sdk.api.session.securestorage.KeyInfo
@@ -88,7 +92,9 @@ data class SharedSecureStorageViewState(
 class SharedSecureStorageViewModel @AssistedInject constructor(
         @Assisted private val initialState: SharedSecureStorageViewState,
         private val stringProvider: StringProvider,
+        private val vectorFeatures: VectorFeatures,
         private val session: Session,
+        private val rawService: RawService,
         private val matrix: Matrix,
 ) :
         VectorViewModel<SharedSecureStorageViewState, SharedSecureStorageAction, SharedSecureStorageViewEvent>(initialState) {
@@ -102,16 +108,25 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         setState {
             copy(userId = session.myUserId)
         }
-        if (initialState.requestType is RequestType.ReadSecrets) {
-            val integrityResult =
-                    session.sharedSecretStorageService().checkShouldBeAbleToAccessSecrets(initialState.requestType.secretsName, initialState.keyId)
-            if (integrityResult !is IntegrityResult.Success) {
-                _viewEvents.post(
-                        SharedSecureStorageViewEvent.Error(
-                                stringProvider.getString(R.string.enter_secret_storage_invalid),
-                                true
-                        )
-                )
+
+        // TCHAP force to configure secure backup even if well-known is null
+        // Do not check integrity if the session is not verified
+        viewModelScope.launch(Dispatchers.IO) {
+            val elementWellKnown = rawService.getElementWellknown(session.sessionParams)
+            val isSecureBackupRequired = elementWellKnown?.isSecureBackupRequired() ?: vectorFeatures.tchapIsSecureBackupRequired()
+            val isThisSessionVerified = session.cryptoService().crossSigningService().isCrossSigningVerified()
+
+            if ((isThisSessionVerified || !isSecureBackupRequired) && initialState.requestType is RequestType.ReadSecrets) {
+                val integrityResult =
+                        session.sharedSecretStorageService().checkShouldBeAbleToAccessSecrets(initialState.requestType.secretsName, initialState.keyId)
+                if (integrityResult !is IntegrityResult.Success) {
+                    _viewEvents.post(
+                            SharedSecureStorageViewEvent.Error(
+                                    stringProvider.getString(R.string.enter_secret_storage_invalid),
+                                    true
+                            )
+                    )
+                }
             }
         }
 

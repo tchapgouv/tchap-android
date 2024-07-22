@@ -104,7 +104,8 @@ class PillsPostProcessor @AssistedInject constructor(
     }
 
     private fun createPillImageSpan(matrixItem: MatrixItem) =
-            PillImageSpan(GlideApp.with(context), avatarRenderer, context, matrixItem)
+            // TCHAP set pill background color when the user is mentioned
+            PillImageSpan(sessionHolder.getActiveSession(), GlideApp.with(context), avatarRenderer, context, matrixItem)
 
     private fun LinkSpan.createPillSpan(): PillImageSpan? {
         val supportedHosts = context.resources.getStringArray(R.array.permalink_supported_hosts)

@@ -432,7 +432,8 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 getRoom = timelineViewModel::getRoom,
                 getMember = timelineViewModel::getMember,
         ) { matrixItem: MatrixItem ->
-            PillImageSpan(glideRequests, avatarRenderer, requireContext(), matrixItem)
+            // TCHAP set pill background color when the user is mentioned
+            PillImageSpan(session, glideRequests, avatarRenderer, requireContext(), matrixItem)
         }
     }
 
@@ -808,18 +809,19 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             composer.editText.setSelection(Command.EMOTE.command.length + 1)
         } else {
             val roomMember = timelineViewModel.getMember(userId)
-            val displayName = sanitizeDisplayName(roomMember?.displayName ?: userId)
             if ((composer as? RichTextComposerLayout)?.isTextFormattingEnabled == true) {
                 // Rich text editor is enabled so we need to use its APIs
                 permalinkService.createPermalink(userId)?.let { url ->
-                    (composer as RichTextComposerLayout).insertMention(url, displayName)
+                    (composer as RichTextComposerLayout).insertMention(url, userId)
                     composer.editText.append(" ")
                 }
             } else {
+                val displayName = sanitizeDisplayName(roomMember?.displayName ?: userId)
                 val pill = buildSpannedString {
                     append(displayName)
                     setSpan(
                             PillImageSpan(
+                                    session, // TCHAP set pill background color when the user is mentioned
                                     glideRequests,
                                     avatarRenderer,
                                     requireContext(),
