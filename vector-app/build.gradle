@@ -41,7 +41,7 @@ ext.versionPatch = 0
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
-    return cmd.execute().text.trim() as Lon
+    return cmd.execute().text.trim() as Long
 }
 
 static def generateVersionCodeFromTimestamp() {
