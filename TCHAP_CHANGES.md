@@ -1,3 +1,15 @@
+Changes in Tchap 2.12.0 (2024-07-22)
+====================================
+
+Features ✨
+----------
+ - Forcer la génération du code de récupération et la sauvegarde automatique. ([#988](https://github.com/tchapgouv/tchap-android/issues/988))
+
+Improvements 🙌
+--------------
+ - Rebase against Element-Android v1.6.18 ([#1074](https://github.com/tchapgouv/tchap-android/issues/1074))
+ - Mise à jour du style quand un utilisateur est mentionné. ([#1075](https://github.com/tchapgouv/tchap-android/issues/1075))
+
 Changes in Tchap 2.11.11 (2024-06-24)
 =====================================
 

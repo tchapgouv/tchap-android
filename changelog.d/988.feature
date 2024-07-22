@@ -1,1 +1,0 @@
-Forcer la génération du code de récupération et la sauvegarde automatique.
