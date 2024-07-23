@@ -27,7 +27,7 @@ import javax.inject.Inject
 
 interface VectorFeatures {
 
-    fun tchapIsVoipSupported(homeServerUrl: String): Boolean
+    fun tchapIsVisioSupported(homeServerUrl: String): Boolean
     fun tchapIsCrossSigningEnabled(): Boolean
     fun tchapIsKeyBackupEnabled(): Boolean
     fun tchapIsThreadEnabled(): Boolean
@@ -63,8 +63,8 @@ class DefaultVectorFeatures @Inject constructor(
         private val stringArrayProvider: StringArrayProvider,
         private val booleanProvider: BooleanProvider
 ) : VectorFeatures {
-    override fun tchapIsVoipSupported(homeServerUrl: String) = booleanProvider.getBoolean(R.bool.tchap_is_voip_supported) &&
-        stringArrayProvider.getStringArray(R.array.tchap_is_voip_supported_homeservers).let { homeServerUrls ->
+    override fun tchapIsVisioSupported(homeServerUrl: String) = booleanProvider.getBoolean(R.bool.tchap_is_visio_supported) &&
+        stringArrayProvider.getStringArray(R.array.tchap_is_visio_supported_homeservers).let { homeServerUrls ->
             homeServerUrls.isEmpty() || homeServerUrls.any { homeServerUrl.contains(it) }
         }
     override fun tchapIsCrossSigningEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_cross_signing_enabled)

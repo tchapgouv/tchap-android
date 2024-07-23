@@ -233,9 +233,9 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
     }
 
     private fun renderCallSupportState(holder: Holder) {
-        val error = if (!attributes.isVoipSupported) holder.resources.getString(R.string.tchap_call_not_supported) else null
-        holder.acceptView.isEnabled = attributes.isVoipSupported
-        holder.rejectView.isEnabled = attributes.isVoipSupported
+        val error = if (!attributes.isCallSupported) holder.resources.getString(R.string.tchap_call_not_supported) else null
+        holder.acceptView.isEnabled = attributes.isCallSupported
+        holder.rejectView.isEnabled = attributes.isCallSupported
         holder.errorView.setTextOrHide(error)
     }
 
@@ -269,7 +269,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
     }
 
     data class Attributes(
-            val isVoipSupported: Boolean,
+            val isCallSupported: Boolean,
             val callId: String,
             val callKind: CallKind,
             val callStatus: CallStatus,

@@ -80,7 +80,7 @@ class WidgetItemFactory @Inject constructor(
             CallTileTimelineItem.CallStatus.ENDED
         }
         val attributes = CallTileTimelineItem.Attributes(
-                isVoipSupported = vectorFeatures.tchapIsVoipSupported(session.sessionParams.homeServerUrl),
+                isCallSupported = vectorFeatures.tchapIsVisioSupported(session.sessionParams.homeServerUrl),
                 callId = jitsiWidgetEventsGroup.callId,
                 callKind = CallTileTimelineItem.CallKind.CONFERENCE,
                 callStatus = callStatus,
