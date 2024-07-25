@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.room.timeline.decorator
 import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -40,7 +41,8 @@ internal class UpdatedReplyDecorator(
 ) : TimelineEventDecorator {
 
     override fun decorate(timelineEvent: TimelineEvent): TimelineEvent {
-        return if (timelineEvent.isReply() && !timelineEvent.root.isThread()) {
+        // TCHAP Display reply to only if the root event is a text message.
+        return if (timelineEvent.isReply() && !timelineEvent.root.isThread() && timelineEvent.root.isTextMessage()) {
             val newRepliedEvent = createNewRepliedEvent(timelineEvent) ?: return timelineEvent
             timelineEvent.copy(root = newRepliedEvent)
         } else {
