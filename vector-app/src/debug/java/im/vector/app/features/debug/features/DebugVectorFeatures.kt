@@ -40,7 +40,7 @@ class DebugVectorFeatures(
 
     private val dataStore = context.dataStore
 
-    override fun tchapIsVoipSupported(homeServerUrl: String) = vectorFeatures.tchapIsVoipSupported(homeServerUrl)
+    override fun tchapIsVisioSupported(homeServerUrl: String) = vectorFeatures.tchapIsVisioSupported(homeServerUrl)
 
     override fun tchapIsCrossSigningEnabled() = vectorFeatures.tchapIsCrossSigningEnabled()
 

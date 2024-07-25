@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.getRelationContentForType
 import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
 import org.matrix.android.sdk.api.session.events.model.isSticker
+import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
@@ -168,7 +169,8 @@ internal class ThreadsAwarenessHandler @Inject constructor(
         roomId ?: return null
         if (lightweightSettingsStorage.areThreadMessagesEnabled() && !isReplyEvent(event)) return null
         handleRootThreadEventsIfNeeded(realm, roomId, eventEntity, event)
-        if (!isThreadEvent(event)) return null
+        // TCHAP Display reply to only if the root event is a text message.
+        if (!isThreadEvent(event) || !event.isTextMessage()) return null
         val eventPayload = if (!event.isEncrypted()) {
             event.content?.toMutableMap() ?: return null
         } else {

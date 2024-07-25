@@ -863,12 +863,12 @@ class TimelineViewModel @AssistedInject constructor(
                     R.id.timeline_setting -> true
                     R.id.invite -> state.canInvite
                     R.id.open_matrix_apps -> false // TCHAP there are no matrix apps
-                    // TCHAP check if voip is enabled
-                    R.id.video_call -> vectorPreferences.developerMode() && vectorFeatures.tchapIsVoipSupported(session.sessionParams.homeServerUrl)
-                    R.id.voice_call -> vectorFeatures.tchapIsVoipSupported(session.sessionParams.homeServerUrl) &&
-                            (state.isCallOptionAvailable() || state.hasActiveElementCallWidget())
+                    R.id.voice_call -> state.isCallOptionAvailable() || state.hasActiveElementCallWidget()
+                    // TCHAP check if visio is enabled
+                    R.id.video_call -> vectorFeatures.tchapIsVisioSupported(session.sessionParams.homeServerUrl) &&
+                            (state.isCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined)
                     // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
-                    R.id.join_conference -> vectorFeatures.tchapIsVoipSupported(session.sessionParams.homeServerUrl) && !state.isCallOptionAvailable() &&
+                    R.id.join_conference -> vectorFeatures.tchapIsVisioSupported(session.sessionParams.homeServerUrl) && !state.isCallOptionAvailable() &&
                             state.jitsiState.confId != null && !state.jitsiState.hasJoined
                     R.id.search -> state.isSearchAvailable()
                     R.id.menu_timeline_thread_list -> vectorPreferences.areThreadMessagesEnabled()

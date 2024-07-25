@@ -147,7 +147,7 @@ class CallItemFactory @Inject constructor(
         val userOfInterest = roomSummary.toMatrixItem()
         val attributes = messageItemAttributesFactory.create(null, informationData, callback, reactionsSummaryEvents).let {
             CallTileTimelineItem.Attributes(
-                    isVoipSupported = vectorFeatures.tchapIsVoipSupported(session.sessionParams.homeServerUrl),
+                    isCallSupported = vectorFeatures.tchapIsVisioSupported(session.sessionParams.homeServerUrl) || callKind.isVoiceCall,
                     callId = callId,
                     callKind = callKind,
                     callStatus = callStatus,

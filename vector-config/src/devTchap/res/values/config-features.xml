@@ -5,5 +5,5 @@
     <bool name="tchap_is_thread_enabled">false</bool>
     <bool name="tchap_is_secure_backup_required">true</bool>
 
-    <string-array name="tchap_is_voip_supported_homeservers" translatable="false" />
+    <string-array name="tchap_is_visio_supported_homeservers" translatable="false" />
 </resources>
