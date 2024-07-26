@@ -23,15 +23,19 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import im.vector.app.R
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.queryExportKeys
 import im.vector.app.core.extensions.registerStartForActivityResult
+import im.vector.app.core.resources.BuildMeta
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.Session
+import javax.inject.Inject
 
 class TchapSettingsChangePasswordPreDialog(
         private val session: Session
 ) : DialogFragment() {
+
+    @Inject lateinit var buildMeta: BuildMeta
 
     var listener: InteractionListener? = null
 
@@ -53,17 +57,17 @@ class TchapSettingsChangePasswordPreDialog(
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = MaterialAlertDialogBuilder(requireActivity())
                 .setCancelable(false)
-                .setTitle(R.string.dialog_title_warning)
-                .setMessage(R.string.tchap_settings_change_pwd_caution)
-                .setPositiveButton(R.string.settings_change_password) { _, _ -> listener?.changePassword() }
-                .setNeutralButton(R.string.encryption_export_e2e_room_keys, null)
-                .setNegativeButton(R.string.action_cancel, null)
+                .setTitle(CommonStrings.dialog_title_warning)
+                .setMessage(CommonStrings.tchap_settings_change_pwd_caution)
+                .setPositiveButton(CommonStrings.settings_change_password) { _, _ -> listener?.changePassword() }
+                .setNeutralButton(CommonStrings.encryption_export_e2e_room_keys, null)
+                .setNegativeButton(CommonStrings.action_cancel, null)
                 .create()
 
         dialog.setOnShowListener {
             val exportKeysButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
             exportKeysButton.setOnClickListener {
-                queryExportKeys(session.myUserId, manualExportKeysActivityResultLauncher)
+                queryExportKeys(session.myUserId, buildMeta.applicationName, manualExportKeysActivityResultLauncher)
             }
         }
 

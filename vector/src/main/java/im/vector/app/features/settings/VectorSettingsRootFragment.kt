@@ -27,6 +27,7 @@ import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.displayname.getBestName
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -37,7 +38,7 @@ class VectorSettingsRootFragment :
 
     @Inject lateinit var vectorFeatures: VectorFeatures
 
-    override var titleRes: Int = R.string.title_activity_settings
+    override var titleRes: Int = CommonStrings.title_activity_settings
     override val preferenceXmlRes = R.xml.vector_settings_root
 
     private val firstThrottler = FirstThrottler(1000)

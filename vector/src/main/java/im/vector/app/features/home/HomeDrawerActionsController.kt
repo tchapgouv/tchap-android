@@ -19,6 +19,7 @@ package im.vector.app.features.home
 import com.airbnb.epoxy.EpoxyController
 import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
@@ -43,20 +44,20 @@ class HomeDrawerActionsController @Inject constructor(
         if (!TchapUtils.isExternalTchapUser(session.myUserId)) {
             homeDrawerActionItem {
                 id("emailInvite")
-                titleRes(R.string.tchap_invite_to)
+                titleRes(CommonStrings.tchap_invite_to)
                 iconRes(R.drawable.ic_tchap_invite)
                 itemClickAction { host.listener?.inviteByEmail() }
             }
         }
         homeDrawerActionItem {
             id("openTAC")
-            titleRes(R.string.settings_app_term_conditions)
+            titleRes(CommonStrings.settings_app_term_conditions)
             iconRes(R.drawable.ic_tchap_term_conditions)
             itemClickAction { host.listener?.openTermAndConditions() }
         }
         homeDrawerActionItem {
             id("bugReport")
-            titleRes(R.string.send_bug_report)
+            titleRes(CommonStrings.send_bug_report)
             iconRes(R.drawable.ic_tchap_bug_report)
             itemClickAction { host.listener?.reportBug() }
         }

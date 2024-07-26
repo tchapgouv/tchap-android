@@ -41,6 +41,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.presence.model.UserPresence
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -172,7 +173,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>(R.layo
     private fun renderSelection(holder: Holder, isSelected: Boolean) {
         if (isSelected) {
             holder.avatarCheckedImageView.visibility = View.VISIBLE
-            val backgroundColor = ThemeUtils.getColor(holder.view.context, R.attr.colorPrimary)
+            val backgroundColor = ThemeUtils.getColor(holder.view.context, com.google.android.material.R.attr.colorPrimary)
             val backgroundDrawable = TextDrawable.builder().buildRound("", backgroundColor)
             holder.avatarImageView.setImageDrawable(backgroundDrawable)
         } else {
@@ -185,15 +186,15 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>(R.layo
         with(holder) {
             when (roomType) {
                 TchapRoomType.EXTERNAL -> {
-                    domainNameView.text = view.context.getString(R.string.tchap_room_extern_room_type)
-                    domainNameView.setTextColor(ContextCompat.getColor(view.context, R.color.tchap_room_external))
+                    domainNameView.text = view.context.getString(CommonStrings.tchap_room_extern_room_type)
+                    domainNameView.setTextColor(ContextCompat.getColor(view.context, im.vector.lib.ui.styles.R.color.tchap_room_external))
                 }
                 TchapRoomType.FORUM -> {
-                    domainNameView.text = view.context.getString(R.string.tchap_room_forum_type)
-                    domainNameView.setTextColor(ContextCompat.getColor(view.context, R.color.tchap_room_forum))
+                    domainNameView.text = view.context.getString(CommonStrings.tchap_room_forum_type)
+                    domainNameView.setTextColor(ContextCompat.getColor(view.context, im.vector.lib.ui.styles.R.color.tchap_room_forum))
                 }
                 else -> {
-                    domainNameView.text = ""
+                    domainNameView.text = null
                 }
             }
 

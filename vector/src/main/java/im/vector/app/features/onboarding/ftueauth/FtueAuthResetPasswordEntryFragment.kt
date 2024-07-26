@@ -23,7 +23,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
@@ -33,6 +32,7 @@ import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.databinding.FragmentFtueResetPasswordInputBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.failure.isMissingEmailVerification
 
 @AndroidEntryPoint
@@ -96,12 +96,12 @@ class FtueAuthResetPasswordEntryFragment :
             if (showWarning) {
                 showWarning = false
                 MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(R.string.login_reset_password_warning_title)
-                        .setMessage(R.string.login_reset_password_warning_content)
-                        .setPositiveButton(R.string.login_reset_password_warning_submit) { _, _ ->
+                        .setTitle(CommonStrings.login_reset_password_warning_title)
+                        .setMessage(CommonStrings.login_reset_password_warning_content)
+                        .setPositiveButton(CommonStrings.login_reset_password_warning_submit) { _, _ ->
                             this@FtueAuthResetPasswordEntryFragment.resetPassword()
                         }
-                        .setNegativeButton(R.string.action_cancel, null)
+                        .setNegativeButton(CommonStrings.action_cancel, null)
                         .show()
             } else {
                 this@FtueAuthResetPasswordEntryFragment.resetPassword()

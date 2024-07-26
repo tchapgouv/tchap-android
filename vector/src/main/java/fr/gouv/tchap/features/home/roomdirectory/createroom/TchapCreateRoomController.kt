@@ -19,12 +19,12 @@ package fr.gouv.tchap.features.home.roomdirectory.createroom
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Loading
 import fr.gouv.tchap.core.utils.TchapRoomType
-import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsSectionTitleItem
 import im.vector.app.features.form.formSubmitButtonItem
 import im.vector.app.features.roomdirectory.createroom.CreateRoomController
 import im.vector.app.features.roomdirectory.createroom.CreateRoomViewState
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 class TchapCreateRoomController @Inject constructor(
@@ -51,13 +51,13 @@ class TchapCreateRoomController @Inject constructor(
             roomType(viewState.roomType)
 
             value(viewState.roomName)
-            hint(host.stringProvider.getString(R.string.create_room_name_hint))
+            hint(host.stringProvider.getString(CommonStrings.create_room_name_hint))
             onTextChange { host.listener?.onNameChange(it) }
         }
 
         settingsSectionTitleItem {
             id("typeSection")
-            titleResId(R.string.tchap_room_creation_room_type_title)
+            titleResId(CommonStrings.tchap_room_creation_room_type_title)
             showBackground(false)
         }
 
@@ -86,7 +86,7 @@ class TchapCreateRoomController @Inject constructor(
         formSubmitButtonItem {
             id("submit")
             enabled(enableFormElement && viewState.roomName.isNotEmpty())
-            buttonTitleId(R.string.create_room_action_create)
+            buttonTitleId(CommonStrings.create_room_action_create)
             buttonClickListener { host.listener?.submit() }
         }
     }

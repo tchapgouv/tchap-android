@@ -39,6 +39,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.util.MatrixItem
 
 @EpoxyModelClass
@@ -76,20 +77,20 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         // Sent by me means I made the call and opponent missed it.
         if (attributes.informationData.sentByMe) {
             if (attributes.callKind.isVoiceCall) {
-                holder.statusView.setStatus(R.string.call_tile_no_answer, R.drawable.ic_voice_call_declined)
+                holder.statusView.setStatus(CommonStrings.call_tile_no_answer, R.drawable.ic_voice_call_declined)
             } else {
-                holder.statusView.setStatus(R.string.call_tile_no_answer, R.drawable.ic_video_call_declined)
+                holder.statusView.setStatus(CommonStrings.call_tile_no_answer, R.drawable.ic_video_call_declined)
             }
         } else {
             if (attributes.callKind.isVoiceCall) {
-                holder.statusView.setStatus(R.string.call_tile_voice_missed, R.drawable.ic_missed_voice_call_small)
+                holder.statusView.setStatus(CommonStrings.call_tile_voice_missed, R.drawable.ic_missed_voice_call_small)
             } else {
-                holder.statusView.setStatus(R.string.call_tile_video_missed, R.drawable.ic_missed_video_call_small)
+                holder.statusView.setStatus(CommonStrings.call_tile_video_missed, R.drawable.ic_missed_video_call_small)
             }
         }
         holder.acceptRejectViewGroup.isVisible = true
-        holder.acceptView.setText(R.string.call_tile_call_back)
-        holder.acceptView.setLeftDrawable(attributes.callKind.icon, R.attr.colorOnPrimary)
+        holder.acceptView.setText(CommonStrings.call_tile_call_back)
+        holder.acceptView.setLeftDrawable(attributes.callKind.icon, com.google.android.material.R.attr.colorOnPrimary)
         holder.acceptView.onClick {
             val callbackAction = RoomDetailAction.StartCall(attributes.callKind == CallKind.VIDEO)
             attributes.callback?.onTimelineItemAction(callbackAction)
@@ -101,7 +102,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         // TCHAP Add button to report issues about voip
         holder.acceptRejectViewGroup.isVisible = true
         holder.rejectView.isVisible = false
-        holder.acceptView.setText(R.string.tchap_call_tile_reported)
+        holder.acceptView.setText(CommonStrings.tchap_call_tile_reported)
         holder.acceptView.clearDrawables()
         holder.acceptView.onClick {
             val callbackAction = RoomDetailAction.SendCallFeedback
@@ -109,23 +110,23 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         }
         when (attributes.callKind) {
             CallKind.VIDEO -> {
-                val endCallStatus = holder.resources.getString(R.string.call_tile_video_call_has_ended, attributes.formattedDuration)
+                val endCallStatus = holder.resources.getString(CommonStrings.call_tile_video_call_has_ended, attributes.formattedDuration)
                 holder.statusView.setStatus(endCallStatus)
             }
             CallKind.AUDIO -> {
-                val endCallStatus = holder.resources.getString(R.string.call_tile_voice_call_has_ended, attributes.formattedDuration)
+                val endCallStatus = holder.resources.getString(CommonStrings.call_tile_voice_call_has_ended, attributes.formattedDuration)
                 holder.statusView.setStatus(endCallStatus)
             }
             CallKind.CONFERENCE -> {
-                holder.statusView.setStatus(R.string.call_tile_ended)
+                holder.statusView.setStatus(CommonStrings.call_tile_ended)
             }
         }
     }
 
     private fun renderRejectedStatus(holder: Holder) {
         holder.acceptRejectViewGroup.isVisible = true
-        holder.acceptView.setText(R.string.call_tile_call_back)
-        holder.acceptView.setLeftDrawable(attributes.callKind.icon, R.attr.colorOnPrimary)
+        holder.acceptView.setText(CommonStrings.call_tile_call_back)
+        holder.acceptView.setLeftDrawable(attributes.callKind.icon, com.google.android.material.R.attr.colorOnPrimary)
         holder.acceptView.onClick {
             val callbackAction = RoomDetailAction.StartCall(attributes.callKind == CallKind.VIDEO)
             attributes.callback?.onTimelineItemAction(callbackAction)
@@ -134,15 +135,15 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         // Sent by me means I rejected the call made by opponent.
         if (attributes.informationData.sentByMe) {
             if (attributes.callKind.isVoiceCall) {
-                holder.statusView.setStatus(R.string.call_tile_voice_declined, R.drawable.ic_voice_call_declined)
+                holder.statusView.setStatus(CommonStrings.call_tile_voice_declined, R.drawable.ic_voice_call_declined)
             } else {
-                holder.statusView.setStatus(R.string.call_tile_video_declined, R.drawable.ic_video_call_declined)
+                holder.statusView.setStatus(CommonStrings.call_tile_video_declined, R.drawable.ic_video_call_declined)
             }
         } else {
             if (attributes.callKind.isVoiceCall) {
-                holder.statusView.setStatus(R.string.call_tile_no_answer, R.drawable.ic_voice_call_declined)
+                holder.statusView.setStatus(CommonStrings.call_tile_no_answer, R.drawable.ic_voice_call_declined)
             } else {
-                holder.statusView.setStatus(R.string.call_tile_no_answer, R.drawable.ic_video_call_declined)
+                holder.statusView.setStatus(CommonStrings.call_tile_no_answer, R.drawable.ic_video_call_declined)
             }
         }
     }
@@ -153,16 +154,16 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         when {
             attributes.callKind == CallKind.CONFERENCE -> {
                 holder.rejectView.isVisible = true
-                holder.rejectView.setText(R.string.action_leave)
-                holder.rejectView.setLeftDrawable(R.drawable.ic_call_hangup, R.attr.colorOnPrimary)
+                holder.rejectView.setText(CommonStrings.action_leave)
+                holder.rejectView.setLeftDrawable(R.drawable.ic_call_hangup, com.google.android.material.R.attr.colorOnPrimary)
                 holder.rejectView.onClick {
                     attributes.callback?.onTimelineItemAction(RoomDetailAction.LeaveJitsiCall)
                 }
             }
             attributes.isStillActive -> {
                 holder.rejectView.isVisible = true
-                holder.rejectView.setText(R.string.call_notification_hangup)
-                holder.rejectView.setLeftDrawable(R.drawable.ic_call_hangup, R.attr.colorOnPrimary)
+                holder.rejectView.setText(CommonStrings.call_notification_hangup)
+                holder.rejectView.setLeftDrawable(R.drawable.ic_call_hangup, com.google.android.material.R.attr.colorOnPrimary)
                 holder.rejectView.onClick {
                     attributes.callback?.onTimelineItemAction(RoomDetailAction.EndCall)
                 }
@@ -172,9 +173,9 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
             }
         }
         if (attributes.callKind.isVoiceCall) {
-            holder.statusView.setStatus(R.string.call_tile_voice_active)
+            holder.statusView.setStatus(CommonStrings.call_tile_voice_active)
         } else {
-            holder.statusView.setStatus(R.string.call_tile_video_active)
+            holder.statusView.setStatus(CommonStrings.call_tile_video_active)
         }
     }
 
@@ -187,8 +188,8 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
                 }
                 holder.acceptView.isVisible = true
                 holder.rejectView.isVisible = false
-                holder.acceptView.setText(R.string.action_join)
-                holder.acceptView.setLeftDrawable(R.drawable.ic_call_video_small, R.attr.colorOnPrimary)
+                holder.acceptView.setText(CommonStrings.action_join)
+                holder.acceptView.setLeftDrawable(R.drawable.ic_call_video_small, com.google.android.material.R.attr.colorOnPrimary)
             }
             !attributes.informationData.sentByMe && attributes.isStillActive -> {
                 holder.acceptRejectViewGroup.isVisible = true
@@ -197,18 +198,18 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
                 holder.acceptView.onClick {
                     attributes.callback?.onTimelineItemAction(RoomDetailAction.AcceptCall(callId = attributes.callId))
                 }
-                holder.rejectView.setLeftDrawable(R.drawable.ic_call_hangup, R.attr.colorOnPrimary)
+                holder.rejectView.setLeftDrawable(R.drawable.ic_call_hangup, com.google.android.material.R.attr.colorOnPrimary)
                 holder.rejectView.onClick {
                     attributes.callback?.onTimelineItemAction(RoomDetailAction.EndCall)
                 }
                 if (attributes.callKind == CallKind.AUDIO) {
-                    holder.rejectView.setText(R.string.call_notification_reject)
-                    holder.acceptView.setText(R.string.call_notification_answer)
-                    holder.acceptView.setLeftDrawable(R.drawable.ic_call_audio_small, R.attr.colorOnPrimary)
+                    holder.rejectView.setText(CommonStrings.call_notification_reject)
+                    holder.acceptView.setText(CommonStrings.call_notification_answer)
+                    holder.acceptView.setLeftDrawable(R.drawable.ic_call_audio_small, com.google.android.material.R.attr.colorOnPrimary)
                 } else if (attributes.callKind == CallKind.VIDEO) {
-                    holder.rejectView.setText(R.string.call_notification_reject)
-                    holder.acceptView.setText(R.string.call_notification_answer)
-                    holder.acceptView.setLeftDrawable(R.drawable.ic_call_video_small, R.attr.colorOnPrimary)
+                    holder.rejectView.setText(CommonStrings.call_notification_reject)
+                    holder.acceptView.setText(CommonStrings.call_notification_answer)
+                    holder.acceptView.setLeftDrawable(R.drawable.ic_call_video_small, com.google.android.material.R.attr.colorOnPrimary)
                 }
             }
             else -> {
@@ -218,22 +219,22 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         when {
             // Invite state for conference should show as InCallStatus
             attributes.callKind == CallKind.CONFERENCE -> {
-                holder.statusView.setStatus(R.string.call_tile_video_active)
+                holder.statusView.setStatus(CommonStrings.call_tile_video_active)
             }
             attributes.informationData.sentByMe -> {
-                holder.statusView.setStatus(R.string.call_ringing)
+                holder.statusView.setStatus(CommonStrings.call_ringing)
             }
             attributes.callKind.isVoiceCall -> {
-                holder.statusView.setStatus(R.string.call_tile_voice_incoming)
+                holder.statusView.setStatus(CommonStrings.call_tile_voice_incoming)
             }
             else -> {
-                holder.statusView.setStatus(R.string.call_tile_video_incoming)
+                holder.statusView.setStatus(CommonStrings.call_tile_video_incoming)
             }
         }
     }
 
     private fun renderCallSupportState(holder: Holder) {
-        val error = if (!attributes.isCallSupported) holder.resources.getString(R.string.tchap_call_not_supported) else null
+        val error = if (!attributes.isCallSupported) holder.resources.getString(CommonStrings.tchap_call_not_supported) else null
         holder.acceptView.isEnabled = attributes.isCallSupported
         holder.rejectView.isEnabled = attributes.isCallSupported
         holder.errorView.setTextOrHide(error)
@@ -288,9 +289,9 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
     ) : AbsBaseMessageItem.Attributes
 
     enum class CallKind(@DrawableRes val icon: Int, @StringRes val title: Int) {
-        VIDEO(R.drawable.ic_call_video_small, R.string.action_video_call),
-        AUDIO(R.drawable.ic_call_audio_small, R.string.action_voice_call),
-        CONFERENCE(R.drawable.ic_call_video_small, R.string.action_video_call);
+        VIDEO(R.drawable.ic_call_video_small, CommonStrings.action_video_call),
+        AUDIO(R.drawable.ic_call_audio_small, CommonStrings.action_voice_call),
+        CONFERENCE(R.drawable.ic_call_video_small, CommonStrings.action_video_call);
 
         val isVoiceCall
             get() = this == AUDIO

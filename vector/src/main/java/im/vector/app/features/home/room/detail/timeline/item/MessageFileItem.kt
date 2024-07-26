@@ -35,6 +35,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.ContentScannerSta
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonStrings
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 
@@ -100,7 +101,7 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
         val backgroundTint = if (attributes.informationData.messageLayout is TimelineMessageLayout.Bubble) {
             Color.TRANSPARENT
         } else {
-            ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_quinary)
+            ThemeUtils.getColor(holder.view.context, im.vector.lib.ui.styles.R.attr.vctr_content_quinary)
         }
         holder.mainLayout.backgroundTintList = ColorStateList.valueOf(backgroundTint)
         holder.filenameView.onClick(attributes.itemClickListener)
@@ -141,9 +142,9 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
                 fileDownloadProgress.isVisible = true
                 fileImageWrapper.background = ContextCompat.getDrawable(view.context, R.drawable.rounded_rect_shape_8)
                 fileImageView.setImageResource(R.drawable.ic_paperclip)
-                fileImageView.imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(view.context, R.attr.vctr_notice_secondary))
+                fileImageView.imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(view.context, im.vector.lib.ui.styles.R.attr.vctr_notice_secondary))
 
-                messageFileAvText.text = view.context.getText(R.string.antivirus_clean)
+                messageFileAvText.text = view.context.getText(CommonStrings.antivirus_clean)
                 messageFileAvText.isVisible = true
                 messageFileAvText.setCompoundDrawablesWithIntrinsicBounds(
                         ContextCompat.getDrawable(view.context, R.drawable.ic_av_checked),
@@ -164,12 +165,12 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
                 fileImageView.setImageResource(R.drawable.ic_tchap_danger)
                 fileImageView.imageTintList = null
 
-                messageFileAvText.text = span(view.context.getText(R.string.antivirus_infected)) {
-                    textColor = ThemeUtils.getColor(view.context, R.attr.colorError)
+                messageFileAvText.text = span(view.context.getText(CommonStrings.antivirus_infected)) {
+                    textColor = ThemeUtils.getColor(view.context, com.google.android.material.R.attr.colorError)
                 }
                 messageFileAvText.isVisible = true
                 messageFileAvText.setCompoundDrawables(null, null, null, null)
-                filenameView.text = view.context.getString(R.string.tchap_scan_media_untrusted_content_message, filenameView.text)
+                filenameView.text = view.context.getString(CommonStrings.tchap_scan_media_untrusted_content_message, filenameView.text)
             }
         }
 
@@ -177,8 +178,8 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
             fileImageView.background = ContextCompat.getDrawable(view.context, R.drawable.rounded_rect_shape_8)
             fileImageView.setImageResource(R.drawable.ic_paperclip)
 
-            messageFileAvText.text = span(view.context.getText(R.string.antivirus_in_progress)) {
-                textColor = ThemeUtils.getColor(view.context, R.attr.vctr_notice_secondary)
+            messageFileAvText.text = span(view.context.getText(CommonStrings.antivirus_in_progress)) {
+                textColor = ThemeUtils.getColor(view.context, im.vector.lib.ui.styles.R.attr.vctr_notice_secondary)
             }
             messageFileAvText.isVisible = true
             messageFileAvText.setCompoundDrawables(null, null, null, null)

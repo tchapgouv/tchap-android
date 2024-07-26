@@ -19,7 +19,6 @@ package fr.gouv.tchap.features.roomprofile.settings.linkaccess
 import com.airbnb.epoxy.TypedEpoxyController
 import fr.gouv.tchap.core.utils.RoomUtils
 import fr.gouv.tchap.core.utils.TchapRoomType
-import im.vector.app.R
 import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.epoxy.profiles.profileActionItem
 import im.vector.app.core.resources.ColorProvider
@@ -29,6 +28,7 @@ import im.vector.app.core.ui.list.verticalMarginItem
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.form.formSwitchItem
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 class TchapRoomLinkAccessController @Inject constructor(
@@ -51,13 +51,13 @@ class TchapRoomLinkAccessController @Inject constructor(
         val roomType = RoomUtils.getRoomType(roomSummary)
 
         buildProfileSection(
-                stringProvider.getString(R.string.tchap_room_settings_room_access_by_link_title)
+                stringProvider.getString(CommonStrings.tchap_room_settings_room_access_by_link_title)
         )
 
         if (state.canChangeLinkAccess && roomType != TchapRoomType.FORUM) {
             formSwitchItem {
                 id("LinkAccessActivation")
-                title(host.stringProvider.getString(R.string.tchap_room_settings_enable_room_access_by_link))
+                title(host.stringProvider.getString(CommonStrings.tchap_room_settings_enable_room_access_by_link))
                 switchChecked(state.isLinkAccessEnabled)
                 listener { host.interactionListener?.setLinkAccessEnabled(it) }
                 enabled(state.canChangeLinkAccess)
@@ -70,8 +70,8 @@ class TchapRoomLinkAccessController @Inject constructor(
 
             genericHeaderItem {
                 id("forumTitle")
-                text(host.stringProvider.getString(R.string.tchap_room_settings_room_access_by_link_enabled))
-                textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                text(host.stringProvider.getString(CommonStrings.tchap_room_settings_room_access_by_link_enabled))
+                textColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
             }
 
             verticalMarginItem {
@@ -84,9 +84,9 @@ class TchapRoomLinkAccessController @Inject constructor(
             id("LinkAccessInfo")
             helperTextResId(
                     when {
-                        !state.isLinkAccessEnabled -> R.string.tchap_room_settings_enable_room_access_by_link_info_off
-                        roomType == TchapRoomType.EXTERNAL -> R.string.tchap_room_settings_enable_room_access_by_link_info_on_with_limitation
-                        else -> R.string.tchap_room_settings_enable_room_access_by_link_info_on
+                        !state.isLinkAccessEnabled -> CommonStrings.tchap_room_settings_enable_room_access_by_link_info_off
+                        roomType == TchapRoomType.EXTERNAL -> CommonStrings.tchap_room_settings_enable_room_access_by_link_info_on_with_limitation
+                        else -> CommonStrings.tchap_room_settings_enable_room_access_by_link_info_on
                     }
             )
         }

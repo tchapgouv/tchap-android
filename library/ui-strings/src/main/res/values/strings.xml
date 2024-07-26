@@ -2054,7 +2054,7 @@
     <string name="ftue_auth_phone_confirmation_entry_title">Confirmation code</string>
 
     <!-- Note for translators, %s is the homeserver name, eg matrix.org -->
-    <string name="ftue_auth_reset_password_email_subtitle">%s will send you a verification link</string>
+    <string name="ftue_auth_reset_password_email_subtitle">${app_name} will send you a verification link</string> <!-- Tchap: Custom string -->
     <string name="ftue_auth_reset_password_breaker_title">Check your email.</string>
     <string name="ftue_auth_new_password_entry_title">New Password</string>
     <string name="ftue_auth_new_password_title">Choose a new password</string>

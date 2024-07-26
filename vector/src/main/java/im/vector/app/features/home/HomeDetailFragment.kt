@@ -66,6 +66,7 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusAction
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
@@ -222,24 +223,24 @@ class HomeDetailFragment :
             when (viewEvent) {
                 CreateDirectRoomViewEvents.InviteSent -> {
                     handleInviteByEmailResult(buildString {
-                        appendLine(getString(R.string.tchap_invite_sending_succeeded))
-                        appendLine(getString(R.string.tchap_send_invite_confirmation))
+                        appendLine(getString(CommonStrings.tchap_invite_sending_succeeded))
+                        appendLine(getString(CommonStrings.tchap_send_invite_confirmation))
                     })
                 }
                 is CreateDirectRoomViewEvents.Failure -> showFailure(viewEvent.throwable)
                 is CreateDirectRoomViewEvents.UserDiscovered -> handleExistingUser(viewEvent.user)
                 is CreateDirectRoomViewEvents.InviteAlreadySent -> {
-                    handleInviteByEmailResult(getString(R.string.tchap_invite_already_send_message, viewEvent.email))
+                    handleInviteByEmailResult(getString(CommonStrings.tchap_invite_already_send_message, viewEvent.email))
                 }
                 is CreateDirectRoomViewEvents.InviteUnauthorizedEmail -> {
-                    handleInviteByEmailResult(getString(R.string.tchap_invite_unauthorized_message, viewEvent.email))
+                    handleInviteByEmailResult(getString(CommonStrings.tchap_invite_unauthorized_message, viewEvent.email))
                 }
                 is CreateDirectRoomViewEvents.OpenDirectChat -> openRoom(viewEvent.roomId)
                 CreateDirectRoomViewEvents.DmSelf -> {
-                    Toast.makeText(requireContext(), R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), CommonStrings.cannot_dm_self, Toast.LENGTH_SHORT).show()
                 }
                 CreateDirectRoomViewEvents.InvalidCode -> {
-                    Toast.makeText(requireContext(), R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), CommonStrings.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -285,12 +286,12 @@ class HomeDetailFragment :
         alertManager.postVectorAlert(
                 VerificationVectorAlert(
                         uid = uid,
-                        title = getString(R.string.new_session),
-                        description = getString(R.string.verify_this_session, newest.displayName ?: newest.deviceId ?: ""),
+                        title = getString(CommonStrings.new_session),
+                        description = getString(CommonStrings.verify_this_session, newest.displayName ?: newest.deviceId ?: ""),
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer)
-                    colorInt = colorProvider.getColorFromAttribute(R.attr.colorPrimary)
+                    colorInt = colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let { vectorBaseActivity ->
                             vectorBaseActivity.navigator
@@ -314,12 +315,12 @@ class HomeDetailFragment :
         alertManager.postVectorAlert(
                 VerificationVectorAlert(
                         uid = uid,
-                        title = getString(R.string.review_unverified_sessions_title),
-                        description = getString(R.string.review_unverified_sessions_description),
+                        title = getString(CommonStrings.review_unverified_sessions_title),
+                        description = getString(CommonStrings.review_unverified_sessions_description),
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer)
-                    colorInt = colorProvider.getColorFromAttribute(R.attr.colorPrimary)
+                    colorInt = colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let { activity ->
                             // mark as ignored to avoid showing it again
@@ -497,11 +498,11 @@ class HomeDetailFragment :
         isVisible = count > 0
         number = count
         maxCharacterCount = 3
-        badgeTextColor = ThemeUtils.getColor(requireContext(), R.attr.colorOnPrimary)
+        badgeTextColor = ThemeUtils.getColor(requireContext(), com.google.android.material.R.attr.colorOnPrimary)
         backgroundColor = if (highlight) {
-            ThemeUtils.getColor(requireContext(), R.attr.colorError)
+            ThemeUtils.getColor(requireContext(), com.google.android.material.R.attr.colorError)
         } else {
-            ThemeUtils.getColor(requireContext(), R.attr.vctr_unread_background)
+            ThemeUtils.getColor(requireContext(), im.vector.lib.ui.styles.R.attr.vctr_unread_background)
         }
     }
 
@@ -551,9 +552,9 @@ class HomeDetailFragment :
 
     private fun handleExistingUser(user: User) {
         MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.permissions_rationale_popup_title)
-                .setMessage(R.string.tchap_invite_not_sent_for_discovered_user)
-                .setPositiveButton(R.string.ok) { _, _ ->
+                .setTitle(CommonStrings.permissions_rationale_popup_title)
+                .setMessage(CommonStrings.tchap_invite_not_sent_for_discovered_user)
+                .setPositiveButton(CommonStrings.ok) { _, _ ->
                     createDirectRoomViewModel.handle(CreateDirectRoomAction.CreateDirectMessageByUserId(user.userId))
                 }
                 .show()
