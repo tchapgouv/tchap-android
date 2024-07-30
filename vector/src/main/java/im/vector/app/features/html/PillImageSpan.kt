@@ -57,7 +57,7 @@ class PillImageSpan(
         override val matrixItem: MatrixItem
 ) : ReplacementSpan(), MatrixItemSpan {
 
-    private val maxSize = context.resources.getDimensionPixelSize(im.vector.lib.ui.styles.R.dimen.pill_avatar_size)
+    private val maxPxSize = context.resources.getDimensionPixelSize(im.vector.lib.ui.styles.R.dimen.pill_avatar_size)
     private val pillDrawable = createChipDrawable()
     private val target = PillImageSpanTarget(this)
     private var tv: WeakReference<TextView>? = null
@@ -65,7 +65,7 @@ class PillImageSpan(
     @UiThread
     fun bind(textView: TextView) {
         tv = WeakReference(textView)
-        avatarRenderer.render(glideRequests, matrixItem, target, maxSize) // TCHAP Fix avatar sizing
+        avatarRenderer.render(glideRequests, matrixItem, target, maxPxSize) // TCHAP Fix avatar sizing
     }
 
     // ReplacementSpan *****************************************************************************
@@ -145,7 +145,7 @@ class PillImageSpan(
             }
             else -> {
                 try {
-                    avatarRenderer.getCachedDrawable(glideRequests, matrixItem, maxSize) // TCHAP Fix avatar sizing
+                    avatarRenderer.getCachedDrawable(glideRequests, matrixItem, maxPxSize) // TCHAP Fix avatar sizing
                 } catch (exception: Exception) {
                     avatarRenderer.getPlaceholderDrawable(matrixItem)
                 }

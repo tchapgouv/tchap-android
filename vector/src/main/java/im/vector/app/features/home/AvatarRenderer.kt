@@ -163,7 +163,7 @@ class AvatarRenderer @Inject constructor(
             glideRequests: GlideRequests,
             matrixItem: MatrixItem,
             target: Target<Drawable>,
-            maxSize: Int = 0
+            maxPxSize: Int = 0
     ) {
         val placeholder = getPlaceholderDrawable(matrixItem)
         glideRequests.loadResolvedUrl(matrixItem.avatarUrl)
@@ -174,7 +174,7 @@ class AvatarRenderer @Inject constructor(
                         }
                         else -> {
                             // TCHAP Fix avatar sizing
-                            it.apply(RequestOptions.circleCropTransform().override(maxSize, maxSize))
+                            it.apply(RequestOptions.circleCropTransform().override(maxPxSize, maxPxSize))
                         }
                     }
                 }
@@ -266,10 +266,10 @@ class AvatarRenderer @Inject constructor(
     }
 
     @AnyThread
-    fun getCachedDrawable(glideRequests: GlideRequests, matrixItem: MatrixItem, maxSize: Int = 0): Drawable {
+    fun getCachedDrawable(glideRequests: GlideRequests, matrixItem: MatrixItem, maxPxSize: Int = 0): Drawable {
         return glideRequests.loadResolvedUrl(matrixItem.avatarUrl)
                 .onlyRetrieveFromCache(true)
-                .apply(RequestOptions.circleCropTransform().override(maxSize, maxSize)) // TCHAP Fix avatar sizing
+                .apply(RequestOptions.circleCropTransform().override(maxPxSize, maxPxSize)) // TCHAP Fix avatar sizing
                 .submit()
                 .get()
     }
