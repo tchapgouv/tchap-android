@@ -63,7 +63,6 @@ private const val MAX_WAIT_MILLIS = 60_000
 class DecryptionFailureTracker @Inject constructor(
         private val analyticsTracker: AnalyticsTracker,
         private val sessionDataSource: ActiveSessionDataSource,
-        private val decryptionFailurePersistence: ReportedDecryptionFailurePersistence,
         private val clock: Clock
 ) : Session.Listener, LiveEventListener {
 
@@ -76,6 +75,9 @@ class DecryptionFailureTracker @Inject constructor(
     // Map of eventId to tracked failure
     // Only accessed on a `post` call, ensuring sequential access
     private val trackedEventsMap = mutableMapOf<String, DecryptionFailure>()
+
+    // List of eventId that have been reported, to avoid double reporting
+    private val alreadyReported = mutableListOf<String>()
 
     // Mutex to ensure sequential access to internal state
     private val mutex = Mutex()
@@ -96,16 +98,10 @@ class DecryptionFailureTracker @Inject constructor(
             this.scope = scope
         }
         observeActiveSession()
-        post {
-            decryptionFailurePersistence.load()
-        }
     }
 
     fun stop() {
         Timber.v("Stop DecryptionFailureTracker")
-        post {
-                decryptionFailurePersistence.persist()
-        }
         activeSessionSourceDisposable.cancel(CancellationException("Closing DecryptionFailureTracker"))
 
         activeSession?.removeListener(this)
@@ -127,7 +123,6 @@ class DecryptionFailureTracker @Inject constructor(
             delay(CHECK_INTERVAL)
             post {
                 checkFailures()
-                decryptionFailurePersistence.persist()
                 currentTicker = null
                 if (trackedEventsMap.isNotEmpty()) {
                     // Reschedule
@@ -136,12 +131,13 @@ class DecryptionFailureTracker @Inject constructor(
             }
         }
     }
+
     private fun observeActiveSession() {
-       activeSessionSourceDisposable =  sessionDataSource.stream()
+        activeSessionSourceDisposable = sessionDataSource.stream()
                 .distinctUntilChanged()
                 .onEach {
                     Timber.v("Active session changed ${it.getOrNull()?.myUserId}")
-                    it.getOrNull()?.let { session ->
+                    it.orNull()?.let { session ->
                         post {
                             onSessionActive(session)
                         }
@@ -149,7 +145,7 @@ class DecryptionFailureTracker @Inject constructor(
                 }.launchIn(scope)
     }
 
-    private suspend fun onSessionActive(session: Session) {
+    private fun onSessionActive(session: Session) {
         Timber.v("onSessionActive ${session.myUserId} previous: ${activeSession?.myUserId}")
         val sessionId = session.sessionId
         if (sessionId == activeSession?.sessionId) {
@@ -206,14 +202,13 @@ class DecryptionFailureTracker @Inject constructor(
             // already tracked
             return
         }
-        if (decryptionFailurePersistence.hasBeenReported(eventId)) {
-            Timber.v("Event $eventId already reported")
+        if (alreadyReported.contains(eventId)) {
             // already reported
             return
         }
         val isOwnIdentityTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified()
         val userHS = MatrixPatterns.extractServerNameFromId(session.myUserId)
-        val messageSenderHs = event.senderId?.let {  MatrixPatterns.extractServerNameFromId(it) }
+        val messageSenderHs = event.senderId?.let { MatrixPatterns.extractServerNameFromId(it) }
         Timber.v("senderHs: $messageSenderHs, userHS: $userHS, isOwnIdentityTrusted: $isOwnIdentityTrusted")
 
         val deviceCreationTs = session.cryptoService().getMyCryptoDevice().firstTimeSeenLocalTs
@@ -242,7 +237,7 @@ class DecryptionFailureTracker @Inject constructor(
         }
     }
 
-    private suspend fun handleEventDecrypted(eventId: String) {
+    private fun handleEventDecrypted(eventId: String) {
         Timber.v("Handle event decrypted $eventId time: ${clock.epochMillis()}")
         // Only consider if it was tracked as a failure
         val trackedFailure = trackedEventsMap[eventId] ?: return
@@ -264,7 +259,7 @@ class DecryptionFailureTracker @Inject constructor(
         }
     }
 
-     fun utdDisplayedInTimeline(event: TimelineEvent) {
+    fun utdDisplayedInTimeline(event: TimelineEvent) {
         post {
             // should be tracked (unless already reported)
             val eventId = event.root.eventId ?: return@post
@@ -275,7 +270,7 @@ class DecryptionFailureTracker @Inject constructor(
     }
 
     // This will mutate the trackedEventsMap, so don't call it while iterating on it.
-    private suspend fun reportFailure(decryptionFailure: DecryptionFailure) {
+    private fun reportFailure(decryptionFailure: DecryptionFailure) {
         Timber.v("Report failure for event ${decryptionFailure.failedEventId}")
         val error = decryptionFailure.toAnalyticsEvent()
 
@@ -284,10 +279,10 @@ class DecryptionFailureTracker @Inject constructor(
         // now remove from tracked
         trackedEventsMap.remove(decryptionFailure.failedEventId)
         // mark as already reported
-        decryptionFailurePersistence.markAsReported(decryptionFailure.failedEventId)
+        alreadyReported.add(decryptionFailure.failedEventId)
     }
 
-    private suspend fun checkFailures() {
+    private fun checkFailures() {
         val now = clock.epochMillis()
         Timber.v("Check failures now $now")
         // report the definitely failed
