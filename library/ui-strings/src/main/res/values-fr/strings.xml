@@ -2013,7 +2013,7 @@
     <string name="create_spaces_make_sure_access">Assurez-vous que les bonnes personnes ont accès à %s.</string>
     <string name="create_spaces_who_are_you_working_with">Avec qui travaillez-vous \?</string>
     <string name="create_spaces_join_info_help">Pour rejoindre un espace existant, il vous faut une invitation.</string>
-    <string name="error_file_too_big_simple">Le fichier est trop volumineux pour être envoyé.</string>
+    <string name="error_file_too_big_simple">Le fichier est trop volumineux ou l’image est trop grande pour être envoyée.</string> <!-- Tchap: Use custom string -->
     <string name="send_file_step_compressing_video">Compression de la vidéo %d %%</string>
     <string name="send_file_step_compressing_image">Compression de l’image…</string>
     <string name="use_as_default_and_do_not_ask_again">Utiliser par défaut et ne plus demander</string>
