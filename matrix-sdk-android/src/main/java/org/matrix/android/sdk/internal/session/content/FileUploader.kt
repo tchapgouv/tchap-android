@@ -17,6 +17,8 @@
 package org.matrix.android.sdk.internal.session.content
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
@@ -37,12 +39,14 @@ import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeImage
 import org.matrix.android.sdk.internal.di.Authenticated
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.ProgressRequestBody
 import org.matrix.android.sdk.internal.network.awaitResponse
 import org.matrix.android.sdk.internal.network.toFailure
 import org.matrix.android.sdk.internal.util.TemporaryFileCreator
+import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -70,6 +74,7 @@ internal class FileUploader @Inject constructor(
     ): ContentUploadResponse {
         // Check size limit
         val maxUploadFileSize = homeServerCapabilitiesService.getHomeServerCapabilities().maxUploadFileSize
+        val maxImageSize = 32_000_000
 
         if (maxUploadFileSize != HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN &&
                 file.length() > maxUploadFileSize) {
@@ -81,6 +86,24 @@ internal class FileUploader @Inject constructor(
                     ),
                     httpCode = 413
             )
+        }
+
+        // TCHAP Check image size limit
+        if (mimeType.isMimeTypeImage()) {
+            BitmapFactory.Options().run {
+                inJustDecodeBounds = true
+                decodeBitmap(file, this)
+                if (outHeight * outWidth > maxImageSize) {
+                    // Known limitation and image size too big for the server, save the pain to upload it
+                    throw Failure.ServerError(
+                            error = MatrixError(
+                                    code = MatrixError.M_TOO_LARGE,
+                                    message = "Cannot upload images larger than ${maxImageSize / 1_000_000} Megapixels"
+                            ),
+                            httpCode = 413
+                    )
+                }
+            }
         }
 
         val uploadBody = object : RequestBody() {
@@ -132,6 +155,17 @@ internal class FileUploader @Inject constructor(
             }
             inputStream.close()
             workingFile
+        }
+    }
+
+    private fun decodeBitmap(file: File, options: BitmapFactory.Options = BitmapFactory.Options()): Bitmap? {
+        return try {
+            file.inputStream().use { inputStream ->
+                BitmapFactory.decodeStream(inputStream, null, options)
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Cannot decode Bitmap")
+            null
         }
     }
 

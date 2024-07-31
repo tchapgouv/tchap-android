@@ -48,7 +48,7 @@ abstract class SettingsSectionTitleItem : VectorEpoxyModel<SettingsSectionTitleI
         }
         holder.textView.apply {
             if (showBackground) {
-                setBackgroundColor(ThemeUtils.getColor(context, R.attr.vctr_header_background))
+                setBackgroundColor(ThemeUtils.getColor(context, im.vector.lib.ui.styles.R.attr.vctr_header_background))
             } else {
                 background = null
             }

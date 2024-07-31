@@ -53,6 +53,7 @@ import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.navigation.SettingsActivityPayload
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
@@ -142,7 +143,7 @@ class RoomProfileFragment :
     }
 
     private fun setupWaitingView() {
-        views.waitingView.waitingStatusText.setText(R.string.please_wait)
+        views.waitingView.waitingStatusText.setText(CommonStrings.please_wait)
         views.waitingView.waitingStatusText.isVisible = true
     }
 
@@ -247,10 +248,10 @@ class RoomProfileFragment :
 
     override fun onEnableEncryptionClicked() {
         MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.room_settings_enable_encryption_dialog_title)
-                .setMessage(R.string.room_settings_enable_encryption_dialog_content)
-                .setNegativeButton(R.string.action_cancel, null)
-                .setPositiveButton(R.string.room_settings_enable_encryption_dialog_submit) { _, _ ->
+                .setTitle(CommonStrings.room_settings_enable_encryption_dialog_title)
+                .setMessage(CommonStrings.room_settings_enable_encryption_dialog_content)
+                .setNegativeButton(CommonStrings.action_cancel, null)
+                .setPositiveButton(CommonStrings.room_settings_enable_encryption_dialog_submit) { _, _ ->
                     roomProfileViewModel.handle(RoomProfileAction.EnableEncryption)
                 }
                 .show()
@@ -300,25 +301,28 @@ class RoomProfileFragment :
     override fun onLeaveRoomClicked(isLastAdmin: Boolean) {
         val isPublicRoom = roomProfileViewModel.isPublicRoom()
         val message = buildString {
-            append(getString(R.string.room_participants_leave_prompt_msg))
+            append(getString(CommonStrings.room_participants_leave_prompt_msg))
             // TCHAP Add custom string when the user is the last admin of the room
             if (!isLastAdmin) {
                 if (!isPublicRoom) {
                     append("\n\n")
-                    append(getString(R.string.room_participants_leave_private_warning))
+                    append(getString(CommonStrings.room_participants_leave_private_warning))
                 }
             } else {
                 append("\n\n")
-                append(getString(R.string.tchap_room_last_admin_leave_prompt_msg))
+                append(getString(CommonStrings.tchap_room_last_admin_leave_prompt_msg))
             }
         }
-        MaterialAlertDialogBuilder(requireContext(), if (isPublicRoom) 0 else R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
-                .setTitle(R.string.room_participants_leave_prompt_title)
+        MaterialAlertDialogBuilder(
+                requireContext(),
+                if (isPublicRoom) 0 else im.vector.lib.ui.styles.R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive
+        )
+                .setTitle(CommonStrings.room_participants_leave_prompt_title)
                 .setMessage(message)
-                .setPositiveButton(R.string.action_leave) { _, _ ->
+                .setPositiveButton(CommonStrings.action_leave) { _, _ ->
                     roomProfileViewModel.handle(RoomProfileAction.LeaveRoom)
                 }
-                .setNegativeButton(R.string.action_cancel, null)
+                .setNegativeButton(CommonStrings.action_cancel, null)
                 .show()
     }
 

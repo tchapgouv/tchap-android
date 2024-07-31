@@ -17,7 +17,6 @@
 package im.vector.app.features.home.room.detail.timeline
 
 import androidx.annotation.ColorInt
-import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.settings.VectorPreferences
@@ -35,7 +34,7 @@ class MessageColorProvider @Inject constructor(
     @ColorInt
     fun getMemberNameTextColor(matrixItem: MatrixItem): Int {
         // TCHAP Use primary color for member name.
-        return colorProvider.getColorFromAttribute(R.attr.colorPrimary)
+        return colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary)
     }
 
     @ColorInt
@@ -44,17 +43,17 @@ class MessageColorProvider @Inject constructor(
             when (sendState) {
                 // SendStates, in the classical order they will occur
                 SendState.UNKNOWN,
-                SendState.UNSENT -> colorProvider.getColorFromAttribute(R.attr.vctr_sending_message_text_color)
-                SendState.ENCRYPTING -> colorProvider.getColorFromAttribute(R.attr.vctr_encrypting_message_text_color)
-                SendState.SENDING -> colorProvider.getColorFromAttribute(R.attr.vctr_sending_message_text_color)
+                SendState.UNSENT -> colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_sending_message_text_color)
+                SendState.ENCRYPTING -> colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_encrypting_message_text_color)
+                SendState.SENDING -> colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_sending_message_text_color)
                 SendState.SENT,
-                SendState.SYNCED -> colorProvider.getColorFromAttribute(R.attr.vctr_message_text_color)
+                SendState.SYNCED -> colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_message_text_color)
                 SendState.UNDELIVERED,
-                SendState.FAILED_UNKNOWN_DEVICES -> colorProvider.getColorFromAttribute(R.attr.vctr_unsent_message_text_color)
+                SendState.FAILED_UNKNOWN_DEVICES -> colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_unsent_message_text_color)
             }
         } else {
             // When not in developer mode, we use only one color
-            colorProvider.getColorFromAttribute(R.attr.vctr_message_text_color)
+            colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_message_text_color)
         }
     }
 }

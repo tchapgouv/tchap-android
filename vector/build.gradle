@@ -71,7 +71,7 @@ android {
     buildTypes {
         debug {
             if (project.hasProperty("coverage")) {
-                testCoverageEnabled = coverage == "true"
+                testCoverageEnabled = project.properties["coverage"] == "true"
             }
         }
     }
@@ -108,7 +108,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "17" // TCHAP Migrate to Java version 17 to support the new version of webrtc library
+        jvmTarget = versions.jvmTarget
         freeCompilerArgs += [
                 "-opt-in=kotlin.RequiresOptIn",
                 // Fixes false positive "This is an internal Mavericks API. It is not intended for external use."
@@ -132,6 +132,13 @@ android {
 
     buildFeatures {
         viewBinding true
+        buildConfig true
+    }
+
+    packaging {
+        pickFirsts.add("META-INF/LICENSE.md")
+        pickFirsts.add("META-INF/LICENSE-notice.md")
+        pickFirsts.add("MANIFEST.MF")
     }
 }
 
@@ -273,6 +280,7 @@ dependencies {
     // TCHAP Manage jitsi lib
     // WebRTC
     withdmvoipImplementation('com.github.tchapgouv:webrtc:124.2.0')
+    withdmvoipImplementation('com.google.guava:guava:33.2.1-android')
     // Jitsi
     withvoipApi('org.jitsi.react:jitsi-meet-sdk:8.1.1') {
         exclude group: 'com.google.firebase'

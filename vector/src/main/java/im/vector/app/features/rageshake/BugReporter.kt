@@ -273,7 +273,7 @@ class BugReporter @Inject constructor(
                 var email = "undefined"
                 var bugReportURL = buildString {
                     append(context.getString(R.string.server_url_prefix))
-                    append(context.getString(R.string.bug_report_default_host))
+                    append(context.getString(im.vector.app.config.R.string.bug_report_default_host))
                     append(BUG_REPORT_URL_SUFFIX)
                 }
 
@@ -550,12 +550,12 @@ class BugReporter @Inject constructor(
         // As per https://github.com/matrix-org/rageshake
         // app: Identifier for the application (eg 'riot-web').
         // Should correspond to a mapping configured in the configuration file for github issue reporting to work.
-        // (see R.string.bug_report_url for configured RS server)
+        // (see CommonStrings.bug_report_url for configured RS server)
         return context.getString(
                 when (reportType) {
                     ReportType.AUTO_UISI_SENDER,
-                    ReportType.AUTO_UISI -> R.string.bug_report_auto_uisi_app_name
-                    else -> R.string.bug_report_app_name
+                    ReportType.AUTO_UISI -> im.vector.app.config.R.string.bug_report_auto_uisi_app_name
+                    else -> im.vector.app.config.R.string.bug_report_app_name
                 }
         )
     }

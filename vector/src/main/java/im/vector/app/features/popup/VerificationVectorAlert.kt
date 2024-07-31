@@ -37,7 +37,7 @@ class VerificationVectorAlert(
         override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true }
 ) : DefaultVectorAlert(uid, title, description, iconId, shouldBeDisplayedIn) {
     override val layoutRes = R.layout.alerter_verification_layout
-    override var colorAttribute: Int? = R.attr.colorPrimary
+    override var colorAttribute: Int? = com.google.android.material.R.attr.colorPrimary
 
     class ViewBinder(
             private val matrixItem: MatrixItem,

@@ -24,6 +24,7 @@ import androidx.core.view.isVisible
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import im.vector.app.R
 import im.vector.app.databinding.MotionTchapRoomsFabMenuMergeBinding
+import im.vector.lib.strings.CommonStrings
 
 class TchapRoomsFabMenuView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
                                                       defStyleAttr: Int = 0) : MotionLayout(context, attrs, defStyleAttr) {
@@ -58,13 +59,13 @@ class TchapRoomsFabMenuView @JvmOverloads constructor(context: Context, attrs: A
     override fun transitionToEnd() {
         super.transitionToEnd()
 
-        views.createRoomButton.contentDescription = context.getString(R.string.a11y_create_menu_close)
+        views.createRoomButton.contentDescription = context.getString(CommonStrings.a11y_create_menu_close)
     }
 
     override fun transitionToStart() {
         super.transitionToStart()
 
-        views.createRoomButton.contentDescription = context.getString(R.string.a11y_create_menu_open)
+        views.createRoomButton.contentDescription = context.getString(CommonStrings.a11y_create_menu_open)
     }
 
     fun show() {

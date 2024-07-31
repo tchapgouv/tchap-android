@@ -16,7 +16,6 @@
 
 package im.vector.app.features
 
-import im.vector.app.R
 import im.vector.app.config.Config
 import im.vector.app.config.OnboardingVariant
 import im.vector.app.core.resources.AppNameProvider
@@ -63,16 +62,16 @@ class DefaultVectorFeatures @Inject constructor(
         private val stringArrayProvider: StringArrayProvider,
         private val booleanProvider: BooleanProvider
 ) : VectorFeatures {
-    override fun tchapIsVisioSupported(homeServerUrl: String) = booleanProvider.getBoolean(R.bool.tchap_is_visio_supported) &&
-        stringArrayProvider.getStringArray(R.array.tchap_is_visio_supported_homeservers).let { homeServerUrls ->
+    override fun tchapIsVisioSupported(homeServerUrl: String) = booleanProvider.getBoolean(im.vector.app.config.R.bool.tchap_is_visio_supported) &&
+        stringArrayProvider.getStringArray(im.vector.app.config.R.array.tchap_is_visio_supported_homeservers).let { homeServerUrls ->
             homeServerUrls.isEmpty() || homeServerUrls.any { homeServerUrl.contains(it) }
         }
-    override fun tchapIsCrossSigningEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_cross_signing_enabled)
-    override fun tchapIsKeyBackupEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_key_backup_enabled)
-    override fun tchapIsThreadEnabled() = booleanProvider.getBoolean(R.bool.tchap_is_thread_enabled)
-    override fun tchapIsLabsVisible(domain: String) = booleanProvider.getBoolean(R.bool.settings_root_labs_visible) ||
+    override fun tchapIsCrossSigningEnabled() = booleanProvider.getBoolean(im.vector.app.config.R.bool.tchap_is_cross_signing_enabled)
+    override fun tchapIsKeyBackupEnabled() = booleanProvider.getBoolean(im.vector.app.config.R.bool.tchap_is_key_backup_enabled)
+    override fun tchapIsThreadEnabled() = booleanProvider.getBoolean(im.vector.app.config.R.bool.tchap_is_thread_enabled)
+    override fun tchapIsLabsVisible(domain: String) = booleanProvider.getBoolean(im.vector.app.config.R.bool.settings_root_labs_visible) ||
             domain == appNameProvider.getAppName()
-    override fun tchapIsSecureBackupRequired() = booleanProvider.getBoolean(R.bool.tchap_is_secure_backup_required)
+    override fun tchapIsSecureBackupRequired() = booleanProvider.getBoolean(im.vector.app.config.R.bool.tchap_is_secure_backup_required)
     override fun onboardingVariant() = Config.ONBOARDING_VARIANT
     override fun isOnboardingAlreadyHaveAccountSplashEnabled() = true
     override fun isOnboardingSplashCarouselEnabled() = false // TCHAP no carousel

@@ -83,8 +83,8 @@ class TchapGetPlatformTask @Inject constructor(
         }
 
         // add randomly the preferred known ISes plus the other known ISes
-        idServerUrls += context.resources.getStringArray(R.array.preferred_identity_server_names).toList().shuffled()
-                .plus(context.resources.getStringArray(R.array.identity_server_names).toList().shuffled())
+        idServerUrls += context.resources.getStringArray(im.vector.app.config.R.array.preferred_identity_server_names).toList().shuffled()
+                .plus(context.resources.getStringArray(im.vector.app.config.R.array.identity_server_names).toList().shuffled())
                 .map { host -> context.getString(R.string.server_url_prefix) + host.removeSuffix("/") }
 
         return idServerUrls

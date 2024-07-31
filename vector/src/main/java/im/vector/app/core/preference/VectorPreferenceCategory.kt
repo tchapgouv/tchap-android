@@ -24,7 +24,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceViewHolder
-import im.vector.app.R
 import im.vector.app.features.themes.ThemeUtils
 
 /**
@@ -51,7 +50,7 @@ class VectorPreferenceCategory : PreferenceCategory {
         val titleTextView = holder.findViewById(android.R.id.title) as? TextView
 
         titleTextView?.setTypeface(null, Typeface.BOLD)
-        titleTextView?.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_primary))
+        titleTextView?.setTextColor(ThemeUtils.getColor(context, im.vector.lib.ui.styles.R.attr.vctr_content_primary))
         // TCHAP bigger title size for Preference Categories
         titleTextView?.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18.0f)
 

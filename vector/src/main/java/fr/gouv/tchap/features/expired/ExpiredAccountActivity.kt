@@ -21,11 +21,11 @@ import android.content.Intent
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityTchapExpiredBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.lib.strings.CommonStrings
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -65,12 +65,12 @@ class ExpiredAccountActivity : VectorBaseActivity<ActivityTchapExpiredBinding>()
     private fun renderState(state: ExpiredAccountViewState) {
         with(views) {
             if (state.isRenewalEmailSent) {
-                titleView.setText(R.string.tchap_expired_account_on_new_sent_email_title)
-                msgView.setText(R.string.tchap_expired_account_on_new_sent_email_msg)
+                titleView.setText(CommonStrings.tchap_expired_account_on_new_sent_email_title)
+                msgView.setText(CommonStrings.tchap_expired_account_on_new_sent_email_msg)
                 renewalEmailButton.isVisible = false
             } else {
-                titleView.setText(R.string.tchap_expired_account_title)
-                msgView.setText(R.string.tchap_expired_account_msg)
+                titleView.setText(CommonStrings.tchap_expired_account_title)
+                msgView.setText(CommonStrings.tchap_expired_account_msg)
                 renewalEmailButton.isVisible = true
             }
         }

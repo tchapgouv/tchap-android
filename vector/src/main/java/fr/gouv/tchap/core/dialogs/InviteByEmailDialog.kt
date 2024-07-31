@@ -23,6 +23,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.databinding.DialogInviteByIdBinding
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.isEmail
 
 class InviteByEmailDialog(
@@ -38,9 +39,9 @@ class InviteByEmailDialog(
         val views = DialogInviteByIdBinding.bind(dialogLayout)
 
         val inviteDialog = MaterialAlertDialogBuilder(activity)
-                .setTitle(R.string.tchap_people_search_invite_by_id_dialog_title)
+                .setTitle(CommonStrings.tchap_people_search_invite_by_id_dialog_title)
                 .setView(dialogLayout)
-                .setPositiveButton(R.string.action_invite) { _, _ ->
+                .setPositiveButton(CommonStrings.action_invite) { _, _ ->
                     val text = views.inviteByIdEditText.text.toString().lowercase().trim()
 
                     if (text.isEmail()) {
@@ -48,7 +49,7 @@ class InviteByEmailDialog(
                         listener.inviteByEmail(text)
                     }
                 }
-                .setNegativeButton(R.string.action_cancel, null)
+                .setNegativeButton(CommonStrings.action_cancel, null)
                 .show()
 
         val inviteButton = inviteDialog.getButton(DialogInterface.BUTTON_POSITIVE)

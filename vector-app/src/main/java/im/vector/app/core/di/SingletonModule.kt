@@ -30,7 +30,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import im.vector.app.EmojiCompatWrapper
 import im.vector.app.EmojiSpanify
-import im.vector.app.R
 import im.vector.app.SpaceStateHandler
 import im.vector.app.SpaceStateHandlerImpl
 import im.vector.app.config.Config
@@ -166,7 +165,7 @@ import javax.inject.Singleton
                 cryptoAnalyticsPlugin = vectorPlugins.cryptoMetricPlugin,
                 customEventTypesProvider = vectorCustomEventTypesProvider,
                 // TCHAP Use custom permalink prefix
-                clientPermalinkBaseUrl = mdmService.getData(MdmData.PermalinkBaseUrl) ?: context.getString(R.string.permalink_prefix),
+                clientPermalinkBaseUrl = mdmService.getData(MdmData.PermalinkBaseUrl) ?: context.getString(im.vector.app.config.R.string.permalink_prefix),
                 syncConfig = SyncConfig(
                         syncFilterParams = SyncFilterParams(lazyLoadMembersForStateEvents = true, useThreadNotifications = true)
                 )
@@ -228,9 +227,10 @@ import javax.inject.Singleton
 
     @Provides
     @Singleton
-    fun providesBuildMeta() = BuildMeta(
+    fun providesBuildMeta(context: Context) = BuildMeta(
             isDebug = BuildConfig.DEBUG,
             applicationId = BuildConfig.APPLICATION_ID,
+            applicationName = context.getString(im.vector.application.R.string.app_name),
             lowPrivacyLoggingEnabled = Config.LOW_PRIVACY_LOG_ENABLE,
             versionName = BuildConfig.VERSION_NAME,
             gitRevision = BuildConfig.GIT_REVISION,

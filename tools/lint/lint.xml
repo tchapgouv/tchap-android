@@ -11,7 +11,7 @@
     <issue id="TypographyEllipsis" severity="error" />
     <issue id="ImpliedQuantity" severity="warning" />
     <issue id="MissingQuantity" severity="warning" />
-    <issue id="UnusedQuantity" severity="error" />
+    <issue id="UnusedQuantity" severity="warning" />
     <issue id="IconXmlAndPng" severity="error" />
     <issue id="IconDipSize" severity="error" />
     <issue id="IconDuplicatesConfig" severity="error" />
@@ -30,7 +30,7 @@
     <issue id="UnusedResources" severity="error">
         <!-- Ignore unused resource in debug build type -->
         <ignore path="**/src/debug/**" />
-        <!-- Tchap: Use custom lint rules -->
+        <!-- TCHAP Use custom lint rules -->
         <ignore path="**/devTchap/res/values/config.xml"/>
         <ignore path="**/btchap/res/values/config.xml"/>
         <ignore path="**/tchap/res/values/config.xml"/>
@@ -65,7 +65,7 @@
 
     <!-- Layout -->
     <issue id="UnknownIdInLayout" severity="error" />
-    <issue id="StringFormatCount" severity="error" />
+    <issue id="StringFormatCount" severity="warning" />
     <issue id="HardcodedText" severity="error" />
     <issue id="ObsoleteLayoutParam" severity="error" />
     <issue id="InefficientWeight" severity="error" />

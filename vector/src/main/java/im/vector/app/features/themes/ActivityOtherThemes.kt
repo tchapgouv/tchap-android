@@ -17,7 +17,7 @@
 package im.vector.app.features.themes
 
 import androidx.annotation.StyleRes
-import im.vector.app.R
+import im.vector.lib.ui.styles.R
 
 /**
  * Class to manage Activity other possible themes.
@@ -34,8 +34,8 @@ sealed class ActivityOtherThemes(
     )
 
     object Launcher : ActivityOtherThemes(
-            R.style.Theme_Tchap_Launcher,
-            R.style.Theme_Tchap_Launcher
+            im.vector.app.R.style.Theme_Tchap_Launcher,
+            im.vector.app.R.style.Theme_Tchap_Launcher
     )
 
     object AttachmentsPreview : ActivityOtherThemes(

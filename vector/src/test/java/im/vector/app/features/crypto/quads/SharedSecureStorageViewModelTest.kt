@@ -18,8 +18,10 @@ package im.vector.app.features.crypto.quads
 
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.test.MavericksTestRule
+import im.vector.app.test.fakes.FakeRawService
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeStringProvider
+import im.vector.app.test.fakes.FakeVectorFeatures
 import im.vector.app.test.test
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -45,6 +47,8 @@ class SharedSecureStorageViewModelTest {
     val mavericksTestRule = MavericksTestRule()
 
     private val stringProvider = FakeStringProvider()
+    private val fakeRawService = FakeRawService()
+    private val fakeVectorFeatures = FakeVectorFeatures()
     private val fakeSession = FakeSession()
     private val matrix: Matrix = mockk()
     val args = SharedSecureStorageActivity.Args(keyId = null, emptyList(), "alias")
@@ -159,7 +163,9 @@ class SharedSecureStorageViewModelTest {
         return SharedSecureStorageViewModel(
                 SharedSecureStorageViewState(args),
                 stringProvider.instance,
+                fakeVectorFeatures,
                 fakeSession,
+                fakeRawService,
                 matrix,
         )
     }

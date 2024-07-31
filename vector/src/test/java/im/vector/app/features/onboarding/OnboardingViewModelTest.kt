@@ -21,7 +21,6 @@ import android.os.Build
 import com.airbnb.mvrx.test.MavericksTestRule
 import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
 import fr.gouv.tchap.features.platform.GetPlatformResult
-import im.vector.app.R
 import im.vector.app.core.session.ConfigureAndStartSessionUseCase
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
@@ -84,7 +83,7 @@ private val A_FINGERPRINT = Fingerprint(ByteArray(1), Fingerprint.HashType.SHA1)
 private val ANY_CONTINUING_REGISTRATION_RESULT = RegistrationActionHandler.Result.NextStage(Stage.Dummy(mandatory = true))
 private val A_DIRECT_LOGIN = OnboardingAction.AuthenticateAction.LoginDirect("@a-user:id.org", "a-password", "a-device-name")
 private const val A_HOMESERVER_URL = "https://edited-homeserver.org"
-private val A_DEFAULT_HOMESERVER_URL = "${R.string.matrix_org_server_url.toTestString()}/"
+private val A_DEFAULT_HOMESERVER_URL = "${im.vector.app.config.R.string.matrix_org_server_url.toTestString()}/"
 private val A_HOMESERVER_CONFIG = HomeServerConnectionConfig(FakeUri().instance)
 private val SELECTED_HOMESERVER_STATE = SelectedHomeserverState(preferredLoginMode = LoginMode.Password, userFacingUrl = A_HOMESERVER_URL)
 private val SELECTED_HOMESERVER_STATE_SUPPORTED_LOGOUT_DEVICES = SelectedHomeserverState(isLogoutDevicesSupported = true)

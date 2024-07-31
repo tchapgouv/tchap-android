@@ -20,9 +20,9 @@ import android.net.Uri
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.roomprofile.RoomProfileArgs
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
@@ -83,19 +83,19 @@ data class RoomSettingsViewState(
     fun getJoinRuleWording(stringProvider: StringProvider): String {
         return when (val joinRule = newRoomJoinRules.newJoinRules ?: currentRoomJoinRules) {
             RoomJoinRules.INVITE -> {
-                stringProvider.getString(R.string.room_settings_room_access_private_title)
+                stringProvider.getString(CommonStrings.room_settings_room_access_private_title)
             }
             RoomJoinRules.PUBLIC -> {
-                stringProvider.getString(R.string.room_settings_room_access_public_title)
+                stringProvider.getString(CommonStrings.room_settings_room_access_public_title)
             }
             RoomJoinRules.KNOCK -> {
-                stringProvider.getString(R.string.room_settings_room_access_entry_knock)
+                stringProvider.getString(CommonStrings.room_settings_room_access_entry_knock)
             }
             RoomJoinRules.RESTRICTED -> {
-                stringProvider.getString(R.string.room_settings_room_access_restricted_title)
+                stringProvider.getString(CommonStrings.room_settings_room_access_restricted_title)
             }
             else -> {
-                stringProvider.getString(R.string.room_settings_room_access_entry_unknown, joinRule.value)
+                stringProvider.getString(CommonStrings.room_settings_room_access_entry_unknown, joinRule.value)
             }
         }
     }
@@ -104,9 +104,9 @@ data class RoomSettingsViewState(
 
     fun getAccessByLinkWording(stringProvider: StringProvider): String {
         return if (isAccessByLinkEnabled()) {
-            stringProvider.getString(R.string.tchap_room_settings_room_access_by_link_enabled)
+            stringProvider.getString(CommonStrings.tchap_room_settings_room_access_by_link_enabled)
         } else {
-            stringProvider.getString(R.string.tchap_room_settings_room_access_by_link_disabled)
+            stringProvider.getString(CommonStrings.tchap_room_settings_room_access_by_link_disabled)
         }
     }
 }

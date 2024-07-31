@@ -104,7 +104,7 @@ class DecryptionFailureTracker @Inject constructor(
     fun stop() {
         Timber.v("Stop DecryptionFailureTracker")
         post {
-                decryptionFailurePersistence.persist()
+            decryptionFailurePersistence.persist()
         }
         activeSessionSourceDisposable.cancel(CancellationException("Closing DecryptionFailureTracker"))
 
@@ -136,8 +136,9 @@ class DecryptionFailureTracker @Inject constructor(
             }
         }
     }
+
     private fun observeActiveSession() {
-       activeSessionSourceDisposable =  sessionDataSource.stream()
+        activeSessionSourceDisposable = sessionDataSource.stream()
                 .distinctUntilChanged()
                 .onEach {
                     Timber.v("Active session changed ${it.getOrNull()?.myUserId}")
@@ -213,7 +214,7 @@ class DecryptionFailureTracker @Inject constructor(
         }
         val isOwnIdentityTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified()
         val userHS = MatrixPatterns.extractServerNameFromId(session.myUserId)
-        val messageSenderHs = event.senderId?.let {  MatrixPatterns.extractServerNameFromId(it) }
+        val messageSenderHs = event.senderId?.let { MatrixPatterns.extractServerNameFromId(it) }
         Timber.v("senderHs: $messageSenderHs, userHS: $userHS, isOwnIdentityTrusted: $isOwnIdentityTrusted")
 
         val deviceCreationTs = session.cryptoService().getMyCryptoDevice().firstTimeSeenLocalTs
@@ -264,7 +265,7 @@ class DecryptionFailureTracker @Inject constructor(
         }
     }
 
-     fun utdDisplayedInTimeline(event: TimelineEvent) {
+    fun utdDisplayedInTimeline(event: TimelineEvent) {
         post {
             // should be tracked (unless already reported)
             val eventId = event.root.eventId ?: return@post
