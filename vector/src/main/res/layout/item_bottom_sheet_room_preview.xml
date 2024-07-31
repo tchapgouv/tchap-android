@@ -38,13 +38,14 @@
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/bottomSheetRoomPreviewAvatar"
-        app:layout_constraintEnd_toStartOf="@id/bottomSheetRoomPreviewFavorite"
+        app:layout_constraintEnd_toStartOf="@id/bottomSheetRoomPreviewLowPriority"
         app:layout_constraintStart_toEndOf="@id/bottomSheetRoomPreviewAvatar"
         app:layout_constraintTop_toTopOf="@id/bottomSheetRoomPreviewAvatar"
         tools:fontFamily="sans-serif"
         tools:text="@sample/rooms.json/data/name" />
 
-    <!-- <ImageView
+    <!-- TCHAP hide low priority feature -->
+    <ImageView
         android:id="@+id/bottomSheetRoomPreviewLowPriority"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -52,11 +53,12 @@
         android:contentDescription="@string/room_list_quick_actions_low_priority_add"
         android:scaleType="centerInside"
         android:src="@drawable/ic_low_priority_24"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/bottomSheetRoomPreviewAvatar"
         app:layout_constraintEnd_toStartOf="@id/bottomSheetRoomPreviewFavorite"
         app:layout_constraintTop_toTopOf="@id/bottomSheetRoomPreviewAvatar"
         tools:contentDescription="@string/room_list_quick_actions_low_priority_add"
-        tools:tint="?vctr_content_secondary" /> -->
+        tools:tint="?vctr_content_secondary" />
 
     <ImageView
         android:id="@+id/bottomSheetRoomPreviewFavorite"

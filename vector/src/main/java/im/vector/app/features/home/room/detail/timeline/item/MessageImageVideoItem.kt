@@ -38,6 +38,7 @@ import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLay
 import im.vector.app.features.home.room.detail.timeline.style.granularRoundedCorners
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonStrings
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
@@ -138,7 +139,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         override fun mediaScanResult(clean: Boolean) {
             if (clean) {
                 avInfectedIndicator.isVisible = false
-                messageMediaAvText.text = view.context.getText(R.string.antivirus_clean)
+                messageMediaAvText.text = view.context.getText(CommonStrings.antivirus_clean)
                 messageMediaAvText.isVisible = true
                 messageMediaAvText.setCompoundDrawablesWithIntrinsicBounds(
                         ContextCompat.getDrawable(view.context, R.drawable.ic_av_checked),
@@ -154,8 +155,8 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
                 mediaContentView.setOnLongClickListener(null)
 
                 avInfectedIndicator.isVisible = true
-                messageMediaAvText.text = span(view.context.getText(R.string.antivirus_infected)) {
-                    textColor = ThemeUtils.getColor(view.context, R.attr.colorError)
+                messageMediaAvText.text = span(view.context.getText(CommonStrings.antivirus_infected)) {
+                    textColor = ThemeUtils.getColor(view.context, com.google.android.material.R.attr.colorError)
                 }
                 messageMediaAvText.isVisible = true
                 messageMediaAvText.setCompoundDrawables(null, null, null, null)
@@ -164,8 +165,8 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
 
         override fun mediaScanInProgress() {
             avInfectedIndicator.isVisible = false
-            messageMediaAvText.text = span(view.context.getText(R.string.antivirus_in_progress)) {
-                textColor = ThemeUtils.getColor(view.context, R.attr.vctr_notice_secondary)
+            messageMediaAvText.text = span(view.context.getText(CommonStrings.antivirus_in_progress)) {
+                textColor = ThemeUtils.getColor(view.context, im.vector.lib.ui.styles.R.attr.vctr_notice_secondary)
             }
             messageMediaAvText.isVisible = true
             messageMediaAvText.setCompoundDrawables(null, null, null, null)

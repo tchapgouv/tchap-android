@@ -16,7 +16,6 @@
 
 package im.vector.app.features.call.conference
 
-import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -39,7 +38,7 @@ class JitsiService @Inject constructor(
                     ?.jitsiServer
                     ?.preferredDomain
         }
-        val jitsiDomain = preferredJitsiDomain ?: stringProvider.getString(R.string.preferred_jitsi_domain)
+        val jitsiDomain = preferredJitsiDomain ?: stringProvider.getString(im.vector.app.config.R.string.preferred_jitsi_domain)
 
         val widgetEventContent = mapOf(
                 "type" to WidgetType.Jitsi.legacy,

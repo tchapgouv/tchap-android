@@ -21,7 +21,6 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import fr.gouv.tchap.core.utils.RoomUtils
 import fr.gouv.tchap.core.utils.TchapUtils
-import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.di.ActiveSessionHolder
@@ -37,6 +36,8 @@ import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.voicebroadcast.isLive
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -88,12 +89,12 @@ class RoomSummaryItemFactory @Inject constructor(
                 .topic(spaceChildInfo.topic)
                 .errorLabel(
                         error?.let {
-                            stringProvider.getString(R.string.error_failed_to_join_room, errorFormatter.toHumanReadable(it))
+                            stringProvider.getString(CommonStrings.error_failed_to_join_room, errorFormatter.toHumanReadable(it))
                         }
                 )
                 .buttonLabel(
-                        if (error != null) stringProvider.getString(R.string.global_retry)
-                        else stringProvider.getString(R.string.action_join)
+                        if (error != null) stringProvider.getString(CommonStrings.global_retry)
+                        else stringProvider.getString(CommonStrings.action_join)
                 )
                 .loading(suggestedRoomJoiningStates[spaceChildInfo.childRoomId] is Loading)
                 .memberCount(spaceChildInfo.activeMemberCount ?: 0)
@@ -118,7 +119,7 @@ class RoomSummaryItemFactory @Inject constructor(
                         }
                     }
                     ?: TchapUtils.computeDisplayNameFromUserId(userId)
-            stringProvider.getString(R.string.tchap_room_invited_you, displayName)
+            stringProvider.getString(CommonStrings.tchap_room_invited_you, displayName)
         }
 
         return RoomInvitationItem_()
@@ -244,8 +245,8 @@ class RoomSummaryItemFactory @Inject constructor(
         when (val size = directParentNames.size) {
             0 -> null
             1 -> directParentNames.first()
-            2 -> stringProvider.getString(R.string.search_space_two_parents, directParentNames[0], directParentNames[1])
-            else -> stringProvider.getQuantityString(R.plurals.search_space_multiple_parents, size - 1, directParentNames[0], size - 1)
+            2 -> stringProvider.getString(CommonStrings.search_space_two_parents, directParentNames[0], directParentNames[1])
+            else -> stringProvider.getQuantityString(CommonPlurals.search_space_multiple_parents, size - 1, directParentNames[0], size - 1)
         }
     }
 }

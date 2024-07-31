@@ -2553,7 +2553,7 @@
     <string name="ftue_auth_new_password_title">Choisissez un nouveau mot de passe</string>
     <string name="ftue_auth_new_password_entry_title">Nouveau mot de passe</string>
     <string name="ftue_auth_reset_password_breaker_title">Vérifiez vos courriels.</string>
-    <string name="ftue_auth_reset_password_email_subtitle">%s va vous envoyer un lien de vérification</string>
+    <string name="ftue_auth_reset_password_email_subtitle">${app_name} va vous envoyer un lien de vérification</string> <!-- Tchap: Custom string -->
     <string name="ftue_auth_phone_confirmation_entry_title">Code de confirmation</string>
     <string name="ftue_auth_phone_entry_title">Numéro de téléphone</string>
     <string name="ftue_auth_phone_subtitle">%s a besoin de vérifier votre compte</string>

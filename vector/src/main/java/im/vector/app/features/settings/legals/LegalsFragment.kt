@@ -23,7 +23,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
@@ -35,6 +34,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.discovery.ServerPolicy
 import im.vector.app.features.settings.VectorSettingsUrls
 import im.vector.app.features.webview.VectorWebViewActivity
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -76,7 +76,7 @@ class LegalsFragment :
 
     override fun onResume() {
         super.onResume()
-        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.preference_root_legals)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(CommonStrings.preference_root_legals)
         viewModel.handle(LegalsAction.Refresh)
     }
 
@@ -101,7 +101,7 @@ class LegalsFragment :
                 url == VectorSettingsUrls.TAC -> {
                     // TCHAP the Term And Conditions url is detected as a permalink (same prefix), which make the application fail to open it from
                     // ChromeCustomTab, so we open it here directly in a WebView
-                    val intent = VectorWebViewActivity.getIntent(requireActivity(), url, resources.getString(R.string.settings_app_term_conditions))
+                    val intent = VectorWebViewActivity.getIntent(requireActivity(), url, resources.getString(CommonStrings.settings_app_term_conditions))
                     activity?.startActivity(intent)
                 }
                 else                          -> {

@@ -89,6 +89,7 @@ import im.vector.app.features.usercode.UserCodeActivity
 import im.vector.app.features.webview.VectorWebViewActivity
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -235,7 +236,7 @@ class HomeActivity :
                         HomeActivitySharedAction.OpenTermAndConditions -> {
                             // TCHAP the Term And Conditions url is detected as a permalink (same prefix), which make the application fail to open it from
                             // ChromeCustomTab, so we open it here directly in a WebView
-                            val intent = VectorWebViewActivity.getIntent(this, VectorSettingsUrls.TAC, getString(R.string.settings_app_term_conditions))
+                            val intent = VectorWebViewActivity.getIntent(this, VectorSettingsUrls.TAC, getString(CommonStrings.settings_app_term_conditions))
                             startActivity(intent)
                         }
                         HomeActivitySharedAction.OpenBugReport -> {
@@ -374,10 +375,10 @@ class HomeActivity :
 
     private fun handleNotifyUserForThreadsMigration() {
         MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.threads_notice_migration_title)
-                .setMessage(R.string.threads_notice_migration_message)
+                .setTitle(CommonStrings.threads_notice_migration_title)
+                .setMessage(CommonStrings.threads_notice_migration_message)
                 .setCancelable(true)
-                .setPositiveButton(R.string.sas_got_it) { _, _ -> }
+                .setPositiveButton(CommonStrings.sas_got_it) { _, _ -> }
                 .show()
     }
 
@@ -408,9 +409,9 @@ class HomeActivity :
                     val isMatrixToLink = deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE) ||
                             deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE)
                     MaterialAlertDialogBuilder(this@HomeActivity)
-                            .setTitle(R.string.dialog_title_error)
-                            .setMessage(if (isMatrixToLink) R.string.permalink_malformed else R.string.universal_link_malformed)
-                            .setPositiveButton(R.string.ok, null)
+                            .setTitle(CommonStrings.dialog_title_error)
+                            .setMessage(if (isMatrixToLink) CommonStrings.permalink_malformed else CommonStrings.universal_link_malformed)
+                            .setPositiveButton(CommonStrings.ok, null)
                             .show()
                 }
             }
@@ -458,8 +459,8 @@ class HomeActivity :
         promptSecurityEvent(
                 uid = PopupAlertManager.UPGRADE_SECURITY_UID,
                 userItem = events.userItem,
-                titleRes = R.string.upgrade_security,
-                descRes = R.string.security_prompt_text,
+                titleRes = CommonStrings.upgrade_security,
+                descRes = CommonStrings.security_prompt_text,
         ) {
             it.navigator.upgradeSessionSecurity(it, true)
         }
@@ -470,8 +471,8 @@ class HomeActivity :
         promptSecurityEvent(
                 uid = PopupAlertManager.VERIFY_SESSION_UID,
                 userItem = event.userItem,
-                titleRes = R.string.crosssigning_verify_this_session,
-                descRes = R.string.confirm_your_identity,
+                titleRes = CommonStrings.crosssigning_verify_this_session,
+                descRes = CommonStrings.confirm_your_identity,
         ) {
             // check first if it's not an outdated request?
             activeSessionHolder.getSafeActiveSession()?.let { session ->
@@ -489,14 +490,14 @@ class HomeActivity :
     private fun handleOnNewSession(event: HomeActivityViewEvents.CurrentSessionNotVerified) {
         // We need to ask
         val titleRes = if (event.afterMigration) {
-            R.string.crosssigning_verify_after_update
+            CommonStrings.crosssigning_verify_after_update
         } else {
-            R.string.crosssigning_verify_this_session
+            CommonStrings.crosssigning_verify_this_session
         }
         val descRes = if (event.afterMigration) {
-            R.string.confirm_your_identity_after_update
+            CommonStrings.confirm_your_identity_after_update
         } else {
-            R.string.confirm_your_identity
+            CommonStrings.confirm_your_identity
         }
         promptSecurityEvent(
                 uid = PopupAlertManager.VERIFY_SESSION_UID,
@@ -513,8 +514,8 @@ class HomeActivity :
         promptSecurityEvent(
                 uid = PopupAlertManager.UPGRADE_SECURITY_UID,
                 userItem = event.userItem,
-                titleRes = R.string.crosssigning_cannot_verify_this_session,
-                descRes = R.string.crosssigning_cannot_verify_this_session_desc,
+                titleRes = CommonStrings.crosssigning_cannot_verify_this_session,
+                descRes = CommonStrings.crosssigning_cannot_verify_this_session_desc,
         ) {
             it.navigator.open4SSetup(it, SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
         }
@@ -524,14 +525,14 @@ class HomeActivity :
         popupAlertManager.postVectorAlert(
                 DefaultVectorAlert(
                         uid = PopupAlertManager.ENABLE_PUSH_UID,
-                        title = getString(R.string.alert_push_are_disabled_title),
-                        description = getString(R.string.alert_push_are_disabled_description),
+                        title = getString(CommonStrings.alert_push_are_disabled_title),
+                        description = getString(CommonStrings.alert_push_are_disabled_description),
                         iconId = R.drawable.ic_room_actions_notifications_mutes,
                         shouldBeDisplayedIn = {
                             it is HomeActivity
                         }
                 ).apply {
-                    colorInt = ThemeUtils.getColor(this@HomeActivity, R.attr.vctr_notice_secondary)
+                    colorInt = ThemeUtils.getColor(this@HomeActivity, im.vector.lib.ui.styles.R.attr.vctr_notice_secondary)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                             // action(it)
@@ -542,10 +543,10 @@ class HomeActivity :
                     dismissedAction = Runnable {
                         homeActivityViewModel.handle(HomeActivityViewActions.PushPromptHasBeenReviewed)
                     }
-                    addButton(getString(R.string.action_dismiss), {
+                    addButton(getString(CommonStrings.action_dismiss), {
                         homeActivityViewModel.handle(HomeActivityViewActions.PushPromptHasBeenReviewed)
                     }, true)
-                    addButton(getString(R.string.settings), {
+                    addButton(getString(CommonStrings.settings), {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                             // action(it)
                             homeActivityViewModel.handle(HomeActivityViewActions.PushPromptHasBeenReviewed)
@@ -571,7 +572,7 @@ class HomeActivity :
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     viewBinder = VerificationVectorAlert.ViewBinder(userItem, avatarRenderer)
-                    colorInt = ThemeUtils.getColor(this@HomeActivity, R.attr.colorPrimary)
+                    colorInt = ThemeUtils.getColor(this@HomeActivity, com.google.android.material.R.attr.colorPrimary)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                             action(it)
@@ -582,9 +583,9 @@ class HomeActivity :
         )
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        val parcelableExtra = intent?.getParcelableExtraCompat<HomeActivityArgs>(Mavericks.KEY_ARG)
+        val parcelableExtra = intent.getParcelableExtraCompat<HomeActivityArgs>(Mavericks.KEY_ARG)
         if (parcelableExtra?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
         }
@@ -611,10 +612,10 @@ class HomeActivity :
             vectorUncaughtExceptionHandler.clearAppCrashStatus()
 
             MaterialAlertDialogBuilder(this)
-                    .setMessage(R.string.send_bug_report_app_crashed)
+                    .setMessage(CommonStrings.send_bug_report_app_crashed)
                     .setCancelable(false)
-                    .setPositiveButton(R.string.yes) { _, _ -> bugReporter.openBugReportScreen(this) }
-                    .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile() }
+                    .setPositiveButton(CommonStrings.yes) { _, _ -> bugReporter.openBugReportScreen(this) }
+                    .setNegativeButton(CommonStrings.no) { _, _ -> bugReporter.deleteCrashFile() }
                     .show()
         }
 
@@ -705,14 +706,14 @@ class HomeActivity :
     private fun launchInviteFriends() {
         activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(sharedActionViewModel.session.myUserId)?.let { permalink ->
             analyticsTracker.screen(MobileScreen(screenName = MobileScreen.ScreenName.InviteFriends))
-            val text = getString(R.string.invite_friends_text, permalink)
+            val text = getString(CommonStrings.invite_friends_text, permalink)
 
             startSharePlainTextIntent(
                     context = this,
                     activityResultLauncher = null,
-                    chooserTitle = getString(R.string.invite_friends),
+                    chooserTitle = getString(CommonStrings.invite_friends),
                     text = text,
-                    extraTitle = getString(R.string.invite_friends_rich_title)
+                    extraTitle = getString(CommonStrings.invite_friends_rich_title)
             )
         }
     }
@@ -723,6 +724,7 @@ class HomeActivity :
         }
     }
 
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun onBackPressed() {
         if (views.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             views.drawerLayout.closeDrawer(GravityCompat.START)

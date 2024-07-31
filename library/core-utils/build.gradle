@@ -28,7 +28,6 @@ android {
         targetSdk versions.targetSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -44,7 +43,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "17" // TCHAP Migrate to Java version 17 to support the new version of webrtc library
+        jvmTarget = versions.jvmTarget
         freeCompilerArgs += [
                 "-opt-in=kotlin.RequiresOptIn"
         ]

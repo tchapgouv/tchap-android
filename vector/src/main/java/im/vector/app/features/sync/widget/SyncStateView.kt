@@ -31,6 +31,7 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.utils.isAirplaneModeOn
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.ViewSyncStateBinding
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.api.session.sync.SyncState
 
@@ -64,8 +65,8 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
         if (newState == SyncState.NoNetwork) {
             val isAirplaneModeOn = context.isAirplaneModeOn()
             // TCHAP Add service status URL
-            val statusLink = context.getString(R.string.tchap_no_connection_service_status)
-            val spannable = SpannableString("${context.getString(R.string.no_connectivity_to_the_server_indicator)} $statusLink")
+            val statusLink = context.getString(CommonStrings.tchap_no_connection_service_status)
+            val spannable = SpannableString("${context.getString(CommonStrings.no_connectivity_to_the_server_indicator)} $statusLink")
             spannable.setSpan(StyleSpan(Typeface.BOLD), spannable.length - statusLink.length, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             spannable.setSpan(UnderlineSpan(), spannable.length - statusLink.length, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             views.syncStateNoNetwork.text = spannable

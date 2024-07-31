@@ -53,6 +53,7 @@ import im.vector.app.features.mdm.MdmData
 import im.vector.app.features.mdm.MdmService
 import im.vector.app.features.onboarding.OnboardingAction.AuthenticateAction
 import im.vector.app.features.onboarding.StartAuthenticationFlowUseCase.StartAuthenticationResult
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -156,7 +157,7 @@ class OnboardingViewModel @AssistedInject constructor(
     // TCHAP
     private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
 
-    private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
+    private val matrixOrgUrl = stringProvider.getString(im.vector.app.config.R.string.matrix_org_server_url).ensureTrailingSlash()
     private val defaultHomeserverUrl = mdmService.getData(MdmData.DefaultHomeserverUrl, matrixOrgUrl)
 
     private val registrationWizard: RegistrationWizard
@@ -1043,7 +1044,7 @@ class OnboardingViewModel @AssistedInject constructor(
                     }
 
                     if (!isValid) {
-                        _viewEvents.post(OnboardingViewEvents.Failure(Throwable(stringProvider.getString(R.string.tchap_password_weak_pwd_error))))
+                        _viewEvents.post(OnboardingViewEvents.Failure(Throwable(stringProvider.getString(CommonStrings.tchap_password_weak_pwd_error))))
                     } else {
                         onSuccess.invoke()
                     }

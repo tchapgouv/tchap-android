@@ -28,6 +28,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
+import im.vector.lib.strings.CommonStrings
 
 @EpoxyModelClass
 abstract class TchapRoomTypeForumItem : EpoxyModelWithHolder<TchapRoomTypeForumItem.Holder>() {
@@ -58,11 +59,11 @@ abstract class TchapRoomTypeForumItem : EpoxyModelWithHolder<TchapRoomTypeForumI
         holder.containerView.isSelected = selected
         holder.containerView.setBackgroundResource(R.drawable.bg_tchap_forum)
         holder.titleView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_tchap_forum, 0, 0, 0)
-        holder.titleView.setText(R.string.tchap_room_creation_forum_room_title)
-        holder.titleView.setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_room_forum))
-        holder.descriptionView.setText(R.string.tchap_room_creation_forum_room_info)
-        holder.description2View.setText(R.string.tchap_room_creation_public_info)
-        holder.switchView.text = holder.view.context.getString(R.string.tchap_room_creation_limited_domain, userDomain.orEmpty())
+        holder.titleView.setText(CommonStrings.tchap_room_creation_forum_room_title)
+        holder.titleView.setTextColor(ContextCompat.getColor(holder.view.context, im.vector.lib.ui.styles.R.color.tchap_room_forum))
+        holder.descriptionView.setText(CommonStrings.tchap_room_creation_forum_room_info)
+        holder.description2View.setText(CommonStrings.tchap_room_creation_public_info)
+        holder.switchView.text = holder.view.context.getString(CommonStrings.tchap_room_creation_limited_domain, userDomain.orEmpty())
         holder.description2View.isVisible = selected
         holder.switchView.isChecked = checked
         holder.switchView.isVisible = selected && switchVisible

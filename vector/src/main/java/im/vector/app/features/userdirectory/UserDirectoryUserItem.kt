@@ -31,6 +31,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.util.MatrixItem
 
 @EpoxyModelClass
@@ -47,12 +48,12 @@ abstract class UserDirectoryUserItem : VectorEpoxyModel<UserDirectoryUserItem.Ho
         val displayName = matrixItem.getBestName()
         if (TchapUtils.isExternalTchapUser(matrixItem.id)) {
             holder.nameView.text = displayName
-            holder.domainView.text = holder.view.context.resources.getString(R.string.tchap_contact_external)
-            holder.domainView.setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_room_external))
+            holder.domainView.text = holder.view.context.resources.getString(CommonStrings.tchap_contact_external)
+            holder.domainView.setTextColor(ContextCompat.getColor(holder.view.context, im.vector.lib.ui.styles.R.color.tchap_room_external))
         } else {
             holder.nameView.text = TchapUtils.getNameFromDisplayName(displayName)
             holder.domainView.text = TchapUtils.getDomainFromDisplayName(displayName)
-            holder.domainView.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary))
+            holder.domainView.setTextColor(ThemeUtils.getColor(holder.view.context, im.vector.lib.ui.styles.R.attr.vctr_content_secondary))
         }
         renderSelection(holder, selected)
     }
@@ -60,7 +61,7 @@ abstract class UserDirectoryUserItem : VectorEpoxyModel<UserDirectoryUserItem.Ho
     private fun renderSelection(holder: Holder, isSelected: Boolean) {
         if (isSelected) {
             holder.avatarCheckedImageView.visibility = View.VISIBLE
-            val backgroundColor = ThemeUtils.getColor(holder.view.context, R.attr.colorPrimary)
+            val backgroundColor = ThemeUtils.getColor(holder.view.context, com.google.android.material.R.attr.colorPrimary)
             val backgroundDrawable = TextDrawable.builder().buildRound("", backgroundColor)
             holder.avatarImageView.setImageDrawable(backgroundDrawable)
         } else {

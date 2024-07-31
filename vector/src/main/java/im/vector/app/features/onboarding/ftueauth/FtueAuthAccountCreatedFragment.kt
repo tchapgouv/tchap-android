@@ -22,13 +22,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.animations.play
 import im.vector.app.core.utils.isAnimationEnabled
 import im.vector.app.databinding.FragmentFtueAccountCreatedBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
+import im.vector.lib.strings.CommonStrings
 
 @AndroidEntryPoint
 class FtueAuthAccountCreatedFragment :
@@ -53,7 +53,8 @@ class FtueAuthAccountCreatedFragment :
 
     override fun updateWithState(state: OnboardingViewState) {
         // TCHAP custom string
-        val subtitle = getString(R.string.tchap_ftue_account_created_subtitle)
+//        val userId = state.personalizationState.userId
+        val subtitle = getString(CommonStrings.tchap_ftue_account_created_subtitle)
         views.accountCreatedSubtitle.text = subtitle
         val canPersonalize = state.personalizationState.supportsPersonalization()
         views.personalizeButtonGroup.isVisible = canPersonalize

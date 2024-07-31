@@ -25,7 +25,6 @@ import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
-import com.squareup.moshi.Moshi
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.features.media.ImageContentRenderer
@@ -33,19 +32,17 @@ import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.session.contentscanner.ContentScannerError
 import org.matrix.android.sdk.api.session.contentscanner.ScanFailure
 import org.matrix.android.sdk.api.session.contentscanner.toException
 import timber.log.Timber
 import java.io.IOException
 import java.io.InputStream
-import java.util.concurrent.TimeUnit
 
-class VectorGlideModelLoaderFactory(private val context: Context) : ModelLoaderFactory<ImageContentRenderer.Data, InputStream> {
+class ImageContentRendererDataLoaderFactory(private val context: Context) : ModelLoaderFactory<ImageContentRenderer.Data, InputStream> {
 
     override fun build(multiFactory: MultiModelLoaderFactory): ModelLoader<ImageContentRenderer.Data, InputStream> {
-        return VectorGlideModelLoader(context)
+        return ImageContentRendererDataLoader(context)
     }
 
     override fun teardown() {
@@ -53,7 +50,7 @@ class VectorGlideModelLoaderFactory(private val context: Context) : ModelLoaderF
     }
 }
 
-class VectorGlideModelLoader(private val context: Context) :
+class ImageContentRendererDataLoader(private val context: Context) :
         ModelLoader<ImageContentRenderer.Data, InputStream> {
     override fun handles(model: ImageContentRenderer.Data): Boolean {
         // Always handle
@@ -61,11 +58,11 @@ class VectorGlideModelLoader(private val context: Context) :
     }
 
     override fun buildLoadData(model: ImageContentRenderer.Data, width: Int, height: Int, options: Options): ModelLoader.LoadData<InputStream>? {
-        return ModelLoader.LoadData(ObjectKey(model), VectorGlideDataFetcher(context, model, width, height))
+        return ModelLoader.LoadData(ObjectKey(model), ImageContentRendererDataFetcher(context, model, width, height))
     }
 }
 
-class VectorGlideDataFetcher(
+class ImageContentRendererDataFetcher(
         context: Context,
         private val data: ImageContentRenderer.Data,
         private val width: Int,
@@ -75,15 +72,6 @@ class VectorGlideDataFetcher(
 
     private val localFilesHelper = LocalFilesHelper(context)
     private val activeSessionHolder = context.singletonEntryPoint().activeSessionHolder()
-
-    private val client = (activeSessionHolder.getSafeActiveSession()?.getOkHttpClient() ?: OkHttpClient()).newBuilder()
-            // Raise timeouts for antivirus scanner
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .build()
-
-    private val moshi = Moshi.Builder().build()
 
     override fun getDataClass(): Class<InputStream> {
         return InputStream::class.java

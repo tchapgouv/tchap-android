@@ -25,6 +25,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
+import im.vector.lib.strings.CommonStrings
 
 @EpoxyModelClass
 abstract class TchapRoomTypePrivateItem : EpoxyModelWithHolder<TchapRoomTypePrivateItem.Holder>() {
@@ -43,9 +44,9 @@ abstract class TchapRoomTypePrivateItem : EpoxyModelWithHolder<TchapRoomTypePriv
         holder.containerView.isSelected = selected
         holder.containerView.setBackgroundResource(R.drawable.bg_tchap_private)
         holder.titleView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_tchap_room_lock_red, 0, 0, 0)
-        holder.titleView.setText(R.string.tchap_room_creation_private_room_title)
-        holder.titleView.setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_room_private))
-        holder.descriptionView.setText(R.string.tchap_room_creation_private_room_info)
+        holder.titleView.setText(CommonStrings.tchap_room_creation_private_room_title)
+        holder.titleView.setTextColor(ContextCompat.getColor(holder.view.context, im.vector.lib.ui.styles.R.color.tchap_room_private))
+        holder.descriptionView.setText(CommonStrings.tchap_room_creation_private_room_info)
     }
 
     class Holder : VectorEpoxyHolder() {
