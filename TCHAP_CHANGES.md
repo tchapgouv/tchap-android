@@ -1,3 +1,15 @@
+Changes in Tchap 2.13.1 (2024-07-31)
+====================================
+
+Improvements 🙌
+--------------
+ - Rebase against Element-Android v1.6.20 ([#1081](https://github.com/tchapgouv/tchap-android/issues/1081))
+
+Bugfixes 🐛
+----------
+ - Correction du crash lorsque l'image de l'avatar d'un membre est trop grande. ([#1082](https://github.com/tchapgouv/tchap-android/issues/1082))
+ - Correction du crash au lancement de l'application sur Android 5 et 6. ([#1088](https://github.com/tchapgouv/tchap-android/issues/1088))
+
 Changes in Tchap 2.13.0 (2024-07-25)
 ====================================
 
