@@ -18,10 +18,10 @@ package im.vector.app.features.analytics
 
 import android.content.Context
 import android.util.LruCache
+import com.google.common.hash.BloomFilter
+import com.google.common.hash.Funnels
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.checkerframework.com.google.common.hash.BloomFilter
-import org.checkerframework.com.google.common.hash.Funnels
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
