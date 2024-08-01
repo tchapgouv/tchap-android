@@ -85,6 +85,7 @@
 -dontwarn com.google.appengine.api.urlfetch.**
 -dontwarn com.google.common.io.LimitInputStream
 -dontwarn com.google.firebase.analytics.connector.AnalyticsConnector
+-dontwarn com.google.j2objc.annotations.** # TCHAP guava rule
 -dontwarn com.google.javascript.jscomp.**
 -dontwarn com.likethesalad.android.templates.provider.api.TemplatesProvider
 -dontwarn com.yahoo.platform.yui.compressor.**
