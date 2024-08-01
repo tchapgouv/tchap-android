@@ -85,7 +85,6 @@
 -dontwarn com.google.appengine.api.urlfetch.**
 -dontwarn com.google.common.io.LimitInputStream
 -dontwarn com.google.firebase.analytics.connector.AnalyticsConnector
--dontwarn com.google.j2objc.annotations.** # TCHAP guava rule
 -dontwarn com.google.javascript.jscomp.**
 -dontwarn com.likethesalad.android.templates.provider.api.TemplatesProvider
 -dontwarn com.yahoo.platform.yui.compressor.**
@@ -94,3 +93,13 @@
 -dontwarn org.commonmark.ext.gfm.strikethrough.Strikethrough
 -dontwarn org.mozilla.javascript.**
 -dontwarn org.slf4j.**
+
+# TCHAP guava rules
+-dontwarn com.google.j2objc.annotations.**
+-dontwarn com.sun.source.**
+-dontwarn com.sun.tools.**
+-dontwarn java.beans.Introspector
+-dontwarn java.lang.management.**
+-dontwarn java.lang.reflect.AnnotatedType
+-dontwarn jdk.javadoc.doclet.**
+-dontwarn org.checkerframework.**
