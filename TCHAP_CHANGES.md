@@ -1,3 +1,14 @@
+Changes in Tchap 2.13.2 (2024-08-01)
+====================================
+
+Features ✨
+----------
+ - Activation des appels vidéos pour Finances. ([#1092](https://github.com/tchapgouv/tchap-android/issues/1092))
+
+Improvements 🙌
+--------------
+ - Amélioration du parcours de signalement de contenu. ([#1083](https://github.com/tchapgouv/tchap-android/issues/1083))
+
 Changes in Tchap 2.13.1 (2024-07-31)
 ====================================
 
