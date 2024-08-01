@@ -278,14 +278,16 @@ dependencies {
     implementation "androidx.emoji2:emoji2:1.3.0"
 
     // TCHAP Manage jitsi lib
+    // Guava
+    implementation('com.google.guava:guava:33.2.1-android')
     // WebRTC
     withdmvoipImplementation('com.github.tchapgouv:webrtc:124.2.0')
-    withdmvoipImplementation('com.google.guava:guava:33.2.1-android')
     // Jitsi
     withvoipApi('org.jitsi.react:jitsi-meet-sdk:8.1.1') {
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'
+        exclude group: 'com.android.guava'
 
         // Exclude jitsi's android-scalablevideoview fork's support library
         // The library exports a jetified artifact but doesn't remove the support library dependency
