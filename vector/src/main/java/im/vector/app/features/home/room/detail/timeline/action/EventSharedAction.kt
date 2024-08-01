@@ -95,7 +95,7 @@ sealed class EventSharedAction(
             EventSharedAction(CommonStrings.report_content_inappropriate, R.drawable.ic_report_inappropriate)
 
     data class ReportContentCustom(val eventId: String, val senderId: String?) :
-            EventSharedAction(CommonStrings.report_content_custom, R.drawable.ic_report_custom)
+            EventSharedAction(CommonStrings.report_content, R.drawable.ic_flag) // TCHAP Use custom report content by default.
 
     data class IgnoreUser(val senderId: String?) :
             EventSharedAction(CommonStrings.message_ignore_user, R.drawable.ic_alert_triangle, true)

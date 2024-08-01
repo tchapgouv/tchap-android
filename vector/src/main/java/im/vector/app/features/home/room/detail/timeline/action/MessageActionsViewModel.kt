@@ -424,17 +424,19 @@ class MessageActionsViewModel @AssistedInject constructor(
         if (session.myUserId != timelineEvent.root.senderId) {
             // not sent by me
             if (timelineEvent.root.isContentReportable()) {
-                add(EventSharedAction.ReportContent(eventId, timelineEvent.root.senderId))
+                // TCHAP Use custom report content by default.
+                add(EventSharedAction.ReportContentCustom(eventId, timelineEvent.root.senderId))
             }
 
             add(EventSharedAction.Separator)
             add(EventSharedAction.IgnoreUser(timelineEvent.root.senderId))
-            add(
-                    EventSharedAction.ReportUser(
-                            eventId = eventId,
-                            senderId = timelineEvent.root.senderId,
-                    )
-            )
+            // TCHAP Hide user report feature in event action list.
+//            add(
+//                    EventSharedAction.ReportUser(
+//                            eventId = eventId,
+//                            senderId = timelineEvent.root.senderId,
+//                    )
+//            )
         }
     }
 
