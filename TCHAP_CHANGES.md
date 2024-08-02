@@ -1,3 +1,10 @@
+Changes in Tchap 2.13.3 (2024-08-02)
+====================================
+
+Features ✨
+----------
+ - Activation des appels vidéos pour DINUM uniquement. ([#1098](https://github.com/tchapgouv/tchap-android/issues/1098))
+
 Changes in Tchap 2.13.2 (2024-08-01)
 ====================================
 
