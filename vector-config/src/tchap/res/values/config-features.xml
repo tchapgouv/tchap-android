@@ -7,6 +7,5 @@
 
     <string-array name="tchap_is_visio_supported_homeservers" translatable="false">
         <item>agent.dinum.tchap.gouv.fr</item>
-        <item>agent.finances.tchap.gouv.fr</item>
     </string-array>
 </resources>
