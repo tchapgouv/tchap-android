@@ -179,6 +179,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
     override fun handle(action: OnboardingAction) {
         when (action) {
+            is OnboardingAction.EmailEnteredAction -> handleEmailEntered(action)
             is OnboardingAction.SplashAction -> handleSplashAction(action)
             is OnboardingAction.UpdateUseCase -> handleUpdateUseCase(action)
             OnboardingAction.ResetUseCase -> resetUseCase()
@@ -206,6 +207,20 @@ class OnboardingViewModel @AssistedInject constructor(
             OnboardingAction.SaveSelectedProfilePicture -> updateProfilePicture()
             is OnboardingAction.PostViewEvent -> _viewEvents.post(action.viewEvent)
             OnboardingAction.StopEmailValidationCheck -> cancelWaitForEmailValidation()
+        }
+    }
+
+    private fun handleEmailEntered(action: OnboardingAction.EmailEnteredAction) {
+        currentJob = viewModelScope.launch {
+            when (val result = getPlatformTask.execute(Params(action.email))) {
+                is GetPlatformResult.Success -> {
+                    val homeServerUrl = stringProvider.getString(R.string.server_url_prefix) + result.platform.hs
+                    handleHomeserverChange(OnboardingAction.HomeServerChange.EditHomeServer(homeServerUrl))
+                }
+                is GetPlatformResult.Failure -> {
+                // Nothin to do.
+                }
+            }
         }
     }
 

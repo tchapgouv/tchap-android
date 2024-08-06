@@ -25,6 +25,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -39,7 +40,6 @@ import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import im.vector.app.features.login.SocialLoginButtonsView
-import im.vector.app.features.login.SocialLoginButtonsView.Mode
 import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
@@ -88,6 +88,12 @@ class FtueAuthLoginFragment :
 
         setupSubmitButton()
         setupForgottenPasswordButton()
+
+        views.loginField.doOnTextChanged { text, _, _, _ ->
+            text.toString().lowercase().trim().let {
+                if (it.isEmail()) viewModel.handle(OnboardingAction.EmailEnteredAction(it))
+            }
+        }
 
         views.passwordField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
