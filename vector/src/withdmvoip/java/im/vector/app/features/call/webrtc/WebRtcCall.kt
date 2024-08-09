@@ -174,6 +174,8 @@ class WebRtcCall(
             }
         }
     }
+    var durationMillis = 0
+        private set
 
     private var inviteTimeout: Deferred<Unit>? = null
 
@@ -272,10 +274,6 @@ class WebRtcCall(
                 makingOffer = false
             }
         }
-    }
-
-    fun durationMillis(): Int {
-        return timer.elapsedTime().toInt()
     }
 
     fun formattedDuration(): String {
@@ -914,6 +912,7 @@ class WebRtcCall(
         inviteTimeout?.cancel()
         inviteTimeout = null
         mxCall.state = CallState.Ended(reason ?: EndCallReason.USER_HANGUP)
+        durationMillis = timer.elapsedTime().toInt()
         release()
         onCallEnded(callId, reason ?: EndCallReason.USER_HANGUP, rejected)
     }
