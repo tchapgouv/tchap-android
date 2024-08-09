@@ -86,7 +86,7 @@ object Config {
     val DEBUG_ANALYTICS_CONFIG = Analytics.Enabled(
             postHogHost = "https://us.i.posthog.com", // TCHAP dev posthog
             postHogApiKey = "phc_eQOeaQiaIxdX9kaQmqYTD7RJLyFubYmGYKUI9czqqQD", // TCHAP dev posthog
-            policyLink = "",
+            policyLink = "https://tchap.beta.gouv.fr/politique-de-confidentialite", // TCHAP dev posthog
             sentryDSN = "",
             sentryEnvironment = "DEBUG"
     )
