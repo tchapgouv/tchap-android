@@ -354,13 +354,15 @@ class VectorSettingsSecurityPrivacyFragment :
 
         analyticsConsent.setOnPreferenceChangeListener { _, newValue ->
             val newValueBool = newValue as? Boolean ?: false
-            if (newValueBool) {
-                // User wants to enable analytics, display the opt in screen
-                navigator.openAnalyticsOptIn(requireContext())
-            } else {
-                // Just disable analytics
-                analyticsConsentViewModel.handle(AnalyticsConsentViewActions.SetUserConsent(false))
-            }
+            // TCHAP user already consented about analytics in the private policy
+            analyticsConsentViewModel.handle(AnalyticsConsentViewActions.SetUserConsent(newValueBool))
+//            if (newValueBool) {
+//                // User wants to enable analytics, display the opt in screen
+//                navigator.openAnalyticsOptIn(requireContext())
+//            } else {
+//                // Just disable analytics
+//                analyticsConsentViewModel.handle(AnalyticsConsentViewActions.SetUserConsent(false))
+//            }
             true
         }
     }

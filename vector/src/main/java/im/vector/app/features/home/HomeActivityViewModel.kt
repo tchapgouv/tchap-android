@@ -203,7 +203,9 @@ class HomeActivityViewModel @AssistedInject constructor(
                     .onEach { didAskUser ->
                         Timber.v("DidAskUserConsent: $didAskUser")
                         if (!didAskUser) {
-                            _viewEvents.post(HomeActivityViewEvents.ShowAnalyticsOptIn)
+                            // TCHAP user already consented about analytics in the private policy
+                            //_viewEvents.post(HomeActivityViewEvents.ShowAnalyticsOptIn)
+                            _viewEvents.post(HomeActivityViewEvents.SetAnalyticsOptIn)
                         } else {
                             _viewEvents.post(HomeActivityViewEvents.ShowNotificationDialog)
                         }

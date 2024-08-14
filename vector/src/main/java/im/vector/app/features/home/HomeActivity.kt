@@ -56,6 +56,8 @@ import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
+import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewActions
+import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewModel
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
@@ -133,6 +135,8 @@ class HomeActivity :
     private val userColorAccountDataViewModel: UserColorAccountDataViewModel by viewModel()
 
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by viewModel()
+
+    private val analyticsConsentViewModel: AnalyticsConsentViewModel by viewModel()
 
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
@@ -280,6 +284,7 @@ class HomeActivity :
                 }
                 is HomeActivityViewEvents.OnCrossSignedInvalidated -> handleCrossSigningInvalidated(it)
                 HomeActivityViewEvents.ShowAnalyticsOptIn -> handleShowAnalyticsOptIn()
+                HomeActivityViewEvents.SetAnalyticsOptIn -> handleSetAnalyticsOptIn()
                 HomeActivityViewEvents.ShowNotificationDialog -> handleShowNotificationDialog()
                 HomeActivityViewEvents.ShowReleaseNotes -> handleShowReleaseNotes()
                 HomeActivityViewEvents.NotifyUserForThreadsMigration -> handleNotifyUserForThreadsMigration()
@@ -338,6 +343,11 @@ class HomeActivity :
 
     private fun handleShowAnalyticsOptIn() {
         navigator.openAnalyticsOptIn(this)
+    }
+
+    // TCHAP user already consented about analytics in the private policy
+    private fun handleSetAnalyticsOptIn() {
+        analyticsConsentViewModel.handle(AnalyticsConsentViewActions.SetUserConsent(true))
     }
 
     /**
