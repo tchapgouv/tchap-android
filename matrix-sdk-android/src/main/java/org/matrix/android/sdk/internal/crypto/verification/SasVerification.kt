@@ -82,6 +82,7 @@ internal class SasVerification @AssistedInject constructor(
             SasState.Confirmed -> SasTransactionState.SasMacSent
             SasState.Done -> SasTransactionState.Done(true)
             is SasState.Cancelled -> SasTransactionState.Cancelled(safeValueOf(state.cancelInfo.cancelCode), state.cancelInfo.cancelledByUs)
+            SasState.Created -> TODO()
         }
     }
 

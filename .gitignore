@@ -30,4 +30,4 @@ Cargo.lock
 **/out/failures
 
 # For manual dependency to rust crypto sdk
-library/rustCrypto/matrix-rust-sdk-crypto.aar
+#library/rustCrypto/matrix-rust-sdk-crypto.aar

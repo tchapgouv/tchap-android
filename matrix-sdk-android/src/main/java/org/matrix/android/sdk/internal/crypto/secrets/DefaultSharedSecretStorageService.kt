@@ -44,9 +44,9 @@ import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.SecretShareManager
 import org.matrix.android.sdk.internal.crypto.keysbackup.generatePrivateKeyWithPassword
 import org.matrix.android.sdk.internal.crypto.tools.HkdfSha256
-import org.matrix.android.sdk.internal.crypto.tools.withOlmDecryption
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.olm.OlmPkMessage
+import org.matrix.rustcomponents.sdk.crypto.Message
+import org.matrix.rustcomponents.sdk.crypto.PkDecryption
 import java.security.SecureRandom
 import javax.crypto.Cipher
 import javax.crypto.Mac
@@ -325,16 +325,15 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
             val keySpec = secretKey as? RawBytesKeySpec ?: throw SharedSecretStorageError.BadKeyFormat
             return withContext(cryptoCoroutineScope.coroutineContext + coroutineDispatchers.computation) {
                 // decrypt from recovery key
-                withOlmDecryption { olmPkDecryption ->
-                    olmPkDecryption.setPrivateKey(keySpec.privateKey)
-                    olmPkDecryption.decrypt(OlmPkMessage()
-                            .apply {
-                                mCipherText = secretContent.ciphertext
-                                mEphemeralKey = secretContent.ephemeral
-                                mMac = secretContent.mac
-                            }
-                    )
-                }
+                if (secretContent.ciphertext != null && secretContent.mac != null && secretContent.ephemeral != null) {
+                    val pkDecryption = PkDecryption.fromKey(keySpec.privateKey)
+                    pkDecryption.decrypt(
+                            Message(
+                                    secretContent.ciphertext.fromBase64(),
+                                    secretContent.mac.fromBase64(),
+                                    secretContent.ephemeral.fromBase64())
+                    ).contentToString()
+                } else throw SharedSecretStorageError.UnknownSecret("none")
             }
         } else if (SSSS_ALGORITHM_AES_HMAC_SHA2 == algorithm.algorithm) {
             val keySpec = secretKey as? RawBytesKeySpec ?: throw SharedSecretStorageError.BadKeyFormat

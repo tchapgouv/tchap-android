@@ -19,10 +19,12 @@ package org.matrix.android.sdk.internal.session.contentscanner
 import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileInfo
 import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileKey
-import org.matrix.android.sdk.internal.crypto.tools.withOlmEncryption
+import org.matrix.android.sdk.api.util.fromBase64
+import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.internal.session.contentscanner.model.DownloadBody
 import org.matrix.android.sdk.internal.session.contentscanner.model.EncryptedBody
 import org.matrix.android.sdk.internal.session.contentscanner.model.toCanonicalJson
+import org.matrix.rustcomponents.sdk.crypto.PkEncryption
 
 internal object ScanEncryptorUtils {
 
@@ -43,19 +45,15 @@ internal object ScanEncryptorUtils {
                 v = "v2"
         )
         return if (publicServerKey != null) {
-            // We should encrypt
-            withOlmEncryption { olm ->
-                olm.setRecipientKey(publicServerKey)
-
-                val olmResult = olm.encrypt(DownloadBody(encryptedInfo).toCanonicalJson())
-                DownloadBody(
-                        encryptedBody = EncryptedBody(
-                                cipherText = olmResult.mCipherText,
-                                ephemeral = olmResult.mEphemeralKey,
-                                mac = olmResult.mMac
-                        )
-                )
-            }
+            val pkEncryption = PkEncryption.fromPublicKey(publicServerKey.fromBase64())
+            val result = pkEncryption.encrypt(DownloadBody(encryptedInfo).toCanonicalJson().toByteArray())
+            DownloadBody(
+                    encryptedBody = EncryptedBody(
+                            cipherText = result.ciphertext.toBase64NoPadding(),
+                            ephemeral = result.ephemeralKey.toBase64NoPadding(),
+                            mac = result.mac.toBase64NoPadding()
+                    )
+            )
         } else {
             DownloadBody(encryptedInfo)
         }
