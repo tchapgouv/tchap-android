@@ -119,30 +119,34 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <FrameLayout
+            <Button
+                android:id="@+id/forgetPasswordButton"
+                style="@style/Widget.Vector.Button.Text.Login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/auth_forgot_password" />
+
+            <Button
+                android:id="@+id/loginSubmit"
+                style="@style/Widget.Vector.Button.Login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="22dp">
+                android:layout_gravity="end"
+                android:paddingHorizontal="40dp"
+                android:text="@string/auth_login"
+                tools:enabled="false"
+                tools:ignore="RelativeOverlap"
+                tools:drawableLeft="@drawable/ic_tchap_agentconnect" />
 
-                <Button
-                    android:id="@+id/forgetPasswordButton"
-                    style="@style/Widget.Vector.Button.Text.Login"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:text="@string/auth_forgot_password" />
-
-                <Button
-                    android:id="@+id/loginSubmit"
-                    style="@style/Widget.Vector.Button.Login"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:text="@string/auth_login"
-                    tools:enabled="false"
-                    tools:ignore="RelativeOverlap" />
-
-            </FrameLayout>
+            <Button
+                android:id="@+id/loginACHelp"
+                style="@style/Widget.Vector.Button.Text.Login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?colorPrimaryVariant"
+                android:text="@string/tchap_connection_ac_help"
+                android:visibility="gone" />
 
             <!-- Social Logins buttons -->
             <LinearLayout

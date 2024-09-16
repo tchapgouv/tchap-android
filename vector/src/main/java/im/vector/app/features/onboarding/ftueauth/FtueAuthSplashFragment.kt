@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.resources.BuildMeta
+import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentTchapWelcomeBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.onboarding.OnboardingAction
@@ -53,13 +54,22 @@ class FtueAuthSplashFragment :
     }
 
     private fun setupViews() {
+        // TCHAP Login with SSO
         val isAlreadyHaveAccountEnabled = vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
+        views.loginSplashAC.apply {
+            isVisible = isAlreadyHaveAccountEnabled
+            debouncedClicks { alreadyHaveAnAccountWithSSO() }
+        }
+        views.loginSplashACHelp.apply {
+            isVisible = isAlreadyHaveAccountEnabled
+            debouncedClicks { openUrlInExternalBrowser(requireContext(), TCHAP_AGENTCONNECT_URL) }
+        }
         views.loginSplashSubmit.apply {
             setText(if (isAlreadyHaveAccountEnabled) CommonStrings.login_splash_create_account else CommonStrings.login_splash_submit)
             debouncedClicks { splashSubmit(isAlreadyHaveAccountEnabled) }
         }
         views.loginSplashAlreadyHaveAccount.apply {
-            isVisible = vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
+            isVisible = isAlreadyHaveAccountEnabled
             debouncedClicks { alreadyHaveAnAccount() }
         }
 
@@ -70,6 +80,11 @@ class FtueAuthSplashFragment :
                     "Branch: ${buildMeta.gitBranchName} ${buildMeta.gitRevision}"
             views.loginSplashVersion.debouncedClicks { navigator.openDebug(requireContext()) }
         }
+    }
+
+    /** TCHAP Login with SSO */
+    private fun alreadyHaveAnAccountWithSSO() {
+        viewModel.handle(OnboardingAction.SplashAction.OnIAlreadyHaveAnAccount(onboardingFlow = OnboardingFlow.TchapSignInWithSSO))
     }
 
     private fun splashSubmit(isAlreadyHaveAccountEnabled: Boolean) {
