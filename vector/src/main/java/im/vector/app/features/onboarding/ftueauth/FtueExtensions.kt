@@ -23,6 +23,7 @@ import im.vector.lib.ui.styles.R
 
 fun SignMode.toAuthenticateAction(login: String, password: String, initialDeviceName: String): OnboardingAction.AuthenticateAction {
     return when (this) {
+        SignMode.TchapSignInWithSSO,
         SignMode.Unknown -> error("developer error")
         SignMode.TchapSignUp -> OnboardingAction.AuthenticateAction.TchapRegister(email = login, password, initialDeviceName)
         SignMode.TchapSignIn -> OnboardingAction.AuthenticateAction.TchapLogin(email = login, password, initialDeviceName)
