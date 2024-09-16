@@ -179,7 +179,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
     override fun handle(action: OnboardingAction) {
         when (action) {
-            is OnboardingAction.LoginWithSSO -> handleLoginWithSSO(action)
+            is OnboardingAction.LoginWithSSO -> tchap.handleLoginWithSSO(action)
             is OnboardingAction.SplashAction -> handleSplashAction(action)
             is OnboardingAction.UpdateUseCase -> handleUpdateUseCase(action)
             OnboardingAction.ResetUseCase -> resetUseCase()
@@ -207,20 +207,6 @@ class OnboardingViewModel @AssistedInject constructor(
             OnboardingAction.SaveSelectedProfilePicture -> updateProfilePicture()
             is OnboardingAction.PostViewEvent -> _viewEvents.post(action.viewEvent)
             OnboardingAction.StopEmailValidationCheck -> cancelWaitForEmailValidation()
-        }
-    }
-
-    private fun handleLoginWithSSO(action: OnboardingAction.LoginWithSSO) {
-        currentJob = viewModelScope.launch {
-            when (val result = getPlatformTask.execute(Params(action.email))) {
-                is GetPlatformResult.Success -> {
-                    val homeServerUrl = stringProvider.getString(R.string.server_url_prefix) + result.platform.hs
-                    handleHomeserverChange(OnboardingAction.HomeServerChange.EditHomeServer(homeServerUrl))
-                }
-                is GetPlatformResult.Failure -> {
-                // Nothin to do.
-                }
-            }
         }
     }
 
@@ -1022,6 +1008,10 @@ class OnboardingViewModel @AssistedInject constructor(
             startTchapAuthenticationFlow(action.email) {
                 handleLogin(AuthenticateAction.Login(action.email, action.password, action.initialDeviceName))
             }
+        }
+
+        fun handleLoginWithSSO(action: OnboardingAction.LoginWithSSO) {
+            startTchapAuthenticationFlow(action.email) {}
         }
 
         fun startResetPasswordFlow(email: String, onSuccess: () -> Unit) {
