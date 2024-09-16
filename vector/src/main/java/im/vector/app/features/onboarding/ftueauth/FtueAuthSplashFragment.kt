@@ -82,7 +82,7 @@ class FtueAuthSplashFragment :
         }
     }
 
-    /** TCHAP Login with SSO */
+    /** TCHAP Login with SSO. */
     private fun alreadyHaveAnAccountWithSSO() {
         viewModel.handle(OnboardingAction.SplashAction.OnIAlreadyHaveAnAccount(onboardingFlow = OnboardingFlow.TchapSignInWithSSO))
     }
