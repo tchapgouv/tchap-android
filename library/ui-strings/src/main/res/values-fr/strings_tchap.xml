@@ -76,9 +76,11 @@
     <string name="tchap_expired_account_on_new_sent_email_title">Nouvel e\u2011mail envoyé</string>
 
     <!-- Login/Register Tchap -->
-    <string name="tchap_has_account_no">Je n’ai pas\nde compte</string>
-    <string name="tchap_has_account_yes">J’ai un compte</string>
-    <string name="tchap_connection_email">Adresse email</string>
+    <string name="tchap_has_account_yes">Se connecter par mot de passe</string>
+    <string name="tchap_start_message">La messagerie instantanée du secteur public</string>
+    <string name="tchap_connection_ac">S’identifier avec \nAgentConnect</string>
+    <string name="tchap_connection_ac_help">➜ Qu’est-ce que AgentConnect ?</string>
+    <string name="tchap_connection_email">Adresse mail professionnelle</string>
     <string name="tchap_connection_email_help">Utilisez votre adresse professionnelle</string>
     <string name="tchap_connection_password_help">Votre mot de passe doit contenir au moins 8 caractères, avec au moins un caractère de chaque type : majuscule, minuscule, chiffre, caractère spécial.</string>
     <string name="tchap_connection_password_confirm">Confirmer le mot de passe</string>

@@ -179,7 +179,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
     override fun handle(action: OnboardingAction) {
         when (action) {
-            is OnboardingAction.EmailEnteredAction -> handleEmailEntered(action)
+            is OnboardingAction.LoginWithSSO -> handleLoginWithSSO(action)
             is OnboardingAction.SplashAction -> handleSplashAction(action)
             is OnboardingAction.UpdateUseCase -> handleUpdateUseCase(action)
             OnboardingAction.ResetUseCase -> resetUseCase()
@@ -210,7 +210,7 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleEmailEntered(action: OnboardingAction.EmailEnteredAction) {
+    private fun handleLoginWithSSO(action: OnboardingAction.LoginWithSSO) {
         currentJob = viewModelScope.launch {
             when (val result = getPlatformTask.execute(Params(action.email))) {
                 is GetPlatformResult.Success -> {
@@ -297,8 +297,11 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun continueToPageAfterSplash(onboardingFlow: OnboardingFlow) {
         when (onboardingFlow) {
+            // TCHAP login with SSO
+            OnboardingFlow.TchapSignInWithSSO -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.TchapSignInWithSSO))
             OnboardingFlow.SignUp -> {
                 handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.TchapSignUp))
+                // TCHAP disable homeserver selection
 //                _viewEvents.post(
 //                        if (vectorFeatures.isOnboardingUseCaseEnabled()) {
 //                            OnboardingViewEvents.OpenUseCaseSelection
@@ -498,6 +501,7 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleUpdateSignMode(action: OnboardingAction.UpdateSignMode) {
         updateSignMode(action.signMode)
         when (action.signMode) {
+            SignMode.TchapSignInWithSSO -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.TchapSignInWithSSO))
             SignMode.TchapSignIn -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.TchapSignIn))
             SignMode.TchapSignUp -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.TchapSignUp))
             SignMode.SignUp -> handleRegisterAction(RegisterAction.StartRegistration)
@@ -823,6 +827,7 @@ class OnboardingViewModel @AssistedInject constructor(
         updateServerSelection(config, serverTypeOverride, authResult)
         if (authResult.selectedHomeserver.preferredLoginMode.supportsSignModeScreen()) {
             when (awaitState().onboardingFlow) {
+                OnboardingFlow.TchapSignInWithSSO -> error("developer error")
                 OnboardingFlow.SignIn -> {
                     updateSignMode(SignMode.SignIn)
                     when (vectorFeatures.isOnboardingCombinedLoginEnabled()) {
@@ -850,6 +855,7 @@ class OnboardingViewModel @AssistedInject constructor(
                 updateServerSelection(config, serverTypeOverride, authResult)
                 _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
             }
+            OnboardingFlow.TchapSignInWithSSO,
             OnboardingFlow.SignIn -> {
                 updateServerSelection(config, serverTypeOverride, authResult)
                 _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)

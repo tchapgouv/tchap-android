@@ -25,7 +25,6 @@ import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -33,7 +32,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
+import im.vector.app.core.extensions.setLeftDrawable
 import im.vector.app.core.extensions.toReducedUrl
+import im.vector.app.core.resources.BuildMeta
+import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentLoginBinding
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
@@ -58,6 +60,7 @@ import org.matrix.android.sdk.api.failure.isRegistrationDisabled
 import org.matrix.android.sdk.api.failure.isUsernameInUse
 import org.matrix.android.sdk.api.failure.isWeakPassword
 import reactivecircus.flowbinding.android.widget.textChanges
+import javax.inject.Inject
 
 /**
  * In this screen:
@@ -70,6 +73,8 @@ import reactivecircus.flowbinding.android.widget.textChanges
 @AndroidEntryPoint
 class FtueAuthLoginFragment :
         AbstractSSOFtueAuthFragment<FragmentLoginBinding>() {
+
+    @Inject lateinit var buildMeta: BuildMeta
 
     private val tchap = Tchap()
 
@@ -88,12 +93,6 @@ class FtueAuthLoginFragment :
 
         setupSubmitButton()
         setupForgottenPasswordButton()
-
-        views.loginField.doOnTextChanged { text, _, _, _ ->
-            text.toString().lowercase().trim().let {
-                if (it.isEmail()) viewModel.handle(OnboardingAction.EmailEnteredAction(it))
-            }
-        }
 
         views.passwordField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -117,7 +116,11 @@ class FtueAuthLoginFragment :
                     views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
                     views.passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
                 }
-                SignMode.TchapSignIn,
+                SignMode.TchapSignInWithSSO,
+                SignMode.TchapSignIn -> {
+                    views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS)
+                    views.passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
+                }
                 SignMode.SignIn,
                 SignMode.SignInWithMatrixId -> {
                     views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_USERNAME)
@@ -131,6 +134,7 @@ class FtueAuthLoginFragment :
         SignMode.Unknown -> error("developer error")
         SignMode.TchapSignUp,
         SignMode.SignUp -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
+        SignMode.TchapSignInWithSSO,
         SignMode.TchapSignIn,
         SignMode.SignIn,
         SignMode.SignInWithMatrixId -> SocialLoginButtonsView.Mode.MODE_SIGN_IN
@@ -154,7 +158,7 @@ class FtueAuthLoginFragment :
                 views.loginFieldTil.error = getString(CommonStrings.error_forbidden_digits_only_username)
                 error++
             }
-            if (password.isEmpty()) {
+            if (password.isEmpty() && state.signMode != SignMode.TchapSignInWithSSO) {
                 views.passwordFieldTil.error = getString(
                         if (isSignupMode) {
                             CommonStrings.error_empty_field_choose_password
@@ -172,8 +176,12 @@ class FtueAuthLoginFragment :
             }
 
             if (error == 0) {
-                val initialDeviceName = getString(CommonStrings.login_default_session_public_name)
-                viewModel.handle(state.signMode.toAuthenticateAction(login, password, initialDeviceName))
+                if (state.signMode != SignMode.TchapSignInWithSSO) {
+                    val initialDeviceName = getString(CommonStrings.login_default_session_public_name)
+                    viewModel.handle(state.signMode.toAuthenticateAction(login, password, initialDeviceName))
+                } else {
+                    viewModel.handle(OnboardingAction.LoginWithSSO(login))
+                }
             }
         }
     }
@@ -192,6 +200,7 @@ class FtueAuthLoginFragment :
                     SignMode.SignUp -> CommonStrings.login_signup_username_hint
                     SignMode.SignIn -> CommonStrings.login_signin_username_hint
                     SignMode.TchapSignUp,
+                    SignMode.TchapSignInWithSSO,
                     SignMode.TchapSignIn -> CommonStrings.tchap_connection_email
                     SignMode.SignInWithMatrixId -> CommonStrings.login_signin_matrix_id_hint
                 }
@@ -205,12 +214,12 @@ class FtueAuthLoginFragment :
             views.loginPasswordNotice.isVisible = true
         } else {
             val resId = when (state.signMode) {
-                SignMode.Unknown -> error("developer error")
                 SignMode.TchapSignUp,
                 SignMode.SignUp -> CommonStrings.login_signup_to
                 SignMode.TchapSignIn -> CommonStrings.login_connect_to
                 SignMode.SignIn -> CommonStrings.login_connect_to
-                SignMode.SignInWithMatrixId -> CommonStrings.login_connect_to
+                SignMode.TchapSignInWithSSO -> CommonStrings.login_social_signin_with
+                else -> error("developer error")
             }
 
             when (state.serverType) {
@@ -234,14 +243,22 @@ class FtueAuthLoginFragment :
                 ServerType.Unknown -> {
                     // TCHAP Hide views if empty
                     views.loginServerIcon.isVisible = false
-                    views.loginTitle.isVisible = false
                     views.loginNotice.isVisible = false
+                    if (state.signMode == SignMode.TchapSignInWithSSO) {
+                        views.passwordFieldTil.isVisible = false
+                        views.loginTitle.text = getString(resId, "AgentConnect")
+                        views.loginACHelp.isVisible = true
+                        views.loginSubmit.setLeftDrawable(im.vector.lib.ui.styles.R.drawable.ic_tchap_agentconnect)
+                    } else {
+                        views.loginTitle.text = getString(resId, buildMeta.applicationName)
+                        views.loginACHelp.isVisible = false
+                    }
                 }
             }
             views.loginPasswordNotice.isVisible = false
+            views.loginSocialLoginContainer.isVisible = false // TCHAP hide SSO container
 
             if (state.selectedHomeserver.preferredLoginMode is LoginMode.SsoAndPassword) {
-                views.loginSocialLoginContainer.isVisible = true
                 views.loginSocialLoginButtons.render(state.selectedHomeserver.preferredLoginMode, ssoMode(state)) { provider ->
                     viewModel.fetchSsoUrl(
                             redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
@@ -252,7 +269,6 @@ class FtueAuthLoginFragment :
                             ?.let { openInCustomTab(it) }
                 }
             } else {
-                views.loginSocialLoginContainer.isVisible = false
                 views.loginSocialLoginButtons.ssoIdentityProviders = null
             }
         }
@@ -266,20 +282,23 @@ class FtueAuthLoginFragment :
                     SignMode.Unknown -> error("developer error")
                     SignMode.TchapSignUp,
                     SignMode.SignUp -> CommonStrings.login_signup_submit
+                    SignMode.TchapSignInWithSSO -> CommonStrings.login_signin_sso
                     SignMode.TchapSignIn,
                     SignMode.SignIn,
                     SignMode.SignInWithMatrixId -> CommonStrings.login_signin
                 }
         )
+
+        views.loginACHelp.debouncedClicks { openUrlInExternalBrowser(requireContext(), TCHAP_AGENTCONNECT_URL) }
     }
 
-    private fun setupSubmitButton() {
+    private fun setupSubmitButton() = withState(viewModel) { state ->
         views.loginSubmit.setOnClickListener { submit() }
         combine(
                 views.loginField.textChanges().map { it.trim().isNotEmpty() },
                 views.passwordField.textChanges().map { it.isNotEmpty() }
         ) { isLoginNotEmpty, isPasswordNotEmpty ->
-            isLoginNotEmpty && isPasswordNotEmpty
+            (isLoginNotEmpty && isPasswordNotEmpty) || state.signMode == SignMode.TchapSignInWithSSO
         }
                 .onEach {
                     views.loginFieldTil.error = null
@@ -333,6 +352,7 @@ class FtueAuthLoginFragment :
         tchap.setupUi(state)
         setupAutoFill(state)
         setupButtons(state)
+        tchap.tryLoginSSO(state)
 
         if (state.isLoading) {
             // Ensure password is hidden
@@ -358,6 +378,24 @@ class FtueAuthLoginFragment :
                 views.passwordFieldTil.isHelperTextEnabled = false
                 views.tchapPasswordConfirmationFieldTil.isVisible = false
                 views.passwordField.imeOptions = EditorInfo.IME_ACTION_DONE
+            }
+        }
+
+        fun tryLoginSSO(state: OnboardingViewState) {
+            if (state.signMode != SignMode.TchapSignInWithSSO) return
+            if (views.loginSocialLoginButtons.ssoIdentityProviders.isNullOrEmpty()) return
+            if (views.loginField.text.isNullOrEmpty()) return
+
+            views.loginSocialLoginButtons.ssoIdentityProviders?.first().let {
+                viewModel.fetchSsoUrl(
+                        redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                        deviceId = state.deviceId,
+                        provider = it,
+                        action = SSOAction.LOGIN
+                )
+                        ?.let { url -> openInCustomTab(url) }
+
+                views.loginField.text?.clear()
             }
         }
     }
