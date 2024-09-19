@@ -1,3 +1,15 @@
+Changes in Tchap 2.13.4 (2024-09-19)
+====================================
+
+Features ✨
+----------
+ - Activation des appels vidéos pour Éducation. ([#1106](https://github.com/tchapgouv/tchap-android/issues/1106))
+
+Bugfixes 🐛
+----------
+ - Activation du module analytics sur l'instance de dev. ([#1101](https://github.com/tchapgouv/tchap-android/issues/1101))
+ - Correction du problème de microphone sur Android 14. ([#1108](https://github.com/tchapgouv/tchap-android/issues/1108))
+
 Changes in Tchap 2.13.3 (2024-08-02)
 ====================================
 
