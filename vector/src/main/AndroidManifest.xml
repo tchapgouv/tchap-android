@@ -44,6 +44,7 @@
 
     <!-- For CallAndroidService -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
 
     <!-- For VectorSyncAndroidService -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
