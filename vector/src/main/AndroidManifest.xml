@@ -362,7 +362,7 @@
 
         <service
             android:name=".core.services.CallAndroidService"
-            android:foregroundServiceType="phoneCall"
+            android:foregroundServiceType="microphone|phoneCall"
             android:exported="false">
             <!-- in order to get headset button events -->
             <intent-filter>
