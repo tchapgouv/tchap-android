@@ -477,7 +477,7 @@ class WebRtcCallManager @Inject constructor(
     private fun WebRtcCall.trackCallEnded() {
         analyticsTracker.capture(
                 CallEnded(
-                        durationMs = durationMillis(),
+                        durationMs = durationMillis,
                         isVideo = mxCall.isVideoCall,
                         numParticipants = 2,
                         placed = mxCall.isOutgoing
