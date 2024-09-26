@@ -81,12 +81,6 @@ class DefaultVectorFeatures @Inject constructor(
     override fun isLocationSharingEnabled() = Config.ENABLE_LOCATION_SHARING
     override fun forceUsageOfOpusEncoder(): Boolean = false
     override fun isNewAppLayoutFeatureEnabled(): Boolean = true
-<<<<<<< HEAD
-    override fun isQrCodeLoginEnabled(): Boolean = false // TCHAP disable QrCode login for now
-    override fun isQrCodeLoginForAllServers(): Boolean = false
-    override fun isReciprocateQrCodeLogin(): Boolean = false
-=======
->>>>>>> v1.6.22
     override fun isVoiceBroadcastEnabled(): Boolean = true
     override fun isUnverifiedSessionsAlertEnabled(): Boolean = true
 }

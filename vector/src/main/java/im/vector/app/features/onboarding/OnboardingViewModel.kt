@@ -131,35 +131,9 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-<<<<<<< HEAD
-    private fun checkQrCodeLoginCapability() {
-        if (!vectorFeatures.isQrCodeLoginEnabled()) {
-            setState {
-                copy(
-                        canLoginWithQrCode = false
-                )
-            }
-        } else if (vectorFeatures.isQrCodeLoginForAllServers()) {
-            // allow for all servers
-            setState {
-                copy(
-                        canLoginWithQrCode = true
-                )
-            }
-        } else {
-            setState {
-                copy(
-                        canLoginWithQrCode = selectedHomeserver.isLoginWithQrSupported
-                )
-            }
-        }
-    }
-
     // TCHAP
     private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
 
-=======
->>>>>>> v1.6.22
     private val matrixOrgUrl = stringProvider.getString(im.vector.app.config.R.string.matrix_org_server_url).ensureTrailingSlash()
     private val defaultHomeserverUrl = mdmService.getData(MdmData.DefaultHomeserverUrl, matrixOrgUrl)
 
