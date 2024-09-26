@@ -131,6 +131,7 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
+<<<<<<< HEAD
     private fun checkQrCodeLoginCapability() {
         if (!vectorFeatures.isQrCodeLoginEnabled()) {
             setState {
@@ -157,6 +158,8 @@ class OnboardingViewModel @AssistedInject constructor(
     // TCHAP
     private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
 
+=======
+>>>>>>> v1.6.22
     private val matrixOrgUrl = stringProvider.getString(im.vector.app.config.R.string.matrix_org_server_url).ensureTrailingSlash()
     private val defaultHomeserverUrl = mdmService.getData(MdmData.DefaultHomeserverUrl, matrixOrgUrl)
 
@@ -729,7 +732,6 @@ class OnboardingViewModel @AssistedInject constructor(
             _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
         } else {
             startAuthenticationFlow(action, homeServerConnectionConfig, serverTypeOverride, suspend {
-                checkQrCodeLoginCapability()
                 postAction()
             })
         }

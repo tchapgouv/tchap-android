@@ -192,6 +192,7 @@ class OnboardingViewModelTest {
 
     // TCHAP unit test
     @Test
+<<<<<<< HEAD
     fun `given combined login enabled, when handling sign in splash action, then emits Tchap sign in`() = runTest {
         val test = viewModel.test()
         fakeVectorFeatures.givenCombinedLoginEnabled()
@@ -232,6 +233,8 @@ class OnboardingViewModelTest {
     }
 
     @Test
+=======
+>>>>>>> v1.6.22
     fun `given can successfully login in with token, when logging in with token, then emits AccountSignedIn`() = runTest {
         val test = viewModel.test()
         fakeAuthenticationService.givenLoginWizard(fakeLoginWizard)
