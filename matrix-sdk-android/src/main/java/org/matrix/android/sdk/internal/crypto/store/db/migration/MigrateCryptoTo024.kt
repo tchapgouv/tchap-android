@@ -38,7 +38,6 @@ internal class MigrateCryptoTo024(realm: DynamicRealm) : RealmMigrator(realm, 24
             remove("KeyInfoEntity")
             remove("TrustLevelEntity")
             remove("KeysBackupDataEntity")
-            remove("OlmInboundGroupSessionEntity")
             remove("OlmSessionEntity")
             remove("AuditTrailEntity")
             remove("OutgoingKeyRequestEntity")

@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.session.crypto.model.CryptoRoomInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
 
 /**
@@ -33,6 +34,13 @@ import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
  * The actual implementation are moved in each flavors
  */
 interface IMXCommonCryptoStore {
+
+    /**
+     * Retrieve the known inbound group sessions.
+     *
+     * @return the list of all known group sessions, to export them.
+     */
+    fun getInboundGroupSessions(): List<MXInboundMegolmSessionWrapper>
 
     /**
      * Provides the algorithm used in a dedicated room.

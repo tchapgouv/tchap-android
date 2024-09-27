@@ -35,6 +35,7 @@ import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventCo
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.OlmMachine
+import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
 import org.matrix.android.sdk.internal.crypto.store.db.doRealmTransaction
 import org.matrix.android.sdk.internal.crypto.store.db.doRealmTransactionAsync
@@ -46,6 +47,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntityFields
+import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
 import org.matrix.android.sdk.internal.crypto.store.db.query.getById
 import org.matrix.android.sdk.internal.crypto.store.db.query.getOrCreate
 import org.matrix.android.sdk.internal.di.CryptoDatabase
@@ -147,6 +149,18 @@ internal class RustCryptoStore @Inject constructor(
         tryOrNull("Interrupted") {
             // Wait 1 minute max
             monarchyWriteAsyncExecutor.awaitTermination(1, TimeUnit.MINUTES)
+        }
+    }
+
+    /**
+     * Note: the result will be only use to export all the keys and not to use the OlmInboundGroupSessionWrapper2,
+     * so there is no need to use or update `inboundGroupSessionToRelease` for native memory management.
+     */
+    override fun getInboundGroupSessions(): List<MXInboundMegolmSessionWrapper> {
+        return doWithRealm(realmConfiguration) { realm ->
+            realm.where<OlmInboundGroupSessionEntity>()
+                    .findAll()
+                    .mapNotNull { it.toModel() }
         }
     }
 
