@@ -7,6 +7,7 @@
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
+            android:summary="@string/tchap_settings_enable_this_device_summary"
             android:title="@string/settings_enable_all_notif" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
