@@ -1,9 +1,16 @@
+Changes in Tchap 2.13.5 (2024-10-01)
+====================================
+
+Features ✨
+----------
+- Activation des appels vidéos pour DINUM. ([#1098](https://github.com/tchapgouv/tchap-android/issues/1098))
+
 Changes in Tchap 2.13.4 (2024-09-19)
 ====================================
 
 Features ✨
 ----------
- - Activation des appels vidéos pour Éducation. ([#1106](https://github.com/tchapgouv/tchap-android/issues/1106))
+ - Activation des appels vidéos pour Éducation en beta externe. ([#1106](https://github.com/tchapgouv/tchap-android/issues/1106))
 
 Bugfixes 🐛
 ----------
@@ -15,7 +22,7 @@ Changes in Tchap 2.13.3 (2024-08-02)
 
 Features ✨
 ----------
- - Activation des appels vidéos pour DINUM uniquement. ([#1098](https://github.com/tchapgouv/tchap-android/issues/1098))
+ - Activation des appels vidéos pour DINUM en beta externe. ([#1098](https://github.com/tchapgouv/tchap-android/issues/1098))
 
 Changes in Tchap 2.13.2 (2024-08-01)
 ====================================
@@ -56,7 +63,7 @@ Changes in Tchap 2.12.0 (2024-07-22)
 
 Features ✨
 ----------
- - Forcer la génération du code de récupération et la sauvegarde automatique. ([#988](https://github.com/tchapgouv/tchap-android/issues/988))
+ - Forcer la génération du code de récupération et la sauvegarde automatique en beta externe. ([#988](https://github.com/tchapgouv/tchap-android/issues/988))
 
 Improvements 🙌
 --------------
