@@ -293,7 +293,7 @@
     <string name="settings_app_info_link_summary">Affiche les informations de l’application dans les paramètres système.</string>
     <string name="settings_app_info_link_title">Informations sur l’application</string>
     <string name="settings_enable_all_notif">Activer les notifications pour ce compte</string>
-    <string name="settings_enable_this_device">Activer les notifications pour cet appareil</string> <!-- Tchap: Use custom string -->
+    <string name="settings_enable_this_device">Activer les notifications pour cet appareil uniquement</string> <!-- Tchap: Use custom string -->
     <string name="settings_messages_in_one_to_one">Messages dans les discussions</string> <!-- Tchap: Use custom string -->
     <string name="settings_messages_in_group_chat">Messages dans les salons</string> <!-- Tchap: Use custom string -->
     <string name="settings_call_invitations">Demandes d’appel</string> <!-- Tchap: Use custom string -->
