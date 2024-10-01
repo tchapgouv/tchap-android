@@ -50,9 +50,6 @@ interface VectorFeatures {
      * use [VectorPreferences.isNewAppLayoutEnabled] instead.
      */
     fun isNewAppLayoutFeatureEnabled(): Boolean
-    fun isQrCodeLoginEnabled(): Boolean
-    fun isQrCodeLoginForAllServers(): Boolean
-    fun isReciprocateQrCodeLogin(): Boolean
     fun isVoiceBroadcastEnabled(): Boolean
     fun isUnverifiedSessionsAlertEnabled(): Boolean
 }
@@ -84,9 +81,6 @@ class DefaultVectorFeatures @Inject constructor(
     override fun isLocationSharingEnabled() = Config.ENABLE_LOCATION_SHARING
     override fun forceUsageOfOpusEncoder(): Boolean = false
     override fun isNewAppLayoutFeatureEnabled(): Boolean = true
-    override fun isQrCodeLoginEnabled(): Boolean = false // TCHAP disable QrCode login for now
-    override fun isQrCodeLoginForAllServers(): Boolean = false
-    override fun isReciprocateQrCodeLogin(): Boolean = false
     override fun isVoiceBroadcastEnabled(): Boolean = true
     override fun isUnverifiedSessionsAlertEnabled(): Boolean = true
 }

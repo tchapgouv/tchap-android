@@ -59,40 +59,4 @@ data class MXInboundMegolmSessionWrapper(
             null
         }
     }
-
-    companion object {
-
-        /**
-         * @exportFormat true if the megolm keys are in export format
-         *    (ie, they lack an ed25519 signature)
-         */
-        @Throws
-        internal fun newFromMegolmData(megolmSessionData: MegolmSessionData, exportFormat: Boolean): MXInboundMegolmSessionWrapper {
-            val exportedKey = megolmSessionData.sessionKey ?: throw IllegalArgumentException("key data not found")
-            val inboundSession = if (exportFormat) {
-                OlmInboundGroupSession.importSession(exportedKey)
-            } else {
-                OlmInboundGroupSession(exportedKey)
-            }
-                    .also {
-                        if (it.sessionIdentifier() != megolmSessionData.sessionId) {
-                            it.releaseSession()
-                            throw IllegalStateException("Mismatched group session Id")
-                        }
-                    }
-            val data = InboundGroupSessionData(
-                    roomId = megolmSessionData.roomId,
-                    senderKey = megolmSessionData.senderKey,
-                    keysClaimed = megolmSessionData.senderClaimedKeys,
-                    forwardingCurve25519KeyChain = megolmSessionData.forwardingCurve25519KeyChain,
-                    sharedHistory = megolmSessionData.sharedHistory,
-                    trusted = false
-            )
-
-            return MXInboundMegolmSessionWrapper(
-                    inboundSession,
-                    data
-            )
-        }
-    }
 }
