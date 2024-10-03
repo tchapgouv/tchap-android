@@ -169,6 +169,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
     abstract fun resetViewModel()
 
     companion object {
-        const val TCHAP_AGENTCONNECT_URL = "https://agentconnect.gouv.fr/"
+        const val TCHAP_SSO_URL = "https://proconnect.gouv.fr/"
+        const val TCHAP_SSO_PROVIDER = "ProConnect"
     }
 }

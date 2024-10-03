@@ -43,31 +43,32 @@
         app:layout_constraintTop_toBottomOf="@id/fragment_tchap_welcome_title" />
 
     <Button
-        android:id="@+id/loginSplashAC"
+        android:id="@+id/loginSplashSSO"
         style="@style/Widget.Vector.Button.Login"
-        android:drawableLeft="@drawable/ic_tchap_agentconnect"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="40dp"
-        android:paddingVertical="10dp"
+        android:drawableLeft="@drawable/ic_tchap_proconnect"
         android:gravity="start|center_vertical"
-        android:text="@string/tchap_connection_ac"
+        android:paddingHorizontal="25dp"
+        android:paddingVertical="10dp"
         app:layout_constraintBottom_toTopOf="@id/loginSplashSubmit"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_tchap_welcome_subtitle" />
+        app:layout_constraintTop_toBottomOf="@id/fragment_tchap_welcome_subtitle"
+        app:layout_constraintVertical_bias="0.492"
+        tools:text="@string/login_social_signin_with" />
 
     <Button
-        android:id="@+id/loginSplashACHelp"
+        android:id="@+id/loginSplashSSOHelp"
         style="@style/Widget.Vector.Button.Text.Login"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textColor="?colorPrimaryVariant"
-        android:text="@string/tchap_connection_ac_help"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginSplashAC" />
+        app:layout_constraintTop_toBottomOf="@id/loginSplashSSO"
+        tools:text="@string/tchap_connection_sso_help" />
 
     <Button
         android:id="@+id/loginSplashAlreadyHaveAccount"
@@ -76,7 +77,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/tchap_has_account_yes"
-        android:textColor="?colorPrimaryVariant"
         app:layout_constraintBottom_toTopOf="@id/loginSplashSubmit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -87,7 +87,6 @@
         android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textColor="?colorPrimaryVariant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
