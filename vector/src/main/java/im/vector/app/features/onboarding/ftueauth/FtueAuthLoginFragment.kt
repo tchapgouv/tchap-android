@@ -37,6 +37,7 @@ import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentLoginBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.ServerType
@@ -44,6 +45,7 @@ import im.vector.app.features.login.SignMode
 import im.vector.app.features.login.SocialLoginButtonsView
 import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
+import im.vector.app.features.onboarding.OnboardingFlow
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.lib.strings.CommonStrings
@@ -53,6 +55,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.auth.SSOAction
 import org.matrix.android.sdk.api.extensions.isEmail
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.failure.isInvalidUsername
 import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
@@ -75,6 +78,7 @@ class FtueAuthLoginFragment :
         AbstractSSOFtueAuthFragment<FragmentLoginBinding>() {
 
     @Inject lateinit var buildMeta: BuildMeta
+    @Inject lateinit var vectorFeatures: VectorFeatures
 
     private val tchap = Tchap()
 
@@ -245,18 +249,13 @@ class FtueAuthLoginFragment :
                     views.loginServerIcon.isVisible = false
                     views.loginNotice.isVisible = false
                     if (state.signMode == SignMode.TchapSignInWithSSO) {
-                        views.passwordFieldTil.isVisible = false
-                        views.loginTitle.text = getString(resId, "AgentConnect")
-                        views.loginACHelp.isVisible = true
-                        views.loginSubmit.setLeftDrawable(im.vector.lib.ui.styles.R.drawable.ic_tchap_agentconnect)
+                        views.loginTitle.text = getString(resId, TCHAP_SSO_PROVIDER)
                     } else {
                         views.loginTitle.text = getString(resId, buildMeta.applicationName)
-                        views.loginACHelp.isVisible = false
                     }
                 }
             }
             views.loginPasswordNotice.isVisible = false
-            views.loginSocialLoginContainer.isVisible = false // TCHAP hide SSO container
 
             if (state.selectedHomeserver.preferredLoginMode is LoginMode.SsoAndPassword) {
                 views.loginSocialLoginButtons.render(state.selectedHomeserver.preferredLoginMode, ssoMode(state)) { provider ->
@@ -286,10 +285,8 @@ class FtueAuthLoginFragment :
                     SignMode.TchapSignIn,
                     SignMode.SignIn,
                     SignMode.SignInWithMatrixId -> CommonStrings.login_signin
-                }
+                }, TCHAP_SSO_PROVIDER
         )
-
-        views.loginACHelp.debouncedClicks { openUrlInExternalBrowser(requireContext(), TCHAP_AGENTCONNECT_URL) }
     }
 
     private fun setupSubmitButton() = withState(viewModel) { state ->
@@ -298,7 +295,7 @@ class FtueAuthLoginFragment :
                 views.loginField.textChanges().map { it.trim().isNotEmpty() },
                 views.passwordField.textChanges().map { it.isNotEmpty() }
         ) { isLoginNotEmpty, isPasswordNotEmpty ->
-            (isLoginNotEmpty && isPasswordNotEmpty) || state.signMode == SignMode.TchapSignInWithSSO
+            (isLoginNotEmpty && isPasswordNotEmpty) || state.signMode == SignMode.TchapSignInWithSSO && views.loginField.text?.isEmail().orFalse()
         }
                 .onEach {
                     views.loginFieldTil.error = null
@@ -369,15 +366,35 @@ class FtueAuthLoginFragment :
 
         fun setupUi(state: OnboardingViewState) {
             this@FtueAuthLoginFragment.setupUi(state) // call "super" method
-            if (state.signMode == SignMode.TchapSignUp) {
-                views.loginFieldTil.isHelperTextEnabled = true
-                views.passwordFieldTil.isHelperTextEnabled = true
-                views.tchapPasswordConfirmationFieldTil.isVisible = true
-            } else {
-                views.loginFieldTil.isHelperTextEnabled = false
-                views.passwordFieldTil.isHelperTextEnabled = false
-                views.tchapPasswordConfirmationFieldTil.isVisible = false
-                views.passwordField.imeOptions = EditorInfo.IME_ACTION_DONE
+
+            val isSignUpMode = state.signMode == SignMode.TchapSignUp
+            views.loginFieldTil.isHelperTextEnabled = isSignUpMode
+            views.passwordFieldTil.isHelperTextEnabled = isSignUpMode
+            views.tchapPasswordConfirmationFieldTil.isVisible = isSignUpMode
+            views.loginSocialLoginContainer.isVisible = isSignUpMode && vectorFeatures.tchapIsSSOEnabled()
+
+            when(state.signMode) {
+                SignMode.TchapSignUp -> {
+                    views.loginSSOSubmit.text = getString(CommonStrings.login_signin_sso, TCHAP_SSO_PROVIDER)
+                    views.loginSSOSubmit.debouncedClicks {
+                        viewModel.handle(
+                                OnboardingAction.SplashAction.OnIAlreadyHaveAnAccount(
+                                        onboardingFlow = OnboardingFlow.TchapSignInWithSSO
+                                )
+                        )
+                    }
+                }
+                SignMode.TchapSignInWithSSO -> {
+                    views.passwordFieldTil.isVisible = false
+                    views.loginSSOHelp.text = getString(CommonStrings.tchap_connection_sso_help, TCHAP_SSO_PROVIDER)
+                    views.loginSSOHelp.debouncedClicks { openUrlInExternalBrowser(requireContext(), TCHAP_SSO_URL) }
+                    views.loginSSOHelp.isVisible = true
+                    views.loginSubmit.setLeftDrawable(im.vector.lib.ui.styles.R.drawable.ic_tchap_proconnect)
+                }
+                else -> {
+                    views.passwordField.imeOptions = EditorInfo.IME_ACTION_DONE
+                    views.loginSSOHelp.isVisible = false
+                }
             }
         }
 

@@ -52,6 +52,8 @@ class DebugVectorFeatures(
 
     override fun tchapIsSecureBackupRequired() = vectorFeatures.tchapIsSecureBackupRequired()
 
+    override fun tchapIsSSOEnabled() = vectorFeatures.tchapIsSSOEnabled()
+
     override fun onboardingVariant(): OnboardingVariant {
         return readPreferences().getEnum<OnboardingVariant>() ?: vectorFeatures.onboardingVariant()
     }
