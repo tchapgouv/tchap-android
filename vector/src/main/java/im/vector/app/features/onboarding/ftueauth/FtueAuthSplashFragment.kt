@@ -17,7 +17,11 @@
 package im.vector.app.features.onboarding.ftueauth
 
 import android.annotation.SuppressLint
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,13 +60,18 @@ class FtueAuthSplashFragment :
     private fun setupViews() {
         // TCHAP Login with SSO
         val isAlreadyHaveAccountEnabled = vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
-        views.loginSplashAC.apply {
-            isVisible = isAlreadyHaveAccountEnabled
+        views.loginSplashSSO.apply {
+            val spannable = SpannableString(getString(CommonStrings.login_social_signin_with, TCHAP_SSO_PROVIDER))
+            spannable.setSpan(StyleSpan(Typeface.BOLD), spannable.length - TCHAP_SSO_PROVIDER.length, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            text = spannable
+            isVisible = isAlreadyHaveAccountEnabled && vectorFeatures.tchapIsSSOEnabled()
             debouncedClicks { alreadyHaveAnAccountWithSSO() }
         }
-        views.loginSplashACHelp.apply {
-            isVisible = isAlreadyHaveAccountEnabled
-            debouncedClicks { openUrlInExternalBrowser(requireContext(), TCHAP_AGENTCONNECT_URL) }
+        views.loginSplashSSOHelp.apply {
+            text = getString(CommonStrings.tchap_connection_sso_help, TCHAP_SSO_PROVIDER)
+            isVisible = isAlreadyHaveAccountEnabled && vectorFeatures.tchapIsSSOEnabled()
+            debouncedClicks { openUrlInExternalBrowser(requireContext(), TCHAP_SSO_URL) }
         }
         views.loginSplashSubmit.apply {
             setText(if (isAlreadyHaveAccountEnabled) CommonStrings.login_splash_create_account else CommonStrings.login_splash_submit)

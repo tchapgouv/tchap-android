@@ -78,8 +78,7 @@
     <!-- Login/Register Tchap -->
     <string name="tchap_has_account_yes">Login by password</string>
     <string name="tchap_start_message">Instant messaging of public sector</string>
-    <string name="tchap_connection_ac">Authenticate with \nAgentConnect</string>
-    <string name="tchap_connection_ac_help">➜ What is AgentConnect ?</string>
+    <string name="tchap_connection_sso_help">➜ What is %s ?</string>
     <string name="tchap_connection_email">Professional email</string>
     <string name="tchap_connection_email_help">Use your business address</string>
     <string name="tchap_connection_password_help">Your password must include a lower-case letter, an upper-case letter, a number and a symbol and be at a minimum 8 characters in length.</string>
