@@ -4,6 +4,11 @@ Tchap Android is an Android Matrix Client provided by [DINUM](https://tchap.beta
 
 [<img src="resources/img/google-play-badge.png" alt="Get it on Google Play" height="60">](https://play.google.com/store/apps/details?id=fr.gouv.tchap.a)
 
+Signing certificate fingerprint to [verify](https://developer.android.com/studio/command-line/apksigner#usage-verify) the APK:
+```
+SHA-256: 0d9cc8cbbfac2ba6a46cccd7b2fc2714f0b71830384f4e75f36d3a7e48128d8b  
+```
+
 # New Android SDK
 
 Tchap is based on [Element](https://github.com/element-hq/element-android) with a new Android [SDK](https://github.com/matrix-org/matrix-android-sdk2) fully written in Kotlin. In order to make the early development as fast as possible, Tchap and the new SDK currently share the same git repository.
