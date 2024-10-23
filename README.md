@@ -7,6 +7,7 @@ Tchap Android is an Android Matrix Client provided by [DINUM](https://tchap.beta
 Signing certificate fingerprint to [verify](https://developer.android.com/studio/command-line/apksigner#usage-verify) the APK:
 ```
 SHA-256: 0d9cc8cbbfac2ba6a46cccd7b2fc2714f0b71830384f4e75f36d3a7e48128d8b  
+SHA-1: c64612d1b02ac86e98fb7e37965b6d228e4cf6ec
 ```
 
 # New Android SDK
