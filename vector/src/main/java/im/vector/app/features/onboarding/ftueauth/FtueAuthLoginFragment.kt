@@ -400,8 +400,13 @@ class FtueAuthLoginFragment :
 
         fun tryLoginSSO(state: OnboardingViewState) {
             if (state.signMode != SignMode.TchapSignInWithSSO) return
-            if (views.loginSocialLoginButtons.ssoIdentityProviders.isNullOrEmpty()) return
             if (views.loginField.text.isNullOrEmpty()) return
+            if (state.selectedHomeserver.upstreamUrl.isNullOrEmpty()) return
+            if (views.loginSocialLoginButtons.ssoIdentityProviders.isNullOrEmpty()) {
+                views.loginFieldTil.error = getString(CommonStrings.tchap_auth_sso_inactive, TCHAP_SSO_PROVIDER)
+                viewModel.handle(OnboardingAction.ResetHomeServerUrl)
+                return
+            }
 
             views.loginSocialLoginButtons.ssoIdentityProviders?.first().let {
                 viewModel.fetchSsoUrl(

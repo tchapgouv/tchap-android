@@ -8,6 +8,7 @@
 
     <!-- Register -->
     <string name="tchap_auth_password_dont_match">Passwords don’t match</string>
+    <string name="tchap_auth_sso_inactive">%s is disabled for your domain</string>
 
     <!-- Invitation -->
     <string name="tchap_people_search_invite_by_id_dialog_title">Send an invitation</string>
