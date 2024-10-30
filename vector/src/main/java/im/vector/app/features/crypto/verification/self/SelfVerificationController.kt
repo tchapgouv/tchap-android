@@ -54,6 +54,7 @@ class SelfVerificationController @Inject constructor(
 ) : BaseEpoxyVerificationController(stringProvider, colorProvider, eventHtmlRenderer) {
 
     interface InteractionListener : BaseEpoxyVerificationController.InteractionListener {
+        fun onClickHelp()
         fun onClickRecoverFromPassphrase()
         fun onClickSkip()
         fun onClickResetSecurity()
@@ -318,6 +319,15 @@ class SelfVerificationController @Inject constructor(
             iconRes(R.drawable.ic_arrow_right)
             iconColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
             listener { host.selfVerificationListener?.onClickResetSecurity() }
+        }
+
+        bottomSheetVerificationActionItem {
+            id("help")
+            title(host.stringProvider.getString(CommonStrings.tchap_verification_get_help))
+            titleColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorError))
+            iconRes(R.drawable.ic_arrow_right)
+            iconColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorError))
+            listener { host.selfVerificationListener?.onClickHelp() }
         }
 
         if (!state.isVerificationRequired) {
