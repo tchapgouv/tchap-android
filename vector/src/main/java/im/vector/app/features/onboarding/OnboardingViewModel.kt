@@ -131,29 +131,6 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun checkQrCodeLoginCapability() {
-        if (!vectorFeatures.isQrCodeLoginEnabled()) {
-            setState {
-                copy(
-                        canLoginWithQrCode = false
-                )
-            }
-        } else if (vectorFeatures.isQrCodeLoginForAllServers()) {
-            // allow for all servers
-            setState {
-                copy(
-                        canLoginWithQrCode = true
-                )
-            }
-        } else {
-            setState {
-                copy(
-                        canLoginWithQrCode = selectedHomeserver.isLoginWithQrSupported
-                )
-            }
-        }
-    }
-
     // TCHAP
     private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
 
@@ -729,7 +706,6 @@ class OnboardingViewModel @AssistedInject constructor(
             _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
         } else {
             startAuthenticationFlow(action, homeServerConnectionConfig, serverTypeOverride, suspend {
-                checkQrCodeLoginCapability()
                 postAction()
             })
         }

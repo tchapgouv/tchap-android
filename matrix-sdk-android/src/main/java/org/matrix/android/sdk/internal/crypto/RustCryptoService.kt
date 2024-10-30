@@ -84,6 +84,7 @@ import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
 import org.matrix.android.sdk.internal.crypto.tasks.toDeviceTracingId
 import org.matrix.android.sdk.internal.crypto.verification.RustVerificationService
 import org.matrix.android.sdk.internal.di.DeviceId
+import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.StreamEventsManager
@@ -504,15 +505,8 @@ internal class RustCryptoService @Inject constructor(
                 val content = event.content?.toModel<EncryptedEventContent>() ?: throw mxCryptoError
                 val roomId = event.roomId
                 val sessionId = content.sessionId
-                val senderKey = content.senderKey
                 if (roomId != null && sessionId != null) {
-                    // try to perform a lazy migration from legacy store
-                    val legacy = tryOrNull("Failed to access legacy crypto store") {
-                        cryptoStore.getInboundGroupSession(sessionId, senderKey.orEmpty())
-                    }
-                    if (legacy == null || olmMachine.importRoomKey(legacy).isFailure) {
-                        perSessionBackupQueryRateLimiter.tryFromBackupIfPossible(sessionId, roomId)
-                    }
+                    perSessionBackupQueryRateLimiter.tryFromBackupIfPossible(sessionId, roomId)
                 }
             }
             throw mxCryptoError
@@ -700,6 +694,29 @@ internal class RustCryptoService @Inject constructor(
         return olmMachine.exportKeys(password, iterationCount)
     }
 
+    /**
+     * Migrate the crypto keys from realm to rust crypto database.
+     *
+     * @param password the password
+     * @param anIterationCount the encryption iteration count (0 means no encryption)
+     */
+    private suspend fun migrateRoomKeys(password: String, anIterationCount: Int) {
+        return withContext(coroutineDispatchers.crypto) {
+            val iterationCount = max(0, anIterationCount)
+
+            val exportedSessions = cryptoStore.getInboundGroupSessions().mapNotNull { it.exportKeys() }
+
+            val adapter = MoshiProvider.providesMoshi()
+                    .adapter(List::class.java)
+
+            // Export keys from realm
+            val roomKeys = MXMegolmExportEncryption.encryptMegolmKeyFile(adapter.toJson(exportedSessions), password, iterationCount)
+
+            // Import keys to rust crypto database
+            importRoomKeys(roomKeysAsArray = roomKeys, password = password, progressListener = null)
+        }
+    }
+
     override fun setRoomBlockUnverifiedDevices(roomId: String, block: Boolean) {
         cryptoStore.blockUnverifiedDevicesInRoom(roomId, block)
     }
@@ -851,9 +868,9 @@ internal class RustCryptoService @Inject constructor(
     override fun removeSessionListener(listener: NewSessionListener) {
         megolmSessionImportManager.removeListener(listener)
     }
-/* ==========================================================================================
- * DEBUG INFO
- * ========================================================================================== */
+    /* ==========================================================================================
+     * DEBUG INFO
+     * ========================================================================================== */
 
     override fun toString(): String {
         return "DefaultCryptoService of $myUserId ($deviceId)"

@@ -36,6 +36,13 @@ import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
 interface IMXCommonCryptoStore {
 
     /**
+     * Retrieve the known inbound group sessions.
+     *
+     * @return the list of all known group sessions, to export them.
+     */
+    fun getInboundGroupSessions(): List<MXInboundMegolmSessionWrapper>
+
+    /**
      * Provides the algorithm used in a dedicated room.
      *
      * @param roomId the room id
@@ -143,14 +150,4 @@ interface IMXCommonCryptoStore {
      * @return the device or null if not found
      */
     fun deviceWithIdentityKey(userId: String, identityKey: String): CryptoDeviceInfo?
-
-    /**
-     * Retrieve an inbound group session.
-     * Used in rust for lazy migration
-     *
-     * @param sessionId the session identifier.
-     * @param senderKey the base64-encoded curve25519 key of the sender.
-     * @return an inbound group session.
-     */
-    fun getInboundGroupSession(sessionId: String, senderKey: String): MXInboundMegolmSessionWrapper?
 }
