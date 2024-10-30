@@ -37,10 +37,12 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.onPermissionDeniedDialog
+import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.BottomSheetVerificationChildFragmentBinding
 import im.vector.app.features.crypto.verification.VerificationAction
 import im.vector.app.features.qrcode.QrCodeScannerActivity
+import im.vector.app.features.settings.VectorSettingsUrls
 import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import timber.log.Timber
@@ -92,6 +94,10 @@ class SelfVerificationFragment : VectorBaseFragment<BottomSheetVerificationChild
             requestAccessibilityFocus = true
         }
         controller.update(state)
+    }
+
+    override fun onClickHelp() {
+        openUrlInChromeCustomTab(requireContext(), null, TCHAP_FAQ_VERIFICATION_URL)
     }
 
     override fun onClickRecoverFromPassphrase() {
@@ -234,5 +240,10 @@ class SelfVerificationFragment : VectorBaseFragment<BottomSheetVerificationChild
                 Uninitialized -> 2
             }
         }
+    }
+
+    companion object {
+        private const val TCHAP_FAQ_VERIFICATION_URL =
+                "${VectorSettingsUrls.HELP}/fr/article/comment-verifier-un-nouvel-appareil-sur-tchap-xm0b0y/"
     }
 }

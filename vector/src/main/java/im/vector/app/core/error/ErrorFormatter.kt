@@ -123,7 +123,8 @@ class DefaultErrorFormatter @Inject constructor(
                     throwable.error.code == MatrixError.M_PASSWORD_NO_SYMBOL -> {
                         stringProvider.getString(CommonStrings.tchap_register_pwd_no_symbol)
                     }
-                    throwable.error.code == MatrixError.M_UNKNOWN &&
+                    // TCHAP Add explicit error when a user is not allowed to access a room.
+                    (throwable.error.code == MatrixError.M_UNKNOWN || throwable.error.code == MatrixError.M_FORBIDDEN) &&
                             throwable.error.message == "Not allowed to join this room" -> {
                         stringProvider.getString(CommonStrings.room_error_access_unauthorized)
                     }

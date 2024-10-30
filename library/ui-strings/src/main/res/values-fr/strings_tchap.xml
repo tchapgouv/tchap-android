@@ -112,9 +112,11 @@
     <string name="tchap_settings_hide_from_users_directory_summary">Les autres utilisateurs ne pourront pas découvrir mon compte lors de leurs recherches</string>
     <string name="tchap_settings_show_external_user_in_users_directory_prompt">Pour désactiver cette option, vous devez accepter que votre adresse e\u2011mail soit visible des autres utilisateurs lors de leurs recherches.</string>
     <string name="tchap_settings_notification_emails_summary">Recevez un e\u2011mail si au moins un message reste non lu pendant 72h.</string>
+    <string name="tchap_settings_enable_this_device_summary">Le compte correspond à tous vos appareils connectés à ${app_name}.</string>
 
     <!-- Verification -->
     <string name="tchap_verification_conclusion_not_secure">La vérification de votre nouvelle session a échoué.</string>
+    <string name="tchap_verification_get_help">Obtenir de l’aide</string>
 
     <!-- Connectivity -->
     <string name="tchap_no_connection_service_status">Voir l’état du service</string>

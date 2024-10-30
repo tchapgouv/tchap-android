@@ -32,6 +32,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttrib
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.settings.VectorSettingsUrls
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.lib.strings.CommonStrings
 import me.gujun.android.span.image
@@ -139,6 +140,6 @@ class EncryptedItemFactory @Inject constructor(
 
     companion object {
         private const val TCHAP_FAQ_UTD_URL =
-                "https://aide.tchap.beta.gouv.fr/fr/article/dechiffrement-impossible-de-mes-messages-comment-y-remedier-android-m6e371/"
+                "${VectorSettingsUrls.HELP}/fr/article/dechiffrement-impossible-de-mes-messages-comment-y-remedier-android-m6e371/"
     }
 }

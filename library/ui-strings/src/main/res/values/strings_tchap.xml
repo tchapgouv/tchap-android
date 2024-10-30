@@ -112,9 +112,11 @@
     <string name="tchap_settings_hide_from_users_directory_summary">"Other users won't be able to find my account in their search results."</string>
     <string name="tchap_settings_show_external_user_in_users_directory_prompt">To disable this option, you must accept that your email address is visible to the other users.</string>
     <string name="tchap_settings_notification_emails_summary">Receive an email if at least one message has not been read for 72 hours.</string>
+    <string name="tchap_settings_enable_this_device_summary">The account corresponds to all your devices connected to ${app_name}.</string>
 
     <!-- Verification -->
     <string name="tchap_verification_conclusion_not_secure">Failed to verify your new session.</string>
+    <string name="tchap_verification_get_help">Get help</string>
 
     <!-- Connectivity -->
     <string name="tchap_no_connection_service_status">View the status of services</string>
