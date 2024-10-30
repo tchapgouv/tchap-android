@@ -1542,7 +1542,7 @@
     <string name="power_level_edit_title">Définir le rôle</string>
     <string name="secure_backup_reset_no_history">Vous redémarrerez sans aucun historique, message, appareil ou utilisateurs connus</string>
     <string name="secure_backup_reset_if_you_reset_all">Si vous réinitialisez tout</string>
-    <string name="secure_backup_reset_all_no_other_devices">Uniquement si vous avez perdu votre Code et n\'avez aucun autre appareil connecté à ${app_name}.</string> <!-- Tchap: Use custom string -->
+    <string name="secure_backup_reset_all_no_other_devices">Uniquement si vous avez perdu votre code et n\'avez aucun autre appareil connecté à ${app_name}.</string> <!-- Tchap: Use custom string -->
     <string name="secure_backup_reset_all">Réinitialiser tout</string>
     <string name="bad_passphrase_key_reset_all_action">Générer un nouveau Code de Récupération</string> <!-- Tchap: Use custom string -->
     <string name="error_saving_media_file">Impossible d’enregistrer le fichier multimédia</string>
