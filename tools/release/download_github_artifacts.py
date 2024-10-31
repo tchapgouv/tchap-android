@@ -22,6 +22,8 @@ import os
 import re
 # Run `pip3 install requests` if not installed yet
 import requests
+# Run `pip3 install tqdm` if not installed yet
+from tqdm import tqdm
 
 # This script downloads artifacts from GitHub.
 # Ref: https://docs.github.com/en/rest/actions/artifacts#get-an-artifact
@@ -131,20 +133,30 @@ if args.verbose:
 
 target = targetDir + "/" + filename
 sizeInBytes = data.get("size_in_bytes")
+
+ # get request
+response = requests.get(url, headers=headers, stream=True)
+
+# Sizes in bytes.
+total_size = data.get("size_in_bytes")
+block_size = 1024
+
 print("Downloading %s to '%s' (file size is %s bytes, this may take a while)..." % (filename, targetDir, sizeInBytes))
 if not args.simulate:
-    # open file to write in binary mode
-    with open(target, "wb") as file:
-        # get request
-        response = requests.get(url, headers=headers)
-        # write to file
-        file.write(response.content)
-    print("Verifying file size...")
-    # get the file size
-    size = os.path.getsize(target)
-    if sizeInBytes != size:
-        # error = True
-        print("Warning, file size mismatch: expecting %s and get %s. This is just a warning for now..." % (sizeInBytes, size))
+    with tqdm(total=total_size, unit="B", unit_scale=True) as progress_bar:
+        # open file to write in binary mode
+        with open(target, "wb") as file:
+            for data in response.iter_content(block_size):
+                progress_bar.update(len(data))
+                # write to file
+                file.write(data)
+
+        print("Verifying file size...")
+        # get the file size
+        size = os.path.getsize(target)
+        if sizeInBytes != size:
+            # error = True
+            print("Warning, file size mismatch: expecting %s and get %s. This is just a warning for now..." % (sizeInBytes, size))
 
 if error:
     print("❌ Error(s) occurred, please check the log")
