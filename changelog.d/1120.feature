@@ -1,0 +1,1 @@
+Activation des appels vidéos pour Intradef en beta externe.
