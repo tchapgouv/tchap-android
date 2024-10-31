@@ -235,6 +235,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
     }
 
     private fun inferAuthDescription(loginViewState: LoginViewState) = when (loginViewState.signMode) {
+        SignMode.TchapSignInWithSSO,
         SignMode.TchapSignUp,
         SignMode.TchapSignIn -> error("developer error")
         SignMode.Unknown -> null
@@ -271,6 +272,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
     private fun onSignModeSelected(loginViewEvents: LoginViewEvents.OnSignModeSelected) = withState(loginViewModel) { state ->
         // state.signMode could not be ready yet. So use value from the ViewEvent
         when (loginViewEvents.signMode) {
+            SignMode.TchapSignInWithSSO,
             SignMode.TchapSignUp,
             SignMode.TchapSignIn -> error("developer error")
             SignMode.Unknown -> error("Sign mode has to be set before calling this method")

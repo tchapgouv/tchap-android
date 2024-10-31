@@ -17,13 +17,18 @@
 package im.vector.app.features.onboarding.ftueauth
 
 import android.annotation.SuppressLint
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.resources.BuildMeta
+import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentTchapWelcomeBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.onboarding.OnboardingAction
@@ -53,13 +58,27 @@ class FtueAuthSplashFragment :
     }
 
     private fun setupViews() {
+        // TCHAP Login with SSO
         val isAlreadyHaveAccountEnabled = vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
+        views.loginSplashSSO.apply {
+            val spannable = SpannableString(getString(CommonStrings.login_social_signin_with, TCHAP_SSO_PROVIDER))
+            spannable.setSpan(StyleSpan(Typeface.BOLD), spannable.length - TCHAP_SSO_PROVIDER.length, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            text = spannable
+            isVisible = isAlreadyHaveAccountEnabled && vectorFeatures.tchapIsSSOEnabled()
+            debouncedClicks { alreadyHaveAnAccountWithSSO() }
+        }
+        views.loginSplashSSOHelp.apply {
+            text = getString(CommonStrings.tchap_connection_sso_help, TCHAP_SSO_PROVIDER)
+            isVisible = isAlreadyHaveAccountEnabled && vectorFeatures.tchapIsSSOEnabled()
+            debouncedClicks { openUrlInExternalBrowser(requireContext(), TCHAP_SSO_URL) }
+        }
         views.loginSplashSubmit.apply {
             setText(if (isAlreadyHaveAccountEnabled) CommonStrings.login_splash_create_account else CommonStrings.login_splash_submit)
             debouncedClicks { splashSubmit(isAlreadyHaveAccountEnabled) }
         }
         views.loginSplashAlreadyHaveAccount.apply {
-            isVisible = vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
+            isVisible = isAlreadyHaveAccountEnabled
             debouncedClicks { alreadyHaveAnAccount() }
         }
 
@@ -70,6 +89,11 @@ class FtueAuthSplashFragment :
                     "Branch: ${buildMeta.gitBranchName} ${buildMeta.gitRevision}"
             views.loginSplashVersion.debouncedClicks { navigator.openDebug(requireContext()) }
         }
+    }
+
+    /** TCHAP Login with SSO. */
+    private fun alreadyHaveAnAccountWithSSO() {
+        viewModel.handle(OnboardingAction.SplashAction.OnIAlreadyHaveAnAccount(onboardingFlow = OnboardingFlow.TchapSignInWithSSO))
     }
 
     private fun splashSubmit(isAlreadyHaveAccountEnabled: Boolean) {

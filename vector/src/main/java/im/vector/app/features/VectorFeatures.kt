@@ -32,6 +32,7 @@ interface VectorFeatures {
     fun tchapIsThreadEnabled(): Boolean
     fun tchapIsLabsVisible(domain: String): Boolean
     fun tchapIsSecureBackupRequired(): Boolean
+    fun tchapIsSSOEnabled(): Boolean
     fun onboardingVariant(): OnboardingVariant
     fun isOnboardingAlreadyHaveAccountSplashEnabled(): Boolean
     fun isOnboardingSplashCarouselEnabled(): Boolean
@@ -72,6 +73,7 @@ class DefaultVectorFeatures @Inject constructor(
     override fun tchapIsLabsVisible(domain: String) = booleanProvider.getBoolean(im.vector.app.config.R.bool.settings_root_labs_visible) ||
             domain == appNameProvider.getAppName()
     override fun tchapIsSecureBackupRequired() = booleanProvider.getBoolean(im.vector.app.config.R.bool.tchap_is_secure_backup_required)
+    override fun tchapIsSSOEnabled() = booleanProvider.getBoolean(im.vector.app.config.R.bool.tchap_is_sso_enabled)
     override fun onboardingVariant() = Config.ONBOARDING_VARIANT
     override fun isOnboardingAlreadyHaveAccountSplashEnabled() = true
     override fun isOnboardingSplashCarouselEnabled() = false // TCHAP no carousel
