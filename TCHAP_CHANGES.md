@@ -1,9 +1,16 @@
+Changes in Tchap 2.13.8 (2024-10-31)
+====================================
+
+Features ✨
+----------
+ - Activation des appels vidéos pour Intradef en beta externe. ([#1120](https://github.com/tchapgouv/tchap-android/issues/1120))
+
 Changes in Tchap 2.13.7 (2024-10-31)
 ====================================
 
 Features ✨
 ----------
-- Ne pas forcer la génération du code de récupération et la sauvegarde automatique en production.
+ - Ne pas forcer la génération du code de récupération et la sauvegarde automatique en production.
 
 Changes in Tchap 2.13.6 (2024-10-30)
 ====================================
