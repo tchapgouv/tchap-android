@@ -1,3 +1,10 @@
+Changes in Tchap 2.13.7 (2024-10-31)
+====================================
+
+Features ✨
+----------
+- Ne pas forcer la génération du code de récupération et la sauvegarde automatique en production.
+
 Changes in Tchap 2.13.6 (2024-10-30)
 ====================================
 
