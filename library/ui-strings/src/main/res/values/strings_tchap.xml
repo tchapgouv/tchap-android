@@ -116,6 +116,7 @@
 
     <!-- Verification -->
     <string name="tchap_verification_conclusion_not_secure">Failed to verify your new session.</string>
+    <string name="tchap_verification_get_help">Get help</string>
 
     <!-- Connectivity -->
     <string name="tchap_no_connection_service_status">View the status of services</string>

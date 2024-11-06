@@ -1,3 +1,31 @@
+Changes in Tchap 2.13.8 (2024-10-31)
+====================================
+
+Features ✨
+----------
+ - Activation des appels vidéos pour Intradef en beta externe. ([#1120](https://github.com/tchapgouv/tchap-android/issues/1120))
+
+Changes in Tchap 2.13.7 (2024-10-31)
+====================================
+
+Features ✨
+----------
+ - Ne pas forcer la génération du code de récupération et la sauvegarde automatique en production.
+
+Changes in Tchap 2.13.6 (2024-10-30)
+====================================
+
+Features ✨
+----------
+ - Activation des appels vidéos pour Éducation et Agent. ([#1121](https://github.com/tchapgouv/tchap-android/issues/1121))
+
+Improvements 🙌
+--------------
+ - Ajout d'une description pour le paramètre de notifications du compte. ([#1107](https://github.com/tchapgouv/tchap-android/issues/1107))
+ - Améliorer l'explication pour la génération d'un nouveau code de récupération. ([#1113](https://github.com/tchapgouv/tchap-android/issues/1113))
+ - Faciliter l'accès à l'aide sur la vérification d'appareil. ([#1116](https://github.com/tchapgouv/tchap-android/issues/1116))
+ - Améliorer l'explication pour un utilisateur voulant rejoindre un salon sans autorisation. ([#1118](https://github.com/tchapgouv/tchap-android/issues/1118))
+
 Changes in Tchap 2.13.5 (2024-10-01)
 ====================================
 
