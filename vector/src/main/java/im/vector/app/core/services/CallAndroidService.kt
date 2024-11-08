@@ -181,7 +181,7 @@ class CallAndroidService : VectorAndroidService() {
                 title = callInformation.opponentMatrixItem?.getBestName() ?: callInformation.opponentUserId,
                 fromBg = fromBg
         )
-        //TCHAP fix crash when a call incoming on Androd 14 and higher
+        // TCHAP fix crash when a call incoming on Androd 14 and higher
         notificationManager.notify(callId.hashCode(), notification)
         knownCalls[callId] = callInformation
     }
@@ -199,7 +199,7 @@ class CallAndroidService : VectorAndroidService() {
         }
         val notification = notificationUtils.buildCallEndedNotification(false)
         val notificationId = callId.hashCode()
-        //TCHAP fix crash when a call incoming on Androd 14 and higher
+        // TCHAP fix crash when a call incoming on Androd 14 and higher
         notificationManager.notify(notificationId, notification)
         if (knownCalls.isEmpty()) {
             Timber.tag(loggerTag.value).v("No more call, stop the service")
@@ -258,7 +258,7 @@ class CallAndroidService : VectorAndroidService() {
                 call = call,
                 title = callInformation.opponentMatrixItem?.getBestName() ?: callInformation.opponentUserId
         )
-        //TCHAP fix crash when a call incoming on Androd 14 and higher
+        // TCHAP fix crash when a call incoming on Androd 14 and higher
         startForegroundCompat(callId.hashCode(), notification)
         knownCalls[callId] = callInformation
     }
