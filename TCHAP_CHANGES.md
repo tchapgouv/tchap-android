@@ -1,3 +1,10 @@
+Changes in Tchap 2.13.9 (2024-11-12)
+====================================
+
+Bugfixes 🐛
+----------
+ - Correction du crash sur Android 14 quand on reçoit un appel sur Tchap. ([#1126](https://github.com/tchapgouv/tchap-android/issues/1126))
+
 Changes in Tchap 2.13.8 (2024-10-31)
 ====================================
 

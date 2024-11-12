@@ -3,12 +3,11 @@
     <bool name="tchap_is_cross_signing_enabled">true</bool>
     <bool name="tchap_is_key_backup_enabled">true</bool>
     <bool name="tchap_is_thread_enabled">false</bool>
-    <bool name="tchap_is_secure_backup_required">true</bool>
+    <bool name="tchap_is_secure_backup_required">false</bool>
 
     <string-array name="tchap_is_visio_supported_homeservers" translatable="false">
         <item>agent.dinum.tchap.gouv.fr</item>
         <item>agent.education.tchap.gouv.fr</item>
         <item>agent.tchap.gouv.fr</item>
-        <item>agent.intradef.tchap.gouv.fr</item>
     </string-array>
 </resources>
