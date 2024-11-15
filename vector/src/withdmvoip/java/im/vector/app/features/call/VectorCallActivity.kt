@@ -271,6 +271,7 @@ class VectorCallActivity :
         val appProcess = ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
         return appProcess
     }
+
     private fun stopMicrophoneService() {
         Timber.tag(loggerTag.value).d("Stopping MicrophoneAccessService (if needed).")
         val intent = Intent(this, MicrophoneAccessService::class.java)
