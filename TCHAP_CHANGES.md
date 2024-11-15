@@ -1,3 +1,14 @@
+Changes in Tchap 2.13.10 (2024-11-15)
+=====================================
+
+Improvements 🙌
+--------------
+ - Modification du commentaire lorsqu'on active l'accès à un salon par lien. ([#1112](https://github.com/tchapgouv/tchap-android/issues/1112))
+
+Bugfixes 🐛
+----------
+ - Correction du crash quand on reçoit ou émet un appel sur Tchap. ([#1126](https://github.com/tchapgouv/tchap-android/issues/1126))
+
 Changes in Tchap 2.13.9 (2024-11-12)
 ====================================
 
