@@ -2186,6 +2186,7 @@
     <string name="audio_call_with_participant">Appel audio avec %s</string>
     <string name="video_call_with_participant">Appel vidéo avec %s</string>
     <string name="call_ringing">Appel en cours…</string>
+    <string name="microphone_in_use_title">Microphone en cours d’utilisation</string>
     <string name="spaces">Espaces</string>
     <string name="a11y_stop_voice_message">Arrêter l’enregistrement</string>
     <string name="space_add_space_to_any_space_you_manage">Ajouter un espace à un espace que vous gérez.</string>
