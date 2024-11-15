@@ -61,9 +61,9 @@
     <string name="tchap_room_settings_room_access_by_link_disabled">Ce salon n’est pas accessible par lien</string>
     <string name="tchap_room_settings_room_access_by_link_enabled">Ce salon est accessible par lien</string>
     <string name="tchap_room_settings_enable_room_access_by_link">Activer l’accès au salon par lien</string>
-    <string name="tchap_room_settings_enable_room_access_by_link_info_off">Les autres utilisateurs seront autorisés à rejoindre ce salon à partir d’un lien</string>
-    <string name="tchap_room_settings_enable_room_access_by_link_info_on">Les autres utilisateurs peuvent rejoindre ce salon à partir du lien suivant\u00A0:</string>
-    <string name="tchap_room_settings_enable_room_access_by_link_info_on_with_limitation">Les autres utilisateurs peuvent rejoindre ce salon à partir du lien suivant (une invitation reste nécessaire pour les externes)\u00A0:</string>
+    <string name="tchap_room_settings_enable_room_access_by_link_info_off">Tous les agents disposant du lien pourront rejoindre ce salon et inviter d’autres agents</string>
+    <string name="tchap_room_settings_enable_room_access_by_link_info_on">Tous les agents disposant du lien peuvent rejoindre ce salon et inviter d’autres agents\u00A0:</string>
+    <string name="tchap_room_settings_enable_room_access_by_link_info_on_with_limitation">Tous les agents disposant du lien peuvent rejoindre ce salon et inviter d’autres agents (une invitation reste nécessaire pour les externes)\u00A0:</string>
     <string name="tchap_room_settings_room_access_by_link_forward">Transférer le lien</string>
     <string name="tchap_room_settings_room_access_by_link_share">Partager le lien</string>
 
