@@ -44,7 +44,6 @@
 
     <!-- For CallAndroidService -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
 
     <!-- For VectorSyncAndroidService -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
@@ -57,6 +56,9 @@
 
     <!-- Jitsi SDK is now API23+ -->
     <uses-sdk tools:overrideLibrary="com.swmansion.gesturehandler,org.jitsi.meet.sdk,com.oney.WebRTCModule,com.learnium.RNDeviceInfo,com.reactnativecommunity.asyncstorage,com.ocetnik.timer,com.calendarevents,com.reactnativecommunity.netinfo,com.kevinresol.react_native_default_preference,com.rnimmersive,com.corbt.keepawake,com.BV.LinearGradient,com.horcrux.svg,com.oblador.performance,com.reactnativecommunity.slider,com.brentvatne.react,com.reactnativecommunity.clipboard,com.swmansion.gesturehandler.react,org.linusu,org.reactnative.maskedview,com.reactnativepagerview,com.swmansion.reanimated,com.th3rdwave.safeareacontext,com.swmansion.rnscreens,org.devio.rn.splashscreen,com.reactnativecommunity.webview,org.wonday.orientation" />
+
+    <!-- For MicrophoneAccessService -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
 
     <!-- Tchap: Jitsi libs adds CALENDAR permissions, but we can remove them safely
     according to https://github.com/jitsi/jitsi-meet/issues/4068#issuecomment-480482481 -->

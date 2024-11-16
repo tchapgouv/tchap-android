@@ -251,19 +251,17 @@ class VectorCallActivity :
     }
 
     private fun startMicrophoneService() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-                == PackageManager.PERMISSION_GRANTED) {
-            // Only start the service if the app is in the foreground
-            if (isAppInForeground()) {
-                Timber.tag(loggerTag.value).v("Starting microphone foreground service")
-                val intent = Intent(this, MicrophoneAccessService::class.java)
-                ContextCompat.startForegroundService(this, intent)
-            } else {
-                Timber.tag(loggerTag.value).v("App is not in foreground; cannot start microphone service")
-            }
-        } else {
-            Timber.tag(loggerTag.value).v("Microphone permission not granted; cannot start service")
+        val isConnected = withState(callViewModel) {
+            val callState = it.callState.invoke()
+            callState is CallState.Connected
         }
+        if (!isAppInForeground()) return
+        if (!isConnected) return
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) return
+
+        Timber.tag(loggerTag.value).d("Starting microphone foreground service")
+        val intent = Intent(this, MicrophoneAccessService::class.java)
+        ContextCompat.startForegroundService(this, intent)
     }
 
     private fun isAppInForeground(): Boolean {
@@ -292,6 +290,7 @@ class VectorCallActivity :
         turnScreenOffAndKeyguardOn()
         removeOnPictureInPictureModeChangedListener(pictureInPictureModeChangedInfoConsumer)
         screenCaptureServiceConnection.unbind()
+        stopMicrophoneService()
         super.onDestroy()
     }
 
