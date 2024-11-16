@@ -253,7 +253,6 @@ class VectorCallActivity :
     private fun startMicrophoneService() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                 == PackageManager.PERMISSION_GRANTED) {
-
             // Only start the service if the app is in the foreground
             if (isAppInForeground()) {
                 Timber.tag(loggerTag.value).v("Starting microphone foreground service")
@@ -271,6 +270,7 @@ class VectorCallActivity :
         val appProcess = ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
         return appProcess
     }
+
     private fun stopMicrophoneService() {
         Timber.tag(loggerTag.value).d("Stopping MicrophoneAccessService (if needed).")
         val intent = Intent(this, MicrophoneAccessService::class.java)
