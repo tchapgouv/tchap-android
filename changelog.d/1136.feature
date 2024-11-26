@@ -1,0 +1,1 @@
+Activation des appels vidéos sur toutes les instances.
