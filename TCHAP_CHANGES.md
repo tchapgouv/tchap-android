@@ -1,3 +1,10 @@
+Changes in Tchap 2.14.0 (2024-11-26)
+====================================
+
+Features ✨
+----------
+ - Activation des appels vidéos sur toutes les instances. ([#1136](https://github.com/tchapgouv/tchap-android/issues/1136))
+
 Changes in Tchap 2.13.11 (2024-11-16)
 =====================================
 
