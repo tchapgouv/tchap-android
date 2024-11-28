@@ -23,6 +23,9 @@ enum class SignMode {
     // TCHAP Account creation
     TchapSignUp,
 
+    // TCHAP Login with SSO
+    TchapSignInWithSSO,
+
     Unknown,
 
     // Account creation
