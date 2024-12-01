@@ -1,3 +1,31 @@
+Changes in Tchap 2.14.0 (2024-11-26)
+====================================
+
+Features ✨
+----------
+ - Activation des appels vidéos sur toutes les instances. ([#1136](https://github.com/tchapgouv/tchap-android/issues/1136))
+
+Changes in Tchap 2.13.11 (2024-11-16)
+=====================================
+
+Bugfixes 🐛
+----------
+- Correction du crash quand on reçoit ou émet un appel sur Tchap. ([#1126](https://github.com/tchapgouv/tchap-android/issues/1126))
+
+Changes in Tchap 2.13.10 (2024-11-15)
+=====================================
+
+Improvements 🙌
+--------------
+ - Modification du commentaire lorsqu'on active l'accès à un salon par lien. ([#1112](https://github.com/tchapgouv/tchap-android/issues/1112))
+
+Changes in Tchap 2.13.9 (2024-11-12)
+====================================
+
+Bugfixes 🐛
+----------
+ - Correction du crash sur Android 14 quand on reçoit un appel sur Tchap. ([#1126](https://github.com/tchapgouv/tchap-android/issues/1126))
+
 Changes in Tchap 2.13.8 (2024-10-31)
 ====================================
 
