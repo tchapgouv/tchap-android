@@ -88,7 +88,6 @@ import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.usercode.UserCodeActivity
-import im.vector.app.features.webview.VectorWebViewActivity
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import im.vector.lib.strings.CommonStrings
@@ -237,12 +236,7 @@ class HomeActivity :
                     when (sharedAction) {
                         // TCHAP Custom implementation
                         is HomeActivitySharedAction.InviteByEmail -> Unit // no-op
-                        HomeActivitySharedAction.OpenTermAndConditions -> {
-                            // TCHAP the Term And Conditions url is detected as a permalink (same prefix), which make the application fail to open it from
-                            // ChromeCustomTab, so we open it here directly in a WebView
-                            val intent = VectorWebViewActivity.getIntent(this, VectorSettingsUrls.TAC, getString(CommonStrings.settings_app_term_conditions))
-                            startActivity(intent)
-                        }
+                        HomeActivitySharedAction.OpenTermAndConditions -> openUrlInChromeCustomTab(this, null, VectorSettingsUrls.TAC)
                         HomeActivitySharedAction.OpenBugReport -> {
                             views.drawerLayout.closeDrawer(GravityCompat.START)
                             bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT, false)
