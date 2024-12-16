@@ -33,7 +33,6 @@ import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.discovery.ServerPolicy
 import im.vector.app.features.settings.VectorSettingsUrls
-import im.vector.app.features.webview.VectorWebViewActivity
 import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
@@ -94,19 +93,10 @@ class LegalsFragment :
 
     private fun openUrl(url: String) {
         if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
-            when {
-                url.startsWith("file://")     -> {
-                    activity?.displayInWebView(url)
-                }
-                url == VectorSettingsUrls.TAC -> {
-                    // TCHAP the Term And Conditions url is detected as a permalink (same prefix), which make the application fail to open it from
-                    // ChromeCustomTab, so we open it here directly in a WebView
-                    val intent = VectorWebViewActivity.getIntent(requireActivity(), url, resources.getString(CommonStrings.settings_app_term_conditions))
-                    activity?.startActivity(intent)
-                }
-                else                          -> {
-                    openUrlInChromeCustomTab(requireContext(), null, url)
-                }
+            if (url.startsWith("file://")) {
+                activity?.displayInWebView(url)
+            } else {
+                openUrlInChromeCustomTab(requireContext(), null, url)
             }
         }
     }

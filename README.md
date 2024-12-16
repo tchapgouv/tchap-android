@@ -1,8 +1,14 @@
 # Tchap Android
 
-Tchap Android is an Android Matrix Client provided by [DINUM](https://tchap.beta.gouv.fr/). The app can be run on every Android devices with Android OS Lollipop and more (API 21).
+Tchap Android is an Android Matrix Client provided by [DINUM](https://tchap.numerique.gouv.fr/). The app can be run on every Android devices with Android OS Lollipop and more (API 21).
 
 [<img src="resources/img/google-play-badge.png" alt="Get it on Google Play" height="60">](https://play.google.com/store/apps/details?id=fr.gouv.tchap.a)
+
+The integrity of APKs obtained from github can be [verified](https://developer.android.com/studio/command-line/apksigner#usage-verify) using the signing certificate fingerprints:
+```
+SHA-256: 2799b5dc1c4ee23127bffdad325db7096f5d0b4e3856f0000305e23f61f991ac
+SHA-1: 48d2a6cb6a779fc8fa3b75cd56a55cc706886205
+```
 
 # New Android SDK
 
