@@ -1,3 +1,12 @@
+Changes in Tchap 2.15.0 (2024-12-16)
+====================================
+
+Other changes
+-------------
+ - Ajout de la configuration posthog pour vérifier la charge en production. ([#1140](https://github.com/tchapgouv/tchap-android/issues/1140))
+ - Mise à jour de realm-gradle-plugin en version 10.19.0 ([#1142](https://github.com/tchapgouv/tchap-android/issues/1142))
+ - Changement des URLs pour les CGU et la politique de confidentialité. ([#1143](https://github.com/tchapgouv/tchap-android/issues/1143))
+
 Changes in Tchap 2.14.0 (2024-11-26)
 ====================================
 
