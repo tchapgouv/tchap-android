@@ -69,15 +69,15 @@ class KeysExporter @Inject constructor(
     // TCHAP add policy on the password to export keys
     private suspend fun checkPasswordPolicy(password: String) {
         val passwordPolicy = tryOrNull { authenticationService.getPasswordPolicy(session.sessionParams.homeServerConnectionConfig) }
-        val isValid =  if (passwordPolicy != null) {
-            passwordPolicy.minLength?.let { it <= password.length } ?: true &&
-                    passwordPolicy.requireDigit?.let { it && password.any { char -> char.isDigit() } } ?: true &&
-                    passwordPolicy.requireLowercase?.let { it && password.any { char -> char.isLetter() && char.isLowerCase() } } ?: true &&
-                    passwordPolicy.requireUppercase?.let { it && password.any { char -> char.isLetter() && char.isUpperCase() } } ?: true &&
-                    passwordPolicy.requireSymbol?.let { it && password.any { char -> !char.isLetter() && !char.isDigit() } } ?: true
-        } else {
-            true
-        }
+        val isValid = passwordPolicy?.let { policy ->
+            val minLengthValid = policy.minLength?.let { minLength -> password.length >= minLength } ?: true
+            val hasDigit = policy.requireDigit == null || password.any { it.isDigit() }
+            val hasLowercase = policy.requireLowercase == null || password.any { it.isLowerCase() }
+            val hasUppercase = policy.requireUppercase == null || password.any { it.isUpperCase() }
+            val hasSymbol = policy.requireSymbol == null || password.any { !it.isLetterOrDigit() }
+
+            minLengthValid && hasDigit && hasLowercase && hasUppercase && hasSymbol
+        } ?: true
 
         if (!isValid) {
             throw Failure.ServerError(
