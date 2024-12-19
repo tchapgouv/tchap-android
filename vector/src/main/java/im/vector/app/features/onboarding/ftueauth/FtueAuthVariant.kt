@@ -261,6 +261,7 @@ class FtueAuthVariant(
             else -> {
                 withState(onboardingViewModel) { state ->
                     when (state.onboardingFlow) {
+                        OnboardingFlow.TchapSignInWithSSO -> error("developer error")
                         OnboardingFlow.SignIn -> onStartCombinedLogin()
                         OnboardingFlow.SignUp -> onStartCombinedRegister()
                         OnboardingFlow.SignInSignUp,
@@ -323,6 +324,7 @@ class FtueAuthVariant(
         // state.signMode could not be ready yet. So use value from the ViewEvent
         when (onboardingViewEvents.signMode) {
             SignMode.Unknown -> error("Sign mode has to be set before calling this method")
+            SignMode.TchapSignInWithSSO -> tchap.handleSignInWithSSO()
             SignMode.TchapSignUp -> tchap.handleSignUpSelected()
             SignMode.TchapSignIn -> tchap.handleSignInSelected()
             SignMode.SignUp -> Unit // This case is processed in handleOnboardingViewEvents
@@ -558,5 +560,6 @@ class FtueAuthVariant(
     private inner class Tchap {
         fun handleSignInSelected() = openAuthLoginFragmentWithTag(FRAGMENT_LOGIN_TAG)
         fun handleSignUpSelected() = openAuthLoginFragmentWithTag(FRAGMENT_LOGIN_TAG)
+        fun handleSignInWithSSO() = openAuthLoginFragmentWithTag(FRAGMENT_LOGIN_TAG)
     }
 }

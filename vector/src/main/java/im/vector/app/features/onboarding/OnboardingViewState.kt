@@ -64,6 +64,7 @@ data class OnboardingViewState(
 ) : MavericksState
 
 enum class OnboardingFlow {
+    TchapSignInWithSSO,
     SignIn,
     SignUp,
     SignInSignUp
