@@ -20,11 +20,19 @@ import android.content.Context
 import android.net.Uri
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.extensions.safeOpenOutputStream
+import im.vector.app.core.resources.StringProvider
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
 class KeysExporter @Inject constructor(
+        private val authenticationService: AuthenticationService,
+        private val stringProvider: StringProvider,
         private val session: Session,
         private val context: Context,
         private val dispatchers: CoroutineDispatchers
@@ -34,6 +42,7 @@ class KeysExporter @Inject constructor(
      */
     suspend fun export(password: String, uri: Uri) {
         withContext(dispatchers.io) {
+            checkPasswordPolicy(password)
             val data = session.cryptoService().exportRoomKeys(password)
             context.safeOpenOutputStream(uri)
                     ?.use { it.write(data) }
@@ -54,6 +63,30 @@ class KeysExporter @Inject constructor(
                 output.close()
                 throw exception
             }
+        }
+    }
+
+    // TCHAP add policy on the password to export keys
+    private suspend fun checkPasswordPolicy(password: String) {
+        val passwordPolicy = tryOrNull { authenticationService.getPasswordPolicy(session.sessionParams.homeServerConnectionConfig) }
+        val isValid = passwordPolicy?.let { policy ->
+            val minLengthValid = policy.minLength?.let { minLength -> password.length >= minLength } ?: true
+            val hasDigit = policy.requireDigit == null || password.any { it.isDigit() }
+            val hasLowercase = policy.requireLowercase == null || password.any { it.isLowerCase() }
+            val hasUppercase = policy.requireUppercase == null || password.any { it.isUpperCase() }
+            val hasSymbol = policy.requireSymbol == null || password.any { !it.isLetterOrDigit() }
+
+            minLengthValid && hasDigit && hasLowercase && hasUppercase && hasSymbol
+        } ?: true
+
+        if (!isValid) {
+            throw Failure.ServerError(
+                    error = MatrixError(
+                            code = MatrixError.M_WEAK_PASSWORD,
+                            message = stringProvider.getString(CommonStrings.tchap_password_weak_pwd_error)
+                    ),
+                    httpCode = 400
+            )
         }
     }
 }

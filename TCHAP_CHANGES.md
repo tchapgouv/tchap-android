@@ -1,3 +1,14 @@
+Changes in Tchap 2.15.1 (2024-12-23)
+====================================
+
+Bugfixes 🐛
+----------
+ - Ajout d'une exception pour les requêtes posthog ([#1146](https://github.com/tchapgouv/tchap-android/issues/1146))
+
+Other changes
+-------------
+ - Ajout d'une politique de mot de passe sur l'export manuel des clés. ([#1145](https://github.com/tchapgouv/tchap-android/issues/1145))
+
 Changes in Tchap 2.15.0 (2024-12-16)
 ====================================
 
