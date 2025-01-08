@@ -251,7 +251,7 @@
     <string name="start_video_call">Nouvel appel vidéo</string>
     <string name="option_send_files">Envoyer des fichiers</string>
     <string name="option_take_photo_video">Prendre une photo ou une vidéo</string>
-    <string name="auth_login">Je me connecte</string> <!-- Tchap: Custom string -->
+    <string name="auth_login">Se connecter</string>
     <string name="auth_submit">Valider</string>
     <string name="auth_invalid_login_param">Nom d’utilisateur et/ou mot de passe incorrect</string>
     <string name="auth_forgot_password">Mot de passe oublié \?</string>
@@ -1054,7 +1054,7 @@
     <string name="login_signin_to">S’authentifier sur %1$s</string>
     <string name="login_signup">Je m’inscris</string> <!-- Tchap: Custom string -->
     <string name="login_signin">Je me connecte</string> <!-- Tchap: Custom string -->
-    <string name="login_signin_sso">Continuer avec l’authentification unique</string>
+    <string name="login_signin_sso">Continuer avec %s</string> <!-- Tchap: Custom string -->
     <string name="login_server_url_form_modular_hint">Adresse Element Matrix Services</string>
     <string name="login_server_url_form_other_hint">Adresse</string>
     <string name="login_server_url_form_modular_text">Hébergement privé pour les organisations</string>

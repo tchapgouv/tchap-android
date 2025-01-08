@@ -43,11 +43,53 @@
                 android:textColor="?vctr_content_secondary"
                 tools:text="@string/login_server_matrix_org_text" />
 
+            <!-- Social Logins buttons -->
+            <LinearLayout
+                android:id="@+id/loginSocialLoginContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <Button
+                    android:id="@+id/loginSSOSubmit"
+                    style="@style/Widget.Vector.Button.Login"
+                    android:drawableLeft="@drawable/ic_tchap_proconnect"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:paddingHorizontal="40dp"
+                    tools:text="@string/login_signin_sso"
+                    tools:enabled="false"
+                    tools:ignore="RelativeOverlap" />
+
+                <im.vector.app.features.login.SocialLoginButtonsView
+                    android:id="@+id/loginSocialLoginButtons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:signMode="signin" />
+
+                <TextView
+                    android:id="@+id/loginSocialLoginHeader"
+                    style="@style/Widget.Vector.TextView.Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:text="@string/login_social_continue"
+                    android:textColor="?vctr_content_secondary" />
+
+            </LinearLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/loginFieldTil"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 app:errorEnabled="true"
                 app:helperText="@string/tchap_connection_email_help"
                 tools:hint="@string/login_signin_username_hint">
@@ -119,58 +161,38 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <FrameLayout
+            <Button
+                android:id="@+id/forgetPasswordButton"
+                style="@style/Widget.Vector.Button.Text.Login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/auth_forgot_password" />
+
+            <Button
+                android:id="@+id/loginSubmit"
+                style="@style/Widget.Vector.Button.Login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="22dp">
+                android:layout_gravity="end"
+                android:paddingHorizontal="40dp"
+                android:text="@string/auth_login"
+                tools:enabled="false"
+                tools:ignore="RelativeOverlap" />
 
-                <Button
-                    android:id="@+id/forgetPasswordButton"
-                    style="@style/Widget.Vector.Button.Text.Login"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:text="@string/auth_forgot_password" />
-
-                <Button
-                    android:id="@+id/loginSubmit"
-                    style="@style/Widget.Vector.Button.Login"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:text="@string/auth_login"
-                    tools:enabled="false"
-                    tools:ignore="RelativeOverlap" />
-
-            </FrameLayout>
-
-            <!-- Social Logins buttons -->
-            <LinearLayout
-                android:id="@+id/loginSocialLoginContainer"
+            <Button
+                android:id="@+id/loginSSOHelp"
+                style="@style/Widget.Vector.Button.Text.Login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone"
-                tools:visibility="visible">
+                tools:text="@string/tchap_connection_sso_help" />
 
-                <TextView
-                    android:id="@+id/loginSocialLoginHeader"
-                    style="@style/Widget.Vector.TextView.Body"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center"
-                    android:text="@string/login_social_continue"
-                    android:textColor="?vctr_content_secondary" />
-
-                <im.vector.app.features.login.SocialLoginButtonsView
-                    android:id="@+id/loginSocialLoginButtons"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:signMode="signin" />
-
-            </LinearLayout>
+            <Button
+                android:id="@+id/loginSSODescription"
+                style="@style/Widget.Vector.Button.Text.Login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="@string/tchap_connection_sso_description" />
 
         </LinearLayout>
 

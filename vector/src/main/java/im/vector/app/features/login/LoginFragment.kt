@@ -89,6 +89,7 @@ class LoginFragment :
     private fun setupAutoFill(state: LoginViewState) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             when (state.signMode) {
+                SignMode.TchapSignInWithSSO,
                 SignMode.TchapSignUp,
                 SignMode.TchapSignIn,
                 SignMode.Unknown -> error("developer error")
@@ -106,6 +107,7 @@ class LoginFragment :
     }
 
     private fun ssoMode(state: LoginViewState) = when (state.signMode) {
+        SignMode.TchapSignInWithSSO,
         SignMode.TchapSignUp,
         SignMode.TchapSignIn,
         SignMode.Unknown -> error("developer error")
@@ -161,6 +163,7 @@ class LoginFragment :
     private fun setupUi(state: LoginViewState) {
         views.loginFieldTil.hint = getString(
                 when (state.signMode) {
+                    SignMode.TchapSignInWithSSO,
                     SignMode.TchapSignUp,
                     SignMode.TchapSignIn,
                     SignMode.Unknown -> error("developer error")
@@ -178,6 +181,7 @@ class LoginFragment :
             views.loginPasswordNotice.isVisible = true
         } else {
             val resId = when (state.signMode) {
+                SignMode.TchapSignInWithSSO,
                 SignMode.TchapSignUp,
                 SignMode.TchapSignIn,
                 SignMode.Unknown -> error("developer error")
@@ -231,6 +235,7 @@ class LoginFragment :
 
         views.loginSubmit.text = getString(
                 when (state.signMode) {
+                    SignMode.TchapSignInWithSSO,
                     SignMode.TchapSignUp,
                     SignMode.TchapSignIn,
                     SignMode.Unknown -> error("developer error")

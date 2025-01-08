@@ -32,16 +32,20 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
+import im.vector.app.core.extensions.setLeftDrawable
 import im.vector.app.core.extensions.toReducedUrl
+import im.vector.app.core.resources.BuildMeta
+import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentLoginBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import im.vector.app.features.login.SocialLoginButtonsView
-import im.vector.app.features.login.SocialLoginButtonsView.Mode
 import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
+import im.vector.app.features.onboarding.OnboardingFlow
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.lib.strings.CommonStrings
@@ -51,6 +55,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.auth.SSOAction
 import org.matrix.android.sdk.api.extensions.isEmail
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.failure.isInvalidUsername
 import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
@@ -58,6 +63,7 @@ import org.matrix.android.sdk.api.failure.isRegistrationDisabled
 import org.matrix.android.sdk.api.failure.isUsernameInUse
 import org.matrix.android.sdk.api.failure.isWeakPassword
 import reactivecircus.flowbinding.android.widget.textChanges
+import javax.inject.Inject
 
 /**
  * In this screen:
@@ -70,6 +76,9 @@ import reactivecircus.flowbinding.android.widget.textChanges
 @AndroidEntryPoint
 class FtueAuthLoginFragment :
         AbstractSSOFtueAuthFragment<FragmentLoginBinding>() {
+
+    @Inject lateinit var buildMeta: BuildMeta
+    @Inject lateinit var vectorFeatures: VectorFeatures
 
     private val tchap = Tchap()
 
@@ -111,7 +120,11 @@ class FtueAuthLoginFragment :
                     views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
                     views.passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
                 }
-                SignMode.TchapSignIn,
+                SignMode.TchapSignInWithSSO,
+                SignMode.TchapSignIn -> {
+                    views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS)
+                    views.passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
+                }
                 SignMode.SignIn,
                 SignMode.SignInWithMatrixId -> {
                     views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_USERNAME)
@@ -125,6 +138,7 @@ class FtueAuthLoginFragment :
         SignMode.Unknown -> error("developer error")
         SignMode.TchapSignUp,
         SignMode.SignUp -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
+        SignMode.TchapSignInWithSSO,
         SignMode.TchapSignIn,
         SignMode.SignIn,
         SignMode.SignInWithMatrixId -> SocialLoginButtonsView.Mode.MODE_SIGN_IN
@@ -148,7 +162,7 @@ class FtueAuthLoginFragment :
                 views.loginFieldTil.error = getString(CommonStrings.error_forbidden_digits_only_username)
                 error++
             }
-            if (password.isEmpty()) {
+            if (password.isEmpty() && state.signMode != SignMode.TchapSignInWithSSO) {
                 views.passwordFieldTil.error = getString(
                         if (isSignupMode) {
                             CommonStrings.error_empty_field_choose_password
@@ -166,8 +180,12 @@ class FtueAuthLoginFragment :
             }
 
             if (error == 0) {
-                val initialDeviceName = getString(CommonStrings.login_default_session_public_name)
-                viewModel.handle(state.signMode.toAuthenticateAction(login, password, initialDeviceName))
+                if (state.signMode != SignMode.TchapSignInWithSSO) {
+                    val initialDeviceName = getString(CommonStrings.login_default_session_public_name)
+                    viewModel.handle(state.signMode.toAuthenticateAction(login, password, initialDeviceName))
+                } else {
+                    viewModel.handle(OnboardingAction.LoginWithSSO(login))
+                }
             }
         }
     }
@@ -186,6 +204,7 @@ class FtueAuthLoginFragment :
                     SignMode.SignUp -> CommonStrings.login_signup_username_hint
                     SignMode.SignIn -> CommonStrings.login_signin_username_hint
                     SignMode.TchapSignUp,
+                    SignMode.TchapSignInWithSSO,
                     SignMode.TchapSignIn -> CommonStrings.tchap_connection_email
                     SignMode.SignInWithMatrixId -> CommonStrings.login_signin_matrix_id_hint
                 }
@@ -199,12 +218,12 @@ class FtueAuthLoginFragment :
             views.loginPasswordNotice.isVisible = true
         } else {
             val resId = when (state.signMode) {
-                SignMode.Unknown -> error("developer error")
                 SignMode.TchapSignUp,
                 SignMode.SignUp -> CommonStrings.login_signup_to
                 SignMode.TchapSignIn -> CommonStrings.login_connect_to
                 SignMode.SignIn -> CommonStrings.login_connect_to
-                SignMode.SignInWithMatrixId -> CommonStrings.login_connect_to
+                SignMode.TchapSignInWithSSO -> CommonStrings.login_social_signin_with
+                else -> error("developer error")
             }
 
             when (state.serverType) {
@@ -228,14 +247,17 @@ class FtueAuthLoginFragment :
                 ServerType.Unknown -> {
                     // TCHAP Hide views if empty
                     views.loginServerIcon.isVisible = false
-                    views.loginTitle.isVisible = false
                     views.loginNotice.isVisible = false
+                    if (state.signMode == SignMode.TchapSignInWithSSO) {
+                        views.loginTitle.text = getString(resId, TCHAP_SSO_PROVIDER)
+                    } else {
+                        views.loginTitle.text = getString(resId, buildMeta.applicationName)
+                    }
                 }
             }
             views.loginPasswordNotice.isVisible = false
 
             if (state.selectedHomeserver.preferredLoginMode is LoginMode.SsoAndPassword) {
-                views.loginSocialLoginContainer.isVisible = true
                 views.loginSocialLoginButtons.render(state.selectedHomeserver.preferredLoginMode, ssoMode(state)) { provider ->
                     viewModel.fetchSsoUrl(
                             redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
@@ -246,7 +268,6 @@ class FtueAuthLoginFragment :
                             ?.let { openInCustomTab(it) }
                 }
             } else {
-                views.loginSocialLoginContainer.isVisible = false
                 views.loginSocialLoginButtons.ssoIdentityProviders = null
             }
         }
@@ -260,20 +281,21 @@ class FtueAuthLoginFragment :
                     SignMode.Unknown -> error("developer error")
                     SignMode.TchapSignUp,
                     SignMode.SignUp -> CommonStrings.login_signup_submit
+                    SignMode.TchapSignInWithSSO -> CommonStrings.login_signin_sso
                     SignMode.TchapSignIn,
                     SignMode.SignIn,
                     SignMode.SignInWithMatrixId -> CommonStrings.login_signin
-                }
+                }, TCHAP_SSO_PROVIDER
         )
     }
 
-    private fun setupSubmitButton() {
+    private fun setupSubmitButton() = withState(viewModel) { state ->
         views.loginSubmit.setOnClickListener { submit() }
         combine(
                 views.loginField.textChanges().map { it.trim().isNotEmpty() },
                 views.passwordField.textChanges().map { it.isNotEmpty() }
         ) { isLoginNotEmpty, isPasswordNotEmpty ->
-            isLoginNotEmpty && isPasswordNotEmpty
+            (isLoginNotEmpty && isPasswordNotEmpty) || state.signMode == SignMode.TchapSignInWithSSO && views.loginField.text?.isEmail().orFalse()
         }
                 .onEach {
                     views.loginFieldTil.error = null
@@ -327,6 +349,7 @@ class FtueAuthLoginFragment :
         tchap.setupUi(state)
         setupAutoFill(state)
         setupButtons(state)
+        tchap.tryLoginSSO(state)
 
         if (state.isLoading) {
             // Ensure password is hidden
@@ -343,15 +366,61 @@ class FtueAuthLoginFragment :
 
         fun setupUi(state: OnboardingViewState) {
             this@FtueAuthLoginFragment.setupUi(state) // call "super" method
-            if (state.signMode == SignMode.TchapSignUp) {
-                views.loginFieldTil.isHelperTextEnabled = true
-                views.passwordFieldTil.isHelperTextEnabled = true
-                views.tchapPasswordConfirmationFieldTil.isVisible = true
-            } else {
-                views.loginFieldTil.isHelperTextEnabled = false
-                views.passwordFieldTil.isHelperTextEnabled = false
-                views.tchapPasswordConfirmationFieldTil.isVisible = false
-                views.passwordField.imeOptions = EditorInfo.IME_ACTION_DONE
+
+            val isSignUpMode = state.signMode == SignMode.TchapSignUp
+            views.loginFieldTil.isHelperTextEnabled = isSignUpMode
+            views.passwordFieldTil.isHelperTextEnabled = isSignUpMode
+            views.tchapPasswordConfirmationFieldTil.isVisible = isSignUpMode
+            views.loginSocialLoginContainer.isVisible = isSignUpMode && vectorFeatures.tchapIsSSOEnabled()
+
+            when(state.signMode) {
+                SignMode.TchapSignUp -> {
+                    views.loginSSOSubmit.text = getString(CommonStrings.login_signin_sso, TCHAP_SSO_PROVIDER)
+                    views.loginSSOSubmit.debouncedClicks {
+                        viewModel.handle(
+                                OnboardingAction.SplashAction.OnIAlreadyHaveAnAccount(
+                                        onboardingFlow = OnboardingFlow.TchapSignInWithSSO
+                                )
+                        )
+                    }
+                }
+                SignMode.TchapSignInWithSSO -> {
+                    views.loginSubmit.setLeftDrawable(im.vector.lib.ui.styles.R.drawable.ic_tchap_proconnect)
+                    views.loginSSOHelp.text = getString(CommonStrings.tchap_connection_sso_help, TCHAP_SSO_PROVIDER)
+                    views.loginSSODescription.text = getString(CommonStrings.tchap_connection_sso_description, TCHAP_SSO_PROVIDER)
+                    views.loginSSOHelp.debouncedClicks { openUrlInExternalBrowser(requireContext(), TCHAP_SSO_URL) }
+                    views.loginSSODescription.debouncedClicks { openUrlInExternalBrowser(requireContext(), TCHAP_SSO_FAQ_URL) }
+                    views.passwordFieldTil.isVisible = false
+                    views.loginSSOHelp.isVisible = true
+                    views.loginSSODescription.isVisible = true
+                }
+                else -> {
+                    views.passwordField.imeOptions = EditorInfo.IME_ACTION_DONE
+                    views.loginSSOHelp.isVisible = false
+                }
+            }
+        }
+
+        fun tryLoginSSO(state: OnboardingViewState) {
+            if (state.signMode != SignMode.TchapSignInWithSSO) return
+            if (views.loginField.text.isNullOrEmpty()) return
+            if (state.selectedHomeserver.upstreamUrl.isNullOrEmpty()) return
+            if (views.loginSocialLoginButtons.ssoIdentityProviders.isNullOrEmpty()) {
+                views.loginFieldTil.error = getString(CommonStrings.tchap_auth_sso_inactive, TCHAP_SSO_PROVIDER)
+                viewModel.handle(OnboardingAction.ResetHomeServerUrl)
+                return
+            }
+
+            views.loginSocialLoginButtons.ssoIdentityProviders?.first().let {
+                viewModel.fetchSsoUrl(
+                        redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                        deviceId = state.deviceId,
+                        provider = it,
+                        action = SSOAction.LOGIN
+                )
+                        ?.let { url -> openInCustomTab(url) }
+
+                views.loginField.text?.clear()
             }
         }
     }
