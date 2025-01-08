@@ -431,6 +431,7 @@ class LoginViewModel @AssistedInject constructor(
         }
 
         when (action.signMode) {
+            SignMode.TchapSignInWithSSO,
             SignMode.TchapSignUp,
             SignMode.TchapSignIn -> error("developer error")
             SignMode.SignUp -> startRegistrationFlow()
@@ -570,6 +571,7 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun handleLoginOrRegister(action: LoginAction.LoginOrRegister) = withState { state ->
         when (state.signMode) {
+            SignMode.TchapSignInWithSSO,
             SignMode.TchapSignIn,
             SignMode.TchapSignUp,
             SignMode.Unknown -> error("Developer error, invalid sign mode")

@@ -111,5 +111,15 @@ fun RegistrationFlowResponse.toFlowResult(): FlowResult {
 
 fun RegistrationFlowResponse.nextUncompletedStage(flowIndex: Int = 0): String? {
     val completed = completedStages ?: emptyList()
-    return flows?.getOrNull(flowIndex)?.stages?.firstOrNull { completed.contains(it).not() }
+    val flows = flows ?: return null
+
+    // TCHAP return LoginFlowTypes.SSO if SSO type is supported by UIA.
+    if (flowIndex == 0) {
+        flows.forEach {
+            if (!it.stages.isNullOrEmpty() && LoginFlowTypes.SSO !in completed && LoginFlowTypes.SSO in it.stages) {
+                return LoginFlowTypes.SSO
+            }
+        }
+    }
+    return flows.getOrNull(flowIndex)?.stages?.firstOrNull { it !in completed }
 }
