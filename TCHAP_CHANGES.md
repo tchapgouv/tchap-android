@@ -1,3 +1,10 @@
+Changes in Tchap 2.16.0 (2025-01-08)
+====================================
+
+Features ✨
+----------
+ - Connexion des utilisateurs avec ProConnect ([#1104](https://github.com/tchapgouv/tchap-android/issues/1104))
+
 Changes in Tchap 2.15.1 (2024-12-23)
 ====================================
 
