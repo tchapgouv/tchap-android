@@ -31,6 +31,7 @@ import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewModel
 import im.vector.app.features.onboarding.OnboardingViewState
+import im.vector.app.features.settings.VectorSettingsUrls
 import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.CancellationException
 
@@ -171,5 +172,6 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
     companion object {
         const val TCHAP_SSO_URL = "https://proconnect.gouv.fr/"
         const val TCHAP_SSO_PROVIDER = "ProConnect"
+        const val TCHAP_SSO_FAQ_URL = "${VectorSettingsUrls.HELP}/fr/article/se-connecter-a-tchap-avec-proconnect-1dh1peg/"
     }
 }

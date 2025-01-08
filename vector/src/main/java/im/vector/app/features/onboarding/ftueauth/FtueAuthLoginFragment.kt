@@ -385,11 +385,14 @@ class FtueAuthLoginFragment :
                     }
                 }
                 SignMode.TchapSignInWithSSO -> {
-                    views.passwordFieldTil.isVisible = false
-                    views.loginSSOHelp.text = getString(CommonStrings.tchap_connection_sso_help, TCHAP_SSO_PROVIDER)
-                    views.loginSSOHelp.debouncedClicks { openUrlInExternalBrowser(requireContext(), TCHAP_SSO_URL) }
-                    views.loginSSOHelp.isVisible = true
                     views.loginSubmit.setLeftDrawable(im.vector.lib.ui.styles.R.drawable.ic_tchap_proconnect)
+                    views.loginSSOHelp.text = getString(CommonStrings.tchap_connection_sso_help, TCHAP_SSO_PROVIDER)
+                    views.loginSSODescription.text = getString(CommonStrings.tchap_connection_sso_description, TCHAP_SSO_PROVIDER)
+                    views.loginSSOHelp.debouncedClicks { openUrlInExternalBrowser(requireContext(), TCHAP_SSO_URL) }
+                    views.loginSSODescription.debouncedClicks { openUrlInExternalBrowser(requireContext(), TCHAP_SSO_FAQ_URL) }
+                    views.passwordFieldTil.isVisible = false
+                    views.loginSSOHelp.isVisible = true
+                    views.loginSSODescription.isVisible = true
                 }
                 else -> {
                     views.passwordField.imeOptions = EditorInfo.IME_ACTION_DONE

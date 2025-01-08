@@ -187,6 +187,13 @@
                 android:layout_height="wrap_content"
                 tools:text="@string/tchap_connection_sso_help" />
 
+            <Button
+                android:id="@+id/loginSSODescription"
+                style="@style/Widget.Vector.Button.Text.Login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="@string/tchap_connection_sso_description" />
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
