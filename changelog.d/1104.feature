@@ -1,1 +1,1 @@
-Connexion avec ProConnect disponible sur la plateforme de dev et preprod
+Connexion des utilisateurs avec ProConnect
