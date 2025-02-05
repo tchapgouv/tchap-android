@@ -283,7 +283,7 @@ dependencies {
     // WebRTC
     withdmvoipImplementation('com.github.tchapgouv:webrtc:124.2.0')
     // Jitsi
-    withvoipApi('org.jitsi.react:jitsi-meet-sdk:8.1.1') {
+    withvoipApi('org.jitsi.react:jitsi-meet-sdk:10.2.0') {
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'
@@ -293,6 +293,9 @@ dependencies {
         // The library exports a jetified artifact but doesn't remove the support library dependency
         // https://github.com/MatrixFrog/Android-ScalableVideoView/blob/master/gradle.properties#L1
         exclude group: 'com.android.support', module: 'appcompat-v7'
+
+        // transitive needed to pull in the react-native dependency
+        transitive = true
     }
 
     // TCHAP Fix issue on okhttp3 import

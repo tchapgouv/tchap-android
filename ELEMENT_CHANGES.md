@@ -1,3 +1,54 @@
+Changes in Element v1.6.30 (2025-02-04)
+=======================================
+
+Dual licensing: AGPL + Element Commercial  ([#8990](https://github.com/element-hq/element-android/issues/8990))
+
+Bugfixes 🐛
+----------
+ - Fix incoming call crash on Android 14+. ([#8964](https://github.com/element-hq/element-android/issues/8964))
+
+
+Changes in Element v1.6.28 (2025-01-13)
+=======================================
+
+- Start sunsetting the application: prevent creation of new accounts on server with MAS support, and redirect users to Element X. ([#8983](https://github.com/element-hq/element-android/pull/8983))
+- Sync strings. ([#8986](https://github.com/element-hq/element-android/pull/8986))
+
+
+Changes in Element v1.6.26 (2024-12-20)
+=======================================
+
+Other changes
+-------------
+ - Bump org.matrix.rustcomponents:crypto-android from 0.5.0 to 0.6.0 based on matrix-sdk-crypto-0.9.0 ([#8960](https://github.com/element-hq/element-android/issues/8960))
+
+
+Changes in Element v1.6.24 (2024-11-19)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Extended file name support to include characters from multiple languages, including Cyrillic and Han scripts. ([#6449](https://github.com/element-hq/element-android/issues/6449)) ([#6449](https://github.com/element-hq/element-android/issues/6449))
+ - Intercept mobile.element.io links with Element app ([#8904](https://github.com/element-hq/element-android/issues/8904))
+ - Show a notice when a previously verified user is not anymore ([#8933](https://github.com/element-hq/element-android/issues/8933))
+
+Other changes
+-------------
+ - Indicate when calls are unsupported in the timeline/notifications ([#8938](https://github.com/element-hq/element-android/issues/8938))
+
+
+Changes in Element v1.6.22 (2024-09-23)
+=======================================
+
+Important: this version removes the dependency of the deprecated libolm library.
+Application installations that have not been updated to the first version with the migration (v1.6.0 released at 2023-05-17) will not be able to migrate the account.
+More details in ([#8901](https://github.com/element-hq/element-android/issues/8901))
+
+Other changes
+-------------
+ - Remove legacy QR code login. ([#8889](https://github.com/element-hq/element-android/issues/8889))
+
+
 Changes in Element v1.6.20 (2024-07-25)
 =======================================
 
@@ -13,7 +64,7 @@ Bugfixes 🐛
 ----------
  - Fix redacted events not grouped correctly when hidden events are inserted between. ([#8840](https://github.com/element-hq/element-android/issues/8840))
  - Element-Android session doesn't encrypt for a dehydrated device ([#8842](https://github.com/element-hq/element-android/issues/8842))
- - Intercept only links from `element.io` well known hosts. The previous behaviour broke OIDC login in Element X. ([#8894](https://github.com/element-hq/element-android/issues/8894))
+ - Intercept only links from `element.io` well known hosts. The previous behaviour broke OIDC login in Element X. ([#8849](https://github.com/element-hq/element-android/issues/8849))
 
 Other changes
 -------------

@@ -53,7 +53,6 @@ import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.coroutines.builder.safeInvokeOnClose
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.DefaultKeysAlgorithmAndData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysAlgorithmAndData
-import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.SasVerification
 import org.matrix.android.sdk.internal.crypto.verification.VerificationRequest
@@ -85,7 +84,9 @@ import org.matrix.rustcomponents.sdk.crypto.ShieldState
 import org.matrix.rustcomponents.sdk.crypto.SignatureVerification
 import org.matrix.rustcomponents.sdk.crypto.setLogger
 import timber.log.Timber
+import uniffi.matrix_sdk_crypto.DecryptionSettings
 import uniffi.matrix_sdk_crypto.LocalTrust
+import uniffi.matrix_sdk_crypto.TrustRequirement
 import java.io.File
 import java.nio.charset.Charset
 import javax.inject.Inject
@@ -319,22 +320,6 @@ internal class OlmMachine @Inject constructor(
     }
 
     /**
-     * Used for lazy migration of inboundGroupSession from EA to ER.
-     */
-    suspend fun importRoomKey(inbound: MXInboundMegolmSessionWrapper): Result<Unit> {
-        Timber.v("Migration:: Tentative lazy migration")
-        return withContext(coroutineDispatchers.io) {
-            val export = inbound.exportKeys()
-                    ?: return@withContext Result.failure(Exception("Failed to export key"))
-            val result = importDecryptedKeys(listOf(export), null).also {
-                Timber.v("Migration:: Tentative lazy migration result: ${it.totalNumberOfKeys}")
-            }
-            if (result.totalNumberOfKeys == 1) return@withContext Result.success(Unit)
-            return@withContext Result.failure(Exception("Import failed"))
-        }
-    }
-
-    /**
      * Mark the given list of users to be tracked, triggering a key query request for them.
      *
      * *Note*: Only users that aren't already tracked will be considered for an update. It's safe to
@@ -467,7 +452,12 @@ internal class OlmMachine @Inject constructor(
                     }
 
                     val serializedEvent = adapter.toJson(event)
-                    val decrypted = inner.decryptRoomEvent(serializedEvent, event.roomId, false, false)
+                    val decrypted = inner.decryptRoomEvent(
+                            serializedEvent, event.roomId,
+                            handleVerificationEvents = false,
+                            strictShields = false,
+                            decryptionSettings = DecryptionSettings(TrustRequirement.UNTRUSTED)
+                    )
 
                     val deserializationAdapter =
                             moshi.adapter<JsonDict>(Map::class.java)
