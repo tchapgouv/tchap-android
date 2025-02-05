@@ -9,9 +9,11 @@ package im.vector.app.features.crypto.keys
 
 import android.net.Uri
 import im.vector.app.core.dispatchers.CoroutineDispatchers
+import im.vector.app.test.fakes.FakeAuthenticationService
 import im.vector.app.test.fakes.FakeContext
 import im.vector.app.test.fakes.FakeCryptoService
 import im.vector.app.test.fakes.FakeSession
+import im.vector.app.test.fakes.FakeStringProvider
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
@@ -31,6 +33,8 @@ class KeysExporterTest {
     private val cryptoService = FakeCryptoService()
     private val context = FakeContext()
     private val keysExporter = KeysExporter(
+            authenticationService = FakeAuthenticationService(), // TCHAP add policy on the password to export keys
+            stringProvider = FakeStringProvider().instance, // TCHAP add policy on the password to export keys
             session = FakeSession(fakeCryptoService = cryptoService),
             context = context.instance,
             dispatchers = CoroutineDispatchers(Dispatchers.Unconfined, Dispatchers.Unconfined)

@@ -242,19 +242,6 @@ class VectorCallActivity :
     }
 
     private fun startMicrophoneService() {
-<<<<<<< HEAD:vector/src/withvoip/java/im/vector/app/features/call/VectorCallActivity.kt
-        val isConnected = withState(callViewModel) {
-            val callState = it.callState.invoke()
-            callState is CallState.Connected
-        }
-        if (!isAppInForeground()) return
-        if (!isConnected) return
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) return
-
-        Timber.tag(loggerTag.value).d("Starting microphone foreground service")
-        val intent = Intent(this, MicrophoneAccessService::class.java)
-        ContextCompat.startForegroundService(this, intent)
-=======
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                 == PackageManager.PERMISSION_GRANTED) {
             // Only start the service if the app is in the foreground
@@ -280,17 +267,13 @@ class VectorCallActivity :
         } else {
             Timber.tag(loggerTag.value).v("Microphone permission not granted; cannot start service")
         }
->>>>>>> v1.6.30:vector/src/main/java/im/vector/app/features/call/VectorCallActivity.kt
     }
 
     private fun isAppInForeground(): Boolean {
         val appProcess = ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
         return appProcess
     }
-<<<<<<< HEAD:vector/src/withvoip/java/im/vector/app/features/call/VectorCallActivity.kt
 
-=======
->>>>>>> v1.6.30:vector/src/main/java/im/vector/app/features/call/VectorCallActivity.kt
     private fun stopMicrophoneService() {
         Timber.tag(loggerTag.value).d("Stopping MicrophoneAccessService (if needed).")
         val intent = Intent(this, MicrophoneAccessService::class.java)
@@ -299,12 +282,9 @@ class VectorCallActivity :
 
     override fun onPause() {
         super.onPause()
-<<<<<<< HEAD:vector/src/withvoip/java/im/vector/app/features/call/VectorCallActivity.kt
-=======
 
         // Start the microphone service to keep access to the microphone when the call is in the background
         // https://github.com/element-hq/element-android/issues/8881
->>>>>>> v1.6.30:vector/src/main/java/im/vector/app/features/call/VectorCallActivity.kt
         startMicrophoneService()
     }
 

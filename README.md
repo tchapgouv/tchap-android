@@ -1,13 +1,4 @@
-<<<<<<< HEAD
 # Tchap Android
-=======
-[![Latest build](https://github.com/element-hq/element-android/actions/workflows/build.yml/badge.svg?query=branch%3Adevelop)](https://github.com/element-hq/element-android/actions/workflows/build.yml?query=branch%3Adevelop)
-[![Weblate](https://translate.element.io/widgets/element-android/-/svg-badge.svg)](https://translate.element.io/engage/element-android/?utm_source=widget)
-[![Element Android Matrix room #element-android:matrix.org](https://img.shields.io/matrix/element-android:matrix.org.svg?label=%23element-android:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-android:matrix.org)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=element-android&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=element-android)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=element-android&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=element-android)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=element-android&metric=bugs)](https://sonarcloud.io/summary/new_code?id=element-android)
->>>>>>> v1.6.30
 
 Tchap Android is an Android Matrix Client provided by [DINUM](https://tchap.numerique.gouv.fr/). The app can be run on every Android devices with Android OS Lollipop and more (API 21).
 

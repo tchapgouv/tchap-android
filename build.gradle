@@ -211,19 +211,11 @@ sonar {
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.projectVersion", project(":vector").android.defaultConfig.versionName
         property "sonar.sourceEncoding", "UTF-8"
-<<<<<<< HEAD
         property "sonar.links.homepage", "https://github.com/tchapgouv/tchap-android/"
         property "sonar.links.ci", "https://github.com/tchapgouv/tchap-android/actions"
         property "sonar.links.scm", "https://github.com/tchapgouv/tchap-android/"
         property "sonar.links.issue", "https://github.com/tchapgouv/tchap-android/issues"
-        property "sonar.organization", "new_vector_ltd_organization"
-=======
-        property "sonar.links.homepage", "https://github.com/element-hq/element-android/"
-        property "sonar.links.ci", "https://github.com/element-hq/element-android/actions"
-        property "sonar.links.scm", "https://github.com/element-hq/element-android/"
-        property "sonar.links.issue", "https://github.com/element-hq/element-android/issues"
-        property "sonar.organization", "element-hq"
->>>>>>> v1.6.30
+        property "sonar.organization", "tchapgouv"
         property "sonar.java.coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/generateCoverageReport/generateCoverageReport.xml"
         property "sonar.login", project.hasProperty("SONAR_LOGIN") ? SONAR_LOGIN : "invalid"
