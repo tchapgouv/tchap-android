@@ -93,6 +93,7 @@
 -dontwarn org.commonmark.ext.gfm.strikethrough.Strikethrough
 -dontwarn org.mozilla.javascript.**
 -dontwarn org.slf4j.**
+<<<<<<< HEAD
 
 # TCHAP guava rules
 -dontwarn com.google.j2objc.annotations.**
@@ -103,3 +104,6 @@
 -dontwarn java.lang.reflect.AnnotatedType
 -dontwarn jdk.javadoc.doclet.**
 -dontwarn org.checkerframework.**
+=======
+-dontwarn org.jspecify.annotations.NullMarked
+>>>>>>> v1.6.30

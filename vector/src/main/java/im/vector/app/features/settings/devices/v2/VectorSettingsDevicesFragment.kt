@@ -1,17 +1,8 @@
 /*
- * Copyright 2022 New Vector Ltd
+ * Copyright 2022-2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package im.vector.app.features.settings.devices.v2
@@ -41,8 +32,6 @@ import im.vector.app.databinding.FragmentSettingsDevicesBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.crypto.recover.SetupMode
-import im.vector.app.features.login.qr.QrCodeLoginArgs
-import im.vector.app.features.login.qr.QrCodeLoginType
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.list.NUMBER_OF_OTHER_DEVICES_TO_RENDER
 import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
@@ -106,7 +95,6 @@ class VectorSettingsDevicesFragment :
         initOtherSessionsHeaderView()
         initOtherSessionsView()
         initSecurityRecommendationsView()
-        initQrLoginView()
         observeViewEvents()
     }
 
@@ -238,38 +226,6 @@ class VectorSettingsDevicesFragment :
                 )
             }
         }
-    }
-
-    private fun initQrLoginView() {
-        if (!vectorFeatures.isReciprocateQrCodeLogin()) {
-            views.deviceListHeaderSignInWithQrCode.isVisible = false
-            views.deviceListHeaderScanQrCodeButton.isVisible = false
-            views.deviceListHeaderShowQrCodeButton.isVisible = false
-            return
-        }
-
-        views.deviceListHeaderSignInWithQrCode.isVisible = true
-        views.deviceListHeaderScanQrCodeButton.isVisible = true
-        views.deviceListHeaderShowQrCodeButton.isVisible = true
-
-        views.deviceListHeaderScanQrCodeButton.debouncedClicks {
-            navigateToQrCodeScreen(showQrCodeImmediately = false)
-        }
-
-        views.deviceListHeaderShowQrCodeButton.debouncedClicks {
-            navigateToQrCodeScreen(showQrCodeImmediately = true)
-        }
-    }
-
-    private fun navigateToQrCodeScreen(showQrCodeImmediately: Boolean) {
-        navigator
-                .openLoginWithQrCode(
-                        requireActivity(),
-                        QrCodeLoginArgs(
-                                loginType = QrCodeLoginType.LINK_A_DEVICE,
-                                showQrCodeImmediately = showQrCodeImmediately,
-                        )
-                )
     }
 
     override fun onDestroyView() {
