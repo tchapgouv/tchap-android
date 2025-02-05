@@ -123,6 +123,8 @@ interface CryptoService {
 
     suspend fun exportRoomKeys(password: String): ByteArray
 
+    suspend fun migrateRoomKeys(password: String)
+
     fun setRoomBlockUnverifiedDevices(roomId: String, block: Boolean)
 
     suspend fun getCryptoDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo?
