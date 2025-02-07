@@ -505,8 +505,15 @@ internal class RustCryptoService @Inject constructor(
                 val content = event.content?.toModel<EncryptedEventContent>() ?: throw mxCryptoError
                 val roomId = event.roomId
                 val sessionId = content.sessionId
+                val senderKey = content.senderKey
                 if (roomId != null && sessionId != null) {
-                    perSessionBackupQueryRateLimiter.tryFromBackupIfPossible(sessionId, roomId)
+                    // try to perform a lazy migration from legacy store
+                    val legacy = tryOrNull("Failed to access legacy crypto store") {
+                        cryptoStore.getInboundGroupSession(sessionId, senderKey.orEmpty())
+                    }
+                    if (legacy == null || olmMachine.importRoomKey(legacy).isFailure) {
+                        perSessionBackupQueryRateLimiter.tryFromBackupIfPossible(sessionId, roomId)
+                    }
                 }
             }
             throw mxCryptoError

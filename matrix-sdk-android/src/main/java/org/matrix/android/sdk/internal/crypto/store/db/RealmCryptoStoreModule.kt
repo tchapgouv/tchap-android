@@ -20,6 +20,7 @@ import io.realm.annotations.RealmModule
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntity
+import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
 
 /**
  * Realm module for Crypto store classes.
@@ -29,6 +30,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInf
         classes = [
             CryptoMetadataEntity::class,
             CryptoRoomEntity::class,
+            OlmInboundGroupSessionEntity::class,
             MyDeviceLastSeenInfoEntity::class,
         ]
 )

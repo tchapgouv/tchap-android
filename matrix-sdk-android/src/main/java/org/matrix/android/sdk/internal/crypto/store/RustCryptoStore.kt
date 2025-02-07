@@ -48,6 +48,8 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFie
 import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
+import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
+import org.matrix.android.sdk.internal.crypto.store.db.model.createPrimaryKey
 import org.matrix.android.sdk.internal.crypto.store.db.query.getById
 import org.matrix.android.sdk.internal.crypto.store.db.query.getOrCreate
 import org.matrix.android.sdk.internal.di.CryptoDatabase
@@ -126,6 +128,32 @@ internal class RustCryptoStore @Inject constructor(
                 }
     }
 
+    /**
+     * Note: the result will be only use to export all the keys and not to use the OlmInboundGroupSessionWrapper2,
+     * so there is no need to use or update `inboundGroupSessionToRelease` for native memory management.
+     */
+    override fun getInboundGroupSessions(): List<MXInboundMegolmSessionWrapper> {
+        return doWithRealm(realmConfiguration) { realm ->
+            realm.where<OlmInboundGroupSessionEntity>()
+                    .findAll()
+                    .mapNotNull { it.toModel() }
+        }
+    }
+
+    /**
+     * Needed for lazy migration of sessions from the legacy store.
+     */
+    override fun getInboundGroupSession(sessionId: String, senderKey: String): MXInboundMegolmSessionWrapper? {
+        val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionId, senderKey)
+
+        return doWithRealm(realmConfiguration) { realm ->
+            realm.where<OlmInboundGroupSessionEntity>()
+                    .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
+                    .findFirst()
+                    ?.toModel()
+        }
+    }
+
     // ================================================
     // Things that should be migrated to another store than realm
     // ================================================
@@ -149,18 +177,6 @@ internal class RustCryptoStore @Inject constructor(
         tryOrNull("Interrupted") {
             // Wait 1 minute max
             monarchyWriteAsyncExecutor.awaitTermination(1, TimeUnit.MINUTES)
-        }
-    }
-
-    /**
-     * Note: the result will be only use to export all the keys and not to use the OlmInboundGroupSessionWrapper2,
-     * so there is no need to use or update `inboundGroupSessionToRelease` for native memory management.
-     */
-    override fun getInboundGroupSessions(): List<MXInboundMegolmSessionWrapper> {
-        return doWithRealm(realmConfiguration) { realm ->
-            realm.where<OlmInboundGroupSessionEntity>()
-                    .findAll()
-                    .mapNotNull { it.toModel() }
         }
     }
 
