@@ -43,7 +43,7 @@ jobs:
       - name: Assemble ${{ matrix.target }} debug apk
         run: ./gradlew assemble${{ matrix.target }}Debug $CI_GRADLE_ARG_PROPERTIES
       - name: Upload ${{ matrix.target }} debug APKs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.target }}-debug
           path: |
@@ -81,7 +81,7 @@ jobs:
       - name: Assemble ${{ matrix.target }} unsigned apk
         run: ./gradlew clean assemble${{ matrix.target }}Release $CI_GRADLE_ARG_PROPERTIES
       - name: Upload ${{ matrix.target }} unsigned APKs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.target }}-release-unsigned
           path: |
@@ -97,7 +97,7 @@ jobs:
     steps:
       - name: Obtain apk from artifact
         id: download
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ env.TARGET_NAME }}-release-unsigned
       - name: Show apks in artifact
@@ -112,7 +112,7 @@ jobs:
           # Don't fail when finding trackers so they can be reported later
           args: /github/workspace/${{ env.TARGET_FOLDER }}/release/${{ steps.list-apks.outputs.FIRST_APK_NAME }} -j -o /github/workspace/exodus.json -e 0
       - name: Upload exodus json report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: exodus.json
           path: |

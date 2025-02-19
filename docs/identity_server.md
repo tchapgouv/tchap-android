@@ -10,7 +10,7 @@
   * [Settings](#settings)
   * [Discovery screen](#discovery-screen)
   * [Set identity server screen](#set-identity-server-screen)
-* [Ref:](#ref:)
+* [Ref:](#ref)
 
 <!--- END -->
 

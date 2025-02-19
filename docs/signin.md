@@ -8,7 +8,7 @@ This document describes the flow of signin to a homeserver, and also the flow wh
   * [Get the flow](#get-the-flow)
   * [Login with username](#login-with-username)
     * [Incorrect password](#incorrect-password)
-    * [Correct password:](#correct-password:)
+    * [Correct password](#correct-password)
   * [Login with email](#login-with-email)
     * [Unknown email](#unknown-email)
     * [Known email, wrong password](#known-email-wrong-password)
@@ -76,7 +76,7 @@ curl -X POST --data $'{"identifier":{"type":"m.id.user","user":"alice"},"passwor
 }
 ```
 
-#### Correct password:
+#### Correct password
 
 We get credential (200)
 
