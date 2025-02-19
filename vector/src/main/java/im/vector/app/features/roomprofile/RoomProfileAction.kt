@@ -17,11 +17,7 @@ sealed class RoomProfileAction : VectorViewModelAction {
     object ShareRoomProfile : RoomProfileAction()
     object CreateShortcut : RoomProfileAction()
     object RestoreEncryptionState : RoomProfileAction()
-<<<<<<< HEAD
     // TCHAP force to false to deactivate "Never send messages to unverified devices in room"
 //    data class SetEncryptToVerifiedDeviceOnly(val enabled: Boolean) : RoomProfileAction()
-=======
-    data class SetEncryptToVerifiedDeviceOnly(val enabled: Boolean) : RoomProfileAction()
     data class ReportRoom(val reason: String) : RoomProfileAction()
->>>>>>> v1.6.32
 }

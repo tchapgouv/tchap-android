@@ -208,11 +208,8 @@ class RoomProfileViewModel @AssistedInject constructor(
             is RoomProfileAction.ShareRoomProfile -> handleShareRoomProfile()
             RoomProfileAction.CreateShortcut -> handleCreateShortcut()
             RoomProfileAction.RestoreEncryptionState -> restoreEncryptionState()
-<<<<<<< HEAD
             // TCHAP force to false to deactivate "Never send messages to unverified devices in room"
 //            is RoomProfileAction.SetEncryptToVerifiedDeviceOnly -> setEncryptToVerifiedDeviceOnly(action.enabled)
-=======
-            is RoomProfileAction.SetEncryptToVerifiedDeviceOnly -> setEncryptToVerifiedDeviceOnly(action.enabled)
             is RoomProfileAction.ReportRoom -> handleReportRoom(action.reason)
         }
     }
@@ -233,7 +230,6 @@ class RoomProfileViewModel @AssistedInject constructor(
             } finally {
                 _viewEvents.post(RoomProfileViewEvents.DismissLoading)
             }
->>>>>>> v1.6.32
         }
     }
 

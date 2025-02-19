@@ -44,25 +44,14 @@ jobs:
       #- name: Run screenshot tests
       #  run: ./gradlew verifyScreenshots $CI_GRADLE_ARG_PROPERTIES
 
-<<<<<<< HEAD
       #- name: Archive Screenshot Results on Error
       #  if: failure()
-      #  uses: actions/upload-artifact@v3
+      #  uses: actions/upload-artifact@v4
       #  with:
       #    name: screenshot-results
       #    path: |
       #      **/out/failures/
       #      **/build/reports/tests/*UnitTest/
-=======
-      - name: Archive Screenshot Results on Error
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: screenshot-results
-          path: |
-            **/out/failures/
-            **/build/reports/tests/*UnitTest/
->>>>>>> v1.6.32
 
       - uses: actions/setup-python@v4
         with:

@@ -53,12 +53,8 @@ class RoomProfileController @Inject constructor(
         fun onUploadsClicked()
         fun createShortcut()
         fun onSettingsClicked()
-<<<<<<< HEAD
-        fun onLeaveRoomClicked(isLastAdmin: Boolean)
-=======
         fun onReportRoomClicked()
-        fun onLeaveRoomClicked()
->>>>>>> v1.6.32
+        fun onLeaveRoomClicked(isLastAdmin: Boolean)
         fun onRoomAliasesClicked()
         fun onRoomPermissionsClicked()
         fun onRoomIdClicked()

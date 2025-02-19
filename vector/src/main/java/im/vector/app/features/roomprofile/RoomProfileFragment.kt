@@ -301,9 +301,6 @@ class RoomProfileFragment :
         ShortcutManagerCompat.requestPinShortcut(requireContext(), onShortcutReady.shortcutInfo, null)
     }
 
-<<<<<<< HEAD
-    override fun onLeaveRoomClicked(isLastAdmin: Boolean) {
-=======
     override fun onReportRoomClicked() {
         promptReasonToReportRoom()
     }
@@ -324,8 +321,7 @@ class RoomProfileFragment :
                 .show()
     }
 
-    override fun onLeaveRoomClicked() {
->>>>>>> v1.6.32
+    override fun onLeaveRoomClicked(isLastAdmin: Boolean) {
         val isPublicRoom = roomProfileViewModel.isPublicRoom()
         val message = buildString {
             append(getString(CommonStrings.room_participants_leave_prompt_msg))

@@ -78,17 +78,10 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
-<<<<<<< HEAD
       - name: Assemble ${{ matrix.target }} unsigned apk
         run: ./gradlew clean assemble${{ matrix.target }}Release $CI_GRADLE_ARG_PROPERTIES
       - name: Upload ${{ matrix.target }} unsigned APKs
-        uses: actions/upload-artifact@v3
-=======
-      - name: Assemble GPlay unsigned apk
-        run: ./gradlew clean assembleGplayRelease $CI_GRADLE_ARG_PROPERTIES
-      - name: Upload Gplay unsigned APKs
         uses: actions/upload-artifact@v4
->>>>>>> v1.6.32
         with:
           name: ${{ matrix.target }}-release-unsigned
           path: |
