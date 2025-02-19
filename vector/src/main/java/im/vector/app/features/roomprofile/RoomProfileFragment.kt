@@ -32,6 +32,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.startSharePlainTextIntent
+import im.vector.app.databinding.DialogReportContentBinding
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomProfileHeaderBinding
 import im.vector.app.features.analytics.plan.Interaction
@@ -122,6 +123,7 @@ class RoomProfileFragment :
                 is RoomProfileViewEvents.ShareRoomProfile -> onShareRoomProfile(it.permalink)
                 is RoomProfileViewEvents.OnShortcutReady -> addShortcut(it)
                 RoomProfileViewEvents.DismissLoading -> dismissLoadingDialog()
+                is RoomProfileViewEvents.Success -> dismissSuccessDialog(it.message)
             }
         }
         roomListQuickActionsSharedActionViewModel
@@ -130,6 +132,17 @@ class RoomProfileFragment :
                 .launchIn(viewLifecycleOwner.lifecycleScope)
         setupClicks()
         setupLongClicks()
+    }
+
+    private fun dismissSuccessDialog(message: CharSequence) {
+        MaterialAlertDialogBuilder(
+                requireActivity(),
+                im.vector.lib.ui.styles.R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive
+        )
+                .setTitle(CommonStrings.room_profile_section_more_report)
+                .setMessage(message)
+                .setPositiveButton(CommonStrings.ok, null)
+                .show()
     }
 
     private fun setupWaitingView() {
@@ -288,7 +301,31 @@ class RoomProfileFragment :
         ShortcutManagerCompat.requestPinShortcut(requireContext(), onShortcutReady.shortcutInfo, null)
     }
 
+<<<<<<< HEAD
     override fun onLeaveRoomClicked(isLastAdmin: Boolean) {
+=======
+    override fun onReportRoomClicked() {
+        promptReasonToReportRoom()
+    }
+
+    private fun promptReasonToReportRoom() {
+        val inflater = requireActivity().layoutInflater
+        val layout = inflater.inflate(R.layout.dialog_report_content, null)
+        val views = DialogReportContentBinding.bind(layout)
+
+        MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(CommonStrings.room_profile_section_more_report)
+                .setView(layout)
+                .setPositiveButton(CommonStrings.report_content_custom_submit) { _, _ ->
+                    val reason = views.dialogReportContentInput.text.toString()
+                    roomProfileViewModel.handle(RoomProfileAction.ReportRoom(reason))
+                }
+                .setNegativeButton(CommonStrings.action_cancel, null)
+                .show()
+    }
+
+    override fun onLeaveRoomClicked() {
+>>>>>>> v1.6.32
         val isPublicRoom = roomProfileViewModel.isPublicRoom()
         val message = buildString {
             append(getString(CommonStrings.room_participants_leave_prompt_msg))

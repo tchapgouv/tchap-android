@@ -208,8 +208,32 @@ class RoomProfileViewModel @AssistedInject constructor(
             is RoomProfileAction.ShareRoomProfile -> handleShareRoomProfile()
             RoomProfileAction.CreateShortcut -> handleCreateShortcut()
             RoomProfileAction.RestoreEncryptionState -> restoreEncryptionState()
+<<<<<<< HEAD
             // TCHAP force to false to deactivate "Never send messages to unverified devices in room"
 //            is RoomProfileAction.SetEncryptToVerifiedDeviceOnly -> setEncryptToVerifiedDeviceOnly(action.enabled)
+=======
+            is RoomProfileAction.SetEncryptToVerifiedDeviceOnly -> setEncryptToVerifiedDeviceOnly(action.enabled)
+            is RoomProfileAction.ReportRoom -> handleReportRoom(action.reason)
+        }
+    }
+
+    private fun handleReportRoom(reason: String) {
+        _viewEvents.post(RoomProfileViewEvents.Loading())
+        session.coroutineScope.launch {
+            try {
+                room.reportingService().reportRoom(reason = reason)
+                _viewEvents.post(
+                        RoomProfileViewEvents.Success(
+                                stringProvider.getString(CommonStrings.room_profile_section_more_report_success_content)
+                        )
+                )
+            } catch (failure: Throwable) {
+                Timber.e(failure, "Failed to report room ${room.roomId}")
+                _viewEvents.post(RoomProfileViewEvents.Failure(failure))
+            } finally {
+                _viewEvents.post(RoomProfileViewEvents.DismissLoading)
+            }
+>>>>>>> v1.6.32
         }
     }
 
