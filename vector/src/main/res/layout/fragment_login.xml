@@ -57,11 +57,11 @@
                 <Button
                     android:id="@+id/loginSSOSubmit"
                     style="@style/Widget.Vector.Button.Login"
-                    android:drawableLeft="@drawable/ic_tchap_proconnect"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:paddingHorizontal="40dp"
+                    tools:drawableLeft="@drawable/ic_tchap_proconnect"
                     tools:text="@string/login_signin_sso"
                     tools:enabled="false"
                     tools:ignore="RelativeOverlap" />
