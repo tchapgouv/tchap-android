@@ -17,6 +17,8 @@
 package org.matrix.android.sdk.internal.crypto.store.db
 
 import io.realm.DynamicRealm
+import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo020
+import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo021
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo024
 import org.matrix.android.sdk.internal.util.database.MatrixRealmMigration
 import javax.inject.Inject
@@ -40,6 +42,8 @@ internal class RealmCryptoStoreMigration @Inject constructor() : MatrixRealmMigr
     override fun hashCode() = 5000
 
     override fun doMigrate(realm: DynamicRealm, oldVersion: Long) {
+        if (oldVersion < 20) MigrateCryptoTo020(realm).perform()
+        if (oldVersion < 21) MigrateCryptoTo021(realm).perform()
         if (oldVersion < 24) MigrateCryptoTo024(realm).perform()
     }
 }

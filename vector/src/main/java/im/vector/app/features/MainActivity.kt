@@ -25,6 +25,7 @@ import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.deleteAllFiles
+import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.ActivityMainBinding
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.plan.ViewRoom
@@ -39,6 +40,7 @@ import im.vector.app.features.pin.lockscreen.crypto.LockScreenKeyRepository
 import im.vector.app.features.pin.lockscreen.pincode.PinCodeHelper
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.session.VectorSessionStore
+import im.vector.app.features.settings.VectorSettingsUrls
 import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.start.StartAppAction
 import im.vector.app.features.start.StartAppAndroidService
@@ -82,6 +84,9 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         private const val EXTRA_INIT_SESSION = "EXTRA_INIT_SESSION"
         private const val EXTRA_ROOM_ID = "EXTRA_ROOM_ID"
         private const val ACTION_ROOM_DETAILS_FROM_SHORTCUT = "ROOM_DETAILS_FROM_SHORTCUT"
+        private const val TCHAP_FAQ_UTD_URL =
+                "${VectorSettingsUrls.HELP}/fr/article/dechiffrement-en-cours-mes-messages-restent-verrouilles-atnp15/" +
+                        "#3-b-tous-ou-une-partie-de-mes-anciens-messages-sont-illisibles"
 
         // Special action to clear cache and/or clear credentials
         fun restartApp(activity: Activity, args: MainActivityArgs) {
@@ -177,7 +182,8 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
 
     private fun handleAppStarted() {
         // On the first run with rust crypto this would be false
-        if (!vectorPreferences.isOnRustCrypto()) {
+        val isOnRustCrypto = vectorPreferences.isOnRustCrypto()
+        if (!isOnRustCrypto) {
             if (activeSessionHolder.hasActiveSession()) {
                 vectorPreferences.setHadExistingLegacyData(activeSessionHolder.getActiveSession().isOpenable)
             } else {
@@ -210,9 +216,11 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                 clearNotifications()
             }
             // Handle some wanted cleanup
-            // TCHAP handle account expiration
+            // TCHAP handle account expiration and rust migration
             if (args.clearCache || args.clearCredentials || args.isAccountExpired) {
                 doCleanUp()
+            } else if (!isOnRustCrypto && activeSessionHolder.hasActiveSession()) {
+                showSignoutDialog()
             } else {
                 startSyncing()
                 startNextActivityAndFinish()
@@ -309,6 +317,25 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             doLocalCleanup(clearPreferences = true, onboardingStore)
             startNextActivityAndFinish()
         }
+    }
+
+    private fun showSignoutDialog() {
+        MaterialAlertDialogBuilder(this)
+                .setTitle(CommonStrings.dialog_title_warning)
+                .setMessage(CommonStrings.tchap_sign_out_rust_dialog_message)
+                .setPositiveButton(CommonStrings.tchap_sign_out_login) { _, _ ->
+                    Timber.e("## SIGN_OUT: rust issue. previous version was too old")
+                    val session = activeSessionHolder.getActiveSession()
+                    val onboardingStore = session.vectorStore(this)
+                    signout(session, onboardingStore, ignoreServerError = true)
+                }
+                .setNeutralButton(CommonStrings.tchap_sign_out_help) { _, _ ->
+                    vectorPreferences.setIsOnRustCrypto(false)
+                    openUrlInChromeCustomTab(this, null, TCHAP_FAQ_UTD_URL)
+                    finish()
+                }
+                .setCancelable(false)
+                .show()
     }
 
     override fun handleInvalidToken(globalError: GlobalError.InvalidToken) {
