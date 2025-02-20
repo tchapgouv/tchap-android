@@ -1,3 +1,11 @@
+Changes in Tchap 2.17.1 (2025-02-20)
+====================================
+
+Features ✨
+----------
+- Forcer la génération du code de récupération et la sauvegarde automatique. ([#988](https://github.com/tchapgouv/tchap-android/issues/988))
+- Connexion des utilisateurs avec ProConnect ([#1104](https://github.com/tchapgouv/tchap-android/issues/1104))
+
 Changes in Tchap 2.17.0 (2025-02-20)
 ====================================
 
