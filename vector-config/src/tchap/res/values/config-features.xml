@@ -4,7 +4,7 @@
     <bool name="tchap_is_key_backup_enabled">true</bool>
     <bool name="tchap_is_thread_enabled">false</bool>
     <bool name="tchap_is_secure_backup_required">false</bool>
-    <bool name="tchap_is_sso_enabled">true</bool>
+    <bool name="tchap_is_sso_enabled">false</bool>
 
     <string-array name="tchap_is_visio_supported_homeservers" translatable="false" />
 </resources>
