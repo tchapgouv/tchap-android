@@ -294,13 +294,15 @@ class RoomProfileController @Inject constructor(
                     action = { callback?.createShortcut() }
             )
         }
-        buildProfileAction(
-                id = "Report",
-                title = stringProvider.getString(CommonStrings.room_profile_section_more_report),
-                icon = R.drawable.ic_report_spam,
-                editable = false,
-                action = { callback?.onReportRoomClicked() }
-        )
+
+        // TCHAP Hidden in Tchap
+//        buildProfileAction(
+//                id = "Report",
+//                title = stringProvider.getString(CommonStrings.room_profile_section_more_report),
+//                icon = R.drawable.ic_report_spam,
+//                editable = false,
+//                action = { callback?.onReportRoomClicked() }
+//        )
         buildProfileAction(
                 id = "leave",
                 title = stringProvider.getString(
