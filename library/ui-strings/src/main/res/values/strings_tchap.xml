@@ -101,7 +101,7 @@
 
     <!-- Logout Tchap -->
     <string name="tchap_action_sign_out_confirmation">For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.</string>
-    <string name="tchap_sign_out_rust_dialog_message">Due to the previous version installed on your device you cannot keep signed in to ${app_name}.\nFor security, please reconnect.\nTo retrieve your messages please read our help.</string>
+    <string name="tchap_sign_out_rust_dialog_message">Due to the previous version installed on your device you cannot be logged in onto ${app_name}.\nFor security, please reconnect.\nTo retrieve your messages please read our help.</string>
     <string name="tchap_sign_out_login">Reconnect</string>
     <string name="tchap_sign_out_help">Need help ?</string>
 
