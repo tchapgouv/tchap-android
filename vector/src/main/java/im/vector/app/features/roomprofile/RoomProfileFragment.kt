@@ -1,18 +1,8 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2019-2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package im.vector.app.features.roomprofile
@@ -42,6 +32,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.startSharePlainTextIntent
+import im.vector.app.databinding.DialogReportContentBinding
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomProfileHeaderBinding
 import im.vector.app.features.analytics.plan.Interaction
@@ -132,6 +123,7 @@ class RoomProfileFragment :
                 is RoomProfileViewEvents.ShareRoomProfile -> onShareRoomProfile(it.permalink)
                 is RoomProfileViewEvents.OnShortcutReady -> addShortcut(it)
                 RoomProfileViewEvents.DismissLoading -> dismissLoadingDialog()
+                is RoomProfileViewEvents.Success -> dismissSuccessDialog(it.message)
             }
         }
         roomListQuickActionsSharedActionViewModel
@@ -140,6 +132,17 @@ class RoomProfileFragment :
                 .launchIn(viewLifecycleOwner.lifecycleScope)
         setupClicks()
         setupLongClicks()
+    }
+
+    private fun dismissSuccessDialog(message: CharSequence) {
+        MaterialAlertDialogBuilder(
+                requireActivity(),
+                im.vector.lib.ui.styles.R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive
+        )
+                .setTitle(CommonStrings.room_profile_section_more_report)
+                .setMessage(message)
+                .setPositiveButton(CommonStrings.ok, null)
+                .show()
     }
 
     private fun setupWaitingView() {
@@ -296,6 +299,26 @@ class RoomProfileFragment :
     private fun addShortcut(onShortcutReady: RoomProfileViewEvents.OnShortcutReady) {
         // ... and propose the user to add it
         ShortcutManagerCompat.requestPinShortcut(requireContext(), onShortcutReady.shortcutInfo, null)
+    }
+
+    override fun onReportRoomClicked() {
+        promptReasonToReportRoom()
+    }
+
+    private fun promptReasonToReportRoom() {
+        val inflater = requireActivity().layoutInflater
+        val layout = inflater.inflate(R.layout.dialog_report_content, null)
+        val views = DialogReportContentBinding.bind(layout)
+
+        MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(CommonStrings.room_profile_section_more_report)
+                .setView(layout)
+                .setPositiveButton(CommonStrings.report_content_custom_submit) { _, _ ->
+                    val reason = views.dialogReportContentInput.text.toString()
+                    roomProfileViewModel.handle(RoomProfileAction.ReportRoom(reason))
+                }
+                .setNegativeButton(CommonStrings.action_cancel, null)
+                .show()
     }
 
     override fun onLeaveRoomClicked(isLastAdmin: Boolean) {

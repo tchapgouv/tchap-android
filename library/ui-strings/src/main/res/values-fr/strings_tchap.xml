@@ -101,6 +101,9 @@
 
     <!-- Logout Tchap -->
     <string name="tchap_action_sign_out_confirmation">Pour des raisons de sécurité, la déconnexion supprimera toutes les clés de chiffrement de bout en bout, rendant l’historique des conversations chiffrées inaccessible lorsque vous vous reconnecterez. Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
+    <string name="tchap_sign_out_rust_dialog_message">La version de ${app_name} précédemment installée sur votre appareil ne permet pas de conserver votre connexion.\nPour des raisons de sécurité, merci de vous reconnecter.\nPour récupérer votre historique veuillez consulter notre aide.</string>
+    <string name="tchap_sign_out_login">Me reconnecter</string>
+    <string name="tchap_sign_out_help">Besoin d’aide ?</string>
 
     <!-- Call -->
     <string name="tchap_call_not_supported">${app_name} ne supporte pas les appels</string>

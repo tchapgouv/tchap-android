@@ -12,7 +12,7 @@ Currently the test are covering a small set of application flows:
 
 <!--- TOC -->
 
-* [Prerequisites:](#prerequisites:)
+* [Prerequisites:](#prerequisites)
 * [Run the tests](#run-the-tests)
   * [From the source code](#from-the-source-code)
   * [From command line](#from-command-line)

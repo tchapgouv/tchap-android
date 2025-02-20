@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020-2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package im.vector.app.features.call
@@ -251,17 +242,31 @@ class VectorCallActivity :
     }
 
     private fun startMicrophoneService() {
-        val isConnected = withState(callViewModel) {
-            val callState = it.callState.invoke()
-            callState is CallState.Connected
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                == PackageManager.PERMISSION_GRANTED) {
+            // Only start the service if the app is in the foreground
+            if (isAppInForeground()) {
+                withState(callViewModel) {
+                    // Starting in Android 14, you can't create a microphone foreground service while your app is in
+                    // the background. If we call startForegroundService while the call state is ringing (i.e. the
+                    // user has not interacted with the device at all) the app will crash. Make sure the call has
+                    // already been answered before starting the MicrophoneAccessService
+                    // https://github.com/element-hq/element-android/issues/8964
+                    val callState = it.callState.invoke()
+                    if (callState !is CallState.LocalRinging && callState !is CallState.Ended && callState != null) {
+                        Timber.tag(loggerTag.value).v("Starting microphone foreground service")
+                        val intent = Intent(this, MicrophoneAccessService::class.java)
+                        ContextCompat.startForegroundService(this, intent)
+                    } else {
+                        Timber.tag(loggerTag.value).v("Call is in ringing or ended state; cannot start microphone service. callState: $callState")
+                    }
+                }
+            } else {
+                Timber.tag(loggerTag.value).v("App is not in foreground; cannot start microphone service")
+            }
+        } else {
+            Timber.tag(loggerTag.value).v("Microphone permission not granted; cannot start service")
         }
-        if (!isAppInForeground()) return
-        if (!isConnected) return
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) return
-
-        Timber.tag(loggerTag.value).d("Starting microphone foreground service")
-        val intent = Intent(this, MicrophoneAccessService::class.java)
-        ContextCompat.startForegroundService(this, intent)
     }
 
     private fun isAppInForeground(): Boolean {
@@ -277,6 +282,9 @@ class VectorCallActivity :
 
     override fun onPause() {
         super.onPause()
+
+        // Start the microphone service to keep access to the microphone when the call is in the background
+        // https://github.com/element-hq/element-android/issues/8881
         startMicrophoneService()
     }
 

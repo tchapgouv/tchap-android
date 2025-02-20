@@ -1,17 +1,8 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2019-2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package im.vector.app.features.onboarding.ftueauth
@@ -40,8 +31,6 @@ import im.vector.app.features.VectorFeatures
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.SocialLoginButtonsView
-import im.vector.app.features.login.qr.QrCodeLoginArgs
-import im.vector.app.features.login.qr.QrCodeLoginType
 import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
@@ -75,26 +64,6 @@ class FtueAuthCombinedLoginFragment :
             viewModel.handle(OnboardingAction.UserNameEnteredAction.Login(views.loginInput.content()))
         }
         views.loginForgotPassword.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnForgetPasswordClicked)) }
-
-        viewModel.onEach(OnboardingViewState::canLoginWithQrCode) {
-            configureQrCodeLoginButtonVisibility(it)
-        }
-    }
-
-    private fun configureQrCodeLoginButtonVisibility(canLoginWithQrCode: Boolean) {
-        views.loginWithQrCode.isVisible = canLoginWithQrCode
-        if (canLoginWithQrCode) {
-            views.loginWithQrCode.debouncedClicks {
-                navigator
-                        .openLoginWithQrCode(
-                                requireActivity(),
-                                QrCodeLoginArgs(
-                                        loginType = QrCodeLoginType.LOGIN,
-                                        showQrCodeImmediately = false,
-                                )
-                        )
-            }
-        }
     }
 
     private fun setupSubmitButton() {

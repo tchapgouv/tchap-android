@@ -1,20 +1,9 @@
 #!/usr/bin/env bash
 
+# Copyright 2022-2024 New Vector Ltd.
 #
-# Copyright (c) 2022 New Vector Ltd
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+# SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+# Please see LICENSE files in the repository root for full details.
 
 # Ignore any error to not stop the script
 set +e
@@ -354,7 +343,11 @@ read -p "Does it look correct? Press enter when it's done."
 printf "\n================================================================================\n"
 read -p "Installing apk on a real device, press enter when a real device is connected. "
 apkPath="${targetPath}/vector-gplay-arm64-v8a-release-signed.apk"
+# Ignore error
+set +e
 adb -d install ${apkPath}
+# Do not ignore error
+set -e
 
 read -p "Please run the APK on your phone to check that the upgrade went well (no init sync, etc.). Press enter when it's done."
 

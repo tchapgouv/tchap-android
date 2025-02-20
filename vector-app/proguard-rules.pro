@@ -93,6 +93,7 @@
 -dontwarn org.commonmark.ext.gfm.strikethrough.Strikethrough
 -dontwarn org.mozilla.javascript.**
 -dontwarn org.slf4j.**
+-dontwarn org.jspecify.annotations.NullMarked
 
 # TCHAP guava rules
 -dontwarn com.google.j2objc.annotations.**

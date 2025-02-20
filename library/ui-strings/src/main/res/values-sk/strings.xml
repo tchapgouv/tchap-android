@@ -3026,4 +3026,17 @@
 \n
 \n%s</string>
     <string name="invite_unknown_users_dialog_submit">Napriek tomu pozvať</string>
+    <string name="login_splash_sign_in">Prihlásiť sa</string>
+    <string name="user_reported_as_inappropriate_title">Nahlásený používateľ</string>
+    <string name="user_reported_as_inappropriate_content">Používateľ bol nahlásený.
+\n
+\nAk nechcete vidieť viac obsahu od tohto používateľa, môžete ho ignorovať a skryť jeho správy.</string>
+    <string name="message_report_user">Nahlásiť používateľa</string>
+    <string name="microphone_in_use_title">Mikrofón v prevádzke</string>
+    <string name="call_unsupported">Nepodporovaný hovor</string>
+    <string name="call_unsupported_matrix_rtc_call">Nepodporovaný hovor. Na pripojenie k tomuto hovoru je potrebná nová aplikácia Element X.</string>
+    <string name="error_mas_not_supported_subtitle">Stiahnite si %1$s a používajte %2$s pre svoje konto alebo si vyberte iný domovský server.</string>
+    <string name="view_download_replacement_app_title">Stiahnuť %1$s</string>
+    <string name="error_mas_not_supported_title">Pomocou tejto aplikácie si už nemôžete vytvoriť účet %1$s</string>
+    <string name="view_download_replacement_app_subtitle">Rýchlejší, bezpečnejší a vybavený výkonnými nástrojmi na spoluprácu.</string>
 </resources>

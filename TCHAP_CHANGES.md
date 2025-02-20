@@ -1,3 +1,15 @@
+Changes in Tchap 2.17.0 (2025-02-20)
+====================================
+
+Improvements 🙌
+--------------
+ - Rebase against Element-Android v1.6.32 ([#1150](https://github.com/tchapgouv/tchap-android/issues/1150))
+
+Bugfixes 🐛
+----------
+ - Correction du crash quand la version de l'application avant la mise à jour est inférieure à 2.10.3. Demande de reconnexion à l'utilisateur. ([#1149](https://github.com/tchapgouv/tchap-android/issues/1149))
+ - Affichage des réponses suite à la mise à jour de Tchap Web ([#8947](https://github.com/element-hq/element-android/pull/8947))
+
 Changes in Tchap 2.16.0 (2025-01-08)
 ====================================
 
