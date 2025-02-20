@@ -25,11 +25,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Use JDK 17
+      - name: Use JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '17'
+          java-version: '21'
       - name: Configure gradle
         uses: gradle/actions/setup-gradle@v3
         with:
@@ -54,11 +54,11 @@ jobs:
           app_id: ${{ secrets.APP_ID_DANGERBOT }}
           private_key: ${{ secrets.APP_PEM_DANGERBOT }}
       - uses: actions/checkout@v4
-      - name: Use JDK 17
+      - name: Use JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '17'
+          java-version: '21'
       - name: Configure gradle
         uses: gradle/actions/setup-gradle@v3
         with:
@@ -107,11 +107,11 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
-      - name: Use JDK 17
+      - name: Use JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '17'
+          java-version: '21'
       - name: Configure gradle
         uses: gradle/actions/setup-gradle@v3
         with:

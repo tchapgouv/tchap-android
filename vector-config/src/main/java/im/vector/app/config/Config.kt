@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright 2022-2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package im.vector.app.config
@@ -113,4 +104,15 @@ object Config {
     val ER_DEBUG_ANALYTICS_CONFIG = Analytics.Disabled // TCHAP No analytics
 
     val SHOW_UNVERIFIED_SESSIONS_ALERT_AFTER_MILLIS = 7.days.inWholeMilliseconds // 1 Week
+
+    /**
+     * Sunsetting the application.
+     * Fork maintainers can use this to inform users about their new application if any. Note that you probably also want
+     * to replace the resource `replacement_app_icon` too.
+     */
+    val sunsetConfig: SunsetConfig = SunsetConfig.Enabled(
+            learnMoreLink = "https://element.io/app-for-productivity",
+            replacementApplicationName = "Element X",
+            replacementApplicationId = "io.element.android.x",
+    )
 }
