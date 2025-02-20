@@ -16,6 +16,7 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.resources.BuildMeta
@@ -57,6 +58,9 @@ class FtueAuthSplashFragment :
 
             text = spannable
             isVisible = isAlreadyHaveAccountEnabled && vectorFeatures.tchapIsSSOEnabled()
+            setCompoundDrawablesWithIntrinsicBounds(
+                    ContextCompat.getDrawable(requireContext(), im.vector.lib.ui.styles.R.drawable.ic_tchap_proconnect), null, null, null
+            )
             debouncedClicks { alreadyHaveAnAccountWithSSO() }
         }
         views.loginSplashSSOHelp.apply {

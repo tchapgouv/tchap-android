@@ -7,6 +7,7 @@
 
 package im.vector.app.features.onboarding.ftueauth
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
+import androidx.core.content.ContextCompat
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -23,7 +25,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
-import im.vector.app.core.extensions.setLeftDrawable
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.openUrlInExternalBrowser
@@ -355,6 +356,8 @@ class FtueAuthLoginFragment :
 
     private inner class Tchap {
 
+        // TCHAP Add SuppressLint to fix a false positive
+        @SuppressLint("StringFormatInvalid")
         fun setupUi(state: OnboardingViewState) {
             this@FtueAuthLoginFragment.setupUi(state) // call "super" method
 
@@ -364,7 +367,7 @@ class FtueAuthLoginFragment :
             views.tchapPasswordConfirmationFieldTil.isVisible = isSignUpMode
             views.loginSocialLoginContainer.isVisible = isSignUpMode && vectorFeatures.tchapIsSSOEnabled()
 
-            when(state.signMode) {
+            when (state.signMode) {
                 SignMode.TchapSignUp -> {
                     views.loginSSOSubmit.text = getString(CommonStrings.login_signin_sso, TCHAP_SSO_PROVIDER)
                     views.loginSSOSubmit.debouncedClicks {
@@ -376,7 +379,9 @@ class FtueAuthLoginFragment :
                     }
                 }
                 SignMode.TchapSignInWithSSO -> {
-                    views.loginSubmit.setLeftDrawable(im.vector.lib.ui.styles.R.drawable.ic_tchap_proconnect)
+                    views.loginSubmit.setCompoundDrawablesWithIntrinsicBounds(
+                            ContextCompat.getDrawable(requireContext(), im.vector.lib.ui.styles.R.drawable.ic_tchap_proconnect), null, null, null
+                    )
                     views.loginSSOHelp.text = getString(CommonStrings.tchap_connection_sso_help, TCHAP_SSO_PROVIDER)
                     views.loginSSODescription.text = getString(CommonStrings.tchap_connection_sso_description, TCHAP_SSO_PROVIDER)
                     views.loginSSOHelp.debouncedClicks { openUrlInExternalBrowser(requireContext(), TCHAP_SSO_URL) }
