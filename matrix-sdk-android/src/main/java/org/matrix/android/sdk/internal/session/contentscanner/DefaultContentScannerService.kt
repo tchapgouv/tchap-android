@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.contentscanner.ScanState
 import org.matrix.android.sdk.api.session.contentscanner.ScanStatusInfo
 import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.internal.di.Authenticated
 import org.matrix.android.sdk.internal.di.Unauthenticated
 import org.matrix.android.sdk.internal.network.RetrofitFactory
 import org.matrix.android.sdk.internal.session.SessionScope
@@ -32,6 +33,7 @@ import org.matrix.android.sdk.internal.session.contentscanner.data.ContentScanne
 import org.matrix.android.sdk.internal.session.contentscanner.tasks.GetServerPublicKeyTask
 import org.matrix.android.sdk.internal.session.contentscanner.tasks.ScanEncryptedTask
 import org.matrix.android.sdk.internal.session.contentscanner.tasks.ScanMediaTask
+import org.matrix.android.sdk.internal.session.media.IsAuthenticatedMediaSupported
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
@@ -42,6 +44,9 @@ internal class DefaultContentScannerService @Inject constructor(
         private val retrofitFactory: RetrofitFactory,
         @Unauthenticated
         private val okHttpClient: Lazy<OkHttpClient>,
+        @Authenticated
+        private val authenticatedOkHttpClient: Lazy<OkHttpClient>,
+        private val isAuthenticatedMediaSupported: IsAuthenticatedMediaSupported,
         private val contentScannerApiProvider: ContentScannerApiProvider,
         private val contentScannerStore: ContentScannerStore,
         private val getServerPublicKeyTask: GetServerPublicKeyTask,
@@ -96,6 +101,7 @@ internal class DefaultContentScannerService @Inject constructor(
             contentScannerApiProvider.contentScannerApi = null
             serverPublicKey = null
         } else {
+            val okHttpClient = if (isAuthenticatedMediaSupported()) authenticatedOkHttpClient else okHttpClient
             val api = retrofitFactory
                     .create(okHttpClient, url)
                     .create(ContentScannerApi::class.java)
