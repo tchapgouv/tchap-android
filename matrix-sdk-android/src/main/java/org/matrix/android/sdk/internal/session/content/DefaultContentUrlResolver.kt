@@ -37,18 +37,13 @@ internal class DefaultContentUrlResolver @Inject constructor(
 
     private val baseUrl = homeServerConnectionConfig.homeServerUriBase.toString().ensureTrailingSlash()
     private val authenticatedMediaApiPath = baseUrl + NetworkConstants.URI_API_PREFIX_PATH_V1 + "media/"
-    private val mediaProxyApiPath = baseUrl + NetworkConstants.URI_API_PREFIX_PATH_MEDIA_PROXY_UNSTABLE
     override val uploadUrl = baseUrl + NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "upload"
 
     override fun resolveForDownload(contentUrl: String?, elementToDecrypt: ElementToDecrypt?): ContentUrlResolver.ResolvedMethod? {
         return if (scannerService.isScannerEnabled() && elementToDecrypt != null) {
-            val baseUrl = scannerService.getContentScannerServer()
-            val sep = if (baseUrl?.endsWith("/") == true) "" else "/"
-
-            val url = baseUrl + sep + NetworkConstants.URI_API_PREFIX_PATH_MEDIA_PROXY_UNSTABLE + "download_encrypted"
-
+            val baseUrl = scannerService.getContentScannerServer()!!.ensureTrailingSlash()
             ContentUrlResolver.ResolvedMethod.POST(
-                    url = url,
+                    url = "$baseUrl${NetworkConstants.URI_API_PREFIX_PATH_MEDIA_PROXY_UNSTABLE}download_encrypted",
                     jsonBody = ScanEncryptorUtils
                             .getDownloadBodyAndEncryptIfNeeded(scannerService.serverPublicKey, contentUrl ?: "", elementToDecrypt)
                             .toJson()
@@ -83,9 +78,8 @@ internal class DefaultContentUrlResolver @Inject constructor(
                 }
     }
 
-    override fun requiresAuthentication(resolvedUrl: String): Boolean {
-        return resolvedUrl.startsWith(mediaProxyApiPath) && isAuthenticatedMediaSupported() || resolvedUrl.startsWith(authenticatedMediaApiPath)
-    }
+    override fun requiresAuthentication(resolvedUrl: String) =
+            scannerService.isScannerEnabled() && isAuthenticatedMediaSupported() || resolvedUrl.startsWith(authenticatedMediaApiPath)
 
     private fun resolve(
             contentUrl: String,
