@@ -150,7 +150,7 @@ internal class DefaultFileService @Inject constructor(
                                     .url(resolvedMethod.url)
                                     .header(DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER, url)
 
-                            if (isAuthenticatedMediaSupported()) {
+                            if (contentUrlResolver.requiresAuthentication(resolvedMethod.url)) {
                                 val accessToken = accessTokenProvider.getToken()
                                 requestBuilder.addAuthenticationHeader(accessToken)
                             }

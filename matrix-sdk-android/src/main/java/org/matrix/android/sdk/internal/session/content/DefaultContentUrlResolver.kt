@@ -37,6 +37,7 @@ internal class DefaultContentUrlResolver @Inject constructor(
 
     private val baseUrl = homeServerConnectionConfig.homeServerUriBase.toString().ensureTrailingSlash()
     private val authenticatedMediaApiPath = baseUrl + NetworkConstants.URI_API_PREFIX_PATH_V1 + "media/"
+    private val mediaProxyApiPath = baseUrl + NetworkConstants.URI_API_PREFIX_PATH_MEDIA_PROXY_UNSTABLE
     override val uploadUrl = baseUrl + NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "upload"
 
     override fun resolveForDownload(contentUrl: String?, elementToDecrypt: ElementToDecrypt?): ContentUrlResolver.ResolvedMethod? {
@@ -83,7 +84,7 @@ internal class DefaultContentUrlResolver @Inject constructor(
     }
 
     override fun requiresAuthentication(resolvedUrl: String): Boolean {
-        return resolvedUrl.startsWith(authenticatedMediaApiPath)
+        return resolvedUrl.startsWith(mediaProxyApiPath) && isAuthenticatedMediaSupported() || resolvedUrl.startsWith(authenticatedMediaApiPath)
     }
 
     private fun resolve(
