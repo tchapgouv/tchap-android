@@ -60,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@id/fragment_tchap_welcome_subtitle"
         app:layout_constraintVertical_bias="0.492"
         tools:drawableLeft="@drawable/ic_tchap_proconnect"
-        tools:text="S’identifier avec \nProConnect" />
+        tools:text="@string/login_social_signin_with" />
 
     <Button
         android:id="@+id/loginSplashSSOHelp"
