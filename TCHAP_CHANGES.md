@@ -1,3 +1,14 @@
+Changes in Tchap 2.17.2 (2025-02-28)
+====================================
+
+Bugfixes 🐛
+----------
+ - Correction du crash sur android 6 et 7 à l'ouverture d'un salon. ([#1155](https://github.com/tchapgouv/tchap-android/issues/1155))
+
+SDK API changes ⚠️
+------------------
+ - Support des API de medias authentifiés avec l'anti-virus. ([#1152](https://github.com/tchapgouv/tchap-android/issues/1152))
+
 Changes in Tchap 2.17.1 (2025-02-20)
 ====================================
 
