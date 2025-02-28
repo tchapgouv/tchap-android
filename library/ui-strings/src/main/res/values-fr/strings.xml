@@ -1834,7 +1834,7 @@
     <string name="settings_server_name">Nom du serveur</string>
     <string name="login_clear_homeserver_history">Effacer l’historique</string>
     <string name="login_social_sso">authentification unique</string>
-    <string name="login_social_signin_with">Se connecter avec %s</string>
+    <string name="login_social_signin_with">S’identifier avec %s</string>
     <string name="login_social_signup_with">S’inscrire avec %s</string>
     <string name="login_social_continue_with">Poursuivre avec %s</string>
     <string name="login_social_continue">Ou</string>

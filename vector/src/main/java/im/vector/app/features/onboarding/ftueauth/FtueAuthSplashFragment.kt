@@ -8,6 +8,7 @@
 package im.vector.app.features.onboarding.ftueauth
 
 import android.annotation.SuppressLint
+import android.graphics.Rect
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
@@ -53,14 +54,16 @@ class FtueAuthSplashFragment :
         // TCHAP Login with SSO
         val isAlreadyHaveAccountEnabled = vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
         views.loginSplashSSO.apply {
-            val spannable = SpannableString(getString(CommonStrings.login_social_signin_with, TCHAP_SSO_PROVIDER))
+            val ssoProvider = "\n$TCHAP_SSO_PROVIDER"
+            val spannable = SpannableString(getString(CommonStrings.login_social_signin_with, ssoProvider))
             spannable.setSpan(StyleSpan(Typeface.BOLD), spannable.length - TCHAP_SSO_PROVIDER.length, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
             text = spannable
             isVisible = isAlreadyHaveAccountEnabled && vectorFeatures.tchapIsSSOEnabled()
-            setCompoundDrawablesWithIntrinsicBounds(
-                    ContextCompat.getDrawable(requireContext(), im.vector.lib.ui.styles.R.drawable.ic_tchap_proconnect), null, null, null
-            )
+            val ssoIcon = ContextCompat.getDrawable(requireContext(), im.vector.lib.ui.styles.R.drawable.ic_tchap_proconnect)?.apply {
+                bounds = Rect(0, 0, 132, 117)
+            }
+            setCompoundDrawables(ssoIcon, null, null, null)
             debouncedClicks { alreadyHaveAnAccountWithSSO() }
         }
         views.loginSplashSSOHelp.apply {
