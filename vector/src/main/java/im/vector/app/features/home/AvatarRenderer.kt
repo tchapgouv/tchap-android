@@ -284,16 +284,6 @@ class AvatarRenderer @Inject constructor(
                 }
     }
 
-    @AnyThread
-    fun getSpacePlaceholderDrawable(matrixItem: MatrixItem): Drawable {
-        val avatarColor = matrixItemColorProvider.getColor(matrixItem)
-        return TextDrawable.builder()
-                .beginConfig()
-                .bold()
-                .endConfig()
-                .buildRoundRect(matrixItem.firstLetterOfDisplayName(), avatarColor, dimensionConverter.dpToPx(8))
-    }
-
     // PRIVATE API *********************************************************************************
 
     private fun GlideRequests.loadResolvedUrl(avatarUrl: String?): GlideRequest<Drawable> {

@@ -39,6 +39,7 @@ import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificateWithProg
 import org.matrix.android.sdk.internal.network.httpclient.addAuthenticationHeader
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
 import org.matrix.android.sdk.internal.session.download.DownloadProgressInterceptor.Companion.DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER
+import org.matrix.android.sdk.internal.session.media.IsAuthenticatedMediaSupported
 import org.matrix.android.sdk.internal.util.file.AtomicFileCreator
 import org.matrix.android.sdk.internal.util.file.safeFileName
 import org.matrix.android.sdk.internal.util.time.Clock
@@ -55,6 +56,7 @@ internal class DefaultFileService @Inject constructor(
         private val contentUrlResolver: ContentUrlResolver,
         @UnauthenticatedWithCertificateWithProgress
         private val okHttpClient: OkHttpClient,
+        private val isAuthenticatedMediaSupported: IsAuthenticatedMediaSupported,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val clock: Clock,
         @Authenticated private val accessTokenProvider: AccessTokenProvider,
@@ -144,11 +146,15 @@ internal class DefaultFileService @Inject constructor(
                         }
 
                         is ContentUrlResolver.ResolvedMethod.POST -> {
-                            Request.Builder()
+                            val requestBuilder = Request.Builder()
                                     .url(resolvedMethod.url)
                                     .header(DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER, url)
-                                    .post(resolvedMethod.jsonBody.toRequestBody("application/json".toMediaType()))
-                                    .build()
+
+                            if (contentUrlResolver.requiresAuthentication(resolvedMethod.url)) {
+                                val accessToken = accessTokenProvider.getToken()
+                                requestBuilder.addAuthenticationHeader(accessToken)
+                            }
+                            requestBuilder.post(resolvedMethod.jsonBody.toRequestBody("application/json".toMediaType())).build()
                         }
                     }
 
