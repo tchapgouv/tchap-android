@@ -1,3 +1,10 @@
+Changes in Tchap 2.17.3 (2025-02-28)
+====================================
+
+Other changes
+-------------
+ - Mise à jour du style du bouton proconnect. ([#1154](https://github.com/tchapgouv/tchap-android/issues/1154))
+
 Changes in Tchap 2.17.2 (2025-02-28)
 ====================================
 
