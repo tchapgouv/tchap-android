@@ -1,5 +1,5 @@
 [tool.towncrier]
-    version = "2.17.2"
+    version = "2.17.3"
     directory = "changelog.d"
     filename = "TCHAP_CHANGES.md"
     name = "Changes in Tchap"
