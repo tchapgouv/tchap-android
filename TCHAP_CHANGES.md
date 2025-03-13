@@ -1,3 +1,14 @@
+Changes in Tchap 2.18.0 (2025-03-13)
+====================================
+
+Features ✨
+----------
+- Connexion des utilisateurs avec ProConnect. ([#1104](https://github.com/tchapgouv/tchap-android/issues/1104))
+
+Other changes
+-------------
+- Mise à jour de l'URL du service (sygnal) de push en preprod.
+
 Changes in Tchap 2.17.3 (2025-02-28)
 ====================================
 
@@ -21,8 +32,8 @@ Changes in Tchap 2.17.1 (2025-02-20)
 
 Features ✨
 ----------
-- Forcer la génération du code de récupération et la sauvegarde automatique. ([#988](https://github.com/tchapgouv/tchap-android/issues/988))
-- Connexion des utilisateurs avec ProConnect ([#1104](https://github.com/tchapgouv/tchap-android/issues/1104))
+ - Forcer la génération du code de récupération et la sauvegarde automatique. ([#988](https://github.com/tchapgouv/tchap-android/issues/988))
+ - Connexion des utilisateurs avec ProConnect ([#1104](https://github.com/tchapgouv/tchap-android/issues/1104))
 
 Changes in Tchap 2.17.0 (2025-02-20)
 ====================================
@@ -41,7 +52,7 @@ Changes in Tchap 2.16.0 (2025-01-08)
 
 Features ✨
 ----------
- - Connexion des utilisateurs avec ProConnect ([#1104](https://github.com/tchapgouv/tchap-android/issues/1104))
+ - Connexion des utilisateurs avec ProConnect en beta externe. ([#1104](https://github.com/tchapgouv/tchap-android/issues/1104))
 
 Changes in Tchap 2.15.1 (2024-12-23)
 ====================================
