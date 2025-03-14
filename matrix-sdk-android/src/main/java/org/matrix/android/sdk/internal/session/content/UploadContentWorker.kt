@@ -504,6 +504,6 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
     }
 
     companion object {
-        private const val MAX_IMAGE_SIZE = 640
+        private const val MAX_IMAGE_SIZE = 1600
     }
 }
