@@ -1,3 +1,11 @@
+Changes in Tchap 2.18.1 (2025-03-14)
+====================================
+
+Improvements 🙌
+--------------
+ - Augmentation de la résolution des images envoyées depuis Tchap Android. ([#1157](https://github.com/tchapgouv/tchap-android/issues/1157))
+ - Rebase against Element-Android v1.6.34 ([#1158](https://github.com/tchapgouv/tchap-android/issues/1158))
+
 Changes in Tchap 2.18.0 (2025-03-13)
 ====================================
 
