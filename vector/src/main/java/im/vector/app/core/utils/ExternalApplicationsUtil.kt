@@ -31,6 +31,7 @@ import androidx.browser.customtabs.CustomTabsSession
 import androidx.core.app.ShareCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
+import androidx.core.net.toUri
 import im.vector.app.R
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.notifications.NotificationUtils
@@ -88,7 +89,7 @@ fun openUrlInExternalBrowser(context: Context, uri: Uri?) {
 fun openUrlInChromeCustomTab(
         context: Context,
         session: CustomTabsSession?,
-        url: String
+        url: Uri
 ) {
     try {
         CustomTabsIntent.Builder()
@@ -111,10 +112,18 @@ fun openUrlInChromeCustomTab(
                 .setExitAnimations(context, R.anim.enter_fade_in, R.anim.exit_fade_out)
                 .apply { session?.let { setSession(it) } }
                 .build()
-                .launchUrl(context, Uri.parse(url))
+                .launchUrl(context, url)
     } catch (activityNotFoundException: ActivityNotFoundException) {
         context.toast(CommonStrings.error_no_external_application_found)
     }
+}
+
+fun openUrlInChromeCustomTab(
+        context: Context,
+        session: CustomTabsSession?,
+        url: String
+) {
+    openUrlInChromeCustomTab(context, session, url.toUri())
 }
 
 /**

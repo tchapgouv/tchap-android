@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -399,7 +400,7 @@ class FtueAuthLoginFragment :
 
         fun tryLoginSSO(state: OnboardingViewState) {
             if (state.signMode != SignMode.TchapSignInWithSSO) return
-            if (views.loginField.text.isNullOrEmpty()) return
+            if (views.loginField.text.isNullOrEmpty() || !views.loginField.text.toString().isEmail()) return
             if (state.selectedHomeserver.upstreamUrl.isNullOrEmpty()) return
             if (views.loginSocialLoginButtons.ssoIdentityProviders.isNullOrEmpty()) {
                 views.loginFieldTil.error = getString(CommonStrings.tchap_auth_sso_inactive, TCHAP_SSO_PROVIDER)
@@ -414,7 +415,7 @@ class FtueAuthLoginFragment :
                         provider = it,
                         action = SSOAction.LOGIN
                 )
-                        ?.let { url -> openInCustomTab(url) }
+                        ?.let { url -> openInCustomTab(url.toUri().buildUpon().appendQueryParameter("login_hint", views.loginField.text.toString()).build()) }
 
                 views.loginField.text?.clear()
             }
