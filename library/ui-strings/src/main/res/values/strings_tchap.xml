@@ -84,7 +84,7 @@
     <string name="tchap_connection_sso_description">Is %s available for my organization ?</string>
     <string name="tchap_connection_email">Professional email</string>
     <string name="tchap_connection_email_help">Use your business address</string>
-    <string name="tchap_connection_password_help">Your password must include a lower-case letter, an upper-case letter, a number and a symbol and be at a minimum 8 characters in length.</string>
+    <string name="tchap_connection_password_help">Your password must include a lower-case letter, an upper-case letter, a number and a symbol and be at a minimum 12 characters in length.</string>
     <string name="tchap_connection_password_confirm">Password confirmation</string>
     <!-- FIXME Tchap: restore these strings by restoring the warning dialog during the registration flow of an external account -->
 <!--    <string name="tchap_register_warning_for_external_title">Information about your registration</string>-->
@@ -92,8 +92,8 @@
 <!--    <string name="tchap_register_warning_for_external_proceed">Proceed</string>-->
     <string name="tchap_register_wait_for_email_title">An e-mail has been sent, except if a ${app_name} account already exists:</string>
     <string name="tchap_register_wait_for_email_subtitle">Please open it and click in the link it contains to create your account</string>
-    <string name="tchap_password_weak_pwd_error">This password is too weak. It must include a lower-case letter, an upper-case letter, a number and a symbol and be at a minimum 8 characters in length.</string>
-    <string name="tchap_register_pwd_too_short">The password must be at least 8 characters long</string>
+    <string name="tchap_password_weak_pwd_error">This password is too weak. It must include a lower-case letter, an upper-case letter, a number and a symbol and be at a minimum 12 characters in length.</string>
+    <string name="tchap_register_pwd_too_short">The password must be at least 12 characters long</string>
     <string name="tchap_register_pwd_no_uppercase">The password must include at least one uppercase</string>
     <string name="tchap_register_pwd_no_digit">The password must include at least one digit</string>
     <string name="tchap_register_pwd_no_lowercase">The password must include at least one lowercase</string>
