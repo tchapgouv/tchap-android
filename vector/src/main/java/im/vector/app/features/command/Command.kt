@@ -23,6 +23,7 @@ enum class Command(
         val isDevCommand: Boolean,
         val isThreadCommand: Boolean
 ) {
+    LASUITE_VISIO("/visio", null, "<message>", CommonStrings.tchap_command_description_lasuite_visio, false, true),
     CRASH_APP("/crash", null, "", CommonStrings.command_description_crash_application, true, true),
     EMOTE("/me", null, "<message>", CommonStrings.command_description_emote, false, true),
     BAN_USER("/ban", null, "<user-id> [reason]", CommonStrings.command_description_ban_user, false, false),
@@ -69,6 +70,7 @@ enum class Command(
      */
     val isTchapCommand
         get() = when (this) {
+            LASUITE_VISIO,
             DISCARD_SESSION,
             EMOTE,
             MARKDOWN,

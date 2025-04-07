@@ -37,6 +37,7 @@
     <string name="tchap_empty_room_no_permission_to_post">Your recipient has left the room or has refused your invite. You cannot send him a message.</string>
     <string name="tchap_discovery_section">Discovered user</string>
     <string name="tchap_login_reset_password_on">Reset password</string>
+    <string name="tchap_command_description_lasuite_visio">Create a meeting with a message</string>
 
     <!-- tchap discussion -->
     <string name="tchap_contact_external">External</string>
