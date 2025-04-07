@@ -61,6 +61,9 @@ class CommandParser @Inject constructor(
             }
 
             when {
+                Command.LASUITE_VISIO.matches(slashCommand) -> {
+                    ParsedCommand.SendVisioUrl(message)
+                }
                 Command.PLAIN.matches(slashCommand) -> {
                     if (message.isNotEmpty()) {
                         if (formattedMessage != null) {

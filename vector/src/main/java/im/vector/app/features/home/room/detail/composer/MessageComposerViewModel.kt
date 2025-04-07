@@ -289,6 +289,11 @@ class MessageComposerViewModel @AssistedInject constructor(
                         is ParsedCommand.ErrorCommandNotSupportedInThreads -> {
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandNotSupportedInThreads(parsedCommand.command))
                         }
+                        is ParsedCommand.SendVisioUrl -> {
+                            sendPrefixedMessage(room, generateVisioUrl(), parsedCommand.message, state.rootThreadEventId)
+                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                            popDraft(room)
+                        }
                         is ParsedCommand.SendPlainText -> {
                             // Send the text message to the room, without markdown
                             if (state.rootThreadEventId != null) {
@@ -1067,5 +1072,14 @@ class MessageComposerViewModel @AssistedInject constructor(
         override fun create(initialState: MessageComposerViewState): MessageComposerViewModel
     }
 
-    companion object : MavericksViewModelFactory<MessageComposerViewModel, MessageComposerViewState> by hiltMavericksViewModelFactory()
+    companion object : MavericksViewModelFactory<MessageComposerViewModel, MessageComposerViewState> by hiltMavericksViewModelFactory() {
+        private const val LASUITE_VISIO_URL = "https://visio.numerique.gouv.fr/"
+        private const val ROOM_ID_ALLOWED_CHARACTERS = "abcdefghijklmnopqrstuvwxyz"
+
+        private fun getRandomChar() = ROOM_ID_ALLOWED_CHARACTERS.random()
+
+        private fun generateSegment(length: Int) = buildString { repeat(length) { append(getRandomChar()) } }
+
+        fun generateVisioUrl() = "$LASUITE_VISIO_URL${generateSegment(3)}-${generateSegment(4)}-${generateSegment(3)}"
+    }
 }
