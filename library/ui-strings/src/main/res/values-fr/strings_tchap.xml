@@ -37,7 +37,7 @@
     <string name="tchap_empty_room_no_permission_to_post">Votre destinataire a quitté le salon ou refusé votre invitation. Vous ne pouvez pas lui envoyer de message.</string>
     <string name="tchap_discovery_section">Utilisateur trouvé</string>
     <string name="tchap_login_reset_password_on">Réinitialiser le mot de passe</string>
-    <string name="tchap_command_description_lasuite_visio">Crée une réunion avec le message suivant</string>
+    <string name="tchap_command_description_lasuite_visio">Crée un lien Visio avec le message suivant</string>
 
     <!-- tchap discussion -->
     <string name="tchap_contact_external">Externe</string>
