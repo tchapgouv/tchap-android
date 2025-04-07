@@ -16,7 +16,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -254,6 +253,7 @@ class FtueAuthLoginFragment :
                 views.loginSocialLoginButtons.render(state.selectedHomeserver.preferredLoginMode, ssoMode(state)) { provider ->
                     viewModel.fetchSsoUrl(
                             redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                            loginHint = views.loginField.text.toString(),
                             deviceId = state.deviceId,
                             provider = provider,
                             action = if (state.signMode == SignMode.SignUp) SSOAction.REGISTER else SSOAction.LOGIN
@@ -411,11 +411,12 @@ class FtueAuthLoginFragment :
             views.loginSocialLoginButtons.ssoIdentityProviders?.first().let {
                 viewModel.fetchSsoUrl(
                         redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                        loginHint = views.loginField.text.toString(),
                         deviceId = state.deviceId,
                         provider = it,
                         action = SSOAction.LOGIN
                 )
-                        ?.let { url -> openInCustomTab(url.toUri().buildUpon().appendQueryParameter("login_hint", views.loginField.text.toString()).build()) }
+                        ?.let { url -> openInCustomTab(url) }
 
                 views.loginField.text?.clear()
             }

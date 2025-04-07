@@ -258,7 +258,7 @@ internal class DefaultSession @Inject constructor(
         return "$myUserId - ${sessionParams.deviceId}"
     }
 
-    override fun getUiaSsoFallbackUrl(authenticationSessionId: String): String {
+    override fun getUiaSsoFallbackUrl(authenticationSessionId: String, loginHint: String?): String {
         val hsBas = sessionParams.homeServerConnectionConfig
                 .homeServerUriBase
                 .toString()
@@ -267,6 +267,11 @@ internal class DefaultSession @Inject constructor(
             append(hsBas)
             append(SSO_UIA_FALLBACK_PATH)
             appendParamToUrl("session", authenticationSessionId)
+
+            // TCHAP support login_hint
+            loginHint?.takeIf { it.isNotBlank() }?.let {
+                appendParamToUrl("login_hint", it)
+            }
         }
     }
 

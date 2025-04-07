@@ -81,6 +81,7 @@ abstract class AbstractSSOLoginFragment<VB : ViewBinding> : AbstractLoginFragmen
                 // in this case we can prefetch (not other cases for privacy concerns)
                 loginViewModel.getSsoUrl(
                         redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                        loginHint = null,
                         deviceId = state.deviceId,
                         providerId = null,
                         action = if (state.signMode == SignMode.SignUp) SSOAction.REGISTER else SSOAction.LOGIN
