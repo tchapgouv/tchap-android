@@ -7,8 +7,12 @@
 
 package im.vector.app.features.rageshake
 
+import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.Uninitialized
+import org.matrix.android.sdk.api.session.identity.ThreePid
 
 data class BugReportState(
-        val serverVersion: String = ""
+        val serverVersion: String = "",
+        val threePids: Async<List<ThreePid>> = Uninitialized,
 ) : MavericksState

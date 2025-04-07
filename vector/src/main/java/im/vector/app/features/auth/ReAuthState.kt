@@ -7,7 +7,10 @@
 
 package im.vector.app.features.auth
 
+import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.Uninitialized
+import org.matrix.android.sdk.api.session.identity.ThreePid
 
 data class ReAuthState(
         val title: String? = null,
@@ -15,7 +18,8 @@ data class ReAuthState(
         val flowType: String? = null,
         val ssoFallbackPageWasShown: Boolean = false,
         val lastErrorCode: String? = null,
-        val resultKeyStoreAlias: String = ""
+        val resultKeyStoreAlias: String = "",
+        val threePids: Async<List<ThreePid>> = Uninitialized,
 ) : MavericksState {
     constructor(args: ReAuthActivity.Args) : this(
             args.title,

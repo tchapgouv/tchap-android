@@ -48,7 +48,6 @@ import okhttp3.Response
 import org.json.JSONException
 import org.json.JSONObject
 import org.matrix.android.sdk.api.Matrix
-import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.MatrixJsonParser
@@ -175,6 +174,7 @@ class BugReporter @Inject constructor(
      */
     @SuppressLint("StaticFieldLeak")
     fun sendBugReport(
+            email: String,
             reportType: ReportType,
             withDevicesLogs: Boolean,
             withCrashLogs: Boolean,
@@ -261,7 +261,6 @@ class BugReporter @Inject constructor(
                 var deviceId = "undefined"
                 var userId = "undefined"
                 var olmVersion = "undefined"
-                var email = "undefined"
                 var bugReportURL = buildString {
                     append(context.getString(R.string.server_url_prefix))
                     append(context.getString(im.vector.app.config.R.string.bug_report_default_host))
@@ -273,7 +272,6 @@ class BugReporter @Inject constructor(
                     deviceId = session.sessionParams.deviceId
                     olmVersion = Matrix.getCryptoVersion(true)
                     bugReportURL = session.sessionParams.homeServerUrl.removeSuffix("/") + BUG_REPORT_URL_SUFFIX
-                    email = session.profileService().getThreePids().filterIsInstance<ThreePid.Email>().firstOrNull()?.email ?: "undefined" // TCHAP Add Email
                 }
 
                 if (!mIsCancelled) {

@@ -19,6 +19,7 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.util.toBase64NoPadding
+import org.matrix.android.sdk.flow.flow
 import java.io.ByteArrayOutputStream
 
 class ReAuthViewModel @AssistedInject constructor(
@@ -34,12 +35,26 @@ class ReAuthViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<ReAuthViewModel, ReAuthState> by hiltMavericksViewModelFactory()
 
+    init {
+        observeThreePids()
+    }
+
+    private fun observeThreePids() {
+        session.flow()
+                .liveThreePIds(true)
+                .execute {
+                    copy(
+                            threePids = it
+                    )
+                }
+    }
+
     override fun handle(action: ReAuthActions) = withState { state ->
         when (action) {
             ReAuthActions.StartSSOFallback -> {
                 if (state.flowType == LoginFlowTypes.SSO) {
                     setState { copy(ssoFallbackPageWasShown = true) }
-                    val loginHint = session.profileService().getThreePids().filterIsInstance<ThreePid.Email>().firstOrNull()?.email
+                    val loginHint = state.threePids.invoke().orEmpty().filterIsInstance<ThreePid.Email>().firstOrNull()?.email // TCHAP lognin hint
                     val ssoURL = session.getUiaSsoFallbackUrl(initialState.session ?: "", loginHint)
                     _viewEvents.post(ReAuthEvents.OpenSsoURl(ssoURL))
                 }

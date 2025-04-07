@@ -23,6 +23,7 @@ import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.databinding.ActivityBugReportBinding
 import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.identity.ThreePid
 import timber.log.Timber
 
 /**
@@ -157,6 +158,7 @@ class BugReportActivity :
         views.bugReportProgressView.progress = 0
 
         bugReporter.sendBugReport(
+                state.threePids.invoke().orEmpty().filterIsInstance<ThreePid.Email>().firstOrNull()?.email ?: "undefined",
                 reportType,
                 views.bugReportButtonIncludeLogs.isChecked,
                 views.bugReportButtonIncludeCrashLogs.isChecked,
