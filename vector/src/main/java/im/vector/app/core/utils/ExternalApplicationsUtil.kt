@@ -89,7 +89,7 @@ fun openUrlInExternalBrowser(context: Context, uri: Uri?) {
 fun openUrlInChromeCustomTab(
         context: Context,
         session: CustomTabsSession?,
-        url: Uri
+        url: String
 ) {
     try {
         CustomTabsIntent.Builder()
@@ -112,18 +112,10 @@ fun openUrlInChromeCustomTab(
                 .setExitAnimations(context, R.anim.enter_fade_in, R.anim.exit_fade_out)
                 .apply { session?.let { setSession(it) } }
                 .build()
-                .launchUrl(context, url)
+                .launchUrl(context, url.toUri())
     } catch (activityNotFoundException: ActivityNotFoundException) {
         context.toast(CommonStrings.error_no_external_application_found)
     }
-}
-
-fun openUrlInChromeCustomTab(
-        context: Context,
-        session: CustomTabsSession?,
-        url: String
-) {
-    openUrlInChromeCustomTab(context, session, url.toUri())
 }
 
 /**

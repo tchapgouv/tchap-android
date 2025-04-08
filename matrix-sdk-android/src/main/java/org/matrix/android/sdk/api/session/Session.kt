@@ -325,7 +325,7 @@ interface Session {
         fun onGlobalError(session: Session, globalError: GlobalError) = Unit
     }
 
-    fun getUiaSsoFallbackUrl(authenticationSessionId: String): String
+    fun getUiaSsoFallbackUrl(authenticationSessionId: String, loginHint: String?): String
 
     /**
      * Debug API, will return info about the DB.

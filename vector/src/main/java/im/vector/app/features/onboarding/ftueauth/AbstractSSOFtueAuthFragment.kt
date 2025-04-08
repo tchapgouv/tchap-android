@@ -79,16 +79,13 @@ abstract class AbstractSSOFtueAuthFragment<VB : ViewBinding> : AbstractFtueAuthF
         openUrlInChromeCustomTab(requireContext(), customTabsSession, ssoUrl)
     }
 
-    fun openInCustomTab(ssoUrl: Uri) {
-        openUrlInChromeCustomTab(requireContext(), customTabsSession, ssoUrl)
-    }
-
     private fun prefetchIfNeeded() {
         withState(viewModel) { state ->
             if (state.selectedHomeserver.preferredLoginMode.hasSso() && state.selectedHomeserver.preferredLoginMode.ssoState().isFallback()) {
                 // in this case we can prefetch (not other cases for privacy concerns)
                 viewModel.fetchSsoUrl(
                         redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                        loginHint = null,
                         deviceId = state.deviceId,
                         provider = null,
                         action = if (state.onboardingFlow == OnboardingFlow.SignUp) SSOAction.REGISTER else SSOAction.LOGIN

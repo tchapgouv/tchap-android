@@ -846,8 +846,8 @@ class LoginViewModel @AssistedInject constructor(
         return loginConfig?.homeServerUrl
     }
 
-    fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?, action: SSOAction): String? {
-        return authenticationService.getSsoUrl(redirectUrl, deviceId, providerId, action)
+    fun getSsoUrl(redirectUrl: String, loginHint: String?, deviceId: String?, providerId: String?, action: SSOAction): String? {
+        return authenticationService.getSsoUrl(redirectUrl, loginHint, deviceId, providerId, action)
     }
 
     fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String? {

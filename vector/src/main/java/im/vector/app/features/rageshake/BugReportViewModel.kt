@@ -19,6 +19,7 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.flow.flow
 
 class BugReportViewModel @AssistedInject constructor(
         @Assisted initialState: BugReportState,
@@ -34,6 +35,7 @@ class BugReportViewModel @AssistedInject constructor(
 
     init {
         fetchHomeserverVersion()
+        observeThreePids()
     }
 
     private fun fetchHomeserverVersion() {
@@ -50,6 +52,18 @@ class BugReportViewModel @AssistedInject constructor(
                         serverVersion = version
                 )
             }
+        }
+    }
+
+    private fun observeThreePids() {
+        activeSessionHolder.getSafeActiveSession()?.let { session ->
+            session.flow()
+                    .liveThreePIds(true)
+                    .execute {
+                        copy(
+                                threePids = it
+                        )
+                    }
         }
     }
 
