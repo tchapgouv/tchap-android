@@ -2024,7 +2024,7 @@
     <string name="ftue_auth_create_account_title">Create your account</string>
     <!-- Note for translators, %s is the full matrix of the account being created, eg @hello:matrix.org -->
     <string name="ftue_auth_create_account_username_entry_footer">Others can discover you %s</string>
-    <string name="ftue_auth_create_account_password_entry_footer">Must be 8 characters or more</string>
+    <string name="ftue_auth_create_account_password_entry_footer">Must be 12 characters or more</string>
     <string name="ftue_auth_create_account_choose_server_header">Where your conversations will live</string>
     <string name="ftue_auth_sign_in_choose_server_header">Where your conversations live</string>
     <string name="ftue_auth_create_account_sso_section_header">Or</string>
@@ -2060,7 +2060,7 @@
     <string name="ftue_auth_reset_password_breaker_title">Check your email.</string>
     <string name="ftue_auth_new_password_entry_title">New Password</string>
     <string name="ftue_auth_new_password_title">Choose a new password</string>
-    <string name="ftue_auth_new_password_subtitle">Make sure it\'s 8 characters or more.</string>
+    <string name="ftue_auth_new_password_subtitle">Make sure it\'s 12 characters or more.</string>
     <string name="ftue_auth_reset_password">Reset password</string>
     <string name="ftue_auth_sign_out_all_devices">Lock my messages and disconnect me from all my devices (in case your account is hacked or a device loss)</string>  <!-- Tchap: Custom string -->
 

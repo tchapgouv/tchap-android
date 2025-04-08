@@ -2549,7 +2549,7 @@
     <string name="ftue_auth_phone_confirmation_title">Confirmer votre numéro de téléphone</string>
     <string name="ftue_auth_sign_out_all_devices">Verrouiller mes messages et me déconnecter de tous mes appareils (en cas de piratage de votre compte ou perte d\'un appareil)</string> <!-- Tchap: Custom string -->
     <string name="ftue_auth_reset_password">Réinitialiser le mot de passe</string>
-    <string name="ftue_auth_new_password_subtitle">Soyez sûr qu’il ait au moins 8 caractères.</string>
+    <string name="ftue_auth_new_password_subtitle">Soyez sûr qu’il ait au moins 12 caractères.</string> <!-- Tchap: Custom string -->
     <string name="ftue_auth_new_password_title">Choisissez un nouveau mot de passe</string>
     <string name="ftue_auth_new_password_entry_title">Nouveau mot de passe</string>
     <string name="ftue_auth_reset_password_breaker_title">Vérifiez vos courriels.</string>
@@ -2573,7 +2573,7 @@
     <string name="ftue_auth_create_account_edit_server_selection">Modifier</string>
     <string name="ftue_auth_create_account_sso_section_header">Ou</string>
     <string name="ftue_auth_create_account_choose_server_header">Où vos conversations résideront</string>
-    <string name="ftue_auth_create_account_password_entry_footer">Doit contenir au moins 8 caractères</string>
+    <string name="ftue_auth_create_account_password_entry_footer">Doit contenir au moins 12 caractères</string> <!-- Tchap: Custom string -->
     <string name="ftue_auth_create_account_username_entry_footer">Les autres peuvent vous trouver en tant que %s</string>
     <string name="ftue_auth_create_account_title">Créer votre compte</string>
     <string name="font_size_use_system">Utiliser la valeur du système</string>
