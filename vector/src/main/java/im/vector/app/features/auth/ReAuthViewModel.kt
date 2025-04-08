@@ -54,7 +54,7 @@ class ReAuthViewModel @AssistedInject constructor(
             ReAuthActions.StartSSOFallback -> {
                 if (state.flowType == LoginFlowTypes.SSO) {
                     setState { copy(ssoFallbackPageWasShown = true) }
-                    val loginHint = state.threePids.invoke().orEmpty().filterIsInstance<ThreePid.Email>().firstOrNull()?.email // TCHAP lognin hint
+                    val loginHint = state.threePids.invoke().orEmpty().filterIsInstance<ThreePid.Email>().firstOrNull()?.email // TCHAP login hint
                     val ssoURL = session.getUiaSsoFallbackUrl(initialState.session ?: "", loginHint)
                     _viewEvents.post(ReAuthEvents.OpenSsoURl(ssoURL))
                 }
