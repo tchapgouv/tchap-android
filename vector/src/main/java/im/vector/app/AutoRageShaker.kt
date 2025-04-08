@@ -42,6 +42,11 @@ class AutoRageShaker @Inject constructor(
         private val vectorPreferences: VectorPreferences
 ) : Session.Listener, SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private val email = activeSessionHolder.getSafeActiveSession()?.profileService()?.getThreePids()
+            ?.filterIsInstance<ThreePid.Email>()
+            ?.firstOrNull()
+            ?.email
+            ?: "undefined"
     private val activeSessionIds = mutableSetOf<String>()
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private var currentActiveSessionId: String? = null
@@ -120,11 +125,6 @@ class AutoRageShaker @Inject constructor(
     }
 
     private fun sendRageShake(target: E2EMessageDetected) {
-        val email = activeSessionHolder.getSafeActiveSession()?.profileService()?.getThreePids()
-                ?.filterIsInstance<ThreePid.Email>()
-                ?.firstOrNull()
-                ?.email
-                ?: "undefined"
         bugReporter.sendBugReport(
                 email = email,
                 reportType = ReportType.AUTO_UISI,
@@ -205,11 +205,6 @@ class AutoRageShaker @Inject constructor(
         val userId = event.content?.get("user_id")
         val senderKey = event.content?.get("sender_key")
         val matchingIssue = event.content?.get("recipient_rageshake")?.toString() ?: ""
-        val email = activeSessionHolder.getSafeActiveSession()?.profileService()?.getThreePids()
-                ?.filterIsInstance<ThreePid.Email>()
-                ?.firstOrNull()
-                ?.email
-                ?: "undefined"
 
         bugReporter.sendBugReport(
                 email = email,
