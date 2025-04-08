@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import timber.log.Timber
 import javax.inject.Inject
@@ -41,6 +42,11 @@ class AutoRageShaker @Inject constructor(
         private val vectorPreferences: VectorPreferences
 ) : Session.Listener, SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private val email = activeSessionHolder.getSafeActiveSession()?.profileService()?.getThreePids()
+            ?.filterIsInstance<ThreePid.Email>()
+            ?.firstOrNull()
+            ?.email
+            ?: "undefined"
     private val activeSessionIds = mutableSetOf<String>()
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private var currentActiveSessionId: String? = null
@@ -120,6 +126,7 @@ class AutoRageShaker @Inject constructor(
 
     private fun sendRageShake(target: E2EMessageDetected) {
         bugReporter.sendBugReport(
+                email = email,
                 reportType = ReportType.AUTO_UISI,
                 withDevicesLogs = true,
                 withCrashLogs = true,
@@ -200,6 +207,7 @@ class AutoRageShaker @Inject constructor(
         val matchingIssue = event.content?.get("recipient_rageshake")?.toString() ?: ""
 
         bugReporter.sendBugReport(
+                email = email,
                 reportType = ReportType.AUTO_UISI_SENDER,
                 withDevicesLogs = true,
                 withCrashLogs = true,

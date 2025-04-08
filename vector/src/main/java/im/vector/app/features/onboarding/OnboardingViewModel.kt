@@ -860,12 +860,12 @@ class OnboardingViewModel @AssistedInject constructor(
 
     fun getDefaultHomeserverUrl() = defaultHomeserverUrl
 
-    fun fetchSsoUrl(redirectUrl: String, deviceId: String?, provider: SsoIdentityProvider?, action: SSOAction): String? {
+    fun fetchSsoUrl(redirectUrl: String, loginHint: String?, deviceId: String?, provider: SsoIdentityProvider?, action: SSOAction): String? {
         setState {
             val authDescription = AuthenticationDescription.Register(provider.toAuthenticationType())
             copy(selectedAuthenticationState = SelectedAuthenticationState(authDescription))
         }
-        return authenticationService.getSsoUrl(redirectUrl, deviceId, provider?.id, action)
+        return authenticationService.getSsoUrl(redirectUrl, loginHint, deviceId, provider?.id, action)
     }
 
     fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String? {

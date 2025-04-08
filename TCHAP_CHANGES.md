@@ -1,3 +1,15 @@
+Changes in Tchap 2.19.0 (2025-04-08)
+====================================
+
+Features ✨
+----------
+ - Ajout de la commande /visio pour créer une réunion sur https://visio.numerique.gouv.fr ([#1162](https://github.com/tchapgouv/tchap-android/issues/1162))
+
+Improvements 🙌
+--------------
+ - Éviter la ressaisie de l'email dans ProConnect. ([#1156](https://github.com/tchapgouv/tchap-android/issues/1156))
+ - 12 caractères minimum à la création du compte. ([#1159](https://github.com/tchapgouv/tchap-android/issues/1159))
+
 Changes in Tchap 2.18.1 (2025-03-14)
 ====================================
 

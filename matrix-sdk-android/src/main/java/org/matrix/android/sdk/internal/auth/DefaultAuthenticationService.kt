@@ -90,7 +90,7 @@ internal class DefaultAuthenticationService @Inject constructor(
         return getLoginFlow(homeServerConnectionConfig)
     }
 
-    override fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?, action: SSOAction): String? {
+    override fun getSsoUrl(redirectUrl: String, loginHint: String?, deviceId: String?, providerId: String?, action: SSOAction): String? {
         val homeServerUrlBase = getHomeServerUrlBase() ?: return null
 
         return buildString {
@@ -108,6 +108,11 @@ internal class DefaultAuthenticationService @Inject constructor(
 
             // unstable MSC3824 action param
             appendParamToUrl("org.matrix.msc3824.action", action.toString())
+
+            // TCHAP support login_hint
+            loginHint?.takeIf { it.isNotBlank() }?.let {
+                appendParamToUrl("login_hint", it)
+            }
         }
     }
 

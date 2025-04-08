@@ -253,6 +253,7 @@ class FtueAuthLoginFragment :
                 views.loginSocialLoginButtons.render(state.selectedHomeserver.preferredLoginMode, ssoMode(state)) { provider ->
                     viewModel.fetchSsoUrl(
                             redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                            loginHint = views.loginField.text.toString(),
                             deviceId = state.deviceId,
                             provider = provider,
                             action = if (state.signMode == SignMode.SignUp) SSOAction.REGISTER else SSOAction.LOGIN
@@ -399,7 +400,7 @@ class FtueAuthLoginFragment :
 
         fun tryLoginSSO(state: OnboardingViewState) {
             if (state.signMode != SignMode.TchapSignInWithSSO) return
-            if (views.loginField.text.isNullOrEmpty()) return
+            if (views.loginField.text.isNullOrEmpty() || !views.loginField.text.toString().isEmail()) return
             if (state.selectedHomeserver.upstreamUrl.isNullOrEmpty()) return
             if (views.loginSocialLoginButtons.ssoIdentityProviders.isNullOrEmpty()) {
                 views.loginFieldTil.error = getString(CommonStrings.tchap_auth_sso_inactive, TCHAP_SSO_PROVIDER)
@@ -410,6 +411,7 @@ class FtueAuthLoginFragment :
             views.loginSocialLoginButtons.ssoIdentityProviders?.first().let {
                 viewModel.fetchSsoUrl(
                         redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                        loginHint = views.loginField.text.toString(),
                         deviceId = state.deviceId,
                         provider = it,
                         action = SSOAction.LOGIN

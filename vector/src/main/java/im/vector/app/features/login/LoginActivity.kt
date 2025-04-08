@@ -297,6 +297,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
     private fun launchSsoFlow() = withState(loginViewModel) { state ->
         loginViewModel.getSsoUrl(
                 redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                loginHint = null,
                 deviceId = state.deviceId,
                 providerId = null,
                 action = SSOAction.LOGIN
