@@ -1,3 +1,10 @@
+Changes in Tchap 2.19.1 (2025-04-09)
+====================================
+
+Bugfixes 🐛
+----------
+ - Correction du crash au redémarrage de l'application depuis la version 2.19.0 ([#1165](https://github.com/tchapgouv/tchap-android/issues/1165))
+
 Changes in Tchap 2.19.0 (2025-04-08)
 ====================================
 
@@ -8,7 +15,7 @@ Features ✨
 Improvements 🙌
 --------------
  - Éviter la ressaisie de l'email dans ProConnect. ([#1156](https://github.com/tchapgouv/tchap-android/issues/1156))
- - 12 caractères minimum à la création du compte. ([#1159](https://github.com/tchapgouv/tchap-android/issues/1159))
+ - 12 caractères minimum pour le mot de passe du compte. ([#1159](https://github.com/tchapgouv/tchap-android/issues/1159))
 
 Changes in Tchap 2.18.1 (2025-03-14)
 ====================================
@@ -23,11 +30,11 @@ Changes in Tchap 2.18.0 (2025-03-13)
 
 Features ✨
 ----------
-- Connexion des utilisateurs avec ProConnect. ([#1104](https://github.com/tchapgouv/tchap-android/issues/1104))
+ - Connexion des utilisateurs avec ProConnect. ([#1104](https://github.com/tchapgouv/tchap-android/issues/1104))
 
 Other changes
 -------------
-- Mise à jour de l'URL du service (sygnal) de push en preprod.
+ - Mise à jour de l'URL du service (sygnal) de push en preprod.
 
 Changes in Tchap 2.17.3 (2025-02-28)
 ====================================
@@ -106,7 +113,7 @@ Changes in Tchap 2.13.11 (2024-11-16)
 
 Bugfixes 🐛
 ----------
-- Correction du crash quand on reçoit ou émet un appel sur Tchap. ([#1126](https://github.com/tchapgouv/tchap-android/issues/1126))
+ - Correction du crash quand on reçoit ou émet un appel sur Tchap. ([#1126](https://github.com/tchapgouv/tchap-android/issues/1126))
 
 Changes in Tchap 2.13.10 (2024-11-15)
 =====================================
