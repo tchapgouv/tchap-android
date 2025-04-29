@@ -402,24 +402,22 @@ class FtueAuthLoginFragment :
             if (state.signMode != SignMode.TchapSignInWithSSO) return
             if (views.loginField.text.isNullOrEmpty() || !views.loginField.text.toString().isEmail()) return
             if (state.selectedHomeserver.upstreamUrl.isNullOrEmpty()) return
-            if (views.loginSocialLoginButtons.ssoIdentityProviders.isNullOrEmpty()) {
+            if (views.loginSocialLoginButtons.ssoIdentityProviders.isNullOrEmpty() && !state.selectedHomeserver.hasOidcCompatibilityFlow) {
                 views.loginFieldTil.error = getString(CommonStrings.tchap_auth_sso_inactive, TCHAP_SSO_PROVIDER)
                 viewModel.handle(OnboardingAction.ResetHomeServerUrl)
                 return
             }
 
-            views.loginSocialLoginButtons.ssoIdentityProviders?.first().let {
-                viewModel.fetchSsoUrl(
-                        redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
-                        loginHint = views.loginField.text.toString(),
-                        deviceId = state.deviceId,
-                        provider = it,
-                        action = SSOAction.LOGIN
-                )
-                        ?.let { url -> openInCustomTab(url) }
+            viewModel.fetchSsoUrl(
+                    redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                    loginHint = views.loginField.text.toString(),
+                    deviceId = state.deviceId,
+                    provider = views.loginSocialLoginButtons.ssoIdentityProviders?.first(),
+                    action = SSOAction.LOGIN
+            )
+                    ?.let { url -> openInCustomTab(url) }
 
-                views.loginField.text?.clear()
-            }
+            views.loginField.text?.clear()
         }
     }
 }
