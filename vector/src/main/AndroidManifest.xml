@@ -206,12 +206,12 @@
 <!--                <category android:name="android.intent.category.BROWSABLE" />-->
 
 <!--                <data android:scheme="https" />-->
-<!--                &lt;!&ndash; Note: we can't use "*.element.io" here because it'll intercept the "mas.element.io" domain too. &ndash;&gt;-->
-<!--                &lt;!&ndash; Matching asset file: https://app.element.io/.well-known/assetlinks.json &ndash;&gt;-->
+                <!-- Note: we can't use "*.element.io" here because it'll intercept the "mas.element.io" domain too. -->
+                <!-- Matching asset file: https://app.element.io/.well-known/assetlinks.json -->
 <!--                <data android:host="app.element.io" />-->
-<!--                &lt;!&ndash; Matching asset file: https://develop.element.io/.well-known/assetlinks.json &ndash;&gt;-->
+                <!-- Matching asset file: https://develop.element.io/.well-known/assetlinks.json -->
 <!--                <data android:host="develop.element.io" />-->
-<!--                &lt;!&ndash; Matching asset file: https://staging.element.io/.well-known/assetlinks.json &ndash;&gt;-->
+                <!-- Matching asset file: https://staging.element.io/.well-known/assetlinks.json -->
 <!--                <data android:host="staging.element.io" />-->
 <!--            </intent-filter>-->
 <!--            <intent-filter android:autoVerify="true">-->
@@ -222,7 +222,7 @@
 
 <!--                <data android:scheme="https" />-->
 <!--                <data android:host="mobile.element.io" />-->
-<!--                &lt;!&ndash; accept only root path &ndash;&gt;-->
+                <!-- accept only root path -->
 <!--                <data android:path="/" />-->
 <!--            </intent-filter>-->
 <!--        </activity>-->
