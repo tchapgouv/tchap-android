@@ -206,15 +206,24 @@
 <!--                <category android:name="android.intent.category.BROWSABLE" />-->
 
 <!--                <data android:scheme="https" />-->
-                <!-- Note: we can't use "*.element.io" here because it'll intercept the "mas.element.io" domain too. -->
-                <!-- Matching asset file: https://app.element.io/.well-known/assetlinks.json -->
+<!--                &lt;!&ndash; Note: we can't use "*.element.io" here because it'll intercept the "mas.element.io" domain too. &ndash;&gt;-->
+<!--                &lt;!&ndash; Matching asset file: https://app.element.io/.well-known/assetlinks.json &ndash;&gt;-->
 <!--                <data android:host="app.element.io" />-->
-                <!-- Matching asset file: https://develop.element.io/.well-known/assetlinks.json -->
+<!--                &lt;!&ndash; Matching asset file: https://develop.element.io/.well-known/assetlinks.json &ndash;&gt;-->
 <!--                <data android:host="develop.element.io" />-->
-                <!-- Matching asset file: https://staging.element.io/.well-known/assetlinks.json -->
+<!--                &lt;!&ndash; Matching asset file: https://staging.element.io/.well-known/assetlinks.json &ndash;&gt;-->
 <!--                <data android:host="staging.element.io" />-->
-                <!-- Fix it https://github.com/element-hq/element-android/issues/8904 -->
+<!--            </intent-filter>-->
+<!--            <intent-filter android:autoVerify="true">-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+
+<!--                <data android:scheme="https" />-->
 <!--                <data android:host="mobile.element.io" />-->
+<!--                &lt;!&ndash; accept only root path &ndash;&gt;-->
+<!--                <data android:path="/" />-->
 <!--            </intent-filter>-->
 <!--        </activity>-->
 

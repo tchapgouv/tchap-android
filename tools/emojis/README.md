@@ -1,4 +1,4 @@
-# Emojis in Element Android
+# Emojis in Tchap Android
 
 This folder contains a formatted version of emoji_picker_datasource.json, for easier comparison when doing change.
 

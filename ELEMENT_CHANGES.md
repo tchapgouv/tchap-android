@@ -1,3 +1,22 @@
+Changes in Element v1.6.42 (2025-06-10)
+=======================================
+
+- Bump org.matrix.rustcomponents:crypto-android to 0.11.1 ([#9043](https://github.com/element-hq/element-android/pull/9043))
+
+
+Changes in Element v1.6.40 (2025-06-02)
+=======================================
+
+- Bump org.matrix.rustcomponents:crypto-android to 0.11.0 ([#9036](https://github.com/element-hq/element-android/pull/9036))
+
+Changes in Element v1.6.38 (2025-05-27)
+=======================================
+
+Other changes
+-------------
+ - Filter mobile links: only open links which have an explicit empty path like `https://mobile.element.io/?hs_url=...` ([#9033](https://github.com/element-hq/element-android/issues/9033))
+
+
 Changes in Element v1.6.36 (2025-03-14)
 =======================================
 
