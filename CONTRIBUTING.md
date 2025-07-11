@@ -1,4 +1,4 @@
-# Contributing to Element Android
+# Contributing to Tchap Android
 
 <!--- TOC -->
 
@@ -54,6 +54,8 @@ Note that if the templates are modified, the only things to do is to restart And
 ## Compilation
 
 For now, the Matrix SDK and the Tchap application are in the same project. So there is no specific thing to do, this project should compile without any special action.
+
+See [docs/rust_crypto_integration.md](./docs/rust_crypto_integration.md#testing-with-a-local-rust-aar) for notes on building against a custom version of the Rust `matrix-sdk-crypto`.
 
 ## I want to submit a PR to fix an issue
 
