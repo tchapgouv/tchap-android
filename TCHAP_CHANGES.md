@@ -1,3 +1,22 @@
+Changes in Tchap 2.19.3 (2025-07-11)
+====================================
+
+Features ✨
+----------
+ - Ajout du support de la connexion avec le Matrix Authentication Service. ([#1171](https://github.com/tchapgouv/tchap-android/issues/1171))
+
+Improvements 🙌
+--------------
+ - Rebase against Element-Android v1.6.42 ([#1177](https://github.com/tchapgouv/tchap-android/issues/1177))
+
+Bugfixes 🐛
+----------
+ - Correction des liens Tchap qui n'ouvrent pas l'application. ([#1178](https://github.com/tchapgouv/tchap-android/issues/1178))
+
+Other changes
+-------------
+ - Mise à jour de l'URL vers l'aide. ([#1176](https://github.com/tchapgouv/tchap-android/issues/1176))
+
 Changes in Tchap 2.19.2 (2025-05-19)
 ====================================
 

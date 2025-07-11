@@ -41,7 +41,7 @@ Other useful documentation:
 
 Matrix website: [matrix.org](https://matrix.org), [discover page](https://matrix.org/discover).
 *Note*: Matrix.org is also hosting a homeserver ([.well-known file](https://matrix.org/.well-known/matrix/client)).
-The reference homeserver (this is how Matrix servers are called) implementation is [Synapse](https://github.com/matrix-org/synapse/). But other implementations exist. The Matrix specification is here to ensure that any Matrix client, such as Element Android and its SDK can talk to any Matrix server.
+The reference homeserver (this is how Matrix servers are called) implementation is [Synapse](https://github.com/matrix-org/synapse/). But other implementations exist. The Matrix specification is here to ensure that any Matrix client, such as Tchap Android and its SDK can talk to any Matrix server.
 
 Have a quick look to the client-server API documentation: [Client-server documentation](https://spec.matrix.org/v1.3/client-server-api/). Other network API exist, the list is here: (https://spec.matrix.org/latest/)
 
@@ -242,7 +242,7 @@ Rageshake can be very useful to get logs from a release version of the applicati
 
 ### Tips
 
-- Element Android has a `developer mode` in the `Settings/Advanced settings`. Other useful options are available here;
+- Tchap Android has a `developer mode` in the `Settings/Advanced settings`. Other useful options are available here;
 - Show hidden Events can also help to debug feature. When developer mode is enabled, it is possible to view the source (= the Json content) of any Events;
 - Type `/devtools` in a Room composer to access a developer menu. There are some other entry points. Developer mode has to be enabled;
 - Hidden debug menu: when developer mode is enabled and on debug build, there are some extra screens that can be accessible using the green wheel. In those screens, it will be possible to toggle some feature flags;
