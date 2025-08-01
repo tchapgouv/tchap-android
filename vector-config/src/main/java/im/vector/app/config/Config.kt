@@ -74,12 +74,12 @@ object Config {
      * The analytics configuration to use for the Debug build type.
      * Can be disabled by providing Analytics.Disabled
      */
-    val DEBUG_ANALYTICS_CONFIG = Analytics.Enabled(
-            postHogHost = "https://us.i.posthog.com", // TCHAP dev posthog
-            postHogApiKey = "phc_eQOeaQiaIxdX9kaQmqYTD7RJLyFubYmGYKUI9czqqQD", // TCHAP dev posthog
+    val TEST_ANALYTICS_CONFIG = Analytics.Enabled(
+            postHogHost = "https://posthog.tchap.incubateur.net", // TCHAP dev and preprod posthog
+            postHogApiKey = "phc_yf5yr3PrgiUTZMZpSmUlR6hdtqAejwhcUMQGsK8Nx5w", // TCHAP dev and preprod posthog
             policyLink = "https://tchap.numerique.gouv.fr/politique-de-confidentialite",
             sentryDSN = "",
-            sentryEnvironment = "DEBUG"
+            sentryEnvironment = "TEST"
     )
 
     /**
@@ -87,8 +87,8 @@ object Config {
      * Can be disabled by providing Analytics.Disabled
      */
     val RELEASE_ANALYTICS_CONFIG = Analytics.Enabled(
-            postHogHost = "https://posthogdev.tchap.incubateur.net", // TCHAP prod posthog
-            postHogApiKey = "phc_FFa4pkvmuWjF9nZOMmYJWUXMibuYnCnPyf3DqPGZs4L", // TCHAP prod posthog
+            postHogHost = "https://posthog.tchap.numerique.gouv.fr", // TCHAP prod posthog
+            postHogApiKey = "phc_gm2O25mu8NTQtKpozdoVwZCixWqdq7PUHLLjDNDzVIe", // TCHAP prod posthog
             policyLink = "https://tchap.numerique.gouv.fr/politique-de-confidentialite",
             sentryDSN = "",
             sentryEnvironment = "RELEASE"

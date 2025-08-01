@@ -28,11 +28,10 @@ object ConfigurationModule {
 
     @Provides
     fun providesAnalyticsConfig(): AnalyticsConfig {
-        val config: Analytics = when (BuildConfig.BUILD_TYPE) {
-            "debug" -> Config.DEBUG_ANALYTICS_CONFIG
-            "nightly" -> Config.NIGHTLY_ANALYTICS_CONFIG
-            "release" -> Config.RELEASE_ANALYTICS_CONFIG
-            else -> throw IllegalStateException("Unhandled build type: ${BuildConfig.BUILD_TYPE}")
+        val config: Analytics = when (BuildConfig.FLAVOR_target) {
+            "tchap" -> Config.RELEASE_ANALYTICS_CONFIG
+            "btchap", "devTchap" -> Config.TEST_ANALYTICS_CONFIG
+            else -> throw IllegalStateException("Unhandled build type: ${BuildConfig.FLAVOR_target}")
         }
         return when (config) {
             Analytics.Disabled -> AnalyticsConfig(isEnabled = false, "", "", "", "", "")
