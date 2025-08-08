@@ -1897,6 +1897,7 @@
     <string name="room_settings_permissions_subtitle">Voir et changer les rôles requis pour changer les différentes parties du salon.</string>
     <string name="room_settings_permissions_title">Permissions du salon</string>
     <string name="room_participants_leave_private_warning">Ce salon n’est pas public. Vous ne pourrez pas le rejoindre sans invitation.</string>
+    <string name="room_participants_leave_last_admin">Ce salon ne sera plus administré, et vous risquez de ne plus pouvoir le joindre de nouveau.</string> <!-- Tchap: Use custom string -->
     <string name="call_held_by_you">Vous avez mis l’appel en attente</string>
     <string name="call_held_by_user">%s a mis l’appel en attente</string>
     <string name="call_hold_action">Mettre en attente</string>

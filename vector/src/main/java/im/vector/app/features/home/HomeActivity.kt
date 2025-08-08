@@ -200,6 +200,9 @@ class HomeActivity :
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
+    override val rootView: View
+        get() = views.coordinatorLayout
+
     override fun getBinding() = ActivityHomeBinding.inflate(layoutInflater)
 
     override fun onCreate(savedInstanceState: Bundle?) {

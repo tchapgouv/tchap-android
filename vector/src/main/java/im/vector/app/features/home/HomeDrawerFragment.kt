@@ -13,7 +13,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import dagger.hilt.android.AndroidEntryPoint
 import fr.gouv.tchap.core.dialogs.InviteByEmailDialog
 import im.vector.app.R
@@ -116,6 +118,20 @@ class HomeDrawerFragment :
                         extraTitle = getString(CommonStrings.invite_friends_rich_title)
                 )
             }
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+            val systemBars = insets.getInsets(
+                    WindowInsetsCompat.Type.systemBars() or
+                            WindowInsetsCompat.Type.displayCutout()
+            )
+            v.updatePadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    systemBars.bottom,
+            )
+            WindowInsetsCompat.CONSUMED
         }
 
         // Debug menu

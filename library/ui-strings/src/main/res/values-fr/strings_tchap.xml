@@ -27,7 +27,6 @@
     <string name="tchap_room_creation_forum_room_info">Non chiffré et accessible automatiquement et uniquement à tous les agents publics depuis l\'annuaire (ou un lien partagé).</string>
 
     <!-- tchap new strings -->
-    <string name="tchap_room_last_admin_leave_prompt_msg">Ce salon ne sera plus administré, et vous risquez de ne plus pouvoir le joindre de nouveau.</string>
     <string name="tchap_invite_already_send_message">Vous avez déjà envoyé une invitation à %s</string>
     <string name="tchap_invite_not_sent_for_discovered_user">Ce contact utilise déjà ${app_name}, vous pouvez dès à présent lui envoyer un message.</string>
     <string name="tchap_invite_unauthorized_message">Il n\'est pas possible d\'inviter : %s</string>

@@ -51,13 +51,13 @@ set -e
 printf "\n================================================================================\n"
 printf "Unzipping the artifact...\n"
 
-unzip ${PARAM_DIRECTORY}/GplayTchapWithdmvoipWithpinning-release-unsigned.zip -d ${PARAM_DIRECTORY}
-unzip ${PARAM_DIRECTORY}/FdroidTchapWithdmvoipWithoutpinning-release-unsigned.zip -d ${PARAM_DIRECTORY}
+unzip ${PARAM_DIRECTORY}/GplayTchapWithpinning-release-unsigned.zip -d ${PARAM_DIRECTORY}
+unzip ${PARAM_DIRECTORY}/FdroidTchapWithoutpinning-release-unsigned.zip -d ${PARAM_DIRECTORY}
 
 # Flatten folder hierarchy
-mv ${PARAM_DIRECTORY}/gplayTchapWithdmvoipWithpinning/release/* ${PARAM_DIRECTORY}
-mv ${PARAM_DIRECTORY}/fdroidTchapWithdmvoipWithoutpinning/release/* ${PARAM_DIRECTORY}
-rm -rf ${PARAM_DIRECTORY}/gplayTchapWithdmvoipWithpinning ${PARAM_DIRECTORY}/fdroidTchapWithdmvoipWithoutpinning
+mv ${PARAM_DIRECTORY}/gplayTchapWithpinning/release/* ${PARAM_DIRECTORY}
+mv ${PARAM_DIRECTORY}/fdroidTchapWithoutpinning/release/* ${PARAM_DIRECTORY}
+rm -rf ${PARAM_DIRECTORY}/gplayTchapWithpinning ${PARAM_DIRECTORY}/fdroidTchapWithoutpinning
 
 read -s -p "Enter your PIN: " pin
 

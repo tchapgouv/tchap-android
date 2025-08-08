@@ -18,6 +18,7 @@ package im.vector.app.features.call.conference
 
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.raw.wellknown.getElementWellknown
+import im.vector.lib.core.utils.timer.Clock
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
@@ -28,11 +29,13 @@ import javax.inject.Inject
 class JitsiService @Inject constructor(
         private val session: Session,
         private val rawService: RawService,
-        private val stringProvider: StringProvider) {
+        private val stringProvider: StringProvider,
+        private val clock: Clock,
+) {
 
     suspend fun createJitsiWidget(roomId: String, withVideo: Boolean): Widget {
         // Build data for a jitsi widget
-        val widgetId: String = WidgetType.Jitsi.preferred + "_" + session.myUserId + "_" + System.currentTimeMillis()
+        val widgetId: String = WidgetType.Jitsi.preferred + "_" + session.myUserId + "_" + clock.epochMillis()
         val preferredJitsiDomain = tryOrNull {
             rawService.getElementWellknown(session.sessionParams)
                     ?.jitsiServer

@@ -19,12 +19,11 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.home.ShortcutCreator
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
+import im.vector.app.features.powerlevel.isLastAdminFlow
 import im.vector.app.features.session.coroutineScope
 import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
@@ -39,11 +38,7 @@ import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
-import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
-import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.flow.FlowRoom
 import org.matrix.android.sdk.flow.flow
@@ -75,8 +70,15 @@ class RoomProfileViewModel @AssistedInject constructor(
         observeBannedRoomMembers(flowRoom)
         observePermissions()
         observePowerLevels()
-        observeAdminMembers()
         observeCryptoSettings(flowRoom)
+        observeIsLastAdmin()
+    }
+
+    private fun observeIsLastAdmin() {
+        room.isLastAdminFlow(session.myUserId)
+                .onEach { isLastAdmin ->
+                    setState { copy(isLastAdmin = isLastAdmin) }
+                }.launchIn(viewModelScope)
     }
 
     private fun observeCryptoSettings(flowRoom: FlowRoom) {
@@ -118,11 +120,10 @@ class RoomProfileViewModel @AssistedInject constructor(
     }
 
     private fun observePowerLevels() {
-        val powerLevelsContentLive = PowerLevelsFlowFactory(room).createFlow()
+        val powerLevelsContentLive = room.flow().liveRoomPowerLevels()
         powerLevelsContentLive
-                .onEach {
-                    val powerLevelsHelper = PowerLevelsHelper(it)
-                    val canUpdateRoomState = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
+                .onEach { roomPowerLevels ->
+                    val canUpdateRoomState = roomPowerLevels.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
                     setState {
                         copy(canUpdateRoomState = canUpdateRoomState)
                     }
@@ -161,43 +162,13 @@ class RoomProfileViewModel @AssistedInject constructor(
     }
 
     private fun observePermissions() {
-        PowerLevelsFlowFactory(room)
-                .createFlow()
-                .setOnEach {
-                    val powerLevelsHelper = PowerLevelsHelper(it)
+        room.flow().liveRoomPowerLevels()
+                .setOnEach { roomPowerLevels ->
                     val permissions = RoomProfileViewState.ActionPermissions(
-                            canEnableEncryption = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
+                            canEnableEncryption = roomPowerLevels.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
                     )
                     copy(actionPermissions = permissions)
                 }
-    }
-
-    // TCHAP Observe the admin members to know if the user is the last admin of the room
-    private fun observeAdminMembers() {
-        val roomMemberQueryParams = roomMemberQueryParams {
-            displayName = QueryStringValue.IsNotEmpty
-            memberships = Membership.activeMemberships()
-        }
-
-        combine(
-                room.flow().liveRoomMembers(roomMemberQueryParams),
-                room.flow()
-                        .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
-                        .mapOptional { it.content.toModel<PowerLevelsContent>() }
-                        .unwrap()
-        ) { roomMembers, powerLevelsContent ->
-            buildAdminMembersList(powerLevelsContent, roomMembers)
-        }
-                .distinctUntilChanged()
-                .setOnEach { adminsMembers ->
-                    copy(isLastAdmin = adminsMembers.singleOrNull()?.userId == session.myUserId)
-                }
-    }
-
-    private fun buildAdminMembersList(powerLevelsContent: PowerLevelsContent, roomMembers: List<RoomMemberSummary>): List<RoomMemberSummary> {
-        return roomMembers.filter { roomMember ->
-            PowerLevelsHelper(powerLevelsContent).getUserRole(roomMember.userId) == Role.Admin
-        }
     }
 
     override fun handle(action: RoomProfileAction) {

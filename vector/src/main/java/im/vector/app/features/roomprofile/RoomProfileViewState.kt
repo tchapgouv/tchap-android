@@ -20,7 +20,6 @@ data class RoomProfileViewState(
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val roomCreateContent: Async<RoomCreateContent> = Uninitialized,
         val bannedMembership: Async<List<RoomMemberSummary>> = Uninitialized,
-        val isLastAdmin: Boolean = false,
         val actionPermissions: ActionPermissions = ActionPermissions(),
         val isLoading: Boolean = false,
         val isUsingUnstableRoomVersion: Boolean = false,
@@ -31,6 +30,7 @@ data class RoomProfileViewState(
         val encryptToVerifiedDeviceOnly: Async<Boolean> = Uninitialized,
         val globalCryptoConfig: Async<GlobalCryptoConfig> = Uninitialized,
         val unverifiedDevicesInTheRoom: Async<Boolean> = Uninitialized,
+        val isLastAdmin: Boolean = false
 ) : MavericksState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)

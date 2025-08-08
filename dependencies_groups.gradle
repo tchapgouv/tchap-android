@@ -214,6 +214,7 @@ ext.groups = [
                         'org.jitsi',
                         'org.json',
                         'org.jsoup',
+                        'org.jspecify',
                         'org.junit',
                         'org.junit.jupiter',
                         'org.junit.platform',
