@@ -71,27 +71,39 @@ object Config {
     const val ENABLE_STRICT_MODE_LOGS = false
 
     /**
-     * The analytics configuration to use for the Debug build type.
+     * The analytics configuration to use for the Dev environment.
      * Can be disabled by providing Analytics.Disabled
      */
-    val DEBUG_ANALYTICS_CONFIG = Analytics.Enabled(
-            postHogHost = "https://us.i.posthog.com", // TCHAP dev posthog
-            postHogApiKey = "phc_eQOeaQiaIxdX9kaQmqYTD7RJLyFubYmGYKUI9czqqQD", // TCHAP dev posthog
+    val DEV_ANALYTICS_CONFIG = Analytics.Enabled(
+            postHogHost = "https://posthog.tchap.incubateur.net",
+            postHogApiKey = "phc_yf5yr3PrgiUTZMZpSmUlR6hdtqAejwhcUMQGsK8Nx5w",
             policyLink = "https://tchap.numerique.gouv.fr/politique-de-confidentialite",
             sentryDSN = "",
-            sentryEnvironment = "DEBUG"
+            sentryEnvironment = "DEV"
     )
 
     /**
-     * The analytics configuration to use for the Release build type.
+     * The analytics configuration to use for the Staging environment.
      * Can be disabled by providing Analytics.Disabled
      */
-    val RELEASE_ANALYTICS_CONFIG = Analytics.Enabled(
-            postHogHost = "https://posthogdev.tchap.incubateur.net", // TCHAP prod posthog
-            postHogApiKey = "phc_FFa4pkvmuWjF9nZOMmYJWUXMibuYnCnPyf3DqPGZs4L", // TCHAP prod posthog
+    val STAGING_ANALYTICS_CONFIG = Analytics.Enabled(
+            postHogHost = "https://posthog.preprod.tchap.numerique.gouv.fr/",
+            postHogApiKey = "phc_yf5yr3PrgiUTZMZpSmUlR6hdtqAejwhcUMQGsK8Nx5w",
             policyLink = "https://tchap.numerique.gouv.fr/politique-de-confidentialite",
             sentryDSN = "",
-            sentryEnvironment = "RELEASE"
+            sentryEnvironment = "STAGING"
+    )
+
+    /**
+     * The analytics configuration to use for the Prod environment.
+     * Can be disabled by providing Analytics.Disabled
+     */
+    val PROD_ANALYTICS_CONFIG = Analytics.Enabled(
+            postHogHost = "https://posthog.tchap.numerique.gouv.fr",
+            postHogApiKey = "phc_gm2O25mu8NTQtKpozdoVwZCixWqdq7PUHLLjDNDzVIe",
+            policyLink = "https://tchap.numerique.gouv.fr/politique-de-confidentialite",
+            sentryDSN = "",
+            sentryEnvironment = "PROD"
     )
 
     /**
