@@ -26,6 +26,7 @@ interface PermalinkService {
 
     companion object {
         const val MATRIX_TO_URL_BASE = "https://matrix.to/#/"
+        const val TCHAP_PERMALINK_BASE_URL: String = "https://tchap.gouv.fr/#/"
     }
 
     enum class SpanTemplateType {

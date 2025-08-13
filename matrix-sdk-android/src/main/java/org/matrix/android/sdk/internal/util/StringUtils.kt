@@ -80,6 +80,18 @@ internal val spaceChars = "[\u00A0\u2000-\u200B\u2800\u3000]".toRegex()
  */
 internal fun String.replaceSpaceChars(replacement: String = "") = replace(spaceChars, replacement)
 
+/**
+ * Replace the old prefix with the new prefix.
+ * If the string does not start with the old prefix, the string is returned as is.
+ */
+internal fun String.replacePrefix(oldPrefix: String, newPrefix: String): String {
+    return if (startsWith(oldPrefix)) {
+        newPrefix + substring(oldPrefix.length)
+    } else {
+        this
+    }
+}
+
 // String.capitalize is now deprecated
 internal fun String.safeCapitalize(): String {
     return replaceFirstChar { char ->

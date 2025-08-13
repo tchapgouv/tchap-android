@@ -17,6 +17,8 @@
 package org.matrix.android.sdk.api.session.permalinks
 
 import android.net.Uri
+import androidx.core.net.toUri
+import org.matrix.android.sdk.internal.util.replacePrefix
 
 /**
  * Mapping of an input URI to a matrix.to compliant URI.
@@ -30,23 +32,34 @@ object MatrixToConverter {
      * - https://riot.im/develop/#/room/#element-android:matrix.org  ->  https://matrix.to/#/#element-android:matrix.org
      * - https://app.element.io/#/room/#element-android:matrix.org   ->  https://matrix.to/#/#element-android:matrix.org
      * - https://www.example.org/#/room/#element-android:matrix.org  ->  https://matrix.to/#/#element-android:matrix.org
+     * - https://tchap.gouv.fr/#/#element-android:matrix.org         ->  https://matrix.to/#/#element-android:matrix.org
+     * Also convert links coming from the matrix.to website:
+     * - tchap://room/#element-android:matrix.org                  ->  https://matrix.to/#/#element-android:matrix.org
+     * - tchap://user/@alice:matrix.org                            ->  https://matrix.to/#/@alice:matrix.org
      */
     fun convert(uri: Uri): Uri? {
         val uriString = uri.toString()
+                // Handle links coming from the matrix.to website.
+                .replacePrefix(MATRIX_TO_CUSTOM_SCHEME_BASE_URL, PermalinkService.TCHAP_PERMALINK_BASE_URL)
+        val baseUrl = PermalinkService.MATRIX_TO_URL_BASE
+        val tchapBaseUrl = PermalinkService.TCHAP_PERMALINK_BASE_URL // Parse tchap.gouv.fr permalinks
 
         return when {
             // URL is already a matrix.to
-            uriString.startsWith(PermalinkService.MATRIX_TO_URL_BASE) -> uri
+            uriString.startsWith(baseUrl) -> uri
             // Web or client url
             SUPPORTED_PATHS.any { it in uriString } -> {
                 val path = SUPPORTED_PATHS.first { it in uriString }
-                Uri.parse(PermalinkService.MATRIX_TO_URL_BASE + uriString.substringAfter(path))
+                (baseUrl + uriString.substringAfter(path)).toUri()
             }
+            // URL is already a tchap.gouv.fr (match after SUPPORTED_PATHS to allow https://tchap.gouv.fr/#/[room|user|group])
+            uriString.startsWith(tchapBaseUrl) -> (baseUrl + uriString.substringAfter(tchapBaseUrl)).toUri()
             // URL is not supported
             else -> null
         }
     }
 
+    private const val MATRIX_TO_CUSTOM_SCHEME_BASE_URL = "tchap://"
     private val SUPPORTED_PATHS = listOf(
             "/#/room/",
             "/#/user/",
