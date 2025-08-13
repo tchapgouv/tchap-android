@@ -78,9 +78,8 @@ android {
 
     // The 'store' dimension permits to deal with GooglePlay/Fdroid app
     // The 'target' dimension permits to specify which platform are used
-    // The 'voip' flavor dimension permits to include/exclude jitsi at compilation time
     // The 'pinning' flavor dimension permits to enable/disable certificate pinning with fingerprint check
-    flavorDimensions = ["store", "target", "voip", "pinning"]
+    flavorDimensions = ["store", "target", "pinning"]
 
     productFlavors {
         gplay {
@@ -90,9 +89,6 @@ android {
         fdroid {
             dimension "store"
         }
-
-        withvoip { dimension "voip" }
-        withdmvoip { dimension "voip" }
 
         withpinning { dimension "pinning" }
         withoutpinning { dimension "pinning" }
@@ -269,7 +265,7 @@ dependencies {
     kapt libs.dagger.hiltCompiler
 
     // Analytics
-    implementation 'com.posthog:posthog-android:3.2.0'
+    implementation 'com.posthog:posthog-android:3.20.2'
     implementation libs.sentry.sentryAndroid
 
     // UnifiedPush
@@ -277,26 +273,11 @@ dependencies {
 
     implementation "androidx.emoji2:emoji2:1.3.0"
 
-    // TCHAP Manage jitsi lib
+    // TCHAP Exclude jitsi lib
     // Guava
-    implementation('com.google.guava:guava:33.2.1-android')
+    implementation('com.google.guava:guava:33.4.8-android')
     // WebRTC
-    withdmvoipImplementation('com.github.tchapgouv:webrtc:124.2.0')
-    // Jitsi
-    withvoipApi('org.jitsi.react:jitsi-meet-sdk:10.2.0') {
-        exclude group: 'com.google.firebase'
-        exclude group: 'com.google.android.gms'
-        exclude group: 'com.android.installreferrer'
-        exclude group: 'com.android.guava'
-
-        // Exclude jitsi's android-scalablevideoview fork's support library
-        // The library exports a jetified artifact but doesn't remove the support library dependency
-        // https://github.com/MatrixFrog/Android-ScalableVideoView/blob/master/gradle.properties#L1
-        exclude group: 'com.android.support', module: 'appcompat-v7'
-
-        // transitive needed to pull in the react-native dependency
-        transitive = true
-    }
+    implementation('com.github.tchapgouv:webrtc:124.2.0')
 
     // TCHAP Fix issue on okhttp3 import
     api 'com.squareup.okhttp3:okhttp'

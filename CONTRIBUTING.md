@@ -139,8 +139,8 @@ The CI will check that markdown files are up to date by running
 #### lint
 
 <pre>
-./gradlew lintGplayBtchapWithdmvoipWithpinningRelease
-./gradlew lintFdroidBtchapWithdmvoipWithoutpinningRelease
+./gradlew lintGplayBtchapWithpinningRelease
+./gradlew lintFdroidBtchapWithoutpinningRelease
 </pre>
 
 ### Unit tests
@@ -148,7 +148,7 @@ The CI will check that markdown files are up to date by running
 Make sure the following commands execute without any error:
 
 <pre>
-./gradlew testGplayBtchapWithdmvoipWithoutpinningReleaseUnitTest
+./gradlew testGplayBtchapWithoutpinningReleaseUnitTest
 </pre>
 
 ### Tests

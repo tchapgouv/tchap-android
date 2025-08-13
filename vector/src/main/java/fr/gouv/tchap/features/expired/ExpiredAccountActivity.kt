@@ -18,6 +18,7 @@ package fr.gouv.tchap.features.expired
 
 import android.content.Context
 import android.content.Intent
+import android.view.View
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,6 +41,9 @@ class ExpiredAccountActivity : VectorBaseActivity<ActivityTchapExpiredBinding>()
     private val viewModel: ExpiredAccountViewModel by viewModel()
 
     override fun getBinding() = ActivityTchapExpiredBinding.inflate(layoutInflater)
+
+    override val rootView: View
+        get() = views.expiredAccount
 
     override fun create(initialState: ExpiredAccountViewState): ExpiredAccountViewModel {
         return expiredAccountFactory.create(initialState)
