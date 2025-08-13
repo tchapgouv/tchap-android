@@ -29,8 +29,9 @@ object ConfigurationModule {
     @Provides
     fun providesAnalyticsConfig(): AnalyticsConfig {
         val config: Analytics = when (BuildConfig.FLAVOR_target) {
-            "tchap" -> Config.RELEASE_ANALYTICS_CONFIG
-            "btchap", "devTchap" -> Config.TEST_ANALYTICS_CONFIG
+            "tchap" -> Config.PROD_ANALYTICS_CONFIG
+            "btchap" -> Config.STAGING_ANALYTICS_CONFIG
+            "devTchap" -> Config.DEV_ANALYTICS_CONFIG
             else -> throw IllegalStateException("Unhandled build type: ${BuildConfig.FLAVOR_target}")
         }
         return when (config) {
