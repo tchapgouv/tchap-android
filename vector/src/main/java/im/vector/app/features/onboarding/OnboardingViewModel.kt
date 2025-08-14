@@ -15,6 +15,7 @@ import dagger.assisted.AssistedInject
 import fr.gouv.tchap.features.platform.GetPlatformResult
 import fr.gouv.tchap.features.platform.Params
 import fr.gouv.tchap.features.platform.TchapGetPlatformTask
+import fr.gouv.tchap.onboarding.TchapWeakPasswordException
 import im.vector.app.R
 import im.vector.app.config.Config
 import im.vector.app.config.SunsetConfig
@@ -818,10 +819,10 @@ class OnboardingViewModel @AssistedInject constructor(
                     setState { copy(isLoading = false) }
                     _viewEvents.post(OnboardingViewEvents.Failure(MasSupportRequiredException()))
                 } else {
-                    internalRegisterAction(RegisterAction.StartRegistration) {
-                        updateServerSelection(config, serverTypeOverride, authResult)
-                        _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
-                    }
+                    // TCHAP update homeserver selection even if registration is not possible on this server.
+                    updateServerSelection(config, serverTypeOverride, authResult)
+                    _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
+                    internalRegisterAction(RegisterAction.StartRegistration)
                 }
             }
             OnboardingFlow.TchapSignInWithSSO,
@@ -1038,7 +1039,7 @@ class OnboardingViewModel @AssistedInject constructor(
                     } ?: true
 
                     if (!isValid) {
-                        _viewEvents.post(OnboardingViewEvents.Failure(Throwable(stringProvider.getString(CommonStrings.tchap_password_weak_pwd_error))))
+                        _viewEvents.post(OnboardingViewEvents.Failure(TchapWeakPasswordException()))
                     } else {
                         onSuccess.invoke()
                     }
