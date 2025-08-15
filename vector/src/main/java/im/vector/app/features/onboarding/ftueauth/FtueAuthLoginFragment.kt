@@ -325,24 +325,8 @@ class FtueAuthLoginFragment :
             throwable.isWeakPassword() || throwable.isInvalidPassword() || throwable is TchapWeakPasswordException -> {
                 views.passwordFieldTil.error = getString(CommonStrings.tchap_password_weak_pwd_error)
             }
-            isSignupMode && throwable.isRegistrationDisabled() -> {
-                MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(CommonStrings.dialog_title_warning)
-                        .setMessage(getString(CommonStrings.tchap_login_mas_enabled))
-                        .setPositiveButton(CommonStrings.ok) { _, _ -> withState(viewModel) {
-                            state -> tchap.loginOrRegisterSSO(state, SSOAction.REGISTER) }
-                        }
-                        .show()
-            }
-            throwable is Failure.ServerError && throwable.error.code == MatrixError.M_UNKNOWN && throwable.error.message == "Unsupported login identifier" -> {
-                MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(CommonStrings.dialog_title_warning)
-                        .setMessage(getString(CommonStrings.tchap_login_mas_enabled))
-                        .setPositiveButton(CommonStrings.ok) { _, _ -> withState(viewModel) {
-                            state -> tchap.loginOrRegisterSSO(state, SSOAction.LOGIN) }
-                        }
-                        .show()
-            }
+            isSignupMode && throwable.isRegistrationDisabled() -> tchap.showMasDialog(SSOAction.REGISTER)
+            throwable.isUnsupportedLoginIdentifier() -> tchap.showMasDialog(SSOAction.LOGIN)
             else -> {
                 super.onError(throwable)
             }
@@ -369,8 +353,13 @@ class FtueAuthLoginFragment :
      */
     private fun spaceInPassword() = views.passwordField.text.toString().let { it.trim() != it }
 
-    private inner class Tchap {
+    private fun Throwable.isUnsupportedLoginIdentifier(): Boolean {
+        return this is Failure.ServerError &&
+                error.code == MatrixError.M_UNKNOWN &&
+                error.message == "Unsupported login identifier"
+    }
 
+    private inner class Tchap {
         // TCHAP Add SuppressLint to fix a false positive
         @SuppressLint("StringFormatInvalid")
         fun setupUi(state: OnboardingViewState) {
@@ -412,6 +401,16 @@ class FtueAuthLoginFragment :
             }
         }
 
+        fun showMasDialog(action: SSOAction) {
+            MaterialAlertDialogBuilder(requireActivity())
+                    .setTitle(CommonStrings.dialog_title_warning)
+                    .setMessage(getString(CommonStrings.tchap_login_mas_enabled))
+                    .setPositiveButton(CommonStrings.ok) { _, _ -> withState(viewModel) {
+                        state -> tchap.loginOrRegisterSSO(state, action) }
+                    }
+                    .show()
+        }
+
         fun tryLoginSSO(state: OnboardingViewState) {
             if (state.signMode != SignMode.TchapSignInWithSSO) return
             if (views.loginSocialLoginButtons.ssoIdentityProviders.isNullOrEmpty() && !state.selectedHomeserver.hasOidcCompatibilityFlow) {
@@ -423,7 +422,7 @@ class FtueAuthLoginFragment :
             loginOrRegisterSSO(state, SSOAction.LOGIN)
         }
 
-        fun loginOrRegisterSSO(state: OnboardingViewState, action: SSOAction) {
+        private fun loginOrRegisterSSO(state: OnboardingViewState, action: SSOAction) {
             if (views.loginField.text.isNullOrEmpty() || !views.loginField.text.toString().isEmail()) return
             if (state.selectedHomeserver.upstreamUrl.isNullOrEmpty()) return
 
