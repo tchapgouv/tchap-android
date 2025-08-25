@@ -22,6 +22,7 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import fr.gouv.tchap.onboarding.TchapWeakPasswordException
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
@@ -48,6 +49,8 @@ import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.auth.SSOAction
 import org.matrix.android.sdk.api.extensions.isEmail
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.failure.isInvalidUsername
 import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
@@ -241,6 +244,7 @@ class FtueAuthLoginFragment :
                     views.loginServerIcon.isVisible = false
                     views.loginNotice.isVisible = false
                     if (state.signMode == SignMode.TchapSignInWithSSO) {
+                        views.loginField.setText(state.emailPasswordToReset)
                         views.loginTitle.text = getString(resId, TCHAP_SSO_PROVIDER)
                     } else {
                         views.loginTitle.text = getString(resId, buildMeta.applicationName)
@@ -319,16 +323,11 @@ class FtueAuthLoginFragment :
             throwable.isInvalidPassword() && spaceInPassword() -> {
                 views.passwordFieldTil.error = getString(CommonStrings.auth_invalid_login_param_space_in_password)
             }
-            throwable.isWeakPassword() || throwable.isInvalidPassword() -> {
-                views.passwordFieldTil.error = errorFormatter.toHumanReadable(throwable)
+            throwable.isWeakPassword() || throwable.isInvalidPassword() || throwable is TchapWeakPasswordException -> {
+                views.passwordFieldTil.error = getString(CommonStrings.tchap_password_weak_pwd_error)
             }
-            isSignupMode && throwable.isRegistrationDisabled() -> {
-                MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(CommonStrings.dialog_title_error)
-                        .setMessage(getString(CommonStrings.login_registration_disabled))
-                        .setPositiveButton(CommonStrings.ok, null)
-                        .show()
-            }
+            isSignupMode && throwable.isRegistrationDisabled() -> tchap.showMasDialog(SSOAction.REGISTER)
+            throwable.isUnsupportedLoginIdentifier() -> tchap.showMasDialog(SSOAction.LOGIN)
             else -> {
                 super.onError(throwable)
             }
@@ -342,6 +341,10 @@ class FtueAuthLoginFragment :
         tchap.setupUi(state)
         setupAutoFill(state)
         setupButtons(state)
+
+        if (state.emailPasswordToReset != null) {
+            submit()
+        }
         tchap.tryLoginSSO(state)
 
         if (state.isLoading) {
@@ -355,8 +358,13 @@ class FtueAuthLoginFragment :
      */
     private fun spaceInPassword() = views.passwordField.text.toString().let { it.trim() != it }
 
-    private inner class Tchap {
+    private fun Throwable.isUnsupportedLoginIdentifier(): Boolean {
+        return this is Failure.ServerError &&
+                error.code == MatrixError.M_UNKNOWN &&
+                error.message == "Unsupported login identifier"
+    }
 
+    private inner class Tchap {
         // TCHAP Add SuppressLint to fix a false positive
         @SuppressLint("StringFormatInvalid")
         fun setupUi(state: OnboardingViewState) {
@@ -398,26 +406,43 @@ class FtueAuthLoginFragment :
             }
         }
 
+        fun showMasDialog(action: SSOAction) {
+            MaterialAlertDialogBuilder(requireActivity())
+                    .setTitle(CommonStrings.dialog_title_warning)
+                    .setMessage(getString(CommonStrings.tchap_login_mas_enabled))
+                    .setPositiveButton(CommonStrings.ok) { _, _ -> withState(viewModel) {
+                        state -> tchap.loginOrRegisterSSO(state, action) }
+                    }
+                    .show()
+        }
+
         fun tryLoginSSO(state: OnboardingViewState) {
             if (state.signMode != SignMode.TchapSignInWithSSO) return
-            if (views.loginField.text.isNullOrEmpty() || !views.loginField.text.toString().isEmail()) return
-            if (state.selectedHomeserver.upstreamUrl.isNullOrEmpty()) return
             if (views.loginSocialLoginButtons.ssoIdentityProviders.isNullOrEmpty() && !state.selectedHomeserver.hasOidcCompatibilityFlow) {
                 views.loginFieldTil.error = getString(CommonStrings.tchap_auth_sso_inactive, TCHAP_SSO_PROVIDER)
                 viewModel.handle(OnboardingAction.ResetHomeServerUrl)
                 return
             }
 
+            loginOrRegisterSSO(state, SSOAction.LOGIN)
+        }
+
+        private fun loginOrRegisterSSO(state: OnboardingViewState, action: SSOAction) {
+            if (views.loginField.text.isNullOrEmpty() || !views.loginField.text.toString().isEmail()) return
+            if (state.selectedHomeserver.upstreamUrl.isNullOrEmpty()) return
+
             viewModel.fetchSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     loginHint = views.loginField.text.toString(),
                     deviceId = state.deviceId,
                     provider = views.loginSocialLoginButtons.ssoIdentityProviders?.first(),
-                    action = SSOAction.LOGIN
+                    action = action
             )
                     ?.let { url -> openInCustomTab(url) }
 
             views.loginField.text?.clear()
+            views.passwordField.text?.clear()
+            views.tchapPasswordConfirmationField.text?.clear()
         }
     }
 }
