@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.clearErrorOnChange
@@ -21,6 +22,8 @@ import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.isEmail
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
 
 @AndroidEntryPoint
 class FtueAuthResetPasswordEmailEntryFragment :
@@ -54,10 +57,23 @@ class FtueAuthResetPasswordEmailEntryFragment :
     }
 
     override fun onError(throwable: Throwable) {
-        views.emailEntryInput.error = errorFormatter.toHumanReadable(throwable)
+        when {
+            throwable.isUnrecognizedRequest() -> {
+                MaterialAlertDialogBuilder(requireActivity())
+                        .setTitle(CommonStrings.dialog_title_warning)
+                        .setMessage(getString(CommonStrings.tchap_login_mas_enabled))
+                        .setPositiveButton(CommonStrings.ok) { _, _ -> viewModel.handle(OnboardingAction.ResetMasPassword) }
+                        .show()
+            }
+            else -> {
+                views.emailEntryInput.error = errorFormatter.toHumanReadable(throwable)
+            }
+        }
     }
 
     override fun resetViewModel() {
         viewModel.handle(OnboardingAction.ResetResetPassword)
     }
+
+    private fun Throwable.isUnrecognizedRequest() = this is Failure.ServerError && error.code == MatrixError.M_UNRECOGNIZED
 }

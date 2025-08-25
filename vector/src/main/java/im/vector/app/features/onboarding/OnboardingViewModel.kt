@@ -64,6 +64,7 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationAvailability
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.isHomeserverConnectionError
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.failure.isUnrecognisedCertificate
@@ -165,6 +166,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.ResetPassword -> handleResetPassword(action)
             OnboardingAction.ResendResetPassword -> handleResendResetPassword()
             is OnboardingAction.ConfirmNewPassword -> tchap.handleResetPasswordConfirmed(action)
+            OnboardingAction.ResetMasPassword -> tchap.handleResetMasPassword()
             is OnboardingAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
             is OnboardingAction.PostRegisterAction -> handleRegisterAction(action.registerAction)
             is OnboardingAction.ResetAction -> handleResetAction(action)
@@ -542,6 +544,15 @@ class OnboardingViewModel @AssistedInject constructor(
                     onSuccess = { onSuccess.invoke() },
                     onFailure = {
                         setState { copy(isLoading = false) }
+                        if (it is Failure.ServerError && it.error.code == MatrixError.M_UNRECOGNIZED) {
+                            setState {
+                                copy(
+                                        emailPasswordToReset = email,
+                                        onboardingFlow = OnboardingFlow.TchapSignInWithSSO,
+                                        signMode = SignMode.TchapSignInWithSSO
+                                )
+                            }
+                        }
                         _viewEvents.post(OnboardingViewEvents.Failure(it))
                     }
             )
@@ -982,6 +993,10 @@ class OnboardingViewModel @AssistedInject constructor(
             }
         }
 
+        fun handleResetMasPassword() {
+            _viewEvents.post(OnboardingViewEvents.OnResetPasswordFailed)
+        }
+
         fun handleResetPasswordConfirmed(action: OnboardingAction.ConfirmNewPassword) {
             checkPasswordPolicy(action.newPassword) {
                 this@OnboardingViewModel.handleResetPasswordConfirmed(action)
@@ -995,6 +1010,7 @@ class OnboardingViewModel @AssistedInject constructor(
         }
 
         fun handleLoginWithSSO(action: OnboardingAction.LoginWithSSO) {
+            setState { copy(emailPasswordToReset = null) }
             startTchapAuthenticationFlow(action.email) {}
         }
 

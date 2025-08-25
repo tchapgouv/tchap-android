@@ -244,6 +244,7 @@ class FtueAuthLoginFragment :
                     views.loginServerIcon.isVisible = false
                     views.loginNotice.isVisible = false
                     if (state.signMode == SignMode.TchapSignInWithSSO) {
+                        views.loginField.setText(state.emailPasswordToReset)
                         views.loginTitle.text = getString(resId, TCHAP_SSO_PROVIDER)
                     } else {
                         views.loginTitle.text = getString(resId, buildMeta.applicationName)
@@ -340,6 +341,10 @@ class FtueAuthLoginFragment :
         tchap.setupUi(state)
         setupAutoFill(state)
         setupButtons(state)
+
+        if (state.emailPasswordToReset != null) {
+            submit()
+        }
         tchap.tryLoginSSO(state)
 
         if (state.isLoading) {
