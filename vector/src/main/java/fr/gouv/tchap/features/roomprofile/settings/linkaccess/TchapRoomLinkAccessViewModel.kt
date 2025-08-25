@@ -24,7 +24,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
@@ -37,7 +36,6 @@ import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.mapOptional
 import org.matrix.android.sdk.flow.unwrap
@@ -100,11 +98,10 @@ class TchapRoomLinkAccessViewModel @AssistedInject constructor(
     }
 
     private fun observePowerLevel() {
-        PowerLevelsFlowFactory(room).createFlow()
+        room.flow().liveRoomPowerLevels()
                 .onEach {
-                    val powerLevelsHelper = PowerLevelsHelper(it)
                     setState {
-                        copy(canChangeLinkAccess = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_CANONICAL_ALIAS))
+                        copy(canChangeLinkAccess = it.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_CANONICAL_ALIAS))
                     }
                 }.launchIn(viewModelScope)
     }

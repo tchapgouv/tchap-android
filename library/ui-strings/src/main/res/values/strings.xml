@@ -120,6 +120,7 @@
     <string name="notice_widget_modified">%1$s modified %2$s widget</string>
     <string name="notice_widget_modified_by_you">You modified %1$s widget</string>
 
+    <string name="power_level_owner">Owner</string>
     <string name="power_level_admin">Admin</string>
     <string name="power_level_moderator">Moderator</string>
     <string name="power_level_default">Default</string>
@@ -685,6 +686,7 @@
     <string name="room_participants_leave_prompt_title">Leave room</string>
     <string name="room_participants_leave_prompt_msg">Are you sure you want to leave the room?</string>
     <string name="room_participants_leave_private_warning">This room is not public. You will not be able to rejoin without an invite.</string>
+    <string name="room_participants_leave_last_admin">The room will no longer be administered, and you may not be able to join it again.</string> <!-- Tchap: Use custom string -->
 
     <string name="room_participants_header_direct_chats">Direct Messages</string>
 
@@ -2384,6 +2386,7 @@
     <string name="room_member_power_level_invites">Invites</string>
     <string name="room_member_power_level_users">Users</string>
 
+    <string name="room_member_power_level_owner_in">Owner in %1$s</string>
     <string name="room_member_power_level_admin_in">Admin in %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderator in %1$s</string>
     <string name="room_member_power_level_default_in">Default in %1$s</string>
@@ -2545,7 +2548,7 @@
 
     <string name="new_session">New login. Was this you?</string>
     <string name="verify_new_session_notice">Use this session to verify your new one, granting it access to encrypted messages.</string>
-    <string name="verification_request_was_sent">A verification request has been sent. Open one of your other sessions to accept and start the verification.</string>
+    <string name="verification_request_was_sent">A verification request has been sent. Open ${app_name} on one of your other devices to accept and start verification.</string> <!-- Tchap: Use custom string -->
     <string name="verify_new_session_was_not_me">This wasn’t me</string>
     <!-- TODO TO BE REMOVED -->
     <string tools:ignore="UnusedResources" name="verify_new_session_compromized">Your account may be compromised</string>

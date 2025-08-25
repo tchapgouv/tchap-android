@@ -8,16 +8,16 @@
 package im.vector.app.features.rageshake
 
 import android.annotation.SuppressLint
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothHeadset
-import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.media.AudioDeviceInfo
+import android.media.AudioManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
@@ -371,7 +371,9 @@ class BugReporter @Inject constructor(
                             builder.addFormDataPart("label", "voip-feedback")
                             builder.addFormDataPart("context", "voip")
                             builder.addFormDataPart("connection", getConnectionType())
-                            builder.addFormDataPart("audio_input", getAudioInterface())
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                builder.addFormDataPart("audio_input", getAudioInterface())
+                            }
                         }
                         ReportType.SUGGESTION -> builder.addFormDataPart("label", "[Suggestion]")
                         ReportType.SPACE_BETA_FEEDBACK -> builder.addFormDataPart("label", "spaces-feedback")
@@ -572,14 +574,15 @@ class BugReporter @Inject constructor(
     }
 
     // TCHAP check if a headset is connected
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun getAudioInterface() = if (isBluetoothHeadsetConnected()) "headset_bluetooth" else "device"
 
-    private fun isBluetoothHeadsetConnected(): Boolean {
-        val bm: BluetoothManager? = context.getSystemService()
-        return bm?.adapter?.let {
-            it.isEnabled && it.getProfileConnectionState(BluetoothHeadset.HEADSET) == BluetoothAdapter.STATE_CONNECTED
-        } ?: false
-    }
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun isBluetoothHeadsetConnected(): Boolean =
+            context.getSystemService<AudioManager>()?.getDevices(AudioManager.GET_DEVICES_OUTPUTS)?.any {
+                it.type == AudioDeviceInfo.TYPE_BLUETOOTH_SCO || it.type == AudioDeviceInfo.TYPE_BLUETOOTH_A2DP
+            } ?: false
+
 // ==============================================================================================================
 // crash report management
 // ==============================================================================================================

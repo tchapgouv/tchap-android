@@ -74,7 +74,7 @@ Click on the green arrow in front of each test. Clicking on the arrow in front o
 ### From command line
 
 ````shell script
-./gradlew vector:connectedGplayBtchapWithdmvoipWithpinningDebugAndroidTest
+./gradlew vector:connectedGplayBtchapWithpinningDebugAndroidTest
 ````
 
 To run all the tests from the `vector` module.

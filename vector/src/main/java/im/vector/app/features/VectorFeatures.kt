@@ -51,10 +51,10 @@ class DefaultVectorFeatures @Inject constructor(
         private val stringArrayProvider: StringArrayProvider,
         private val booleanProvider: BooleanProvider
 ) : VectorFeatures {
-    override fun tchapIsVisioSupported(homeServerUrl: String) = booleanProvider.getBoolean(im.vector.app.config.R.bool.tchap_is_visio_supported) &&
-        stringArrayProvider.getStringArray(im.vector.app.config.R.array.tchap_is_visio_supported_homeservers).let { homeServerUrls ->
-            homeServerUrls.isEmpty() || homeServerUrls.any { homeServerUrl.contains(it) }
-        }
+    override fun tchapIsVisioSupported(homeServerUrl: String) =
+            stringArrayProvider.getStringArray(im.vector.app.config.R.array.tchap_is_visio_supported_homeservers).let { homeServerUrls ->
+                homeServerUrls.isEmpty() || homeServerUrls.any { homeServerUrl.contains(it) }
+            }
     override fun tchapIsCrossSigningEnabled() = booleanProvider.getBoolean(im.vector.app.config.R.bool.tchap_is_cross_signing_enabled)
     override fun tchapIsKeyBackupEnabled() = booleanProvider.getBoolean(im.vector.app.config.R.bool.tchap_is_key_backup_enabled)
     override fun tchapIsThreadEnabled() = booleanProvider.getBoolean(im.vector.app.config.R.bool.tchap_is_thread_enabled)

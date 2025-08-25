@@ -24,6 +24,8 @@ data class OnboardingViewState(
 
         // User choices
         @PersistState
+        val emailPasswordToReset: String? = null,
+        @PersistState
         val serverType: ServerType = ServerType.Unknown,
         @PersistState
         val useCase: FtueUseCase? = null,

@@ -5,6 +5,7 @@
 
     <!-- tchap Authentication -->
     <string name="start_message">Bienvenue dans ${app_name}</string>
+    <string name="tchap_login_mas_enabled">Pour plus de sécurité, vous allez être redirigé vers le nouveau service d’authentification de ${app_name} depuis le navigateur de votre appareil.</string>
 
     <!-- Register -->
     <string name="tchap_auth_password_dont_match">Les mots de passe ne correspondent pas</string>
@@ -22,15 +23,14 @@
     <string name="tchap_room_creation_private_room_title">Privé</string>
     <string name="tchap_room_creation_extern_room_title">Privé avec externes</string>
     <string name="tchap_room_creation_forum_room_title">Forum</string>
-    <string name="tchap_room_creation_private_room_info">Chiffré et accessible uniquement aux agents publics sur invitation d\'un administrateur.</string>
-    <string name="tchap_room_creation_extern_room_info">Chiffré et accessible à tous les agents publics et aux invités externes sur invitation d\'un administrateur.</string>
-    <string name="tchap_room_creation_forum_room_info">Non chiffré et accessible automatiquement et uniquement à tous les agents publics depuis l\'annuaire (ou un lien partagé).</string>
+    <string name="tchap_room_creation_private_room_info">Chiffré et accessible uniquement aux agents publics sur invitation d’un administrateur.</string>
+    <string name="tchap_room_creation_extern_room_info">Chiffré et accessible à tous les agents publics et aux invités externes sur invitation d’un administrateur.</string>
+    <string name="tchap_room_creation_forum_room_info">Non chiffré et accessible automatiquement et uniquement à tous les agents publics depuis l’annuaire (ou un lien partagé).</string>
 
     <!-- tchap new strings -->
-    <string name="tchap_room_last_admin_leave_prompt_msg">Ce salon ne sera plus administré, et vous risquez de ne plus pouvoir le joindre de nouveau.</string>
     <string name="tchap_invite_already_send_message">Vous avez déjà envoyé une invitation à %s</string>
     <string name="tchap_invite_not_sent_for_discovered_user">Ce contact utilise déjà ${app_name}, vous pouvez dès à présent lui envoyer un message.</string>
-    <string name="tchap_invite_unauthorized_message">Il n\'est pas possible d\'inviter : %s</string>
+    <string name="tchap_invite_unauthorized_message">Il n’est pas possible d’inviter : %s</string>
     <string name="tchap_send_invite_confirmation">Vous recevrez une notification lorsque \n votre invité rejoindra la communauté ${app_name}</string>
     <string name="tchap_invite_sending_succeeded">L’invitation a bien été envoyée.</string>
     <string name="tchap_colon_append">&#160;:</string>

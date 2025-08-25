@@ -5,6 +5,7 @@
 
     <!-- tchap Authentication -->
     <string name="start_message">Welcome to ${app_name}</string>
+    <string name="tchap_login_mas_enabled">For added security, you will be redirected to ${app_name}’s new authentication service via your device’s browser.</string>
 
     <!-- Register -->
     <string name="tchap_auth_password_dont_match">Passwords don’t match</string>
@@ -27,7 +28,6 @@
     <string name="tchap_room_creation_forum_room_info">Unencrypted and accessible automatically and only to all agent users from the forum directory (or a shared link).</string>
 
     <!-- tchap new strings -->
-    <string name="tchap_room_last_admin_leave_prompt_msg">The room will no longer be administered, and you may not be able to join it again</string>
     <string name="tchap_invite_already_send_message">You have already sent an invitation to %s</string>
     <string name="tchap_invite_not_sent_for_discovered_user">This contact already uses ${app_name}, you can send him a message now.</string>
     <string name="tchap_invite_unauthorized_message">Unable to send invite to %s</string>

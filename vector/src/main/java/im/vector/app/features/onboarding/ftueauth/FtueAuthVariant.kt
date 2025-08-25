@@ -166,6 +166,9 @@ class FtueAuthVariant(
                     vectorFeatures.isOnboardingCombinedLoginEnabled() -> addLoginStageFragmentToBackstack(FtueAuthResetPasswordEmailEntryFragment::class.java)
                     else -> addLoginStageFragmentToBackstack(FtueAuthResetPasswordFragment::class.java)
                 }
+            is OnboardingViewEvents.OnResetPasswordFailed -> {
+                supportFragmentManager.popBackStack(TCHAP_FRAGMENT_LOGIN_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            }
             is OnboardingViewEvents.OnResetPasswordEmailConfirmationSent -> {
                 supportFragmentManager.popBackStack(TCHAP_FRAGMENT_LOGIN_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 when {
