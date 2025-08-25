@@ -1,3 +1,20 @@
+Changes in Tchap 2.20.0 (2025-08-25)
+====================================
+
+Features ✨
+----------
+ - Redirection de l'authentification vers le MAS si le service existe. ([#1185](https://github.com/tchapgouv/tchap-android/issues/1185))
+
+Improvements 🙌
+--------------
+ - Rebase against Element-Android v1.6.44 ([#1182](https://github.com/tchapgouv/tchap-android/issues/1182))
+ - Amélioration de la gestion des permaliens Tchap. ([#1184](https://github.com/tchapgouv/tchap-android/issues/1184))
+ - Ajout de l'autorité de certification Certigna Server Authentication OVCP EU CA G1 ([#1186](https://github.com/tchapgouv/tchap-android/issues/1186))
+
+Other changes
+-------------
+ - Mise à jour des URLs PostHog. ([#1183](https://github.com/tchapgouv/tchap-android/issues/1183))
+
 Changes in Tchap 2.19.3 (2025-07-11)
 ====================================
 
