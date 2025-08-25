@@ -822,7 +822,7 @@ class OnboardingViewModel @AssistedInject constructor(
                     // TCHAP update homeserver selection even if registration is not possible on this server.
                     updateServerSelection(config, serverTypeOverride, authResult)
                     _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
-                    internalRegisterAction(RegisterAction.StartRegistration)
+//                    internalRegisterAction(RegisterAction.StartRegistration)
                 }
             }
             OnboardingFlow.TchapSignInWithSSO,
