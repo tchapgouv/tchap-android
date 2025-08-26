@@ -1,3 +1,10 @@
+Changes in Tchap 2.20.2 (2025-08-26)
+====================================
+
+Bugfixes 🐛
+----------
+ - Correction du crash à l'ouverture d'un salon. ([#1187](https://github.com/tchapgouv/tchap-android/issues/1187))
+
 Changes in Tchap 2.20.1 (2025-08-26)
 ====================================
 
