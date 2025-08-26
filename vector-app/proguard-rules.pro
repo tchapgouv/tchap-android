@@ -104,3 +104,7 @@
 -dontwarn java.lang.reflect.AnnotatedType
 -dontwarn jdk.javadoc.doclet.**
 -dontwarn org.checkerframework.**
+
+# TCHAP TagSoup (used by WYSIWYG editor). Keep to avoid access modification/obfuscation on fields
+-dontwarn org.ccil.cowan.tagsoup.**
+-keep class org.ccil.cowan.tagsoup.** { *; }
