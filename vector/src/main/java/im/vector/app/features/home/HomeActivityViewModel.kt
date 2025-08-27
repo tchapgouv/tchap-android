@@ -513,40 +513,46 @@ class HomeActivityViewModel @AssistedInject constructor(
                     _viewEvents.post(HomeActivityViewEvents.StartRecoverySetupFlow)
                 } else {
                     // Initialize cross-signing silently
-                    val password = reAuthHelper.data
-
-                    if (password == null) {
-                        // Check this is not an SSO account
-                        if (session.homeServerCapabilitiesService().getHomeServerCapabilities().canChangePassword) {
-                            // Ask password to the user: Upgrade security
-                            _viewEvents.post(HomeActivityViewEvents.AskPasswordToInitCrossSigning(session.getUserOrDefault(session.myUserId).toMatrixItem()))
-                        }
-                        // Else (SSO) just ignore for the moment
-                    } else {
-                        // Try to initialize cross signing in background if possible
-                        Timber.d("Initialize cross signing...")
-                        try {
-                            session.cryptoService().crossSigningService().awaitCrossSigninInitialization { response, errCode ->
-                                // We missed server grace period or it's not setup, see if we remember locally password
-                                if (response.nextUncompletedStage() == LoginFlowTypes.PASSWORD &&
-                                        errCode == null &&
-                                        reAuthHelper.data != null) {
-                                    resume(
-                                            UserPasswordAuth(
-                                                    session = response.session,
-                                                    user = session.myUserId,
-                                                    password = reAuthHelper.data
-                                            )
-                                    )
-                                    Timber.d("Initialize cross signing SUCCESS")
-                                } else {
-                                    resumeWithException(Exception("Cannot silently initialize cross signing, UIA missing"))
-                                }
+                    // TCHAP Force to initialize cross-signing silently with password or SSO
+//                    val password = reAuthHelper.data
+//
+//                    if (password == null) {
+//                        // Check this is not an SSO account
+//                        if (session.homeServerCapabilitiesService().getHomeServerCapabilities().canChangePassword) {
+//                            // Ask password to the user: Upgrade security
+//                            _viewEvents.post(HomeActivityViewEvents.AskPasswordToInitCrossSigning(session.getUserOrDefault(session.myUserId).toMatrixItem()))
+//                        }
+//                        // Else (SSO) just ignore for the moment
+//                    } else {
+                    // Try to initialize cross signing in background if possible
+                    Timber.d("Initialize cross signing...")
+                    try {
+                        session.cryptoService().crossSigningService().awaitCrossSigninInitialization { response, errCode ->
+                            // We missed server grace period or it's not setup, see if we remember locally password
+                            if (response.nextUncompletedStage() == LoginFlowTypes.PASSWORD &&
+                                    errCode == null &&
+                                    reAuthHelper.data != null) {
+                                resume(
+                                        UserPasswordAuth(
+                                                session = response.session,
+                                                user = session.myUserId,
+                                                password = reAuthHelper.data
+                                        )
+                                )
+                                Timber.d("Initialize cross signing SUCCESS")
+                            } else if (reAuthHelper.data.isNullOrEmpty()) {
+                                Timber.d("Ask password to init cross signing")
+                                _viewEvents.post(
+                                        HomeActivityViewEvents.AskPasswordToInitCrossSigning(session.getUserOrDefault(session.myUserId).toMatrixItem())
+                                )
+                            } else {
+                                resumeWithException(Exception("Cannot silently initialize cross signing, UIA missing"))
                             }
-                        } catch (failure: Throwable) {
-                            Timber.e(failure, "Failed to initialize cross signing")
                         }
+                    } catch (failure: Throwable) {
+                        Timber.e(failure, "Failed to initialize cross signing")
                     }
+//                    }
                 }
             }
         }
