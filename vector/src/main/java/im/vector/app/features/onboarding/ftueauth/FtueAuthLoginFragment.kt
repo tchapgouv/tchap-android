@@ -244,7 +244,7 @@ class FtueAuthLoginFragment :
                     views.loginServerIcon.isVisible = false
                     views.loginNotice.isVisible = false
                     if (state.signMode == SignMode.TchapSignInWithSSO) {
-                        views.loginField.setText(state.emailPasswordToReset)
+                        state.emailPasswordToReset?.let { views.loginField.setText(it) }
                         views.loginTitle.text = getString(resId, TCHAP_SSO_PROVIDER)
                     } else {
                         views.loginTitle.text = getString(resId, buildMeta.applicationName)
@@ -342,7 +342,7 @@ class FtueAuthLoginFragment :
         setupAutoFill(state)
         setupButtons(state)
 
-        if (state.emailPasswordToReset != null) {
+        if (!state.emailPasswordToReset.isNullOrBlank()) {
             submit()
         }
         tchap.tryLoginSSO(state)
@@ -418,6 +418,8 @@ class FtueAuthLoginFragment :
 
         fun tryLoginSSO(state: OnboardingViewState) {
             if (state.signMode != SignMode.TchapSignInWithSSO) return
+            if (views.loginField.text.isNullOrBlank() || !views.loginField.text.toString().isEmail()) return
+            if (state.selectedHomeserver.upstreamUrl.isNullOrEmpty()) return
             if (views.loginSocialLoginButtons.ssoIdentityProviders.isNullOrEmpty() && !state.selectedHomeserver.hasOidcCompatibilityFlow) {
                 views.loginFieldTil.error = getString(CommonStrings.tchap_auth_sso_inactive, TCHAP_SSO_PROVIDER)
                 viewModel.handle(OnboardingAction.ResetHomeServerUrl)
@@ -428,7 +430,7 @@ class FtueAuthLoginFragment :
         }
 
         private fun loginOrRegisterSSO(state: OnboardingViewState, action: SSOAction) {
-            if (views.loginField.text.isNullOrEmpty() || !views.loginField.text.toString().isEmail()) return
+            if (views.loginField.text.isNullOrBlank() || !views.loginField.text.toString().isEmail()) return
             if (state.selectedHomeserver.upstreamUrl.isNullOrEmpty()) return
 
             viewModel.fetchSsoUrl(
