@@ -542,7 +542,9 @@ class HomeActivityViewModel @AssistedInject constructor(
                                 Timber.d("Initialize cross signing SUCCESS")
                             } else if (reAuthHelper.data.isNullOrEmpty()) {
                                 Timber.d("Ask password to init cross signing")
-                                _viewEvents.post(HomeActivityViewEvents.AskPasswordToInitCrossSigning(session.getUserOrDefault(session.myUserId).toMatrixItem()))
+                                _viewEvents.post(
+                                        HomeActivityViewEvents.AskPasswordToInitCrossSigning(session.getUserOrDefault(session.myUserId).toMatrixItem())
+                                )
                             } else {
                                 resumeWithException(Exception("Cannot silently initialize cross signing, UIA missing"))
                             }
