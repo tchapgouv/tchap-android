@@ -218,10 +218,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 }
             }
             is BootstrapActions.DoInitializeGeneratedKey -> {
-                // TCHAP do not ask user password multiple times
-                if (state.step !is BootstrapStep.AccountReAuth) {
-                    startInitializeFlow(state)
-                }
+                startInitializeFlow(state)
             }
             BootstrapActions.RecoveryKeySaved -> {
                 _viewEvents.post(BootstrapViewEvents.RecoveryKeySaved)

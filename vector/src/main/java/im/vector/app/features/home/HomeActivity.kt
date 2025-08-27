@@ -260,9 +260,7 @@ class HomeActivity :
 
         homeActivityViewModel.observeViewEvents {
             when (it) {
-                // TCHAP hide promote Xsss
-                // is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning(it)
-                is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> {}
+                is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning()
                 is HomeActivityViewEvents.CurrentSessionNotVerified -> handleOnNewSession(it)
                 is HomeActivityViewEvents.CurrentSessionCannotBeVerified -> handleCantVerify(it)
                 HomeActivityViewEvents.PromptToEnableSessionPush -> handlePromptToEnablePush()
@@ -452,17 +450,21 @@ class HomeActivity :
         }
     }
 
-    private fun handleAskPasswordToInitCrossSigning(events: HomeActivityViewEvents.AskPasswordToInitCrossSigning) {
-        // We need to ask
-        promptSecurityEvent(
-                uid = PopupAlertManager.UPGRADE_SECURITY_UID,
-                userItem = events.userItem,
-                titleRes = CommonStrings.upgrade_security,
-                descRes = CommonStrings.security_prompt_text,
-        ) {
-            it.navigator.upgradeSessionSecurity(it, true)
-        }
+    // TCHAP we don't need to ask user to init cross signing
+    private fun handleAskPasswordToInitCrossSigning() {
+        navigator.upgradeSessionSecurity(this, true)
     }
+//    private fun handleAskPasswordToInitCrossSigning(events: HomeActivityViewEvents.AskPasswordToInitCrossSigning) {
+//        // We need to ask
+//        promptSecurityEvent(
+//                uid = PopupAlertManager.UPGRADE_SECURITY_UID,
+//                userItem = events.userItem,
+//                titleRes = CommonStrings.upgrade_security,
+//                descRes = CommonStrings.security_prompt_text,
+//        ) {
+//            it.navigator.upgradeSessionSecurity(it, true)
+//        }
+//    }
 
     private fun handleCrossSigningInvalidated(event: HomeActivityViewEvents.OnCrossSignedInvalidated) {
         // We need to ask
