@@ -1,3 +1,10 @@
+Changes in Tchap 2.20.3 (2025-08-27)
+====================================
+
+Bugfixes 🐛
+----------
+ - Activation de la signature croisée avec ProConnect. ([#1190](https://github.com/tchapgouv/tchap-android/issues/1190))
+
 Changes in Tchap 2.20.2 (2025-08-26)
 ====================================
 
