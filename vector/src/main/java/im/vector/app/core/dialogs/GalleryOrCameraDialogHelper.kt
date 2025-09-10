@@ -22,6 +22,7 @@ import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.features.media.createUCropWithDefaultSettings
+import im.vector.app.features.themes.ThemeUtils
 import im.vector.lib.core.utils.timer.Clock
 import im.vector.lib.multipicker.MultiPicker
 import im.vector.lib.multipicker.entity.MultiPickerImageType
@@ -86,7 +87,13 @@ class GalleryOrCameraDialogHelper(
     private fun startUCrop(image: MultiPickerImageType) {
         val destinationFile = File(activity.cacheDir, image.displayName.insertBeforeLast("_e_${clock.epochMillis()}"))
         val uri = image.contentUri
-        createUCropWithDefaultSettings(colorProvider, uri, destinationFile.toUri(), fragment.getString(CommonStrings.rotate_and_crop_screen_title))
+        createUCropWithDefaultSettings(
+                colorProvider,
+                uri,
+                destinationFile.toUri(),
+                ThemeUtils.isLightTheme(activity),
+                fragment.getString(CommonStrings.rotate_and_crop_screen_title)
+        )
                 .withAspectRatio(1f, 1f)
                 .getIntent(activity)
                 .let { uCropActivityResultLauncher.launch(it) }
