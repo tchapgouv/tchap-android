@@ -1,3 +1,14 @@
+Changes in Tchap 2.20.4 (2025-10-10)
+====================================
+
+Improvements 🙌
+--------------
+ - Rebase against Element-Android v1.6.46 ([#1192](https://github.com/tchapgouv/tchap-android/issues/1192))
+
+Bugfixes 🐛
+----------
+ - Correction du chargement de la carte lors du partage de la localisation. ([#1192](https://github.com/tchapgouv/tchap-android/issues/1192))
+
 Changes in Tchap 2.20.3 (2025-08-27)
 ====================================
 
