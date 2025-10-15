@@ -37,7 +37,7 @@ ext.versionMinor = 6
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 46
+ext.versionPatch = 48
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -247,7 +247,7 @@ android {
         debug {
             applicationIdSuffix ".debug"
             signingConfig signingConfigs.debug
-            resValue "string", "app_name", "Element - dbg"
+            resValue "string", "app_name", "Element Classic - dbg"
 
             if (project.hasProperty("coverage")) {
                 testCoverageEnabled = project.coverage == "true"
@@ -255,7 +255,7 @@ android {
         }
 
         release {
-            resValue "string", "app_name", "Element"
+            resValue "string", "app_name", "Element Classic"
             postprocessing {
                 // FIXME Set to true.
                 removeUnusedCode false
