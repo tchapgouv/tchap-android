@@ -17,7 +17,8 @@ fun createUCropWithDefaultSettings(
         colorProvider: ColorProvider,
         source: Uri,
         destination: Uri,
-        toolbarTitle: String?
+        isLightTheme: Boolean,
+        toolbarTitle: String?,
 ): UCrop {
     return UCrop.of(source, destination)
             .withOptions(
@@ -36,7 +37,7 @@ fun createUCropWithDefaultSettings(
                                 // Background
                                 setRootViewBackgroundColor(colorProvider.getColorFromAttribute(android.R.attr.colorBackground))
                                 // Status bar color (pb in dark mode, icon of the status bar are dark)
-                                setStatusBarColor(colorProvider.getColor(im.vector.lib.ui.styles.R.color.android_status_bar_background_light))
+                                setStatusBarLight(isLightTheme)
                                 setActiveControlsWidgetColor(colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary))
                                 // Hide the logo (does not work)
                                 setLogoColor(Color.TRANSPARENT)
