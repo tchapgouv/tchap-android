@@ -1,3 +1,14 @@
+Changes in Tchap 2.20.5 (2025-10-30)
+====================================
+
+Improvements 🙌
+--------------
+ - Renommage du code de récupération en code de vérification. ([#1196](https://github.com/tchapgouv/tchap-android/issues/1196))
+
+Bugfixes 🐛
+----------
+ - Mise à jour de l'écran pour recadrer les photos. ([#1191](https://github.com/tchapgouv/tchap-android/issues/1191))
+
 Changes in Tchap 2.20.4 (2025-10-10)
 ====================================
 
