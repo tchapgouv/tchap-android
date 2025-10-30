@@ -42,6 +42,7 @@ import im.vector.app.core.utils.SnapOnScrollListener
 import im.vector.app.core.utils.attachSnapHelperWithListener
 import im.vector.app.databinding.FragmentAttachmentsPreviewBinding
 import im.vector.app.features.media.createUCropWithDefaultSettings
+import im.vector.app.features.themes.ThemeUtils
 import im.vector.lib.core.utils.timer.Clock
 import im.vector.lib.strings.CommonPlurals
 import im.vector.lib.strings.CommonStrings
@@ -191,7 +192,7 @@ class AttachmentsPreviewFragment :
         val currentAttachment = it.attachments.getOrNull(it.currentAttachmentIndex) ?: return@withState
         val destinationFile = File(requireContext().cacheDir, currentAttachment.name.insertBeforeLast("_edited_image_${clock.epochMillis()}"))
         val uri = currentAttachment.queryUri
-        createUCropWithDefaultSettings(colorProvider, uri, destinationFile.toUri(), currentAttachment.name)
+        createUCropWithDefaultSettings(colorProvider, uri, destinationFile.toUri(), ThemeUtils.isLightTheme(requireContext()), currentAttachment.name)
                 .getIntent(requireContext())
                 .let { intent -> uCropActivityResultLauncher.launch(intent) }
     }
