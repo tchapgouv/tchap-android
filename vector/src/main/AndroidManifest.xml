@@ -60,9 +60,6 @@
     <!-- For MicrophoneAccessService -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
 
-    <!-- For MicrophoneAccessService -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
-
     <!-- TCHAP Jitsi libs adds CALENDAR permissions, but we can remove them safely
     according to https://github.com/jitsi/jitsi-meet/issues/4068#issuecomment-480482481 -->
     <uses-permission android:name="android.permission.READ_CALENDAR" tools:node="remove" />
