@@ -1,3 +1,10 @@
+Changes in Element v1.6.48 (2025-10-15)
+=======================================
+
+Other changes
+-------------
+ - Change the app name to Element Classic. ([#9094](https://github.com/element-hq/element-android/issues/9094))
+
 Changes in Element v1.6.46 (2025-09-22)
 =======================================
 
