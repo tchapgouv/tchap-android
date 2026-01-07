@@ -264,11 +264,11 @@ class VectorSettingsGeneralFragment :
                 true
             }
 
-            val hostname = URL(homeServerCapabilities.externalAccountManagementUrl).host
+//            val hostname = URL(homeServerCapabilities.externalAccountManagementUrl).host
 
             mExternalAccountManagementPreference.summary = requireContext().getString(
                     CommonStrings.settings_external_account_management,
-                    hostname
+//                    hostname // TCHAP hidden MAS server name
             )
         } else {
             mExternalAccountManagementPreference.isVisible = false

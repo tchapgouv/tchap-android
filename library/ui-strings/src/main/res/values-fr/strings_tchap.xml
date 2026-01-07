@@ -5,7 +5,7 @@
 
     <!-- tchap Authentication -->
     <string name="start_message">Bienvenue dans ${app_name}</string>
-    <string name="tchap_login_mas_enabled">Pour plus de sécurité, vous allez être redirigé vers le nouveau service d’authentification de ${app_name} depuis le navigateur de votre appareil.</string>
+    <string name="tchap_login_mas_enabled">Pour plus de sécurité, une redirection vers le nouveau service d’authentification de ${app_name} va s’effectuer dans le navigateur de l’appareil.</string>
 
     <!-- Register -->
     <string name="tchap_auth_password_dont_match">Les mots de passe ne correspondent pas</string>
