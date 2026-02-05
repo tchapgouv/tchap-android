@@ -107,12 +107,20 @@ internal class DefaultAuthenticationService @Inject constructor(
             }
 
             // unstable MSC3824 action param
+<<<<<<< HEAD
             appendParamToUrl("org.matrix.msc3824.action", action.toString())
 
             // TCHAP support login_hint
             loginHint?.takeIf { it.isNotBlank() }?.let {
                 appendParamToUrl("login_hint", it)
             }
+=======
+            // This can be removed once servers have been updated to support the stable one.
+            appendParamToUrl("org.matrix.msc3824.action", action.value)
+
+            // stable param:
+            appendParamToUrl("action", action.value)
+>>>>>>> v1.6.50
         }
     }
 
@@ -303,8 +311,8 @@ internal class DefaultAuthenticationService @Inject constructor(
             authAPI.getLoginFlows()
         }
 
-        // If an m.login.sso flow is present that is flagged as being for MSC3824 OIDC compatibility then we only return that flow
-        val oidcCompatibilityFlow = loginFlowResponse.flows.orEmpty().firstOrNull { it.type == "m.login.sso" && it.delegatedOidcCompatibility == true }
+        // If an m.login.sso flow is present that is flagged as being for MSC3824 OAuth compatibility then we only return that flow
+        val oidcCompatibilityFlow = loginFlowResponse.flows.orEmpty().firstOrNull { it.type == "m.login.sso" && it.delegatedOidcCompatibility }
         val flows = if (oidcCompatibilityFlow != null) listOf(oidcCompatibilityFlow) else loginFlowResponse.flows
 
         val supportsGetLoginTokenFlow = loginFlowResponse.flows.orEmpty().firstOrNull { it.type == "m.login.token" && it.getLoginToken == true } != null
