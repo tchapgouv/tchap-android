@@ -1,3 +1,10 @@
+Changes in Tchap 2.20.6 (2026-02-06)
+====================================
+
+Improvements 🙌
+--------------
+ - Ajout de l'autorité de certification Certigna Services CA ([#1201](https://github.com/tchapgouv/tchap-android/issues/1201))
+
 Changes in Tchap 2.20.5 (2025-10-30)
 ====================================
 
