@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Danger
     steps:
-<<<<<<< HEAD
       # TCHAP use github app token
       - name: Generate token
         id: generate_token
@@ -17,12 +16,9 @@ jobs:
         with:
           app_id: ${{ secrets.APP_ID_DANGERBOT }}
           private_key: ${{ secrets.APP_PEM_DANGERBOT }}
-      - uses: actions/checkout@v4
-=======
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
->>>>>>> v1.6.54
       - run: |
           npm install --save-dev @babel/plugin-transform-flow-strip-types
       - name: Danger

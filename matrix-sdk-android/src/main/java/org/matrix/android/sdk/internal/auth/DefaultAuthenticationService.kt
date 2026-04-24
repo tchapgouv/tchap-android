@@ -107,20 +107,16 @@ internal class DefaultAuthenticationService @Inject constructor(
             }
 
             // unstable MSC3824 action param
-<<<<<<< HEAD
-            appendParamToUrl("org.matrix.msc3824.action", action.toString())
-
-            // TCHAP support login_hint
-            loginHint?.takeIf { it.isNotBlank() }?.let {
-                appendParamToUrl("login_hint", it)
-            }
-=======
             // This can be removed once servers have been updated to support the stable one.
             appendParamToUrl("org.matrix.msc3824.action", action.value)
 
             // stable param:
             appendParamToUrl("action", action.value)
->>>>>>> v1.6.54
+
+            // TCHAP support login_hint
+            loginHint?.takeIf { it.isNotBlank() }?.let {
+                appendParamToUrl("login_hint", it)
+            }
         }
     }
 

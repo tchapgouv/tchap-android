@@ -53,7 +53,7 @@ jobs:
       group: ${{ github.ref == 'refs/heads/main' && format('lint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('lint-develop-{0}', github.sha) || format('lint-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
-<<<<<<< HEAD
+      # TCHAP use github app token
       - name: Generate token
         id: generate_token
         uses: tibdex/github-app-token@v1
@@ -61,11 +61,6 @@ jobs:
           app_id: ${{ secrets.APP_ID_DANGERBOT }}
           private_key: ${{ secrets.APP_PEM_DANGERBOT }}
       - uses: actions/checkout@v4
-=======
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          persist-credentials: false
->>>>>>> v1.6.54
       - name: Use JDK 21
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
         with:
@@ -100,16 +95,6 @@ jobs:
           npm install --save-dev @babel/core
           npm install --save-dev @babel/plugin-transform-flow-strip-types
           yarn add danger-plugin-lint-report --dev
-<<<<<<< HEAD
-# TCHAP disable Danger lint check
-#      - name: Danger lint
-#        if: always()
-#        uses: danger/danger-js@11.2.6
-#        with:
-#          args: "--dangerfile ./tools/danger/dangerfile-lint.js"
-#        env:
-#          DANGER_GITHUB_API_TOKEN: ${{ steps.generate_token.outputs.token }}
-=======
       - name: Danger lint
         if: always()
         uses: danger/danger-js@67ed2c1f42fd2fc198cc3c14b43c8f83351f4fe9 # 13.0.5
@@ -119,7 +104,6 @@ jobs:
           DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
           # Fallback for forks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
->>>>>>> v1.6.54
 
   # Gradle dependency analysis using https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin
   dependency-analysis:

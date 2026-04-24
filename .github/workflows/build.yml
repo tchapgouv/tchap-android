@@ -65,19 +65,11 @@ jobs:
       group: ${{ github.ref == 'refs/head/main' && format('build-release-apk-main-{0}-{1}', github.sha, matrix.target) || startsWith(github.ref, 'refs/tags/tchap_v') && format('build-release-apk-tag-{0}-{1}', github.sha, matrix.target) }}
       cancel-in-progress: ${{ github.ref != 'refs/head/main' && !startsWith(github.ref, 'refs/tags/tchap_v') }}
     steps:
-<<<<<<< HEAD
-      - uses: actions/checkout@v4
-        # TCHAP stay on current branch
-        # with:
-          # https://github.com/actions/checkout/issues/881
-          # ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
-=======
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          # https://github.com/actions/checkout/issues/881
-          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
+          # TCHAP stay on current branch : https://github.com/actions/checkout/issues/881
+          # ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
           persist-credentials: false
->>>>>>> v1.6.54
       - name: Use JDK 21
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
         with:
@@ -87,17 +79,10 @@ jobs:
         uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5.0.2
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
-<<<<<<< HEAD
       - name: Assemble ${{ matrix.target }} unsigned apk
         run: ./gradlew clean assemble${{ matrix.target }}Release $CI_GRADLE_ARG_PROPERTIES
       - name: Upload ${{ matrix.target }} unsigned APKs
-        uses: actions/upload-artifact@v4
-=======
-      - name: Assemble GPlay unsigned apk
-        run: ./gradlew clean assembleGplayRelease $CI_GRADLE_ARG_PROPERTIES
-      - name: Upload Gplay unsigned APKs
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
->>>>>>> v1.6.54
         with:
           name: ${{ matrix.target }}-release-unsigned
           path: |
@@ -117,17 +102,13 @@ jobs:
         with:
           name: ${{ env.TARGET_NAME }}-release-unsigned
       - name: Show apks in artifact
-<<<<<<< HEAD
         id: list-apks
         # TCHAP Find apks in artifacts
         run: |
-          ls -R ${{steps.download.outputs.download-path}} | grep ".apk"
-          echo ::set-output name=FIRST_APK_NAME::$(ls -R ${{steps.download.outputs.download-path}} | grep ".apk" | head -1)
-=======
-        run: ls -R ${STEPS_DOWNLOAD_OUTPUTS_DOWNLOAD_PATH}
+          ls -R ${STEPS_DOWNLOAD_OUTPUTS_DOWNLOAD_PATH} | grep ".apk"
+          echo ::set-output name=FIRST_APK_NAME::$(ls -R ${STEPS_DOWNLOAD_OUTPUTS_DOWNLOAD_PATH} | grep ".apk" | head -1)
         env:
           STEPS_DOWNLOAD_OUTPUTS_DOWNLOAD_PATH: ${{steps.download.outputs.download-path}}
->>>>>>> v1.6.54
       - name: Execute exodus-standalone
         uses: docker://exodusprivacy/exodus-standalone:latest
         with:

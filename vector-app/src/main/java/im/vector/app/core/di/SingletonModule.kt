@@ -138,11 +138,7 @@ import javax.inject.Singleton
     fun providesMatrixConfiguration(
             vectorPreferences: VectorPreferences,
             vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider,
-<<<<<<< HEAD
-            flipperProxy: FlipperProxy,
             context: Context,
-=======
->>>>>>> v1.6.54
             vectorPlugins: VectorPlugins,
             vectorCustomEventTypesProvider: VectorCustomEventTypesProvider,
             mdmService: MdmService,

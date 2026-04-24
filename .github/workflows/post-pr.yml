@@ -90,24 +90,3 @@ jobs:
           path: |
             emulator.log
             failure_screenshots/
-<<<<<<< HEAD
-
-# Notify the channel about delayed failures
-  notify:
-    name: Notify matrix
-    runs-on: ubuntu-latest
-    needs:
-      - should-i-run
-      - ui-tests
-    # TCHAP Disabled for now
-    if: github.repository == 'element-hq/element-android' && always() && (needs.should-i-run.result == 'success' ) && (needs.ui-tests.result != 'success')
-    # No concurrency required, runs every time on a schedule.
-    steps:
-      - uses: michaelkaye/matrix-hookshot-action@v1.0.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          hookshot_url: ${{ secrets.ELEMENT_ANDROID_HOOKSHOT_URL }}
-          text_template: "Post-merge validation of ${{ github.head_ref }} into ${{ github.base_ref }} by ${{ github.event.pull_request.merged_by.login }} failed: {{#each job_statuses }}{{#with this }}{{#if completed }}  {{name}} {{conclusion}} at {{completed_at}}, {{/if}}{{/with}}{{/each}}"
-          html_template: "Post-merge validation of ${{ github.head_ref }} into ${{ github.base_ref }} by ${{ github.event.pull_request.merged_by.login }} failed: {{#each job_statuses }}{{#with this }}{{#if completed }}<br />{{icon conclusion}} {{name}} <font color='{{color conclusion}}'>{{conclusion}} at {{completed_at}} <a href=\"{{html_url}}\">[details]</a></font>{{/if}}{{/with}}{{/each}}"
-=======
->>>>>>> v1.6.54

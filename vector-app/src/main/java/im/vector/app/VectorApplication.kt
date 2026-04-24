@@ -60,11 +60,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
 import im.vector.application.R
-<<<<<<< HEAD
-=======
-import org.jitsi.meet.sdk.log.JitsiMeetDefaultLogHandler
 import org.maplibre.android.MapLibre
->>>>>>> v1.6.54
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import timber.log.Timber
