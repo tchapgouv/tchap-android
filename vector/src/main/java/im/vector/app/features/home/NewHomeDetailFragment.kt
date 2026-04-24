@@ -34,6 +34,8 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.CurrentCallsViewPresenter
 import im.vector.app.core.ui.views.KeysBackupBanner
+import im.vector.app.core.ui.views.VerifyDeviceBanner
+import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentNewHomeDetailBinding
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
@@ -69,7 +71,8 @@ class NewHomeDetailFragment :
         KeysBackupBanner.Delegate,
         CurrentCallsView.Callback,
         OnBackPressed,
-        VectorMenuProvider {
+        VectorMenuProvider,
+        VerifyDeviceBanner.Delegate {
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var colorProvider: ColorProvider
@@ -136,6 +139,7 @@ class NewHomeDetailFragment :
         sharedCallActionViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
         setupToolbar()
         setupKeysBackupBanner()
+        setupVerificationBanner()
         setupActiveCallView()
         setupDebugButton()
         setupFabs()
@@ -343,6 +347,10 @@ class NewHomeDetailFragment :
         views.homeKeysBackupBanner.delegate = this
     }
 
+    private fun setupVerificationBanner() {
+        views.homeVerifyDevice.delegate = this
+    }
+
     private fun setupActiveCallView() {
         currentCallsViewPresenter.bind(views.currentCallsView, this)
     }
@@ -375,9 +383,9 @@ class NewHomeDetailFragment :
         })
     }
 
-/* ==========================================================================================
- * KeysBackupBanner Listener
- * ========================================================================================== */
+    /* ==========================================================================================
+     * KeysBackupBanner Listener
+     * ========================================================================================== */
 
     override fun onCloseClicked() {
         serverBackupStatusViewModel.handle(ServerBackupStatusAction.OnBannerClosed)
@@ -398,7 +406,7 @@ class NewHomeDetailFragment :
                 it.pushCounter,
                 vectorPreferences.developerShowDebugInfo()
         )
-
+        views.homeVerifyDevice.isVisible = it.showVerifyDeviceBanner
         refreshAvatar()
         hasUnreadRooms = it.hasUnreadMessages
     }
@@ -443,6 +451,21 @@ class NewHomeDetailFragment :
     }
 
     private fun SpaceStateHandler.isRoot() = getSpaceBackstack().isEmpty()
+
+    override fun onVerificationLearnMoreClicked() {
+        openUrlInChromeCustomTab(
+                context = requireContext(),
+                session = null,
+                url = "https://docs.element.io/latest/element-support/device-verification/how-to-verify-devices",
+        )
+    }
+
+    override fun onVerifySession() {
+        (activity as? VectorBaseActivity<*>)?.let { vectorBaseActivity ->
+            vectorBaseActivity.navigator
+                    .requestSelfSessionVerification(vectorBaseActivity)
+        }
+    }
 
     companion object {
         private const val HOME_ROOM_LIST_FRAGMENT_TAG = "TAG_HOME_ROOM_LIST"
