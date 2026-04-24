@@ -9,6 +9,9 @@
             <certificates src="@raw/servicesca_rootca" />
             <certificates src="@raw/certignaserviceseurootca" />
             <certificates src="@raw/certignaservicesrootca" />
+
+            <!-- Allow let's encrypt for CSPN -->
+            <certificates src="@raw/isrgrootx1" />
         </trust-anchors>
     </base-config>
 
