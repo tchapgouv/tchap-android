@@ -35,7 +35,7 @@ class PromptFragment : VectorBaseFragment<FragmentReauthConfirmBinding>() {
 
     private fun onButtonClicked() = withState(viewModel) { state ->
         when (state.flowType) {
-            LoginFlowTypes.SSO -> {
+            LoginFlowTypes.OAUTH -> {
                 viewModel.handle(ReAuthActions.StartSSOFallback)
             }
             LoginFlowTypes.PASSWORD -> {
@@ -56,7 +56,7 @@ class PromptFragment : VectorBaseFragment<FragmentReauthConfirmBinding>() {
 
     override fun invalidate() = withState(viewModel) {
         when (it.flowType) {
-            LoginFlowTypes.SSO -> {
+            LoginFlowTypes.OAUTH -> {
                 views.passwordFieldTil.isVisible = false
                 views.reAuthConfirmButton.text = getString(CommonStrings.auth_login_sso)
             }
@@ -71,7 +71,7 @@ class PromptFragment : VectorBaseFragment<FragmentReauthConfirmBinding>() {
 
         if (it.lastErrorCode != null) {
             when (it.flowType) {
-                LoginFlowTypes.SSO -> {
+                LoginFlowTypes.OAUTH -> {
                     views.genericErrorText.isVisible = true
                     views.genericErrorText.text = getString(CommonStrings.authentication_error)
                 }

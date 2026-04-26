@@ -17,7 +17,6 @@ import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.flow.flow
 import java.io.ByteArrayOutputStream
@@ -52,11 +51,9 @@ class ReAuthViewModel @AssistedInject constructor(
     override fun handle(action: ReAuthActions) = withState { state ->
         when (action) {
             ReAuthActions.StartSSOFallback -> {
-                if (state.flowType == LoginFlowTypes.SSO) {
+                if (state.flowType == LoginFlowTypes.OAUTH) {
                     setState { copy(ssoFallbackPageWasShown = true) }
-                    val loginHint = state.threePids.invoke().orEmpty().filterIsInstance<ThreePid.Email>().firstOrNull()?.email // TCHAP login hint
-                    val ssoURL = session.getUiaSsoFallbackUrl(initialState.session ?: "", loginHint)
-                    _viewEvents.post(ReAuthEvents.OpenSsoURl(ssoURL))
+                    state.fallbackUrl?.let { _viewEvents.post(ReAuthEvents.OpenSsoURl(it)) }
                 }
             }
             ReAuthActions.FallBackPageLoaded -> {

@@ -73,7 +73,6 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 import java.io.File
-import java.net.URL
 import java.util.UUID
 import javax.inject.Inject
 
