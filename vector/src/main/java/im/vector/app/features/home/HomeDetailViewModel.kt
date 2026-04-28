@@ -93,12 +93,28 @@ class HomeDetailViewModel @AssistedInject constructor(
         observeRoomSummaries()
         updatePstnSupportFlag()
         observeDataStore()
+        observeCrossSigningState()
         callManager.addProtocolsCheckerListener(this)
         session.flow().liveUser(session.myUserId).execute {
             copy(
                     myMatrixItem = it.invoke()?.getOrNull()?.toMatrixItem()
             )
         }
+    }
+
+    private fun observeCrossSigningState() {
+        session
+                .flow()
+                .liveCrossSigningInfo(session.myUserId)
+                .onEach { info ->
+                    val isVerified = info.getOrNull()?.isTrusted() ?: false
+                    setState {
+                        copy(
+                                isSessionVerified = isVerified,
+                        )
+                    }
+                }
+                .launchIn(viewModelScope)
     }
 
     private fun observeDataStore() {

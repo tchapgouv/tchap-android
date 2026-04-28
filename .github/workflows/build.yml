@@ -6,6 +6,8 @@ on:
     branches: [ main, develop ]
     tags: [ tchap_v* ]
 
+permissions: {}
+
 # Enrich gradle.properties for CI/CD
 env:
   # TCHAP increase Xmx to 4g to achieve build in CI and adding default -XX:MaxMetaspaceSize jvmargs parameter https://github.com/gradle/gradle-build-action/issues/122
@@ -26,23 +28,24 @@ jobs:
       group: ${{ github.ref == 'refs/heads/develop' && format('integration-tests-develop-{0}-{1}', matrix.target, github.sha) || format('build-debug-{0}-{1}', matrix.target, github.ref)  }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
       - name: Use JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '21'
       - name: Configure gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5.0.2
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Assemble ${{ matrix.target }} debug apk
         run: ./gradlew assemble${{ matrix.target }}Debug $CI_GRADLE_ARG_PROPERTIES
       - name: Upload ${{ matrix.target }} debug APKs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: ${{ matrix.target }}-debug
           path: |
@@ -62,24 +65,24 @@ jobs:
       group: ${{ github.ref == 'refs/head/main' && format('build-release-apk-main-{0}-{1}', github.sha, matrix.target) || startsWith(github.ref, 'refs/tags/tchap_v') && format('build-release-apk-tag-{0}-{1}', github.sha, matrix.target) }}
       cancel-in-progress: ${{ github.ref != 'refs/head/main' && !startsWith(github.ref, 'refs/tags/tchap_v') }}
     steps:
-      - uses: actions/checkout@v4
-        # TCHAP stay on current branch
-        # with:
-          # https://github.com/actions/checkout/issues/881
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          # TCHAP stay on current branch : https://github.com/actions/checkout/issues/881
           # ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
+          persist-credentials: false
       - name: Use JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '21'
       - name: Configure gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5.0.2
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Assemble ${{ matrix.target }} unsigned apk
         run: ./gradlew clean assemble${{ matrix.target }}Release $CI_GRADLE_ARG_PROPERTIES
       - name: Upload ${{ matrix.target }} unsigned APKs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: ${{ matrix.target }}-release-unsigned
           path: |
@@ -95,22 +98,24 @@ jobs:
     steps:
       - name: Obtain apk from artifact
         id: download
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
         with:
           name: ${{ env.TARGET_NAME }}-release-unsigned
       - name: Show apks in artifact
         id: list-apks
         # TCHAP Find apks in artifacts
         run: |
-          ls -R ${{steps.download.outputs.download-path}} | grep ".apk"
-          echo ::set-output name=FIRST_APK_NAME::$(ls -R ${{steps.download.outputs.download-path}} | grep ".apk" | head -1)
+          ls -R ${STEPS_DOWNLOAD_OUTPUTS_DOWNLOAD_PATH} | grep ".apk"
+          echo ::set-output name=FIRST_APK_NAME::$(ls -R ${STEPS_DOWNLOAD_OUTPUTS_DOWNLOAD_PATH} | grep ".apk" | head -1)
+        env:
+          STEPS_DOWNLOAD_OUTPUTS_DOWNLOAD_PATH: ${{steps.download.outputs.download-path}}
       - name: Execute exodus-standalone
         uses: docker://exodusprivacy/exodus-standalone:latest
         with:
           # Don't fail when finding trackers so they can be reported later
           args: /github/workspace/${{ env.TARGET_FOLDER }}/release/${{ steps.list-apks.outputs.FIRST_APK_NAME }} -j -o /github/workspace/exodus.json -e 0
       - name: Upload exodus json report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: exodus.json
           path: |

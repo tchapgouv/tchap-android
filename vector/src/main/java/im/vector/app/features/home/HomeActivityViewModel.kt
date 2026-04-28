@@ -401,6 +401,8 @@ class HomeActivityViewModel @AssistedInject constructor(
             // cross signing keys have been reset
             // Trigger a popup to re-verify
             // Note: user can be unknown in case of logout
+
+            // TCHAP reactivate device verification banner
             session.getUserOrDefault(session.myUserId)
                     .toMatrixItem()
                     .let { user ->
@@ -490,6 +492,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                             val is4Ssetup = session.sharedSecretStorageService().isRecoverySetup()
                             if (hasTargetDeviceToVerifyAgainst || is4Ssetup) {
                                 // New session
+                                // TCHAP reactivate device verification banner
                                 _viewEvents.post(
                                         HomeActivityViewEvents.CurrentSessionNotVerified(
                                                 session.getUserOrDefault(session.myUserId).toMatrixItem(),
