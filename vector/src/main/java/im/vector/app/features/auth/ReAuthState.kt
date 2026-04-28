@@ -16,6 +16,7 @@ data class ReAuthState(
         val title: String? = null,
         val session: String? = null,
         val flowType: String? = null,
+        val fallbackUrl: String? = null,
         val ssoFallbackPageWasShown: Boolean = false,
         val lastErrorCode: String? = null,
         val resultKeyStoreAlias: String = "",
@@ -25,6 +26,7 @@ data class ReAuthState(
             args.title,
             args.session,
             args.flowType,
+            args.fallbackUrl,
             lastErrorCode = args.lastErrorCode,
             resultKeyStoreAlias = args.resultKeyStoreAlias
     )

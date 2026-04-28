@@ -268,7 +268,7 @@ class SessionOverviewFragment :
     private val reAuthActivityResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             when (activityResult.data?.extras?.getString(ReAuthActivity.RESULT_FLOW_TYPE)) {
-                LoginFlowTypes.SSO -> {
+                LoginFlowTypes.OAUTH -> {
                     viewModel.handle(SessionOverviewAction.SsoAuthDone)
                 }
                 LoginFlowTypes.PASSWORD -> {
