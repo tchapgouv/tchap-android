@@ -107,7 +107,8 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
             val isSecureBackupRequired = elementWellKnown?.isSecureBackupRequired() ?: vectorFeatures.tchapIsSecureBackupRequired()
             val isThisSessionVerified = session.cryptoService().crossSigningService().isCrossSigningVerified()
 
-            if ((isThisSessionVerified || !isSecureBackupRequired) && initialState.requestType is RequestType.ReadSecrets) {
+            if ((isThisSessionVerified || !isSecureBackupRequired) && initialState.requestType is RequestType.ReadSecrets &&
+                    initialState.step != SharedSecureStorageViewState.Step.ResetAll) {
                 val integrityResult =
                         session.sharedSecretStorageService().checkShouldBeAbleToAccessSecrets(initialState.requestType.secretsName, initialState.keyId)
                 if (integrityResult !is IntegrityResult.Success) {
