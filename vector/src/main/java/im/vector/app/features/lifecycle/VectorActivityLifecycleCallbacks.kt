@@ -67,7 +67,7 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
                 (tryOrNull {
                     packageManager.getPackageInfoCompat("com.google.android.permissioncontroller", PackageManager.GET_ACTIVITIES).activities
                 } ?: tryOrNull {
-                    packageManager.getModuleInfo("com.google.android.permission", PackageManager.GET_ACTIVITIES).packageName?.let {
+                        packageManager.getModuleInfo("com.google.android.permission",0).packageName?.let {
                         packageManager.getPackageInfoCompat(it, PackageManager.GET_ACTIVITIES or PackageManager.MATCH_APEX).activities
                     }
                 })
