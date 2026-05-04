@@ -1,3 +1,10 @@
+Changes in Tchap 1.6.58 (2026-05-04)
+====================================
+
+Bugfixes 🐛
+----------
+ - Fix "Cannot find secrets in storage" error when using "Reset everything" to reset verification keys. ([#8917](https://github.com/element-hq/element-android/issues/8917))
+
 Changes in Element v1.6.54 (2026-04-01)
 =======================================
 
