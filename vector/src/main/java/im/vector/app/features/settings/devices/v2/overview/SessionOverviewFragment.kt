@@ -129,12 +129,12 @@ class SessionOverviewFragment :
     }
 
     private fun confirmSignoutOtherSession() = withState(viewModel) { state ->
-        if (state.externalAccountManagementUrl != null) {
+        if (state.externalDeleteDeviceUrl != null) {
             // Manage in external account manager
             openUrlInChromeCustomTab(
                     requireContext(),
                     null,
-                    state.externalAccountManagementUrl.removeSuffix("/") + "?action=session_end&device_id=${state.deviceId}"
+                    state.externalDeleteDeviceUrl,
             )
         } else {
             activity?.let {
@@ -268,7 +268,7 @@ class SessionOverviewFragment :
     private val reAuthActivityResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             when (activityResult.data?.extras?.getString(ReAuthActivity.RESULT_FLOW_TYPE)) {
-                LoginFlowTypes.SSO -> {
+                LoginFlowTypes.OAUTH -> {
                     viewModel.handle(SessionOverviewAction.SsoAuthDone)
                 }
                 LoginFlowTypes.PASSWORD -> {

@@ -218,7 +218,9 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 }
             }
             is BootstrapActions.DoInitializeGeneratedKey -> {
-                startInitializeFlow(state)
+                if (state.step !is BootstrapStep.AccountReAuth) {
+                    startInitializeFlow(state)
+                }
             }
             BootstrapActions.RecoveryKeySaved -> {
                 _viewEvents.post(BootstrapViewEvents.RecoveryKeySaved)
@@ -404,7 +406,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                         }
                         _viewEvents.post(BootstrapViewEvents.RequestReAuth(flowResponse, errCode))
                     }
-                    LoginFlowTypes.SSO -> {
+                    LoginFlowTypes.OAUTH -> {
                         pendingAuthHandler.pendingAuth = DefaultBaseAuth(flowResponse.session)
                         pendingAuthHandler.uiaContinuation = promise
                         setState {

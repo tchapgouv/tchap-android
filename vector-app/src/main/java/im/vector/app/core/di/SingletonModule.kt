@@ -24,7 +24,6 @@ import im.vector.app.EmojiSpanify
 import im.vector.app.SpaceStateHandler
 import im.vector.app.SpaceStateHandlerImpl
 import im.vector.app.config.Config
-import im.vector.app.core.debug.FlipperProxy
 import im.vector.app.core.device.DefaultGetDeviceInfoUseCase
 import im.vector.app.core.device.GetDeviceInfoUseCase
 import im.vector.app.core.dispatchers.CoroutineDispatchers
@@ -139,7 +138,6 @@ import javax.inject.Singleton
     fun providesMatrixConfiguration(
             vectorPreferences: VectorPreferences,
             vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider,
-            flipperProxy: FlipperProxy,
             context: Context,
             vectorPlugins: VectorPlugins,
             vectorCustomEventTypesProvider: VectorCustomEventTypesProvider,
@@ -149,9 +147,7 @@ import javax.inject.Singleton
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
                 roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
                 threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
-                networkInterceptors = listOfNotNull(
-                        flipperProxy.networkInterceptor(),
-                ),
+                networkInterceptors = emptyList(),
                 metricPlugins = vectorPlugins.plugins(),
                 cryptoAnalyticsPlugin = vectorPlugins.cryptoMetricPlugin,
                 customEventTypesProvider = vectorCustomEventTypesProvider,

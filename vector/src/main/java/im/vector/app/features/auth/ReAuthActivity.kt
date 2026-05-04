@@ -42,7 +42,8 @@ class ReAuthActivity : SimpleFragmentActivity() {
             val title: String?,
             val session: String?,
             val lastErrorCode: String?,
-            val resultKeyStoreAlias: String
+            val resultKeyStoreAlias: String,
+            val fallbackUrl: String? = null,
     ) : Parcelable
 
     // For sso
@@ -102,7 +103,7 @@ class ReAuthActivity : SimpleFragmentActivity() {
             if (it.ssoFallbackPageWasShown) {
                 Timber.d("## UIA ssoFallbackPageWasShown tentative success")
                 setResult(RESULT_OK, Intent().apply {
-                    putExtra(RESULT_FLOW_TYPE, LoginFlowTypes.SSO)
+                    putExtra(RESULT_FLOW_TYPE, LoginFlowTypes.OAUTH)
                 })
                 finish()
             }
@@ -198,16 +199,17 @@ class ReAuthActivity : SimpleFragmentActivity() {
                 LoginFlowTypes.PASSWORD -> {
                     LoginFlowTypes.PASSWORD
                 }
-                LoginFlowTypes.SSO -> {
-                    LoginFlowTypes.SSO
+                LoginFlowTypes.OAUTH -> {
+                    LoginFlowTypes.OAUTH
                 }
                 else -> {
                     // TODO, support more auth type?
                     null
                 }
             }
+            val fallbackUrl = (fromError.params?.get(LoginFlowTypes.OAUTH) as? Map<*, *>)?.get("url") as? String
             return Intent(context, ReAuthActivity::class.java).apply {
-                putExtra(Mavericks.KEY_ARG, Args(authType, reasonTitle, fromError.session, lastErrorCode, resultKeyStoreAlias))
+                putExtra(Mavericks.KEY_ARG, Args(authType, reasonTitle, fromError.session, lastErrorCode, resultKeyStoreAlias, fallbackUrl))
             }
         }
     }

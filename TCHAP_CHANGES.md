@@ -1,3 +1,16 @@
+Changes in Tchap 2.21.0 (2026-05-04)
+====================================
+
+Improvements 🙌
+--------------
+ - Rebase against Element-Android v1.6.54 ([#1203](https://github.com/tchapgouv/tchap-android/issues/1203))
+ - Rebase against Element-Android v1.6.58 ([#1207](https://github.com/tchapgouv/tchap-android/issues/1207))
+
+Bugfixes 🐛
+----------
+ - Support de la réinitialisation du code de vérification avec le MAS. ([#1199](https://github.com/tchapgouv/tchap-android/issues/1199))
+ - Correction de l'affichage des fonds de cartes. ([#1204](https://github.com/tchapgouv/tchap-android/issues/1204))
+
 Changes in Tchap 2.20.6 (2026-02-06)
 ====================================
 

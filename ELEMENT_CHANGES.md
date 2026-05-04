@@ -1,3 +1,48 @@
+Changes in Tchap 1.6.58 (2026-05-04)
+====================================
+
+Bugfixes 🐛
+----------
+ - Fix "Cannot find secrets in storage" error when using "Reset everything" to reset verification keys. ([#8917](https://github.com/element-hq/element-android/issues/8917))
+
+Changes in Element v1.6.54 (2026-04-01)
+=======================================
+
+Features ✨
+----------
+ - Expose service to let Element X access some internal data ([#9109](https://github.com/element-hq/element-android/issues/9109))
+
+Other changes
+-------------
+ - Temporary hide "Verify this device" banner. ([#9130](https://github.com/element-hq/element-android/issues/9130))
+
+Changes in Element v1.6.52 (2026-03-05)
+=======================================
+
+Other changes
+-------------
+ - Bump `jitsi_modile_sdk` to v11.5.1 ([#9124](https://github.com/element-hq/element-android/issues/9124)). This should fix the 16KB page size incompatibility.
+
+Changes in Element v1.6.50 (2026-02-04)
+=======================================
+
+Other changes
+-------------
+ - Update the default bug reporting URL. ([#9097](https://github.com/element-hq/element-android/issues/9097))
+ - Update OAuth-awareness to support the stable version of MSC3824. ([#9102](https://github.com/element-hq/element-android/issues/9102))
+ - Update realm plugin to 10.19.0 ([#9111](https://github.com/element-hq/element-android/issues/9116))
+ - Bump org.matrix.rustcomponents:crypto-android from 26.1.22 to 26.1.28 ([#9114](https://github.com/element-hq/element-android/issues/9114))
+ - Update sentry to version 8.31.0 ([#9115](https://github.com/element-hq/element-android/issues/9115))
+ - Update Maplibre dependency to version 11.6.1 ([#9116](https://github.com/element-hq/element-android/issues/9116))
+ - Remove flipper from the codebase. ([#9117](https://github.com/element-hq/element-android/issues/9117))
+
+Changes in Element v1.6.48 (2025-10-15)
+=======================================
+
+Other changes
+-------------
+ - Change the app name to Element Classic. ([#9094](https://github.com/element-hq/element-android/issues/9094))
+
 Changes in Element v1.6.46 (2025-09-22)
 =======================================
 

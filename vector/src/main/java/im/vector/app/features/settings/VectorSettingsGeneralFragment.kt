@@ -73,7 +73,6 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 import java.io.File
-import java.net.URL
 import java.util.UUID
 import javax.inject.Inject
 
@@ -264,11 +263,11 @@ class VectorSettingsGeneralFragment :
                 true
             }
 
-            val hostname = URL(homeServerCapabilities.externalAccountManagementUrl).host
+//            val hostname = URL(homeServerCapabilities.externalAccountManagementUrl).host
 
             mExternalAccountManagementPreference.summary = requireContext().getString(
                     CommonStrings.settings_external_account_management,
-                    hostname
+//                    hostname // TCHAP hidden MAS server name
             )
         } else {
             mExternalAccountManagementPreference.isVisible = false

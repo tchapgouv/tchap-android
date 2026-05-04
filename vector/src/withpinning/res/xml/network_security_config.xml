@@ -18,6 +18,7 @@
         <domain includeSubdomains="false">posthog.tchap.numerique.gouv.fr</domain>
         <domain includeSubdomains="false">posthog.preprod.tchap.numerique.gouv.fr</domain>
         <domain includeSubdomains="false">posthog.tchap.incubateur.net</domain>
+        <domain includeSubdomains="false">openmaptiles.geo.data.gouv.fr</domain>
         <trust-anchors>
             <certificates src="system" />
         </trust-anchors>
