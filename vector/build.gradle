@@ -81,8 +81,17 @@ android {
                             "new im.vector.app.features.importer.ApplicationFingerprint(\n" +
                             "\"fr.gouv.tchap.android.x.debug\",\n" +
                             "java.util.Arrays.asList(\"B0:B0:51:DC:56:5C:81:2F:E1:7F:6F:3E:94:5B:4D:79:04:71:23:AB:0D:A6:12:86:76:9E:B2:94:91:97:13:0E\")\n" +
-                            "),\n" +
-                            // Tchap nightly
+                            ")\n" +
+                            ")",
+            )
+        }
+        nightly {
+            matchingFallbacks = ['release']
+            buildConfigField(
+                    "java.util.List<im.vector.app.features.importer.ApplicationFingerprint>",
+                    "ALLOWED_APP_SIGNATURES",
+                    "java.util.Arrays.asList(\n" +
+                            // Tchap
                             "new im.vector.app.features.importer.ApplicationFingerprint(\n" +
                             "\"fr.gouv.tchap.android.x.nightly\",\n" +
                             "java.util.Arrays.asList(\"B0:B0:51:DC:56:5C:81:2F:E1:7F:6F:3E:94:5B:4D:79:04:71:23:AB:0D:A6:12:86:76:9E:B2:94:91:97:13:0E\")\n" +
