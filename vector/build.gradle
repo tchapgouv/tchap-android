@@ -77,12 +77,22 @@ android {
                     "java.util.List<im.vector.app.features.importer.ApplicationFingerprint>",
                     "ALLOWED_APP_SIGNATURES",
                     "java.util.Arrays.asList(\n" +
-                            // Tchap
+                            // Tchap debug
                             "new im.vector.app.features.importer.ApplicationFingerprint(\n" +
-                            "\"fr.gouv.tchap.android.x.debug\",\n" +
-                            "java.util.Arrays.asList(\"B0:B0:51:DC:56:5C:81:2F:E1:7F:6F:3E:94:5B:4D:79:04:71:23:AB:0D:A6:12:86:76:9E:B2:94:91:97:13:0E\")\n" +
+                                    "\"fr.gouv.tchap.android.x.debug\",\n" +
+                                    "java.util.Arrays.asList(\"B0:B0:51:DC:56:5C:81:2F:E1:7F:6F:3E:94:5B:4D:79:04:71:23:AB:0D:A6:12:86:76:9E:B2:94:91:97:13:0E\")\n" +
+                            "),\n" +
+                            // TchapPreprod debug
+                            "new im.vector.app.features.importer.ApplicationFingerprint(\n" +
+                                    "\"fr.gouv.tchap.android.x.staging.debug\",\n" +
+                                    "java.util.Arrays.asList(\"B0:B0:51:DC:56:5C:81:2F:E1:7F:6F:3E:94:5B:4D:79:04:71:23:AB:0D:A6:12:86:76:9E:B2:94:91:97:13:0E\")\n" +
+                            "),\n" +
+                            // TchapDev debug
+                            "new im.vector.app.features.importer.ApplicationFingerprint(\n" +
+                                    "\"fr.gouv.tchap.android.x.dev.debug\",\n" +
+                                    "java.util.Arrays.asList(\"B0:B0:51:DC:56:5C:81:2F:E1:7F:6F:3E:94:5B:4D:79:04:71:23:AB:0D:A6:12:86:76:9E:B2:94:91:97:13:0E\")\n" +
                             ")\n" +
-                            ")",
+                    ")",
             )
         }
         nightly {
@@ -91,12 +101,22 @@ android {
                     "java.util.List<im.vector.app.features.importer.ApplicationFingerprint>",
                     "ALLOWED_APP_SIGNATURES",
                     "java.util.Arrays.asList(\n" +
-                            // Tchap
+                            // Tchap nightly
                             "new im.vector.app.features.importer.ApplicationFingerprint(\n" +
-                            "\"fr.gouv.tchap.android.x.nightly\",\n" +
-                            "java.util.Arrays.asList(\"B0:B0:51:DC:56:5C:81:2F:E1:7F:6F:3E:94:5B:4D:79:04:71:23:AB:0D:A6:12:86:76:9E:B2:94:91:97:13:0E\")\n" +
+                                    "\"fr.gouv.tchap.android.x.nightly\",\n" +
+                                    "java.util.Arrays.asList(\"B0:B0:51:DC:56:5C:81:2F:E1:7F:6F:3E:94:5B:4D:79:04:71:23:AB:0D:A6:12:86:76:9E:B2:94:91:97:13:0E\")\n" +
+                            "),\n" +
+                            // TchapPreprod nightly
+                            "new im.vector.app.features.importer.ApplicationFingerprint(\n" +
+                                    "\"fr.gouv.tchap.android.x.staging.nightly\",\n" +
+                                    "java.util.Arrays.asList(\"B0:B0:51:DC:56:5C:81:2F:E1:7F:6F:3E:94:5B:4D:79:04:71:23:AB:0D:A6:12:86:76:9E:B2:94:91:97:13:0E\")\n" +
+                            "),\n" +
+                            // TchapDev nightly
+                            "new im.vector.app.features.importer.ApplicationFingerprint(\n" +
+                                    "\"fr.gouv.tchap.android.x.dev.nightly\",\n" +
+                                    "java.util.Arrays.asList(\"B0:B0:51:DC:56:5C:81:2F:E1:7F:6F:3E:94:5B:4D:79:04:71:23:AB:0D:A6:12:86:76:9E:B2:94:91:97:13:0E\")\n" +
                             ")\n" +
-                            ")",
+                    ")",
             )
         }
         release {
@@ -104,12 +124,15 @@ android {
                     "java.util.List<im.vector.app.features.importer.ApplicationFingerprint>",
                     "ALLOWED_APP_SIGNATURES",
                     "java.util.Arrays.asList(\n" +
-                            // Tchap
+                            // Tchap release (GPlay & Fdroid)
                             "new im.vector.app.features.importer.ApplicationFingerprint(\n" +
-                            "\"fr.gouv.tchap.android.x\",\n" +
-                            "java.util.Arrays.asList(\"2A:09:5B:AD:E1:47:5C:2E:AA:AB:7A:06:75:30:00:71:1D:43:31:BD:C3:69:65:B4:82:96:86:71:4C:25:53:1A\")\n" +
+                                    "\"fr.gouv.tchap.android.x\",\n" +
+                                    "java.util.Arrays.asList(\n" +
+                                            "\"2A:09:5B:AD:E1:47:5C:2E:AA:AB:7A:06:75:30:00:71:1D:43:31:BD:C3:69:65:B4:82:96:86:71:4C:25:53:1A\",\n" +
+                                            "\"E0:2D:F2:23:DD:4F:80:97:09:DE:B0:0F:C6:5F:C2:B0:C6:7D:0A:FA:E6:F2:73:C7:E7:5F:27:11:7B:19:D3:04\"\n" +
+                                    ")\n" +
                             ")\n" +
-                            ")",
+                    ")",
             )
         }
     }
