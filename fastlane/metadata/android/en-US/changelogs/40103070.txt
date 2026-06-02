@@ -1,2 +1,0 @@
-Main changes in this version: Bug fixes mainly regarding the notifications.
-Full changelog: https://github.com/element-hq/element-android/releases/tag/v1.3.7-RC2

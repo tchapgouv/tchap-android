@@ -1,0 +1,5 @@
+Tchap est un service de messagerie instantanée destiné aux communications des agents de l’administration française, pour échanger des informations en mobilité ou depuis un poste de travail bureautique.
+
+Tchap permet de discuter par messages à deux et en groupe, et de partager des fichiers comme toute messagerie instantanée, avec un annuaire intégré des agents utilisateurs, une utilisation simultanée sur plusieurs appareils et de confidentialité des échanges privés.
+
+Les agents peuvent inviter des personnes extérieurs dans une conversation professionnelle.

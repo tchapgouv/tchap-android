@@ -1,2 +1,0 @@
-Main changes in this version: Make identity server policy(ies) visible in the settings. Temporarily remove Android Auto support.
-Full changelog: https://github.com/element-hq/element-android/releases/tag/v1.3.3
