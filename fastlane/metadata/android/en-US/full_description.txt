@@ -1,0 +1,5 @@
+Tchap is an instant messaging service intended for communications by French administration agents, to exchange information on the move or from an office workstation.
+
+Tchap allows you to chat via messages in pairs and in groups, and to share files like any instant messenger, with an integrated directory of user agents, simultaneous use on several devices and confidentiality of private exchanges.
+
+Agents can invite outsiders into a professional conversation.
