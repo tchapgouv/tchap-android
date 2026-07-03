@@ -1,3 +1,11 @@
+Changes in Tchap 2.21.1 (2026-07-03)
+====================================
+
+Improvements 🙌
+--------------
+ - Renommage de l'application en Tchap Classique. ([#1211](https://github.com/tchapgouv/tchap-android/issues/1211))
+ - Ajout de l'autorité de certification Harica TLS Root 2021 RSA. ([#1212](https://github.com/tchapgouv/tchap-android/issues/1212))
+
 Changes in Tchap 2.21.0 (2026-05-04)
 ====================================
 
