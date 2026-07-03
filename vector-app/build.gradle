@@ -352,7 +352,7 @@ android {
         devTchap {
             dimension "target"
 
-            resValue "string", "app_name", "DevTchap"
+            resValue "string", "app_name", "DevTchap Classique"
 
             applicationId "fr.gouv.tchap.dev"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}" + "_dev"
@@ -361,7 +361,7 @@ android {
         btchap {
             dimension "target"
 
-            resValue "string", "app_name", "Btchap"
+            resValue "string", "app_name", "Btchap Classique"
 
             applicationId "fr.gouv.rie.tchap"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}" + "_b"
@@ -370,7 +370,7 @@ android {
         tchap {
             dimension "target"
 
-            resValue "string", "app_name", "Tchap"
+            resValue "string", "app_name", "Tchap Classique"
 
             applicationId "fr.gouv.tchap.a"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}"
