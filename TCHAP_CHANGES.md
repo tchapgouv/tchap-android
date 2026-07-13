@@ -1,3 +1,14 @@
+Changes in Tchap 2.21.2 (2026-07-13)
+====================================
+
+Improvements 🙌
+--------------
+ - Mise à jour de l'icône de l'application. ([#1214](https://github.com/tchapgouv/tchap-android/issues/1214))
+
+Bugfixes 🐛
+----------
+ - Restauration de l'accès à la nouvelle application Tchap pour l'authentification. ([#1215](https://github.com/tchapgouv/tchap-android/issues/1215))
+
 Changes in Tchap 2.21.1 (2026-07-03)
 ====================================
 
