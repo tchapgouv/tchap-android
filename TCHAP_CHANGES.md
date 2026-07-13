@@ -1,3 +1,10 @@
+Changes in Tchap 2.21.3 (2026-07-13)
+====================================
+
+Improvements 🙌
+--------------
+ - Désactivation temporaire du certificate pinning. ([#1216](https://github.com/tchapgouv/tchap-android/issues/1216))
+
 Changes in Tchap 2.21.2 (2026-07-13)
 ====================================
 
