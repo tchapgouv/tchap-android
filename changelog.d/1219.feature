@@ -1,0 +1,1 @@
+Réactivation du certificate pinning.
