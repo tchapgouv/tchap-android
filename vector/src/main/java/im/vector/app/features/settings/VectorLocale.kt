@@ -40,7 +40,8 @@ class VectorLocale @Inject constructor(
         private const val ISO_15924_LATN = "Latn"
     }
 
-    private val defaultLocale = Locale.Builder().setLanguage("fr").setRegion("FR").build()
+    @Suppress("DEPRECATION")
+    private val defaultLocale = Locale("en", "US")
 
     /**
      * The cache of supported application languages.
@@ -56,13 +57,14 @@ class VectorLocale @Inject constructor(
     /**
      * Init this singleton.
      */
+    @Suppress("DEPRECATION")
     fun init() {
         if (preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {
-            applicationLocale = Locale.Builder()
-                    .setLanguage(preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, "")!!)
-                    .setRegion(preferences.getString(APPLICATION_LOCALE_COUNTRY_KEY, "")!!)
-                    .setVariant(preferences.getString(APPLICATION_LOCALE_VARIANT_KEY, "")!!)
-                    .build()
+            applicationLocale = Locale(
+                    preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, "")!!,
+                    preferences.getString(APPLICATION_LOCALE_COUNTRY_KEY, "")!!,
+                    preferences.getString(APPLICATION_LOCALE_VARIANT_KEY, "")!!
+            )
         } else {
             applicationLocale = Locale.getDefault()
 
