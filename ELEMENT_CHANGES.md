@@ -1,16 +1,46 @@
-Changes in Tchap 1.6.58 (2026-05-04)
-====================================
+Changes in Element v1.6.62 (2026-07-21)
+=======================================
 
-Bugfixes 🐛
-----------
- - Fix "Cannot find secrets in storage" error when using "Reset everything" to reset verification keys. ([#8917](https://github.com/element-hq/element-android/issues/8917))
+Security fixes 🔐
+-----------------
 
-Changes in Element v1.6.54 (2026-04-01)
+This release contains a security fix:
+
+ - Improve sanitization of file storage location ([#9157](https://github.com/element-hq/element-android/issues/9157))
+  This is part of a security fix ([GHSA-fr74-76wm-x6pp](https://github.com/matrix-org/matrix-android-sdk2/security/advisories/GHSA-fr74-76wm-x6pp)).
+
+Changes in Element v1.6.60 (2026-06-24)
+=======================================
+
+Other changes
+-------------
+ - Show "Verify this device" banner on un-verified devices. ([#9141](https://github.com/element-hq/element-android/issues/9141))
+
+
+Changes in Element v1.6.58 (2026-05-13)
+=======================================
+
+Security fixes 🔐
+-----------------
+
+This release contains an important security fix:
+
+- Check the user ID in the `sender_device_keys` property of Olm-encrypted to-device events to prevent sender spoofing by homeserver owners. ([#6553](https://github.com/matrix-org/matrix-rust-sdk/pull/6553), High, [CVE-2026-45056](https://www.cve.org/CVERecord?id=CVE-2026-45056), [GHSA-wfq4-36m3-9g42](https://github.com/matrix-org/matrix-rust-sdk/security/advisories/GHSA-wfq4-36m3-9g42))
+
+Other changes
+-------------
+- Bump org.matrix.rustcomponents:crypto-android from 26.1.28 to 26.05.12 ([#9143](https://github.com/element-hq/element-android/issues/9143))
+
+Changes in Element v1.6.56 (2026-04-29)
 =======================================
 
 Features ✨
 ----------
  - Expose service to let Element X access some internal data ([#9109](https://github.com/element-hq/element-android/issues/9109))
+
+Bugfixes 🐛
+----------
+ - Fix "Cannot find secrets in storage" error when using "Reset everything" to reset verification keys. ([#8917](https://github.com/element-hq/element-android/issues/8917)) ([#8917](https://github.com/element-hq/element-android/issues/8917))
 
 Other changes
 -------------
