@@ -1,3 +1,18 @@
+Changes in Tchap 2.21.4 (2026-08-11)
+====================================
+
+Features ✨
+----------
+ - Réactivation du certificate pinning. ([#1219](https://github.com/tchapgouv/tchap-android/issues/1219))
+
+Improvements 🙌
+--------------
+ - Rebase against Element-Android v1.6.62 ([#1219](https://github.com/tchapgouv/tchap-android/issues/1219))
+
+Other changes
+-------------
+ - Mise à jour des SDK de compilation et cible vers la version 36. ([#1219](https://github.com/tchapgouv/tchap-android/issues/1219))
+
 Changes in Tchap 2.21.3 (2026-07-13)
 ====================================
 
