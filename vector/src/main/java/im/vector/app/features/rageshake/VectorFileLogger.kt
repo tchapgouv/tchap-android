@@ -8,6 +8,7 @@
 package im.vector.app.features.rageshake
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -135,7 +136,13 @@ class VectorFileLogger @Inject constructor(
 
     private fun logToFile(level: String, tag: String, content: String) {
         val b = StringBuilder()
-        b.append(Thread.currentThread().id)
+        b.append(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+                    Thread.currentThread().threadId()
+                } else {
+                    @Suppress("DEPRECATION") Thread.currentThread().id
+                }
+        )
         b.append(" ")
         b.append(level)
         b.append("/")
