@@ -1,3 +1,10 @@
+Changes in Tchap 2.21.5 (2026-08-12)
+====================================
+
+Improvements 🙌
+--------------
+ - Partage de l'email de l'utilisateur avec la nouvelle application. ([#1220](https://github.com/tchapgouv/tchap-android/issues/1220))
+
 Changes in Tchap 2.21.4 (2026-08-11)
 ====================================
 
