@@ -25,9 +25,11 @@ import im.vector.app.core.services.VectorAndroidService
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.identity.ThreePid
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -47,6 +49,7 @@ class ImporterService : VectorAndroidService() {
         const val KEY_SECRETS_STR = "secrets"
         const val KEY_ROOM_KEYS_VERSION_STR = "roomKeysVersion"
         const val KEY_USER_AVATAR_PARCELABLE = "avatar"
+        const val KEY_USER_EMAIL_STR = "email"
     }
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
@@ -88,6 +91,7 @@ class ImporterService : VectorAndroidService() {
             sendResponse(MSG_GET_SESSION, bundle)
         } else {
             bundle.putString(KEY_USER_ID_STR, session.myUserId)
+            bundle.putString(KEY_USER_EMAIL_STR, getEmail(session))
             bundle.putString(KEY_HOMESERVER_URL_STR, session.sessionParams.homeServerUrlBase)
             session.getUser(session.myUserId)?.let { user ->
                 bundle.putString(KEY_USER_DISPLAY_NAME_STR, user.displayName)
@@ -184,6 +188,12 @@ class ImporterService : VectorAndroidService() {
             Timber.e(e, "ImporterService: The client is dead.")
         }
     }
+
+    private fun getEmail(session: Session?) = session?.profileService()?.getThreePids()
+            ?.filterIsInstance<ThreePid.Email>()
+            ?.firstOrNull()
+            ?.email
+            ?: "undefined"
 
     /**
      * When binding to the service, we return an interface to our messenger
