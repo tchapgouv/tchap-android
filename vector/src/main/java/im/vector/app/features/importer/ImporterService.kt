@@ -91,7 +91,7 @@ class ImporterService : VectorAndroidService() {
             sendResponse(MSG_GET_SESSION, bundle)
         } else {
             bundle.putString(KEY_USER_ID_STR, session.myUserId)
-            bundle.putString(KEY_USER_EMAIL_STR, getEmail(session))
+            bundle.putString(KEY_USER_EMAIL_STR, session.getEmail())
             bundle.putString(KEY_HOMESERVER_URL_STR, session.sessionParams.homeServerUrlBase)
             session.getUser(session.myUserId)?.let { user ->
                 bundle.putString(KEY_USER_DISPLAY_NAME_STR, user.displayName)
@@ -189,9 +189,9 @@ class ImporterService : VectorAndroidService() {
         }
     }
 
-    private fun getEmail(session: Session?) = session?.profileService()?.getThreePids()
-            ?.filterIsInstance<ThreePid.Email>()
-            ?.firstOrNull()
+    private fun Session.getEmail() = this.profileService().getThreePids()
+            .filterIsInstance<ThreePid.Email>()
+            .firstOrNull()
             ?.email
             ?: "undefined"
 
