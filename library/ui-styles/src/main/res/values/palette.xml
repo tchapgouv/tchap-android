@@ -48,6 +48,8 @@
     <color name="palette_tchap_light_blue">#2F80ED</color>
 
     <!-- For all themes Tchap -->
+    <color name="palette_tchap_classic_gray">#4E5474</color>
+    <color name="palette_tchap_classic_mauve">#887E95</color>
     <color name="palette_tchap_official_blue">#000091</color>
     <color name="palette_tchap_secondary_blue">#E4E4F3</color>
     <color name="palette_tchap_official_white">#FFFFFF</color>

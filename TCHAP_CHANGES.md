@@ -1,3 +1,51 @@
+Changes in Tchap 2.21.5 (2026-08-12)
+====================================
+
+Improvements 🙌
+--------------
+ - Partage de l'email de l'utilisateur avec la nouvelle application. ([#1220](https://github.com/tchapgouv/tchap-android/issues/1220))
+
+Changes in Tchap 2.21.4 (2026-08-11)
+====================================
+
+Features ✨
+----------
+ - Réactivation du certificate pinning. ([#1219](https://github.com/tchapgouv/tchap-android/issues/1219))
+
+Improvements 🙌
+--------------
+ - Rebase against Element-Android v1.6.62 ([#1219](https://github.com/tchapgouv/tchap-android/issues/1219))
+
+Other changes
+-------------
+ - Mise à jour des SDK de compilation et cible vers la version 36. ([#1219](https://github.com/tchapgouv/tchap-android/issues/1219))
+
+Changes in Tchap 2.21.3 (2026-07-13)
+====================================
+
+Improvements 🙌
+--------------
+ - Désactivation temporaire du certificate pinning. ([#1216](https://github.com/tchapgouv/tchap-android/issues/1216))
+
+Changes in Tchap 2.21.2 (2026-07-13)
+====================================
+
+Improvements 🙌
+--------------
+ - Mise à jour de l'icône de l'application. ([#1214](https://github.com/tchapgouv/tchap-android/issues/1214))
+
+Bugfixes 🐛
+----------
+ - Restauration de l'accès à la nouvelle application Tchap pour l'authentification. ([#1215](https://github.com/tchapgouv/tchap-android/issues/1215))
+
+Changes in Tchap 2.21.1 (2026-07-03)
+====================================
+
+Improvements 🙌
+--------------
+ - Renommage de l'application en Tchap Classique. ([#1211](https://github.com/tchapgouv/tchap-android/issues/1211))
+ - Ajout de l'autorité de certification Harica TLS Root 2021 RSA. ([#1212](https://github.com/tchapgouv/tchap-android/issues/1212))
+
 Changes in Tchap 2.21.0 (2026-05-04)
 ====================================
 

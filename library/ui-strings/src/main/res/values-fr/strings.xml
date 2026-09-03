@@ -1268,6 +1268,8 @@
         <item quantity="other">%d appareils actifs</item> <!-- Tchap: Custom string -->
     </plurals>
     <string name="crosssigning_verify_this_session">Vérifier cet appareil</string>
+    <string name="verify_this_session_content">À partir d’octobre 2026, les appareils non vérifiés ne pourront plus envoyer ni recevoir de messages</string>
+    <string name="verify_now">Vérifier maintenant</string>
     <string name="verification_open_other_to_verify">Utilisez un appareil existant pour vérifier celui-ci, ce qui lui permettra d’avoir accès aux messages chiffrés.</string> <!-- Tchap: Custom string -->
     <string name="verification_profile_verify">Vérifier</string>
     <string name="verification_profile_verified">Vérifié</string>
@@ -2966,7 +2968,7 @@
     <string name="login_splash_sign_in">Se connecter</string>
     <string name="create_room_unknown_users_dialog_content">Impossible de trouver des profils pour les identifiants ci-dessous. Voulez-vous tout de même débuter une nouvelle conversation \?
 \n
-\n%s</string> <!-- Tchap: Custom string --> 
+\n%s</string> <!-- Tchap: Custom string -->
     <string name="create_room_unknown_users_dialog_submit">Commencer la conversation quand même</string>
     <string name="user_reported_as_inappropriate_title">Utilisateur signalé</string>
     <string name="message_report_user">Signaler l’utilisateur</string>

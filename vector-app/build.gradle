@@ -37,7 +37,7 @@ ext.versionMinor = 21
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 0
+ext.versionPatch = 5
 
 ext.versionName = '2.21.0'
 ext.versionCode = 402210000
@@ -355,7 +355,7 @@ android {
         devTchap {
             dimension "target"
 
-            resValue "string", "app_name", "DevTchap"
+            resValue "string", "app_name", "DevTchap Classique"
 
             applicationId "fr.gouv.tchap.dev"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}" + "_dev"
@@ -364,7 +364,7 @@ android {
         btchap {
             dimension "target"
 
-            resValue "string", "app_name", "Btchap"
+            resValue "string", "app_name", "Btchap Classique"
 
             applicationId "fr.gouv.rie.tchap"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}" + "_b"
@@ -373,7 +373,7 @@ android {
         tchap {
             dimension "target"
 
-            resValue "string", "app_name", "Tchap"
+            resValue "string", "app_name", "Tchap Classique"
 
             applicationId "fr.gouv.tchap.a"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}"

@@ -26,7 +26,7 @@ class ProcessInfo @Inject constructor() {
         append("===========================================\n")
     }
 
-    @SuppressLint("PrivateApi")
+    @SuppressLint("DiscouragedPrivateApi")
     private fun getProcessName(): String? {
         return if (Build.VERSION.SDK_INT >= 28) {
             Application.getProcessName()
@@ -35,7 +35,7 @@ class ProcessInfo @Inject constructor() {
                 val activityThread = Class.forName("android.app.ActivityThread")
                 val getProcessName: Method = activityThread.getDeclaredMethod("currentProcessName")
                 getProcessName.invoke(null) as? String
-            } catch (t: Throwable) {
+            } catch (_: Throwable) {
                 null
             }
         }
@@ -51,6 +51,7 @@ class ProcessInfo @Inject constructor() {
 
 private fun Thread.getInfo() = buildString {
     append("Thread '$name':")
+    @Suppress("DEPRECATION")
     append(" id: $id")
     append(" priority: $priority")
     append(" group name: ${threadGroup?.name ?: "null"}")
