@@ -39,8 +39,8 @@ ext.versionMinor = 21
 // is the value for the next regular release.
 ext.versionPatch = 5
 
-ext.versionName = '2.21.0'
-ext.versionCode = 402210000
+ext.versionName = '2.21.5'
+ext.versionCode = 402210500
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'

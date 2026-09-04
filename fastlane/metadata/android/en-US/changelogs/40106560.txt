@@ -1,2 +1,0 @@
-Main changes in this version: allow logging into Element X Android directly using this version.
-Full changelog: https://github.com/element-hq/element-android/releases
